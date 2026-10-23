@@ -2,7 +2,7 @@
 """8편 실험: '11월 기획 보고서 — 무엇을 밀고 무엇을 줄일까' 를 조건마다 N번 쓰게 하고 코드로 채점한다(report_grade).
 조건: wiki(위키 에이전트, 읽기 도구 · 최대 12장) · rag(검색 상위 12개 청크) · dump(원본 통째). 모두 같은 원본 57개(ops 제외).
 사용: python _scratch/wiki/report_run.py [--wiki=wiki_ep7] [--conds=wiki,rag,dump] [--trials=10] [--name=ep8]
-결과 results/<name>.json — 조건 × 회차별 보고서 전문 · 토큰 · 채점"""
+결과 results/<name>.json — 조건 × 횟수별 보고서 전문 · 토큰 · 채점"""
 import json, os, sys, time
 from concurrent.futures import ThreadPoolExecutor
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))

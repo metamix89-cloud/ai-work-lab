@@ -11,3 +11,6 @@
 == plain: 넣기 전 이미 틀린 값 7 · 재발 3/10 ['E4', 'E5', 'E7'] · 토큰 289681 · 196s
 [rules E1 ] pages=['index', '거래처/가나마트'] tok=32033
 [rules E2 ] pages=['index', '거래처/참기름'] tok=28207
+[rules E3 ] pages=['index', '거래처/고객센터'] tok=36913
+[rules E4 ] pages=['index', '거래처/가나마트'] tok=33364
+[rules E5 ] pages=['거래처/가나마트'] tok=23319
