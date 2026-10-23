@@ -1,0 +1,13 @@
+[plain E1 ] pages=['거래처/가나마트'] tok=29524
+[plain E2 ] pages=['거래처/참기름'] tok=24137
+[plain E3 ] pages=['지표/고객센터-AI-응답-시범'] tok=27067
+[plain E4 ] pages=['거래처/가나마트'] tok=28130
+[plain E5 ] pages=['거래처/가나마트'] tok=33994
+[plain E6 ] pages=['상품/밀키트'] tok=27458
+[plain E7 ] pages=['지표/변질-문의-증가-2026-10'] tok=32687
+[plain E8 ] pages=['지표/고객센터-AI-응답-시범'] tok=31058
+[plain E9 ] pages=['상품/김-선물세트'] tok=23810
+[plain E10] pages=['규정/지방-냉동-출고-요일'] tok=31816
+== plain: 넣기 전 이미 틀린 값 7 · 재발 3/10 ['E4', 'E5', 'E7'] · 토큰 289681 · 196s
+[rules E1 ] pages=['index', '거래처/가나마트'] tok=32033
+[rules E2 ] pages=['index', '거래처/참기름'] tok=28207

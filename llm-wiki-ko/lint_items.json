@@ -1,0 +1,24 @@
+{
+ "_doc": "6편 lint 채점표. planted.json 의 C 항목마다: topic(주제 낱말 중 하나), wrong(심은 틀린 값), right(맞는 값). lint 가 낸 항목(JSON 한 건을 글로 편 것)에 topic 과 wrong · right 중 하나가 같이 있으면 '찾음', likely_right 에 right 가 있고 wrong 이 없으면 '판단 맞음'. groups: 그 모순의 두 원본이 든 raw/ 하위 폴더(위키에 그 묶음이 없으면 채점에서 뺀다).",
+ "items": [
+  {"id": "C1",  "groups": ["suppliers"],            "topic": ["가나공급", "떡볶이 소스", "떡볶이소스"], "wrong": ["10%"],                       "right": ["8%"]},
+  {"id": "C3",  "groups": ["suppliers"],            "topic": ["젤", "아이스팩", "다온팩", "보냉재"],   "wrong": ["350"],                       "right": ["380"]},
+  {"id": "C4",  "groups": ["customers"],            "topic": ["가나마트"],                           "wrong": ["익월 말", "말일"],             "right": ["익월 25일", "25일"]},
+  {"id": "C5",  "groups": ["cs", "suppliers"],      "topic": ["제주"],                               "wrong": ["2,000"],                     "right": ["1,500"]},
+  {"id": "C6",  "groups": ["customers", "meetings"], "topic": ["참기름"],                            "wrong": ["10%"],                       "right": ["12%"]},
+  {"id": "C7",  "groups": ["customers", "meetings"], "topic": ["선물세트", "선물 세트"],               "wrong": ["단종"],                       "right": ["보류"]},
+  {"id": "C8",  "groups": ["customers"],            "topic": ["입수"],                               "wrong": ["4"],                         "right": ["6"]},
+  {"id": "C9",  "groups": ["policies"],             "topic": ["재택"],                               "wrong": ["주 1일", "1일"],              "right": ["주 2일", "2일"]},
+  {"id": "C10", "groups": ["cs", "policies"],       "topic": ["식비"],                               "wrong": ["10,000"],                    "right": ["12,000"]},
+  {"id": "C11", "groups": ["sales", "meetings"],    "topic": ["지방", "냉동 출고", "출고"],            "wrong": ["월 · 수", "월·수", "월, 수", "월,수"], "right": ["월 · 화", "월·화", "월, 화", "월,화"]},
+  {"id": "C12", "groups": ["customers", "sales"],   "topic": ["떡갈비"],                             "wrong": ["50,300"],                    "right": ["52,300"]},
+  {"id": "C13", "groups": ["customers"],            "topic": ["바사푸드"],                           "wrong": ["화 · 목", "화·목", "화, 목", "목요일"], "right": ["화 · 금", "화·금", "화, 금", "금요일"]},
+  {"id": "C14", "groups": ["sales", "meetings"],    "topic": ["시범"],                               "wrong": ["10/1", "10월 1일", "10-01"],   "right": ["10/6", "10월 6일", "10-06"]},
+  {"id": "C15", "groups": ["cs", "policies"],       "topic": ["법인카드", "사전 승인"],                "wrong": ["300,000"],                   "right": ["500,000"]},
+  {"id": "C16", "groups": ["customers"],            "topic": ["다나유통"],                           "wrong": ["2.5%"],                      "right": ["2%"]},
+  {"id": "C17", "groups": ["customers", "sales"],   "topic": ["홍삼"],                               "wrong": ["300"],                       "right": ["500"]},
+  {"id": "C18", "groups": ["suppliers"],            "topic": ["고추장"],                             "wrong": ["47,000"],                    "right": ["47,500"]},
+  {"id": "C19", "groups": ["cs", "sales"],          "topic": ["변질"],                               "wrong": ["10월부터", "10월"],            "right": ["9월 셋째", "9월", "W38", "38주"]},
+  {"id": "C20", "groups": ["cs", "meetings"],       "topic": ["규정 밖", "환불"],                     "wrong": ["1건"],                       "right": ["2건"]}
+ ]
+}

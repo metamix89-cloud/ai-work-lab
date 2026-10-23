@@ -483,12 +483,13 @@ QUERY_SYS = """너는 가나다식품(가상 회사) 직원이 묻는 질문에 
 위키에 답이 없으면 '답: 위키에 없음' 이라고 쓰고 근거에는 '없음' 이라고 쓴다. 비슷한 값을 끌어다 짐작하지 않는다."""
 
 
-def query(wiki, question, today, search=False):
-    sys_prompt = QUERY_SYS.format(today=today, lim=PAGE_READ_LIMIT)
+def query(wiki, question, today, search=False, read_limit=None):
+    lim = read_limit or PAGE_READ_LIMIT                      # 8편 보고서 쓰기는 12장까지
+    sys_prompt = QUERY_SYS.format(today=today, lim=lim)
     tools = TOOLS_RO + ([TOOL_SEARCH] if search else [])
     if search:
         sys_prompt += "\n목차를 본 뒤, 질문의 핵심 낱말(상품명 · 거래처 이름 하나)로 search_wiki 를 돌려 값이 있는 페이지를 모두 찾고, 그 페이지들을 읽고 답한다. 검색이 '없음' 이어도 목차에서 고른 페이지는 반드시 읽는다. '위키에 없음' 은 관련 페이지를 읽고도 없을 때만."
-    ans, tokens, trace = run_agent(wiki, sys_prompt, question, tools, PAGE_READ_LIMIT + 6, PAGE_READ_LIMIT)
+    ans, tokens, trace = run_agent(wiki, sys_prompt, question, tools, lim + 6, lim)
     return dict(answer=ans, tokens=tokens, pages_read=[s for n, s in trace if n == "read_page"], searches=[s for n, s in trace if n == "search_wiki"])
 
 
@@ -510,6 +511,98 @@ def lint(wiki, today):
     except Exception:
         data = {"_raw": txt}
     return dict(result=data, tokens=tokens)
+
+
+LINT_CLUSTER_SYS = """너는 가나다식품(가상 회사) LLM 위키의 점검(lint) 담당이다. 아래는 한 대상('%s')을 언급하는 페이지들이다. 이 페이지들 사이 · 안에서만 다음 둘을 찾는다. 위키 밖 지식은 쓰지 않는다.
+1. 상충: 같은 항목에 서로 다른 값이 있는 곳. 어느 쪽이 맞을 가능성이 큰지와 그 근거(더 최신 · 1차 자료 · 계약서 > 메모)를 쓴다. 날짜 조건으로 둘 다 맞는 경우는 '날짜 조건'이라고 쓴다.
+2. 낡음: 적용일이 지난 옛 값이 현재 값처럼 쓰인 곳.
+없으면 빈 목록. JSON 하나만 출력: {"conflicts":[{"topic":..,"pages":[..],"values":[..],"likely_right":..,"basis":..}],"stale":[{"page":..,"what":..}]}"""
+UNIT_WORDS = {"2kg", "1kg", "500g", "300g", "350g", "320ml", "1-8L", "1.8L", "50g", "세트", "선물", "냉동", "밀키트", "소스", "상품", "거래처", "규정", "결정", "이슈", "지표", "보안", "출장", "구매", "위생", "복지", "교육", "차량"}
+
+
+def lint_clusters(wiki):
+    """6편 v2: 코드가 대상(상품 · 거래처 · 규정 주제)마다 그 이름을 언급하는 페이지 묶음을 만든다. [(대상, [slug, ...])] — 2페이지 이상만, 같은 묶음은 하나로."""
+    texts = {s: wiki.read_page(s) or "" for s in wiki.slugs() if s.lower() not in ("index", "log")}
+    seen, out = set(), []
+    for s in sorted(texts):
+        if "-" not in s or s.split("-", 1)[0] not in ("상품", "거래처", "규정"):
+            continue
+        toks = [t for t in re.split(r"-", s.split("-", 1)[1]) if len(t) >= 2 and not t.isdigit() and t not in UNIT_WORDS]
+        if not toks:
+            continue
+        key = max(toks, key=len)                                   # 가장 긴 토막이 이름(참기름 · 가나공급 · 법인카드)
+        members = [m for m, t in texts.items() if key in t or key in m]
+        has_conflict = bool(re.search(r"##\s*⚠[^\n]*\n\s*-\s*\S", texts[s]))    # 페이지 하나뿐이어도 '상충' 글머리가 차 있으면 그 페이지 안을 본다
+        if len(members) < (1 if has_conflict else 2) or len(members) > 12:
+            continue
+        fs = frozenset(members)
+        if fs in seen:
+            continue
+        seen.add(fs); out.append((key, sorted(members)))
+    return out
+
+
+def lint_sections(wiki, today):
+    """6편 v2: 전문을 한 번에 읽는 대신 코드가 만든 대상별 묶음마다 모델에게 상충 · 낡음을 묻고 합친다. 고아 · 빠짐은 코드가 센다(목차 기준)."""
+    conflicts, stale, tokens = [], [], 0
+    for key, members in lint_clusters(wiki):
+        body = "\n\n".join("<<페이지 %s>>\n%s" % (s, wiki.read_page(s)) for s in members)
+        m, t = chat([{"role": "system", "content": LINT_CLUSTER_SYS % key}, {"role": "user", "content": "오늘: %s\n\n%s" % (today, body)}], temp=0.2)
+        tokens += t
+        j = re.search(r"\{.*\}", m.content or "", re.S)
+        try:
+            d = json.loads(j.group(0)) if j else {}
+        except Exception:
+            d = {}
+        for c in d.get("conflicts", []) or []:
+            if isinstance(c, dict):
+                c["cluster"] = key
+            conflicts.append(c)
+        stale += d.get("stale", []) or []
+    idx = wiki.index()
+    orphans = [s for s in wiki.slugs() if s not in idx and s.replace("-", "/", 1) not in idx]
+    return dict(result=dict(conflicts=conflicts, stale=stale, orphans=orphans, missing=[], clusters=len(lint_clusters(wiki))), tokens=tokens)
+
+
+VERIFY_SYS = """너는 가나다식품(가상 회사) LLM 위키 점검 결과를 검증하는 담당이다. 아래 '상충 후보' 하나와 그 후보가 가리키는 페이지 원문을 보고 판정한다. 위키 밖 지식은 쓰지 않는다.
+- 같은 대상의 같은 항목에 서로 다른 값이 실제로 적혀 있으면 "상충".
+- 적용일 · 시행일이 달라 둘 다 맞는 것(이력 · 예정)이면 "날짜 조건". 다른 항목을 비교했거나 값이 사실 같으면 "아님".
+- "상충" 이면 어느 값이 맞을 가능성이 큰지와 근거(더 최신 · 1차 자료 · 계약서 > 메모)를 다시 쓴다.
+JSON 하나만 출력: {"verdict":"상충|날짜 조건|아님","topic":..,"values":[..],"likely_right":..,"basis":..}"""
+
+
+def lint_verify(wiki, today, conflicts):
+    """6편 v3: 묶음 lint 가 낸 상충 후보를 한 건씩 해당 페이지와 함께 다시 물어 '상충' 만 남긴다(오탐 · 날짜 조건 · 중복 제거). 돌아오는 값: (남은 상충, 토큰, 판정 목록)."""
+    kept, verdicts, tokens, seen = [], [], 0, set()
+    for c in conflicts:
+        if not isinstance(c, dict):
+            continue
+        pages = [slugify(str(p).replace("/", "-", 1)) for p in (c.get("pages") or [])][:4]
+        body = "\n\n".join("<<페이지 %s>>\n%s" % (s, wiki.read_page(s) or "(없는 페이지)") for s in pages) or "(페이지 지정 없음)"
+        key = (str(c.get("topic", ""))[:40], tuple(sorted(pages)))
+        if key in seen:
+            verdicts.append(dict(topic=c.get("topic"), verdict="중복")); continue
+        seen.add(key)
+        m, t = chat([{"role": "system", "content": VERIFY_SYS}, {"role": "user", "content": "오늘: %s\n\n[상충 후보]\n%s\n\n[페이지 원문]\n%s" % (today, json.dumps(c, ensure_ascii=False), body)}], temp=0.1)
+        tokens += t
+        j = re.search(r"\{.*\}", m.content or "", re.S)
+        try:
+            v = json.loads(j.group(0)) if j else {}
+        except Exception:
+            v = {}
+        v["pages"] = pages; verdicts.append(v)
+        if v.get("verdict") == "상충":
+            kept.append(dict(c, likely_right=v.get("likely_right", c.get("likely_right")), basis=v.get("basis", c.get("basis")), verified=True))
+    return kept, tokens, verdicts
+
+
+def lint_sections_verified(wiki, today):
+    """6편 v3 = 묶음 lint(v2) + 후보 한 건씩 검증."""
+    r = lint_sections(wiki, today)
+    kept, t, verdicts = lint_verify(wiki, today, r["result"]["conflicts"])
+    r["result"]["candidates"] = len(r["result"]["conflicts"]); r["result"]["conflicts"] = kept; r["result"]["verdicts"] = verdicts
+    r["tokens"] += t
+    return r
 
 
 # ── 비교 조건: 원본 통째 · 일반 RAG ─────────────────────────────────────────
