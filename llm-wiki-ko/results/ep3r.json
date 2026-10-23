@@ -1,0 +1,646 @@
+[
+ {
+  "cond": "wiki",
+  "id": "Q2-01",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 0,
+  "ok": true,
+  "why": "",
+  "grounded": false,
+  "answer": "답: 오늘 기준(2026-10-26) 가나공급 떡볶이 소스 2kg 박스 단가는 73,400원입니다.  \n근거: [상품/떡볶이-소스-2kg] (가나다식품 위키)",
+  "tokens": 2324,
+  "pages": null
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-01",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 1,
+  "ok": true,
+  "why": "",
+  "grounded": true,
+  "answer": "답: 오늘 기준(2026-10-26) 가나공급 떡볶이 소스 2kg 박스 단가는 73,400원입니다. 79,270원은 2026-11-01부터 적용 예정 단가입니다.\n근거: [페이지: 상품/떡볶이-소스-2kg] (출처: suppliers/가나공급_단가표.csv, suppliers/가나공급_공문_2026-10-15.md)",
+  "tokens": 4816,
+  "pages": [
+   "상품/떡볶이-소스-2kg"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-01",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 2,
+  "ok": true,
+  "why": "",
+  "grounded": false,
+  "answer": "답: 오늘 기준(2026-10-26) 가나공급 떡볶이 소스 2kg 박스 단가는 73,400원입니다. 단가는 2026년 7월 1일부터 적용된 가격입니다.\n\n근거: [상품/떡볶이-소스-2kg] (가나다식품 위키)",
+  "tokens": 2340,
+  "pages": null
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-02",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 0,
+  "ok": false,
+  "why": "필수 값 없음: 79,270",
+  "grounded": false,
+  "answer": "답: 2026년 11월 5일자 견적에 쓸 떡볶이 소스 2kg의 가나공급 매입 단가는 73,400원입니다. (2026-07-01 기준 단가이며, 11월 1일 인상 예정 단가가 있으나 11월 5일 견적에는 아직 적용 전입니다.)\n\n근거: [상품/떡볶이-소스-2kg] (가나다식품 위키)",
+  "tokens": 2386,
+  "pages": null
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-02",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 1,
+  "ok": false,
+  "why": "필수 값 없음: 79,270",
+  "grounded": true,
+  "answer": "답: 11월 5일자 견적에 쓸 떡볶이 소스 2kg의 가나공급 매입 단가는 73,400원입니다. (2026-07-01 기준, 11월 5일은 2026-07-01 이후임)  \n근거: [페이지: 상품/떡볶이-소스-2kg] (출처: suppliers/가나공급_단가표.csv [등급 1])",
+  "tokens": 2384,
+  "pages": null
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-02",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 2,
+  "ok": false,
+  "why": "필수 값 없음: 79,270",
+  "grounded": true,
+  "answer": "답: 11월 5일자 견적에 쓸 떡볶이 소스 2kg의 가나공급 매입 단가는 73,400원입니다. (2026-07-01 기준, 11월 5일은 2026-07-01 이후임)\n\n근거: [페이지: 상품/떡볶이-소스-2kg] (출처: suppliers/가나공급_단가표.csv [등급 1])",
+  "tokens": 2383,
+  "pages": null
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-03",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 0,
+  "ok": false,
+  "why": "필수 값 없음: 8%",
+  "grounded": false,
+  "answer": "답: 가나공급 떡볶이 소스 인상률은 10%이며, 적용일은 2026년 11월 1일입니다.\n근거: [페이지: 상품/떡볶이소스] (출처: 구매팀_메모_김과장.md)",
+  "tokens": 4518,
+  "pages": [
+   "상품/떡볶이소스"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-03",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 1,
+  "ok": false,
+  "why": "필수 값 없음: 8%",
+  "grounded": false,
+  "answer": "답: 가나공급 떡볶이 소스 인상률은 10%이며, 적용일은 2026년 11월 1일이다.  \n근거: [페이지: 상품/떡볶이소스] (출처: 구매팀_메모_김과장.md)",
+  "tokens": 4519,
+  "pages": [
+   "상품/떡볶이소스"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-03",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 2,
+  "ok": false,
+  "why": "필수 값 없음: 8%",
+  "grounded": false,
+  "answer": "답: 가나공급 떡볶이 소스 인상률은 10%이며, 적용일은 2026년 11월 1일입니다.  \n근거: [상품/떡볶이소스] (구매팀_메모_김과장.md)",
+  "tokens": 4515,
+  "pages": [
+   "상품/떡볶이소스"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-04",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 0,
+  "ok": false,
+  "why": "필수 값 없음: 5,700",
+  "grounded": true,
+  "answer": "답: 2026년 11월 15일 출고분부터 한빛물류의 제주 냉동 택배 건당 배송비는 기본 4,500원에 제주·도서 추가 요금 1,500원을 더해 총 6,000원이다. (오늘 날짜 2026-10-26 기준 적용 예정일 2026-11-15)\n근거: [페이지: 거래처/한빛물류] (출처: suppliers/한빛물류_공지_2026-10-20.md, suppliers/한빛물류_요금표.md)",
+  "tokens": 4881,
+  "pages": [
+   "거래처/한빛물류"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-04",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 1,
+  "ok": false,
+  "why": "필수 값 없음: 5,700",
+  "grounded": true,
+  "answer": "답: 2026년 11월 15일 출고분부터 한빛물류의 제주 냉동 택배 건당 배송비는 4,500원에 제주·도서 추가 요금 1,500원이 붙어 총 6,000원이다. (오늘 날짜 2026-10-26 기준 적용 예정)\n근거: [페이지: 거래처/한빛물류] (출처: suppliers/한빛물류_공지_2026-10-20.md, suppliers/한빛물류_요금표.md)",
+  "tokens": 4872,
+  "pages": [
+   "거래처/한빛물류"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-04",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 2,
+  "ok": false,
+  "why": "필수 값 없음: 5,700",
+  "grounded": true,
+  "answer": "답: 2026년 11월 15일 출고분부터 한빛물류의 제주 냉동 택배 건당 배송비는 4,500원에 제주·도서 추가 요금 1,500원을 더해 총 6,000원입니다.\n근거: [페이지: 거래처/한빛물류] (출처: suppliers/한빛물류_공지_2026-10-20.md, suppliers/한빛물류_요금표.md)",
+  "tokens": 4858,
+  "pages": [
+   "거래처/한빛물류"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-05",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 0,
+  "ok": true,
+  "why": "",
+  "grounded": false,
+  "answer": "답: 한빛물류 냉동 택배 요금은 2026년 11월 15일 출고분부터 4,500원으로 300원 인상됩니다.\n근거: [페이지: 거래처/한빛물류] (출처: index)",
+  "tokens": 2330,
+  "pages": null
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-05",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 1,
+  "ok": true,
+  "why": "",
+  "grounded": false,
+  "answer": "답: 네, 한빛물류 냉동 택배 요금은 2026년 11월 15일 출고분부터 건당 300원 인상되어 4,500원이 됩니다.\n근거: [페이지: 거래처/한빛물류] (출처: index)",
+  "tokens": 2334,
+  "pages": null
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-05",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 2,
+  "ok": true,
+  "why": "",
+  "grounded": false,
+  "answer": "답: 한빛물류 냉동 택배 요금은 2026년 11월 15일 출고분부터 4,500원으로 300원 인상됩니다.\n근거: [페이지: 거래처/한빛물류] (출처: index)",
+  "tokens": 2330,
+  "pages": null
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-06",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 0,
+  "ok": true,
+  "why": "",
+  "grounded": true,
+  "answer": "답: 가나마트 결제 조건은 월 마감 후 익월 25일 계좌 이체입니다. (2026-10-26 기준)  \n근거: [페이지: 거래처/가나마트] (출처: customers/가나마트_계약조건.md)",
+  "tokens": 4908,
+  "pages": [
+   "거래처/가나마트"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-06",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 1,
+  "ok": true,
+  "why": "",
+  "grounded": true,
+  "answer": "답: 가나마트 결제 조건은 월 마감 후 익월 25일 계좌 이체입니다(2026-10-26 기준).  \n근거: [페이지: 거래처/가나마트] (출처: customers/가나마트_계약조건.md)",
+  "tokens": 4907,
+  "pages": [
+   "거래처/가나마트"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-06",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 2,
+  "ok": true,
+  "why": "",
+  "grounded": true,
+  "answer": "답: 가나마트 결제 조건은 월 마감 후 익월 25일 계좌 이체입니다(2026-10-26 기준).  \n근거: [거래처/가나마트] (customers/가나마트_계약조건.md)",
+  "tokens": 4903,
+  "pages": [
+   "거래처/가나마트"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-07",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 0,
+  "ok": true,
+  "why": "",
+  "grounded": false,
+  "answer": "답: 다온팩 젤 아이스팩 단가는 개당 380원이다 (2026-09-15 출고분부터 적용).\n\n근거: [거래처/다온팩] (가나다식품 위키)",
+  "tokens": 2295,
+  "pages": null
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-07",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 1,
+  "ok": true,
+  "why": "",
+  "grounded": false,
+  "answer": "답: 다온팩 젤 아이스팩 단가는 개당 380원이다 (2026-09-15 출고분부터 적용).\n\n근거: [거래처/다온팩] (가나다식품 위키)",
+  "tokens": 2295,
+  "pages": null
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-07",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 2,
+  "ok": true,
+  "why": "",
+  "grounded": false,
+  "answer": "답: 다온팩 젤 아이스팩 단가는 개당 380원이다. (2026-09-15 출고분부터 적용)  \n근거: [거래처/다온팩] (가나다식품 위키)",
+  "tokens": 2297,
+  "pages": null
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-08",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 0,
+  "ok": false,
+  "why": "후보 값 없음: 30일 / 17일",
+  "grounded": false,
+  "answer": "답: 가나공급 공문에 따르면 2026년 11월 1일부터 떡볶이 소스 2kg 단가가 73,400원에서 79,270원으로, 고추장 500g 단가가 46,200원에서 47,500원으로 인상되는데, 현재 계약 조건과 단가가 일치하지 않는 점이 있을 수 있으나 구체적인 계약 조건이 위키에 없어 확정할 수 없습니다.\n근거: [페이지: 거래처/가나공급] (출처: suppliers/가나공급_공문_2026-10-15.md)",
+  "tokens": 4891,
+  "pages": [
+   "거래처/가나공급"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-08",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 1,
+  "ok": false,
+  "why": "후보 값 없음: 30일 / 17일",
+  "grounded": false,
+  "answer": "답: 가나공급 공문에는 단가 인상 내용이 있으나, 계약 조건에 대한 구체적 내용이나 어긋나는 점은 확인되지 않습니다. (2026-10-26 기준)\n\n근거: [페이지: 거래처/가나공급] (출처: suppliers/가나공급_공문_2026-10-15.md)",
+  "tokens": 4832,
+  "pages": [
+   "거래처/가나공급"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-08",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 2,
+  "ok": false,
+  "why": "후보 값 없음: 30일 / 17일",
+  "grounded": false,
+  "answer": "답: 가나공급 공문이 계약 조건에 어긋난다는 내용은 위키에 없습니다.  \n근거: [페이지: 거래처/가나공급] (출처: suppliers/가나공급_단가표.csv)",
+  "tokens": 7354,
+  "pages": [
+   "거래처/가나공급",
+   "suppliers/가나공급_공문_2026-10-15"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-09",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 0,
+  "ok": true,
+  "why": "",
+  "grounded": true,
+  "answer": "답: 바사푸드 납품 요일은 매주 화요일과 금요일 오전 7시 전 도착이며, 납품 하루 전 변경은 불가합니다. (2026-10-26 기준)\n근거: [페이지: 거래처/바사푸드] (출처: customers/바사푸드_조건.md, customers/영업메모_이대리.md)",
+  "tokens": 4546,
+  "pages": [
+   "거래처/바사푸드"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-09",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 1,
+  "ok": false,
+  "why": "오답 값 포함: 목",
+  "grounded": true,
+  "answer": "답: 바사푸드 납품 요일은 매주 화요일과 금요일 오전 7시 전 도착이며, 납품 일정은 화요일과 목요일 납품으로 기록되어 있습니다. (2026-10-26 기준)  \n근거: [페이지: 거래처/바사푸드] (출처: customers/바사푸드_조건.md, customers/영업메모_이대리.md)",
+  "tokens": 4554,
+  "pages": [
+   "거래처/바사푸드"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-09",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 2,
+  "ok": false,
+  "why": "오답 값 포함: 목",
+  "grounded": true,
+  "answer": "답: 바사푸드 납품 요일은 매주 화요일과 금요일 오전 7시 전 도착해야 하며, 납품 일정은 화요일과 목요일로 되어 있습니다. (2026-10-26 기준)\n\n근거: [페이지: 거래처/바사푸드] (출처: customers/바사푸드_조건.md, customers/영업메모_이대리.md)",
+  "tokens": 4551,
+  "pages": [
+   "거래처/바사푸드"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-10",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 0,
+  "ok": true,
+  "why": "",
+  "grounded": true,
+  "answer": "답: 고추장 500g의 가나공급 단가는 2026년 11월 1일부터 47,500원입니다.  \n근거: [페이지: 상품/고추장-500g] (출처: suppliers/가나공급_공문_2026-10-15.md)",
+  "tokens": 4711,
+  "pages": [
+   "상품/고추장-500g"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-10",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 1,
+  "ok": false,
+  "why": "필수 값 없음: 47,500",
+  "grounded": false,
+  "answer": "답: 고추장 500g의 가나공급 단가는 2026년 11월 1일부터 47,000원으로 적용됩니다.  \n근거: [페이지: 상품/고추장] (출처: 구매팀_메모_김과장.md)",
+  "tokens": 4492,
+  "pages": [
+   "상품/고추장"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-10",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 2,
+  "ok": false,
+  "why": "필수 값 없음: 47,500",
+  "grounded": false,
+  "answer": "답: 고추장 500g의 가나공급 단가는 2026년 11월 1일부터 47,000원으로 적용됩니다.\n근거: [상품/고추장] (출처: 구매팀_메모_김과장.md [등급 5])",
+  "tokens": 4494,
+  "pages": [
+   "상품/고추장"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-11",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 0,
+  "ok": false,
+  "why": "필수 값 없음: 73,400",
+  "grounded": false,
+  "answer": "답: 떡볶이 소스 2kg 단가는 2026년 11월 1일에 10% 인상될 예정입니다.\n근거: [페이지: 상품/떡볶이소스] (출처: 구매팀_메모_김과장.md)",
+  "tokens": 4527,
+  "pages": [
+   "상품/떡볶이소스"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-11",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 1,
+  "ok": true,
+  "why": "",
+  "grounded": true,
+  "answer": "답: 떡볶이 소스 2kg 단가는 2026년 7월 1일에 73,400원에서 2026년 11월 1일에 79,270원으로 바뀐다.  \n근거: [페이지: 상품/떡볶이-소스-2kg] (출처: suppliers/가나공급_단가표.csv, suppliers/가나공급_공문_2026-10-15.md)",
+  "tokens": 7252,
+  "pages": [
+   "상품/떡볶이소스",
+   "상품/떡볶이-소스-2kg"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-11",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 2,
+  "ok": true,
+  "why": "",
+  "grounded": true,
+  "answer": "답: 떡볶이 소스 2kg 단가는 2026년 7월 1일에 73,400원에서 2026년 11월 1일에 79,270원으로 바뀐다.\n근거: [페이지: 상품/떡볶이-소스-2kg], [페이지: 상품/떡볶이소스] (출처: suppliers/가나공급_단가표.csv, suppliers/가나공급_공문_2026-10-15.md, 구매팀_메모_김과장.md)",
+  "tokens": 7275,
+  "pages": [
+   "상품/떡볶이소스",
+   "상품/떡볶이-소스-2kg"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-12",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 0,
+  "ok": true,
+  "why": "",
+  "grounded": false,
+  "answer": "답: 가나마트 담당은 2026년 10월 1일부터 영업지원팀 한 주임이며, 이전에는 이 대리였습니다.  \n근거: [거래처/가나마트] (가나다식품 위키)",
+  "tokens": 2302,
+  "pages": null
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-12",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 1,
+  "ok": true,
+  "why": "",
+  "grounded": false,
+  "answer": "답: 가나마트 담당은 2026년 10월 1일부터 영업지원팀 한 주임이며, 이전에는 이 대리였습니다.\n근거: [거래처/가나마트 — 담당: 영업지원팀 (2026-10-01부터 한 주임, 이전 이 대리)] (출처: index)",
+  "tokens": 2322,
+  "pages": null
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-12",
+  "group": "Q2",
+  "kind": "fact",
+  "trial": 2,
+  "ok": true,
+  "why": "",
+  "grounded": false,
+  "answer": "답: 가나마트 담당은 2026년 10월 1일부터 영업지원팀 한 주임이며, 이전에는 이 대리였습니다.  \n근거: [거래처/가나마트] (가나다식품 위키 목차)",
+  "tokens": 2304,
+  "pages": null
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-13",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 0,
+  "ok": true,
+  "why": "",
+  "grounded": true,
+  "answer": "답: 다온팩에서 받는 냉동 보냉재(젤 아이스팩)는 개당 380원이며, 2026년 9월 15일 출고분부터 변경되었습니다.  \n근거: [페이지: 거래처/다온팩] (출처: suppliers/다온팩_공지_2026-09-10.md)",
+  "tokens": 4882,
+  "pages": [
+   "거래처/다온팩"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-13",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 1,
+  "ok": true,
+  "why": "",
+  "grounded": true,
+  "answer": "답: 다온팩에서 받는 냉동 보냉재(젤 아이스팩)는 개당 380원이며, 2026년 9월 15일 출고분부터 바뀌었습니다.  \n근거: [페이지: 거래처/다온팩] (출처: suppliers/다온팩_공지_2026-09-10.md)",
+  "tokens": 4884,
+  "pages": [
+   "거래처/다온팩"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-13",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 2,
+  "ok": true,
+  "why": "",
+  "grounded": true,
+  "answer": "답: 다온팩에서 받는 냉동 보냉재(젤 아이스팩)는 개당 380원이며, 2026년 9월 15일 출고분부터 변경되었습니다.  \n근거: [거래처/다온팩] (출처: suppliers/다온팩_공지_2026-09-10.md)",
+  "tokens": 4881,
+  "pages": [
+   "거래처/다온팩"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-14",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 0,
+  "ok": true,
+  "why": "",
+  "grounded": false,
+  "answer": "답: 한빛물류 냉동 택배 건당 요금은 현재 4,200원이며, 2026년 11월 15일부터는 4,500원으로 300원 인상됩니다.\n근거: [페이지: 거래처/한빛물류] (출처: index)",
+  "tokens": 2341,
+  "pages": null
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-14",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 1,
+  "ok": true,
+  "why": "",
+  "grounded": false,
+  "answer": "답: 한빛물류 냉동 택배 건당 요금은 현재 4,200원이고, 2026년 11월 15일부터는 4,500원으로 300원 인상됩니다.\n근거: [페이지: 거래처/한빛물류] (출처: index)",
+  "tokens": 2341,
+  "pages": null
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-14",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 2,
+  "ok": true,
+  "why": "",
+  "grounded": false,
+  "answer": "답: 한빛물류 냉동 택배 건당 요금은 현재 4,200원이며, 2026년 11월 15일부터는 4,500원으로 300원 인상됩니다.\n근거: [페이지: 거래처/한빛물류] (출처: index)",
+  "tokens": 2341,
+  "pages": null
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-15",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 0,
+  "ok": true,
+  "why": "",
+  "grounded": true,
+  "answer": "답: 떡볶이 소스 2kg 가나공급 단가는 현재 73,400원(2026-07-01 적용)이며, 2027년 1월부터는 82,000원입니다.  \n근거: [페이지: 상품/떡볶이-소스-2kg] (출처: suppliers/가나공급_단가표.csv, suppliers/가나공급_공문_2026-10-15.md)",
+  "tokens": 4835,
+  "pages": [
+   "상품/떡볶이-소스-2kg"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-15",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 1,
+  "ok": true,
+  "why": "",
+  "grounded": true,
+  "answer": "답: 떡볶이 소스 2kg의 현재 단가는 73,400원이며, 2027년 1월부터는 82,000원입니다.  \n근거: [페이지: 상품/떡볶이-소스-2kg] (출처: suppliers/가나공급_단가표.csv, suppliers/가나공급_공문_2026-10-15.md)",
+  "tokens": 4823,
+  "pages": [
+   "상품/떡볶이-소스-2kg"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q2-15",
+  "group": "Q2",
+  "kind": "date",
+  "trial": 2,
+  "ok": true,
+  "why": "",
+  "grounded": true,
+  "answer": "답: 떡볶이 소스 2kg 가나공급 단가는 현재 73,400원(2026-07-01 적용)이고, 2027년 1월부터는 82,000원입니다.  \n근거: [페이지: 상품/떡볶이-소스-2kg] (출처: suppliers/가나공급_단가표.csv, suppliers/가나공급_공문_2026-10-15.md)",
+  "tokens": 4835,
+  "pages": [
+   "상품/떡볶이-소스-2kg"
+  ]
+ }
+]

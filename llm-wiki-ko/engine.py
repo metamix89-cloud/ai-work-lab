@@ -55,6 +55,61 @@ def slugify(s):
     return s[:60] or "page"
 
 
+# ── 3편 v2: 원본 등급(코드) · 품목 이름 정규화(코드) · 낮은 등급은 새 페이지 금지(코드) ─────────────
+def grade_of(path):
+    """파일 이름으로 원본 등급: 1 기록 · 계약 · 단가표 · 요금표 · 조건, 2 공문 · 공지, 3 회의록, 4 보고, 5 메모 · 초안 · 옛 안내문."""
+    p = path.replace("\\", "/")
+    n = os.path.basename(p)
+    if re.search(r"메모|초안|_옛|FAQ", n):
+        return 5
+    if re.search(r"보고", n):
+        return 4
+    if "/meetings/" in p or "회의" in n:
+        return 3
+    if re.search(r"공문|공지|개정예고|개정공지", n):
+        return 2
+    return 1
+
+
+def _norm_name(s):
+    return re.sub(r"[\s\-_/·.]", "", s).lower()
+
+
+_CANON = None
+
+
+def canon_slug(slug):
+    """'상품/떡볶이소스' · '상품/떡볶이-소스' 처럼 같은 품목의 다른 이름을 상품 단가표의 정식 이름 하나로 맞춘다(코드). 품목이 아니면 그대로."""
+    global _CANON
+    if _CANON is None:
+        _CANON = {}
+        p = os.path.join(RAW, "customers", "상품_단가표_2026-10.md")
+        if os.path.exists(p):
+            for line in read(p).splitlines():
+                cells = [c.strip() for c in line.strip().strip("|").split("|")]
+                if len(cells) >= 2 and re.match(r"[A-Z]\d{3}$", cells[0]):
+                    name = cells[1]
+                    _CANON[_norm_name(name)] = "상품-" + slugify(name)
+                    base = re.sub(r"\s*\d+(\.\d+)?\s*(kg|g|ml|L|oz|lb)\b.*$", "", name).strip()   # '떡볶이 소스 2kg' → '떡볶이 소스'
+                    _CANON.setdefault(_norm_name(base), "상품-" + slugify(name))
+    s = slugify(slug)
+    if s.startswith("거래처-"):                 # '거래처/가나공급_계약' · '거래처/가나공급-단가' → '거래처/가나공급'
+        for p in ("가나마트", "다나유통", "라마상회", "바사푸드", "아자식품", "가나공급", "다온팩", "한빛물류"):
+            if p in s:
+                return "거래처-" + p
+        return s
+    if not s.startswith("상품-"):
+        return s
+    key = _norm_name(s[3:])
+    if key in _CANON:
+        return _CANON[key]
+    if len(key) >= 4:                       # '밀키트' 처럼 짧은 일반 이름은 맞추지 않는다
+        for k, v in _CANON.items():
+            if len(k) >= 4 and (key.startswith(k) or k.startswith(key) or k.endswith(key)):   # '떡갈비500g' ⊂ '냉동떡갈비500g'
+                return v
+    return s
+
+
 # ── 위키 파일 시스템 ─────────────────────────────────────────────────────────
 class Wiki:
     def __init__(self, wdir, schema_path=None, privacy=True):
@@ -85,6 +140,72 @@ class Wiki:
     def write_page(self, slug, content):
         write(self.page_path(slug), content)
 
+    def write_page_keep_history(self, slug, content):
+        """3편 v3: 쓰기는 '전체 덮어쓰기'라 이전 원본이 남긴 이력 · 출처 · 상충이 사라진다 → 코드가 지킨다.
+        새 내용에 없는 (1) 출처 파일명 (2) 표 행(| 로 시작하는 줄 중 데이터 행) (3) '## ⚠' 아래 글머리 줄을 이전 페이지에서 찾아 되살린다."""
+        old = self.read_page(slug)
+        if not old:
+            return self.write_page(slug, content), 0
+        kept = 0
+        # (1) 출처 합치기
+        m_old = re.search(r"^출처:\s*(.+)$", old, re.M); m_new = re.search(r"^출처:\s*(.+)$", content, re.M)
+        if m_old and m_new:
+            srcs = [s.strip() for s in m_old.group(1).split(",") if s.strip()]
+            missing = [s for s in srcs if s and s not in content]
+            if missing:
+                content = content.replace(m_new.group(0), "출처: " + ", ".join([s.strip() for s in m_new.group(1).split(",") if s.strip()] + missing), 1)
+                kept += len(missing)
+        # (2) 이전 표의 데이터 행 중 새 내용에 없는 행 → 같은 머리글의 표 뒤에, 없으면 '## 이력 (되살림)' 절에
+        def rows(t):
+            out, hdr = [], None
+            for l in t.splitlines():
+                if l.strip().startswith("|"):
+                    cells = [c.strip() for c in l.strip().strip("|").split("|")]
+                    if all(set(c) <= set("-: ") for c in cells):
+                        continue
+                    if hdr is None or (out and out[-1][0] != hdr and False):
+                        pass
+                    if not any(ch.isdigit() for ch in l) and hdr is None:
+                        hdr = l.strip(); continue
+                    if hdr is not None and l.strip() == hdr:
+                        continue
+                    out.append((hdr, l.strip()))
+                else:
+                    hdr = None
+            return out
+        old_rows = rows(old); new_text = content
+        lost = [(h, r) for h, r in old_rows if r not in content and any(ch.isdigit() for ch in r)]
+        if lost:
+            by_hdr = {}
+            for h, r in lost:
+                by_hdr.setdefault(h, []).append(r)
+            for h, rs in by_hdr.items():
+                if h and h in new_text:
+                    # 같은 머리글 표의 마지막 행 뒤에 붙인다
+                    i = new_text.index(h); j = i
+                    lines = new_text[i:].split("\n")
+                    k = 0
+                    while k + 1 < len(lines) and lines[k + 1].strip().startswith("|"):
+                        k += 1
+                    insert_at = i + len("\n".join(lines[:k + 1]))
+                    new_text = new_text[:insert_at] + "\n" + "\n".join(rs) + new_text[insert_at:]
+                else:
+                    new_text = new_text.rstrip() + "\n\n## 이력 (코드가 되살림 — 이전 페이지에 있던 행)\n" + (h + "\n|---|\n" if h else "") + "\n".join(rs) + "\n"
+            kept += len(lost)
+        # (3) 상충 글머리
+        def bullets(t):
+            sec = t.split("## ⚠")[-1] if "## ⚠" in t else ""
+            return [l.strip() for l in sec.splitlines() if l.strip().startswith("-") and len(l.strip()) > 3]
+        lostb = [b for b in bullets(old) if b not in new_text]
+        if lostb:
+            if "## ⚠" in new_text:
+                new_text = new_text.rstrip() + "\n" + "\n".join(lostb) + "\n"
+            else:
+                new_text = new_text.rstrip() + "\n\n## ⚠ 상충 · 확인 필요 (코드가 되살림)\n" + "\n".join(lostb) + "\n"
+            kept += len(lostb)
+        self.write_page(slug, new_text)
+        return None, kept
+
     def set_index(self, content):
         write(os.path.join(self.dir, "index.md"), content)
 
@@ -103,6 +224,23 @@ class Wiki:
         chars = sum(len(self.read_page(s) or "") for s in self.slugs())
         return dict(pages=n, chars=chars)
 
+    def rebuild_index(self):
+        """목차를 코드로 다시 만든다(2편 v4 '목차는 코드로'): 페이지마다 '분류:' 줄과 '현재 값' 첫 줄을 읽어 분류별로 모은다. 고아 페이지가 생길 수 없다."""
+        groups = {}
+        for s in self.slugs():
+            t = self.read_page(s) or ""
+            m = re.search(r"^분류:\s*(\S+)", t, re.M)
+            cat = m.group(1) if m else s.split("-")[0]
+            title = (re.search(r"^# (.+)$", t, re.M) or [None, s])[1] if re.search(r"^# (.+)$", t, re.M) else s
+            body = t.split("## 현재 값")[-1] if "## 현재 값" in t else t
+            first = next((l.strip("- ").strip() for l in body.splitlines() if l.strip().startswith("-")), "")
+            first = re.sub(r"\s*\(출처:[^)]*\)", "", first)[:90]
+            groups.setdefault(cat, []).append("- %s — %s" % (s.replace("-", "/", 1), first or title))
+        out = ["# 가나다식품 위키 — 목차 (코드가 페이지에서 자동 생성)", ""]
+        for cat in sorted(groups):
+            out += ["## " + cat] + groups[cat] + [""]
+        self.set_index("\n".join(out))
+
 
 TOOLS_RW = [
     {"type": "function", "function": {"name": "read_index", "description": "위키 목차(index.md) 전체를 읽는다.", "parameters": {"type": "object", "properties": {}}}},
@@ -116,12 +254,43 @@ TOOLS_RW = [
                                       "parameters": {"type": "object", "properties": {"line": {"type": "string"}}, "required": ["line"]}}},
 ]
 TOOLS_RO = TOOLS_RW[:2]
+# 2편 v3: 표의 건수는 모델이 세지 않고 코드가 센다
+TOOL_TALLY = {"type": "function", "function": {"name": "tally_table", "description": "원본 파일 속 마크다운 표를 코드로 센다. by 열의 값별 건수(by2 를 주면 by × by2 교차 건수)를 돌려준다. 건수는 반드시 이 도구로 센다.",
+                                               "parameters": {"type": "object", "properties": {"path": {"type": "string", "description": "원본 파일 경로(raw/ 기준, 예: cs/2026-W38.md)"},
+                                                                                               "by": {"type": "string", "description": "셀 열 이름(예: 유형)"},
+                                                                                               "by2": {"type": "string", "description": "교차할 두 번째 열 이름(예: 상품), 없으면 빈칸"}}, "required": ["path", "by"]}}}
 
 
-def run_agent(wiki, sys_prompt, user, tools, max_steps, read_limit=None):
-    """도구 루프. 돌아오는 값: (마지막 답, 토큰, 기록[(도구, 인자 요약)])"""
+def tally_table(path, by, by2=""):
+    p = os.path.join(RAW, path.replace("\\", "/").lstrip("/").replace("raw/", "", 1))
+    if not os.path.exists(p):
+        return "파일 없음: " + path
+    hdr, rows = None, []
+    for line in read(p).splitlines():
+        if not line.strip().startswith("|"):
+            continue
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if hdr is None:
+            hdr = cells; continue
+        if all(set(c) <= set("-: ") for c in cells):
+            continue
+        rows.append(cells)
+    if not hdr or by not in hdr:
+        return "열 없음: %s (열: %s)" % (by, ", ".join(hdr or []))
+    i = hdr.index(by)
+    if by2 and by2 in hdr:
+        j = hdr.index(by2)
+        c = Counter((r[i], r[j]) for r in rows if len(r) > max(i, j))
+        return "행 %d개 · %s × %s 건수:\n" % (len(rows), by, by2) + "\n".join("%s | %s | %d" % (a, b, n) for (a, b), n in c.most_common())
+    c = Counter(r[i] for r in rows if len(r) > i)
+    return "행 %d개 · %s 별 건수:\n" % (len(rows), by) + "\n".join("%s | %d" % (k, n) for k, n in c.most_common())
+
+
+def run_agent(wiki, sys_prompt, user, tools, max_steps, read_limit=None, guard=None):
+    """도구 루프. 돌아오는 값: (마지막 답, 토큰, 기록[(도구, 인자 요약)]). guard=(원본 등급, 정규화 여부): 3편 v2 코드 규칙."""
     msgs = [{"role": "system", "content": sys_prompt}, {"role": "user", "content": user}]
     tokens, trace, reads = 0, [], 0
+    src_grade, canon = guard if guard else (None, False)
     for step in range(max_steps):
         m, t = chat(msgs, tools)
         tokens += t
@@ -135,13 +304,27 @@ def run_agent(wiki, sys_prompt, user, tools, max_steps, read_limit=None):
                 out = wiki.index()
             elif name == "read_page":
                 reads += 1
-                out = (wiki.read_page(a.get("slug", "")) or "없음") if (read_limit is None or reads <= read_limit) else "읽기 한도 초과 — 지금까지 읽은 것으로 답하라"
+                slug = canon_slug(a.get("slug", "")) if canon else a.get("slug", "")
+                out = (wiki.read_page(slug) or "없음") if (read_limit is None or reads <= read_limit) else "읽기 한도 초과 — 지금까지 읽은 것으로 답하라"
+                if canon and slug != slugify(a.get("slug", "")):
+                    out = "(정식 이름 %s 로 읽음)\n" % slug.replace("-", "/", 1) + out
             elif name == "write_page":
-                wiki.write_page(a.get("slug", "page"), a.get("content", "")); out = "저장: " + slugify(a.get("slug", "page"))
+                slug = canon_slug(a.get("slug", "page")) if canon else slugify(a.get("slug", "page"))
+                if slug.lower().replace(".md", "") in ("index", "log"):
+                    out = "index · log 는 페이지가 아니다(목차는 write_index 또는 자동). 저장하지 않음"   # v4 에서 모델이 'index' 페이지를 만든 일이 있음
+                elif src_grade is not None and src_grade >= 4 and wiki.read_page(slug) is None:
+                    out = "거부: 등급 %d 원본(보고 · 메모 · 초안)으로는 새 페이지를 만들 수 없다. 이미 있는 페이지의 '상충' 섹션에만 적어라. (없는 페이지: %s)" % (src_grade, slug)
+                elif canon:
+                    _, kept = wiki.write_page_keep_history(slug, a.get("content", ""))
+                    out = "저장: " + slug + ("" if slug == slugify(a.get("slug", "page")) else " (정식 이름으로 맞춤)") + (" · 이전 페이지의 이력 %d줄을 코드가 되살림" % kept if kept else "")
+                else:
+                    wiki.write_page(slug, a.get("content", "")); out = "저장: " + slug
             elif name == "write_index":
                 wiki.set_index(a.get("content", "")); out = "index 저장"
             elif name == "append_log":
                 wiki.append_log(a.get("line", "")); out = "log 추가"
+            elif name == "tally_table":
+                out = tally_table(a.get("path", ""), a.get("by", ""), a.get("by2", ""))
             else:
                 out = "알 수 없는 도구"
             trace.append((name, a.get("slug") or a.get("line", "")[:60] or ""))
@@ -164,10 +347,24 @@ INGEST_SYS = """너는 가나다식품(가상 회사)의 LLM 위키 관리자다
 INGEST_USER = "오늘 날짜: {today}\n원본 파일: {name}\n\n<<원본 시작>>\n{text}\n<<원본 끝>>"
 
 
-def ingest(wiki, raw_path, today):
+def ingest(wiki, raw_path, today, tally=False, auto_index=False, grade_guard=False):
     text = read(raw_path)
     name = os.path.relpath(raw_path, RAW).replace("\\", "/")
-    ans, tokens, trace = run_agent(wiki, INGEST_SYS + wiki.schema, INGEST_USER.format(today=today, name=name, text=text), TOOLS_RW, MAX_STEPS)
+    tools = [t for t in TOOLS_RW if not (auto_index and t["function"]["name"] == "write_index")] + ([TOOL_TALLY] if tally else [])
+    sys_prompt = INGEST_SYS + wiki.schema
+    if auto_index:
+        sys_prompt += "\n\n(목차 index.md 는 코드가 페이지에서 자동으로 만든다. 목차를 쓰려 하지 말고 페이지의 '분류:' 줄과 '현재 값' 첫 줄을 잘 쓰면 된다.)"
+    guard = None
+    if grade_guard:
+        g = grade_of(name)
+        guard = (g, True)
+        sys_prompt += "\n\n(이 원본의 등급은 %d 이다. 등급 4 · 5 원본으로는 새 페이지를 만들 수 없고(도구가 거부한다) 기존 페이지의 '상충' 섹션에만 적는다. 품목 페이지 이름은 코드가 정식 이름으로 맞춘다.)" % g
+    user = INGEST_USER.format(today=today, name=name, text=text)
+    if grade_guard:
+        user = "원본 등급: %d\n" % grade_of(name) + user
+    ans, tokens, trace = run_agent(wiki, sys_prompt, user, tools, MAX_STEPS, guard=guard)
+    if auto_index:
+        wiki.rebuild_index()
     touched = sorted({s for n, s in trace if n == "write_page"})
     return dict(source=name, report=ans, tokens=tokens, pages_written=touched, steps=len(trace))
 
@@ -176,7 +373,7 @@ def ingest(wiki, raw_path, today):
 QUERY_SYS = """너는 가나다식품(가상 회사) 직원이 묻는 질문에 사내 위키만 보고 답하는 비서다. 오늘 날짜는 {today} 다.
 순서: read_index 로 목차를 보고, 필요한 페이지만 read_page 로 읽는다(최대 {lim}장). 위키 밖 지식이나 짐작으로 답하지 않는다.
 답 형식:
-답: (한두 문장, 숫자 · 날짜 · 이름을 분명히. 날짜 조건이 있으면 오늘 기준으로 판단하고 근거 날짜를 함께)
+답: (한두 문장, 숫자 · 날짜 · 이름을 분명히. 질문에 날짜가 있으면 그 날짜 기준으로 적용일을 고르고, 없으면 오늘 기준. 적용일이 기준 날짜보다 뒤인 값은 아직 아니다 — '예정'으로만 덧붙이고, 답은 기준 날짜에 유효한 값으로. 근거 날짜를 함께)
 근거: [페이지: 슬러그] (출처: 원본 파일명)  — 읽은 페이지 중 답의 근거가 된 것만
 위키에 답이 없으면 '답: 위키에 없음' 이라고 쓰고 근거에는 '없음' 이라고 쓴다. 비슷한 값을 끌어다 짐작하지 않는다."""
 
@@ -209,7 +406,7 @@ def lint(wiki, today):
 # ── 비교 조건: 원본 통째 · 일반 RAG ─────────────────────────────────────────
 BASE_SYS = """너는 가나다식품(가상 회사) 직원이 묻는 질문에 제공된 회사 자료만 보고 답하는 비서다. 오늘 날짜는 {today} 다.
 답 형식:
-답: (한두 문장, 숫자 · 날짜 · 이름을 분명히. 날짜 조건이 있으면 오늘 기준으로 판단)
+답: (한두 문장, 숫자 · 날짜 · 이름을 분명히. 질문에 날짜가 있으면 그 날짜 기준으로 적용일을 고르고, 없으면 오늘 기준)
 근거: (출처: 원본 파일명) — 답의 근거가 된 자료만
 자료에 답이 없으면 '답: 자료에 없음', 근거 '없음'. 짐작하지 않는다."""
 

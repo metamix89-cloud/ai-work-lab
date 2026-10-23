@@ -1,0 +1,587 @@
+[
+ {
+  "cond": "wiki",
+  "id": "Q1-01",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 0,
+  "ok": false,
+  "why": "필수 값 없음: 떡갈비",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1028,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-01",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 1,
+  "ok": false,
+  "why": "필수 값 없음: 떡갈비",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1028,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-01",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 2,
+  "ok": false,
+  "why": "필수 값 없음: 떡갈비",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1028,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-02",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 0,
+  "ok": false,
+  "why": "후보 값 없음: 보냉재 / 젤 / 아이스팩",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1031,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-02",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 1,
+  "ok": false,
+  "why": "후보 값 없음: 보냉재 / 젤 / 아이스팩",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1031,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-02",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 2,
+  "ok": false,
+  "why": "후보 값 없음: 보냉재 / 젤 / 아이스팩",
+  "grounded": false,
+  "answer": "답: 위키에 없음  \n근거: 없음",
+  "tokens": 1031,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-03",
+  "group": "Q1",
+  "kind": "date",
+  "trial": 0,
+  "ok": false,
+  "why": "후보 값 없음: 9월 셋째 / 9월 3째 / 9/15 / 9월 15 / 09-15 / 9월 중순",
+  "grounded": false,
+  "answer": "답: 위키에 없음  \n근거: 없음",
+  "tokens": 1025,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-03",
+  "group": "Q1",
+  "kind": "date",
+  "trial": 1,
+  "ok": false,
+  "why": "후보 값 없음: 9월 셋째 / 9월 3째 / 9/15 / 9월 15 / 09-15 / 9월 중순",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1025,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-03",
+  "group": "Q1",
+  "kind": "date",
+  "trial": 2,
+  "ok": false,
+  "why": "후보 값 없음: 9월 셋째 / 9월 3째 / 9/15 / 9월 15 / 09-15 / 9월 중순",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1025,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-04",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 0,
+  "ok": false,
+  "why": "후보 값 없음: 지방 / 2일 배송 / 이틀 / 부산 / 대구 / 광주 / 전주 / 강릉 / 제주",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1025,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-04",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 1,
+  "ok": false,
+  "why": "후보 값 없음: 지방 / 2일 배송 / 이틀 / 부산 / 대구 / 광주 / 전주 / 강릉 / 제주",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1025,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-04",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 2,
+  "ok": false,
+  "why": "후보 값 없음: 지방 / 2일 배송 / 이틀 / 부산 / 대구 / 광주 / 전주 / 강릉 / 제주",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1025,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-05",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 0,
+  "ok": false,
+  "why": "필수 값 없음: 군만두",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1019,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-05",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 1,
+  "ok": false,
+  "why": "필수 값 없음: 군만두",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1019,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-05",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 2,
+  "ok": false,
+  "why": "필수 값 없음: 군만두",
+  "grounded": false,
+  "answer": "답: 위키에 없음  \n근거: 없음",
+  "tokens": 1019,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-06",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 0,
+  "ok": false,
+  "why": "후보 값 없음: 2,300만 / 2300만 / 23,000,000 / 약 2,300 / 2,3백만",
+  "grounded": false,
+  "answer": "답: 위키에 없음  \n근거: 없음",
+  "tokens": 1043,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-06",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 1,
+  "ok": false,
+  "why": "후보 값 없음: 2,300만 / 2300만 / 23,000,000 / 약 2,300 / 2,3백만",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1043,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-06",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 2,
+  "ok": false,
+  "why": "후보 값 없음: 2,300만 / 2300만 / 23,000,000 / 약 2,300 / 2,3백만",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1049,
+  "pages": [
+   "고객센터/반품"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-07",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 0,
+  "ok": false,
+  "why": "필수 값 없음: 떡갈비",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1025,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-07",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 1,
+  "ok": false,
+  "why": "필수 값 없음: 떡갈비",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1025,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-07",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 2,
+  "ok": false,
+  "why": "필수 값 없음: 떡갈비",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1025,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-08",
+  "group": "Q1",
+  "kind": "evidence",
+  "trial": 0,
+  "ok": false,
+  "why": "후보 값 없음: 월 · 화 / 월·화 / 월, 화 / 월요일과 화요일 / 월 화",
+  "grounded": false,
+  "answer": "답: 위키에 없음  \n근거: 없음",
+  "tokens": 1055,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-08",
+  "group": "Q1",
+  "kind": "evidence",
+  "trial": 1,
+  "ok": false,
+  "why": "후보 값 없음: 월 · 화 / 월·화 / 월, 화 / 월요일과 화요일 / 월 화",
+  "grounded": false,
+  "answer": "답: 위키에 없음  \n근거: 없음",
+  "tokens": 1055,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-08",
+  "group": "Q1",
+  "kind": "evidence",
+  "trial": 2,
+  "ok": false,
+  "why": "후보 값 없음: 월 · 화 / 월·화 / 월, 화 / 월요일과 화요일 / 월 화",
+  "grounded": false,
+  "answer": "답: 위키에 없음  \n근거: 없음",
+  "tokens": 1055,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-09",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 0,
+  "ok": false,
+  "why": "후보 값 없음: 새우 / 작다",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1031,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-09",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 1,
+  "ok": false,
+  "why": "후보 값 없음: 새우 / 작다",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1031,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-09",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 2,
+  "ok": false,
+  "why": "후보 값 없음: 새우 / 작다",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1031,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-10",
+  "group": "Q1",
+  "kind": "none",
+  "trial": 0,
+  "ok": true,
+  "why": "",
+  "grounded": true,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1049,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-10",
+  "group": "Q1",
+  "kind": "none",
+  "trial": 1,
+  "ok": true,
+  "why": "",
+  "grounded": true,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1061,
+  "pages": [
+   "고객센터/알레르기문의"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-10",
+  "group": "Q1",
+  "kind": "none",
+  "trial": 2,
+  "ok": true,
+  "why": "",
+  "grounded": true,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1061,
+  "pages": [
+   "고객센터/알레르기문의"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-11",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 0,
+  "ok": false,
+  "why": "후보 값 없음: 8건 / 9건 / 10건 / 8~10 / 9~10 / 주 9 / 주당 9 / 주당 8 / 주당 10",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1037,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-11",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 1,
+  "ok": false,
+  "why": "후보 값 없음: 8건 / 9건 / 10건 / 8~10 / 9~10 / 주 9 / 주당 9 / 주당 8 / 주당 10",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1037,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-11",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 2,
+  "ok": false,
+  "why": "후보 값 없음: 8건 / 9건 / 10건 / 8~10 / 9~10 / 주 9 / 주당 9 / 주당 8 / 주당 10",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1037,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-12",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 0,
+  "ok": false,
+  "why": "후보 값 없음: 27",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1055,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-12",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 1,
+  "ok": false,
+  "why": "후보 값 없음: 27",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1055,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-12",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 2,
+  "ok": false,
+  "why": "후보 값 없음: 27",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1055,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-13",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 0,
+  "ok": false,
+  "why": "후보 값 없음: 1건 / 2건 / 3건 / 1~3 / 2~3 / 주 2 / 주당 2 / 주당 1 / 주당 3 / 한두 건 / 두세 건",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1037,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-13",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 1,
+  "ok": false,
+  "why": "후보 값 없음: 1건 / 2건 / 3건 / 1~3 / 2~3 / 주 2 / 주당 2 / 주당 1 / 주당 3 / 한두 건 / 두세 건",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1037,
+  "pages": [
+   "고객센터"
+  ]
+ },
+ {
+  "cond": "wiki",
+  "id": "Q1-13",
+  "group": "Q1",
+  "kind": "fact",
+  "trial": 2,
+  "ok": false,
+  "why": "후보 값 없음: 1건 / 2건 / 3건 / 1~3 / 2~3 / 주 2 / 주당 2 / 주당 1 / 주당 3 / 한두 건 / 두세 건",
+  "grounded": false,
+  "answer": "답: 위키에 없음\n근거: 없음",
+  "tokens": 1037,
+  "pages": [
+   "고객센터"
+  ]
+ }
+]

@@ -8,9 +8,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 name = sys.argv[1] if len(sys.argv) > 1 and not sys.argv[1].startswith("--") else "ep1"
 args = sys.argv[1:]
 only = next((a.split("=", 1)[1] for a in args if a.startswith("--cond=")), None)
+ids = next((set(a.split("=", 1)[1].split(",")) for a in args if a.startswith("--only=")), None)   # 특정 문항만 (예: cs 만으로 답할 수 있는 8문항)
 mx = int(next((a.split("=", 1)[1] for a in args if a.startswith("--max=")), 30))
 res = json.load(open(os.path.join(HERE, "results", name + ".json"), encoding="utf-8"))
-res = [r for r in res if "ok" in r and (only is None or r["cond"] == only)]
+res = [r for r in res if "ok" in r and (only is None or r["cond"] == only) and (ids is None or r["id"] in ids)]
 groups = sorted({r["group"] for r in res})
 print("%-6s %s  %6s %7s %8s" % ("조건", " ".join("%7s" % g for g in groups), "정답", "근거", "토큰/문항"))
 for c in sorted({r["cond"] for r in res}):
