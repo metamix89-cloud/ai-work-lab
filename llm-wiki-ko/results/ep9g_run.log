@@ -1,0 +1,22 @@
+[guard E1 ] pages=['거래처/가나마트'] tok=22391
+[guard E2 ] pages=['거래처/단가표', '거래처/참기름'] tok=44375
+[guard E3 ] pages=['거래처/고객센터', '규정/AI-응답-운영'] tok=38983
+[guard E4 ] pages=['거래처/가나마트'] tok=30801
+[guard E5 ] pages=['index', '거래처/가나마트'] tok=40878
+[guard E6 ] pages=['상품/밀키트'] tok=20444
+[guard E7 ] pages=['지표/변질-문의-건수'] tok=19754
+[guard E8 ] pages=['index', '지표/AI-1차-응답-시범'] tok=29046
+[guard E9 ] pages=['거래처/바사푸드'] tok=20485
+[guard E10] pages=['물류-공지'] tok=19551
+== guard: 넣기 전 이미 틀린 값 4 · 재발 1/10 ['E10'] · 토큰 286708 · 114s
+[fixguard E1 ] pages=['거래처/가나마트'] tok=24505
+[fixguard E2 ] pages=['거래처/단가표', '거래처/참기름'] tok=45204
+[fixguard E3 ] pages=['결정/2026-10-30-AI-1차-응답-확대'] tok=28613
+[fixguard E4 ] pages=['거래처/가나마트'] tok=24565
+[fixguard E5 ] pages=['index', '거래처/가나마트'] tok=35520
+[fixguard E6 ] pages=['index', '상품/밀키트'] tok=40448
+[fixguard E7 ] pages=['이슈/변질-문의', '이슈/변질-문의-증가-2026-W38'] tok=44611
+[fixguard E8 ] pages=['지표/AI-1차-응답-시범'] tok=21858
+[fixguard E9 ] pages=['거래처/김'] tok=21724
+[fixguard E10] pages=['index', '물류-출고-요일'] tok=39700
+== fixguard: 넣기 전 이미 틀린 값 4 · 재발 1/10 ['E10'] · 토큰 326748 · 118s

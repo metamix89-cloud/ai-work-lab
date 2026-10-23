@@ -393,8 +393,13 @@ def run_agent(wiki, sys_prompt, user, tools, max_steps, read_limit=None, guard=N
             return m.content or "", tokens, trace
         msgs.append(m)
         for tc in m.tool_calls:
-            a = json.loads(tc.function.arguments or "{}")
             name = tc.function.name
+            try:
+                a = json.loads(tc.function.arguments or "{}")
+            except Exception as e:                                   # 모델이 보낸 인자 JSON 이 잘림(11편 빌드에서 한 번) → 오류를 돌려주고 계속
+                trace.append((name, "(인자 JSON 깨짐)"))
+                msgs.append({"role": "tool", "tool_call_id": tc.id, "content": "도구 인자 JSON 이 깨졌다(%s). 같은 도구를 더 짧은 인자로 다시 호출하라." % str(e)[:60]})
+                continue
             if name == "read_index":
                 out = wiki.index()
             elif name == "read_page":

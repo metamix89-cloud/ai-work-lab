@@ -32,6 +32,8 @@ EXTRACT = "--extract" in args          # 4편: 회의록의 결정 블록을 코
 SPLIT = "--split-articles" in args     # 5편: '## N.' 조항이 여러 개인 파일(규정집)은 코드가 조항 단위로 쪼개 하나씩 넣는다
 AMEND = "--amend-last" in args         # 5편 v2: 개정 공지 · 개정 조항은 원래 조항 뒤에 넣고, 새 페이지 생성을 거부(기존 페이지를 고치게)
 REQUIRE_WRITE = "--require-write" in args   # 5편 v3: 개정 원본 넣기가 write_page 0회로 끝나면 한 번 재촉(보고문에만 쓰고 끝내는 일 방지)
+NO_PRIVACY = "--no-privacy" in args         # 11편: schema 의 '쓰면 안 되는 것' 절을 뺀 채 넣는다 (민감 정보 노출 비교)
+BUILD_ONLY = "--build-only" in args         # 위키만 만들고 묻기는 하지 않는다
 WIKI_DIR = opt("wiki")                 # 이미 만든 위키 폴더(예: wiki_ep3)를 다시 묻기만 할 때 — 빌드 생략
 QFILE = json.load(open(os.path.join(HERE, "questions.json"), encoding="utf-8"))
 TODAY = QFILE["today"]
@@ -54,7 +56,7 @@ def build():
     shutil.rmtree(WDIR, ignore_errors=True)
     if BASE:
         shutil.copytree(os.path.join(HERE, BASE), WDIR, ignore=shutil.ignore_patterns("BUILT"))
-    w = E.Wiki(WDIR, schema_path=SCHEMA)
+    w = E.Wiki(WDIR, schema_path=SCHEMA, privacy=not NO_PRIVACY)
     log, t0 = [], time.time()
     files = group_files(GROUPS)
     if GRADE_ORDER:
@@ -115,6 +117,8 @@ def run(cond):
 
 
 if __name__ == "__main__":
+    if BUILD_ONLY:
+        build(); print("빌드만:", WDIR); sys.exit(0)
     path = os.path.join(OUT, NAME + ".json")
     res = [r for r in json.load(open(path, encoding="utf-8"))] if os.path.exists(path) else []
     res = [r for r in res if r["cond"] not in CONDS or (ONLY and r.get("id") not in ONLY)]
