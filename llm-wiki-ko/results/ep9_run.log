@@ -14,3 +14,14 @@
 [rules E3 ] pages=['index', '거래처/고객센터'] tok=36913
 [rules E4 ] pages=['index', '거래처/가나마트'] tok=33364
 [rules E5 ] pages=['거래처/가나마트'] tok=23319
+[rules E6 ] pages=['상품/밀키트'] tok=20310
+[rules E7 ] pages=['지표/변질-문의-건수'] tok=19420
+[rules E8 ] pages=['지표/AI-1차-응답-시범'] tok=19805
+[rules E9 ] pages=['거래처/바사푸드'] tok=20445
+[rules E10] pages=['index', '규정/3-물류-출고-지방-냉동'] tok=37688
+== rules: 넣기 전 이미 틀린 값 4 · 재발 7/10 ['E2', 'E3', 'E4', 'E5', 'E7', 'E9', 'E10'] · 토큰 271504 · 139s
+[fixrules E1 ] pages=['거래처/가나마트'] tok=24082
+[fixrules E2 ] pages=['index', '거래처/참기름'] tok=45139
+[fixrules E3 ] pages=['결정/2026-10-30-AI-시범-확대'] tok=21573
+[fixrules E4 ] pages=['거래처/가나마트'] tok=24926
+[fixrules E5 ] pages=['거래처/가나마트'] tok=25578
