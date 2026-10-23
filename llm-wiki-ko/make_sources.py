@@ -364,7 +364,7 @@ def write_meetings():
 
 # ── 규정 ─────────────────────────────────────────────────────────────────────
 def write_policies():
-    kb = open(os.path.join(HERE, "..", "aibook", "05_rag_rules", "kb.md"), encoding="utf-8").read()
+    kb = open(os.path.join(HERE, "..", "aibook", "lab_ep040", "kb.md"), encoding="utf-8").read()
     W("policies/사규_2026.md", kb)
     W("policies/개정공지_2026-10-01_법인카드.md", """# 사규 개정 공지 — 2026-10-01 시행
 

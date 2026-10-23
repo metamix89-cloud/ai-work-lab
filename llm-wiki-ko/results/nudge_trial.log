@@ -1,0 +1,12 @@
+재촉 OFF t0  저장=True 재촉=False 합쳐짐=True steps=4 tok=25999
+재촉 OFF t1  저장=True 재촉=False 합쳐짐=True steps=4 tok=25996
+재촉 OFF t2  저장=False 재촉=False 합쳐짐=False steps=2 tok=13166
+재촉 OFF t3  저장=True 재촉=False 합쳐짐=True steps=4 tok=25946
+재촉 OFF t4  저장=False 재촉=False 합쳐짐=False steps=2 tok=13124
+재촉 ON  t0  저장=True 재촉=False 합쳐짐=True steps=4 tok=25958
+재촉 ON  t1  저장=True 재촉=False 합쳐짐=True steps=6 tok=18578
+재촉 ON  t2  저장=True 재촉=False 합쳐짐=True steps=4 tok=24929
+재촉 ON  t3  저장=True 재촉=False 합쳐짐=True steps=4 tok=25531
+재촉 ON  t4  저장=True 재촉=False 합쳐짐=True steps=4 tok=25170
+== 재촉 OFF: 5회 중 저장 없이 끝남 2 · 재촉 발동 0 · 새 값 합쳐짐 3
+== 재촉 ON: 5회 중 저장 없이 끝남 0 · 재촉 발동 0 · 새 값 합쳐짐 5

@@ -1,0 +1,140 @@
+{
+ "base": "wiki_ep5b",
+ "src": "policies/개정공지_2026-10-15_생성형AI.md",
+ "page": "규정/18-보안-생성형-AI-사용",
+ "must": "구매팀장",
+ "trials": 10,
+ "runs": [
+  {
+   "require_write": true,
+   "trial": 0,
+   "wrote": true,
+   "nudged": false,
+   "merged": true,
+   "pages_written": [
+    "규정/18-보안-생성형-AI-사용"
+   ],
+   "steps": 4,
+   "tokens": 25183,
+   "sec": 8
+  },
+  {
+   "require_write": true,
+   "trial": 1,
+   "wrote": true,
+   "nudged": false,
+   "merged": true,
+   "pages_written": [
+    "규정/18-보안-생성형-AI-사용"
+   ],
+   "steps": 4,
+   "tokens": 25722,
+   "sec": 8
+  },
+  {
+   "require_write": true,
+   "trial": 2,
+   "wrote": true,
+   "nudged": false,
+   "merged": true,
+   "pages_written": [
+    "규정/18-보안-생성형-AI-사용"
+   ],
+   "steps": 4,
+   "tokens": 26412,
+   "sec": 10
+  },
+  {
+   "require_write": true,
+   "trial": 3,
+   "wrote": true,
+   "nudged": false,
+   "merged": true,
+   "pages_written": [
+    "규정/18-보안-생성형-AI-사용"
+   ],
+   "steps": 4,
+   "tokens": 25910,
+   "sec": 9
+  },
+  {
+   "require_write": true,
+   "trial": 4,
+   "wrote": true,
+   "nudged": false,
+   "merged": true,
+   "pages_written": [
+    "규정/18-보안-생성형-AI-사용"
+   ],
+   "steps": 4,
+   "tokens": 25731,
+   "sec": 9
+  },
+  {
+   "require_write": true,
+   "trial": 5,
+   "wrote": true,
+   "nudged": false,
+   "merged": true,
+   "pages_written": [
+    "규정/18-보안-생성형-AI-사용"
+   ],
+   "steps": 4,
+   "tokens": 25874,
+   "sec": 11
+  },
+  {
+   "require_write": true,
+   "trial": 6,
+   "wrote": true,
+   "nudged": false,
+   "merged": true,
+   "pages_written": [
+    "규정/18-보안-생성형-AI-사용"
+   ],
+   "steps": 4,
+   "tokens": 25179,
+   "sec": 7
+  },
+  {
+   "require_write": true,
+   "trial": 7,
+   "wrote": true,
+   "nudged": false,
+   "merged": true,
+   "pages_written": [
+    "규정/18-보안-생성형-AI-사용"
+   ],
+   "steps": 4,
+   "tokens": 26505,
+   "sec": 10
+  },
+  {
+   "require_write": true,
+   "trial": 8,
+   "wrote": true,
+   "nudged": false,
+   "merged": true,
+   "pages_written": [
+    "규정/18-보안-생성형-AI-사용",
+    "규정/18-생성형AI-사용"
+   ],
+   "steps": 7,
+   "tokens": 28876,
+   "sec": 13
+  },
+  {
+   "require_write": true,
+   "trial": 9,
+   "wrote": true,
+   "nudged": false,
+   "merged": true,
+   "pages_written": [
+    "규정/18-보안-생성형-AI-사용"
+   ],
+   "steps": 4,
+   "tokens": 25872,
+   "sec": 10
+  }
+ ]
+}

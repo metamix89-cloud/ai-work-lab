@@ -344,15 +344,25 @@ def tally_table(path, by, by2=""):
     return "행 %d개 · %s 별 건수:\n" % (len(rows), by) + "\n".join("%s | %d" % (k, n) for k, n in c.most_common())
 
 
-def run_agent(wiki, sys_prompt, user, tools, max_steps, read_limit=None, guard=None):
-    """도구 루프. 돌아오는 값: (마지막 답, 토큰, 기록[(도구, 인자 요약)]). guard=(원본 등급, 정규화 여부): 3편 v2 코드 규칙."""
+NUDGE_WRITE = ("저장되지 않았습니다 — 보고문에 쓴 내용은 위키에 반영되지 않는다. write_page 를 한 번도 호출하지 않았다. "
+               "search_wiki 로 원래 조항 페이지를 찾아 read_page 로 읽고, 고친 전문을 write_page 로 저장한 뒤 다시 보고하라.")
+
+
+def run_agent(wiki, sys_prompt, user, tools, max_steps, read_limit=None, guard=None, require_write=False):
+    """도구 루프. 돌아오는 값: (마지막 답, 토큰, 기록[(도구, 인자 요약)]). guard=(원본 등급, 정규화 여부): 3편 v2 코드 규칙.
+    require_write(5편 v3): 모델이 write_page 0회로 끝내면 한 번만 재촉하고 루프를 이어 간다 — 보고문에만 써 놓는 일을 막는다."""
     msgs = [{"role": "system", "content": sys_prompt}, {"role": "user", "content": user}]
-    tokens, trace, reads = 0, [], 0
+    tokens, trace, reads, nudged = 0, [], 0, False
     src_grade, canon = guard if guard else (None, False)
     for step in range(max_steps):
         m, t = chat(msgs, tools)
         tokens += t
         if not m.tool_calls:
+            if require_write and not nudged and not any(n == "write_page" for n, _ in trace):
+                nudged = True
+                msgs.append(m); msgs.append({"role": "user", "content": NUDGE_WRITE})
+                trace.append(("nudge", "require_write"))
+                continue
             return m.content or "", tokens, trace
         msgs.append(m)
         for tc in m.tool_calls:
@@ -433,7 +443,7 @@ def is_amendment(name, text):
     return bool(re.search(r"개정|보완", n) or re.search(r"^## \d+\. \[개정", text, re.M))
 
 
-def ingest(wiki, raw_path, today, tally=False, auto_index=False, grade_guard=False, extract=False, text_override=None, name_override=None, amend_guard=False):
+def ingest(wiki, raw_path, today, tally=False, auto_index=False, grade_guard=False, extract=False, text_override=None, name_override=None, amend_guard=False, require_write=False):
     text = text_override if text_override is not None else read(raw_path)
     name = name_override or os.path.relpath(raw_path, RAW).replace("\\", "/")
     amend = amend_guard and is_amendment(name, text)
@@ -457,11 +467,11 @@ def ingest(wiki, raw_path, today, tally=False, auto_index=False, grade_guard=Fal
         sys_prompt += ("\n\n(이 원본은 **개정**이다. 새 규정 페이지를 만들 수 없다 — 도구가 거부한다. search_wiki 로 원래 조항 페이지(같은 주제 · 조 번호)를 찾아 "
                        "그 페이지의 '현재 값' 을 새 값으로 바꾸고, '이력' 에 '이전 값 → 새 값 (시행일, 출처)' 를 남겨라. 시행일이 오늘보다 뒤면 '시행 예정' 줄에.)")
         user = "[개정 원본]\n" + user
-    ans, tokens, trace = run_agent(wiki, sys_prompt, user, tools, MAX_STEPS, guard=guard)
+    ans, tokens, trace = run_agent(wiki, sys_prompt, user, tools, MAX_STEPS, guard=guard, require_write=require_write and amend)   # 재촉은 개정 원본에만
     if auto_index:
         wiki.rebuild_index()
     touched = sorted({s for n, s in trace if n == "write_page"})
-    return dict(source=name, report=ans, tokens=tokens, pages_written=touched, steps=len(trace))
+    return dict(source=name, report=ans, tokens=tokens, pages_written=touched, steps=len(trace), nudged=any(n == "nudge" for n, _ in trace))
 
 
 # ── 묻기 ─────────────────────────────────────────────────────────────────────

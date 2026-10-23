@@ -31,6 +31,7 @@ SEARCH = "--search" in args            # 3편 v4: 묻기에 위키 전체 검색
 EXTRACT = "--extract" in args          # 4편: 회의록의 결정 블록을 코드 도구(extract_decisions)로 뽑아 준다
 SPLIT = "--split-articles" in args     # 5편: '## N.' 조항이 여러 개인 파일(규정집)은 코드가 조항 단위로 쪼개 하나씩 넣는다
 AMEND = "--amend-last" in args         # 5편 v2: 개정 공지 · 개정 조항은 원래 조항 뒤에 넣고, 새 페이지 생성을 거부(기존 페이지를 고치게)
+REQUIRE_WRITE = "--require-write" in args   # 5편 v3: 개정 원본 넣기가 write_page 0회로 끝나면 한 번 재촉(보고문에만 쓰고 끝내는 일 방지)
 WIKI_DIR = opt("wiki")                 # 이미 만든 위키 폴더(예: wiki_ep3)를 다시 묻기만 할 때 — 빌드 생략
 QFILE = json.load(open(os.path.join(HERE, "questions.json"), encoding="utf-8"))
 TODAY = QFILE["today"]
@@ -65,7 +66,7 @@ def build():
     if AMEND:
         units = sorted(units, key=lambda u: E.is_amendment(u[1] or u[0], u[2] if u[2] is not None else E.read(u[0])))   # 개정은 맨 뒤(안정 정렬)
     for i, (f, n, t) in enumerate(units, 1):
-        r = E.ingest(w, f, TODAY, tally=TALLY, auto_index=AUTO_INDEX, grade_guard=GRADE_GUARD, extract=EXTRACT, text_override=t, name_override=n, amend_guard=AMEND)
+        r = E.ingest(w, f, TODAY, tally=TALLY, auto_index=AUTO_INDEX, grade_guard=GRADE_GUARD, extract=EXTRACT, text_override=t, name_override=n, amend_guard=AMEND, require_write=REQUIRE_WRITE)
         r["stats"] = w.stats(); r["grade"] = E.grade_of(f); log.append(r)
         print("[%2d/%d] %-45s pages=%-3d tok=%d" % (i, len(units), r["source"][:45], r["stats"]["pages"], r["tokens"]), flush=True)
     json.dump(dict(name=NAME, base=BASE, groups=GROUPS, schema=os.path.basename(SCHEMA), sec=round(time.time() - t0), log=log, stats=w.stats()),
