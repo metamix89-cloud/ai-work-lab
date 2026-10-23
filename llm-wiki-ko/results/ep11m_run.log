@@ -71,3 +71,51 @@
 [71/92] policies/사규_2026.md#조26                       pages=79  tok=17048
 [72/92] policies/사규_2026.md#조27                       pages=80  tok=34073
 [73/92] policies/사규_2026.md#조28                       pages=81  tok=35981
+[74/92] policies/사규_2026.md#조29                       pages=82  tok=36867
+[75/92] policies/사규_2026.md#조30                       pages=83  tok=17795
+[76/92] policies/사규_2026.md#조31                       pages=84  tok=37322
+[77/92] policies/사규_2026.md#조32                       pages=85  tok=20132
+[78/92] policies/사규_2026.md#조33                       pages=86  tok=17941
+[79/92] policies/사규_2026.md#조34                       pages=87  tok=32914
+[80/92] policies/안내문_재택근무_옛.md                        pages=87  tok=26694
+[81/92] policies/인사메모_오과장.md                          pages=88  tok=14121
+[82/92] sales/AI시범_보고서초안.md                           pages=89  tok=21048
+[83/92] sales/물류공지_지방냉동출고.md                          pages=90  tok=39449
+[84/92] sales/온라인리뷰_요약_2026-10.md                     pages=96  tok=66036
+[85/92] sales/월매출_2026.md                             pages=97  tok=31032
+[86/92] sales/재고표_2026-10-26.md                       pages=98  tok=29422
+[87/92] sales/품질팀_메신저_2026-10-08.md                   pages=99  tok=23200
+[88/92] policies/개정공지_2026-10-01_법인카드.md              pages=99  tok=23556
+[89/92] policies/개정공지_2026-10-15_생성형AI.md             pages=99  tok=31580
+Traceback (most recent call last):
+  File "D:\mockit\_scratch\wiki\run_stage.py", line 126, in <module>
+    build(); print("빌드만:", WDIR); sys.exit(0)
+    ~~~~~^^
+  File "D:\mockit\_scratch\wiki\run_stage.py", line 75, in build
+    r = E.ingest(w, f, TODAY, tally=TALLY, auto_index=AUTO_INDEX, grade_guard=GRADE_GUARD, extract=EXTRACT, text_override=t, name_override=n, amend_guard=AMEND, require_write=REQUIRE_WRITE)
+  File "D:\mockit\_scratch\wiki\engine.py", line 525, in ingest
+    ans, tokens, trace = run_agent(wiki, sys_prompt, user, tools, MAX_STEPS, guard=guard, require_write=require_write and amend)   # 재촉은 개정 원본에만
+                         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\mockit\_scratch\wiki\engine.py", line 385, in run_agent
+    m, t = chat(msgs, tools)
+           ~~~~^^^^^^^^^^^^^
+  File "D:\mockit\_scratch\wiki\engine.py", line 34, in chat
+    r = client.chat.completions.create(**kw)
+  File "C:\Users\DESKTOP_KIM\AppData\Roaming\Python\Python314\site-packages\openai\_utils\_utils.py", line 298, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\DESKTOP_KIM\AppData\Roaming\Python\Python314\site-packages\openai\resources\chat\completions\completions.py", line 1318, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/chat/completions",
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<53 lines>...
+        stream_cls=Stream[ChatCompletionChunk],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\DESKTOP_KIM\AppData\Roaming\Python\Python314\site-packages\openai\_base_client.py", line 1440, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DESKTOP_KIM\AppData\Roaming\Python\Python314\site-packages\openai\_base_client.py", line 1213, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.RateLimitError: Error code: 429 - {'error': {'message': 'You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.', 'type': 'insufficient_quota', 'param': None, 'code': 'credit_balance_exhausted'}}
