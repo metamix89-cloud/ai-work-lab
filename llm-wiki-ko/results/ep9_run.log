@@ -25,3 +25,9 @@
 [fixrules E3 ] pages=['결정/2026-10-30-AI-시범-확대'] tok=21573
 [fixrules E4 ] pages=['거래처/가나마트'] tok=24926
 [fixrules E5 ] pages=['거래처/가나마트'] tok=25578
+[fixrules E6 ] pages=['상품/밀키트'] tok=22707
+[fixrules E7 ] pages=['이슈/변질-문의'] tok=22163
+[fixrules E8 ] pages=['지표/AI-1차-응답-시범'] tok=21732
+[fixrules E9 ] pages=['거래처/김'] tok=21765
+[fixrules E10] pages=['규정/14-출고-요일'] tok=22267
+== fixrules: 넣기 전 이미 틀린 값 4 · 재발 7/10 ['E2', 'E3', 'E4', 'E5', 'E7', 'E9', 'E10'] · 토큰 251932 · 86s

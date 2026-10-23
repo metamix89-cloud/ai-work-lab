@@ -15,7 +15,9 @@ opt = lambda k, d=None: next((a.split("=", 1)[1] for a in args if a.startswith("
 CONDS = opt("conds", "plain,rules,fixrules").split(","); NAME = opt("name", "ep9")
 TODAY = "2026-10-30"
 BASE = dict(plain=("wiki_full", "schema.md", {}), rules=("wiki_ep7", "schema_ep5.md", dict(tally=True, auto_index=True, amend_guard=True, require_write=True)),
-            fixrules=("wiki_ep7", "schema_ep9.md", dict(tally=True, auto_index=True, amend_guard=True, require_write=True)))
+            fixrules=("wiki_ep7", "schema_ep9.md", dict(tally=True, auto_index=True, amend_guard=True, require_write=True)),
+            guard=("wiki_ep7", "schema_ep5.md", dict(tally=True, auto_index=True, amend_guard=True, require_write=True, conflict_guard=True)),        # 9편 v2: 코드 가드만
+            fixguard=("wiki_ep7", "schema_ep9.md", dict(tally=True, auto_index=True, amend_guard=True, require_write=True, conflict_guard=True)))     # 교정 규칙 + 코드 가드
 # 교정 규칙 파일: schema_ep5 + '## 사람 교정에서 온 규칙' 10줄
 s5 = open(os.path.join(HERE, "schema_ep5.md"), encoding="utf-8").read()
 open(os.path.join(HERE, "schema_ep9.md"), "w", encoding="utf-8").write(

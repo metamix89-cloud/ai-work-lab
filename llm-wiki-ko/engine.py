@@ -348,12 +348,39 @@ NUDGE_WRITE = ("저장되지 않았습니다 — 보고문에 쓴 내용은 위�
                "search_wiki 로 원래 조항 페이지를 찾아 read_page 로 읽고, 고친 전문을 write_page 로 저장한 뒤 다시 보고하라.")
 
 
+def conflict_bullets(text):
+    """'## ⚠ …' 절의 글머리 줄 목록."""
+    m = re.search(r"##\s*⚠[^\n]*\n(.*?)(?=\n## |\Z)", text or "", re.S)
+    return [l.strip() for l in (m.group(1) if m else "").split("\n") if l.strip().startswith("-") and l.strip("- \n") not in ("없음", "")]
+
+
+def merge_conflict_only(old, new, src_grade):
+    """9편 v2(코드 가드): 낮은 등급 원본이 페이지를 고치려 하면 본문은 옛것을 그대로 두고, 새 내용의 '⚠ 상충' 글머리만(없으면 본문에서 새로 생긴 줄을 상충으로) 옛 상충 절에 더한다. (합친 페이지, 더한 줄 수)"""
+    old = old or ""
+    new_all = conflict_bullets(new)
+    new_b = [b for b in new_all if b not in conflict_bullets(old)]
+    if not new_all:                                            # 상충 절에 적지 않고 본문만 바꾸려 했다 → 바뀐 줄을 상충으로 돌린다
+        old_lines = {l.strip() for l in old.split("\n")}
+        diff = [l.strip() for l in new.split("\n") if l.strip().startswith("-") and l.strip() not in old_lines and not l.strip().startswith("- 최초")][:3]
+        new_b = ["- (등급 %d 원본, 본문 반영 거부) %s" % (src_grade, l.lstrip("- ")) for l in diff]
+    if not new_b:
+        return old, 0
+    m = re.search(r"(##\s*⚠[^\n]*\n)(.*?)(?=\n## |\Z)", old, re.S)
+    if m:
+        body = m.group(2).rstrip()
+        body = "" if body.strip("- \n") in ("없음", "") else body
+        merged = old[:m.start(2)] + (body + "\n" if body else "") + "\n".join(new_b) + old[m.end(2):]
+    else:
+        merged = old.rstrip() + "\n\n## ⚠ 상충 · 확인 필요\n" + "\n".join(new_b) + "\n"
+    return merged, len(new_b)
+
+
 def run_agent(wiki, sys_prompt, user, tools, max_steps, read_limit=None, guard=None, require_write=False):
     """도구 루프. 돌아오는 값: (마지막 답, 토큰, 기록[(도구, 인자 요약)]). guard=(원본 등급, 정규화 여부): 3편 v2 코드 규칙.
     require_write(5편 v3): 모델이 write_page 0회로 끝내면 한 번만 재촉하고 루프를 이어 간다 — 보고문에만 써 놓는 일을 막는다."""
     msgs = [{"role": "system", "content": sys_prompt}, {"role": "user", "content": user}]
     tokens, trace, reads, nudged = 0, [], 0, False
-    src_grade, canon = guard if guard else (None, False)
+    src_grade, canon, conflict_only = (tuple(guard) + (False,))[:3] if guard else (None, False, False)   # 9편 v2: 등급 4 · 5 원본은 본문 수정 불가(코드), ⚠ 상충 절에만 더함
     for step in range(max_steps):
         m, t = chat(msgs, tools)
         tokens += t
@@ -384,6 +411,10 @@ def run_agent(wiki, sys_prompt, user, tools, max_steps, read_limit=None, guard=N
                     out = "거부: 개정 원본으로는 새 페이지를 만들 수 없다. search_wiki 로 원래 조항 페이지를 찾아 그 페이지를 고쳐라. (없는 페이지: %s)" % slug
                 elif src_grade is not None and src_grade >= 4 and wiki.read_page(slug) is None:
                     out = "거부: 등급 %d 원본(보고 · 메모 · 초안)으로는 새 페이지를 만들 수 없다. 이미 있는 페이지의 '상충' 섹션에만 적어라. (없는 페이지: %s)" % (src_grade, slug)
+                elif conflict_only and src_grade is not None and src_grade >= 4:
+                    merged, n = merge_conflict_only(wiki.read_page(slug), a.get("content", ""), src_grade)
+                    wiki.write_page(slug, merged)
+                    out = "저장(상충 절만): 등급 %d 원본은 본문(현재 값 · 이력)을 바꿀 수 없다 — 코드가 본문은 그대로 두고 '⚠ 상충' 절에 %d줄만 더했다: %s" % (src_grade, n, slug)
                 elif canon:
                     _, kept = wiki.write_page_keep_history(slug, a.get("content", ""))
                     out = "저장: " + slug + ("" if slug == slugify(a.get("slug", "page")) else " (정식 이름으로 맞춤)") + (" · 이전 페이지의 이력 %d줄을 코드가 되살림" % kept if kept else "")
@@ -443,7 +474,7 @@ def is_amendment(name, text):
     return bool(re.search(r"개정|보완", n) or re.search(r"^## \d+\. \[개정", text, re.M))
 
 
-def ingest(wiki, raw_path, today, tally=False, auto_index=False, grade_guard=False, extract=False, text_override=None, name_override=None, amend_guard=False, require_write=False):
+def ingest(wiki, raw_path, today, tally=False, auto_index=False, grade_guard=False, extract=False, text_override=None, name_override=None, amend_guard=False, require_write=False, conflict_guard=False):
     text = text_override if text_override is not None else read(raw_path)
     name = name_override or os.path.relpath(raw_path, RAW).replace("\\", "/")
     amend = amend_guard and is_amendment(name, text)
@@ -458,8 +489,12 @@ def ingest(wiki, raw_path, today, tally=False, auto_index=False, grade_guard=Fal
         g = grade_of(name)
         guard = (g, True)
         sys_prompt += "\n\n(이 원본의 등급은 %d 이다. 등급 4 · 5 원본으로는 새 페이지를 만들 수 없고(도구가 거부한다) 기존 페이지의 '상충' 섹션에만 적는다. 품목 페이지 이름은 코드가 정식 이름으로 맞춘다.)" % g
+    if conflict_guard:                                          # 9편 v2: 등급 4 · 5 원본은 본문을 못 바꾸고 상충 절에만(코드가 합침)
+        g = grade_of(name)
+        guard = (g, guard[1] if guard else False, True)
+        sys_prompt += "\n\n(이 원본의 등급은 %d 이다. 등급 4 · 5 원본(보고 · 메모 · 초안)은 페이지의 현재 값 · 이력을 바꿀 수 없다 — 도구가 본문 수정을 막고 '⚠ 상충 · 확인 필요' 절에만 더한다. 다른 값은 그 절에 '메모(날짜): 값' 으로 적어라.)" % g
     user = INGEST_USER.format(today=today, name=name, text=text)
-    if grade_guard:
+    if grade_guard or conflict_guard:
         user = "원본 등급: %d\n" % grade_of(name) + user
     if amend:
         tools.append(TOOL_SEARCH)
