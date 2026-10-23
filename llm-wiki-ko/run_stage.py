@@ -34,6 +34,7 @@ AMEND = "--amend-last" in args         # 5편 v2: 개정 공지 · 개정 조항
 REQUIRE_WRITE = "--require-write" in args   # 5편 v3: 개정 원본 넣기가 write_page 0회로 끝나면 한 번 재촉(보고문에만 쓰고 끝내는 일 방지)
 NO_PRIVACY = "--no-privacy" in args         # 11편: schema 의 '쓰면 안 되는 것' 절을 뺀 채 넣는다 (민감 정보 노출 비교)
 BUILD_ONLY = "--build-only" in args         # 위키만 만들고 묻기는 하지 않는다
+PII_MASK = "--pii-mask" in args             # 11편 v2: 넣기 전에 코드가 형식 있는 개인 식별 정보를 가린다(engine.pii_mask)
 WIKI_DIR = opt("wiki")                 # 이미 만든 위키 폴더(예: wiki_ep3)를 다시 묻기만 할 때 — 빌드 생략
 QFILE = json.load(open(os.path.join(HERE, "questions.json"), encoding="utf-8"))
 TODAY = QFILE["today"]
@@ -67,8 +68,12 @@ def build():
         units += [(f, n, t) for n, t in parts] or [(f, None, None)]
     if AMEND:
         units = sorted(units, key=lambda u: E.is_amendment(u[1] or u[0], u[2] if u[2] is not None else E.read(u[0])))   # 개정은 맨 뒤(안정 정렬)
+    masked = 0
     for i, (f, n, t) in enumerate(units, 1):
+        if PII_MASK:
+            t, k = E.pii_mask(t if t is not None else E.read(f)); masked += k
         r = E.ingest(w, f, TODAY, tally=TALLY, auto_index=AUTO_INDEX, grade_guard=GRADE_GUARD, extract=EXTRACT, text_override=t, name_override=n, amend_guard=AMEND, require_write=REQUIRE_WRITE)
+        r["masked"] = k if PII_MASK else 0
         r["stats"] = w.stats(); r["grade"] = E.grade_of(f); log.append(r)
         print("[%2d/%d] %-45s pages=%-3d tok=%d" % (i, len(units), r["source"][:45], r["stats"]["pages"], r["tokens"]), flush=True)
     json.dump(dict(name=NAME, base=BASE, groups=GROUPS, schema=os.path.basename(SCHEMA), sec=round(time.time() - t0), log=log, stats=w.stats()),

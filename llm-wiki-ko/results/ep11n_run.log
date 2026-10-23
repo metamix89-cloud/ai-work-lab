@@ -1,2 +1,93 @@
 [ 1/92] cs/2026-W32.md                                pages=1   tok=22617
 [ 2/92] cs/2026-W33.md                                pages=2   tok=17066
+[ 3/92] cs/2026-W34.md                                pages=3   tok=22075
+[ 4/92] cs/2026-W35.md                                pages=4   tok=17176
+[ 5/92] cs/2026-W36.md                                pages=5   tok=16068
+[ 6/92] cs/2026-W37.md                                pages=6   tok=30753
+[ 7/92] cs/2026-W38.md                                pages=7   tok=26721
+[ 8/92] cs/2026-W39.md                                pages=21  tok=33804
+[ 9/92] cs/2026-W40.md                                pages=21  tok=20309
+[10/92] cs/2026-W41.md                                pages=21  tok=10573
+[11/92] cs/2026-W42.md                                pages=22  tok=43847
+[12/92] cs/2026-W43.md                                pages=22  tok=38430
+[13/92] cs/FAQ_초안.md                                  pages=28  tok=11491
+[14/92] cs/상담원_개인메모_정대리.md                            pages=29  tok=13326
+[15/92] cs/주간보고_2026-10-19.md                         pages=29  tok=23998
+[16/92] suppliers/가나공급_계약요약.md                        pages=30  tok=20933
+[17/92] suppliers/가나공급_공문_2026-10-15.md               pages=30  tok=13879
+[18/92] suppliers/가나공급_단가표.csv                        pages=30  tok=6223
+[19/92] suppliers/구매팀_메모_김과장.md                       pages=34  tok=36219
+[20/92] suppliers/다온팩_공지_2026-09-10.md                pages=34  tok=22720
+[21/92] suppliers/다온팩_단가.md                           pages=34  tok=23353
+[22/92] suppliers/한빛물류_공지_2026-10-20.md               pages=35  tok=12712
+[23/92] suppliers/한빛물류_요금표.md                         pages=35  tok=17455
+[24/92] customers/가나마트_계약조건.md                        pages=35  tok=9857
+[25/92] customers/견적초안_가나마트_떡갈비_2026-10-21.md         pages=36  tok=12698
+[26/92] customers/다나유통_조건.md                          pages=37  tok=12652
+[27/92] customers/라마상회_조건.md                          pages=38  tok=12635
+[28/92] customers/바사푸드_조건.md                          pages=39  tok=22639
+[29/92] customers/상품_단가표_2026-10.md                   pages=40  tok=19366
+[30/92] customers/상품안내_초안_밀키트.md                      pages=41  tok=22721
+[31/92] customers/아자식품_조건.md                          pages=42  tok=13083
+[32/92] customers/영업메모_이대리.md                         pages=45  tok=40437
+[33/92] meetings/2026-08-04_경영회의.md                   pages=46  tok=14216
+[34/92] meetings/2026-08-18_경영회의.md                   pages=47  tok=14340
+[35/92] meetings/2026-08-25_인사회의.md                   pages=48  tok=14418
+[36/92] meetings/2026-09-01_경영회의.md                   pages=49  tok=26001
+[37/92] meetings/2026-09-08_구매회의.md                   pages=50  tok=15432
+[38/92] meetings/2026-09-15_경영회의.md                   pages=50  tok=15611
+[39/92] meetings/2026-09-22_물류회의.md                   pages=51  tok=14830
+[40/92] meetings/2026-09-29_경영회의.md                   pages=52  tok=15288
+[41/92] meetings/2026-10-06_품질회의.md                   pages=53  tok=15131
+[42/92] meetings/2026-10-13_경영회의.md                   pages=54  tok=15811
+[43/92] meetings/2026-10-13_영업회의.md                   pages=55  tok=15743
+[44/92] meetings/2026-10-20_경영회의.md                   pages=56  tok=16268
+[45/92] meetings/2026-10-27_경영회의.md                   pages=57  tok=16473
+[46/92] policies/사규_2026.md#조1                        pages=58  tok=14741
+[47/92] policies/사규_2026.md#조2                        pages=59  tok=29323
+[48/92] policies/사규_2026.md#조3                        pages=60  tok=15742
+[49/92] policies/사규_2026.md#조4                        pages=61  tok=15776
+[50/92] policies/사규_2026.md#조5                        pages=62  tok=14936
+[51/92] policies/사규_2026.md#조6                        pages=63  tok=16140
+[52/92] policies/사규_2026.md#조7                        pages=64  tok=15115
+[53/92] policies/사규_2026.md#조8                        pages=65  tok=15521
+[54/92] policies/사규_2026.md#조9                        pages=66  tok=15445
+[55/92] policies/사규_2026.md#조10                       pages=67  tok=17175
+[56/92] policies/사규_2026.md#조11                       pages=68  tok=15875
+[57/92] policies/사규_2026.md#조12                       pages=69  tok=16127
+[58/92] policies/사규_2026.md#조13                       pages=70  tok=17409
+[59/92] policies/사규_2026.md#조14                       pages=71  tok=17498
+[60/92] policies/사규_2026.md#조15                       pages=72  tok=17665
+[61/92] policies/사규_2026.md#조16                       pages=73  tok=16343
+[62/92] policies/사규_2026.md#조17                       pages=74  tok=16743
+[63/92] policies/사규_2026.md#조18                       pages=75  tok=16637
+[64/92] policies/사규_2026.md#조19                       pages=76  tok=16545
+[65/92] policies/사규_2026.md#조20                       pages=77  tok=16615
+[66/92] policies/사규_2026.md#조21                       pages=78  tok=16690
+[67/92] policies/사규_2026.md#조22                       pages=79  tok=18773
+[68/92] policies/사규_2026.md#조23                       pages=80  tok=36358
+[69/92] policies/사규_2026.md#조24                       pages=81  tok=17174
+[70/92] policies/사규_2026.md#조25                       pages=82  tok=17611
+[71/92] policies/사규_2026.md#조26                       pages=83  tok=17144
+[72/92] policies/사규_2026.md#조27                       pages=84  tok=19570
+[73/92] policies/사규_2026.md#조28                       pages=85  tok=17878
+[74/92] policies/사규_2026.md#조29                       pages=86  tok=38530
+[75/92] policies/사규_2026.md#조30                       pages=87  tok=17763
+[76/92] policies/사규_2026.md#조31                       pages=88  tok=17534
+[77/92] policies/사규_2026.md#조32                       pages=89  tok=18123
+[78/92] policies/사규_2026.md#조33                       pages=90  tok=40010
+[79/92] policies/사규_2026.md#조34                       pages=91  tok=18068
+[80/92] policies/안내문_재택근무_옛.md                        pages=91  tok=21053
+[81/92] policies/인사메모_오과장.md                          pages=93  tok=28036
+[82/92] sales/AI시범_보고서초안.md                           pages=94  tok=28912
+[83/92] sales/물류공지_지방냉동출고.md                          pages=95  tok=21537
+[84/92] sales/온라인리뷰_요약_2026-10.md                     pages=96  tok=23375
+[85/92] sales/월매출_2026.md                             pages=97  tok=23713
+[86/92] sales/재고표_2026-10-26.md                       pages=98  tok=53038
+[87/92] sales/품질팀_메신저_2026-10-08.md                   pages=98  tok=30564
+[88/92] policies/개정공지_2026-10-01_법인카드.md              pages=98  tok=11528
+[89/92] policies/개정공지_2026-10-15_생성형AI.md             pages=98  tok=32758
+[90/92] policies/반품기준_개정예고_2026-11-03.md              pages=98  tok=15652
+[91/92] policies/사규_2026.md#조35                       pages=98  tok=23071
+[92/92] policies/사규_2026.md#조36                       pages=98  tok=26496
+빌드만: D:\mockit\_scratch\wiki\wiki_ep11n
