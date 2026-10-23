@@ -27,6 +27,11 @@ TALLY = "--tally" in args            # 넣기 때 표 건수를 코드 도구(ta
 AUTO_INDEX = "--auto-index" in args  # 목차를 코드가 페이지에서 다시 만든다 (2편 v4) — 모델의 write_index 는 막는다
 GRADE_ORDER = "--grade-order" in args  # 3편 v2: 묶음 안에서 등급 높은 원본(계약 · 단가표)부터 넣는다
 GRADE_GUARD = "--grade-guard" in args  # 3편 v2: 등급 4 · 5 원본은 새 페이지를 못 만들고, 품목 이름은 코드가 정식 이름으로 맞춘다
+SEARCH = "--search" in args            # 3편 v4: 묻기에 위키 전체 검색 도구
+EXTRACT = "--extract" in args          # 4편: 회의록의 결정 블록을 코드 도구(extract_decisions)로 뽑아 준다
+SPLIT = "--split-articles" in args     # 5편: '## N.' 조항이 여러 개인 파일(규정집)은 코드가 조항 단위로 쪼개 하나씩 넣는다
+AMEND = "--amend-last" in args         # 5편 v2: 개정 공지 · 개정 조항은 원래 조항 뒤에 넣고, 새 페이지 생성을 거부(기존 페이지를 고치게)
+WIKI_DIR = opt("wiki")                 # 이미 만든 위키 폴더(예: wiki_ep3)를 다시 묻기만 할 때 — 빌드 생략
 QFILE = json.load(open(os.path.join(HERE, "questions.json"), encoding="utf-8"))
 TODAY = QFILE["today"]
 QS = [q for q in QFILE["questions"] if q["group"] in QGROUPS and (ONLY is None or q["id"] in ONLY)]
@@ -53,10 +58,16 @@ def build():
     files = group_files(GROUPS)
     if GRADE_ORDER:
         files = sorted(files, key=lambda f: (E.grade_of(f), f))
-    for i, f in enumerate(files, 1):
-        r = E.ingest(w, f, TODAY, tally=TALLY, auto_index=AUTO_INDEX, grade_guard=GRADE_GUARD); r["stats"] = w.stats(); log.append(r)
-        r["grade"] = E.grade_of(f)
-        print("[%2d/%d] %-45s pages=%-3d tok=%d" % (i, len(files), r["source"][:45], r["stats"]["pages"], r["tokens"]), flush=True)
+    units = []                                   # (파일, 이름, 본문 또는 None)
+    for f in files:
+        parts = E.split_articles(f) if SPLIT else []
+        units += [(f, n, t) for n, t in parts] or [(f, None, None)]
+    if AMEND:
+        units = sorted(units, key=lambda u: E.is_amendment(u[1] or u[0], u[2] if u[2] is not None else E.read(u[0])))   # 개정은 맨 뒤(안정 정렬)
+    for i, (f, n, t) in enumerate(units, 1):
+        r = E.ingest(w, f, TODAY, tally=TALLY, auto_index=AUTO_INDEX, grade_guard=GRADE_GUARD, extract=EXTRACT, text_override=t, name_override=n, amend_guard=AMEND)
+        r["stats"] = w.stats(); r["grade"] = E.grade_of(f); log.append(r)
+        print("[%2d/%d] %-45s pages=%-3d tok=%d" % (i, len(units), r["source"][:45], r["stats"]["pages"], r["tokens"]), flush=True)
     json.dump(dict(name=NAME, base=BASE, groups=GROUPS, schema=os.path.basename(SCHEMA), sec=round(time.time() - t0), log=log, stats=w.stats()),
               open(os.path.join(OUT, "build_%s.json" % NAME), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     open(os.path.join(WDIR, "BUILT"), "w").write(TODAY)
@@ -82,7 +93,11 @@ def run(cond):
     elif cond == "rag":
         rag = E.RAG(files); fn, trials = (lambda q: rag.answer(q["q"], TODAY)), TRIALS
     else:
-        build(); w = E.Wiki(WDIR, schema_path=SCHEMA); fn, trials = (lambda q: E.query(w, q["q"], TODAY)), TRIALS
+        if WIKI_DIR:
+            w = E.Wiki(os.path.join(HERE, WIKI_DIR), schema_path=SCHEMA)
+        else:
+            build(); w = E.Wiki(WDIR, schema_path=SCHEMA)
+        fn, trials = (lambda q: E.query(w, q["q"], TODAY, search=SEARCH)), TRIALS
     jobs = [(q, t) for q in QS for t in range(trials)]
 
     def one(job):

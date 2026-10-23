@@ -254,6 +254,64 @@ TOOLS_RW = [
                                       "parameters": {"type": "object", "properties": {"line": {"type": "string"}}, "required": ["line"]}}},
 ]
 TOOLS_RO = TOOLS_RW[:2]
+# 3편 v4: 묻기에 '위키 전체 검색' 도구 — 목차만 보고 페이지 하나를 열면 같은 값이 갈라진 다른 페이지를 놓친다
+TOOL_SEARCH = {"type": "function", "function": {"name": "search_wiki", "description": "위키 페이지 전체에서 낱말(상품명 · 거래처 · 숫자 등)을 찾아, 페이지 이름과 그 낱말이 있는 줄을 돌려준다. 목차에서 못 찾거나 값이 다른 페이지에도 있을 것 같으면 쓴다.",
+                                                "parameters": {"type": "object", "properties": {"keyword": {"type": "string", "description": "찾을 낱말(띄어쓰기 무시)"}}, "required": ["keyword"]}}}
+
+
+# 4편: 회의록의 결정 블록은 코드가 뽑는다 — 모델이 요약하면 '이유 · 담당 · 기한' 이 빠진다
+TOOL_EXTRACT = {"type": "function", "function": {"name": "extract_decisions", "description": "회의록 파일에서 '## 결정 사항' 의 결정들을 코드로 뽑아 결정마다 무엇을 · 이유 · 담당 · 기한 · 회의 날짜를 돌려준다. 회의록을 넣을 때 반드시 먼저 부른다.",
+                                                 "parameters": {"type": "object", "properties": {"path": {"type": "string", "description": "원본 파일 경로(raw/ 기준, 예: meetings/2026-09-15_경영회의.md)"}}, "required": ["path"]}}}
+
+
+def extract_decisions(path):
+    p = os.path.join(RAW, path.replace("\\", "/").lstrip("/").replace("raw/", "", 1))
+    if not os.path.exists(p):
+        return "파일 없음: " + path
+    t = read(p)
+    date = (re.search(r"(\d{4}-\d{2}-\d{2})", os.path.basename(p)) or [None, "?"])[1] if re.search(r"\d{4}-\d{2}-\d{2}", os.path.basename(p)) else "?"
+    sec = t.split("## 결정 사항")[1].split("## ")[0] if "## 결정 사항" in t else ""
+    out = []
+    for line in sec.splitlines():
+        if not line.strip().startswith("-"):
+            continue
+        body = line.strip()[1:].strip()
+        what = re.sub(r"\*\*", "", body.split(" — ")[0]).strip()
+        why = (re.search(r"이유:\s*(.+?)(?=\s담당:|$)", body) or [None, "?"])[1]
+        owner = (re.search(r"담당:\s*(.+?)(?=,\s*기한:|$)", body) or [None, "?"])[1]
+        due = (re.search(r"기한:\s*(.+)$", body) or [None, "?"])[1]
+        status = "검토 중" if re.search(r"검토|보류", what) and not re.search(r"결정|확정|승인", what) else "결정됨"
+        if "보류" in what:
+            status = "보류"
+        out.append("결정 | 회의 %s | 무엇을: %s | 이유: %s | 담당: %s | 기한: %s | 상태: %s" % (date, what, why.strip(), owner.strip(), due.strip(), status))
+    notes = t.split("## 논의 · 보고")[1] if "## 논의 · 보고" in t else ""
+    n_notes = sum(1 for l in notes.splitlines() if l.strip().startswith("-"))
+    if not out:
+        return "결정 사항 없음(논의 · 보고 %d줄 — 지표 · 이슈 페이지에 사실로만)" % n_notes
+    return "\n".join(out) + ("\n(논의 · 보고 %d줄은 결정이 아니다 — 숫자 · 사실은 지표 · 이슈 페이지에)" % n_notes if n_notes else "")
+
+
+def search_wiki(wiki, keyword, max_lines=30):
+    """낱말 여러 개면 모두 들어 있는 줄을 찾고, 그런 줄이 없으면 페이지 어딘가에 모두 있는 페이지 이름을 돌려준다(2026-10-23 수정: '가나마트 결제' 처럼 두 낱말이 한 줄에 없으면 '없음' 이 나와 묻기가 포기했음)."""
+    toks = [re.sub(r"\s+", "", t).lower() for t in keyword.split() if t.strip()]
+    if not toks:
+        return "낱말 없음"
+    norm = lambda t: re.sub(r"\s+", "", t).lower()
+    hits, pages = [], []
+    for s in wiki.slugs():
+        text = wiki.read_page(s) or ""
+        if all(t in norm(text) for t in toks):
+            pages.append(s.replace("-", "/", 1))
+        for line in text.splitlines():
+            if all(t in norm(line) for t in toks):
+                hits.append("[%s] %s" % (s.replace("-", "/", 1), line.strip()[:160]))
+                if len(hits) >= max_lines:
+                    return "\n".join(hits) + "\n(더 있음 — 낱말을 좁혀라)"
+    if hits:
+        return "\n".join(hits)
+    if pages:
+        return "한 줄에 같이 있는 곳은 없지만 이 페이지들에 다 들어 있다 → read_page 로 읽어라: " + ", ".join(pages)
+    return "없음: %s (낱말을 하나로 줄여 다시 찾거나, 목차에서 고른 페이지를 그냥 읽어라)" % keyword
 # 2편 v3: 표의 건수는 모델이 세지 않고 코드가 센다
 TOOL_TALLY = {"type": "function", "function": {"name": "tally_table", "description": "원본 파일 속 마크다운 표를 코드로 센다. by 열의 값별 건수(by2 를 주면 by × by2 교차 건수)를 돌려준다. 건수는 반드시 이 도구로 센다.",
                                                "parameters": {"type": "object", "properties": {"path": {"type": "string", "description": "원본 파일 경로(raw/ 기준, 예: cs/2026-W38.md)"},
@@ -312,6 +370,8 @@ def run_agent(wiki, sys_prompt, user, tools, max_steps, read_limit=None, guard=N
                 slug = canon_slug(a.get("slug", "page")) if canon else slugify(a.get("slug", "page"))
                 if slug.lower().replace(".md", "") in ("index", "log"):
                     out = "index · log 는 페이지가 아니다(목차는 write_index 또는 자동). 저장하지 않음"   # v4 에서 모델이 'index' 페이지를 만든 일이 있음
+                elif src_grade == 9 and wiki.read_page(slug) is None:
+                    out = "거부: 개정 원본으로는 새 페이지를 만들 수 없다. search_wiki 로 원래 조항 페이지를 찾아 그 페이지를 고쳐라. (없는 페이지: %s)" % slug
                 elif src_grade is not None and src_grade >= 4 and wiki.read_page(slug) is None:
                     out = "거부: 등급 %d 원본(보고 · 메모 · 초안)으로는 새 페이지를 만들 수 없다. 이미 있는 페이지의 '상충' 섹션에만 적어라. (없는 페이지: %s)" % (src_grade, slug)
                 elif canon:
@@ -325,6 +385,10 @@ def run_agent(wiki, sys_prompt, user, tools, max_steps, read_limit=None, guard=N
                 wiki.append_log(a.get("line", "")); out = "log 추가"
             elif name == "tally_table":
                 out = tally_table(a.get("path", ""), a.get("by", ""), a.get("by2", ""))
+            elif name == "search_wiki":
+                out = search_wiki(wiki, a.get("keyword", ""))
+            elif name == "extract_decisions":
+                out = extract_decisions(a.get("path", ""))
             else:
                 out = "알 수 없는 도구"
             trace.append((name, a.get("slug") or a.get("line", "")[:60] or ""))
@@ -347,10 +411,35 @@ INGEST_SYS = """너는 가나다식품(가상 회사)의 LLM 위키 관리자다
 INGEST_USER = "오늘 날짜: {today}\n원본 파일: {name}\n\n<<원본 시작>>\n{text}\n<<원본 끝>>"
 
 
-def ingest(wiki, raw_path, today, tally=False, auto_index=False, grade_guard=False):
-    text = read(raw_path)
-    name = os.path.relpath(raw_path, RAW).replace("\\", "/")
+def split_articles(path):
+    """5편: 규정집처럼 '## N. 제목' 조항이 여러 개인 파일을 조항 단위로 쪼갠다(코드). [(이름, 본문)] — 조항이 없으면 빈 목록."""
+    t = read(path)
+    parts = re.split(r"(?m)^## (?=\d+\.)", t)
+    if len(parts) < 3:
+        return []
+    head = parts[0].strip()
+    name = os.path.relpath(path, RAW).replace("\\", "/")
+    out = []
+    for p in parts[1:]:
+        m = re.match(r"(\d+)\.\s*(.+)", p)
+        n, title = (m.group(1), m.group(2).strip()) if m else ("?", p[:20])
+        out.append(("%s#조%s" % (name, n), "%s\n\n(이 파일의 %s조 '%s' 만 넣는다. 조항 하나에 규정 페이지 하나.)\n\n## %s" % (head, n, title, p.strip())))
+    return out
+
+
+def is_amendment(name, text):
+    """5편 v2: 개정 공지 · 개정 예고 · '[개정 …]' 조항은 새 규정이 아니라 기존 조항 페이지를 고치는 원본이다."""
+    n = os.path.basename(name)
+    return bool(re.search(r"개정|보완", n) or re.search(r"^## \d+\. \[개정", text, re.M))
+
+
+def ingest(wiki, raw_path, today, tally=False, auto_index=False, grade_guard=False, extract=False, text_override=None, name_override=None, amend_guard=False):
+    text = text_override if text_override is not None else read(raw_path)
+    name = name_override or os.path.relpath(raw_path, RAW).replace("\\", "/")
+    amend = amend_guard and is_amendment(name, text)
     tools = [t for t in TOOLS_RW if not (auto_index and t["function"]["name"] == "write_index")] + ([TOOL_TALLY] if tally else [])
+    if extract and "/meetings/" in ("/" + name):
+        tools.append(TOOL_EXTRACT)
     sys_prompt = INGEST_SYS + wiki.schema
     if auto_index:
         sys_prompt += "\n\n(목차 index.md 는 코드가 페이지에서 자동으로 만든다. 목차를 쓰려 하지 말고 페이지의 '분류:' 줄과 '현재 값' 첫 줄을 잘 쓰면 된다.)"
@@ -362,6 +451,12 @@ def ingest(wiki, raw_path, today, tally=False, auto_index=False, grade_guard=Fal
     user = INGEST_USER.format(today=today, name=name, text=text)
     if grade_guard:
         user = "원본 등급: %d\n" % grade_of(name) + user
+    if amend:
+        tools.append(TOOL_SEARCH)
+        guard = (9, guard[1] if guard else False)      # 9 = 개정: 새 페이지 생성 거부(도구)
+        sys_prompt += ("\n\n(이 원본은 **개정**이다. 새 규정 페이지를 만들 수 없다 — 도구가 거부한다. search_wiki 로 원래 조항 페이지(같은 주제 · 조 번호)를 찾아 "
+                       "그 페이지의 '현재 값' 을 새 값으로 바꾸고, '이력' 에 '이전 값 → 새 값 (시행일, 출처)' 를 남겨라. 시행일이 오늘보다 뒤면 '시행 예정' 줄에.)")
+        user = "[개정 원본]\n" + user
     ans, tokens, trace = run_agent(wiki, sys_prompt, user, tools, MAX_STEPS, guard=guard)
     if auto_index:
         wiki.rebuild_index()
@@ -378,9 +473,13 @@ QUERY_SYS = """너는 가나다식품(가상 회사) 직원이 묻는 질문에 
 위키에 답이 없으면 '답: 위키에 없음' 이라고 쓰고 근거에는 '없음' 이라고 쓴다. 비슷한 값을 끌어다 짐작하지 않는다."""
 
 
-def query(wiki, question, today):
-    ans, tokens, trace = run_agent(wiki, QUERY_SYS.format(today=today, lim=PAGE_READ_LIMIT), question, TOOLS_RO, PAGE_READ_LIMIT + 4, PAGE_READ_LIMIT)
-    return dict(answer=ans, tokens=tokens, pages_read=[s for n, s in trace if n == "read_page"])
+def query(wiki, question, today, search=False):
+    sys_prompt = QUERY_SYS.format(today=today, lim=PAGE_READ_LIMIT)
+    tools = TOOLS_RO + ([TOOL_SEARCH] if search else [])
+    if search:
+        sys_prompt += "\n목차를 본 뒤, 질문의 핵심 낱말(상품명 · 거래처 이름 하나)로 search_wiki 를 돌려 값이 있는 페이지를 모두 찾고, 그 페이지들을 읽고 답한다. 검색이 '없음' 이어도 목차에서 고른 페이지는 반드시 읽는다. '위키에 없음' 은 관련 페이지를 읽고도 없을 때만."
+    ans, tokens, trace = run_agent(wiki, sys_prompt, question, tools, PAGE_READ_LIMIT + 6, PAGE_READ_LIMIT)
+    return dict(answer=ans, tokens=tokens, pages_read=[s for n, s in trace if n == "read_page"], searches=[s for n, s in trace if n == "search_wiki"])
 
 
 # ── 점검 ─────────────────────────────────────────────────────────────────────
