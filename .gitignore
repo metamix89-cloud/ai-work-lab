@@ -1,0 +1,7 @@
+.env
+__pycache__/
+.venv/
+out/
+*.sqlite
+emb_*.json
+*.pptx

@@ -1,0 +1,3261 @@
+[
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4001",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   12.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1352,
+  "answer": "Your refund of $12.90 has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4001",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   12.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1351,
+  "answer": "The pizza has been refunded for change of mind."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4001",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   12.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1352,
+  "answer": "Your refund of $12.90 has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4002",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   9.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1473,
+  "answer": "Your return for the pizza has been processed. A refund of $9.90 has been issued."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4002",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   12.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1357,
+  "answer": "Refund processed for $12.90 for the change of mind."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4002",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   9.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1489,
+  "answer": "The return has been processed, and you will receive a refund of $9.90."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4003",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   23.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1365,
+  "answer": "The burger patties return has been approved. You will receive a refund of $23.90."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4003",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   23.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1367,
+  "answer": "Your return has been processed successfully. You have been refunded $23.90 for the unopened burger patties."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4003",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   23.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1368,
+  "answer": "Your return for the Handmade Burger Patties has been processed successfully. You received a refund of $23.90."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4004",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   20.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1367,
+  "answer": "Your return for the beef patties has been processed. You will be refunded $20.90 after the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4004",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   20.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1365,
+  "answer": "Your return for the Burger Patties has been processed. You received $20.90 after the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4004",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   20.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1363,
+  "answer": "The return is approved. You will receive a refund of $20.90 after a $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4005",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   5.5
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1362,
+  "answer": "The return has been processed. You will be refunded $5.50 after the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4005",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   5.5,
+   3
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1464,
+  "answer": "The refund has been processed. You received $5.50 minus the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4005",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   5.5
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1360,
+  "answer": "The BBQ sauce has been refunded minus the $3.00 return fee, totaling $5.50."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4006",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   5.5,
+   3.0
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1468,
+  "answer": "A total of $8.50 has been refunded for your BBQ sauce order, minus the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4006",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   5.5
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1353,
+  "answer": "A refund of $5.50 has been processed for your BBQ sauce due to change of mind."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4006",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   5.5
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1352,
+  "answer": "A $5.50 refund has been processed for your BBQ sauce as a change of mind."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4007",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   6.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1342,
+  "answer": "The refund of $6.80 has been processed for your cola."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4007",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   6.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1342,
+  "answer": "The refund of $6.80 has been processed for your cola."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4007",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   6.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1345,
+  "answer": "Refund of $6.80 has been processed for order YT-4007."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4008",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1348,
+  "answer": "The refund for the spoiled cola has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4008",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1361,
+  "answer": "The refund for order YT-4008 has been processed for $9.80 due to a quality issue."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4008",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1349,
+  "answer": "Refund processed for the cola due to it being spoiled."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4009",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   65
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1353,
+  "answer": "The gift basket has been refunded $65 after the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4009",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   65
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1345,
+  "answer": "The gift basket has been refunded $65."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4009",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   65
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1353,
+  "answer": "The gift basket has been refunded $65 after deducting the $3 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4010",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   89.0
+  ],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1484,
+  "answer": "Your refund of $89.00 for the discolored and strange-smelling steaks has been processed. We are also requesting team lead approval for this high-value issue."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4010",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   89.0
+  ],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1467,
+  "answer": "The refund of $89.00 has been approved due to a quality issue. The team lead's approval is being requested for the escalation."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4010",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   89.0
+  ],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1470,
+  "answer": "The refund for your discolored and strange smell steaks has been processed. Your case has been escalated for team lead approval."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4011",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   12.9
+  ],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1469,
+  "answer": "The $12.90 has been refunded. As the item was opened, this return is for change of mind, so approval from a team lead is requested."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4011",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   12.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1347,
+  "answer": "The nuggets are within the return window, unopened, so you'll be refunded $12.90."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4011",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   12.9
+  ],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1473,
+  "answer": "The refund of $12.90 has been issued for your order, and a team lead approval has been requested for the return."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4012",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   9.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1366,
+  "answer": "A $9.9 refund has been processed for your change of mind on the unopened pizza."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4012",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   9.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1363,
+  "answer": "A refund of $9.90 has been processed for your change of mind."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4012",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   9.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1358,
+  "answer": "The refund of $9.90 has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4013",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1462,
+  "answer": "The full refund of $15.90 has been issued for the plastic issue, and I am requesting team lead approval for escalation."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4013",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1345,
+  "answer": "A full refund of $15.90 has been issued for the quality issue."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4013",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1349,
+  "answer": "A full refund of $15.90 has been issued for the plastic found in the chicken nuggets."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4014",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": false,
+  "refunds": [
+   3.9,
+   3.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1446,
+  "answer": "Your refund of $3.90 has been processed for the change of mind."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4014",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   3.9,
+   3.0
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1450,
+  "answer": "Your partial refund of $3.9 has been processed after the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4014",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   3.9,
+   3.0
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1454,
+  "answer": "Your change of mind refund has been processed. You will receive $3.90, minus a $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4015",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   3.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1353,
+  "answer": "Your return has been processed, and $3.80 has been refunded."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4015",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   3.8
+  ],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1492,
+  "answer": "The hummus has been refunded for the amount paid, minus the $3.00 return fee, and your request for escalation has been sent to the team lead for approval."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4015",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   3.8,
+   3.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1470,
+  "answer": "The hummus was returned successfully, and you have been refunded $3.80 for the change of mind."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4016",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1472,
+  "answer": "The refund of $15.90 has been processed for the sour smell issue, and the escalation for team lead approval has been sent."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4016",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1474,
+  "answer": "The full refund has been issued due to the quality concern. Your request has also been escalated to the team lead for further approval."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4016",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": false,
+  "refunds": [
+   15.9,
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1451,
+  "answer": "The refund for the sour mac & cheese has been processed successfully."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4001",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "rejected": [
+   "wrong refund amount — the rules give $9.90"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 2675,
+  "answer": "Your refund of $9.90 has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4001",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "wrong refund amount — the rules give $9.90"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1860,
+  "answer": "You can get a refund of $9.90 for changing your mind on this frozen pizza."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4001",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "rejected": [
+   "wrong refund amount — the rules give $9.90"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 2693,
+  "answer": "Your refund of $9.90 has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4002",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "frozen return window of 7 days has passed (today is day 8)"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1831,
+  "answer": "The return window for frozen items has passed. Sorry, you cannot return the pizza now."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4002",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "frozen return window of 7 days has passed (today is day 8)"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1831,
+  "answer": "You cannot return the pizza because the 7-day return window for frozen items has expired."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4002",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "frozen return window of 7 days has passed (today is day 8)"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1833,
+  "answer": "The return window for frozen items has passed (8 days since delivery). You cannot return it now."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4003",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "rejected": [
+   "wrong refund amount — the rules give $20.90"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 2667,
+  "answer": "Your refund of $20.90 has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4003",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "rejected": [
+   "wrong refund amount — the rules give $20.90"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 2667,
+  "answer": "The refund of $20.90 has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4003",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1847,
+  "answer": "Your return for the burger patties has been processed and a refund of $20.90 has been issued."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4004",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "refrigerated return window of 3 days has passed (today is day 4)"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1858,
+  "answer": "You cannot return the burger patties for a change of mind, as the refrigerated return window of 3 days has passed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4004",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "refrigerated return window of 3 days has passed (today is day 4)"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1862,
+  "answer": "You cannot return the burger patties for change of mind since the refrigerated return window of 3 days has passed (today is day 4)."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4004",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "refrigerated return window of 3 days has passed (today is day 4)"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1868,
+  "answer": "The return window for refrigerated items has passed (day 4), so a return isn't allowed for change of mind."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4005",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   5.5
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 13 / actual 14"
+  ],
+  "tokens": 1835,
+  "answer": "Your return for the BBQ sauce has been processed. You will receive $5.50."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4005",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   5.5
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 13 / actual 14"
+  ],
+  "tokens": 1844,
+  "answer": "The return has been approved. You will be refunded $5.50."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4005",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   5.5
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1811,
+  "answer": "Your return has been processed, and you will be refunded $5.50."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4006",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "pantry return window of 14 days has passed (today is day 15)"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1818,
+  "answer": "The return window for pantry items has passed, so we cannot process the return."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4006",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "pantry return window of 14 days has passed (today is day 15)"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1825,
+  "answer": "The return window for pantry items has ended, so we cannot process a change-of-mind return for BBQ sauce."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4006",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "pantry return window of 14 days has passed (today is day 15)"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1819,
+  "answer": "The return window has expired for the pantry item. Sorry, a return isn't possible."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4007",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "opened items can be returned only for a quality issue"
+  ],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 4 / actual 5"
+  ],
+  "tokens": 1828,
+  "answer": "Sorry, opened items like your cola can't be returned for a change of mind."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4007",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "opened items can be returned only for a quality issue"
+  ],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 4 / actual 5"
+  ],
+  "tokens": 1828,
+  "answer": "Sorry, opened items like this cola can only be returned for a quality issue."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4007",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "opened items can be returned only for a quality issue"
+  ],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 4 / actual 5"
+  ],
+  "tokens": 1835,
+  "answer": "Open items can only be returned for a quality issue. Would you like to report a quality issue with the cola?"
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4008",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 21 / actual 22"
+  ],
+  "tokens": 1838,
+  "answer": "The refund for the spoiled cola has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4008",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 21 / actual 22"
+  ],
+  "tokens": 1838,
+  "answer": "The refund for the spoiled cola has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4008",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 21 / actual 22"
+  ],
+  "tokens": 1843,
+  "answer": "The refund for the spoiled cola has been processed for $9.80."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4009",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "over $50.00 — use escalate for team lead approval"
+  ],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 2598,
+  "answer": "The order exceeds $50, so I will need team lead approval to proceed with the return."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4009",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "over $50.00 — use escalate for team lead approval"
+  ],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 2616,
+  "answer": "Your request has been escalated for team lead approval due to the order amount over $50.00."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4009",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "over $50.00 — use escalate for team lead approval"
+  ],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 2606,
+  "answer": "A team lead approval has been requested for the return of your gift basket."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4010",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "over $50.00 — use escalate for team lead approval"
+  ],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 2613,
+  "answer": "Your request has been escalated to the team lead for approval due to the amount over $50."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4010",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "over $50.00 — use escalate for team lead approval"
+  ],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 2606,
+  "answer": "Your request for refund due to quality issues has been escalated for team lead approval."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4010",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "over $50.00 — use escalate for team lead approval"
+  ],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 2601,
+  "answer": "Your refund request has been escalated for team lead approval due to the order amount exceeding $50."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4011",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "opened items can be returned only for a quality issue"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1828,
+  "answer": "Since the nuggets are opened and not a quality issue, a return isn't allowed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4011",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "opened items can be returned only for a quality issue"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1836,
+  "answer": "Open items can only be returned for a quality issue. Since it's a change of mind, I cannot process the refund."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4011",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "opened items can be returned only for a quality issue"
+  ],
+  "escalated": false,
+  "mismatch": [
+   "expected_opened: model False / actual True"
+  ],
+  "tokens": 1844,
+  "answer": "Since the nuggets are opened and not a quality issue, you cannot return them for change of mind."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4012",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "frozen return window of 7 days has passed (today is day 12)"
+  ],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 11 / actual 12"
+  ],
+  "tokens": 1855,
+  "answer": "The return window for frozen items has passed. Sorry, you cannot return it now."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4012",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "frozen return window of 7 days has passed (today is day 12)"
+  ],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 11 / actual 12"
+  ],
+  "tokens": 1853,
+  "answer": "The return window for frozen items has passed. I cannot process the return."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4012",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "frozen return window of 7 days has passed (today is day 12)"
+  ],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 11 / actual 12"
+  ],
+  "tokens": 1874,
+  "answer": "The return window for frozen items ended 5 days ago, so we can't process a change-of-mind return now."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4013",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 7 / actual 1"
+  ],
+  "tokens": 1837,
+  "answer": "A full refund of $15.90 has been issued for the plastic in the nuggets."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4013",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 7 / actual 1"
+  ],
+  "tokens": 1836,
+  "answer": "Your refund of $15.90 has been processed for the plastic in the nuggets."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4013",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 7 / actual 1"
+  ],
+  "tokens": 1839,
+  "answer": "Your refund for the Chicken Nuggets has been processed for $15.90 due to the quality issue."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4014",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1788,
+  "answer": "Your refund for the Mac & Cheese Bake has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4014",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1799,
+  "answer": "Your return has been processed, and you received a refund of $3.90 for the Mac & Cheese Bake."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4014",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 5 / actual 6"
+  ],
+  "tokens": 1827,
+  "answer": "Your refund of $3.90 for the Mac & Cheese Bake has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4015",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   0.8
+  ],
+  "rejected": [
+   "wrong refund amount — the rules give $0.80"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 2652,
+  "answer": "The refund of $0.80 has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4015",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "wrong refund amount — the rules give $0.80"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1861,
+  "answer": "The refund should be $0.80, not $3.80. Please note the correct amount."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4015",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "wrong refund amount — the rules give $0.80"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1850,
+  "answer": "You can get a refund of $0.80 for the change of mind. Would you like to proceed?"
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4016",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 6 / actual 7"
+  ],
+  "tokens": 1832,
+  "answer": "The refund for your sour mac & cheese has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4016",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 6 / actual 7"
+  ],
+  "tokens": 1833,
+  "answer": "The refund for your sour Mac & Cheese Bake has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-nano",
+  "case": "YT-4016",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [
+   "expected_day: model 6 / actual 7"
+  ],
+  "tokens": 1841,
+  "answer": "A full refund of $15.90 has been processed for the sour smell in your Mac & Cheese."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4001",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1517,
+  "answer": "Your return for the pizza is accepted. A refund of $9.90 has been issued after the $3.00 return fee deduction. Let me know if you need further help."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4001",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1370,
+  "answer": "Your unopened frozen pizza return for change of mind is approved. You will be refunded $9.90 after the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4001",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1509,
+  "answer": "Refund of $9.90 has been processed for your unopened pizza after deducting the $3.00 return fee. Anything else I can help with?"
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4002",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   9.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1372,
+  "answer": "Your unopened frozen pizza return is accepted for change of mind. After the $3 return fee, you will be refunded $9.90."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4002",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   9.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1371,
+  "answer": "Your unopened frozen pizza return is accepted. A refund of $9.90 after the $3.00 return fee has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4002",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   9.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1377,
+  "answer": "Your unopened frozen pizza is eligible for return due to change of mind. After subtracting the $3.00 return fee, $9.90 has been refunded."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4003",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1373,
+  "answer": "Your unopened burger patties can be returned for change of mind. Refund of $20.90 issued after $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4003",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1558,
+  "answer": "Your return is approved. You will be refunded $20.90 after the $3.00 return fee deduction. Thank you!"
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4003",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1385,
+  "answer": "Your unopened refrigerated burger patties are eligible for return as a change of mind. After the $3.00 return fee, you will be refunded $20.90. The refund has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4004",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   20.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1529,
+  "answer": "Your return for the unopened burger patties due to change of mind is approved. You've been refunded $20.90 after deducting the $3.00 return fee. Let me know if you need anything else!"
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4004",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 879,
+  "answer": "Your unopened burger patties were delivered on 2026-10-18 and are refrigerated. The return window is 3 days, including the delivery day. Today is 2026-10-21, so the return window has expired. Unfortunately, you cannot return them for change of mind now."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4004",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   20.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1523,
+  "answer": "Your return for the unopened burger patties for a change of mind is approved. A refund of $20.90 has been processed after the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4005",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   5.5
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1367,
+  "answer": "I processed your return for the unopened BBQ Sauce. You will be refunded $5.50 after the $3.00 return fee deduction."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4005",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   5.5
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1507,
+  "answer": "Your return for the unopened BBQ sauce is approved. You will receive a refund of $5.50 after the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4005",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 862,
+  "answer": "Your BBQ Sauce was delivered on 2026-10-08, which is beyond the 14-day pantry return window for change of mind returns. Unfortunately, I cannot accept the return due to the expired return window."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4006",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 876,
+  "answer": "Your BBQ sauce was delivered on 2026-10-07 and is a pantry item with a 14-day return window. Today is 2026-10-21, which is outside the 14-day window for change of mind returns. Therefore, I can't accept this return for change of mind."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4006",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 853,
+  "answer": "The BBQ sauce was delivered on 2026-10-07, which is beyond the 14-day pantry return window. Unfortunately, change-of-mind returns are not allowed after this period."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4006",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 866,
+  "answer": "The BBQ sauce was delivered on 2026-10-07 and is pantry with a 14-day return window. The window ended on 2026-10-20, so it's outside the return window for change of mind. The return isn't allowed."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4007",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   6.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1510,
+  "answer": "Refund of $6.80 has been processed for your opened Cola 12-pack due to change of mind. The $3.00 return fee was deducted. Let me know if you need anything else!"
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4007",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   6.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1354,
+  "answer": "I have processed a refund of $6.80 for the change of mind, deducting the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4007",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   6.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1549,
+  "answer": "Refund of $6.80 processed for order YT-4007 after deducting the $3.00 return fee for change of mind. Let me know if you need anything else!"
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4008",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1459,
+  "answer": "A full refund of $9.80 for your Cola 12-pack has been processed due to the quality issue. Sorry for the inconvenience."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4008",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1526,
+  "answer": "Your full refund of $9.80 for the cola due to the quality issue has been processed. If you need further assistance, feel free to ask."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4008",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1451,
+  "answer": "Your refund for the spoiled cola has been processed in full. Sorry for the inconvenience! If you need any further help, let me know."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4009",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1396,
+  "answer": "The return request for the unopened Holiday Gift Basket is sent for team lead approval due to the amount paid being over $50. I'll update you once I have a response."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4009",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1389,
+  "answer": "The return for the unopened Holiday Gift Basket is a change of mind return over $50, so I have escalated it for team lead approval. You will be updated shortly."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4009",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1392,
+  "answer": "The return request is for an unopened pantry item but the amount paid was $68. I have escalated this for team lead approval and will update you once it's approved."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4010",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1419,
+  "answer": "The steaks are frozen and were delivered on 2026-10-20. Since you have a quality issue and the item is opened, you are eligible for a full refund. Because the amount paid is over $50, I have escalated this for team lead approval. You will be updated shortly."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4010",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1395,
+  "answer": "I have escalated your refund request for the discolored and strange smelling steaks to our team lead due to the high amount paid. You will hear back soon with the resolution."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4010",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1406,
+  "answer": "Your quality issue report for the steaks is noted. Since the order amount exceeds $50, I have escalated this for team lead approval. You'll hear from us soon with the refund confirmation."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4011",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 850,
+  "answer": "The nuggets were opened, so a change of mind return isn't allowed. If there's a quality issue, I can help with a refund. Otherwise, returns are only accepted unopened for change of mind."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4011",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 902,
+  "answer": "The nuggets were delivered on 2026-10-18 and are frozen, so the return window is 7 days, including the delivery day. Today is 2026-10-21, so the return is still within the allowed window. However, the item is marked as opened. Since you changed your mind and the item is opened, the return is not allowed unless there is a quality issue. Is there any quality issue with the product?"
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4011",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 844,
+  "answer": "The nuggets were opened, so return is allowed only for a quality issue, not for change of mind. Since you changed your mind, the return is not allowed."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4012",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 872,
+  "answer": "Your pizza was delivered on 2026-10-10, which is outside the 7-day return window for frozen items. Unfortunately, I can't accept the return for change of mind now. Let me know if it has any quality issues."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4012",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 871,
+  "answer": "Your order was delivered on 2026-10-10. Since it is a frozen product, the return window is 7 days, so it is past the return window. Unfortunately, I can't accept the return for change of mind."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4012",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 861,
+  "answer": "Your order was delivered on 2026-10-10, so it's outside the 7-day return window for frozen items. Unfortunately, the change-of-mind return isn't allowed now."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4013",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1355,
+  "answer": "I refunded you the full amount of $15.90 due to the plastic piece found in the nuggets. Sorry for the inconvenience."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4013",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1358,
+  "answer": "I have processed a full refund for the chicken nuggets due to the foreign object found. You should see the credit soon. Sorry for the trouble!"
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4013",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1354,
+  "answer": "I have refunded you the full amount of $15.90 for the plastic found in the nuggets. Sorry for the inconvenience."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4014",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1356,
+  "answer": "Your Mac & Cheese Bake is unopened and within the return window for frozen items. I've processed your refund of $3.90 after deducting the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4014",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1356,
+  "answer": "Your unopened Mac & Cheese Bake is eligible for a return for change of mind. After the $3.00 return fee, a refund of $3.90 has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4014",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1349,
+  "answer": "Your Mac & Cheese Bake return is accepted as change of mind. You'll get $3.90 back after the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4015",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   0.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1363,
+  "answer": "Your return is accepted. After subtracting the $3.00 return fee, you will be refunded $0.80."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4015",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   0.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1367,
+  "answer": "Your unopened hummus is eligible for return with a $3.00 return fee. I've processed a refund of $0.80 to you."
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4015",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   0.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1374,
+  "answer": "The refund of $0.80 has been processed after deducting the $3.00 return fee for the unopened hummus. If you need further assistance, let me know!"
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4016",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1350,
+  "answer": "Refund for the Mac & Cheese Bake has been processed due to quality issues. Sorry for the inconvenience!"
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4016",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1355,
+  "answer": "Your refund for the sour Mac & Cheese Bake has been processed in full due to the quality issue. Sorry for the inconvenience!"
+ },
+ {
+  "exp": "A",
+  "cond": "PROMPT",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4016",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1359,
+  "answer": "Your mac & cheese was opened and smells sour, which is a quality issue. I've processed a full refund of $15.90 for you."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4001",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1874,
+  "answer": "Your unopened frozen Pepperoni Pizza 2-pack is eligible for return as a change of mind. After the $3.00 return fee, you will receive a $9.90 refund. The return is processed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4001",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1865,
+  "answer": "You can return the unopened frozen Pepperoni Pizza within the 7-day window. I processed your refund of $9.90 after the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4001",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1886,
+  "answer": "Your unopened frozen Pepperoni Pizza 2-pack was delivered on 2026-10-15, within the 7-day return window. I processed your return for change of mind with a $3.00 return fee deducted. You will be refunded $9.90."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4002",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "frozen return window of 7 days has passed (today is day 8)"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1875,
+  "answer": "The frozen pizza return window is 7 days, and today is day 8 since delivery, so change of mind return is not allowed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4002",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "frozen return window of 7 days has passed (today is day 8)"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1878,
+  "answer": "The return window for frozen items is 7 days, and today is day 8 since delivery, so the return for change of mind is not allowed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4002",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "frozen return window of 7 days has passed (today is day 8)"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1879,
+  "answer": "The return window for frozen items is 7 days, and today is day 8 since delivery, so the pizza cannot be returned for a change of mind."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4003",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1877,
+  "answer": "The unopened burger patties can be returned as a change of mind within the 3-day refrigerated window. I have processed a refund of $20.90 after the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4003",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1870,
+  "answer": "The unopened burger patties are eligible for return within 3 days refrigerated window. Your refund of $20.90 after the $3 return fee has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4003",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1888,
+  "answer": "The burger patties are eligible for return within the 3-day refrigerated window, and since they are unopened and it's day 3, you get a refund of $20.90 after the $3.00 return fee. The refund has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4004",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1199,
+  "answer": "Your refrigerated burger patties were delivered on 2026-10-18, making today the 4th day since delivery. The refrigerated return window is 3 days, so it is outside the return window for change of mind.\n\nWould you want to check if there's a quality issue? If there is, you can return them. Otherwise, change of mind returns are not allowed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4004",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1185,
+  "answer": "Your refrigerated burger patties were delivered on 2026-10-18. Today is day 4 since delivery, which is outside the 3-day return window for refrigerated items. Unfortunately, a change of mind return is not allowed. However, if there is a quality issue, you can still return them."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4004",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "refrigerated return window of 3 days has passed (today is day 4)"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1877,
+  "answer": "The return window for refrigerated items is 3 days, and today is day 4 since delivery. Unfortunately, the return for change of mind is not allowed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4005",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   5.5
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1864,
+  "answer": "The BBQ sauce return is approved for a refund of $5.50 after deducting the $3.00 return fee. Is there anything else I can help you with?"
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4005",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   5.5
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1860,
+  "answer": "The return for the unopened BBQ Sauce has been approved for change of mind. Your refund, minus the $3 return fee, is $5.50."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4005",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   5.5
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1863,
+  "answer": "The BBQ sauce return has been processed. You will be refunded $5.50 after the $3.00 return fee. Let me know if you need anything else!"
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4006",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1177,
+  "answer": "Your BBQ sauce was delivered on 2026-10-07, today is 2026-10-21, which is day 15; it's outside the 14-day pantry return window for change of mind. Please note, the unopened item can only be returned for quality issues now."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4006",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1168,
+  "answer": "The BBQ sauce was delivered on 2026-10-07, so today is day 15 since delivery. The pantry return window is 14 days. The return window has expired for a change of mind return. The return is not allowed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4006",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "pantry return window of 14 days has passed (today is day 15)"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1864,
+  "answer": "The return window for pantry items is 14 days, and today is day 15 since delivery, so the return is no longer allowed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4007",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "opened items can be returned only for a quality issue"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1861,
+  "answer": "Since the cola was opened and there is no quality issue, we cannot accept a return for change of mind. Let me know if you think there is a quality problem with the product."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4007",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "opened items can be returned only for a quality issue"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1851,
+  "answer": "Since the cola was opened, returns for change of mind are not allowed. If there is a quality issue, please let me know."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4007",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "opened items can be returned only for a quality issue"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1852,
+  "answer": "Since the cola has been opened and you don't like the taste (not a quality issue), it cannot be refunded due to our return policy."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4008",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 2013,
+  "answer": "I have processed a full refund of $9.80 for the quality issue with your cola. The amount should be back in your account shortly. If you need further assistance, feel free to ask!"
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4008",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 2001,
+  "answer": "Your refund for the cola has been processed due to the quality issue. You will receive the full amount back. Let me know if you need any further assistance."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4008",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 2032,
+  "answer": "Your refund of $9.80 for the cola 12-pack due to quality issues has been processed. Is there anything else I can assist you with?"
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4009",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1839,
+  "answer": "The gift basket return for change of mind will require team lead approval due to the amount paid being over $50. I've requested approval for you."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4009",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1857,
+  "answer": "The order is for an unopened pantry item delivered on 2026-10-19. Since the amount paid is over $50, I have escalated this return request to the team lead for approval. You will be informed once it's approved."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4009",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1844,
+  "answer": "The return request for order YT-4009 is a change of mind and the amount paid is over $50. I have escalated the request for team lead approval. I will update you once I hear back."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4010",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1844,
+  "answer": "The steaks have a quality issue and since the amount paid is over $50, I have escalated the refund request for team lead approval. You will hear back soon."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4010",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1828,
+  "answer": "Your opened frozen steak has a quality issue and the amount paid is over $50, so I have escalated this to my team lead for approval. You will be contacted once it's processed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4010",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": true,
+  "mismatch": [],
+  "tokens": 1859,
+  "answer": "The steaks have a quality issue, and since the order amount is over $50, I have escalated this to the team lead for approval of your full refund. You will be contacted shortly."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4011",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1186,
+  "answer": "Your Chicken Nuggets were delivered on 2026-10-18, today is 2026-10-21 (day 4), and they are frozen category with a 7-day return window. However, your order is marked as opened, but you say it's not opened. Could you please confirm if the nuggets are truly unopened for the return?"
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4011",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [
+   "opened items can be returned only for a quality issue"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 2032,
+  "answer": "Since the nuggets are marked as opened in our records, they cannot be returned for a change of mind, only for a quality issue. If there is a quality issue, please let me know."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4011",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1196,
+  "answer": "Your order of Chicken Nuggets was delivered on 2026-10-18, and today is the 4th day after delivery, which is within the 7-day frozen item return window. However, the order record shows the nuggets were opened. Since changed mind returns for opened items are not allowed, I cannot accept this return unless there's a quality issue. Is there a quality issue with the nuggets?"
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4012",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1173,
+  "answer": "The pizza was delivered 11 days ago, which is outside the 7-day return window for frozen items. Unfortunately, the change-of-mind return is not allowed. If you have a quality issue, please let me know."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4012",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1168,
+  "answer": "Your pepperoni pizza order was delivered on 2026-10-10, which is well beyond the 7-day frozen return window. Unfortunately, change-of-mind return is not allowed this late."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4012",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1198,
+  "answer": "Your order YT-4012 was delivered on 2026-10-10, which is 12 days ago. The pizza is frozen, and the return window for frozen items is 7 days. Since it's past the return window, I cannot accept a change-of-mind return. Let me know if there's a quality issue with the pizza."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4013",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1841,
+  "answer": "I have issued a full refund for the chicken nuggets due to the foreign object found. Sorry for the inconvenience."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4013",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1845,
+  "answer": "I have issued a full refund of $15.90 due to the quality issue with the chicken nuggets. Sorry for the inconvenience."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4013",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1844,
+  "answer": "I have issued a full refund of $15.90 for the quality issue with the chicken nuggets. Sorry for the inconvenience."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4014",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1838,
+  "answer": "Your refund of $3.90 (after the $3.00 return fee) for the unopened Mac & Cheese Bake has been processed."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4014",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1845,
+  "answer": "I processed a refund of $3.90 after deducting the $3.00 return fee for your unopened Mac & Cheese. Let me know if you need anything else!"
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4014",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1845,
+  "answer": "Your return for the unopened Mac & Cheese Bake due to change of mind is approved. You will receive a $3.90 refund after the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4015",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   0.8
+  ],
+  "rejected": [
+   "wrong refund amount — the rules give $0.80"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 2737,
+  "answer": "The unopened hummus return is accepted with a refund of $0.80 after the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4015",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   0.8
+  ],
+  "rejected": [
+   "wrong refund amount — the rules give $0.80"
+  ],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 2701,
+  "answer": "The return is accepted. You will be refunded $0.80 after the $3.00 return fee."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4015",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   0.8
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1864,
+  "answer": "I processed your return for the unopened hummus with a $0.80 refund after the $3.00 return fee. Let me know if you need anything else."
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4016",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1849,
+  "answer": "Your refund for the Mac & Cheese Bake due to the quality issue has been processed in full. Is there anything else I can help you with?"
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4016",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1855,
+  "answer": "I have processed a full refund for your Mac & Cheese Bake due to the quality issue. You should see the amount back on your payment method shortly. Sorry for the inconvenience!"
+ },
+ {
+  "exp": "A",
+  "cond": "CODE",
+  "model": "gpt-4.1-mini",
+  "case": "YT-4016",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "rejected": [],
+  "escalated": false,
+  "mismatch": [],
+  "tokens": 1842,
+  "answer": "The full refund for your Mac & Cheese Bake due to quality issue has been processed. Sorry for the inconvenience."
+ }
+]

@@ -1,0 +1,102 @@
+[
+ {
+  "cond": "B2",
+  "task": "T1",
+  "seed": 0,
+  "need": "weekly-report-ppt",
+  "ok": true,
+  "note": "5 slides · Weekly Sales Report | 10 … Next Week To-Do",
+  "read": [
+   "weekly-report-ppt"
+  ],
+  "files": [],
+  "prompt_tokens": 3202,
+  "first_prompt": 689,
+  "completion_tokens": 324,
+  "turns": 3,
+  "sec": 4.1,
+  "script_input": "{\"file\":\"weekly.pptx\",\"slides\":[{\"title\":\"Weekly Sales Report | 10/13-10/17\",\"bullets\":[]},{\"title\":\"Sales summary\",\"bullets\":[\"Total sales this week: $24.1K\",\"105% of target\",\"vs last week: $21.8K\" ]},{\"title\":\"By product\",\"bullets\":[\"Pepperoni Pizza 2-pack: $12.4K / $11.0K (113%)\",\"Mac & Cheese Bake: $8.6K / $9.0K (96%)\",\"Cola 12-pack: $3.1K / $3.0K (103%)\"]},{\"title\":\"Issues · actions\",\"bullets\":[\"Pizza sauce supplier 3% price increase (Nov) → quote requested from another supplier\"]},{\"title\":\"Next Week To-Do\",\"bullets\":[\"Holiday promo talks with big-box retailer (Alex)\",\"Mac & cheese stock",
+  "blocked": 0,
+  "answer": "The weekly sales report PPT file is ready: B2_T1_0.pptx\nThe slides are titled:\n1. Weekly Sales Report | 10/13-10/17\n2. Sales summary\n3. By product\n4. Issues · actions\n5. Next Week To-Do"
+ },
+ {
+  "cond": "B2",
+  "task": "T1",
+  "seed": 1,
+  "need": "weekly-report-ppt",
+  "ok": true,
+  "note": "5 slides · Weekly Sales Report | 10 … Next Week To-Do",
+  "read": [
+   "weekly-report-ppt"
+  ],
+  "files": [],
+  "prompt_tokens": 4894,
+  "first_prompt": 689,
+  "completion_tokens": 613,
+  "turns": 4,
+  "sec": 6.7,
+  "script_input": "{\"file\":\"weekly.pptx\",\"slides\":[{\"title\":\"Weekly Sales Report | 10/13-10/17\",\"bullets\":[]},{\"title\":\"Sales summary\",\"bullets\":[\"Total sales this week: $24.1K\",\"105% of target\",\"Last week: $21.8K\"]},{\"title\":\"By product\",\"bullets\":[\"Pepperoni Pizza 2-pack: $12.4K / $11.0K (113%)\",\"Mac & Cheese Bake: $8.6K / $9.0K (96%)\",\"Cola 12-pack: $3.1K / $3.0K (103%)\"]},{\"title\":\"Issues · actions\",\"bullets\":[\"Pizza sauce supplier announced 3% price increase for November → asked another supplier for a quote\"]},{\"title\":\"Next Week To-Do\",\"bullets\":[\"Holiday promo talks with big-box retailer (Alex)\",\"Mac & ch",
+  "blocked": 0,
+  "answer": "The weekly sales report PPT for 10/13-10/17 is ready. The file name is B2_T1_1.pptx. \n\nThe slide titles are:\n1. Weekly Sales Report | 10/13-10/17\n2. Sales summary\n3. By product\n4. Issues · actions\n5. Next Week To-Do"
+ },
+ {
+  "cond": "B2",
+  "task": "T1",
+  "seed": 2,
+  "need": "weekly-report-ppt",
+  "ok": true,
+  "note": "5 slides · Weekly Sales Report | 10 … Next Week To-Do",
+  "read": [
+   "weekly-report-ppt"
+  ],
+  "files": [],
+  "prompt_tokens": 3201,
+  "first_prompt": 689,
+  "completion_tokens": 330,
+  "turns": 3,
+  "sec": 4.7,
+  "script_input": "{\"file\":\"weekly.pptx\",\"slides\":[{\"title\":\"Weekly Sales Report | 10/13-10/17\",\"bullets\":[]},{\"title\":\"Sales summary\",\"bullets\":[\"Total sales this week: $24.1K\",\"105% of target\",\"10% increase vs last week ($21.8K)\"]},{\"title\":\"By product\",\"bullets\":[\"Pepperoni Pizza 2-pack: $12.4K / $11.0K (113%)\",\"Mac & Cheese Bake: $8.6K / $9.0K (96%)\",\"Cola 12-pack: $3.1K / $3.0K (103%)\"]},{\"title\":\"Issues · actions\",\"bullets\":[\"Pizza sauce supplier price increase 3% → requested quote from another supplier\"]},{\"title\":\"Next Week To-Do\",\"bullets\":[\"Holiday promo talks with big-box retailer (Alex)\",\"Mac & chees",
+  "blocked": 0,
+  "answer": "The weekly sales report PPT file for 10/13-10/17 has been created. It includes the following slides:\n1. Cover\n2. Sales summary\n3. By product\n4. Issues · actions\n5. Next Week To-Do\n\nYou can find the file named B2_T1_2.pptx."
+ },
+ {
+  "cond": "B2",
+  "task": "T1",
+  "seed": 3,
+  "need": "weekly-report-ppt",
+  "ok": true,
+  "note": "5 slides · Weekly Sales Report | 10 … Next Week To-Do",
+  "read": [
+   "weekly-report-ppt"
+  ],
+  "files": [],
+  "prompt_tokens": 3199,
+  "first_prompt": 689,
+  "completion_tokens": 351,
+  "turns": 3,
+  "sec": 4.6,
+  "script_input": "{\"file\":\"weekly.pptx\",\"slides\":[{\"title\":\"Weekly Sales Report | 10/13-10/17\",\"bullets\":[]},{\"title\":\"Sales summary\",\"bullets\":[\"Total sales $24.1K\",\"105% of target\",\"11% increase vs last week\"]},{\"title\":\"By product\",\"bullets\":[\"Pepperoni Pizza 2-pack: $12.4K / $11.0K (113%)\",\"Mac & Cheese Bake: $8.6K / $9.0K (96%)\",\"Cola 12-pack: $3.1K / $3.0K (103%)\"]},{\"title\":\"Issues  actions\",\"bullets\":[\"Pizza sauce supplier announced 3% price increase for November  asked another supplier for a quote\"]},{\"title\":\"Next Week To-Do\",\"bullets\":[\"Holiday promo talks with a big-box retailer (Alex)\",\"Mac & che",
+  "blocked": 0,
+  "answer": "The weekly sales report PPT for 10/13-10/17 is ready. The file name is B2_T1_3.pptx. The slides are titled:\n1. Weekly Sales Report | 10/13-10/17\n2. Sales summary\n3. By product\n4. Issues · actions\n5. Next Week To-Do\n\nLet me know if you need any changes or additional details."
+ },
+ {
+  "cond": "B2",
+  "task": "T1",
+  "seed": 4,
+  "need": "weekly-report-ppt",
+  "ok": true,
+  "note": "5 slides · Weekly Sales Report | 10 … Next Week To-Do",
+  "read": [
+   "weekly-report-ppt"
+  ],
+  "files": [],
+  "prompt_tokens": 3205,
+  "first_prompt": 689,
+  "completion_tokens": 361,
+  "turns": 3,
+  "sec": 5.0,
+  "script_input": "{\"file\":\"weekly_10_13_10_17.pptx\",\"slides\":[{\"title\":\"Weekly Sales Report | 10/13-10/17\",\"bullets\":[]},{\"title\":\"Sales summary\",\"bullets\":[\"Total sales $24.1K\", \"105% of target\", \"10% vs last week\"]},{\"title\":\"By product\",\"bullets\":[\"Pepperoni Pizza 2-pack: $12.4K / $11.0K (113%)\",\"Mac & Cheese Bake: $8.6K / $9.0K (96%)\",\"Cola 12-pack: $3.1K / $3.0K (103%)\"]},{\"title\":\"Issues · actions\",\"bullets\":[\"Pizza sauce supplier 3% price increase for November → asked another supplier for a quote\"]},{\"title\":\"Next Week To-Do\",\"bullets\":[\"Holiday promo talks with a big-box retailer (Alex)\", \"Mac & cheese ",
+  "blocked": 0,
+  "answer": "The weekly sales report PPT for 10/13-10/17 has been created with 5 slides. The file name is B2_T1_4.pptx. The slide titles are:\n\n1. Weekly Sales Report | 10/13-10/17\n2. Sales summary\n3. By product\n4. Issues · actions\n5. Next Week To-Do\n\nLet me know if you need the file sent to you or any other help."
+ }
+]

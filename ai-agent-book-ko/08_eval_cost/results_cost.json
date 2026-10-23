@@ -1,0 +1,1256 @@
+[
+ {
+  "exp": "cost",
+  "stable": true,
+  "compress": false,
+  "seed": 0,
+  "inp": 76549,
+  "cached": 68608,
+  "out": 599,
+  "cost": 0.010995600000000001,
+  "calls": 15,
+  "rounds": [
+   {
+    "turn": 1,
+    "inp": 2113,
+    "cached": 0,
+    "out": 19
+   },
+   {
+    "turn": 1,
+    "inp": 2205,
+    "cached": 2048,
+    "out": 61
+   },
+   {
+    "turn": 2,
+    "inp": 2282,
+    "cached": 2176,
+    "out": 20
+   },
+   {
+    "turn": 2,
+    "inp": 3531,
+    "cached": 2176,
+    "out": 58
+   },
+   {
+    "turn": 3,
+    "inp": 3610,
+    "cached": 3456,
+    "out": 18
+   },
+   {
+    "turn": 3,
+    "inp": 5060,
+    "cached": 3456,
+    "out": 41
+   },
+   {
+    "turn": 4,
+    "inp": 5119,
+    "cached": 4992,
+    "out": 20
+   },
+   {
+    "turn": 4,
+    "inp": 6361,
+    "cached": 4992,
+    "out": 45
+   },
+   {
+    "turn": 5,
+    "inp": 6432,
+    "cached": 6272,
+    "out": 25
+   },
+   {
+    "turn": 5,
+    "inp": 6475,
+    "cached": 6400,
+    "out": 36
+   },
+   {
+    "turn": 6,
+    "inp": 6544,
+    "cached": 6400,
+    "out": 31
+   },
+   {
+    "turn": 6,
+    "inp": 6587,
+    "cached": 6400,
+    "out": 66
+   },
+   {
+    "turn": 6,
+    "inp": 6666,
+    "cached": 6528,
+    "out": 75
+   },
+   {
+    "turn": 7,
+    "inp": 6759,
+    "cached": 6656,
+    "out": 26
+   },
+   {
+    "turn": 8,
+    "inp": 6805,
+    "cached": 6656,
+    "out": 58
+   }
+  ]
+ },
+ {
+  "exp": "cost",
+  "stable": true,
+  "compress": false,
+  "seed": 1,
+  "inp": 76221,
+  "cached": 68352,
+  "out": 585,
+  "cost": 0.010918800000000001,
+  "calls": 15,
+  "rounds": [
+   {
+    "turn": 1,
+    "inp": 2113,
+    "cached": 0,
+    "out": 19
+   },
+   {
+    "turn": 1,
+    "inp": 2205,
+    "cached": 2048,
+    "out": 59
+   },
+   {
+    "turn": 2,
+    "inp": 2280,
+    "cached": 2176,
+    "out": 20
+   },
+   {
+    "turn": 2,
+    "inp": 3529,
+    "cached": 2176,
+    "out": 24
+   },
+   {
+    "turn": 3,
+    "inp": 3574,
+    "cached": 3456,
+    "out": 18
+   },
+   {
+    "turn": 3,
+    "inp": 5024,
+    "cached": 3456,
+    "out": 45
+   },
+   {
+    "turn": 4,
+    "inp": 5087,
+    "cached": 4992,
+    "out": 20
+   },
+   {
+    "turn": 4,
+    "inp": 6329,
+    "cached": 4992,
+    "out": 49
+   },
+   {
+    "turn": 5,
+    "inp": 6404,
+    "cached": 6272,
+    "out": 25
+   },
+   {
+    "turn": 5,
+    "inp": 6447,
+    "cached": 6272,
+    "out": 40
+   },
+   {
+    "turn": 6,
+    "inp": 6520,
+    "cached": 6400,
+    "out": 31
+   },
+   {
+    "turn": 6,
+    "inp": 6563,
+    "cached": 6400,
+    "out": 57
+   },
+   {
+    "turn": 6,
+    "inp": 6633,
+    "cached": 6528,
+    "out": 55
+   },
+   {
+    "turn": 7,
+    "inp": 6706,
+    "cached": 6528,
+    "out": 82
+   },
+   {
+    "turn": 8,
+    "inp": 6807,
+    "cached": 6656,
+    "out": 41
+   }
+  ]
+ },
+ {
+  "exp": "cost",
+  "stable": true,
+  "compress": false,
+  "seed": 2,
+  "inp": 83579,
+  "cached": 75520,
+  "out": 627,
+  "cost": 0.0117788,
+  "calls": 16,
+  "rounds": [
+   {
+    "turn": 1,
+    "inp": 2113,
+    "cached": 0,
+    "out": 19
+   },
+   {
+    "turn": 1,
+    "inp": 2205,
+    "cached": 2048,
+    "out": 58
+   },
+   {
+    "turn": 2,
+    "inp": 2279,
+    "cached": 2176,
+    "out": 20
+   },
+   {
+    "turn": 2,
+    "inp": 3528,
+    "cached": 2176,
+    "out": 61
+   },
+   {
+    "turn": 3,
+    "inp": 3610,
+    "cached": 3456,
+    "out": 18
+   },
+   {
+    "turn": 3,
+    "inp": 5060,
+    "cached": 3456,
+    "out": 52
+   },
+   {
+    "turn": 4,
+    "inp": 5130,
+    "cached": 4992,
+    "out": 20
+   },
+   {
+    "turn": 4,
+    "inp": 6372,
+    "cached": 4992,
+    "out": 57
+   },
+   {
+    "turn": 5,
+    "inp": 6455,
+    "cached": 6272,
+    "out": 25
+   },
+   {
+    "turn": 5,
+    "inp": 6498,
+    "cached": 6400,
+    "out": 45
+   },
+   {
+    "turn": 6,
+    "inp": 6576,
+    "cached": 6400,
+    "out": 31
+   },
+   {
+    "turn": 6,
+    "inp": 6619,
+    "cached": 6528,
+    "out": 54
+   },
+   {
+    "turn": 6,
+    "inp": 6686,
+    "cached": 6528,
+    "out": 53
+   },
+   {
+    "turn": 7,
+    "inp": 6757,
+    "cached": 6656,
+    "out": 49
+   },
+   {
+    "turn": 7,
+    "inp": 6819,
+    "cached": 6656,
+    "out": 33
+   },
+   {
+    "turn": 8,
+    "inp": 6872,
+    "cached": 6784,
+    "out": 32
+   }
+  ]
+ },
+ {
+  "exp": "cost",
+  "stable": true,
+  "compress": true,
+  "seed": 0,
+  "inp": 43628,
+  "cached": 33280,
+  "out": 719,
+  "cost": 0.0086176,
+  "calls": 15,
+  "rounds": [
+   {
+    "turn": 1,
+    "inp": 2113,
+    "cached": 2048,
+    "out": 19
+   },
+   {
+    "turn": 1,
+    "inp": 2205,
+    "cached": 2048,
+    "out": 70
+   },
+   {
+    "turn": 2,
+    "inp": 2291,
+    "cached": 2176,
+    "out": 20
+   },
+   {
+    "turn": 2,
+    "inp": 3540,
+    "cached": 2176,
+    "out": 66
+   },
+   {
+    "turn": 3,
+    "inp": 2431,
+    "cached": 2048,
+    "out": 18
+   },
+   {
+    "turn": 3,
+    "inp": 3881,
+    "cached": 2304,
+    "out": 139
+   },
+   {
+    "turn": 4,
+    "inp": 2643,
+    "cached": 2048,
+    "out": 20
+   },
+   {
+    "turn": 4,
+    "inp": 3885,
+    "cached": 2560,
+    "out": 53
+   },
+   {
+    "turn": 5,
+    "inp": 2770,
+    "cached": 1792,
+    "out": 25
+   },
+   {
+    "turn": 5,
+    "inp": 2813,
+    "cached": 2688,
+    "out": 40
+   },
+   {
+    "turn": 6,
+    "inp": 2886,
+    "cached": 2688,
+    "out": 31
+   },
+   {
+    "turn": 6,
+    "inp": 2929,
+    "cached": 2816,
+    "out": 72
+   },
+   {
+    "turn": 6,
+    "inp": 3014,
+    "cached": 0,
+    "out": 55
+   },
+   {
+    "turn": 7,
+    "inp": 3087,
+    "cached": 2944,
+    "out": 33
+   },
+   {
+    "turn": 8,
+    "inp": 3140,
+    "cached": 2944,
+    "out": 58
+   }
+  ]
+ },
+ {
+  "exp": "cost",
+  "stable": true,
+  "compress": true,
+  "seed": 1,
+  "inp": 43375,
+  "cached": 33408,
+  "out": 704,
+  "cost": 0.008454,
+  "calls": 15,
+  "rounds": [
+   {
+    "turn": 1,
+    "inp": 2113,
+    "cached": 1792,
+    "out": 19
+   },
+   {
+    "turn": 1,
+    "inp": 2205,
+    "cached": 2048,
+    "out": 63
+   },
+   {
+    "turn": 2,
+    "inp": 2284,
+    "cached": 2176,
+    "out": 20
+   },
+   {
+    "turn": 2,
+    "inp": 3533,
+    "cached": 2176,
+    "out": 62
+   },
+   {
+    "turn": 3,
+    "inp": 2420,
+    "cached": 1792,
+    "out": 18
+   },
+   {
+    "turn": 3,
+    "inp": 3870,
+    "cached": 1792,
+    "out": 124
+   },
+   {
+    "turn": 4,
+    "inp": 2617,
+    "cached": 1792,
+    "out": 20
+   },
+   {
+    "turn": 4,
+    "inp": 3859,
+    "cached": 2560,
+    "out": 52
+   },
+   {
+    "turn": 5,
+    "inp": 2743,
+    "cached": 1792,
+    "out": 25
+   },
+   {
+    "turn": 5,
+    "inp": 2786,
+    "cached": 2688,
+    "out": 40
+   },
+   {
+    "turn": 6,
+    "inp": 2859,
+    "cached": 2048,
+    "out": 31
+   },
+   {
+    "turn": 6,
+    "inp": 2902,
+    "cached": 2688,
+    "out": 69
+   },
+   {
+    "turn": 6,
+    "inp": 2984,
+    "cached": 2816,
+    "out": 57
+   },
+   {
+    "turn": 7,
+    "inp": 3059,
+    "cached": 2304,
+    "out": 63
+   },
+   {
+    "turn": 8,
+    "inp": 3141,
+    "cached": 2944,
+    "out": 41
+   }
+  ]
+ },
+ {
+  "exp": "cost",
+  "stable": true,
+  "compress": true,
+  "seed": 2,
+  "inp": 42683,
+  "cached": 32896,
+  "out": 609,
+  "cost": 0.008178800000000002,
+  "calls": 15,
+  "rounds": [
+   {
+    "turn": 1,
+    "inp": 2113,
+    "cached": 2048,
+    "out": 19
+   },
+   {
+    "turn": 1,
+    "inp": 2205,
+    "cached": 0,
+    "out": 60
+   },
+   {
+    "turn": 2,
+    "inp": 2281,
+    "cached": 1792,
+    "out": 20
+   },
+   {
+    "turn": 2,
+    "inp": 3530,
+    "cached": 2176,
+    "out": 63
+   },
+   {
+    "turn": 3,
+    "inp": 2418,
+    "cached": 2048,
+    "out": 18
+   },
+   {
+    "turn": 3,
+    "inp": 3868,
+    "cached": 2304,
+    "out": 53
+   },
+   {
+    "turn": 4,
+    "inp": 2544,
+    "cached": 1792,
+    "out": 20
+   },
+   {
+    "turn": 4,
+    "inp": 3786,
+    "cached": 1792,
+    "out": 51
+   },
+   {
+    "turn": 5,
+    "inp": 2669,
+    "cached": 2432,
+    "out": 25
+   },
+   {
+    "turn": 5,
+    "inp": 2712,
+    "cached": 2560,
+    "out": 36
+   },
+   {
+    "turn": 6,
+    "inp": 2781,
+    "cached": 2688,
+    "out": 31
+   },
+   {
+    "turn": 6,
+    "inp": 2824,
+    "cached": 2688,
+    "out": 68
+   },
+   {
+    "turn": 6,
+    "inp": 2905,
+    "cached": 2816,
+    "out": 72
+   },
+   {
+    "turn": 7,
+    "inp": 2995,
+    "cached": 2816,
+    "out": 37
+   },
+   {
+    "turn": 8,
+    "inp": 3052,
+    "cached": 2944,
+    "out": 36
+   }
+  ]
+ },
+ {
+  "exp": "cost",
+  "stable": false,
+  "compress": false,
+  "seed": 0,
+  "inp": 76839,
+  "cached": 0,
+  "out": 561,
+  "cost": 0.0316332,
+  "calls": 15,
+  "rounds": [
+   {
+    "turn": 1,
+    "inp": 2130,
+    "cached": 0,
+    "out": 19
+   },
+   {
+    "turn": 1,
+    "inp": 2224,
+    "cached": 0,
+    "out": 63
+   },
+   {
+    "turn": 2,
+    "inp": 2301,
+    "cached": 0,
+    "out": 20
+   },
+   {
+    "turn": 2,
+    "inp": 3552,
+    "cached": 0,
+    "out": 60
+   },
+   {
+    "turn": 3,
+    "inp": 3630,
+    "cached": 0,
+    "out": 18
+   },
+   {
+    "turn": 3,
+    "inp": 5081,
+    "cached": 0,
+    "out": 42
+   },
+   {
+    "turn": 4,
+    "inp": 5141,
+    "cached": 0,
+    "out": 20
+   },
+   {
+    "turn": 4,
+    "inp": 6384,
+    "cached": 0,
+    "out": 54
+   },
+   {
+    "turn": 5,
+    "inp": 6462,
+    "cached": 0,
+    "out": 25
+   },
+   {
+    "turn": 5,
+    "inp": 6504,
+    "cached": 0,
+    "out": 38
+   },
+   {
+    "turn": 6,
+    "inp": 6578,
+    "cached": 0,
+    "out": 31
+   },
+   {
+    "turn": 6,
+    "inp": 6621,
+    "cached": 0,
+    "out": 38
+   },
+   {
+    "turn": 7,
+    "inp": 6678,
+    "cached": 0,
+    "out": 65
+   },
+   {
+    "turn": 7,
+    "inp": 6755,
+    "cached": 0,
+    "out": 24
+   },
+   {
+    "turn": 8,
+    "inp": 6798,
+    "cached": 0,
+    "out": 44
+   }
+  ]
+ },
+ {
+  "exp": "cost",
+  "stable": false,
+  "compress": false,
+  "seed": 1,
+  "inp": 76324,
+  "cached": 0,
+  "out": 537,
+  "cost": 0.0313888,
+  "calls": 15,
+  "rounds": [
+   {
+    "turn": 1,
+    "inp": 2130,
+    "cached": 0,
+    "out": 19
+   },
+   {
+    "turn": 1,
+    "inp": 2221,
+    "cached": 0,
+    "out": 65
+   },
+   {
+    "turn": 2,
+    "inp": 2305,
+    "cached": 0,
+    "out": 20
+   },
+   {
+    "turn": 2,
+    "inp": 3551,
+    "cached": 0,
+    "out": 25
+   },
+   {
+    "turn": 3,
+    "inp": 3600,
+    "cached": 0,
+    "out": 16
+   },
+   {
+    "turn": 3,
+    "inp": 5046,
+    "cached": 0,
+    "out": 38
+   },
+   {
+    "turn": 4,
+    "inp": 5102,
+    "cached": 0,
+    "out": 20
+   },
+   {
+    "turn": 4,
+    "inp": 6343,
+    "cached": 0,
+    "out": 24
+   },
+   {
+    "turn": 5,
+    "inp": 6393,
+    "cached": 0,
+    "out": 25
+   },
+   {
+    "turn": 5,
+    "inp": 6438,
+    "cached": 0,
+    "out": 37
+   },
+   {
+    "turn": 6,
+    "inp": 6507,
+    "cached": 0,
+    "out": 31
+   },
+   {
+    "turn": 6,
+    "inp": 6549,
+    "cached": 0,
+    "out": 76
+   },
+   {
+    "turn": 6,
+    "inp": 6639,
+    "cached": 0,
+    "out": 70
+   },
+   {
+    "turn": 7,
+    "inp": 6728,
+    "cached": 0,
+    "out": 25
+   },
+   {
+    "turn": 8,
+    "inp": 6772,
+    "cached": 0,
+    "out": 46
+   }
+  ]
+ },
+ {
+  "exp": "cost",
+  "stable": false,
+  "compress": false,
+  "seed": 2,
+  "inp": 84952,
+  "cached": 0,
+  "out": 748,
+  "cost": 0.0351776,
+  "calls": 16,
+  "rounds": [
+   {
+    "turn": 1,
+    "inp": 2130,
+    "cached": 0,
+    "out": 19
+   },
+   {
+    "turn": 1,
+    "inp": 2221,
+    "cached": 0,
+    "out": 67
+   },
+   {
+    "turn": 2,
+    "inp": 2306,
+    "cached": 0,
+    "out": 20
+   },
+   {
+    "turn": 2,
+    "inp": 3555,
+    "cached": 0,
+    "out": 53
+   },
+   {
+    "turn": 3,
+    "inp": 3627,
+    "cached": 0,
+    "out": 18
+   },
+   {
+    "turn": 3,
+    "inp": 5077,
+    "cached": 0,
+    "out": 144
+   },
+   {
+    "turn": 4,
+    "inp": 5241,
+    "cached": 0,
+    "out": 20
+   },
+   {
+    "turn": 4,
+    "inp": 6481,
+    "cached": 0,
+    "out": 66
+   },
+   {
+    "turn": 5,
+    "inp": 6575,
+    "cached": 0,
+    "out": 25
+   },
+   {
+    "turn": 5,
+    "inp": 6616,
+    "cached": 0,
+    "out": 48
+   },
+   {
+    "turn": 6,
+    "inp": 6697,
+    "cached": 0,
+    "out": 31
+   },
+   {
+    "turn": 6,
+    "inp": 6742,
+    "cached": 0,
+    "out": 67
+   },
+   {
+    "turn": 6,
+    "inp": 6822,
+    "cached": 0,
+    "out": 62
+   },
+   {
+    "turn": 7,
+    "inp": 6902,
+    "cached": 0,
+    "out": 45
+   },
+   {
+    "turn": 7,
+    "inp": 6959,
+    "cached": 0,
+    "out": 21
+   },
+   {
+    "turn": 8,
+    "inp": 7001,
+    "cached": 0,
+    "out": 42
+   }
+  ]
+ },
+ {
+  "exp": "cost",
+  "stable": false,
+  "compress": true,
+  "seed": 0,
+  "inp": 44103,
+  "cached": 0,
+  "out": 731,
+  "cost": 0.0188108,
+  "calls": 15,
+  "rounds": [
+   {
+    "turn": 1,
+    "inp": 2131,
+    "cached": 0,
+    "out": 19
+   },
+   {
+    "turn": 1,
+    "inp": 2221,
+    "cached": 0,
+    "out": 67
+   },
+   {
+    "turn": 2,
+    "inp": 2305,
+    "cached": 0,
+    "out": 20
+   },
+   {
+    "turn": 2,
+    "inp": 3554,
+    "cached": 0,
+    "out": 64
+   },
+   {
+    "turn": 3,
+    "inp": 2442,
+    "cached": 0,
+    "out": 18
+   },
+   {
+    "turn": 3,
+    "inp": 3894,
+    "cached": 0,
+    "out": 167
+   },
+   {
+    "turn": 4,
+    "inp": 2683,
+    "cached": 0,
+    "out": 20
+   },
+   {
+    "turn": 4,
+    "inp": 3925,
+    "cached": 0,
+    "out": 54
+   },
+   {
+    "turn": 5,
+    "inp": 2811,
+    "cached": 0,
+    "out": 25
+   },
+   {
+    "turn": 5,
+    "inp": 2854,
+    "cached": 0,
+    "out": 40
+   },
+   {
+    "turn": 6,
+    "inp": 2927,
+    "cached": 0,
+    "out": 31
+   },
+   {
+    "turn": 6,
+    "inp": 2970,
+    "cached": 0,
+    "out": 70
+   },
+   {
+    "turn": 6,
+    "inp": 3053,
+    "cached": 0,
+    "out": 71
+   },
+   {
+    "turn": 7,
+    "inp": 3143,
+    "cached": 0,
+    "out": 28
+   },
+   {
+    "turn": 8,
+    "inp": 3190,
+    "cached": 0,
+    "out": 37
+   }
+  ]
+ },
+ {
+  "exp": "cost",
+  "stable": false,
+  "compress": true,
+  "seed": 1,
+  "inp": 42794,
+  "cached": 0,
+  "out": 589,
+  "cost": 0.018060000000000003,
+  "calls": 15,
+  "rounds": [
+   {
+    "turn": 1,
+    "inp": 2131,
+    "cached": 0,
+    "out": 19
+   },
+   {
+    "turn": 1,
+    "inp": 2223,
+    "cached": 0,
+    "out": 65
+   },
+   {
+    "turn": 2,
+    "inp": 2304,
+    "cached": 0,
+    "out": 20
+   },
+   {
+    "turn": 2,
+    "inp": 3553,
+    "cached": 0,
+    "out": 56
+   },
+   {
+    "turn": 3,
+    "inp": 2435,
+    "cached": 0,
+    "out": 18
+   },
+   {
+    "turn": 3,
+    "inp": 3884,
+    "cached": 0,
+    "out": 37
+   },
+   {
+    "turn": 4,
+    "inp": 2543,
+    "cached": 0,
+    "out": 20
+   },
+   {
+    "turn": 4,
+    "inp": 3788,
+    "cached": 0,
+    "out": 53
+   },
+   {
+    "turn": 5,
+    "inp": 2670,
+    "cached": 0,
+    "out": 25
+   },
+   {
+    "turn": 5,
+    "inp": 2715,
+    "cached": 0,
+    "out": 37
+   },
+   {
+    "turn": 6,
+    "inp": 2783,
+    "cached": 0,
+    "out": 31
+   },
+   {
+    "turn": 6,
+    "inp": 2825,
+    "cached": 0,
+    "out": 68
+   },
+   {
+    "turn": 6,
+    "inp": 2908,
+    "cached": 0,
+    "out": 66
+   },
+   {
+    "turn": 7,
+    "inp": 2993,
+    "cached": 0,
+    "out": 28
+   },
+   {
+    "turn": 8,
+    "inp": 3039,
+    "cached": 0,
+    "out": 46
+   }
+  ]
+ },
+ {
+  "exp": "cost",
+  "stable": false,
+  "compress": true,
+  "seed": 2,
+  "inp": 47135,
+  "cached": 0,
+  "out": 734,
+  "cost": 0.020028400000000002,
+  "calls": 16,
+  "rounds": [
+   {
+    "turn": 1,
+    "inp": 2129,
+    "cached": 0,
+    "out": 19
+   },
+   {
+    "turn": 1,
+    "inp": 2221,
+    "cached": 0,
+    "out": 72
+   },
+   {
+    "turn": 2,
+    "inp": 2311,
+    "cached": 0,
+    "out": 20
+   },
+   {
+    "turn": 2,
+    "inp": 3559,
+    "cached": 0,
+    "out": 74
+   },
+   {
+    "turn": 3,
+    "inp": 2459,
+    "cached": 0,
+    "out": 18
+   },
+   {
+    "turn": 3,
+    "inp": 3908,
+    "cached": 0,
+    "out": 128
+   },
+   {
+    "turn": 4,
+    "inp": 2659,
+    "cached": 0,
+    "out": 20
+   },
+   {
+    "turn": 4,
+    "inp": 3903,
+    "cached": 0,
+    "out": 60
+   },
+   {
+    "turn": 5,
+    "inp": 2794,
+    "cached": 0,
+    "out": 25
+   },
+   {
+    "turn": 5,
+    "inp": 2837,
+    "cached": 0,
+    "out": 39
+   },
+   {
+    "turn": 6,
+    "inp": 2909,
+    "cached": 0,
+    "out": 31
+   },
+   {
+    "turn": 6,
+    "inp": 2951,
+    "cached": 0,
+    "out": 61
+   },
+   {
+    "turn": 6,
+    "inp": 3026,
+    "cached": 0,
+    "out": 60
+   },
+   {
+    "turn": 7,
+    "inp": 3103,
+    "cached": 0,
+    "out": 46
+   },
+   {
+    "turn": 7,
+    "inp": 3163,
+    "cached": 0,
+    "out": 22
+   },
+   {
+    "turn": 8,
+    "inp": 3203,
+    "cached": 0,
+    "out": 39
+   }
+  ]
+ }
+]

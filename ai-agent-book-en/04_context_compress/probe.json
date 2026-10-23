@@ -1,0 +1,70 @@
+[
+ {
+  "strategy": "S0",
+  "seed": 0,
+  "kept": [
+   "150 cases",
+   "ship to DC 2",
+   "frozen Tue/Thu",
+   "price increase Dec 1",
+   "pay on the 15th",
+   "mac & cheese 11/12"
+  ],
+  "n_kept": 6,
+  "overflow_turn": null,
+  "max_prompt": 27568,
+  "tokens_main": 474797,
+  "tokens_compress": 0,
+  "compressions": 0,
+  "notes": "",
+  "calls": [
+   "1:get_catalog",
+   "3:get_stock_report",
+   "4:get_catalog",
+   "6:get_catalog",
+   "9:get_delivery_schedule",
+   "10:get_notice",
+   "13:get_catalog",
+   "15:get_sales_history",
+   "19:get_notice"
+  ],
+  "final": "Order Confirmation for ValueMart\n\nItems Ordered:\n- Pepperoni Pizza 2-pack, 150 cases\n\nShip-To:\nValueMart Distribution Center 2\nDayton, Ohio\n\nDelivery:\n- Frozen goods delivery scheduled for Tuesdays and Thursdays only, per Distribution Center 2's requirements.\n\nPricing:\n- Current promo price on Pepperoni Pizza 2-pack applied.\n- Note: The 3% supply price increase for frozen products, including pizza, is postponed to December 1.\n\nPayment Terms:\n- Invoice issued at month-end.\n- Payment due in cash by the 15th of the following month.\n\nAdditional Notes:\n- Mac & Cheese Bake currently out of stock due to cheese sauce supply issue.\n- Expected shipping availability for Mac & Cheese Bake is delayed until November 12.\n\nPlease confirm if all details are correct or if you need any further assistance.",
+  "sec": 38,
+  "budget": 24000
+ },
+ {
+  "strategy": "S0",
+  "seed": 1,
+  "kept": [
+   "150 cases",
+   "ship to DC 2",
+   "frozen Tue/Thu",
+   "price increase Dec 1",
+   "pay on the 15th",
+   "mac & cheese 11/12"
+  ],
+  "n_kept": 6,
+  "overflow_turn": null,
+  "max_prompt": 36139,
+  "tokens_main": 624356,
+  "tokens_compress": 0,
+  "compressions": 0,
+  "notes": "",
+  "calls": [
+   "1:get_catalog",
+   "3:get_stock_report",
+   "4:get_catalog",
+   "6:get_catalog",
+   "7:get_stock_report",
+   "9:get_delivery_schedule",
+   "10:get_notice",
+   "13:get_catalog",
+   "15:get_sales_history",
+   "17:get_stock_report",
+   "19:get_notice"
+  ],
+  "final": "Order Confirmation for ValueMart\n\nItems and Quantities:\n- Pepperoni Pizza 2-pack: 150 cases (promo price $46.80 each)\n\nShipping Information:\n- Ship to: ValueMart Distribution Center 2, Dayton, Ohio\n- Frozen product deliveries scheduled for Tuesdays and Thursdays only.\n\nPricing Notes:\n- Frozen product price increase of 3% originally scheduled for November 1 is postponed to December 1.\n- Pantry product price increase of 2% takes effect November 1 as planned.\n\nPayment Terms:\n- Invoice issued at month-end.\n- Payment due in cash by the 15th of the following month.\n\nMac & Cheese Bake Shipping:\n- Currently out of stock due to cheese sauce supply issue; restock delayed to November 12.\n- Shipments can resume from November 12 onward.\n\nPlease review and confirm or let me know if you need any changes or additional details!",
+  "sec": 43,
+  "budget": 24000
+ }
+]

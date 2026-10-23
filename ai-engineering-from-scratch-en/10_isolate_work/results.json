@@ -1,0 +1,2226 @@
+[
+ {
+  "cond": "A",
+  "i": 0,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $73.40\n- BBQ Sauce 18 oz: $46.20\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 3 pm\n- Frozen returns: within 7 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 4.1,
+  "log": [
+   [
+    1.5,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.5,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.6,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.9,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    3.1,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    3.1,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame"
+  ],
+  "n_survived": 3,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "A",
+  "i": 1,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts\n- Sesame Burger Buns 8-pack: soy\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 3 pm\n- Frozen returns: within 7 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 4.2,
+  "log": [
+   [
+    1.3,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.5,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.7,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    3.1,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    3.1,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    3.2,
+    "price",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50"
+  ],
+  "n_survived": 2,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "A",
+  "i": 2,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts\n- Sesame Burger Buns 8-pack: soy\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 3 pm\n- Frozen returns: within 7 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 4.2,
+  "log": [
+   [
+    1.3,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.4,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.5,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.8,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    3.1,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    3.1,
+    "price",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50"
+  ],
+  "n_survived": 2,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "A",
+  "i": 3,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts\n- Sesame Burger Buns 8-pack: soy\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 3 pm\n- Frozen returns: within 7 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 4.1,
+  "log": [
+   [
+    1.4,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.5,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.7,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    3.0,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    3.1,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    3.2,
+    "price",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50"
+  ],
+  "n_survived": 2,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "A",
+  "i": 4,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts\n- Sesame Burger Buns 8-pack: soy\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 3 pm\n- Frozen returns: within 7 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.6,
+  "log": [
+   [
+    0.6,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.8,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.0,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.1,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.4,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.6,
+    "price",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50"
+  ],
+  "n_survived": 2,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "A",
+  "i": 5,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $73.40\n- BBQ Sauce 18 oz: $46.20\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts\n- Sesame Burger Buns 8-pack: soy\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.6,
+  "log": [
+   [
+    0.6,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.9,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.9,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.3,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.4,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.7,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 2,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "A",
+  "i": 6,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts\n- Sesame Burger Buns 8-pack: soy\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 3 pm\n- Frozen returns: within 7 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.8,
+  "log": [
+   [
+    0.6,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.0,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.1,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.3,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.6,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.7,
+    "price",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50"
+  ],
+  "n_survived": 2,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "A",
+  "i": 7,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts\n- Sesame Burger Buns 8-pack: soy\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 3 pm\n- Frozen returns: within 7 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.7,
+  "log": [
+   [
+    0.8,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.8,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.9,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.4,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.4,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.7,
+    "price",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50"
+  ],
+  "n_survived": 2,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "A",
+  "i": 8,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts\n- Sesame Burger Buns 8-pack: soy\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 3 pm\n- Frozen returns: within 7 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.7,
+  "log": [
+   [
+    0.7,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.9,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.1,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.4,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.8,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.8,
+    "price",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50"
+  ],
+  "n_survived": 2,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "A",
+  "i": 9,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts\n- Sesame Burger Buns 8-pack: soy\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 3 pm\n- Frozen returns: within 7 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.6,
+  "log": [
+   [
+    0.8,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.8,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.9,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.4,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.4,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.5,
+    "price",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50"
+  ],
+  "n_survived": 2,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "C",
+  "i": 0,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $73.40\n- BBQ Sauce 18 oz: $46.20\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts\n- Sesame Burger Buns 8-pack: soy\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 4.2,
+  "log": [
+   [
+    0.6,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.8,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.0,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.2,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.5,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.7,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 2,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "C",
+  "i": 1,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts\n- Sesame Burger Buns 8-pack: soy\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 3 pm\n- Frozen returns: within 7 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.4,
+  "log": [
+   [
+    0.8,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.8,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.9,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.3,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.4,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.4,
+    "price",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50"
+  ],
+  "n_survived": 2,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "C",
+  "i": 2,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $73.40\n- BBQ Sauce 18 oz: $46.20\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts\n- Sesame Burger Buns 8-pack: soy\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.7,
+  "log": [
+   [
+    0.7,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.9,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.0,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.2,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.4,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.6,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 2,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "C",
+  "i": 3,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $73.40\n- BBQ Sauce 18 oz: $46.20\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts\n- Sesame Burger Buns 8-pack: soy\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.8,
+  "log": [
+   [
+    0.6,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.0,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.0,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.3,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.6,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.7,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 2,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "C",
+  "i": 4,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $73.40\n- BBQ Sauce 18 oz: $46.20\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts\n- Sesame Burger Buns 8-pack: soy\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.5,
+  "log": [
+   [
+    0.8,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.8,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.9,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.5,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.6,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.6,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 2,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "C",
+  "i": 5,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $73.40\n- BBQ Sauce 18 oz: $46.20\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts\n- Sesame Burger Buns 8-pack: soy\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.7,
+  "log": [
+   [
+    0.7,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.8,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.0,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.4,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.6,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.6,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 2,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "C",
+  "i": 6,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $73.40\n- BBQ Sauce 18 oz: $46.20\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 3 pm\n- Frozen returns: within 7 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.6,
+  "log": [
+   [
+    0.7,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.9,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.0,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.5,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.6,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.8,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame"
+  ],
+  "n_survived": 3,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "C",
+  "i": 7,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts\n- Sesame Burger Buns 8-pack: soy\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 3 pm\n- Frozen returns: within 7 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.6,
+  "log": [
+   [
+    0.7,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.8,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    1.0,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.3,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.6,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.6,
+    "price",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50"
+  ],
+  "n_survived": 2,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "C",
+  "i": 8,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $73.40\n- BBQ Sauce 18 oz: $46.20\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 3 pm\n- Frozen returns: within 7 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.8,
+  "log": [
+   [
+    0.7,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.8,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.9,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.5,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.5,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    3.1,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame"
+  ],
+  "n_survived": 3,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "C",
+  "i": 9,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $73.40\n- BBQ Sauce 18 oz: $46.20\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 3 pm\n- Frozen returns: within 7 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.4,
+  "log": [
+   [
+    0.7,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.8,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    0.9,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.4,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.4,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    2.5,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame"
+  ],
+  "n_survived": 3,
+  "kept": 3,
+  "ok": false
+ },
+ {
+  "cond": "B",
+  "i": 0,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.2,
+  "log": [
+   [
+    0.6,
+    "price",
+    "read",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    0.7,
+    "ship",
+    "read",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    0.8,
+    "allergy",
+    "read",
+    "product_sheet/2_allergens.md"
+   ],
+   [
+    1.6,
+    "ship",
+    "write",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    1.9,
+    "price",
+    "write",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    2.2,
+    "allergy",
+    "write",
+    "product_sheet/2_allergens.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "B",
+  "i": 1,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.1,
+  "log": [
+   [
+    0.8,
+    "price",
+    "read",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    0.8,
+    "ship",
+    "read",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    0.9,
+    "allergy",
+    "read",
+    "product_sheet/2_allergens.md"
+   ],
+   [
+    1.7,
+    "ship",
+    "write",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    1.7,
+    "price",
+    "write",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    2.1,
+    "allergy",
+    "write",
+    "product_sheet/2_allergens.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "B",
+  "i": 2,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.0,
+  "log": [
+   [
+    0.7,
+    "ship",
+    "read",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    0.7,
+    "price",
+    "read",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    0.8,
+    "allergy",
+    "read",
+    "product_sheet/2_allergens.md"
+   ],
+   [
+    1.6,
+    "ship",
+    "write",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    1.7,
+    "price",
+    "write",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    2.0,
+    "allergy",
+    "write",
+    "product_sheet/2_allergens.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "B",
+  "i": 3,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.1,
+  "log": [
+   [
+    0.7,
+    "ship",
+    "read",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    0.8,
+    "price",
+    "read",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    0.9,
+    "allergy",
+    "read",
+    "product_sheet/2_allergens.md"
+   ],
+   [
+    1.8,
+    "price",
+    "write",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    1.9,
+    "ship",
+    "write",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    2.0,
+    "allergy",
+    "write",
+    "product_sheet/2_allergens.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "B",
+  "i": 4,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 2.9,
+  "log": [
+   [
+    0.8,
+    "ship",
+    "read",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    0.8,
+    "price",
+    "read",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    0.9,
+    "allergy",
+    "read",
+    "product_sheet/2_allergens.md"
+   ],
+   [
+    1.7,
+    "ship",
+    "write",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    1.8,
+    "price",
+    "write",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    2.0,
+    "allergy",
+    "write",
+    "product_sheet/2_allergens.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "B",
+  "i": 5,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.3,
+  "log": [
+   [
+    0.7,
+    "price",
+    "read",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    0.7,
+    "ship",
+    "read",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    1.0,
+    "allergy",
+    "read",
+    "product_sheet/2_allergens.md"
+   ],
+   [
+    1.6,
+    "price",
+    "write",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    1.6,
+    "ship",
+    "write",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    2.2,
+    "allergy",
+    "write",
+    "product_sheet/2_allergens.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "B",
+  "i": 6,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.1,
+  "log": [
+   [
+    0.7,
+    "ship",
+    "read",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    0.8,
+    "price",
+    "read",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    1.0,
+    "allergy",
+    "read",
+    "product_sheet/2_allergens.md"
+   ],
+   [
+    1.8,
+    "price",
+    "write",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    1.9,
+    "ship",
+    "write",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    2.1,
+    "allergy",
+    "write",
+    "product_sheet/2_allergens.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "B",
+  "i": 7,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.0,
+  "log": [
+   [
+    0.6,
+    "price",
+    "read",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    0.7,
+    "ship",
+    "read",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    0.9,
+    "allergy",
+    "read",
+    "product_sheet/2_allergens.md"
+   ],
+   [
+    1.7,
+    "price",
+    "write",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    1.7,
+    "ship",
+    "write",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    1.9,
+    "allergy",
+    "write",
+    "product_sheet/2_allergens.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "B",
+  "i": 8,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.4,
+  "log": [
+   [
+    0.7,
+    "ship",
+    "read",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    0.8,
+    "price",
+    "read",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    1.0,
+    "allergy",
+    "read",
+    "product_sheet/2_allergens.md"
+   ],
+   [
+    1.7,
+    "ship",
+    "write",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    1.7,
+    "price",
+    "write",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    2.2,
+    "allergy",
+    "write",
+    "product_sheet/2_allergens.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "B",
+  "i": 9,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 3.1,
+  "log": [
+   [
+    0.7,
+    "price",
+    "read",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    0.8,
+    "ship",
+    "read",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    1.0,
+    "allergy",
+    "read",
+    "product_sheet/2_allergens.md"
+   ],
+   [
+    1.7,
+    "price",
+    "write",
+    "product_sheet/1_prices.md"
+   ],
+   [
+    1.8,
+    "ship",
+    "write",
+    "product_sheet/3_shipping.md"
+   ],
+   [
+    2.1,
+    "allergy",
+    "write",
+    "product_sheet/2_allergens.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "S",
+  "i": 0,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 10.5,
+  "log": [
+   [
+    0.8,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.3,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    4.0,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    6.0,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    7.9,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    9.6,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "S",
+  "i": 1,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 10.3,
+  "log": [
+   [
+    0.8,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.3,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    4.1,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    6.0,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    7.7,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    9.3,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "S",
+  "i": 2,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 11.3,
+  "log": [
+   [
+    0.9,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.9,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    5.1,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    6.7,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    8.5,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    10.2,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "S",
+  "i": 3,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 10.3,
+  "log": [
+   [
+    0.8,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.5,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    4.1,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    5.8,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    7.6,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    9.4,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "S",
+  "i": 4,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 9.9,
+  "log": [
+   [
+    0.9,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.3,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    3.9,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    5.4,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    7.4,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    8.9,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "S",
+  "i": 5,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 10.5,
+  "log": [
+   [
+    0.8,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.3,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    4.1,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    5.6,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    7.2,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    8.8,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "S",
+  "i": 6,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 10.4,
+  "log": [
+   [
+    0.8,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.5,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    4.7,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    6.2,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    7.9,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    9.5,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "S",
+  "i": 7,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 10.5,
+  "log": [
+   [
+    0.9,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.4,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    4.3,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    6.1,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    7.8,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    9.4,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "S",
+  "i": 8,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 10.5,
+  "log": [
+   [
+    1.0,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.6,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    4.3,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    5.9,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    7.8,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    9.5,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ },
+ {
+  "cond": "S",
+  "i": 9,
+  "final": "# Yummy Tummy Foods - product sheet for trade customers (November 2026 edition)\n\n## 1. Price list (per case, tax included)\n- Pizza Sauce 1 gal: $79.30\n- BBQ Sauce 18 oz: $47.50\n- Ranch Dressing 16 oz: $39.80\n\n## 2. Allergen labels\n- Pizza Sauce 1 gal: soy, wheat\n- Snack Gift Box: peanuts, walnuts, almonds\n- Sesame Burger Buns 8-pack: soy, sesame\n\n## 3. Shipping and returns\n- Same-day dispatch cutoff: orders by 2 pm\n- Frozen returns: within 14 days of delivery\n- Free shipping on orders over $50\n",
+  "sec": 10.5,
+  "log": [
+   [
+    0.8,
+    "price",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    2.5,
+    "price",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    4.4,
+    "allergy",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    6.2,
+    "allergy",
+    "write",
+    "product_sheet.md"
+   ],
+   [
+    7.8,
+    "ship",
+    "read",
+    "product_sheet.md"
+   ],
+   [
+    9.4,
+    "ship",
+    "write",
+    "product_sheet.md"
+   ]
+  ],
+  "n_writes": 3,
+  "denied": 0,
+  "survived": [
+   "price: pizza sauce 79.30",
+   "price: bbq 47.50",
+   "allergy: gift box walnuts",
+   "allergy: gift box almonds",
+   "allergy: buns sesame",
+   "ship: cutoff 2 pm",
+   "ship: returns 14 days"
+  ],
+  "n_survived": 7,
+  "kept": 3,
+  "ok": true
+ }
+]

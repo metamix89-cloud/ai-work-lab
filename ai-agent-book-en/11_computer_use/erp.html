@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Yummy Tummy Foods Back Office (fictional)</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f4f6;color:#111;font-size:15px}
+header{background:#1f2a44;color:#fff;padding:12px 20px;font-weight:700;font-size:18px}
+nav{display:flex;gap:6px;padding:10px 20px;background:#fff;border-bottom:1px solid #ddd}
+nav button{padding:8px 14px;border:1px solid #cbd;background:#fff;border-radius:6px;cursor:pointer;font-size:14px}
+nav button.on{background:#2f6fed;color:#fff;border-color:#2f6fed}
+main{padding:18px 20px}section{display:none;background:#fff;border:1px solid #ddd;border-radius:8px;padding:16px;max-width:1100px}section.on{display:block}
+h2{margin:0 0 12px;font-size:17px}label{display:inline-block;width:100px;color:#444}
+.row{margin:10px 0}input,select{padding:7px 9px;border:1px solid #bbb;border-radius:5px;font-size:14px;width:220px}
+.btn{padding:8px 16px;border-radius:6px;border:0;background:#2f6fed;color:#fff;cursor:pointer;font-size:14px}.btn.gray{background:#888}
+table{border-collapse:collapse;width:100%;margin-top:10px}td,th{border:1px solid #ddd;padding:7px 9px;text-align:left;font-size:14px}th{background:#f0f2f6}
+.msg{margin-top:10px;color:#0a7a3d;font-weight:700}.pager{margin-top:10px;display:flex;gap:6px;align-items:center}
+#modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4)}#modal .box{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);background:#fff;padding:22px;border-radius:10px;width:380px}
+.dd{display:inline-block;position:relative}.ddb{padding:7px 9px;border:1px solid #bbb;border-radius:5px;background:#fff;width:220px;text-align:left;font-size:14px;cursor:pointer}
+.ddl{display:none;position:absolute;z-index:5;background:#fff;border:1px solid #bbb;width:220px;box-shadow:0 4px 12px rgba(0,0,0,.15)}.dd.open .ddl{display:block}.ddo{padding:8px 10px;cursor:pointer}.ddo:hover{background:#eef3ff}
+#ad{position:fixed;right:20px;bottom:20px;width:300px;background:#fffbe6;border:1px solid #e6c200;padding:14px;border-radius:8px;display:none}
+</style></head><body>
+<header>Yummy Tummy Foods Back Office <span style="font-weight:400;font-size:13px;opacity:.8">(fictional screen for training)</span></header>
+<nav>
+ <button data-tab="stock" class="on">Stock</button><button data-tab="po">Purchase Order</button>
+ <button data-tab="cust">Accounts</button><button data-tab="orders">Orders</button>
+</nav>
+<main>
+<section id="stock" class="on"><h2>Stock</h2>
+ <div class="row"><label for="sq">Item</label><input id="sq" placeholder="Item name"> <label for="sc" style="width:auto;margin-left:10px">Warehouse</label>
+ <div class="dd" id="sc" data-value=""><button class="ddb" type="button">All ▾</button><div class="ddl"><div class="ddo" role="option">All</div><div class="ddo" role="option">Dayton DC</div><div class="ddo" role="option">Columbus DC</div><div class="ddo" role="option">Main Office</div></div></div>
+ <button class="btn" id="sbtn">Search</button></div>
+ <table id="stbl"><thead><tr><th>Item</th><th>Warehouse</th><th>On hand (cases)</th><th>Restock</th></tr></thead><tbody></tbody></table>
+</section>
+<section id="po"><h2>Purchase Order</h2>
+ <div class="row"><label for="ps">Supplier</label><div class="dd" id="ps" data-value=""><button class="ddb" type="button">Select ▾</button><div class="ddl"><div class="ddo" role="option">Sunrise Supply</div><div class="ddo" role="option">Lakeside Foods</div><div class="ddo" role="option">Prairie Wholesale</div></div></div></div>
+ <div class="row"><label for="pi">Item</label><div class="dd" id="pi" data-value=""><button class="ddb" type="button">Select ▾</button><div class="ddl"><div class="ddo" role="option">Pizza Sauce</div><div class="ddo" role="option">Mozzarella</div><div class="ddo" role="option">Cola Syrup</div><div class="ddo" role="option">Chili Flakes</div></div></div></div>
+ <div class="row"><label for="pq">Quantity (lb)</label><input id="pq" type="number" placeholder="numbers only"></div>
+ <div class="row"><label for="pd">Due date</label><input id="pd" placeholder="YYYY-MM-DD"></div>
+ <div class="row"><button class="btn" id="psave">Save</button> <button class="btn gray" id="preset">Reset</button></div>
+ <div class="msg" id="pmsg"></div>
+</section>
+<section id="cust"><h2>Accounts</h2>
+ <table id="ctbl"><thead><tr><th>Account</th><th>Code</th><th>Contact</th><th>Phone</th><th></th></tr></thead><tbody></tbody></table>
+ <div id="cedit" style="display:none;margin-top:14px;border-top:1px solid #ddd;padding-top:10px">
+  <div class="row"><label>Account</label><b id="cename"></b></div>
+  <div class="row"><label for="cep">Contact</label><input id="cep"></div>
+  <div class="row"><label for="cet">Phone</label><input id="cet"></div>
+  <div class="row"><button class="btn" id="cesave">Save changes</button></div>
+ </div>
+ <div class="msg" id="cmsg"></div>
+</section>
+<section id="orders"><h2>Orders</h2>
+ <table id="otbl"><thead><tr><th>Order</th><th>Account</th><th>Product</th><th>Status</th></tr></thead><tbody></tbody></table>
+ <div class="pager"><button class="btn gray" id="oprev">Prev</button><span id="opage"></span><button class="btn gray" id="onext">Next</button></div>
+</section>
+</main>
+<div id="modal"><div class="box"><div id="mtext" style="margin-bottom:16px"></div><button class="btn" id="mok">OK</button> <button class="btn gray" id="mno">Cancel</button></div></div>
+<div id="ad"><b>Notice</b><div style="margin:8px 0">Sign-ups for November training are now open.</div><button class="btn gray" id="adclose">Close</button></div>
+<script>
+const STOCK=[["Pepperoni Pizza 2-pack","Dayton DC",320,"10/27"],["Pepperoni Pizza 2-pack","Columbus DC",85,"none"],["Mac & Cheese Bake","Dayton DC",0,"11/12"],["Mac & Cheese Bake","Columbus DC",40,"none"],
+ ["BBQ Sauce 18 oz","Main Office",410,"none"],["BBQ Sauce 18 oz","Dayton DC",60,"10/29"],["Cola 12-pack","Main Office",140,"11/3"],["Chicken Nuggets 2 lb","Dayton DC",210,"none"]];
+const CUST=[["ValueMart","VM-2207","Jenna Lee","ext. 4100"],["Corner Grocer","CG-1180","Dana Choi","ext. 5200"],["Main Street Market","MS-3301","Max Kim","ext. 6300"]];
+const ST=["Received","Preparing","Out for delivery","Delivered","Canceled"];
+const ORD=[];for(let i=0;i<34;i++){const id="YT-"+(4400+i);ORD.push([id,["ValueMart","Corner Grocer","Main Street Market"][i%3],["Pepperoni Pizza 2-pack","BBQ Sauce 18 oz","Chicken Nuggets 2 lb","Cola 12-pack"][i%4],ST[(i*7)%5]]);}
+ORD[10][3]="Out for delivery";ORD[10][2]="Holiday Gift Basket";   // YT-4410 is on page 3 (4 rows per page)
+window.APP_STATE={orders_po:[],customers:CUST.map(c=>({name:c[0],code:c[1],person:c[2],tel:c[3]}))};
+const $=s=>document.querySelector(s);
+document.querySelectorAll(".dd").forEach(d=>{d.querySelector(".ddb").onclick=e=>{document.querySelectorAll(".dd").forEach(x=>{if(x!==d)x.classList.remove("open")});d.classList.toggle("open");};
+ d.querySelectorAll(".ddo").forEach(o=>o.onclick=()=>{d.dataset.value=o.textContent==="All"?"":o.textContent;d.querySelector(".ddb").textContent=o.textContent+" ▾";d.classList.remove("open");});});
+const val=s=>{const e=$(s);return e.classList.contains("dd")?e.dataset.value:e.value;};
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.remove("on"));b.classList.add("on");
+ document.querySelectorAll("section").forEach(s=>s.classList.toggle("on",s.id===b.dataset.tab));if(b.dataset.tab==="po")setTimeout(()=>{$("#ad").style.display="block"},300);});
+$("#adclose").onclick=()=>$("#ad").style.display="none";
+$("#sbtn").onclick=()=>{const q=$("#sq").value.trim().toLowerCase(),c=val("#sc");$("#stbl tbody").innerHTML=STOCK.filter(r=>(!q||r[0].toLowerCase().includes(q))&&(!c||r[1]===c)).map(r=>"<tr>"+r.map(x=>"<td>"+x+"</td>").join("")+"</tr>").join("")||"<tr><td colspan=4>No results</td></tr>";};
+let pending=null;function ask(t,f){$("#mtext").textContent=t;$("#modal").style.display="block";pending=f;}
+$("#mok").onclick=()=>{$("#modal").style.display="none";if(pending)pending();pending=null;};$("#mno").onclick=()=>{$("#modal").style.display="none";pending=null;};
+$("#psave").onclick=()=>{const r={supplier:val("#ps"),item:val("#pi"),qty:$("#pq").value.trim(),due:$("#pd").value.trim()};
+ if(!r.supplier||!r.item||!r.qty||!r.due){$("#pmsg").style.color="#c00";$("#pmsg").textContent="Please fill in every field.";return;}
+ ask("Save this purchase order? ("+r.supplier+" · "+r.item+" · "+r.qty+" lb · "+r.due+")",()=>{window.APP_STATE.orders_po.push(r);$("#pmsg").style.color="#0a7a3d";$("#pmsg").textContent="Purchase order saved: PO-"+(7000+window.APP_STATE.orders_po.length);});};
+$("#preset").onclick=()=>{["#pq","#pd"].forEach(s=>$(s).value="");["#ps","#pi"].forEach(s=>{$(s).dataset.value="";$(s).querySelector(".ddb").textContent="Select ▾";});$("#pmsg").textContent="";};
+function drawCust(){$("#ctbl tbody").innerHTML=window.APP_STATE.customers.map((c,i)=>`<tr><td>${c.name}</td><td>${c.code}</td><td>${c.person}</td><td>${c.tel}</td><td><button class="btn gray" data-ci="${i}">Edit</button></td></tr>`).join("");
+ document.querySelectorAll("[data-ci]").forEach(b=>b.onclick=()=>{const c=window.APP_STATE.customers[b.dataset.ci];$("#cedit").style.display="block";$("#cename").textContent=c.name;$("#cep").value=c.person;$("#cet").value=c.tel;$("#cedit").dataset.ci=b.dataset.ci;});}
+drawCust();
+$("#cesave").onclick=()=>{const c=window.APP_STATE.customers[$("#cedit").dataset.ci];ask("Save the contact details for "+c.name+"?",()=>{c.person=$("#cep").value.trim();c.tel=$("#cet").value.trim();drawCust();$("#cmsg").textContent="Saved";});};
+let page=0;function drawOrd(){$("#otbl tbody").innerHTML=ORD.slice(page*4,page*4+4).map(r=>"<tr>"+r.map(x=>"<td>"+x+"</td>").join("")+"</tr>").join("");$("#opage").textContent="page "+(page+1)+" / "+Math.ceil(ORD.length/4);}
+$("#oprev").onclick=()=>{if(page>0){page--;drawOrd();}};$("#onext").onclick=()=>{if(page<Math.ceil(ORD.length/4)-1){page++;drawOrd();}};drawOrd();
+</script></body></html>

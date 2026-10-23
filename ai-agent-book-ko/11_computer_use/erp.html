@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>가나다식품 업무 시스템 (가상)</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:"Malgun Gothic",sans-serif;background:#f3f4f6;color:#111;font-size:15px}
+header{background:#1f2a44;color:#fff;padding:12px 20px;font-weight:700;font-size:18px}
+nav{display:flex;gap:6px;padding:10px 20px;background:#fff;border-bottom:1px solid #ddd}
+nav button{padding:8px 14px;border:1px solid #cbd;background:#fff;border-radius:6px;cursor:pointer;font-size:14px}
+nav button.on{background:#2f6fed;color:#fff;border-color:#2f6fed}
+main{padding:18px 20px}section{display:none;background:#fff;border:1px solid #ddd;border-radius:8px;padding:16px;max-width:1100px}section.on{display:block}
+h2{margin:0 0 12px;font-size:17px}label{display:inline-block;width:90px;color:#444}
+.row{margin:10px 0}input,select{padding:7px 9px;border:1px solid #bbb;border-radius:5px;font-size:14px;width:220px}
+.btn{padding:8px 16px;border-radius:6px;border:0;background:#2f6fed;color:#fff;cursor:pointer;font-size:14px}.btn.gray{background:#888}
+table{border-collapse:collapse;width:100%;margin-top:10px}td,th{border:1px solid #ddd;padding:7px 9px;text-align:left;font-size:14px}th{background:#f0f2f6}
+.msg{margin-top:10px;color:#0a7a3d;font-weight:700}.pager{margin-top:10px;display:flex;gap:6px;align-items:center}
+#modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4)}#modal .box{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);background:#fff;padding:22px;border-radius:10px;width:360px}
+.dd{display:inline-block;position:relative}.ddb{padding:7px 9px;border:1px solid #bbb;border-radius:5px;background:#fff;width:220px;text-align:left;font-size:14px;cursor:pointer}
+.ddl{display:none;position:absolute;z-index:5;background:#fff;border:1px solid #bbb;width:220px;box-shadow:0 4px 12px rgba(0,0,0,.15)}.dd.open .ddl{display:block}.ddo{padding:8px 10px;cursor:pointer}.ddo:hover{background:#eef3ff}
+#ad{position:fixed;right:20px;bottom:20px;width:300px;background:#fffbe6;border:1px solid #e6c200;padding:14px;border-radius:8px;display:none}
+</style></head><body>
+<header>가나다식품 업무 시스템 <span style="font-weight:400;font-size:13px;opacity:.8">(교육용 가상 화면)</span></header>
+<nav>
+ <button data-tab="stock" class="on">재고 조회</button><button data-tab="po">발주 입력</button>
+ <button data-tab="cust">거래처 관리</button><button data-tab="orders">주문 목록</button>
+</nav>
+<main>
+<section id="stock" class="on"><h2>재고 조회</h2>
+ <div class="row"><label for="sq">품목명</label><input id="sq" placeholder="품목명 입력"> <label for="sc" style="width:auto;margin-left:10px">센터</label>
+ <div class="dd" id="sc" data-value=""><button class="ddb" type="button">전체 ▾</button><div class="ddl"><div class="ddo" role="option">전체</div><div class="ddo" role="option">이천센터</div><div class="ddo" role="option">평택센터</div><div class="ddo" role="option">서울본점</div></div></div>
+ <button class="btn" id="sbtn">조회</button></div>
+ <table id="stbl"><thead><tr><th>품목</th><th>센터</th><th>현재고(박스)</th><th>입고 예정</th></tr></thead><tbody></tbody></table>
+</section>
+<section id="po"><h2>발주 입력</h2>
+ <div class="row"><label for="ps">공급사</label><div class="dd" id="ps" data-value=""><button class="ddb" type="button">선택 ▾</button><div class="ddl"><div class="ddo" role="option">가나공급</div><div class="ddo" role="option">다라물산</div><div class="ddo" role="option">마바유통</div></div></div></div>
+ <div class="row"><label for="pi">품목</label><div class="dd" id="pi" data-value=""><button class="ddb" type="button">선택 ▾</button><div class="ddl"><div class="ddo" role="option">떡볶이 소스</div><div class="ddo" role="option">만두피</div><div class="ddo" role="option">참기름 원유</div><div class="ddo" role="option">고춧가루</div></div></div></div>
+ <div class="row"><label for="pq">수량(kg)</label><input id="pq" type="number" placeholder="숫자만"></div>
+ <div class="row"><label for="pd">납기일</label><input id="pd" placeholder="YYYY-MM-DD"></div>
+ <div class="row"><button class="btn" id="psave">저장</button> <button class="btn gray" id="preset">초기화</button></div>
+ <div class="msg" id="pmsg"></div>
+</section>
+<section id="cust"><h2>거래처 관리</h2>
+ <table id="ctbl"><thead><tr><th>거래처</th><th>코드</th><th>담당자</th><th>연락처</th><th></th></tr></thead><tbody></tbody></table>
+ <div id="cedit" style="display:none;margin-top:14px;border-top:1px solid #ddd;padding-top:10px">
+  <div class="row"><label>거래처</label><b id="cename"></b></div>
+  <div class="row"><label for="cep">담당자</label><input id="cep"></div>
+  <div class="row"><label for="cet">연락처</label><input id="cet"></div>
+  <div class="row"><button class="btn" id="cesave">수정 저장</button></div>
+ </div>
+ <div class="msg" id="cmsg"></div>
+</section>
+<section id="orders"><h2>주문 목록</h2>
+ <table id="otbl"><thead><tr><th>주문번호</th><th>거래처</th><th>상품</th><th>상태</th></tr></thead><tbody></tbody></table>
+ <div class="pager"><button class="btn gray" id="oprev">이전</button><span id="opage"></span><button class="btn gray" id="onext">다음</button></div>
+</section>
+</main>
+<div id="modal"><div class="box"><div id="mtext" style="margin-bottom:16px"></div><button class="btn" id="mok">확인</button> <button class="btn gray" id="mno">취소</button></div></div>
+<div id="ad"><b>알림</b><div style="margin:8px 0">11월 사내 교육 신청이 열렸습니다.</div><button class="btn gray" id="adclose">닫기</button></div>
+<script>
+const STOCK=[["냉동만두 1kg","이천센터",320,"10/27"],["냉동만두 1kg","평택센터",85,"없음"],["떡볶이 밀키트","이천센터",0,"11/12"],["떡볶이 밀키트","평택센터",40,"없음"],
+ ["고추장 500g","서울본점",410,"없음"],["고추장 500g","이천센터",60,"10/29"],["참기름 350ml","서울본점",140,"11/3"],["어묵탕 세트","이천센터",210,"없음"]];
+const CUST=[["가나마트","GM-2207","이수진","내선 4100"],["다라슈퍼","DS-1180","최다라","내선 5200"],["마바상회","MB-3301","김마바","내선 6300"]];
+const ST=["접수","출고 준비","배송 중","배송 완료","취소"];
+const ORD=[];for(let i=0;i<34;i++){const id="GND-"+(4400+i);ORD.push([id,["가나마트","다라슈퍼","마바상회"][i%3],["냉동만두 1kg","고추장 500g","어묵탕 세트","참기름 350ml"][i%4],ST[(i*7)%5]]);}
+ORD[10][3]="배송 중";ORD[10][2]="명절 선물세트";   // GND-4410 은 3쪽에 있다 (한 쪽 4줄)
+window.APP_STATE={orders_po:[],customers:CUST.map(c=>({name:c[0],code:c[1],person:c[2],tel:c[3]}))};
+const $=s=>document.querySelector(s);
+document.querySelectorAll(".dd").forEach(d=>{d.querySelector(".ddb").onclick=e=>{document.querySelectorAll(".dd").forEach(x=>{if(x!==d)x.classList.remove("open")});d.classList.toggle("open");};
+ d.querySelectorAll(".ddo").forEach(o=>o.onclick=()=>{d.dataset.value=o.textContent==="전체"?"":o.textContent;d.querySelector(".ddb").textContent=o.textContent+" ▾";d.classList.remove("open");});});
+const val=s=>{const e=$(s);return e.classList.contains("dd")?e.dataset.value:e.value;};
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.remove("on"));b.classList.add("on");
+ document.querySelectorAll("section").forEach(s=>s.classList.toggle("on",s.id===b.dataset.tab));if(b.dataset.tab==="po")setTimeout(()=>{$("#ad").style.display="block"},300);});
+$("#adclose").onclick=()=>$("#ad").style.display="none";
+$("#sbtn").onclick=()=>{const q=$("#sq").value.trim(),c=val("#sc");$("#stbl tbody").innerHTML=STOCK.filter(r=>(!q||r[0].includes(q))&&(!c||r[1]===c)).map(r=>"<tr>"+r.map(x=>"<td>"+x+"</td>").join("")+"</tr>").join("")||"<tr><td colspan=4>결과 없음</td></tr>";};
+let pending=null;function ask(t,f){$("#mtext").textContent=t;$("#modal").style.display="block";pending=f;}
+$("#mok").onclick=()=>{$("#modal").style.display="none";if(pending)pending();pending=null;};$("#mno").onclick=()=>{$("#modal").style.display="none";pending=null;};
+$("#psave").onclick=()=>{const r={supplier:val("#ps"),item:val("#pi"),qty:$("#pq").value.trim(),due:$("#pd").value.trim()};
+ if(!r.supplier||!r.item||!r.qty||!r.due){$("#pmsg").style.color="#c00";$("#pmsg").textContent="모든 칸을 채워 주세요.";return;}
+ ask("발주를 저장할까요? ("+r.supplier+" · "+r.item+" · "+r.qty+"kg · "+r.due+")",()=>{window.APP_STATE.orders_po.push(r);$("#pmsg").style.color="#0a7a3d";$("#pmsg").textContent="발주 저장 완료: PO-"+(7000+window.APP_STATE.orders_po.length);});};
+$("#preset").onclick=()=>{["#pq","#pd"].forEach(s=>$(s).value="");["#ps","#pi"].forEach(s=>{$(s).dataset.value="";$(s).querySelector(".ddb").textContent="선택 ▾";});$("#pmsg").textContent="";};
+function drawCust(){$("#ctbl tbody").innerHTML=window.APP_STATE.customers.map((c,i)=>`<tr><td>${c.name}</td><td>${c.code}</td><td>${c.person}</td><td>${c.tel}</td><td><button class="btn gray" data-ci="${i}">수정</button></td></tr>`).join("");
+ document.querySelectorAll("[data-ci]").forEach(b=>b.onclick=()=>{const c=window.APP_STATE.customers[b.dataset.ci];$("#cedit").style.display="block";$("#cename").textContent=c.name;$("#cep").value=c.person;$("#cet").value=c.tel;$("#cedit").dataset.ci=b.dataset.ci;});}
+drawCust();
+$("#cesave").onclick=()=>{const c=window.APP_STATE.customers[$("#cedit").dataset.ci];ask(c.name+" 담당자 정보를 저장할까요?",()=>{c.person=$("#cep").value.trim();c.tel=$("#cet").value.trim();drawCust();$("#cmsg").textContent="저장 완료";});};
+let page=0;function drawOrd(){$("#otbl tbody").innerHTML=ORD.slice(page*4,page*4+4).map(r=>"<tr>"+r.map(x=>"<td>"+x+"</td>").join("")+"</tr>").join("");$("#opage").textContent=(page+1)+" / "+Math.ceil(ORD.length/4)+" 쪽";}
+$("#oprev").onclick=()=>{if(page>0){page--;drawOrd();}};$("#onext").onclick=()=>{if(page<Math.ceil(ORD.length/4)-1){page++;drawOrd();}};drawOrd();
+</script></body></html>

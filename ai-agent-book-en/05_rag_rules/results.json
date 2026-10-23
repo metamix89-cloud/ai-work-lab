@@ -1,0 +1,4696 @@
+[
+ {
+  "cond": "R0",
+  "q": "Q1",
+  "kind": "simple",
+  "seed": 0,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook requires employees to request PTO at least 14 days in advance.",
+  "tokens": 89,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.7
+ },
+ {
+  "cond": "R0",
+  "q": "Q1",
+  "kind": "simple",
+  "seed": 1,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook states that PTO requests should be submitted at least 14 days in advance.",
+  "tokens": 91,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.7
+ },
+ {
+  "cond": "R0",
+  "q": "Q1",
+  "kind": "simple",
+  "seed": 2,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook requires you to request PTO at least 14 days in advance.",
+  "tokens": 89,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.6
+ },
+ {
+  "cond": "R0",
+  "q": "Q2",
+  "kind": "simple",
+  "seed": 0,
+  "ok": true,
+  "answer": "The Yummy Tummy Foods handbook states that the freezer must be kept at or below 0°F (-18°C).",
+  "tokens": 93,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.6
+ },
+ {
+  "cond": "R0",
+  "q": "Q2",
+  "kind": "simple",
+  "seed": 1,
+  "ok": true,
+  "answer": "The freezer at Yummy Tummy Foods must stay at or below 0°F (-18°C).",
+  "tokens": 89,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.7
+ },
+ {
+  "cond": "R0",
+  "q": "Q2",
+  "kind": "simple",
+  "seed": 2,
+  "ok": true,
+  "answer": "The freezer at Yummy Tummy Foods must be kept at or below 0°F (-18°C).",
+  "tokens": 90,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.8
+ },
+ {
+  "cond": "R0",
+  "q": "Q3",
+  "kind": "simple",
+  "seed": 0,
+  "ok": true,
+  "answer": "The company covers up to $1,000 per year for job-related outside training.",
+  "tokens": 88,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.8
+ },
+ {
+  "cond": "R0",
+  "q": "Q3",
+  "kind": "simple",
+  "seed": 1,
+  "ok": true,
+  "answer": "The company covers up to $1,000 per year for job-related outside training.",
+  "tokens": 88,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.7
+ },
+ {
+  "cond": "R0",
+  "q": "Q3",
+  "kind": "simple",
+  "seed": 2,
+  "ok": false,
+  "answer": "Yummy Tummy Foods covers up to $1,200 per year for job-related outside training.",
+  "tokens": 91,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 0.9
+ },
+ {
+  "cond": "R0",
+  "q": "Q4",
+  "kind": "simple",
+  "seed": 0,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook states that the club subsidy is $15 per person per month.",
+  "tokens": 88,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.2
+ },
+ {
+  "cond": "R0",
+  "q": "Q4",
+  "kind": "simple",
+  "seed": 1,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook does not specify the amount of the club subsidy per person per month.",
+  "tokens": 89,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.5
+ },
+ {
+  "cond": "R0",
+  "q": "Q4",
+  "kind": "simple",
+  "seed": 2,
+  "ok": false,
+  "answer": "The handbook does not specify the amount of the club subsidy per person per month.",
+  "tokens": 84,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.5
+ },
+ {
+  "cond": "R0",
+  "q": "Q5",
+  "kind": "code",
+  "seed": 0,
+  "ok": false,
+  "answer": "I don’t have information about form SEC-07 in the Yummy Tummy Foods handbook.",
+  "tokens": 84,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 0.9
+ },
+ {
+  "cond": "R0",
+  "q": "Q5",
+  "kind": "code",
+  "seed": 1,
+  "ok": false,
+  "answer": "I don’t have information about form SEC-07 in the Yummy Tummy Foods handbook.",
+  "tokens": 84,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R0",
+  "q": "Q5",
+  "kind": "code",
+  "seed": 2,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook does not specify the purpose of form SEC-07.",
+  "tokens": 83,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.0
+ },
+ {
+  "cond": "R0",
+  "q": "Q6",
+  "kind": "code",
+  "seed": 0,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook states that form HR-204 is used for submitting requests for leave of absence.",
+  "tokens": 89,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.0
+ },
+ {
+  "cond": "R0",
+  "q": "Q6",
+  "kind": "code",
+  "seed": 1,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook does not specify the use of form HR-204. Please check with your HR department for details.",
+  "tokens": 93,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.0
+ },
+ {
+  "cond": "R0",
+  "q": "Q6",
+  "kind": "code",
+  "seed": 2,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook states that form HR-204 is used to request time off for personal leave.",
+  "tokens": 89,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 0.9
+ },
+ {
+  "cond": "R0",
+  "q": "Q7",
+  "kind": "code",
+  "seed": 0,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook does not provide information about a form called PU-310.",
+  "tokens": 85,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 0.9
+ },
+ {
+  "cond": "R0",
+  "q": "Q7",
+  "kind": "code",
+  "seed": 1,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook does not specify what form PU-310 is.",
+  "tokens": 83,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.0
+ },
+ {
+  "cond": "R0",
+  "q": "Q7",
+  "kind": "code",
+  "seed": 2,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook does not specify what form PU-310 is.",
+  "tokens": 83,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 0.9
+ },
+ {
+  "cond": "R0",
+  "q": "Q8",
+  "kind": "code",
+  "seed": 0,
+  "ok": false,
+  "answer": "I couldn't find information about TR-120 in the Yummy Tummy Foods handbook. You might want to check with your supervisor or HR for the exact due date.",
+  "tokens": 97,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R0",
+  "q": "Q8",
+  "kind": "code",
+  "seed": 1,
+  "ok": false,
+  "answer": "The handbook does not specify a due date for TR-120. Please check with your manager or HR for the exact deadline.",
+  "tokens": 89,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.3
+ },
+ {
+  "cond": "R0",
+  "q": "Q8",
+  "kind": "code",
+  "seed": 2,
+  "ok": false,
+  "answer": "I don't have information about TR-120 in the Yummy Tummy Foods handbook. You may want to check your internal resources or contact HR for details.",
+  "tokens": 95,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R0",
+  "q": "Q9",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": false,
+  "answer": "The handbook states that Senior Associates can claim up to $180 for one night at a hotel while on a business trip.",
+  "tokens": 105,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R0",
+  "q": "Q9",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": false,
+  "answer": "A Senior Associate can claim up to $250 for one night at a hotel in New York according to the Yummy Tummy Foods handbook.",
+  "tokens": 109,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R0",
+  "q": "Q9",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": false,
+  "answer": "The handbook states that a Senior Associate can claim up to $200 for one night at a hotel during a business trip.",
+  "tokens": 105,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 0.9
+ },
+ {
+  "cond": "R0",
+  "q": "Q10",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook does not specify a monthly spending limit for Managers on the corporate card.",
+  "tokens": 91,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.0
+ },
+ {
+  "cond": "R0",
+  "q": "Q10",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": false,
+  "answer": "The handbook states that a Manager can spend up to $3,000 per month on the corporate card.",
+  "tokens": 91,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.4
+ },
+ {
+  "cond": "R0",
+  "q": "Q10",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook states that a Manager can spend up to $1,000 per month on the corporate card.",
+  "tokens": 96,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.0
+ },
+ {
+  "cond": "R0",
+  "q": "Q11",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook states that the hotel limit per night for a Senior Manager on a trip to Dallas is $180.",
+  "tokens": 101,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.4
+ },
+ {
+  "cond": "R0",
+  "q": "Q11",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook states that the hotel limit per night for a Senior Manager on a trip to Dallas is $180.",
+  "tokens": 101,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R0",
+  "q": "Q11",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": false,
+  "answer": "The handbook does not specify the hotel limit per night for a Senior Manager on a trip to Dallas. Please check with your travel coordinator or the finance department for the current limits.",
+  "tokens": 109,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.3
+ },
+ {
+  "cond": "R0",
+  "q": "Q12",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": false,
+  "answer": "I don't have the specific information on the hotel expense limits for Directors on business trips in the Yummy Tummy Foods handbook. Please refer to the travel expense policy section or contact HR for the exact per-night hotel allowance.",
+  "tokens": 123,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.4
+ },
+ {
+  "cond": "R0",
+  "q": "Q12",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": false,
+  "answer": "The handbook states Directors can claim up to $250 per night for hotel stays. For 2 nights, they can claim up to $500 total.",
+  "tokens": 109,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.0
+ },
+ {
+  "cond": "R0",
+  "q": "Q12",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook states that Directors can claim up to $200 per night for hotel expenses. For 2 nights in Honolulu, they can claim a total of $400.",
+  "tokens": 117,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.0
+ },
+ {
+  "cond": "R0",
+  "q": "Q13",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": false,
+  "answer": "The Specialist's monthly corporate card limit is $1,000. To purchase a $400 piece of equipment, they can use their corporate card directly since the amount is within their limit.",
+  "tokens": 118,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R0",
+  "q": "Q13",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": false,
+  "answer": "The Specialist's monthly corporate card limit is $350. To purchase a $400 piece of equipment, they would need prior approval from their manager since it exceeds their card limit.",
+  "tokens": 116,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R0",
+  "q": "Q13",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": false,
+  "answer": "The Specialist's monthly corporate card limit is $250. To buy a $400 piece of equipment, they would need prior approval from their manager since the purchase exceeds their card limit.",
+  "tokens": 117,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R0",
+  "q": "Q14",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": false,
+  "answer": "For a $7,000 supplies purchase at Yummy Tummy Foods, you need to obtain at least three quotes. Approval must come from your department manager.",
+  "tokens": 109,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.0
+ },
+ {
+  "cond": "R0",
+  "q": "Q14",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": false,
+  "answer": "For a $7,000 supply purchase at Yummy Tummy Foods, you need to obtain two quotes. The approval must come from your department manager.",
+  "tokens": 108,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 0.9
+ },
+ {
+  "cond": "R0",
+  "q": "Q14",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": false,
+  "answer": "For a $7,000 purchase of supplies at Yummy Tummy Foods, you need to obtain three quotes. The approval must come from your department manager or supervisor.",
+  "tokens": 111,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R0",
+  "q": "Q15",
+  "kind": "revised",
+  "seed": 0,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook states you can claim up to $25 per meal on a business trip.",
+  "tokens": 91,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R0",
+  "q": "Q15",
+  "kind": "revised",
+  "seed": 1,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook states that employees can claim up to $15 per meal on a business trip.",
+  "tokens": 92,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R0",
+  "q": "Q15",
+  "kind": "revised",
+  "seed": 2,
+  "ok": false,
+  "answer": "The handbook states you can claim up to $15 per meal on a business trip.",
+  "tokens": 86,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.0
+ },
+ {
+  "cond": "R0",
+  "q": "Q16",
+  "kind": "revised",
+  "seed": 0,
+  "ok": true,
+  "answer": "The Yummy Tummy Foods handbook states that office staff can work from home up to two days a week.",
+  "tokens": 91,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R0",
+  "q": "Q16",
+  "kind": "revised",
+  "seed": 1,
+  "ok": false,
+  "answer": "Office staff at Yummy Tummy Foods can work from home up to 3 days a week.",
+  "tokens": 89,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R0",
+  "q": "Q16",
+  "kind": "revised",
+  "seed": 2,
+  "ok": true,
+  "answer": "The Yummy Tummy Foods handbook states that office staff can work from home up to two days a week.",
+  "tokens": 91,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.0
+ },
+ {
+  "cond": "R0",
+  "q": "Q17",
+  "kind": "revised",
+  "seed": 0,
+  "ok": true,
+  "answer": "The handbook states that Yummy Tummy Foods reimburses actual meal expenses up to $12 per meal. Since your dinner cost $13, you can be reimbursed up to $12 with your receipt.",
+  "tokens": 121,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.0
+ },
+ {
+  "cond": "R0",
+  "q": "Q17",
+  "kind": "revised",
+  "seed": 1,
+  "ok": false,
+  "answer": "You can be reimbursed the full $13 for your dinner expense on the business trip, as long as you have the receipt.",
+  "tokens": 106,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 0.9
+ },
+ {
+  "cond": "R0",
+  "q": "Q17",
+  "kind": "revised",
+  "seed": 2,
+  "ok": true,
+  "answer": "According to the Yummy Tummy Foods handbook, meal expenses on business trips are reimbursed up to $12 per meal. Since you spent $13, you will be reimbursed $12.",
+  "tokens": 119,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.2
+ },
+ {
+  "cond": "R0",
+  "q": "Q18",
+  "kind": "not in handbook",
+  "seed": 0,
+  "ok": true,
+  "answer": "The Yummy Tummy Foods handbook does not specify the hours for the company gym. You may want to check with HR or the facilities manager for the schedule.",
+  "tokens": 98,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 0.9
+ },
+ {
+  "cond": "R0",
+  "q": "Q18",
+  "kind": "not in handbook",
+  "seed": 1,
+  "ok": true,
+  "answer": "The Yummy Tummy Foods handbook does not specify the hours for the company gym. Please check with your HR department for the current gym hours.",
+  "tokens": 95,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R0",
+  "q": "Q18",
+  "kind": "not in handbook",
+  "seed": 2,
+  "ok": true,
+  "answer": "The Yummy Tummy Foods handbook does not specify the hours for the company gym. You may want to check with your HR department for the current schedule.",
+  "tokens": 97,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R0",
+  "q": "Q19",
+  "kind": "not in handbook",
+  "seed": 0,
+  "ok": true,
+  "answer": "The handbook does not specify the amount of the holiday bonus.",
+  "tokens": 76,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R0",
+  "q": "Q19",
+  "kind": "not in handbook",
+  "seed": 1,
+  "ok": true,
+  "answer": "The Yummy Tummy Foods handbook does not specify the amount of the holiday bonus.",
+  "tokens": 81,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R0",
+  "q": "Q19",
+  "kind": "not in handbook",
+  "seed": 2,
+  "ok": true,
+  "answer": "The handbook does not specify the amount of the holiday bonus.",
+  "tokens": 76,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R0",
+  "q": "Q20",
+  "kind": "not in handbook",
+  "seed": 0,
+  "ok": false,
+  "answer": "The Yummy Tummy Foods handbook does not allow employees to bring dogs to work.",
+  "tokens": 82,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "grounded": false,
+  "sec": 0.9
+ },
+ {
+  "cond": "R0",
+  "q": "Q20",
+  "kind": "not in handbook",
+  "seed": 1,
+  "ok": true,
+  "answer": "The Yummy Tummy Foods handbook does not mention a pet policy, so it's best to check directly with HR or your manager about bringing your dog to work.",
+  "tokens": 97,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 0.9
+ },
+ {
+  "cond": "R0",
+  "q": "Q20",
+  "kind": "not in handbook",
+  "seed": 2,
+  "ok": true,
+  "answer": "The Yummy Tummy Foods handbook does not mention a policy about bringing dogs to work. You may want to check with your manager or HR for specific guidelines.",
+  "tokens": 97,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R1",
+  "q": "Q1",
+  "kind": "simple",
+  "seed": 0,
+  "ok": true,
+  "answer": "You need to request PTO at least 3 days in advance using form HR-201 (section 11).",
+  "tokens": 310,
+  "n_search": 1,
+  "searches": [
+   "How many days in advance do I need to request PTO?"
+  ],
+  "found": [
+   "10",
+   "11",
+   "6"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q1",
+  "kind": "simple",
+  "seed": 1,
+  "ok": true,
+  "answer": "You need to request PTO at least 3 days in advance using form HR-201 (section 11).",
+  "tokens": 310,
+  "n_search": 1,
+  "searches": [
+   "How many days in advance do I need to request PTO?"
+  ],
+  "found": [
+   "10",
+   "11",
+   "6"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.5
+ },
+ {
+  "cond": "R1",
+  "q": "Q1",
+  "kind": "simple",
+  "seed": 2,
+  "ok": true,
+  "answer": "You need to request PTO at least 3 days in advance using form HR-201 (section 11).",
+  "tokens": 310,
+  "n_search": 1,
+  "searches": [
+   "How many days in advance do I need to request PTO?"
+  ],
+  "found": [
+   "10",
+   "11",
+   "6"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.5
+ },
+ {
+  "cond": "R1",
+  "q": "Q2",
+  "kind": "simple",
+  "seed": 0,
+  "ok": true,
+  "answer": "The freezer must be kept at 0°F or below (section 25).",
+  "tokens": 308,
+  "n_search": 1,
+  "searches": [
+   "What temperature does the freezer have to stay at or below?"
+  ],
+  "found": [
+   "17",
+   "23",
+   "25"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.9
+ },
+ {
+  "cond": "R1",
+  "q": "Q2",
+  "kind": "simple",
+  "seed": 1,
+  "ok": true,
+  "answer": "The freezer must be kept at 0°F or below (section 25).",
+  "tokens": 308,
+  "n_search": 1,
+  "searches": [
+   "What temperature does the freezer have to stay at or below?"
+  ],
+  "found": [
+   "17",
+   "23",
+   "25"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.5
+ },
+ {
+  "cond": "R1",
+  "q": "Q2",
+  "kind": "simple",
+  "seed": 2,
+  "ok": true,
+  "answer": "The freezer must be kept at 0°F or below (section 25).",
+  "tokens": 308,
+  "n_search": 1,
+  "searches": [
+   "What temperature does the freezer have to stay at or below?"
+  ],
+  "found": [
+   "17",
+   "23",
+   "25"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.7
+ },
+ {
+  "cond": "R1",
+  "q": "Q3",
+  "kind": "simple",
+  "seed": 0,
+  "ok": true,
+  "answer": "The company supports job-related outside training up to $1,000 per year (section 28).",
+  "tokens": 284,
+  "n_search": 1,
+  "searches": [
+   "How much does the company cover for job-related outside training per year?"
+  ],
+  "found": [
+   "27",
+   "28",
+   "32"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.3
+ },
+ {
+  "cond": "R1",
+  "q": "Q3",
+  "kind": "simple",
+  "seed": 1,
+  "ok": true,
+  "answer": "The company supports job-related outside training up to $1,000 per year (section 28).",
+  "tokens": 284,
+  "n_search": 1,
+  "searches": [
+   "How much does the company cover for job-related outside training per year?"
+  ],
+  "found": [
+   "27",
+   "28",
+   "32"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q3",
+  "kind": "simple",
+  "seed": 2,
+  "ok": true,
+  "answer": "The company covers up to $1,000 per year for job-related outside training (section 28).",
+  "tokens": 285,
+  "n_search": 1,
+  "searches": [
+   "How much does the company cover for job-related outside training per year?"
+  ],
+  "found": [
+   "27",
+   "28",
+   "32"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R1",
+  "q": "Q4",
+  "kind": "simple",
+  "seed": 0,
+  "ok": true,
+  "answer": "The club subsidy is $10 per member per month (section 29).",
+  "tokens": 257,
+  "n_search": 1,
+  "searches": [
+   "How much is the club subsidy per person per month?"
+  ],
+  "found": [
+   "29",
+   "33",
+   "8"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R1",
+  "q": "Q4",
+  "kind": "simple",
+  "seed": 1,
+  "ok": true,
+  "answer": "The club subsidy is $10 per member per month (section 29).",
+  "tokens": 257,
+  "n_search": 1,
+  "searches": [
+   "How much is the club subsidy per person per month?"
+  ],
+  "found": [
+   "29",
+   "33",
+   "8"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R1",
+  "q": "Q4",
+  "kind": "simple",
+  "seed": 2,
+  "ok": true,
+  "answer": "The club subsidy is $10 per member per month (section 29).",
+  "tokens": 257,
+  "n_search": 1,
+  "searches": [
+   "How much is the club subsidy per person per month?"
+  ],
+  "found": [
+   "29",
+   "33",
+   "8"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 0.9
+ },
+ {
+  "cond": "R1",
+  "q": "Q5",
+  "kind": "code",
+  "seed": 0,
+  "ok": true,
+  "answer": "Form SEC-07 is for registering USB drives and other external storage devices with the security team (section 17).",
+  "tokens": 271,
+  "n_search": 1,
+  "searches": [
+   "What is form SEC-07 for?"
+  ],
+  "found": [
+   "17",
+   "19",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R1",
+  "q": "Q5",
+  "kind": "code",
+  "seed": 1,
+  "ok": true,
+  "answer": "Form SEC-07 is for registering USB drives and other external storage devices with the security team (section 17).",
+  "tokens": 271,
+  "n_search": 1,
+  "searches": [
+   "What is form SEC-07 for?"
+  ],
+  "found": [
+   "17",
+   "19",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R1",
+  "q": "Q5",
+  "kind": "code",
+  "seed": 2,
+  "ok": true,
+  "answer": "Form SEC-07 is for registering USB drives and other external storage devices with the security team (section 17).",
+  "tokens": 271,
+  "n_search": 1,
+  "searches": [
+   "What is form SEC-07 for?"
+  ],
+  "found": [
+   "17",
+   "19",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R1",
+  "q": "Q6",
+  "kind": "code",
+  "seed": 0,
+  "ok": false,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 272,
+  "n_search": 1,
+  "searches": [
+   "When do I use form HR-204?"
+  ],
+  "found": [
+   "11",
+   "28",
+   "7"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.5
+ },
+ {
+  "cond": "R1",
+  "q": "Q6",
+  "kind": "code",
+  "seed": 1,
+  "ok": false,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 272,
+  "n_search": 1,
+  "searches": [
+   "When do I use form HR-204?"
+  ],
+  "found": [
+   "11",
+   "28",
+   "7"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q6",
+  "kind": "code",
+  "seed": 2,
+  "ok": false,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 272,
+  "n_search": 1,
+  "searches": [
+   "When do I use form HR-204?"
+  ],
+  "found": [
+   "11",
+   "28",
+   "7"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R1",
+  "q": "Q7",
+  "kind": "code",
+  "seed": 0,
+  "ok": true,
+  "answer": "PU-310 is the form used to register a new vendor (Section 22).",
+  "tokens": 268,
+  "n_search": 1,
+  "searches": [
+   "What kind of form is PU-310?"
+  ],
+  "found": [
+   "21",
+   "22",
+   "31"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R1",
+  "q": "Q7",
+  "kind": "code",
+  "seed": 1,
+  "ok": true,
+  "answer": "Form PU-310 is used to register a new vendor, along with a tax ID form, bank letter, and food safety certificate for food ingredient vendors (section 22).",
+  "tokens": 286,
+  "n_search": 1,
+  "searches": [
+   "What kind of form is PU-310?"
+  ],
+  "found": [
+   "21",
+   "22",
+   "31"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R1",
+  "q": "Q7",
+  "kind": "code",
+  "seed": 2,
+  "ok": true,
+  "answer": "PU-310 is the form used to register a new vendor (Section 22).",
+  "tokens": 268,
+  "n_search": 1,
+  "searches": [
+   "What kind of form is PU-310?"
+  ],
+  "found": [
+   "21",
+   "22",
+   "31"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.6
+ },
+ {
+  "cond": "R1",
+  "q": "Q8",
+  "kind": "code",
+  "seed": 0,
+  "ok": true,
+  "answer": "TR-120 travel expenses must be submitted within 7 days of returning (section 7).",
+  "tokens": 274,
+  "n_search": 1,
+  "searches": [
+   "When is TR-120 due?"
+  ],
+  "found": [
+   "11",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R1",
+  "q": "Q8",
+  "kind": "code",
+  "seed": 1,
+  "ok": true,
+  "answer": "TR-120 must be submitted within 7 days of returning from travel (section 7).",
+  "tokens": 274,
+  "n_search": 1,
+  "searches": [
+   "When is TR-120 due?"
+  ],
+  "found": [
+   "11",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.8
+ },
+ {
+  "cond": "R1",
+  "q": "Q8",
+  "kind": "code",
+  "seed": 2,
+  "ok": true,
+  "answer": "TR-120 travel expenses must be submitted within 7 days of returning from the trip (section 7).",
+  "tokens": 277,
+  "n_search": 1,
+  "searches": [
+   "When is TR-120 due?"
+  ],
+  "found": [
+   "11",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q9",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": true,
+  "answer": "A Senior Associate is grade B. For New York, the hotel limit is $70 + $20 = $90 per night. They can claim up to $90 for one night (sections 1 and 2).",
+  "tokens": 325,
+  "n_search": 1,
+  "searches": [
+   "A Senior Associate is on a business trip to New York. How much can they claim for one night at a hotel?"
+  ],
+  "found": [
+   "1",
+   "2",
+   "4"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q9",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": true,
+  "answer": "A Senior Associate is grade B. For New York, the hotel limit adds $20 to the grade B limit of $70, totaling $90 per night. They can claim up to $90 for one night at a hotel (sections 1 and 2).",
+  "tokens": 334,
+  "n_search": 1,
+  "searches": [
+   "A Senior Associate is on a business trip to New York. How much can they claim for one night at a hotel?"
+  ],
+  "found": [
+   "1",
+   "2",
+   "4"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.7
+ },
+ {
+  "cond": "R1",
+  "q": "Q9",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": true,
+  "answer": "A Senior Associate is grade B. In New York, the hotel limit for grade B is $70 + $20 = $90 per night. They can claim up to $90 for one night at a hotel (sections 1 and 2).",
+  "tokens": 331,
+  "n_search": 1,
+  "searches": [
+   "A Senior Associate is on a business trip to New York. How much can they claim for one night at a hotel?"
+  ],
+  "found": [
+   "1",
+   "2",
+   "4"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q10",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": false,
+  "answer": "The handbook does not specify spending limits by job title such as Manager, only by grade (S, A, B). Please check your grade to determine your corporate card limit (section 8).",
+  "tokens": 317,
+  "n_search": 1,
+  "searches": [
+   "How much can a Manager spend on the corporate card per month?"
+  ],
+  "found": [
+   "2",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.3
+ },
+ {
+  "cond": "R1",
+  "q": "Q10",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": false,
+  "answer": "The handbook does not specify monthly corporate card limits by job title, only by grade. Please provide the manager's grade to determine the limit (section 8).",
+  "tokens": 310,
+  "n_search": 1,
+  "searches": [
+   "How much can a Manager spend on the corporate card per month?"
+  ],
+  "found": [
+   "2",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R1",
+  "q": "Q10",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": false,
+  "answer": "The handbook doesn't specify the spending limit for a Manager's grade on the corporate card. It only lists limits for grades S, A, and B (section 8).",
+  "tokens": 312,
+  "n_search": 1,
+  "searches": [
+   "How much can a Manager spend on the corporate card per month?"
+  ],
+  "found": [
+   "2",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R1",
+  "q": "Q11",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": true,
+  "answer": "A Senior Manager is grade A. For Dallas, the hotel limit per night for grade A is $90 (no city surcharge) (sections 1, 2).",
+  "tokens": 323,
+  "n_search": 1,
+  "searches": [
+   "What is the hotel limit per night for a Senior Manager on a trip to Dallas?"
+  ],
+  "found": [
+   "1",
+   "2",
+   "8"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.3
+ },
+ {
+  "cond": "R1",
+  "q": "Q11",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": true,
+  "answer": "A Senior Manager is grade A, so the hotel limit per night in Dallas (which is not New York, San Francisco, or Honolulu) is $90 (section 1 and 2).",
+  "tokens": 328,
+  "n_search": 1,
+  "searches": [
+   "What is the hotel limit per night for a Senior Manager on a trip to Dallas?"
+  ],
+  "found": [
+   "1",
+   "2",
+   "8"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q11",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": true,
+  "answer": "The hotel limit per night for a Senior Manager (grade A) in Dallas is $90. Dallas is not listed as expensive, so no extra $20 is added (sections 1 and 2).",
+  "tokens": 330,
+  "n_search": 1,
+  "searches": [
+   "What is the hotel limit per night for a Senior Manager on a trip to Dallas?"
+  ],
+  "found": [
+   "1",
+   "2",
+   "8"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R1",
+  "q": "Q12",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": false,
+  "answer": "A Director's grade isn't specified in the handbook sections, so I can't determine the hotel limit without knowing their grade. The limits are per night: grade S $120, grade A $90, grade B $70, plus $20 per night extra for Honolulu (Section 2).",
+  "tokens": 330,
+  "n_search": 1,
+  "searches": [
+   "A Director stayed 2 nights in Honolulu on a business trip. How much hotel can they claim in total?"
+  ],
+  "found": [
+   "2",
+   "3",
+   "4"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.4
+ },
+ {
+  "cond": "R1",
+  "q": "Q12",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": false,
+  "answer": "A Director is grade A. For Honolulu, the hotel limit per night is $90 + $20 = $110. For 2 nights, they can claim up to $220 total (section 2).",
+  "tokens": 315,
+  "n_search": 1,
+  "searches": [
+   "A Director stayed 2 nights in Honolulu on a business trip. How much hotel can they claim in total?"
+  ],
+  "found": [
+   "2",
+   "3",
+   "4"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.3
+ },
+ {
+  "cond": "R1",
+  "q": "Q12",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": false,
+  "answer": "A Director is grade A. In Honolulu, the hotel limit per night for grade A is $90 + $20 = $110. For 2 nights, the total claimable amount is $110 x 2 = $220 (Section 2).",
+  "tokens": 324,
+  "n_search": 1,
+  "searches": [
+   "A Director stayed 2 nights in Honolulu on a business trip. How much hotel can they claim in total?"
+  ],
+  "found": [
+   "2",
+   "3",
+   "4"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.6
+ },
+ {
+  "cond": "R1",
+  "q": "Q13",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": true,
+  "answer": "A Specialist's monthly corporate card limit is $500 (grade B). To buy a $400 piece of equipment, they need their team lead's approval in advance because it's a single purchase over $300 (sections 1 and 8).",
+  "tokens": 318,
+  "n_search": 1,
+  "searches": [
+   "What is a Specialist's monthly corporate card limit, and what do they need to buy a $400 piece of equipment?"
+  ],
+  "found": [
+   "1",
+   "8",
+   "9"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q13",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": true,
+  "answer": "A Specialist is grade B, so their monthly corporate card limit is $500. For a $400 purchase, which is over $300, they need prior approval from their team lead (sections 1 and 8).",
+  "tokens": 314,
+  "n_search": 1,
+  "searches": [
+   "What is a Specialist's monthly corporate card limit, and what do they need to buy a $400 piece of equipment?"
+  ],
+  "found": [
+   "1",
+   "8",
+   "9"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q13",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": true,
+  "answer": "A Specialist is grade B, so their monthly corporate card limit is $500. For a $400 purchase, they need their team lead's approval in advance (sections 1 and 8).",
+  "tokens": 309,
+  "n_search": 1,
+  "searches": [
+   "What is a Specialist's monthly corporate card limit, and what do they need to buy a $400 piece of equipment?"
+  ],
+  "found": [
+   "1",
+   "8",
+   "9"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.4
+ },
+ {
+  "cond": "R1",
+  "q": "Q14",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": false,
+  "answer": "You need at least 3 quotes for a $7,000 purchase (section 20). Approval must come from the division head for purchases from $5,000 up to $50,000 (section 21).",
+  "tokens": 322,
+  "n_search": 1,
+  "searches": [
+   "To buy $7,000 of supplies, how many quotes do I need and who approves it?"
+  ],
+  "found": [
+   "20",
+   "21",
+   "8"
+  ],
+  "gold_found": true,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R1",
+  "q": "Q14",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": true,
+  "answer": "For a $7,000 purchase, you need at least 2 quotes (section 20). Approval must come from the division head since it is between $5,000 and $50,000 (section 21).",
+  "tokens": 323,
+  "n_search": 1,
+  "searches": [
+   "To buy $7,000 of supplies, how many quotes do I need and who approves it?"
+  ],
+  "found": [
+   "20",
+   "21",
+   "8"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q14",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": true,
+  "answer": "For a $7,000 purchase, you need at least 2 quotes (section 20). The approval must come from the division head (section 21).",
+  "tokens": 311,
+  "n_search": 1,
+  "searches": [
+   "To buy $7,000 of supplies, how many quotes do I need and who approves it?"
+  ],
+  "found": [
+   "20",
+   "21",
+   "8"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q15",
+  "kind": "revised",
+  "seed": 0,
+  "ok": false,
+  "answer": "You can claim up to $10 per meal on a business trip, but only for meals with a receipt (section 4).",
+  "tokens": 296,
+  "n_search": 1,
+  "searches": [
+   "How much can I claim per meal on a business trip?"
+  ],
+  "found": [
+   "2",
+   "4",
+   "5"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q15",
+  "kind": "revised",
+  "seed": 1,
+  "ok": false,
+  "answer": "You can claim up to $10 per meal on a business trip, only if you have a receipt (section 4).",
+  "tokens": 295,
+  "n_search": 1,
+  "searches": [
+   "How much can I claim per meal on a business trip?"
+  ],
+  "found": [
+   "2",
+   "4",
+   "5"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q15",
+  "kind": "revised",
+  "seed": 2,
+  "ok": false,
+  "answer": "You can claim up to $10 per meal, only with a receipt (section 4).",
+  "tokens": 289,
+  "n_search": 1,
+  "searches": [
+   "How much can I claim per meal on a business trip?"
+  ],
+  "found": [
+   "2",
+   "4",
+   "5"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.4
+ },
+ {
+  "cond": "R1",
+  "q": "Q16",
+  "kind": "revised",
+  "seed": 0,
+  "ok": true,
+  "answer": "Starting September 1, 2026, office staff may work remotely up to 2 days a week (36).",
+  "tokens": 322,
+  "n_search": 1,
+  "searches": [
+   "How many days a week can office staff work from home?"
+  ],
+  "found": [
+   "11",
+   "14",
+   "36"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q16",
+  "kind": "revised",
+  "seed": 1,
+  "ok": true,
+  "answer": "Office staff may work remotely up to 2 days a week starting September 1, 2026 (section 36).",
+  "tokens": 323,
+  "n_search": 1,
+  "searches": [
+   "How many days a week can office staff work from home?"
+  ],
+  "found": [
+   "11",
+   "14",
+   "36"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q16",
+  "kind": "revised",
+  "seed": 2,
+  "ok": true,
+  "answer": "Office staff may work remotely up to 2 days a week starting September 1, 2026 (section 36).",
+  "tokens": 323,
+  "n_search": 1,
+  "searches": [
+   "How many days a week can office staff work from home?"
+  ],
+  "found": [
+   "11",
+   "14",
+   "36"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R1",
+  "q": "Q17",
+  "kind": "revised",
+  "seed": 0,
+  "ok": false,
+  "answer": "You can claim up to $10 for the dinner since travel meals are reimbursed up to $10 per meal with a receipt (section 4).",
+  "tokens": 304,
+  "n_search": 1,
+  "searches": [
+   "I spent $13 on dinner on a business trip and I have the receipt. How much do I get back?"
+  ],
+  "found": [
+   "2",
+   "3",
+   "4"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.3
+ },
+ {
+  "cond": "R1",
+  "q": "Q17",
+  "kind": "revised",
+  "seed": 1,
+  "ok": false,
+  "answer": "You will be reimbursed $10 for your dinner, as travel meals are reimbursed up to $10 per meal only with a receipt (section 4).",
+  "tokens": 306,
+  "n_search": 1,
+  "searches": [
+   "I spent $13 on dinner on a business trip and I have the receipt. How much do I get back?"
+  ],
+  "found": [
+   "2",
+   "3",
+   "4"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q17",
+  "kind": "revised",
+  "seed": 2,
+  "ok": false,
+  "answer": "You get reimbursed $10 for the dinner since travel meals are reimbursed up to $10 per meal with a receipt (section 4).",
+  "tokens": 303,
+  "n_search": 1,
+  "searches": [
+   "I spent $13 on dinner on a business trip and I have the receipt. How much do I get back?"
+  ],
+  "found": [
+   "2",
+   "3",
+   "4"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q18",
+  "kind": "not in handbook",
+  "seed": 0,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 250,
+  "n_search": 1,
+  "searches": [
+   "What are the hours for the company gym?"
+  ],
+  "found": [
+   "15",
+   "29",
+   "34"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R1",
+  "q": "Q18",
+  "kind": "not in handbook",
+  "seed": 1,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 250,
+  "n_search": 1,
+  "searches": [
+   "What are the hours for the company gym?"
+  ],
+  "found": [
+   "15",
+   "29",
+   "34"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R1",
+  "q": "Q18",
+  "kind": "not in handbook",
+  "seed": 2,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 250,
+  "n_search": 1,
+  "searches": [
+   "What are the hours for the company gym?"
+  ],
+  "found": [
+   "15",
+   "29",
+   "34"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 2.3
+ },
+ {
+  "cond": "R1",
+  "q": "Q19",
+  "kind": "not in handbook",
+  "seed": 0,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 269,
+  "n_search": 1,
+  "searches": [
+   "How much is the holiday bonus?"
+  ],
+  "found": [
+   "13",
+   "32",
+   "34"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R1",
+  "q": "Q19",
+  "kind": "not in handbook",
+  "seed": 1,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 269,
+  "n_search": 1,
+  "searches": [
+   "How much is the holiday bonus?"
+  ],
+  "found": [
+   "13",
+   "32",
+   "34"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R1",
+  "q": "Q19",
+  "kind": "not in handbook",
+  "seed": 2,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 269,
+  "n_search": 1,
+  "searches": [
+   "How much is the holiday bonus?"
+  ],
+  "found": [
+   "13",
+   "32",
+   "34"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R1",
+  "q": "Q20",
+  "kind": "not in handbook",
+  "seed": 0,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 302,
+  "n_search": 1,
+  "searches": [
+   "Can I bring my dog to work?"
+  ],
+  "found": [
+   "11",
+   "14",
+   "36"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R1",
+  "q": "Q20",
+  "kind": "not in handbook",
+  "seed": 1,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 302,
+  "n_search": 1,
+  "searches": [
+   "Can I bring my dog to work?"
+  ],
+  "found": [
+   "11",
+   "14",
+   "36"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R1",
+  "q": "Q20",
+  "kind": "not in handbook",
+  "seed": 2,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 302,
+  "n_search": 1,
+  "searches": [
+   "Can I bring my dog to work?"
+  ],
+  "found": [
+   "11",
+   "14",
+   "36"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q1",
+  "kind": "simple",
+  "seed": 0,
+  "ok": true,
+  "answer": "You need to request PTO at least 3 days in advance using the groupware form HR-201 (section 11).",
+  "tokens": 327,
+  "n_search": 1,
+  "searches": [
+   "How many days in advance do I need to request PTO?"
+  ],
+  "found": [
+   "10",
+   "11",
+   "12"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R2",
+  "q": "Q1",
+  "kind": "simple",
+  "seed": 1,
+  "ok": true,
+  "answer": "You need to request PTO at least 3 days in advance using the groupware form HR-201 (section 11).",
+  "tokens": 327,
+  "n_search": 1,
+  "searches": [
+   "How many days in advance do I need to request PTO?"
+  ],
+  "found": [
+   "10",
+   "11",
+   "12"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.4
+ },
+ {
+  "cond": "R2",
+  "q": "Q1",
+  "kind": "simple",
+  "seed": 2,
+  "ok": true,
+  "answer": "You need to request PTO at least 3 days in advance using the HR-201 form (section 11).",
+  "tokens": 325,
+  "n_search": 1,
+  "searches": [
+   "How many days in advance do I need to request PTO?"
+  ],
+  "found": [
+   "10",
+   "11",
+   "12"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R2",
+  "q": "Q2",
+  "kind": "simple",
+  "seed": 0,
+  "ok": true,
+  "answer": "The freezer must be kept at 0°F or below (Section 25).",
+  "tokens": 316,
+  "n_search": 1,
+  "searches": [
+   "What temperature does the freezer have to stay at or below?"
+  ],
+  "found": [
+   "2",
+   "25",
+   "35"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R2",
+  "q": "Q2",
+  "kind": "simple",
+  "seed": 1,
+  "ok": true,
+  "answer": "The freezer must be kept at 0°F or below (section 25).",
+  "tokens": 316,
+  "n_search": 1,
+  "searches": [
+   "What temperature does the freezer have to stay at or below?"
+  ],
+  "found": [
+   "2",
+   "25",
+   "35"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R2",
+  "q": "Q2",
+  "kind": "simple",
+  "seed": 2,
+  "ok": true,
+  "answer": "The freezer has to be kept at 0°F or below (section 25).",
+  "tokens": 317,
+  "n_search": 1,
+  "searches": [
+   "What temperature does the freezer have to stay at or below?"
+  ],
+  "found": [
+   "2",
+   "25",
+   "35"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q3",
+  "kind": "simple",
+  "seed": 0,
+  "ok": true,
+  "answer": "The company supports up to $1,000 per year for job-related outside training (Section 28).",
+  "tokens": 285,
+  "n_search": 1,
+  "searches": [
+   "How much does the company cover for job-related outside training per year?"
+  ],
+  "found": [
+   "27",
+   "28",
+   "32"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q3",
+  "kind": "simple",
+  "seed": 1,
+  "ok": true,
+  "answer": "The company covers up to $1,000 per year for job-related outside training (section 28).",
+  "tokens": 285,
+  "n_search": 1,
+  "searches": [
+   "How much does the company cover for job-related outside training per year?"
+  ],
+  "found": [
+   "27",
+   "28",
+   "32"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R2",
+  "q": "Q3",
+  "kind": "simple",
+  "seed": 2,
+  "ok": true,
+  "answer": "The company supports up to $1,000 per year for job-related outside training (section 28).",
+  "tokens": 285,
+  "n_search": 1,
+  "searches": [
+   "How much does the company cover for job-related outside training per year?"
+  ],
+  "found": [
+   "27",
+   "28",
+   "32"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q4",
+  "kind": "simple",
+  "seed": 0,
+  "ok": true,
+  "answer": "The club subsidy is $10 per member per month (Section 29).",
+  "tokens": 265,
+  "n_search": 1,
+  "searches": [
+   "How much is the club subsidy per person per month?"
+  ],
+  "found": [
+   "29",
+   "32",
+   "33"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 0.9
+ },
+ {
+  "cond": "R2",
+  "q": "Q4",
+  "kind": "simple",
+  "seed": 1,
+  "ok": true,
+  "answer": "The club subsidy is $10 per member per month (section 29).",
+  "tokens": 265,
+  "n_search": 1,
+  "searches": [
+   "How much is the club subsidy per person per month?"
+  ],
+  "found": [
+   "29",
+   "32",
+   "33"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R2",
+  "q": "Q4",
+  "kind": "simple",
+  "seed": 2,
+  "ok": true,
+  "answer": "The club subsidy is $10 per member per month (section 29).",
+  "tokens": 265,
+  "n_search": 1,
+  "searches": [
+   "How much is the club subsidy per person per month?"
+  ],
+  "found": [
+   "29",
+   "32",
+   "33"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R2",
+  "q": "Q5",
+  "kind": "code",
+  "seed": 0,
+  "ok": true,
+  "answer": "Form SEC-07 is used to register USB drives and other external storage devices with the security team (section 17).",
+  "tokens": 278,
+  "n_search": 1,
+  "searches": [
+   "What is form SEC-07 for?"
+  ],
+  "found": [
+   "17",
+   "22",
+   "31"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.5
+ },
+ {
+  "cond": "R2",
+  "q": "Q5",
+  "kind": "code",
+  "seed": 1,
+  "ok": true,
+  "answer": "Form SEC-07 is used to register USB drives and other external storage devices with the security team (section 17).",
+  "tokens": 278,
+  "n_search": 1,
+  "searches": [
+   "What is form SEC-07 for?"
+  ],
+  "found": [
+   "17",
+   "22",
+   "31"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R2",
+  "q": "Q5",
+  "kind": "code",
+  "seed": 2,
+  "ok": true,
+  "answer": "Form SEC-07 is for registering USB drives and other external storage devices with the security team (section 17).",
+  "tokens": 277,
+  "n_search": 1,
+  "searches": [
+   "What is form SEC-07 for?"
+  ],
+  "found": [
+   "17",
+   "22",
+   "31"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R2",
+  "q": "Q6",
+  "kind": "code",
+  "seed": 0,
+  "ok": true,
+  "answer": "Use form HR-204 to request paid life-event leave, such as for your wedding, child's wedding, spouse giving birth, or the death of certain family members (section 12).",
+  "tokens": 293,
+  "n_search": 1,
+  "searches": [
+   "When do I use form HR-204?"
+  ],
+  "found": [
+   "12",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.3
+ },
+ {
+  "cond": "R2",
+  "q": "Q6",
+  "kind": "code",
+  "seed": 1,
+  "ok": true,
+  "answer": "You use form HR-204 to request paid life-event leave (section 12).",
+  "tokens": 273,
+  "n_search": 1,
+  "searches": [
+   "When do I use form HR-204?"
+  ],
+  "found": [
+   "12",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.3
+ },
+ {
+  "cond": "R2",
+  "q": "Q6",
+  "kind": "code",
+  "seed": 2,
+  "ok": true,
+  "answer": "You use form HR-204 to request paid life-event leave, such as for your wedding, child's wedding, spouse giving birth, or family deaths (section 12).",
+  "tokens": 290,
+  "n_search": 1,
+  "searches": [
+   "When do I use form HR-204?"
+  ],
+  "found": [
+   "12",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R2",
+  "q": "Q7",
+  "kind": "code",
+  "seed": 0,
+  "ok": true,
+  "answer": "Form PU-310 is used to register a new vendor (Section 22).",
+  "tokens": 267,
+  "n_search": 1,
+  "searches": [
+   "What kind of form is PU-310?"
+  ],
+  "found": [
+   "21",
+   "22",
+   "31"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R2",
+  "q": "Q7",
+  "kind": "code",
+  "seed": 1,
+  "ok": true,
+  "answer": "Form PU-310 is used to register a new vendor (section 22).",
+  "tokens": 267,
+  "n_search": 1,
+  "searches": [
+   "What kind of form is PU-310?"
+  ],
+  "found": [
+   "21",
+   "22",
+   "31"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 0.9
+ },
+ {
+  "cond": "R2",
+  "q": "Q7",
+  "kind": "code",
+  "seed": 2,
+  "ok": true,
+  "answer": "Form PU-310 is used to register a new vendor, along with a tax ID form, a bank letter, and a food safety certificate if the vendor provides food ingredients (section 22).",
+  "tokens": 290,
+  "n_search": 1,
+  "searches": [
+   "What kind of form is PU-310?"
+  ],
+  "found": [
+   "21",
+   "22",
+   "31"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R2",
+  "q": "Q8",
+  "kind": "code",
+  "seed": 0,
+  "ok": true,
+  "answer": "TR-120 form for travel expenses is due within 7 days of returning from travel (Section 7).",
+  "tokens": 260,
+  "n_search": 1,
+  "searches": [
+   "When is TR-120 due?"
+  ],
+  "found": [
+   "28",
+   "31",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R2",
+  "q": "Q8",
+  "kind": "code",
+  "seed": 1,
+  "ok": true,
+  "answer": "TR-120 is due within 7 days of returning from travel (section 7).",
+  "tokens": 256,
+  "n_search": 1,
+  "searches": [
+   "When is TR-120 due?"
+  ],
+  "found": [
+   "28",
+   "31",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R2",
+  "q": "Q8",
+  "kind": "code",
+  "seed": 2,
+  "ok": true,
+  "answer": "TR-120 must be submitted within 7 days of returning from travel (section 7).",
+  "tokens": 257,
+  "n_search": 1,
+  "searches": [
+   "When is TR-120 due?"
+  ],
+  "found": [
+   "28",
+   "31",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R2",
+  "q": "Q9",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": true,
+  "answer": "A Senior Associate is grade B, so the hotel limit is $70 per night. Since New York adds $20 to the limit, they can claim up to $90 for one night at a hotel (sections 1 and 2).",
+  "tokens": 345,
+  "n_search": 1,
+  "searches": [
+   "A Senior Associate is on a business trip to New York. How much can they claim for one night at a hotel?"
+  ],
+  "found": [
+   "1",
+   "2",
+   "6"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.6
+ },
+ {
+  "cond": "R2",
+  "q": "Q9",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": true,
+  "answer": "A Senior Associate is grade B. For New York, the hotel limit is $70 + $20 = $90 per night (sections 1 and 2).",
+  "tokens": 330,
+  "n_search": 1,
+  "searches": [
+   "A Senior Associate is on a business trip to New York. How much can they claim for one night at a hotel?"
+  ],
+  "found": [
+   "1",
+   "2",
+   "6"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R2",
+  "q": "Q9",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": true,
+  "answer": "A Senior Associate is grade B. The hotel limit for grade B is $70 per night. Since New York is an expensive city, add $20, making the limit $90 per night. They can claim up to $90 for one night at a hotel (sections 1 and 2).",
+  "tokens": 357,
+  "n_search": 1,
+  "searches": [
+   "A Senior Associate is on a business trip to New York. How much can they claim for one night at a hotel?"
+  ],
+  "found": [
+   "1",
+   "2",
+   "6"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.4
+ },
+ {
+  "cond": "R2",
+  "q": "Q10",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": false,
+  "answer": "The handbook only lists corporate card limits by grade: S $3,000, A $1,500, B $500. It does not specify limits by job title like Manager (section 8). I can't find that in the handbook.",
+  "tokens": 295,
+  "n_search": 1,
+  "searches": [
+   "How much can a Manager spend on the corporate card per month?"
+  ],
+  "found": [
+   "29",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q10",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": false,
+  "answer": "The handbook does not specify limits by job title like Manager, only by grade (S, A, B). Please check your grade to know your limit (Section 8).",
+  "tokens": 281,
+  "n_search": 1,
+  "searches": [
+   "How much can a Manager spend on the corporate card per month?"
+  ],
+  "found": [
+   "29",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q10",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": false,
+  "answer": "The handbook does not specify spending limits by position title like Manager, but by grade: grade S has a $3,000 limit, grade A $1,500, and grade B $500 (section 8). Check your grade to know your limit.",
+  "tokens": 298,
+  "n_search": 1,
+  "searches": [
+   "How much can a Manager spend on the corporate card per month?"
+  ],
+  "found": [
+   "29",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q11",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": true,
+  "answer": "For a Senior Manager (grade A) on a trip to Dallas, the hotel limit per night is $90 (section 1 and 2).",
+  "tokens": 316,
+  "n_search": 1,
+  "searches": [
+   "What is the hotel limit per night for a Senior Manager on a trip to Dallas?"
+  ],
+  "found": [
+   "1",
+   "2",
+   "3"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R2",
+  "q": "Q11",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": true,
+  "answer": "For a Senior Manager (grade A) traveling to Dallas, the hotel limit per night is $90, as Dallas is not listed as an expensive city with an added $20 per night (Sections 1 and 2).",
+  "tokens": 331,
+  "n_search": 1,
+  "searches": [
+   "What is the hotel limit per night for a Senior Manager on a trip to Dallas?"
+  ],
+  "found": [
+   "1",
+   "2",
+   "3"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q11",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": true,
+  "answer": "The hotel limit per night for a Senior Manager (grade A) in Dallas is $90, as Dallas is not listed as an expensive city with an added limit (Sections 1 and 2).",
+  "tokens": 326,
+  "n_search": 1,
+  "searches": [
+   "What is the hotel limit per night for a Senior Manager on a trip to Dallas?"
+  ],
+  "found": [
+   "1",
+   "2",
+   "3"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.3
+ },
+ {
+  "cond": "R2",
+  "q": "Q12",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": true,
+  "answer": "The hotel limit for grade S (Director) is $120 per night. For Honolulu, add $20, so $140 per night. For 2 nights, the total is 2 x $140 = $280 (Section 2).",
+  "tokens": 338,
+  "n_search": 1,
+  "searches": [
+   "A Director stayed 2 nights in Honolulu on a business trip. How much hotel can they claim in total?"
+  ],
+  "found": [
+   "2",
+   "3",
+   "6"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q12",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": true,
+  "answer": "The hotel reimbursement limit for grade S (which includes Directors) in Honolulu is $120 + $20 = $140 per night. For 2 nights, the total claimable amount is 2 x $140 = $280 (Section 2).",
+  "tokens": 339,
+  "n_search": 1,
+  "searches": [
+   "A Director stayed 2 nights in Honolulu on a business trip. How much hotel can they claim in total?"
+  ],
+  "found": [
+   "2",
+   "3",
+   "6"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.3
+ },
+ {
+  "cond": "R2",
+  "q": "Q12",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": false,
+  "answer": "A Director is usually grade A. For Honolulu, the hotel limit per night is $90 + $20 = $110. For 2 nights, the total hotel claim limit is $110 x 2 = $220 (Section 2).",
+  "tokens": 338,
+  "n_search": 1,
+  "searches": [
+   "A Director stayed 2 nights in Honolulu on a business trip. How much hotel can they claim in total?"
+  ],
+  "found": [
+   "2",
+   "3",
+   "6"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.5
+ },
+ {
+  "cond": "R2",
+  "q": "Q13",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": true,
+  "answer": "A Specialist is grade B, so their monthly corporate card limit is $500. For a single purchase over $300, such as a $400 piece of equipment, they need the team lead's approval in advance (Sections 1, 8).",
+  "tokens": 320,
+  "n_search": 1,
+  "searches": [
+   "What is a Specialist's monthly corporate card limit, and what do they need to buy a $400 piece of equipment?"
+  ],
+  "found": [
+   "1",
+   "8",
+   "9"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q13",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": true,
+  "answer": "A Specialist is grade B, so their monthly corporate card limit is $500. For a $400 purchase, which is over $300, they need their team lead's approval in advance (sections 1, 8).",
+  "tokens": 315,
+  "n_search": 1,
+  "searches": [
+   "What is a Specialist's monthly corporate card limit, and what do they need to buy a $400 piece of equipment?"
+  ],
+  "found": [
+   "1",
+   "8",
+   "9"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q13",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": true,
+  "answer": "A Specialist is grade B, so their monthly corporate card limit is $500. For a $400 purchase, which is over $300, they need advance approval from their team lead (sections 1 and 8).",
+  "tokens": 314,
+  "n_search": 1,
+  "searches": [
+   "What is a Specialist's monthly corporate card limit, and what do they need to buy a $400 piece of equipment?"
+  ],
+  "found": [
+   "1",
+   "8",
+   "9"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q14",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": false,
+  "answer": "For a $7,000 purchase, you need at least 2 quotes (section 20). The handbook does not specify who approves purchases.",
+  "tokens": 300,
+  "n_search": 1,
+  "searches": [
+   "To buy $7,000 of supplies, how many quotes do I need and who approves it?"
+  ],
+  "found": [
+   "11",
+   "20",
+   "7"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.4
+ },
+ {
+  "cond": "R2",
+  "q": "Q14",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": false,
+  "answer": "For a $7,000 purchase, you need at least 2 quotes (section 20). The handbook does not specify who approves the purchase.",
+  "tokens": 301,
+  "n_search": 1,
+  "searches": [
+   "To buy $7,000 of supplies, how many quotes do I need and who approves it?"
+  ],
+  "found": [
+   "11",
+   "20",
+   "7"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q14",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": false,
+  "answer": "For a $7,000 purchase, you need at least 2 quotes (section 20). The handbook does not specify who approves it.",
+  "tokens": 300,
+  "n_search": 1,
+  "searches": [
+   "To buy $7,000 of supplies, how many quotes do I need and who approves it?"
+  ],
+  "found": [
+   "11",
+   "20",
+   "7"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q15",
+  "kind": "revised",
+  "seed": 0,
+  "ok": true,
+  "answer": "You can claim up to $12 per meal on a business trip, starting from July 1, 2026, as per the revised travel meal limit (section 35). Meals must have a receipt to be reimbursed (section 4).",
+  "tokens": 324,
+  "n_search": 1,
+  "searches": [
+   "How much can I claim per meal on a business trip?"
+  ],
+  "found": [
+   "2",
+   "35",
+   "4"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.3
+ },
+ {
+  "cond": "R2",
+  "q": "Q15",
+  "kind": "revised",
+  "seed": 1,
+  "ok": true,
+  "answer": "You can claim up to $12 per meal with a receipt on a business trip starting July 1, 2026 (sections 4 and 35).",
+  "tokens": 306,
+  "n_search": 1,
+  "searches": [
+   "How much can I claim per meal on a business trip?"
+  ],
+  "found": [
+   "2",
+   "35",
+   "4"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q15",
+  "kind": "revised",
+  "seed": 2,
+  "ok": true,
+  "answer": "You can claim up to $12 per meal on a business trip, as of July 1, 2026. Meals must have a receipt to be reimbursed (Sections 4 and 35).",
+  "tokens": 315,
+  "n_search": 1,
+  "searches": [
+   "How much can I claim per meal on a business trip?"
+  ],
+  "found": [
+   "2",
+   "35",
+   "4"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q16",
+  "kind": "revised",
+  "seed": 0,
+  "ok": true,
+  "answer": "Office staff may work remotely up to 2 days a week starting September 1, 2026 (section 36).",
+  "tokens": 319,
+  "n_search": 1,
+  "searches": [
+   "How many days a week can office staff work from home?"
+  ],
+  "found": [
+   "10",
+   "14",
+   "36"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R2",
+  "q": "Q16",
+  "kind": "revised",
+  "seed": 1,
+  "ok": true,
+  "answer": "Office staff may work remotely up to 2 days a week starting September 1, 2026, with approval by 6 PM the day before (36).",
+  "tokens": 327,
+  "n_search": 1,
+  "searches": [
+   "How many days a week can office staff work from home?"
+  ],
+  "found": [
+   "10",
+   "14",
+   "36"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q16",
+  "kind": "revised",
+  "seed": 2,
+  "ok": true,
+  "answer": "Starting September 1, 2026, office staff may work remotely up to 2 days a week (36).",
+  "tokens": 318,
+  "n_search": 1,
+  "searches": [
+   "How many days a week can office staff work from home?"
+  ],
+  "found": [
+   "10",
+   "14",
+   "36"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.3
+ },
+ {
+  "cond": "R2",
+  "q": "Q17",
+  "kind": "revised",
+  "seed": 0,
+  "ok": false,
+  "answer": "You will be reimbursed up to $10 for the dinner meal since travel meals are reimbursed up to $10 per meal with a receipt (section 4).",
+  "tokens": 286,
+  "n_search": 1,
+  "searches": [
+   "I spent $13 on dinner on a business trip and I have the receipt. How much do I get back?"
+  ],
+  "found": [
+   "3",
+   "4",
+   "6"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.3
+ },
+ {
+  "cond": "R2",
+  "q": "Q17",
+  "kind": "revised",
+  "seed": 1,
+  "ok": false,
+  "answer": "You will be reimbursed up to $10 for the dinner meal with a receipt (section 4).",
+  "tokens": 274,
+  "n_search": 1,
+  "searches": [
+   "I spent $13 on dinner on a business trip and I have the receipt. How much do I get back?"
+  ],
+  "found": [
+   "3",
+   "4",
+   "6"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.1
+ },
+ {
+  "cond": "R2",
+  "q": "Q17",
+  "kind": "revised",
+  "seed": 2,
+  "ok": false,
+  "answer": "You will be reimbursed up to $10 for the dinner meal with a receipt (section 4).",
+  "tokens": 274,
+  "n_search": 1,
+  "searches": [
+   "I spent $13 on dinner on a business trip and I have the receipt. How much do I get back?"
+  ],
+  "found": [
+   "3",
+   "4",
+   "6"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q18",
+  "kind": "not in handbook",
+  "seed": 0,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 268,
+  "n_search": 1,
+  "searches": [
+   "What are the hours for the company gym?"
+  ],
+  "found": [
+   "15",
+   "32",
+   "34"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.4
+ },
+ {
+  "cond": "R2",
+  "q": "Q18",
+  "kind": "not in handbook",
+  "seed": 1,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 268,
+  "n_search": 1,
+  "searches": [
+   "What are the hours for the company gym?"
+  ],
+  "found": [
+   "15",
+   "32",
+   "34"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q18",
+  "kind": "not in handbook",
+  "seed": 2,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 268,
+  "n_search": 1,
+  "searches": [
+   "What are the hours for the company gym?"
+  ],
+  "found": [
+   "15",
+   "32",
+   "34"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R2",
+  "q": "Q19",
+  "kind": "not in handbook",
+  "seed": 0,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 251,
+  "n_search": 1,
+  "searches": [
+   "How much is the holiday bonus?"
+  ],
+  "found": [
+   "3",
+   "34",
+   "8"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.2
+ },
+ {
+  "cond": "R2",
+  "q": "Q19",
+  "kind": "not in handbook",
+  "seed": 1,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 251,
+  "n_search": 1,
+  "searches": [
+   "How much is the holiday bonus?"
+  ],
+  "found": [
+   "3",
+   "34",
+   "8"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R2",
+  "q": "Q19",
+  "kind": "not in handbook",
+  "seed": 2,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 251,
+  "n_search": 1,
+  "searches": [
+   "How much is the holiday bonus?"
+  ],
+  "found": [
+   "3",
+   "34",
+   "8"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.0
+ },
+ {
+  "cond": "R2",
+  "q": "Q20",
+  "kind": "not in handbook",
+  "seed": 0,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 276,
+  "n_search": 1,
+  "searches": [
+   "Can I bring my dog to work?"
+  ],
+  "found": [
+   "14",
+   "29",
+   "36"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.4
+ },
+ {
+  "cond": "R2",
+  "q": "Q20",
+  "kind": "not in handbook",
+  "seed": 1,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 276,
+  "n_search": 1,
+  "searches": [
+   "Can I bring my dog to work?"
+  ],
+  "found": [
+   "14",
+   "29",
+   "36"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R2",
+  "q": "Q20",
+  "kind": "not in handbook",
+  "seed": 2,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 276,
+  "n_search": 1,
+  "searches": [
+   "Can I bring my dog to work?"
+  ],
+  "found": [
+   "14",
+   "29",
+   "36"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.1
+ },
+ {
+  "cond": "R3",
+  "q": "Q1",
+  "kind": "simple",
+  "seed": 0,
+  "ok": true,
+  "answer": "You need to request PTO at least 3 days in advance using the groupware form HR-201. Same-day PTO requests require your team lead's verbal approval, and the HR-201 form must be filed by the next day (Section 11).",
+  "tokens": 655,
+  "n_search": 1,
+  "searches": [
+   "PTO request advance notice"
+  ],
+  "found": [
+   "10",
+   "11",
+   "6"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.1
+ },
+ {
+  "cond": "R3",
+  "q": "Q1",
+  "kind": "simple",
+  "seed": 1,
+  "ok": true,
+  "answer": "You need to request PTO at least 3 days in advance using groupware form HR-201. Same-day requests require verbal approval from your team lead and must have the form filed by the next day (section 11).",
+  "tokens": 647,
+  "n_search": 1,
+  "searches": [
+   "request PTO in advance"
+  ],
+  "found": [
+   "10",
+   "11",
+   "6"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.0
+ },
+ {
+  "cond": "R3",
+  "q": "Q1",
+  "kind": "simple",
+  "seed": 2,
+  "ok": true,
+  "answer": "You need to request PTO at least 3 days in advance using the groupware form HR-201. Same-day requests require your team lead's verbal approval and filing the form by the next day (section 11).",
+  "tokens": 648,
+  "n_search": 1,
+  "searches": [
+   "PTO request advance notice"
+  ],
+  "found": [
+   "10",
+   "11",
+   "6"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.3
+ },
+ {
+  "cond": "R3",
+  "q": "Q2",
+  "kind": "simple",
+  "seed": 0,
+  "ok": true,
+  "answer": "The freezer has to stay at 0°F or below. If it stays above 5°F for more than 30 minutes, you need to call the quality lead immediately; if there's no answer, call the head of production. The freezer temperature must also be logged every 2 hours (section 25).",
+  "tokens": 663,
+  "n_search": 1,
+  "searches": [
+   "freezer temperature"
+  ],
+  "found": [
+   "23",
+   "25",
+   "35"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.1
+ },
+ {
+  "cond": "R3",
+  "q": "Q2",
+  "kind": "simple",
+  "seed": 1,
+  "ok": true,
+  "answer": "The freezer must be kept at 0°F or below and the temperature should be logged every 2 hours. If the temperature stays above 5°F for more than 30 minutes, you must call the quality lead immediately. If the quality lead doesn't answer, call the head of production (section 25).",
+  "tokens": 663,
+  "n_search": 1,
+  "searches": [
+   "freezer temperature"
+  ],
+  "found": [
+   "23",
+   "25",
+   "35"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.2
+ },
+ {
+  "cond": "R3",
+  "q": "Q2",
+  "kind": "simple",
+  "seed": 2,
+  "ok": true,
+  "answer": "The freezer must be kept at 0°F or below. It should be logged every 2 hours. If the temperature stays above 5°F for more than 30 minutes, you must call the quality lead immediately, and if they don't answer, call the head of production (Section 25).",
+  "tokens": 661,
+  "n_search": 1,
+  "searches": [
+   "freezer temperature"
+  ],
+  "found": [
+   "23",
+   "25",
+   "35"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.1
+ },
+ {
+  "cond": "R3",
+  "q": "Q3",
+  "kind": "simple",
+  "seed": 0,
+  "ok": true,
+  "answer": "The company covers job-related outside training up to $1,000 per year. You need to apply with form HR-260 and submit the certificate within 2 weeks of finishing. If you don't finish the supported course, you must pay the fee back (section 28).",
+  "tokens": 613,
+  "n_search": 1,
+  "searches": [
+   "job-related outside training coverage"
+  ],
+  "found": [
+   "27",
+   "28",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.1
+ },
+ {
+  "cond": "R3",
+  "q": "Q3",
+  "kind": "simple",
+  "seed": 1,
+  "ok": true,
+  "answer": "The company covers job-related outside training up to $1,000 per year. You need to apply with form HR-260 and submit the certificate within 2 weeks of finishing. If you don't finish the supported course, you must pay the fee back (section 28).",
+  "tokens": 633,
+  "n_search": 1,
+  "searches": [
+   "outside training coverage"
+  ],
+  "found": [
+   "27",
+   "28",
+   "32"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.2
+ },
+ {
+  "cond": "R3",
+  "q": "Q3",
+  "kind": "simple",
+  "seed": 2,
+  "ok": true,
+  "answer": "The company covers job-related outside training up to $1,000 per year. You need to apply with form HR-260 and submit the certificate within 2 weeks of finishing. If you don't complete the supported course, you must pay the fee back (section 28).",
+  "tokens": 613,
+  "n_search": 1,
+  "searches": [
+   "job-related outside training coverage"
+  ],
+  "found": [
+   "27",
+   "28",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.3
+ },
+ {
+  "cond": "R3",
+  "q": "Q4",
+  "kind": "simple",
+  "seed": 0,
+  "ok": true,
+  "answer": "The club subsidy is $10 per member per month for a club with 10 or more members (section 29).",
+  "tokens": 591,
+  "n_search": 1,
+  "searches": [
+   "club subsidy per person per month"
+  ],
+  "found": [
+   "29",
+   "32",
+   "33"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.8
+ },
+ {
+  "cond": "R3",
+  "q": "Q4",
+  "kind": "simple",
+  "seed": 1,
+  "ok": true,
+  "answer": "The club subsidy is $10 per member per month (section 29).",
+  "tokens": 582,
+  "n_search": 1,
+  "searches": [
+   "club subsidy per person per month"
+  ],
+  "found": [
+   "29",
+   "32",
+   "33"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.9
+ },
+ {
+  "cond": "R3",
+  "q": "Q4",
+  "kind": "simple",
+  "seed": 2,
+  "ok": true,
+  "answer": "The club subsidy is $10 per member per month for a club with 10 or more members (Section 29).",
+  "tokens": 567,
+  "n_search": 1,
+  "searches": [
+   "club subsidy"
+  ],
+  "found": [
+   "29",
+   "33",
+   "34"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.0
+ },
+ {
+  "cond": "R3",
+  "q": "Q5",
+  "kind": "code",
+  "seed": 0,
+  "ok": true,
+  "answer": "Form SEC-07 is used to register USB drives and other external storage devices with the security team. Registered devices are re-checked every year (Section 17).",
+  "tokens": 589,
+  "n_search": 1,
+  "searches": [
+   "form SEC-07"
+  ],
+  "found": [
+   "17",
+   "22",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.0
+ },
+ {
+  "cond": "R3",
+  "q": "Q5",
+  "kind": "code",
+  "seed": 1,
+  "ok": true,
+  "answer": "Form SEC-07 is used to register USB drives and other external storage devices with the security team. Registered devices are re-checked every year. Using an unregistered device can lead to warnings and HR referral (Section 17).",
+  "tokens": 602,
+  "n_search": 1,
+  "searches": [
+   "form SEC-07"
+  ],
+  "found": [
+   "17",
+   "22",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.9
+ },
+ {
+  "cond": "R3",
+  "q": "Q5",
+  "kind": "code",
+  "seed": 2,
+  "ok": true,
+  "answer": "Form SEC-07 is used to register USB drives and other external storage devices with the security team. Registered devices are re-checked every year (Section 17).",
+  "tokens": 589,
+  "n_search": 1,
+  "searches": [
+   "form SEC-07"
+  ],
+  "found": [
+   "17",
+   "22",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.9
+ },
+ {
+  "cond": "R3",
+  "q": "Q6",
+  "kind": "code",
+  "seed": 0,
+  "ok": true,
+  "answer": "You use form HR-204 to apply for life-event support payments (like your own wedding or death of a parent/parent-in-law/grandparent) with proof within 30 days, and also to request paid life-event leave for events such as your wedding, child's wedding, spouse giving birth, or death in the family (sections 12 and 13).",
+  "tokens": 671,
+  "n_search": 1,
+  "searches": [
+   "HR-204"
+  ],
+  "found": [
+   "12",
+   "13",
+   "17"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.1
+ },
+ {
+  "cond": "R3",
+  "q": "Q6",
+  "kind": "code",
+  "seed": 1,
+  "ok": false,
+  "answer": "I can't find information about form HR-204 in the handbook.",
+  "tokens": 560,
+  "n_search": 1,
+  "searches": [
+   "form HR-204"
+  ],
+  "found": [
+   "15",
+   "31",
+   "7"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.8
+ },
+ {
+  "cond": "R3",
+  "q": "Q6",
+  "kind": "code",
+  "seed": 2,
+  "ok": true,
+  "answer": "You use form HR-204 to apply for life-event support payments, such as your own wedding or the death of a parent or grandparent, and also to request paid life-event leave for events like your own wedding, child's wedding, or a spouse giving birth (sections 12 and 13).",
+  "tokens": 658,
+  "n_search": 1,
+  "searches": [
+   "HR-204"
+  ],
+  "found": [
+   "12",
+   "13",
+   "17"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.1
+ },
+ {
+  "cond": "R3",
+  "q": "Q7",
+  "kind": "code",
+  "seed": 0,
+  "ok": true,
+  "answer": "Form PU-310 is used to register a new vendor, including providing a tax ID form, a bank letter, and a food safety certificate for food ingredient vendors. No orders can be placed before registration with this form (Section 22).",
+  "tokens": 627,
+  "n_search": 1,
+  "searches": [
+   "PU-310"
+  ],
+  "found": [
+   "17",
+   "21",
+   "22"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.0
+ },
+ {
+  "cond": "R3",
+  "q": "Q7",
+  "kind": "code",
+  "seed": 1,
+  "ok": true,
+  "answer": "Form PU-310 is used for vendor registration. You need to submit it along with a tax ID form, a bank letter, and for food ingredient vendors only, a food safety certificate. No orders can be made before completing this registration (Section 22).",
+  "tokens": 631,
+  "n_search": 1,
+  "searches": [
+   "PU-310"
+  ],
+  "found": [
+   "17",
+   "21",
+   "22"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.2
+ },
+ {
+  "cond": "R3",
+  "q": "Q7",
+  "kind": "code",
+  "seed": 2,
+  "ok": true,
+  "answer": "Form PU-310 is used for vendor registration. It is required to register a new vendor along with a tax ID form, a bank letter, and for food ingredient vendors, a food safety certificate. No orders can be made before registration (Section 22).",
+  "tokens": 631,
+  "n_search": 1,
+  "searches": [
+   "PU-310"
+  ],
+  "found": [
+   "17",
+   "21",
+   "22"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.0
+ },
+ {
+  "cond": "R3",
+  "q": "Q8",
+  "kind": "code",
+  "seed": 0,
+  "ok": true,
+  "answer": "TR-120 travel expense form is due within 7 days of returning from the trip (section 7).",
+  "tokens": 586,
+  "n_search": 1,
+  "searches": [
+   "TR-120 due"
+  ],
+  "found": [
+   "11",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.8
+ },
+ {
+  "cond": "R3",
+  "q": "Q8",
+  "kind": "code",
+  "seed": 1,
+  "ok": true,
+  "answer": "TR-120, the travel expense form, is due within 7 days of returning from the trip (section 7).",
+  "tokens": 589,
+  "n_search": 1,
+  "searches": [
+   "TR-120 due"
+  ],
+  "found": [
+   "11",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 1.9
+ },
+ {
+  "cond": "R3",
+  "q": "Q8",
+  "kind": "code",
+  "seed": 2,
+  "ok": true,
+  "answer": "Form TR-120 for travel expenses is due within 7 days of returning from the trip. Late claims will be processed in the next month's payroll (section 7).",
+  "tokens": 598,
+  "n_search": 1,
+  "searches": [
+   "TR-120 due"
+  ],
+  "found": [
+   "11",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.1
+ },
+ {
+  "cond": "R3",
+  "q": "Q9",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": true,
+  "answer": "A Senior Associate is grade B. The hotel reimbursement limit per night is $70 for grade B. Since the trip is to New York, an expensive city, add $20 to the limit. So, the total hotel claim for one night can be up to $90. Anything above this must be paid by the employee (Sections 1 and 2).",
+  "tokens": 694,
+  "n_search": 1,
+  "searches": [
+   "hotel allowance Senior Associate New York"
+  ],
+  "found": [
+   "1",
+   "2",
+   "22"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.2
+ },
+ {
+  "cond": "R3",
+  "q": "Q9",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": true,
+  "answer": "A Senior Associate is grade B. The hotel limit for grade B is $70 per night. Since New York is one of the expensive cities, you add $20 to that limit. So, for one night at a hotel in New York, a Senior Associate can claim up to $90 (section 2 and 1).",
+  "tokens": 688,
+  "n_search": 1,
+  "searches": [
+   "hotel allowance Senior Associate New York"
+  ],
+  "found": [
+   "1",
+   "2",
+   "22"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.1
+ },
+ {
+  "cond": "R3",
+  "q": "Q9",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": true,
+  "answer": "A Senior Associate is grade B. The hotel night limit for grade B is $70, but for New York, an additional $20 is added, making it $90 per night. Anything above $90 must be paid by the employee (sections 2 and 1).",
+  "tokens": 689,
+  "n_search": 1,
+  "searches": [
+   "Senior Associate hotel night expense limit"
+  ],
+  "found": [
+   "1",
+   "2",
+   "35"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.1
+ },
+ {
+  "cond": "R3",
+  "q": "Q10",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": true,
+  "answer": "A Manager, being grade A, can spend up to $1,500 per month on the corporate card (section 8 and 1).",
+  "tokens": 607,
+  "n_search": 1,
+  "searches": [
+   "corporate card spending limit Manager"
+  ],
+  "found": [
+   "1",
+   "8",
+   "9"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.6
+ },
+ {
+  "cond": "R3",
+  "q": "Q10",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": false,
+  "answer": "A Manager with a grade S corporate card can spend up to $3,000 per month on the corporate card. Any single purchase over $300 requires the team lead's approval in advance (section 8).",
+  "tokens": 637,
+  "n_search": 1,
+  "searches": [
+   "Manager corporate card monthly limit"
+  ],
+  "found": [
+   "2",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 2.0
+ },
+ {
+  "cond": "R3",
+  "q": "Q10",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": false,
+  "answer": "A Manager who is grade S can spend up to $3,000 per month on the corporate card. Any single purchase over $300 requires the team lead's approval in advance (section 8).",
+  "tokens": 635,
+  "n_search": 1,
+  "searches": [
+   "Manager corporate card spending limit"
+  ],
+  "found": [
+   "2",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 2.3
+ },
+ {
+  "cond": "R3",
+  "q": "Q11",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": true,
+  "answer": "The hotel limit per night for a Senior Manager (grade A) on a trip to Dallas is $90. Dallas is not listed as an expensive city with additional charges, so the standard grade A limit applies (sections 2 and 1).",
+  "tokens": 659,
+  "n_search": 1,
+  "searches": [
+   "hotel limit Senior Manager Dallas"
+  ],
+  "found": [
+   "1",
+   "2",
+   "8"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.4
+ },
+ {
+  "cond": "R3",
+  "q": "Q11",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": true,
+  "answer": "A Senior Manager is grade A. The hotel limit per night for grade A employees is $90. For Dallas, there is no special additional amount mentioned. So the hotel limit for a Senior Manager on a trip to Dallas is $90 per night (sections 1 and 2).",
+  "tokens": 1091,
+  "n_search": 3,
+  "searches": [
+   "hotel limit Dallas",
+   "Senior Manager hotel limit",
+   "travel expense limits Senior Manager"
+  ],
+  "found": [
+   "1",
+   "2",
+   "35",
+   "7",
+   "8"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.7
+ },
+ {
+  "cond": "R3",
+  "q": "Q11",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": true,
+  "answer": "The hotel limit per night for a Senior Manager (grade A) on a trip to Dallas is $90. Dallas is not listed as an expensive city with an added cost, so the base grade A limit applies (sections 2 and 1).",
+  "tokens": 660,
+  "n_search": 1,
+  "searches": [
+   "hotel limit Senior Manager Dallas"
+  ],
+  "found": [
+   "1",
+   "2",
+   "8"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.0
+ },
+ {
+  "cond": "R3",
+  "q": "Q12",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": true,
+  "answer": "A Director is grade S. The hotel reimbursement limit in Honolulu for grade S is $120 plus an additional $20 for Honolulu, totaling $140 per night. For 2 nights, the total hotel claim can be up to $280 (2 x $140) (sections 1, 2).",
+  "tokens": 674,
+  "n_search": 1,
+  "searches": [
+   "hotel allowance Director"
+  ],
+  "found": [
+   "1",
+   "2",
+   "3"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.4
+ },
+ {
+  "cond": "R3",
+  "q": "Q12",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": true,
+  "answer": "A Director is grade S. The hotel reimbursement limit for grade S is $120 per night, plus an additional $20 per night for expensive cities like Honolulu. So the total hotel claim limit per night in Honolulu for a Director is $140. For 2 nights, they can claim up to $280 in total (sections 1, 2).",
+  "tokens": 1270,
+  "n_search": 2,
+  "searches": [
+   "hotel claim limit Director business trip",
+   "Director grade"
+  ],
+  "found": [
+   "1",
+   "2",
+   "3",
+   "6",
+   "8"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 3.2
+ },
+ {
+  "cond": "R3",
+  "q": "Q12",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": true,
+  "answer": "A Director is grade S, so their hotel limit per night is $120 plus an additional $20 for Honolulu, totaling $140 per night. For 2 nights, they can claim up to $280 in total (2 x $140) (Sections 1 and 2).",
+  "tokens": 678,
+  "n_search": 1,
+  "searches": [
+   "hotel limits director business trip"
+  ],
+  "found": [
+   "1",
+   "2",
+   "6"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.0
+ },
+ {
+  "cond": "R3",
+  "q": "Q13",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": true,
+  "answer": "A Specialist is grade B, so their monthly corporate card limit is $500. For any single purchase over $300, such as a $400 piece of equipment, they need their team lead's approval in advance (Sections 1 and 8).",
+  "tokens": 878,
+  "n_search": 2,
+  "searches": [
+   "corporate card limits by job title",
+   "corporate card purchase requirements equipment"
+  ],
+  "found": [
+   "1",
+   "8",
+   "9"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.4
+ },
+ {
+  "cond": "R3",
+  "q": "Q13",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": true,
+  "answer": "A Specialist is grade B, so their monthly corporate card limit is $500 (section 8 and 1). For a $400 piece of equipment, which is over $300, they will need their team lead's approval in advance to purchase it (section 8).",
+  "tokens": 889,
+  "n_search": 2,
+  "searches": [
+   "corporate card limit Specialist",
+   "buy equipment $400 Specialist"
+  ],
+  "found": [
+   "1",
+   "20",
+   "21",
+   "8",
+   "9"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 3.0
+ },
+ {
+  "cond": "R3",
+  "q": "Q13",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": true,
+  "answer": "A Specialist is grade B, so the monthly corporate card limit is $500. For any single purchase over $300, including a $400 piece of equipment, they need the team lead's approval in advance (sections 1, 8).",
+  "tokens": 878,
+  "n_search": 2,
+  "searches": [
+   "corporate card limit Specialist",
+   "equipment purchase approval Specialist"
+  ],
+  "found": [
+   "1",
+   "21",
+   "6",
+   "8",
+   "9"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.3
+ },
+ {
+  "cond": "R3",
+  "q": "Q14",
+  "kind": "two sections",
+  "seed": 0,
+  "ok": true,
+  "answer": "To buy $7,000 of supplies, you need at least 2 quotes (since it's over $1,000 but less than $10,000) and approval from the division head (since purchases from $5,000 up to $50,000 require their approval) (sections 20 and 21).",
+  "tokens": 666,
+  "n_search": 1,
+  "searches": [
+   "supplies purchase quotes approval"
+  ],
+  "found": [
+   "20",
+   "21",
+   "8"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.3
+ },
+ {
+  "cond": "R3",
+  "q": "Q14",
+  "kind": "two sections",
+  "seed": 1,
+  "ok": true,
+  "answer": "For buying $7,000 of supplies, you need at least 2 quotes (since purchases $1,000 or more require 2 quotes) and the approval must come from the division head (for purchases from $5,000 up to $50,000) (sections 20 and 21).",
+  "tokens": 667,
+  "n_search": 1,
+  "searches": [
+   "quotes supplies approval 7000"
+  ],
+  "found": [
+   "20",
+   "21",
+   "6"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.9
+ },
+ {
+  "cond": "R3",
+  "q": "Q14",
+  "kind": "two sections",
+  "seed": 2,
+  "ok": true,
+  "answer": "To buy $7,000 of supplies, you need at least 2 quotes (since purchases of $1,000 or more require at least 2 quotes). The approval for $7,000 purchases is by the division head (since $5,000 up to $50,000 require division head approval) (sections 20 and 21).",
+  "tokens": 675,
+  "n_search": 1,
+  "searches": [
+   "quotes approval supplies 7000"
+  ],
+  "found": [
+   "20",
+   "21",
+   "8"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.1
+ },
+ {
+  "cond": "R3",
+  "q": "Q15",
+  "kind": "revised",
+  "seed": 0,
+  "ok": false,
+  "answer": "You can claim a meal allowance as part of the travel per diem, which is $20 per day regardless of grade, including both departure and return days. For a same-day trip, the allowance is $10. This per diem is paid without the need for receipts (Section 3).",
+  "tokens": 651,
+  "n_search": 1,
+  "searches": [
+   "meal allowance business trip"
+  ],
+  "found": [
+   "2",
+   "3",
+   "6"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 2.0
+ },
+ {
+  "cond": "R3",
+  "q": "Q15",
+  "kind": "revised",
+  "seed": 1,
+  "ok": false,
+  "answer": "You can claim a meal allowance as part of the travel per diem of $20 per day on a business trip, regardless of grade. For same-day trips, the allowance is $10. The per diem covers both departure and return days and is paid without requiring receipts (section 3).",
+  "tokens": 651,
+  "n_search": 1,
+  "searches": [
+   "meal allowance business trip"
+  ],
+  "found": [
+   "2",
+   "3",
+   "6"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 2.1
+ },
+ {
+  "cond": "R3",
+  "q": "Q15",
+  "kind": "revised",
+  "seed": 2,
+  "ok": false,
+  "answer": "You can claim up to $10 per meal on a business trip, and you need to have a receipt for the meal (section 4).",
+  "tokens": 610,
+  "n_search": 1,
+  "searches": [
+   "meal claim business trip"
+  ],
+  "found": [
+   "2",
+   "4",
+   "6"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 2.6
+ },
+ {
+  "cond": "R3",
+  "q": "Q16",
+  "kind": "revised",
+  "seed": 0,
+  "ok": true,
+  "answer": "Office staff may work from home up to 2 days a week starting September 1, 2026, with approval required by 6 PM the day before (section 36, revised 2026-09-01).",
+  "tokens": 647,
+  "n_search": 1,
+  "searches": [
+   "work from home office staff"
+  ],
+  "found": [
+   "1",
+   "14",
+   "36"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.1
+ },
+ {
+  "cond": "R3",
+  "q": "Q16",
+  "kind": "revised",
+  "seed": 1,
+  "ok": true,
+  "answer": "Office staff may work from home up to 2 days a week starting September 1, 2026, with approval required by 6 PM the day before. This does not apply to floor staff (sections 36 and 14).",
+  "tokens": 649,
+  "n_search": 1,
+  "searches": [
+   "work from home office staff"
+  ],
+  "found": [
+   "1",
+   "14",
+   "36"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.5
+ },
+ {
+  "cond": "R3",
+  "q": "Q16",
+  "kind": "revised",
+  "seed": 2,
+  "ok": true,
+  "answer": "Office staff may work from home up to 2 days a week starting September 1, 2026, with approval by 6 PM the day before. Floor staff are excluded from this option (section 36).",
+  "tokens": 645,
+  "n_search": 1,
+  "searches": [
+   "work from home office staff"
+  ],
+  "found": [
+   "1",
+   "14",
+   "36"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.3
+ },
+ {
+  "cond": "R3",
+  "q": "Q17",
+  "kind": "revised",
+  "seed": 0,
+  "ok": false,
+  "answer": "You will be reimbursed up to $10 for your dinner on the business trip since travel meals are reimbursed up to $10 per meal with a receipt (section 4).",
+  "tokens": 639,
+  "n_search": 1,
+  "searches": [
+   "business trip meal reimbursement"
+  ],
+  "found": [
+   "2",
+   "4",
+   "6"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 2.0
+ },
+ {
+  "cond": "R3",
+  "q": "Q17",
+  "kind": "revised",
+  "seed": 1,
+  "ok": false,
+  "answer": "You get $20 per day as travel per diem for dinner on a business trip, regardless of your grade, and it does not require a receipt. Since you spent $13 and have a receipt, you still get the standard $20 per day (section 3).",
+  "tokens": 669,
+  "n_search": 1,
+  "searches": [
+   "business trip dinner reimbursement"
+  ],
+  "found": [
+   "2",
+   "3",
+   "6"
+  ],
+  "gold_found": false,
+  "grounded": false,
+  "sec": 1.9
+ },
+ {
+  "cond": "R3",
+  "q": "Q17",
+  "kind": "revised",
+  "seed": 2,
+  "ok": true,
+  "answer": "You can be reimbursed up to $12 for your dinner on the business trip starting from July 1, 2026. Since you spent $13 and have a receipt, you will get back $12 (4, 35).",
+  "tokens": 639,
+  "n_search": 1,
+  "searches": [
+   "meal expense reimbursement business trip"
+  ],
+  "found": [
+   "35",
+   "4",
+   "6"
+  ],
+  "gold_found": true,
+  "grounded": true,
+  "sec": 2.2
+ },
+ {
+  "cond": "R3",
+  "q": "Q18",
+  "kind": "not in handbook",
+  "seed": 0,
+  "ok": true,
+  "answer": "I can't find the hours for the company gym in the handbook.",
+  "tokens": 577,
+  "n_search": 1,
+  "searches": [
+   "company gym hours"
+  ],
+  "found": [
+   "15",
+   "30",
+   "34"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 2.0
+ },
+ {
+  "cond": "R3",
+  "q": "Q18",
+  "kind": "not in handbook",
+  "seed": 1,
+  "ok": true,
+  "answer": "I can't find the company gym hours in the handbook.",
+  "tokens": 575,
+  "n_search": 1,
+  "searches": [
+   "company gym hours"
+  ],
+  "found": [
+   "15",
+   "30",
+   "34"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.9
+ },
+ {
+  "cond": "R3",
+  "q": "Q18",
+  "kind": "not in handbook",
+  "seed": 2,
+  "ok": true,
+  "answer": "I can't find the hours for the company gym in the handbook sections I have.",
+  "tokens": 580,
+  "n_search": 1,
+  "searches": [
+   "company gym hours"
+  ],
+  "found": [
+   "15",
+   "30",
+   "34"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 2.1
+ },
+ {
+  "cond": "R3",
+  "q": "Q19",
+  "kind": "not in handbook",
+  "seed": 0,
+  "ok": true,
+  "answer": "I can't find the holiday bonus amount in the handbook.",
+  "tokens": 590,
+  "n_search": 1,
+  "searches": [
+   "holiday bonus"
+  ],
+  "found": [
+   "10",
+   "11",
+   "34"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.8
+ },
+ {
+  "cond": "R3",
+  "q": "Q19",
+  "kind": "not in handbook",
+  "seed": 1,
+  "ok": true,
+  "answer": "I can't find information about the holiday bonus in the handbook.",
+  "tokens": 591,
+  "n_search": 1,
+  "searches": [
+   "holiday bonus"
+  ],
+  "found": [
+   "10",
+   "11",
+   "34"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 2.0
+ },
+ {
+  "cond": "R3",
+  "q": "Q19",
+  "kind": "not in handbook",
+  "seed": 2,
+  "ok": true,
+  "answer": "I can't find information about the holiday bonus in the handbook sections provided.",
+  "tokens": 593,
+  "n_search": 1,
+  "searches": [
+   "holiday bonus"
+  ],
+  "found": [
+   "10",
+   "11",
+   "34"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.8
+ },
+ {
+  "cond": "R3",
+  "q": "Q20",
+  "kind": "not in handbook",
+  "seed": 0,
+  "ok": true,
+  "answer": "I can't find that in the handbook.",
+  "tokens": 604,
+  "n_search": 1,
+  "searches": [
+   "bring dog to work"
+  ],
+  "found": [
+   "14",
+   "32",
+   "36"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.9
+ },
+ {
+  "cond": "R3",
+  "q": "Q20",
+  "kind": "not in handbook",
+  "seed": 1,
+  "ok": true,
+  "answer": "I can't find any information in the handbook about bringing dogs to work.",
+  "tokens": 610,
+  "n_search": 1,
+  "searches": [
+   "bring dog to work"
+  ],
+  "found": [
+   "14",
+   "32",
+   "36"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.8
+ },
+ {
+  "cond": "R3",
+  "q": "Q20",
+  "kind": "not in handbook",
+  "seed": 2,
+  "ok": true,
+  "answer": "I can't find any information about bringing dogs to work in the handbook.",
+  "tokens": 610,
+  "n_search": 1,
+  "searches": [
+   "bring dog to work"
+  ],
+  "found": [
+   "14",
+   "32",
+   "36"
+  ],
+  "gold_found": null,
+  "grounded": true,
+  "sec": 1.7
+ }
+]

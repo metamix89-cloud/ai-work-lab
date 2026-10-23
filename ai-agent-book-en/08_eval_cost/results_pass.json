@@ -1,0 +1,3740 @@
+[
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4001",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I want to return the pizza. Changed my mind. Haven't opened it.",
+  "order": {
+   "order_id": "YT-4001",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-15",
+   "opened": "no"
+  },
+  "answer": "Your return for the Pepperoni Pizza 2-pack is approved. A refund of $9.90 after the $3.00 return fee will be processed.",
+  "tokens": 1373
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4001",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I want to return the pizza. Changed my mind. Haven't opened it.",
+  "order": {
+   "order_id": "YT-4001",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-15",
+   "opened": "no"
+  },
+  "answer": "Your return is approved. The refund amount after the $3.00 return fee is $9.90. You will see the refund shortly.",
+  "tokens": 1509
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4001",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I want to return the pizza. Changed my mind. Haven't opened it.",
+  "order": {
+   "order_id": "YT-4001",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-15",
+   "opened": "no"
+  },
+  "answer": "Your return for the Pepperoni Pizza 2-pack is approved. You will be refunded $9.90 after the $3.00 return fee. Let me know if you need anything else!",
+  "tokens": 1380
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4001",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I want to return the pizza. Changed my mind. Haven't opened it.",
+  "order": {
+   "order_id": "YT-4001",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-15",
+   "opened": "no"
+  },
+  "answer": "Your unopened pepperoni pizza 2-pack can be returned for change of mind. After deducting the $3.00 return fee, $9.90 has been refunded to you.",
+  "tokens": 1378
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4001",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I want to return the pizza. Changed my mind. Haven't opened it.",
+  "order": {
+   "order_id": "YT-4001",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-15",
+   "opened": "no"
+  },
+  "answer": "Your return is accepted. You will receive a refund of $9.90 after the $3.00 return fee deduction. Let me know if you need anything else!",
+  "tokens": 1516
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4002",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   9.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The pizza is unopened, but I just changed my mind and want to return it.",
+  "order": {
+   "order_id": "YT-4002",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-14",
+   "opened": "no"
+  },
+  "answer": "Your unopened frozen pizza is eligible for return as a change of mind. After deducting the $3.00 return fee, a refund of $9.90 has been issued.",
+  "tokens": 1380
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4002",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   9.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The pizza is unopened, but I just changed my mind and want to return it.",
+  "order": {
+   "order_id": "YT-4002",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-14",
+   "opened": "no"
+  },
+  "answer": "Your unopened frozen pizza can be returned for a change of mind. After subtracting the $3.00 return fee, $9.90 has been refunded to you.",
+  "tokens": 1378
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4002",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   9.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The pizza is unopened, but I just changed my mind and want to return it.",
+  "order": {
+   "order_id": "YT-4002",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-14",
+   "opened": "no"
+  },
+  "answer": "Your unopened frozen pizza is eligible for return because you are within the 7-day return window. A refund of $9.90 (after the $3.00 return fee) has been issued.",
+  "tokens": 1384
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4002",
+  "seed": 3,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   9.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The pizza is unopened, but I just changed my mind and want to return it.",
+  "order": {
+   "order_id": "YT-4002",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-14",
+   "opened": "no"
+  },
+  "answer": "Your unopened frozen pizza is eligible for return as a change of mind. A refund of $9.90 after the $3.00 return fee has been issued.",
+  "tokens": 1377
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4002",
+  "seed": 4,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   9.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The pizza is unopened, but I just changed my mind and want to return it.",
+  "order": {
+   "order_id": "YT-4002",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-14",
+   "opened": "no"
+  },
+  "answer": "Your unopened frozen pizza is eligible for return for change of mind. A refund of $9.90 will be issued after subtracting the $3.00 return fee.",
+  "tokens": 1378
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4003",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Haven't opened the burger patties. Just don't need them anymore, so returning them.",
+  "order": {
+   "order_id": "YT-4003",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "Your return for the unopened burger patties is accepted. A refund of $20.90 will be issued after deducting the $3.00 return fee. If you need further assistance, let me know!",
+  "tokens": 1560
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4003",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Haven't opened the burger patties. Just don't need them anymore, so returning them.",
+  "order": {
+   "order_id": "YT-4003",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "Refund of $20.90 has been processed for your unopened burger patties, deducting the $3.00 return fee for change of mind.",
+  "tokens": 1375
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4003",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Haven't opened the burger patties. Just don't need them anymore, so returning them.",
+  "order": {
+   "order_id": "YT-4003",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "Your return is approved. You will receive a refund of $20.90 after the $3.00 return fee.",
+  "tokens": 1522
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4003",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Haven't opened the burger patties. Just don't need them anymore, so returning them.",
+  "order": {
+   "order_id": "YT-4003",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "Your unopened handmade burger patties are eligible for return for change of mind. A refund of $20.90 after the $3.00 return fee has been processed.",
+  "tokens": 1379
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4003",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Haven't opened the burger patties. Just don't need them anymore, so returning them.",
+  "order": {
+   "order_id": "YT-4003",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "Your return is approved. A refund of $20.90 has been issued to you after the $3 return fee deduction.",
+  "tokens": 1499
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4004",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   20.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Burger patties are unopened. Can I return them for a change of mind?",
+  "order": {
+   "order_id": "YT-4004",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-18",
+   "opened": "no"
+  },
+  "answer": "The return for your unopened burger patties has been processed. You will receive a refund of $20.90 after the $3.00 return fee. Let me know if you need any further assistance.",
+  "tokens": 1527
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4004",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Burger patties are unopened. Can I return them for a change of mind?",
+  "order": {
+   "order_id": "YT-4004",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-18",
+   "opened": "no"
+  },
+  "answer": "Your refrigerated burger patties were delivered on 2026-10-18. The return window is 3 days including the delivery day. Today is 2026-10-21, so the return window has just expired. Unfortunately, they cannot be returned for a change of mind now.",
+  "tokens": 877
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4004",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   20.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Burger patties are unopened. Can I return them for a change of mind?",
+  "order": {
+   "order_id": "YT-4004",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-18",
+   "opened": "no"
+  },
+  "answer": "Your unopened burger patties are eligible for return. I have processed a refund of $20.90 after the $3.00 return fee.",
+  "tokens": 1511
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4004",
+  "seed": 3,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   20.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Burger patties are unopened. Can I return them for a change of mind?",
+  "order": {
+   "order_id": "YT-4004",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-18",
+   "opened": "no"
+  },
+  "answer": "Your return is approved for a refund of $20.90 after the $3.00 return fee. The amount will be refunded to your original payment method.",
+  "tokens": 1534
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4004",
+  "seed": 4,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   20.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Burger patties are unopened. Can I return them for a change of mind?",
+  "order": {
+   "order_id": "YT-4004",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-18",
+   "opened": "no"
+  },
+  "answer": "Your return for the unopened burger patties has been approved. You will receive a refund of $20.90 after the $3.00 return fee deduction.",
+  "tokens": 1512
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4005",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The BBQ sauce is unopened and I changed my mind. Please take it back.",
+  "order": {
+   "order_id": "YT-4005",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-08",
+   "opened": "no"
+  },
+  "answer": "Your BBQ sauce was delivered on 2026-10-08, so it's outside the 14-day return window for pantry items. Unfortunately, it cannot be returned for change of mind.",
+  "tokens": 856
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4005",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The BBQ sauce is unopened and I changed my mind. Please take it back.",
+  "order": {
+   "order_id": "YT-4005",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-08",
+   "opened": "no"
+  },
+  "answer": "Your BBQ sauce is in the pantry category, delivered on October 8th. Today's October 21st, which is past the 14-day return window for pantry items, so a change of mind return is not allowed.",
+  "tokens": 863
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4005",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The BBQ sauce is unopened and I changed my mind. Please take it back.",
+  "order": {
+   "order_id": "YT-4005",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-08",
+   "opened": "no"
+  },
+  "answer": "Your BBQ Sauce was delivered on 2026-10-08, and today's 2026-10-21. The pantry item return window is 14 days, so it's past the return window for change of mind. Return is not allowed.",
+  "tokens": 868
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4005",
+  "seed": 3,
+  "ok": false,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The BBQ sauce is unopened and I changed my mind. Please take it back.",
+  "order": {
+   "order_id": "YT-4005",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-08",
+   "opened": "no"
+  },
+  "answer": "The return window for pantry items is 14 days. Your order was delivered on 2026-10-08, which is beyond the return window for a change of mind. So, the return is not allowed due to being outside the window.",
+  "tokens": 868
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4005",
+  "seed": 4,
+  "ok": false,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The BBQ sauce is unopened and I changed my mind. Please take it back.",
+  "order": {
+   "order_id": "YT-4005",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-08",
+   "opened": "no"
+  },
+  "answer": "The BBQ sauce was delivered on 2026-10-08, and since today is 2026-10-21, it's beyond the 14-day pantry return window. Unfortunately, I can't accept the return for a change of mind.",
+  "tokens": 867
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4006",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "BBQ sauce is unopened; I'd like a change-of-mind return.",
+  "order": {
+   "order_id": "YT-4006",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-07",
+   "opened": "no"
+  },
+  "answer": "The BBQ sauce from order YT-4006 was delivered on 2026-10-07, which is past the 14-day return window for pantry items. Unfortunately, the change-of-mind return is not allowed because it's outside the return period.",
+  "tokens": 866
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4006",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "BBQ sauce is unopened; I'd like a change-of-mind return.",
+  "order": {
+   "order_id": "YT-4006",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-07",
+   "opened": "no"
+  },
+  "answer": "The BBQ sauce was delivered on 2026-10-07, which is beyond the 14-day pantry return window (today is 2026-10-21). Unfortunately, a change-of-mind return is not allowed. Let me know if there's a quality issue.",
+  "tokens": 870
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4006",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "BBQ sauce is unopened; I'd like a change-of-mind return.",
+  "order": {
+   "order_id": "YT-4006",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-07",
+   "opened": "no"
+  },
+  "answer": "Your pantry item BBQ Sauce was delivered on 2026-10-07, so it is outside the 14-day return window for change of mind returns. Unfortunately, I cannot accept the return for change of mind at this time.",
+  "tokens": 861
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4006",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "BBQ sauce is unopened; I'd like a change-of-mind return.",
+  "order": {
+   "order_id": "YT-4006",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-07",
+   "opened": "no"
+  },
+  "answer": "Your BBQ sauce was delivered on 2026-10-07 and is pantry category. The return window of 14 days has passed, so a change-of-mind return isn't allowed. If there's any quality issue, I can help with that.",
+  "tokens": 864
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4006",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "BBQ sauce is unopened; I'd like a change-of-mind return.",
+  "order": {
+   "order_id": "YT-4006",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-07",
+   "opened": "no"
+  },
+  "answer": "The BBQ sauce was delivered on 2026-10-07, and today's date is 2026-10-21. The return window for pantry items is 14 days, today is day 15, so the change-of-mind return is not allowed due to being outside the return window.",
+  "tokens": 875
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4007",
+  "seed": 0,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   6.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I tried the cola and don't like the taste. Refund please.",
+  "order": {
+   "order_id": "YT-4007",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-10-17",
+   "opened": "yes"
+  },
+  "answer": "Refund of $6.80 has been processed for the opened cola due to change of mind. Let me know if you need anything else.",
+  "tokens": 1485
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4007",
+  "seed": 1,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   6.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I tried the cola and don't like the taste. Refund please.",
+  "order": {
+   "order_id": "YT-4007",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-10-17",
+   "opened": "yes"
+  },
+  "answer": "Refund of $6.80 has been processed for your opened cola 12-pack due to change of mind. The $3 return fee was deducted.",
+  "tokens": 1495
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4007",
+  "seed": 2,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   6.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I tried the cola and don't like the taste. Refund please.",
+  "order": {
+   "order_id": "YT-4007",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-10-17",
+   "opened": "yes"
+  },
+  "answer": "I've processed a refund of $6.80 for your Cola 12-pack due to change of mind, after deducting the $3.00 return fee.",
+  "tokens": 1360
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4007",
+  "seed": 3,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   6.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I tried the cola and don't like the taste. Refund please.",
+  "order": {
+   "order_id": "YT-4007",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-10-17",
+   "opened": "yes"
+  },
+  "answer": "Refund of $6.80 processed for change of mind on the opened Cola 12-pack from order YT-4007.",
+  "tokens": 1354
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4007",
+  "seed": 4,
+  "ok": false,
+  "wrong_money": true,
+  "refunds": [
+   6.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I tried the cola and don't like the taste. Refund please.",
+  "order": {
+   "order_id": "YT-4007",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-10-17",
+   "opened": "yes"
+  },
+  "answer": "Your refund of $6.80 after the $3.00 return fee has been processed for the cola 12-pack. Let us know if you need anything else!",
+  "tokens": 1513
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4008",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The cola tastes flat and smells off. I think it's gone bad. Refund please.",
+  "order": {
+   "order_id": "YT-4008",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-09-30",
+   "opened": "yes"
+  },
+  "answer": "A full refund for your cola 12-pack has been issued due to the quality issue. Sorry for the inconvenience! Is there anything else I can assist with?",
+  "tokens": 1485
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4008",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The cola tastes flat and smells off. I think it's gone bad. Refund please.",
+  "order": {
+   "order_id": "YT-4008",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-09-30",
+   "opened": "yes"
+  },
+  "answer": "I have processed a full refund for the Cola 12-pack due to the quality issue you reported. You should see the amount back on your payment method shortly. Sorry for the inconvenience!",
+  "tokens": 1375
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4008",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The cola tastes flat and smells off. I think it's gone bad. Refund please.",
+  "order": {
+   "order_id": "YT-4008",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-09-30",
+   "opened": "yes"
+  },
+  "answer": "Your opened cola 12-pack is refunded in full due to the quality issue. You should see the refund soon.",
+  "tokens": 1361
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4008",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The cola tastes flat and smells off. I think it's gone bad. Refund please.",
+  "order": {
+   "order_id": "YT-4008",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-09-30",
+   "opened": "yes"
+  },
+  "answer": "Your cola is confirmed to be spoiled, so you get a full refund of $9.80. It should be back in your account soon.",
+  "tokens": 1367
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4008",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The cola tastes flat and smells off. I think it's gone bad. Refund please.",
+  "order": {
+   "order_id": "YT-4008",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-09-30",
+   "opened": "yes"
+  },
+  "answer": "Your opened cola 12-pack is refunded in full due to quality issue. The amount of $9.80 will be credited back to you.",
+  "tokens": 1367
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4009",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The person I sent the gift basket to doesn't need it. It's unopened. Please return it.",
+  "order": {
+   "order_id": "YT-4009",
+   "product": "Holiday Gift Basket",
+   "category": "pantry",
+   "amount_paid": 68.0,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "The order is eligible for return as it's unopened pantry item, but since the amount paid is over $50.00, I have escalated the request for team lead approval. You'll be updated soon.",
+  "tokens": 1392
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4009",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The person I sent the gift basket to doesn't need it. It's unopened. Please return it.",
+  "order": {
+   "order_id": "YT-4009",
+   "product": "Holiday Gift Basket",
+   "category": "pantry",
+   "amount_paid": 68.0,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "The return request for the unopened gift basket is sent to the team lead for approval since the amount paid is over $50. You will be notified once it's approved.",
+  "tokens": 1385
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4009",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The person I sent the gift basket to doesn't need it. It's unopened. Please return it.",
+  "order": {
+   "order_id": "YT-4009",
+   "product": "Holiday Gift Basket",
+   "category": "pantry",
+   "amount_paid": 68.0,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "The return for the unopened Holiday Gift Basket due to change of mind requires team lead approval because the amount paid is over $50. I have requested approval and will update you once it's granted.",
+  "tokens": 1396
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4009",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The person I sent the gift basket to doesn't need it. It's unopened. Please return it.",
+  "order": {
+   "order_id": "YT-4009",
+   "product": "Holiday Gift Basket",
+   "category": "pantry",
+   "amount_paid": 68.0,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "The return request for the unopened Holiday Gift Basket is escalated to the team lead for approval due to the amount paid being over $50. You will be informed once there's a decision.",
+  "tokens": 1393
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4009",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The person I sent the gift basket to doesn't need it. It's unopened. Please return it.",
+  "order": {
+   "order_id": "YT-4009",
+   "product": "Holiday Gift Basket",
+   "category": "pantry",
+   "amount_paid": 68.0,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "The unopened gift basket is within the 14-day return window for pantry items. Since the amount paid is over $50, I have escalated this return for team lead approval. You will be informed once it's approved.",
+  "tokens": 1392
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4010",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The steaks look discolored and smell strange. Please refund me.",
+  "order": {
+   "order_id": "YT-4010",
+   "product": "Premium Steak Gift Box",
+   "category": "frozen",
+   "amount_paid": 89.0,
+   "delivered": "2026-10-20",
+   "opened": "yes"
+  },
+  "answer": "Your request for a refund due to the quality issue with the steaks has been escalated to our team lead for approval. You will hear back from us soon.",
+  "tokens": 1384
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4010",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The steaks look discolored and smell strange. Please refund me.",
+  "order": {
+   "order_id": "YT-4010",
+   "product": "Premium Steak Gift Box",
+   "category": "frozen",
+   "amount_paid": 89.0,
+   "delivered": "2026-10-20",
+   "opened": "yes"
+  },
+  "answer": "Your opened frozen steaks with the described quality issue qualify for a full refund. Since your order amount is over $50, I've escalated this for team lead approval. You'll hear from us soon.",
+  "tokens": 1373
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4010",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The steaks look discolored and smell strange. Please refund me.",
+  "order": {
+   "order_id": "YT-4010",
+   "product": "Premium Steak Gift Box",
+   "category": "frozen",
+   "amount_paid": 89.0,
+   "delivered": "2026-10-20",
+   "opened": "yes"
+  },
+  "answer": "Your opened frozen steaks showing discoloration and smell issues qualify for a full refund due to a quality issue. Since the amount paid is $89.00, I have escalated this for team lead approval. You will be updated shortly.",
+  "tokens": 1399
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4010",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The steaks look discolored and smell strange. Please refund me.",
+  "order": {
+   "order_id": "YT-4010",
+   "product": "Premium Steak Gift Box",
+   "category": "frozen",
+   "amount_paid": 89.0,
+   "delivered": "2026-10-20",
+   "opened": "yes"
+  },
+  "answer": "Your order YT-4010 has a quality issue with the steaks, and since the amount paid is over $50, I've escalated it for team lead approval for a full refund. You'll hear back soon.",
+  "tokens": 1387
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4010",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The steaks look discolored and smell strange. Please refund me.",
+  "order": {
+   "order_id": "YT-4010",
+   "product": "Premium Steak Gift Box",
+   "category": "frozen",
+   "amount_paid": 89.0,
+   "delivered": "2026-10-20",
+   "opened": "yes"
+  },
+  "answer": "The steaks have a quality issue and you opened them. Since the amount paid is over $50, I have escalated this for team lead approval for a full refund. You will hear back soon.",
+  "tokens": 1402
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4011",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I haven't opened the nuggets. Returning them, changed my mind.",
+  "order": {
+   "order_id": "YT-4011",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-18",
+   "opened": "yes"
+  },
+  "answer": "Your Chicken Nuggets were delivered on 2026-10-18 and are frozen. The return window is 7 days from delivery (until 2026-10-24), so the return is allowed for change of mind. However, the nuggets are marked as opened, and for change of mind, items must be unopened.\n\nCould you please confirm if the nuggets are truly unopened for this return?",
+  "tokens": 891
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4011",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I haven't opened the nuggets. Returning them, changed my mind.",
+  "order": {
+   "order_id": "YT-4011",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-18",
+   "opened": "yes"
+  },
+  "answer": "The nuggets are frozen and delivered on 2026-10-18. Today is 2026-10-21, the return window of 7 days is still open. However, the item is marked as opened, and for change of mind, only unopened items can be returned. So, return for change of mind is not allowed because the item is opened.",
+  "tokens": 885
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4011",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I haven't opened the nuggets. Returning them, changed my mind.",
+  "order": {
+   "order_id": "YT-4011",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-18",
+   "opened": "yes"
+  },
+  "answer": "The nuggets were delivered on 2026-10-18 and are frozen, so the return window is until 2026-10-24, which is still valid. However, you said you haven't opened them but the order shows they were opened. Since it's a change of mind return and the items are opened, I can't accept the return.",
+  "tokens": 881
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4011",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I haven't opened the nuggets. Returning them, changed my mind.",
+  "order": {
+   "order_id": "YT-4011",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-18",
+   "opened": "yes"
+  },
+  "answer": "Your order of frozen chicken nuggets was delivered on 2026-10-18 and is opened, so it can only be returned for a quality issue. Since you changed your mind, the return is not allowed.",
+  "tokens": 854
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4011",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I haven't opened the nuggets. Returning them, changed my mind.",
+  "order": {
+   "order_id": "YT-4011",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-18",
+   "opened": "yes"
+  },
+  "answer": "The nuggets were delivered on 2026-10-18, making today the 4th day in the frozen product return window (7 days). However, the order shows as opened, and returns for change of mind are allowed only if unopened. Since it is opened, a return for change of mind is not allowed. If there is a quality issue, please specify.",
+  "tokens": 886
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4012",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I only got the pizza two days ago. Change-of-mind return, never opened.",
+  "order": {
+   "order_id": "YT-4012",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-10",
+   "opened": "no"
+  },
+  "answer": "The pizza was delivered on 2026-10-10 but today is 2026-10-21, so it's past the 7-day return window for frozen items. Unfortunately, the change-of-mind return is not allowed.",
+  "tokens": 871
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4012",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I only got the pizza two days ago. Change-of-mind return, never opened.",
+  "order": {
+   "order_id": "YT-4012",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-10",
+   "opened": "no"
+  },
+  "answer": "Your frozen pizza was delivered on 2026-10-10, which is beyond the 7-day return window for frozen items. So, I'm sorry, but a change-of-mind return is not possible now.",
+  "tokens": 867
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4012",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I only got the pizza two days ago. Change-of-mind return, never opened.",
+  "order": {
+   "order_id": "YT-4012",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-10",
+   "opened": "no"
+  },
+  "answer": "Your order YT-4012 was delivered on 2026-10-10, which is 12 days ago. The return window for frozen items is 7 days, so the change-of-mind return is unfortunately not allowed.",
+  "tokens": 871
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4012",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I only got the pizza two days ago. Change-of-mind return, never opened.",
+  "order": {
+   "order_id": "YT-4012",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-10",
+   "opened": "no"
+  },
+  "answer": "Your order was delivered on 2026-10-10, which is past the 7-day return window for frozen items. Unfortunately, the change-of-mind return is not allowed as the return window has expired.",
+  "tokens": 867
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4012",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I only got the pizza two days ago. Change-of-mind return, never opened.",
+  "order": {
+   "order_id": "YT-4012",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-10",
+   "opened": "no"
+  },
+  "answer": "Your pizza was delivered on 2026-10-10, which is beyond the 7-day return window for frozen items. Unfortunately, change-of-mind return is not allowed now.",
+  "tokens": 861
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4013",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I found a piece of plastic in the nuggets. Please refund me.",
+  "order": {
+   "order_id": "YT-4013",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-21",
+   "opened": "yes"
+  },
+  "answer": "I have processed a full refund for your order YT-4013 due to the foreign object found in the nuggets. Let me know if you need any further help.",
+  "tokens": 1363
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4013",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I found a piece of plastic in the nuggets. Please refund me.",
+  "order": {
+   "order_id": "YT-4013",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-21",
+   "opened": "yes"
+  },
+  "answer": "A full refund of $15.90 has been processed due to the foreign object found in the nuggets. Sorry for the inconvenience.",
+  "tokens": 1355
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4013",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I found a piece of plastic in the nuggets. Please refund me.",
+  "order": {
+   "order_id": "YT-4013",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-21",
+   "opened": "yes"
+  },
+  "answer": "I have processed a full refund of $15.90 for the quality issue with the chicken nuggets. Sorry for the inconvenience.",
+  "tokens": 1354
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4013",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I found a piece of plastic in the nuggets. Please refund me.",
+  "order": {
+   "order_id": "YT-4013",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-21",
+   "opened": "yes"
+  },
+  "answer": "I have processed a full refund for the chicken nuggets due to the quality issue with a foreign object. Sorry for the inconvenience.",
+  "tokens": 1354
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4013",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I found a piece of plastic in the nuggets. Please refund me.",
+  "order": {
+   "order_id": "YT-4013",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-21",
+   "opened": "yes"
+  },
+  "answer": "You will get a full refund of $15.90 for the plastic found in the nuggets. Sorry for the inconvenience!",
+  "tokens": 1353
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4014",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Mac & cheese is unopened and I changed my mind.",
+  "order": {
+   "order_id": "YT-4014",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 6.9,
+   "delivered": "2026-10-16",
+   "opened": "no"
+  },
+  "answer": "Your unopened Mac & Cheese Bake return is accepted for change of mind. $3.90 refunded after $3 return fee.",
+  "tokens": 1345
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4014",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Mac & cheese is unopened and I changed my mind.",
+  "order": {
+   "order_id": "YT-4014",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 6.9,
+   "delivered": "2026-10-16",
+   "opened": "no"
+  },
+  "answer": "Your unopened Mac & Cheese Bake is eligible for return for change of mind. A refund of $3.90 after the $3.00 return fee has been processed.",
+  "tokens": 1354
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4014",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Mac & cheese is unopened and I changed my mind.",
+  "order": {
+   "order_id": "YT-4014",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 6.9,
+   "delivered": "2026-10-16",
+   "opened": "no"
+  },
+  "answer": "Your unopened Mac & Cheese Bake return for change of mind is accepted. A refund of $3.90 (amount paid minus $3.00 return fee) has been processed.",
+  "tokens": 1356
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4014",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Mac & cheese is unopened and I changed my mind.",
+  "order": {
+   "order_id": "YT-4014",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 6.9,
+   "delivered": "2026-10-16",
+   "opened": "no"
+  },
+  "answer": "Your return for the unopened Mac & Cheese Bake due to change of mind is accepted. You will be refunded $3.90 after a $3.00 return fee.",
+  "tokens": 1354
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4014",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Mac & cheese is unopened and I changed my mind.",
+  "order": {
+   "order_id": "YT-4014",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 6.9,
+   "delivered": "2026-10-16",
+   "opened": "no"
+  },
+  "answer": "Your refund of $3.90 (after $3.00 return fee) for the unopened Mac & Cheese Bake has been processed.",
+  "tokens": 1347
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4015",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   0.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The hummus is unopened but I don't need it anymore. Returning it.",
+  "order": {
+   "order_id": "YT-4015",
+   "product": "Hummus 2-pack",
+   "category": "refrigerated",
+   "amount_paid": 3.8,
+   "delivered": "2026-10-20",
+   "opened": "no"
+  },
+  "answer": "Your unopened hummus was delivered on 2026-10-20 and is refrigerated, so the return window is 3 days. Today is day 2, so return is allowed. After subtracting the $3.00 return fee, a refund of $0.80 has been issued.",
+  "tokens": 1398
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4015",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   0.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The hummus is unopened but I don't need it anymore. Returning it.",
+  "order": {
+   "order_id": "YT-4015",
+   "product": "Hummus 2-pack",
+   "category": "refrigerated",
+   "amount_paid": 3.8,
+   "delivered": "2026-10-20",
+   "opened": "no"
+  },
+  "answer": "The return is accepted. A refund of $0.80 (amount paid minus return fee) will be issued for the unopened hummus.",
+  "tokens": 1366
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4015",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   0.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The hummus is unopened but I don't need it anymore. Returning it.",
+  "order": {
+   "order_id": "YT-4015",
+   "product": "Hummus 2-pack",
+   "category": "refrigerated",
+   "amount_paid": 3.8,
+   "delivered": "2026-10-20",
+   "opened": "no"
+  },
+  "answer": "Your unopened refrigerated hummus is eligible for return. After subtracting the $3.00 return fee, you will be refunded $0.80. The refund has been processed.",
+  "tokens": 1374
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4015",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   0.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The hummus is unopened but I don't need it anymore. Returning it.",
+  "order": {
+   "order_id": "YT-4015",
+   "product": "Hummus 2-pack",
+   "category": "refrigerated",
+   "amount_paid": 3.8,
+   "delivered": "2026-10-20",
+   "opened": "no"
+  },
+  "answer": "Your unopened refrigerated hummus was delivered on 2026-10-20, within the 3-day return window. A refund of $0.80 after the $3.00 return fee has been issued.",
+  "tokens": 1381
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4015",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   0.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The hummus is unopened but I don't need it anymore. Returning it.",
+  "order": {
+   "order_id": "YT-4015",
+   "product": "Hummus 2-pack",
+   "category": "refrigerated",
+   "amount_paid": 3.8,
+   "delivered": "2026-10-20",
+   "opened": "no"
+  },
+  "answer": "Your order YT-4015 for the unopened hummus is eligible for return. You will be refunded $0.80 after the $3.00 return fee deduction.",
+  "tokens": 1373
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4016",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I tried the mac & cheese and it smells sour. Please refund me.",
+  "order": {
+   "order_id": "YT-4016",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-15",
+   "opened": "yes"
+  },
+  "answer": "Your opened mac & cheese smells sour, so I've refunded you the full amount for the quality issue. Let me know if you need anything else.",
+  "tokens": 1359
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4016",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I tried the mac & cheese and it smells sour. Please refund me.",
+  "order": {
+   "order_id": "YT-4016",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-15",
+   "opened": "yes"
+  },
+  "answer": "Your full refund of $15.90 for the Mac & Cheese Bake has been processed due to the quality issue. Sorry for the inconvenience!",
+  "tokens": 1358
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4016",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I tried the mac & cheese and it smells sour. Please refund me.",
+  "order": {
+   "order_id": "YT-4016",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-15",
+   "opened": "yes"
+  },
+  "answer": "Your Mac & Cheese Bake was refunded in full due to the quality issue. Sorry for the inconvenience.",
+  "tokens": 1350
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4016",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I tried the mac & cheese and it smells sour. Please refund me.",
+  "order": {
+   "order_id": "YT-4016",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-15",
+   "opened": "yes"
+  },
+  "answer": "Your opened mac & cheese is spoiled, so you get a full refund of $15.90. The refund has been processed.",
+  "tokens": 1356
+ },
+ {
+  "exp": "pass",
+  "cond": "PROMPT",
+  "case": "YT-4016",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I tried the mac & cheese and it smells sour. Please refund me.",
+  "order": {
+   "order_id": "YT-4016",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-15",
+   "opened": "yes"
+  },
+  "answer": "I've processed a full refund for your Mac & Cheese Bake due to the quality issue. You should see the amount returned shortly. Sorry for the inconvenience!",
+  "tokens": 1360
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4001",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I want to return the pizza. Changed my mind. Haven't opened it.",
+  "order": {
+   "order_id": "YT-4001",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-15",
+   "opened": "no"
+  },
+  "answer": "Your unopened frozen pizza from order YT-4001 has been returned for a change of mind. A refund of $9.90 has been processed after the $3.00 return fee.",
+  "tokens": 1870
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4001",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I want to return the pizza. Changed my mind. Haven't opened it.",
+  "order": {
+   "order_id": "YT-4001",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-15",
+   "opened": "no"
+  },
+  "answer": "Your unopened frozen pizza is within the 7-day return window. I've processed your refund of $9.90 after the $3.00 return fee.",
+  "tokens": 1862
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4001",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I want to return the pizza. Changed my mind. Haven't opened it.",
+  "order": {
+   "order_id": "YT-4001",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-15",
+   "opened": "no"
+  },
+  "answer": "Your unopened frozen pizza can be returned for change of mind. A refund of $9.90 after $3.00 return fee has been issued.",
+  "tokens": 1861
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4001",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I want to return the pizza. Changed my mind. Haven't opened it.",
+  "order": {
+   "order_id": "YT-4001",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-15",
+   "opened": "no"
+  },
+  "answer": "Your unopened frozen Pepperoni Pizza 2-pack is eligible for return due to change of mind. $9.90 has been refunded after the $3.00 return fee.",
+  "tokens": 1866
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4001",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I want to return the pizza. Changed my mind. Haven't opened it.",
+  "order": {
+   "order_id": "YT-4001",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-15",
+   "opened": "no"
+  },
+  "answer": "Your unopened frozen pizza is eligible for return within 7 days from delivery. I've processed a refund of $9.90 after deducting the $3.00 return fee for change of mind.",
+  "tokens": 1870
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4002",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [
+   "frozen return window of 7 days has passed (today is day 8)"
+  ],
+  "customer": "The pizza is unopened, but I just changed my mind and want to return it.",
+  "order": {
+   "order_id": "YT-4002",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-14",
+   "opened": "no"
+  },
+  "answer": "The return window for frozen items is 7 days, and today is day 8 since delivery, so the return is not allowed for change of mind.",
+  "tokens": 1878
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4002",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [
+   "frozen return window of 7 days has passed (today is day 8)"
+  ],
+  "customer": "The pizza is unopened, but I just changed my mind and want to return it.",
+  "order": {
+   "order_id": "YT-4002",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-14",
+   "opened": "no"
+  },
+  "answer": "The return window for frozen items is 7 days, and today is day 8 since delivery, so the return for change of mind is not allowed.",
+  "tokens": 1878
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4002",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [
+   "frozen return window of 7 days has passed (today is day 8)"
+  ],
+  "customer": "The pizza is unopened, but I just changed my mind and want to return it.",
+  "order": {
+   "order_id": "YT-4002",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-14",
+   "opened": "no"
+  },
+  "answer": "The return window for frozen items is 7 days and today is day 8 since delivery, so the return is not allowed for change of mind on this unopened pizza.",
+  "tokens": 1881
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4002",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [
+   "frozen return window of 7 days has passed (today is day 8)"
+  ],
+  "customer": "The pizza is unopened, but I just changed my mind and want to return it.",
+  "order": {
+   "order_id": "YT-4002",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-14",
+   "opened": "no"
+  },
+  "answer": "The return window for frozen items is 7 days, and today is day 8 since delivery. The return for change of mind cannot be accepted.",
+  "tokens": 1877
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4002",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [
+   "frozen return window of 7 days has passed (today is day 8)"
+  ],
+  "customer": "The pizza is unopened, but I just changed my mind and want to return it.",
+  "order": {
+   "order_id": "YT-4002",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-14",
+   "opened": "no"
+  },
+  "answer": "The return window for your frozen pizza is 7 days, and today is day 8 since delivery, so it is past the return window for change of mind returns. I cannot process a return for it.",
+  "tokens": 1889
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4003",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Haven't opened the burger patties. Just don't need them anymore, so returning them.",
+  "order": {
+   "order_id": "YT-4003",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "The burger patties can be returned within the refrigerated 3-day window. Your refund of $20.90 after the $3 return fee has been processed.",
+  "tokens": 1869
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4003",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Haven't opened the burger patties. Just don't need them anymore, so returning them.",
+  "order": {
+   "order_id": "YT-4003",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "Your unopened burger patties are eligible for return within the refrigerated 3-day window. A refund of $20.90 after the $3.00 return fee has been processed.",
+  "tokens": 1873
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4003",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Haven't opened the burger patties. Just don't need them anymore, so returning them.",
+  "order": {
+   "order_id": "YT-4003",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "The return is approved. You will get a refund of $20.90 after the $3.00 return fee deduction.",
+  "tokens": 1862
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4003",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Haven't opened the burger patties. Just don't need them anymore, so returning them.",
+  "order": {
+   "order_id": "YT-4003",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "Your unopened handmade burger patties are eligible for return. I've processed your refund of $20.90 after the $3.00 return fee.",
+  "tokens": 1866
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4003",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   20.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Haven't opened the burger patties. Just don't need them anymore, so returning them.",
+  "order": {
+   "order_id": "YT-4003",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "I have processed your return for the unopened burger patties. A refund of $20.90, minus the $3.00 return fee, has been issued.",
+  "tokens": 1870
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4004",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [
+   "refrigerated return window of 3 days has passed (today is day 4)"
+  ],
+  "customer": "Burger patties are unopened. Can I return them for a change of mind?",
+  "order": {
+   "order_id": "YT-4004",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-18",
+   "opened": "no"
+  },
+  "answer": "The return window for refrigerated items is 3 days, and today is day 4 since delivery. Unfortunately, you cannot return the burger patties for a change of mind.",
+  "tokens": 1880
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4004",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Burger patties are unopened. Can I return them for a change of mind?",
+  "order": {
+   "order_id": "YT-4004",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-18",
+   "opened": "no"
+  },
+  "answer": "Your refrigerated handmade burger patties were delivered on 2026-10-18. Today is day 4 since delivery, which is outside the 3-day return window for refrigerated items. Therefore, a return for change of mind is not allowed.",
+  "tokens": 1172
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4004",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [
+   "refrigerated return window of 3 days has passed (today is day 4)"
+  ],
+  "customer": "Burger patties are unopened. Can I return them for a change of mind?",
+  "order": {
+   "order_id": "YT-4004",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-18",
+   "opened": "no"
+  },
+  "answer": "The refrigerated burger patties were delivered on 2026-10-18, and today is day 4 after delivery. The return window for refrigerated items is 3 days, so the return for change of mind is not allowed.",
+  "tokens": 1892
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4004",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [
+   "refrigerated return window of 3 days has passed (today is day 4)"
+  ],
+  "customer": "Burger patties are unopened. Can I return them for a change of mind?",
+  "order": {
+   "order_id": "YT-4004",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-18",
+   "opened": "no"
+  },
+  "answer": "The return window for refrigerated items is 3 days, and today is day 4 since delivery, so the return for change of mind is not allowed.",
+  "tokens": 1876
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4004",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [
+   "refrigerated return window of 3 days has passed (today is day 4)"
+  ],
+  "customer": "Burger patties are unopened. Can I return them for a change of mind?",
+  "order": {
+   "order_id": "YT-4004",
+   "product": "Handmade Burger Patties",
+   "category": "refrigerated",
+   "amount_paid": 23.9,
+   "delivered": "2026-10-18",
+   "opened": "no"
+  },
+  "answer": "The refrigerated burger patties were delivered on 2026-10-18, so today is day 4. Returns for change of mind in refrigerated category must be within 3 days, so the return window has passed and a return is not allowed.",
+  "tokens": 1896
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4005",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   5.5
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The BBQ sauce is unopened and I changed my mind. Please take it back.",
+  "order": {
+   "order_id": "YT-4005",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-08",
+   "opened": "no"
+  },
+  "answer": "Your return of the unopened BBQ sauce for a change of mind is accepted. You will be refunded $5.50 after the $3.00 return fee.",
+  "tokens": 1861
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4005",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   5.5
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The BBQ sauce is unopened and I changed my mind. Please take it back.",
+  "order": {
+   "order_id": "YT-4005",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-08",
+   "opened": "no"
+  },
+  "answer": "The return for the unopened BBQ Sauce has been accepted for change of mind. You will receive a refund of $5.50 after the $3.00 return fee.",
+  "tokens": 1863
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4005",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   5.5
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The BBQ sauce is unopened and I changed my mind. Please take it back.",
+  "order": {
+   "order_id": "YT-4005",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-08",
+   "opened": "no"
+  },
+  "answer": "Your return for the unopened BBQ sauce has been processed. You will receive a refund of $5.50 after the $3.00 return fee. If you need further assistance, let me know.",
+  "tokens": 1869
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4005",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   5.5
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The BBQ sauce is unopened and I changed my mind. Please take it back.",
+  "order": {
+   "order_id": "YT-4005",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-08",
+   "opened": "no"
+  },
+  "answer": "The BBQ sauce return is accepted as a change of mind. A refund of $5.50 after a $3.00 return fee has been processed.",
+  "tokens": 1860
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4005",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   5.5
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The BBQ sauce is unopened and I changed my mind. Please take it back.",
+  "order": {
+   "order_id": "YT-4005",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-08",
+   "opened": "no"
+  },
+  "answer": "Your unopened BBQ Sauce can be returned for change of mind. We refunded you $5.50 after the $3.00 return fee.",
+  "tokens": 1857
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4006",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "BBQ sauce is unopened; I'd like a change-of-mind return.",
+  "order": {
+   "order_id": "YT-4006",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-07",
+   "opened": "no"
+  },
+  "answer": "Your BBQ sauce was delivered on 2026-10-07, today is day 15 for pantry items with a 14-day return window, so it's outside the change-of-mind window. Unfortunately, I cannot accept a return for change of mind now.",
+  "tokens": 1171
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4006",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [
+   "pantry return window of 14 days has passed (today is day 15)"
+  ],
+  "customer": "BBQ sauce is unopened; I'd like a change-of-mind return.",
+  "order": {
+   "order_id": "YT-4006",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-07",
+   "opened": "no"
+  },
+  "answer": "The return window for pantry items is 14 days, and today is day 15 since delivery, so the return for change of mind is not allowed.",
+  "tokens": 1867
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4006",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [
+   "pantry return window of 14 days has passed (today is day 15)"
+  ],
+  "customer": "BBQ sauce is unopened; I'd like a change-of-mind return.",
+  "order": {
+   "order_id": "YT-4006",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-07",
+   "opened": "no"
+  },
+  "answer": "The pantry return window of 14 days has passed for your order (today is day 15). Unfortunately, the change-of-mind return is not allowed.",
+  "tokens": 1868
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4006",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "BBQ sauce is unopened; I'd like a change-of-mind return.",
+  "order": {
+   "order_id": "YT-4006",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-07",
+   "opened": "no"
+  },
+  "answer": "Your BBQ sauce order YT-4006 was delivered on 2026-10-07. Today is day 15 after delivery, so it's outside the 14-day return window for pantry items. Since the item is unopened and this is a change of mind return, it cannot be accepted. Is there anything else I can help with?",
+  "tokens": 1187
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4006",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "BBQ sauce is unopened; I'd like a change-of-mind return.",
+  "order": {
+   "order_id": "YT-4006",
+   "product": "BBQ Sauce 18 oz",
+   "category": "pantry",
+   "amount_paid": 8.5,
+   "delivered": "2026-10-07",
+   "opened": "no"
+  },
+  "answer": "Your BBQ Sauce was delivered on 2026-10-07 and is a pantry item with a 14-day return window. Today is day 15, so the return window has closed. I can't accept the return for change of mind. Let me know if there's a quality issue.",
+  "tokens": 1176
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4007",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [
+   "opened items can be returned only for a quality issue"
+  ],
+  "customer": "I tried the cola and don't like the taste. Refund please.",
+  "order": {
+   "order_id": "YT-4007",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-10-17",
+   "opened": "yes"
+  },
+  "answer": "The cola was opened, and changes of mind for opened items are not eligible for refund. Only quality issues qualify for refunds on opened items. Let me know if there is a quality problem with the cola.",
+  "tokens": 1865
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4007",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [
+   "opened items can be returned only for a quality issue"
+  ],
+  "customer": "I tried the cola and don't like the taste. Refund please.",
+  "order": {
+   "order_id": "YT-4007",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-10-17",
+   "opened": "yes"
+  },
+  "answer": "Since the cola was opened and you don't like the taste (change of mind), the return is not allowed. Opened items can only be returned for quality issues.",
+  "tokens": 1857
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4007",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [
+   "opened items can be returned only for a quality issue"
+  ],
+  "customer": "I tried the cola and don't like the taste. Refund please.",
+  "order": {
+   "order_id": "YT-4007",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-10-17",
+   "opened": "yes"
+  },
+  "answer": "Since the cola was opened, we can only accept a return if there is a quality issue. Dislike of taste is not eligible for a refund in this case.",
+  "tokens": 1857
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4007",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [
+   "opened items can be returned only for a quality issue"
+  ],
+  "customer": "I tried the cola and don't like the taste. Refund please.",
+  "order": {
+   "order_id": "YT-4007",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-10-17",
+   "opened": "yes"
+  },
+  "answer": "Since the cola was opened, it can only be returned if there's a quality issue. Disliking the taste is not eligible for a refund.",
+  "tokens": 1853
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4007",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [
+   "opened items can be returned only for a quality issue"
+  ],
+  "customer": "I tried the cola and don't like the taste. Refund please.",
+  "order": {
+   "order_id": "YT-4007",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-10-17",
+   "opened": "yes"
+  },
+  "answer": "Since the cola was opened and you want a refund for change of mind, it is not eligible for return according to our policy.",
+  "tokens": 1850
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4008",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The cola tastes flat and smells off. I think it's gone bad. Refund please.",
+  "order": {
+   "order_id": "YT-4008",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-09-30",
+   "opened": "yes"
+  },
+  "answer": "Your refund of $9.80 for the Cola 12-pack due to quality issues has been successfully processed. If you need further assistance, feel free to ask.",
+  "tokens": 1980
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4008",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The cola tastes flat and smells off. I think it's gone bad. Refund please.",
+  "order": {
+   "order_id": "YT-4008",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-09-30",
+   "opened": "yes"
+  },
+  "answer": "Your refund for the Cola 12-pack due to quality issues has been processed. You should see the amount credited soon. Sorry for the inconvenience!",
+  "tokens": 1857
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4008",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The cola tastes flat and smells off. I think it's gone bad. Refund please.",
+  "order": {
+   "order_id": "YT-4008",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-09-30",
+   "opened": "yes"
+  },
+  "answer": "Your refund for the Cola 12-pack has been processed in full due to the quality issue. If you need further assistance, please let me know.",
+  "tokens": 2013
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4008",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The cola tastes flat and smells off. I think it's gone bad. Refund please.",
+  "order": {
+   "order_id": "YT-4008",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-09-30",
+   "opened": "yes"
+  },
+  "answer": "Your refund of $9.80 for the cola with the quality issue has been processed. If you need more help, please let me know.",
+  "tokens": 2014
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4008",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   9.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The cola tastes flat and smells off. I think it's gone bad. Refund please.",
+  "order": {
+   "order_id": "YT-4008",
+   "product": "Cola 12-pack",
+   "category": "pantry",
+   "amount_paid": 9.8,
+   "delivered": "2026-09-30",
+   "opened": "yes"
+  },
+  "answer": "Your refund for the Cola 12-pack due to quality issues has been processed in full. If you have further questions, let me know!",
+  "tokens": 2031
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4009",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The person I sent the gift basket to doesn't need it. It's unopened. Please return it.",
+  "order": {
+   "order_id": "YT-4009",
+   "product": "Holiday Gift Basket",
+   "category": "pantry",
+   "amount_paid": 68.0,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "The order is eligible for return as it is unopened pantry category, but since the amount paid is over $50, I've escalated the request for team lead approval. You'll hear from us soon.",
+  "tokens": 1853
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4009",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The person I sent the gift basket to doesn't need it. It's unopened. Please return it.",
+  "order": {
+   "order_id": "YT-4009",
+   "product": "Holiday Gift Basket",
+   "category": "pantry",
+   "amount_paid": 68.0,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "The unopened Holiday Gift Basket return for change of mind is over $50, so I've escalated it to the team lead for approval. You'll hear back soon.",
+  "tokens": 1862
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4009",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The person I sent the gift basket to doesn't need it. It's unopened. Please return it.",
+  "order": {
+   "order_id": "YT-4009",
+   "product": "Holiday Gift Basket",
+   "category": "pantry",
+   "amount_paid": 68.0,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "The return for the unopened Holiday Gift Basket is over $50. I've escalated the request to our team lead for approval. You'll be notified once it's processed.",
+  "tokens": 1840
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4009",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The person I sent the gift basket to doesn't need it. It's unopened. Please return it.",
+  "order": {
+   "order_id": "YT-4009",
+   "product": "Holiday Gift Basket",
+   "category": "pantry",
+   "amount_paid": 68.0,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "The gift basket is an unopened pantry item delivered on 2026-10-19. Since the amount paid is over $50.00 and it's a change of mind return, I've escalated this to our team lead for approval. You'll be updated soon.",
+  "tokens": 1858
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4009",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The person I sent the gift basket to doesn't need it. It's unopened. Please return it.",
+  "order": {
+   "order_id": "YT-4009",
+   "product": "Holiday Gift Basket",
+   "category": "pantry",
+   "amount_paid": 68.0,
+   "delivered": "2026-10-19",
+   "opened": "no"
+  },
+  "answer": "Your unopened Holiday Gift Basket return request for order YT-4009 has been escalated for team lead approval because the amount paid was over $50. We will update you once approved.",
+  "tokens": 1852
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4010",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The steaks look discolored and smell strange. Please refund me.",
+  "order": {
+   "order_id": "YT-4010",
+   "product": "Premium Steak Gift Box",
+   "category": "frozen",
+   "amount_paid": 89.0,
+   "delivered": "2026-10-20",
+   "opened": "yes"
+  },
+  "answer": "Your opened frozen steak with discoloration and strange smell is eligible for a refund due to quality issues. Since the amount paid is over $50, I have escalated this to the team lead for approval. You will hear from us soon.",
+  "tokens": 1854
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4010",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The steaks look discolored and smell strange. Please refund me.",
+  "order": {
+   "order_id": "YT-4010",
+   "product": "Premium Steak Gift Box",
+   "category": "frozen",
+   "amount_paid": 89.0,
+   "delivered": "2026-10-20",
+   "opened": "yes"
+  },
+  "answer": "Your refund request for the premium steaks due to quality issues has been escalated for team lead approval because the amount paid is over $50. We will update you soon.",
+  "tokens": 1864
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4010",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The steaks look discolored and smell strange. Please refund me.",
+  "order": {
+   "order_id": "YT-4010",
+   "product": "Premium Steak Gift Box",
+   "category": "frozen",
+   "amount_paid": 89.0,
+   "delivered": "2026-10-20",
+   "opened": "yes"
+  },
+  "answer": "The steaks have a quality issue and the item is opened with an amount over $50, so I have escalated this return to the team lead for approval. You will be updated shortly.",
+  "tokens": 1840
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4010",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The steaks look discolored and smell strange. Please refund me.",
+  "order": {
+   "order_id": "YT-4010",
+   "product": "Premium Steak Gift Box",
+   "category": "frozen",
+   "amount_paid": 89.0,
+   "delivered": "2026-10-20",
+   "opened": "yes"
+  },
+  "answer": "I have escalated your refund request for the discolored and strange-smelling steaks to our team lead for approval. You will hear back soon.",
+  "tokens": 1835
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4010",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": true,
+  "rejected": [],
+  "customer": "The steaks look discolored and smell strange. Please refund me.",
+  "order": {
+   "order_id": "YT-4010",
+   "product": "Premium Steak Gift Box",
+   "category": "frozen",
+   "amount_paid": 89.0,
+   "delivered": "2026-10-20",
+   "opened": "yes"
+  },
+  "answer": "I have escalated your refund request for approval due to the high amount paid and reported quality issue. We will get back to you soon.",
+  "tokens": 1858
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4011",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I haven't opened the nuggets. Returning them, changed my mind.",
+  "order": {
+   "order_id": "YT-4011",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-18",
+   "opened": "yes"
+  },
+  "answer": "The nuggets were delivered on 2026-10-18, today is day 4 of the frozen 7-day return window. But the order says the nuggets were opened, which normally disqualifies a change of mind return. Are you sure they are unopened?",
+  "tokens": 1169
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4011",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I haven't opened the nuggets. Returning them, changed my mind.",
+  "order": {
+   "order_id": "YT-4011",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-18",
+   "opened": "yes"
+  },
+  "answer": "The nuggets were delivered on 2026-10-18. Today is day 4 since delivery and they are frozen product. Opening says yes, but you mentioned not opened. Can you please confirm if they are really unopened for the return?",
+  "tokens": 1164
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4011",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I haven't opened the nuggets. Returning them, changed my mind.",
+  "order": {
+   "order_id": "YT-4011",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-18",
+   "opened": "yes"
+  },
+  "answer": "Your chicken nuggets were delivered on 2026-10-18, and today is the 4th day since delivery. Frozen items have a 7-day return window, but since it is marked as opened, a return for change of mind is not allowed. If there is a quality issue, please let me know.",
+  "tokens": 1180
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4011",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [
+   "opened items can be returned only for a quality issue"
+  ],
+  "customer": "I haven't opened the nuggets. Returning them, changed my mind.",
+  "order": {
+   "order_id": "YT-4011",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-18",
+   "opened": "yes"
+  },
+  "answer": "The nuggets were opened, and change of mind returns are only allowed for unopened items. If there is a quality issue, I can assist with the return. Otherwise, the return is not allowed.",
+  "tokens": 1984
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4011",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I haven't opened the nuggets. Returning them, changed my mind.",
+  "order": {
+   "order_id": "YT-4011",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-18",
+   "opened": "yes"
+  },
+  "answer": "The nuggets were delivered on 2026-10-18, today is day 4 for frozen items, which is outside the 7-day window. But as they are marked opened, a change of mind return is not allowed.\n\nSince you said they are not opened but system shows opened, could you please confirm?",
+  "tokens": 1179
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4012",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I only got the pizza two days ago. Change-of-mind return, never opened.",
+  "order": {
+   "order_id": "YT-4012",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-10",
+   "opened": "no"
+  },
+  "answer": "The pizza was delivered on 2026-10-10, today is day 12 since delivery, which is outside the 7-day return window for frozen items. Therefore, the change-of-mind return is not allowed.",
+  "tokens": 1173
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4012",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I only got the pizza two days ago. Change-of-mind return, never opened.",
+  "order": {
+   "order_id": "YT-4012",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-10",
+   "opened": "no"
+  },
+  "answer": "Your pizza was delivered on 2026-10-10, which makes today the 12th day since delivery. For frozen items, the return window is 7 days. Unfortunately, the change-of-mind return window for your frozen pizza has expired, so we cannot accept the return for change of mind.",
+  "tokens": 1190
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4012",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I only got the pizza two days ago. Change-of-mind return, never opened.",
+  "order": {
+   "order_id": "YT-4012",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-10",
+   "opened": "no"
+  },
+  "answer": "Your pizza was delivered on 2026-10-10, so today is day 12 since delivery. The frozen item return window is 7 days, so it is outside the return window for change of mind. The return for change of mind is not allowed now.",
+  "tokens": 1182
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4012",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I only got the pizza two days ago. Change-of-mind return, never opened.",
+  "order": {
+   "order_id": "YT-4012",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-10",
+   "opened": "no"
+  },
+  "answer": "The pizza was delivered on 2026-10-10, which means today is day 12 from delivery. The frozen item return window is 7 days, so the return period has expired. Unfortunately, a change-of-mind return is not allowed.",
+  "tokens": 1179
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4012",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I only got the pizza two days ago. Change-of-mind return, never opened.",
+  "order": {
+   "order_id": "YT-4012",
+   "product": "Pepperoni Pizza 2-pack",
+   "category": "frozen",
+   "amount_paid": 12.9,
+   "delivered": "2026-10-10",
+   "opened": "no"
+  },
+  "answer": "The pizza was delivered on 2026-10-10, which makes today 12 days after delivery. The frozen product return window is 7 days, so the change-of-mind return is unfortunately not allowed for this order due to being outside the return window.",
+  "tokens": 1181
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4013",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I found a piece of plastic in the nuggets. Please refund me.",
+  "order": {
+   "order_id": "YT-4013",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-21",
+   "opened": "yes"
+  },
+  "answer": "I refunded the full amount of $15.90 due to the quality issue with the nuggets. Sorry for the inconvenience.",
+  "tokens": 1843
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4013",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I found a piece of plastic in the nuggets. Please refund me.",
+  "order": {
+   "order_id": "YT-4013",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-21",
+   "opened": "yes"
+  },
+  "answer": "I have processed a full refund for the chicken nuggets due to the quality issue with the plastic piece. You should see the refund shortly. Sorry for the inconvenience!",
+  "tokens": 1851
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4013",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I found a piece of plastic in the nuggets. Please refund me.",
+  "order": {
+   "order_id": "YT-4013",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-21",
+   "opened": "yes"
+  },
+  "answer": "I have processed a full refund for your order YT-4013 due to the quality issue with the nuggets. You should see the refund shortly. Sorry for the inconvenience.",
+  "tokens": 1854
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4013",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I found a piece of plastic in the nuggets. Please refund me.",
+  "order": {
+   "order_id": "YT-4013",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-21",
+   "opened": "yes"
+  },
+  "answer": "I see a quality issue with your opened frozen chicken nuggets delivered today. I've processed a full refund of $15.90 for you. Sorry for the inconvenience!",
+  "tokens": 1851
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4013",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I found a piece of plastic in the nuggets. Please refund me.",
+  "order": {
+   "order_id": "YT-4013",
+   "product": "Chicken Nuggets 2 lb",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-21",
+   "opened": "yes"
+  },
+  "answer": "I have processed a full refund of $15.90 for the quality issue with the chicken nuggets. You should see the amount back on your payment method shortly. Sorry for the inconvenience!",
+  "tokens": 1856
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4014",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Mac & cheese is unopened and I changed my mind.",
+  "order": {
+   "order_id": "YT-4014",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 6.9,
+   "delivered": "2026-10-16",
+   "opened": "no"
+  },
+  "answer": "Your unopened Mac & Cheese Bake return for change of mind is approved. Refund amount is $3.90 after $3.00 return fee.",
+  "tokens": 1839
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4014",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Mac & cheese is unopened and I changed my mind.",
+  "order": {
+   "order_id": "YT-4014",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 6.9,
+   "delivered": "2026-10-16",
+   "opened": "no"
+  },
+  "answer": "Your unopened Mac & Cheese Bake return for change of mind is approved. A refund of $3.90 after the $3.00 return fee has been issued.",
+  "tokens": 1843
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4014",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Mac & cheese is unopened and I changed my mind.",
+  "order": {
+   "order_id": "YT-4014",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 6.9,
+   "delivered": "2026-10-16",
+   "opened": "no"
+  },
+  "answer": "Your Mac & Cheese Bake return for a change of mind is approved. A refund of $3.90 (minus $3.00 return fee) is processed.",
+  "tokens": 1843
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4014",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Mac & cheese is unopened and I changed my mind.",
+  "order": {
+   "order_id": "YT-4014",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 6.9,
+   "delivered": "2026-10-16",
+   "opened": "no"
+  },
+  "answer": "Your unopened Mac & Cheese Bake return for change of mind is accepted. A refund of $3.90 (after $3.00 return fee) has been issued.",
+  "tokens": 1844
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4014",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   3.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "Mac & cheese is unopened and I changed my mind.",
+  "order": {
+   "order_id": "YT-4014",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 6.9,
+   "delivered": "2026-10-16",
+   "opened": "no"
+  },
+  "answer": "Your unopened Mac & Cheese bake has been refunded $3.90 after the $3.00 return fee for change of mind. Let me know if you need anything else!",
+  "tokens": 1845
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4015",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   0.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The hummus is unopened but I don't need it anymore. Returning it.",
+  "order": {
+   "order_id": "YT-4015",
+   "product": "Hummus 2-pack",
+   "category": "refrigerated",
+   "amount_paid": 3.8,
+   "delivered": "2026-10-20",
+   "opened": "no"
+  },
+  "answer": "Your unopened hummus return is accepted. A refund of $0.80 after the $3.00 return fee has been processed.",
+  "tokens": 1857
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4015",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   0.8
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "The hummus is unopened but I don't need it anymore. Returning it.",
+  "order": {
+   "order_id": "YT-4015",
+   "product": "Hummus 2-pack",
+   "category": "refrigerated",
+   "amount_paid": 3.8,
+   "delivered": "2026-10-20",
+   "opened": "no"
+  },
+  "answer": "I processed your return for the unopened hummus. You will receive a refund of $0.80 after the $3.00 return fee.",
+  "tokens": 1859
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4015",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   0.8
+  ],
+  "escalated": false,
+  "rejected": [
+   "wrong refund amount — the rules give $0.80"
+  ],
+  "customer": "The hummus is unopened but I don't need it anymore. Returning it.",
+  "order": {
+   "order_id": "YT-4015",
+   "product": "Hummus 2-pack",
+   "category": "refrigerated",
+   "amount_paid": 3.8,
+   "delivered": "2026-10-20",
+   "opened": "no"
+  },
+  "answer": "The return of your unopened hummus is accepted with a refund of $0.80 after the return fee deduction.",
+  "tokens": 2736
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4015",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   0.8
+  ],
+  "escalated": false,
+  "rejected": [
+   "wrong refund amount — the rules give $0.80"
+  ],
+  "customer": "The hummus is unopened but I don't need it anymore. Returning it.",
+  "order": {
+   "order_id": "YT-4015",
+   "product": "Hummus 2-pack",
+   "category": "refrigerated",
+   "amount_paid": 3.8,
+   "delivered": "2026-10-20",
+   "opened": "no"
+  },
+  "answer": "Your return for the unopened hummus is approved. A refund of $0.80 will be issued after deducting the $3.00 return fee.",
+  "tokens": 2734
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4015",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   0.8
+  ],
+  "escalated": false,
+  "rejected": [
+   "wrong refund amount — the rules give $0.80"
+  ],
+  "customer": "The hummus is unopened but I don't need it anymore. Returning it.",
+  "order": {
+   "order_id": "YT-4015",
+   "product": "Hummus 2-pack",
+   "category": "refrigerated",
+   "amount_paid": 3.8,
+   "delivered": "2026-10-20",
+   "opened": "no"
+  },
+  "answer": "Your unopened hummus return is approved. You will be refunded $0.80 after the $3.00 return fee deduction. Thank you!",
+  "tokens": 2738
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4016",
+  "seed": 0,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I tried the mac & cheese and it smells sour. Please refund me.",
+  "order": {
+   "order_id": "YT-4016",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-15",
+   "opened": "yes"
+  },
+  "answer": "Your refund for the Mac & Cheese Bake due to the quality issue has been processed. You will get the full amount of $15.90 back.",
+  "tokens": 1850
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4016",
+  "seed": 1,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I tried the mac & cheese and it smells sour. Please refund me.",
+  "order": {
+   "order_id": "YT-4016",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-15",
+   "opened": "yes"
+  },
+  "answer": "I have refunded the full amount due to the quality issue with the mac & cheese. Let me know if you need anything else.",
+  "tokens": 1846
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4016",
+  "seed": 2,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I tried the mac & cheese and it smells sour. Please refund me.",
+  "order": {
+   "order_id": "YT-4016",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-15",
+   "opened": "yes"
+  },
+  "answer": "Your refund for the Mac & Cheese Bake due to the quality issue has been processed in full. Sorry for the inconvenience!",
+  "tokens": 1844
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4016",
+  "seed": 3,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I tried the mac & cheese and it smells sour. Please refund me.",
+  "order": {
+   "order_id": "YT-4016",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-15",
+   "opened": "yes"
+  },
+  "answer": "I have processed a full refund for the Mac & Cheese Bake due to the quality issue you experienced. You should see the refund shortly. Sorry for the inconvenience!",
+  "tokens": 1852
+ },
+ {
+  "exp": "pass",
+  "cond": "CODE",
+  "case": "YT-4016",
+  "seed": 4,
+  "ok": true,
+  "wrong_money": false,
+  "refunds": [
+   15.9
+  ],
+  "escalated": false,
+  "rejected": [],
+  "customer": "I tried the mac & cheese and it smells sour. Please refund me.",
+  "order": {
+   "order_id": "YT-4016",
+   "product": "Mac & Cheese Bake",
+   "category": "frozen",
+   "amount_paid": 15.9,
+   "delivered": "2026-10-15",
+   "opened": "yes"
+  },
+  "answer": "Your refund for the Mac & Cheese Bake due to the quality issue has been processed. You should see the amount credited shortly. Sorry for the inconvenience!",
+  "tokens": 1850
+ }
+]

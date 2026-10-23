@@ -1,0 +1,1826 @@
+[
+ {
+  "cond": "M0",
+  "seed": 0,
+  "card": "",
+  "card_tokens": 0,
+  "answers": [
+   {
+    "cond": "M0",
+    "seed": 0,
+    "q": "L1-1",
+    "level": 1,
+    "ok": false,
+    "answer": "I don't know ValueMart's account code as it is not in the current account information.",
+    "tokens": 119,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 0,
+    "q": "L1-2",
+    "level": 1,
+    "ok": false,
+    "answer": "I don't have information about ValueMart's invoice email address in the records.",
+    "tokens": 118,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 0,
+    "q": "L1-3",
+    "level": 1,
+    "ok": false,
+    "answer": "I don't have any information about a price quote for BBQ Sauce 18 oz to ValueMart.",
+    "tokens": 126,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 0,
+    "q": "L1-4",
+    "level": 1,
+    "ok": false,
+    "answer": "I don't have information about ValueMart's order for holiday gift baskets.",
+    "tokens": 127,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 0,
+    "q": "L2-1",
+    "level": 2,
+    "ok": false,
+    "answer": "I don't have the warehouse information for ValueMart. Could you provide more details or check the account info?",
+    "tokens": 133,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 0,
+    "q": "L2-2",
+    "level": 2,
+    "ok": false,
+    "answer": "I don't have information about ValueMart's Dayton DC 2 frozen delivery days.",
+    "tokens": 124,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 0,
+    "q": "L2-3",
+    "level": 2,
+    "ok": false,
+    "answer": "I don't have information about ValueMart's buyer or their contact details in the system.",
+    "tokens": 125,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 0,
+    "q": "L2-4",
+    "level": 2,
+    "ok": false,
+    "answer": "I don't have any information about ValueMart's payment schedule for November.",
+    "tokens": 115,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 0,
+    "q": "L3-1",
+    "level": 3,
+    "ok": false,
+    "answer": "I don't have the account details for ValueMart to confirm this order. Could you please provide more information?",
+    "tokens": 145,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 0,
+    "q": "L3-2",
+    "level": 3,
+    "ok": false,
+    "answer": "I don't have details about ValueMart in the account memory. Please verify their order limits, delivery schedules, or any specific requirements before preparing the 50 Nut Assortment gift sets.",
+    "tokens": 151,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 0,
+    "q": "L3-3",
+    "level": 3,
+    "ok": false,
+    "answer": "I don't have any information on ValueMart's account or conditions. Could you provide more details or check if there are any special instructions for their November promo?",
+    "tokens": 147,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 0,
+    "q": "L3-4",
+    "level": 3,
+    "ok": false,
+    "answer": "I don't have any information about ValueMart's account or delivery conditions. Could you please provide more details?",
+    "tokens": 131,
+    "retrieved": null,
+    "ok_first": false
+   }
+  ]
+ },
+ {
+  "cond": "M0",
+  "seed": 1,
+  "card": "",
+  "card_tokens": 0,
+  "answers": [
+   {
+    "cond": "M0",
+    "seed": 1,
+    "q": "L1-1",
+    "level": 1,
+    "ok": false,
+    "answer": "I don't know ValueMart's account code as there is no information about that in the memory.",
+    "tokens": 120,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 1,
+    "q": "L1-2",
+    "level": 1,
+    "ok": false,
+    "answer": "I don't have information about ValueMart's invoice email in the system.",
+    "tokens": 117,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 1,
+    "q": "L1-3",
+    "level": 1,
+    "ok": false,
+    "answer": "I don't have information about the price quoted to ValueMart for BBQ Sauce 18 oz.",
+    "tokens": 125,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 1,
+    "q": "L1-4",
+    "level": 1,
+    "ok": false,
+    "answer": "I don't have information about ValueMart's order of holiday gift baskets for the fall holiday.",
+    "tokens": 131,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 1,
+    "q": "L2-1",
+    "level": 2,
+    "ok": false,
+    "answer": "I don't have the warehouse information for ValueMart. Please provide it or check with your logistics team.",
+    "tokens": 132,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 1,
+    "q": "L2-2",
+    "level": 2,
+    "ok": false,
+    "answer": "I don't have information about ValueMart's Dayton DC 2 frozen delivery days in the account memory.",
+    "tokens": 128,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 1,
+    "q": "L2-3",
+    "level": 2,
+    "ok": false,
+    "answer": "I don't have information about ValueMart's buyer or their contact details.",
+    "tokens": 122,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 1,
+    "q": "L2-4",
+    "level": 2,
+    "ok": false,
+    "answer": "I don't have information about ValueMart's payment schedule for November.",
+    "tokens": 114,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 1,
+    "q": "L3-1",
+    "level": 3,
+    "ok": false,
+    "answer": "I don’t have any information about Sam Park or ValueMart in the system. Could you please provide more details or confirm the account?",
+    "tokens": 151,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 1,
+    "q": "L3-2",
+    "level": 3,
+    "ok": false,
+    "answer": "I don't have details on ValueMart's account or order conditions. Please verify if there are any specific requirements or restrictions for this customer before preparing the 50 Nut Assortment gift sets.",
+    "tokens": 152,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 1,
+    "q": "L3-3",
+    "level": 3,
+    "ok": false,
+    "answer": "I don't have any information about ValueMart's account or conditions. Please provide more details or check with the account manager.",
+    "tokens": 140,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 1,
+    "q": "L3-4",
+    "level": 3,
+    "ok": false,
+    "answer": "I don’t have any information on ValueMart's account details or delivery conditions. Could you please provide more info?",
+    "tokens": 133,
+    "retrieved": null,
+    "ok_first": false
+   }
+  ]
+ },
+ {
+  "cond": "M0",
+  "seed": 2,
+  "card": "",
+  "card_tokens": 0,
+  "answers": [
+   {
+    "cond": "M0",
+    "seed": 2,
+    "q": "L1-1",
+    "level": 1,
+    "ok": false,
+    "answer": "I don't know ValueMart's account code.",
+    "tokens": 110,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 2,
+    "q": "L1-2",
+    "level": 1,
+    "ok": false,
+    "answer": "I don't have information about ValueMart's invoice email in the records.",
+    "tokens": 117,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 2,
+    "q": "L1-3",
+    "level": 1,
+    "ok": false,
+    "answer": "I don't have the pricing information for BBQ Sauce 18 oz quoted to ValueMart.",
+    "tokens": 124,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 2,
+    "q": "L1-4",
+    "level": 1,
+    "ok": false,
+    "answer": "I don't have information about any orders from ValueMart for holiday gift baskets for the fall holiday.",
+    "tokens": 132,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 2,
+    "q": "L2-1",
+    "level": 2,
+    "ok": false,
+    "answer": "I don't have information about ValueMart's preferred warehouse. Could you please provide more details or check with ValueMart directly?",
+    "tokens": 136,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 2,
+    "q": "L2-2",
+    "level": 2,
+    "ok": false,
+    "answer": "I don't have information about ValueMart's Dayton DC 2 frozen delivery days.",
+    "tokens": 124,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 2,
+    "q": "L2-3",
+    "level": 2,
+    "ok": false,
+    "answer": "I don't have information about ValueMart's buyer or their contact details in the records.",
+    "tokens": 125,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 2,
+    "q": "L2-4",
+    "level": 2,
+    "ok": false,
+    "answer": "I don't have any information about ValueMart's payment schedule for November.",
+    "tokens": 115,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 2,
+    "q": "L3-1",
+    "level": 3,
+    "ok": false,
+    "answer": "I don’t have ValueMart’s delivery conditions on record; please verify any special requirements first. Otherwise:\n\nHi Sam, confirming your order of 100 cases of pepperoni pizza to be delivered to Dayton on Monday, 10/26. Let us know if you have any special instructions. Thanks!",
+    "tokens": 184,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 2,
+    "q": "L3-2",
+    "level": 3,
+    "ok": false,
+    "answer": "I don't have information on ValueMart or the Nut Assortment gift sets in the account data. Please check if there are any special conditions or previous orders related to ValueMart.",
+    "tokens": 150,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 2,
+    "q": "L3-3",
+    "level": 3,
+    "ok": false,
+    "answer": "I don't have any information about ValueMart's account or conditions. Please provide details or check internally for any special requirements before the November 5 delivery.",
+    "tokens": 146,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M0",
+    "seed": 2,
+    "q": "L3-4",
+    "level": 3,
+    "ok": false,
+    "answer": "I don't have any information about ValueMart's account or delivery conditions. Could you provide more details or check if there are any specific conditions for this customer?",
+    "tokens": 141,
+    "retrieved": null,
+    "ok_first": false
+   }
+  ]
+ },
+ {
+  "cond": "M1",
+  "seed": 0,
+  "card": "",
+  "card_tokens": 0,
+  "answers": [
+   {
+    "cond": "M1",
+    "seed": 0,
+    "q": "L1-1",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's account code is VM-2207.",
+    "tokens": 1032,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 0,
+    "q": "L1-2",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's invoices are sent to ap@valuemart.example.",
+    "tokens": 1037,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 0,
+    "q": "L1-3",
+    "level": 1,
+    "ok": true,
+    "answer": "The price quoted for BBQ Sauce 18 oz to ValueMart was $102.00 per case, with a 3% discount for orders of 100 cases or more.",
+    "tokens": 1062,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 0,
+    "q": "L1-4",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart ordered 200 Holiday Gift Basket B for the fall holiday.",
+    "tokens": 1047,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 0,
+    "q": "L2-1",
+    "level": 2,
+    "ok": true,
+    "answer": "The Pepperoni Pizza is frozen, so it should be delivered to Dayton DC 2. Note that frozen deliveries there are accepted only on Tuesdays and Thursdays.",
+    "tokens": 1063,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 0,
+    "q": "L2-2",
+    "level": 2,
+    "ok": true,
+    "answer": "ValueMart's Dayton DC 2 takes frozen deliveries on Tuesdays and Thursdays.",
+    "tokens": 1043,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 0,
+    "q": "L2-3",
+    "level": 2,
+    "ok": true,
+    "answer": "ValueMart's buyer now is Sam Park. You can reach him at extension 4417 or email sam.park@valuemart.example.",
+    "tokens": 1057,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 0,
+    "q": "L2-4",
+    "level": 2,
+    "ok": true,
+    "answer": "ValueMart will pay on the 10th of the following month, so for November, payment is due by December 10th.",
+    "tokens": 1048,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 0,
+    "q": "L3-1",
+    "level": 3,
+    "ok": true,
+    "answer": "Warning: Dayton DC 2 only accepts frozen deliveries on Tuesdays and Thursdays, not Mondays. \n\nConfirmation: Sam, we received your order for 100 cases of pepperoni pizza. However, since Dayton DC 2 only accepts frozen deliveries on Tuesdays and Thursdays, we can schedule delivery for Tuesday, 10/27 instead. Please confirm if that works.",
+    "tokens": 1115,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 0,
+    "q": "L3-2",
+    "level": 3,
+    "ok": true,
+    "answer": "Please note ValueMart requires allergen stickers on any product containing nuts. I will prepare the 50 Nut Assortment gift sets, but please confirm the delivery location (likely Columbus main DC) and verify if the allergen labeling is compliant before shipping.",
+    "tokens": 1085,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 0,
+    "q": "L3-3",
+    "level": 3,
+    "ok": true,
+    "answer": "There are a few conditions to keep in mind for ValueMart's November promo deliveries:\n\n- Frozen deliveries to Dayton DC 2 must be on Tuesdays and Thursdays only.\n- Products containing nuts must have an allergen sticker on the package.\n- Payment terms are month-end close, cash on the 10th of the following month.\n- Delivery locations: frozen and refrigerated only to Dayton DC 2; pantry items to Columbus main DC.\n- Also, note the HACCP certificate expires October 31, 2026, so the new one should be sent early to avoid receiving issues.\n\nCheck if the promo items comply with these conditions before scheduling the first delivery on November 5.",
+    "tokens": 1172,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 0,
+    "q": "L3-4",
+    "level": 3,
+    "ok": true,
+    "answer": "The Mac & Cheese Bake is frozen and must be delivered to Dayton DC 2. Frozen deliveries to Dayton DC 2 are only accepted on Tuesdays and Thursdays. Today is Wednesday, 2026-10-21, so the next delivery day is Thursday, 2026-10-22. I will schedule the delivery for that day.",
+    "tokens": 1099,
+    "retrieved": null,
+    "ok_first": true
+   }
+  ]
+ },
+ {
+  "cond": "M1",
+  "seed": 1,
+  "card": "",
+  "card_tokens": 0,
+  "answers": [
+   {
+    "cond": "M1",
+    "seed": 1,
+    "q": "L1-1",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's account code is VM-2207.",
+    "tokens": 1032,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 1,
+    "q": "L1-2",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's invoices go to ap@valuemart.example.",
+    "tokens": 1036,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 1,
+    "q": "L1-3",
+    "level": 1,
+    "ok": true,
+    "answer": "The quoted price for BBQ Sauce 18 oz to ValueMart was $102.00 per case, with a 3% discount for 100 cases or more.",
+    "tokens": 1060,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 1,
+    "q": "L1-4",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart ordered 200 Holiday Gift Basket B for the fall holiday.",
+    "tokens": 1047,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 1,
+    "q": "L2-1",
+    "level": 2,
+    "ok": true,
+    "answer": "Pepperoni Pizza is frozen, so it should be delivered to Dayton DC 2. Note that frozen deliveries to Dayton DC 2 are only accepted on Tuesdays and Thursdays.",
+    "tokens": 1067,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 1,
+    "q": "L2-2",
+    "level": 2,
+    "ok": true,
+    "answer": "ValueMart's Dayton DC 2 currently accepts frozen deliveries on Tuesdays and Thursdays.",
+    "tokens": 1044,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 1,
+    "q": "L2-3",
+    "level": 2,
+    "ok": true,
+    "answer": "The current buyer for ValueMart is Sam Park. You can reach him at extension 4417 or via email at sam.park@valuemart.example.",
+    "tokens": 1060,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 1,
+    "q": "L2-4",
+    "level": 2,
+    "ok": true,
+    "answer": "ValueMart will pay on the 10th of the following month for purchases made in November, per the updated payment terms from Sam Park starting October.",
+    "tokens": 1051,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 1,
+    "q": "L3-1",
+    "level": 3,
+    "ok": true,
+    "answer": "A potential problem: Dayton DC 2 only accepts frozen deliveries on Tuesdays and Thursdays, not Mondays. Pepperoni pizza is a frozen product.\n\nConfirmation text to Sam Park:\n\"Hi Sam, confirming your order of 100 cases of pepperoni pizza. Please note Dayton DC 2 only accepts frozen deliveries on Tuesdays and Thursdays, so we will schedule delivery for Tuesday 10/27. Let us know if that works. Thanks!\"",
+    "tokens": 1130,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 1,
+    "q": "L3-2",
+    "level": 3,
+    "ok": true,
+    "answer": "I will prepare 50 more Nut Assortment gift sets for ValueMart.\n\nFlag: Products containing nuts must have an allergen sticker on the package per ValueMart's policy; please ensure this for the Nut Assortment gift sets. Delivery location should be Columbus main DC (pantry items).",
+    "tokens": 1094,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 1,
+    "q": "L3-3",
+    "level": 3,
+    "ok": false,
+    "answer": "For ValueMart, note that frozen deliveries to Dayton DC 2 are only accepted on Tuesdays and Thursdays. Also, payment terms have changed to cash on the 10th of the following month. Confirm the delivery day for the frozen items and ensure allergen stickers on any nut-containing products. Otherwise, no issues from previous conditions noted.",
+    "tokens": 1103,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M1",
+    "seed": 1,
+    "q": "L3-4",
+    "level": 3,
+    "ok": true,
+    "answer": "For the 200 cases of Mac & Cheese Bake (frozen), delivery should be planned to Dayton DC 2 since it accepts frozen products. Note that frozen deliveries to Dayton DC 2 are only on Tuesdays and Thursdays. Today is Wednesday, 2026-10-21, so the next possible delivery days are Thursday, October 22 or Tuesday, October 27.\n\nDo you want me to schedule it for the next available delivery day, Thursday, October 22?",
+    "tokens": 1126,
+    "retrieved": null,
+    "ok_first": true
+   }
+  ]
+ },
+ {
+  "cond": "M1",
+  "seed": 2,
+  "card": "",
+  "card_tokens": 0,
+  "answers": [
+   {
+    "cond": "M1",
+    "seed": 2,
+    "q": "L1-1",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's account code is VM-2207.",
+    "tokens": 1032,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 2,
+    "q": "L1-2",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's invoices are sent to ap@valuemart.example.",
+    "tokens": 1037,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 2,
+    "q": "L1-3",
+    "level": 1,
+    "ok": true,
+    "answer": "The price quoted to ValueMart for BBQ Sauce 18 oz was $102.00 per case, with a 3% discount if ordered in quantities of 100 cases or more.",
+    "tokens": 1064,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 2,
+    "q": "L1-4",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart ordered 200 of Holiday Gift Basket B for the fall holiday.",
+    "tokens": 1048,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 2,
+    "q": "L2-1",
+    "level": 2,
+    "ok": true,
+    "answer": "The Pepperoni Pizza is a frozen item, so it should be delivered to the Dayton DC 2 warehouse. Note that frozen deliveries to Dayton DC 2 occur only on Tuesdays and Thursdays.",
+    "tokens": 1070,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 2,
+    "q": "L2-2",
+    "level": 2,
+    "ok": true,
+    "answer": "ValueMart's Dayton DC 2 currently accepts frozen deliveries on Tuesdays and Thursdays.",
+    "tokens": 1044,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 2,
+    "q": "L2-3",
+    "level": 2,
+    "ok": true,
+    "answer": "The current buyer for ValueMart is Sam Park. You can reach him at extension 4417 or by email at sam.park@valuemart.example.",
+    "tokens": 1060,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 2,
+    "q": "L2-4",
+    "level": 2,
+    "ok": true,
+    "answer": "ValueMart will pay on the 10th of the following month, so November payments will be due on December 10th.",
+    "tokens": 1047,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 2,
+    "q": "L3-1",
+    "level": 3,
+    "ok": true,
+    "answer": "Confirming your order for 100 cases of pepperoni pizza to be delivered to Dayton DC 2 on Monday, 2026-10-26. Please note frozen deliveries to Dayton are only accepted on Tuesdays and Thursdays, so Monday delivery is not possible. Would you like us to reschedule for Tuesday or Thursday?",
+    "tokens": 1108,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 2,
+    "q": "L3-2",
+    "level": 3,
+    "ok": true,
+    "answer": "I will prepare the order for 50 more Nut Assortment gift sets for ValueMart. Please note that any product containing nuts must have an allergen sticker on the package per their store policy. I recommend confirming the packaging meets this requirement before shipment. The delivery location for pantry items like these is the Columbus main DC.",
+    "tokens": 1099,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 2,
+    "q": "L3-3",
+    "level": 3,
+    "ok": true,
+    "answer": "For ValueMart, remember that frozen deliveries to Dayton DC 2 are only on Tuesdays and Thursdays, and November 5, 2026 is a Thursday, so that's fine for frozen items.\n\nAlso, be sure all nut-containing products have allergen stickers due to their store policy.\n\nNote the updated payment terms: payment is due on the 10th of the following month starting October.\n\nNo issues with the delivery addresses; pantry items go to Columbus main DC, frozen/refrigerated to Dayton DC 2.\n\nLastly, ensure the updated HACCP certificate is sent before October 31, 2026, or they can't receive products.\n\nIs there a specific order you're scheduling?",
+    "tokens": 1172,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M1",
+    "seed": 2,
+    "q": "L3-4",
+    "level": 3,
+    "ok": true,
+    "answer": "Please note that Mac & Cheese Bake is a frozen product. According to ValueMart's conditions, frozen deliveries to Dayton DC 2 can only be made on Tuesdays and Thursdays, and pallets are acceptable since Dayton DC 2 has forklifts.\n\nShould we schedule the delivery for Dayton DC 2 on the nearest Tuesday or Thursday?",
+    "tokens": 1095,
+    "retrieved": null,
+    "ok_first": true
+   }
+  ]
+ },
+ {
+  "cond": "M2",
+  "seed": 0,
+  "card": "",
+  "card_tokens": 0,
+  "answers": [
+   {
+    "cond": "M2",
+    "seed": 0,
+    "q": "L1-1",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's account code is VM-2207.",
+    "tokens": 351,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-29",
+     "2026-09-30"
+    ],
+    "ok_first": true
+   },
+   {
+    "cond": "M2",
+    "seed": 0,
+    "q": "L1-2",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's invoices go to ap@valuemart.example.",
+    "tokens": 355,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-15",
+     "2026-09-30"
+    ],
+    "ok_first": true
+   },
+   {
+    "cond": "M2",
+    "seed": 0,
+    "q": "L1-3",
+    "level": 1,
+    "ok": true,
+    "answer": "We quoted ValueMart $102.00 per case for BBQ Sauce 18 oz, with a 3% discount for orders of 100 cases or more.",
+    "tokens": 385,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-29",
+     "2026-10-14"
+    ],
+    "ok_first": true
+   },
+   {
+    "cond": "M2",
+    "seed": 0,
+    "q": "L1-4",
+    "level": 1,
+    "ok": false,
+    "answer": "I don't know. There is no information about ValueMart's holiday gift basket orders in the account.",
+    "tokens": 344,
+    "retrieved": [
+     "2026-08-19",
+     "2026-09-02",
+     "2026-10-14"
+    ],
+    "ok_first": false
+   },
+   {
+    "cond": "M2",
+    "seed": 0,
+    "q": "L2-1",
+    "level": 2,
+    "ok": true,
+    "answer": "Pepperoni Pizza is frozen, so it should go to the Dayton DC 2 warehouse.",
+    "tokens": 362,
+    "retrieved": [
+     "2026-06-17",
+     "2026-07-29",
+     "2026-10-14"
+    ],
+    "ok_first": true
+   },
+   {
+    "cond": "M2",
+    "seed": 0,
+    "q": "L2-2",
+    "level": 2,
+    "ok": false,
+    "answer": "I don't know. The information about frozen delivery days is only available for Jenna Lee's account.",
+    "tokens": 324,
+    "retrieved": [
+     "2026-07-15",
+     "2026-08-19",
+     "2026-09-16"
+    ],
+    "ok_first": false
+   },
+   {
+    "cond": "M2",
+    "seed": 0,
+    "q": "L2-3",
+    "level": 2,
+    "ok": true,
+    "answer": "The current buyer for ValueMart is Sam Park. You can reach him via email at sam.park@valuemart.example or by phone extension 4417.",
+    "tokens": 380,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-29",
+     "2026-09-30"
+    ],
+    "ok_first": true
+   },
+   {
+    "cond": "M2",
+    "seed": 0,
+    "q": "L2-4",
+    "level": 2,
+    "ok": false,
+    "answer": "ValueMart closes payment at month-end and pays cash on the 15th of the following month. So, for November, payment will be made on December 15th.",
+    "tokens": 375,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-15",
+     "2026-09-30"
+    ],
+    "ok_first": false
+   },
+   {
+    "cond": "M2",
+    "seed": 0,
+    "q": "L3-1",
+    "level": 3,
+    "ok": false,
+    "answer": "Confirming the delivery of 100 cases of pepperoni pizza to Dayton DC 2 on Monday, 10/26. Noted that frozen deliveries to Dayton DC 2 are on Monday, Wednesday, and Friday. All pepperoni pizzas will have allergen stickers as per policy.",
+    "tokens": 392,
+    "retrieved": [
+     "2026-07-01",
+     "2026-08-19",
+     "2026-10-14"
+    ],
+    "ok_first": false
+   },
+   {
+    "cond": "M2",
+    "seed": 0,
+    "q": "L3-2",
+    "level": 3,
+    "ok": false,
+    "answer": "I will proceed to get 50 more Nut Assortment gift sets ready for ValueMart. Please note, since these products contain nuts, the store policy requires allergen stickers on the packages. I will ensure this is followed.",
+    "tokens": 414,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-01",
+     "2026-09-02"
+    ],
+    "ok_first": false
+   },
+   {
+    "cond": "M2",
+    "seed": 0,
+    "q": "L3-3",
+    "level": 3,
+    "ok": false,
+    "answer": "ValueMart's account notes the frozen deliveries to Dayton DC 2 on Monday, Wednesday, and Friday. No changes have been mentioned since then. Also, they requested a one-case sample of the frozen Mac & Cheese Bake to their Columbus main DC for November promo consideration. Check if the sample was sent and confirm delivery schedules align with existing frozen delivery days.",
+    "tokens": 424,
+    "retrieved": [
+     "2026-06-03",
+     "2026-08-19",
+     "2026-10-14"
+    ],
+    "ok_first": false
+   },
+   {
+    "cond": "M2",
+    "seed": 0,
+    "q": "L3-4",
+    "level": 3,
+    "ok": false,
+    "answer": "I don't have information about ValueMart's account or conditions. Could you please provide more details?",
+    "tokens": 349,
+    "retrieved": [
+     "2026-07-29",
+     "2026-09-02",
+     "2026-10-14"
+    ],
+    "ok_first": false
+   }
+  ]
+ },
+ {
+  "cond": "M2",
+  "seed": 1,
+  "card": "",
+  "card_tokens": 0,
+  "answers": [
+   {
+    "cond": "M2",
+    "seed": 1,
+    "q": "L1-1",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's account code is VM-2207.",
+    "tokens": 351,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-29",
+     "2026-09-30"
+    ],
+    "ok_first": true
+   },
+   {
+    "cond": "M2",
+    "seed": 1,
+    "q": "L1-2",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's invoices go to ap@valuemart.example.",
+    "tokens": 355,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-15",
+     "2026-09-30"
+    ],
+    "ok_first": true
+   },
+   {
+    "cond": "M2",
+    "seed": 1,
+    "q": "L1-3",
+    "level": 1,
+    "ok": true,
+    "answer": "We quoted ValueMart $102.00 per case for BBQ Sauce 18 oz, with a 3% discount for orders of 100 cases or more.",
+    "tokens": 385,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-29",
+     "2026-10-14"
+    ],
+    "ok_first": true
+   },
+   {
+    "cond": "M2",
+    "seed": 1,
+    "q": "L1-4",
+    "level": 1,
+    "ok": false,
+    "answer": "I don't know. The information about ValueMart's order is not in the memory.",
+    "tokens": 341,
+    "retrieved": [
+     "2026-08-19",
+     "2026-09-02",
+     "2026-10-14"
+    ],
+    "ok_first": false
+   },
+   {
+    "cond": "M2",
+    "seed": 1,
+    "q": "L2-1",
+    "level": 2,
+    "ok": true,
+    "answer": "Pepperoni Pizza is frozen, so the 50 cases should be sent to the Dayton DC 2 warehouse.",
+    "tokens": 366,
+    "retrieved": [
+     "2026-06-17",
+     "2026-07-29",
+     "2026-10-14"
+    ],
+    "ok_first": true
+   },
+   {
+    "cond": "M2",
+    "seed": 1,
+    "q": "L2-2",
+    "level": 2,
+    "ok": true,
+    "answer": "Dayton DC 2 currently takes frozen deliveries on Tuesdays and Thursdays.",
+    "tokens": 319,
+    "retrieved": [
+     "2026-07-15",
+     "2026-08-19",
+     "2026-09-16"
+    ],
+    "ok_first": true
+   },
+   {
+    "cond": "M2",
+    "seed": 1,
+    "q": "L2-3",
+    "level": 2,
+    "ok": true,
+    "answer": "ValueMart's current buyer is Sam Park. You can reach him at extension 4417 or via email at sam.park@valuemart.example.",
+    "tokens": 378,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-29",
+     "2026-09-30"
+    ],
+    "ok_first": true
+   },
+   {
+    "cond": "M2",
+    "seed": 1,
+    "q": "L2-4",
+    "level": 2,
+    "ok": false,
+    "answer": "ValueMart closes payments at month-end and pays cash on the 15th of the following month. So, payment for November will be made on December 15th.",
+    "tokens": 374,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-15",
+     "2026-09-30"
+    ],
+    "ok_first": false
+   },
+   {
+    "cond": "M2",
+    "seed": 1,
+    "q": "L3-1",
+    "level": 3,
+    "ok": false,
+    "answer": "Confirming 100 cases of pepperoni pizza delivery to Dayton DC 2 on Monday, 10/26. Noted that frozen deliveries go Monday, Wednesday, Friday. All pepperoni pizzas will have allergen stickers as per store policy.",
+    "tokens": 384,
+    "retrieved": [
+     "2026-07-01",
+     "2026-08-19",
+     "2026-10-14"
+    ],
+    "ok_first": false
+   },
+   {
+    "cond": "M2",
+    "seed": 1,
+    "q": "L3-2",
+    "level": 3,
+    "ok": false,
+    "answer": "I will prepare 50 more Nut Assortment gift sets for ValueMart. Please note, per their store policy, all products containing nuts must have an allergen sticker on the package. Ensure the nut sets comply with this requirement.",
+    "tokens": 415,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-01",
+     "2026-09-02"
+    ],
+    "ok_first": false
+   },
+   {
+    "cond": "M2",
+    "seed": 1,
+    "q": "L3-3",
+    "level": 3,
+    "ok": false,
+    "answer": "ValueMart (account VM-2207) has frozen deliveries to Dayton DC 2 scheduled for Monday, Wednesday, and Friday, so November 5 (Thursday) is not a frozen delivery day there. Also, they planned a November promo including the Mac & Cheese Bake (frozen) with a sample sent to the Columbus main DC. No other issues noted before November 5.",
+    "tokens": 430,
+    "retrieved": [
+     "2026-06-03",
+     "2026-08-19",
+     "2026-10-14"
+    ],
+    "ok_first": false
+   },
+   {
+    "cond": "M2",
+    "seed": 1,
+    "q": "L3-4",
+    "level": 3,
+    "ok": false,
+    "answer": "I don't have any information about ValueMart in the available memory.",
+    "tokens": 343,
+    "retrieved": [
+     "2026-07-29",
+     "2026-09-02",
+     "2026-10-14"
+    ],
+    "ok_first": false
+   }
+  ]
+ },
+ {
+  "cond": "M2",
+  "seed": 2,
+  "card": "",
+  "card_tokens": 0,
+  "answers": [
+   {
+    "cond": "M2",
+    "seed": 2,
+    "q": "L1-1",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's account code is VM-2207.",
+    "tokens": 351,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-29",
+     "2026-09-30"
+    ],
+    "ok_first": true
+   },
+   {
+    "cond": "M2",
+    "seed": 2,
+    "q": "L1-2",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's invoices go to ap@valuemart.example.",
+    "tokens": 355,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-15",
+     "2026-09-30"
+    ],
+    "ok_first": true
+   },
+   {
+    "cond": "M2",
+    "seed": 2,
+    "q": "L1-3",
+    "level": 1,
+    "ok": true,
+    "answer": "The price quoted to ValueMart for BBQ Sauce 18 oz was $102.00 per case with a 3% discount for orders of 100 cases or more.",
+    "tokens": 387,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-29",
+     "2026-10-14"
+    ],
+    "ok_first": true
+   },
+   {
+    "cond": "M2",
+    "seed": 2,
+    "q": "L1-4",
+    "level": 1,
+    "ok": false,
+    "answer": "I don't know. The account information does not include any details about ValueMart's holiday gift basket orders.",
+    "tokens": 345,
+    "retrieved": [
+     "2026-08-19",
+     "2026-09-02",
+     "2026-10-14"
+    ],
+    "ok_first": false
+   },
+   {
+    "cond": "M2",
+    "seed": 2,
+    "q": "L2-1",
+    "level": 2,
+    "ok": true,
+    "answer": "Pepperoni Pizza is likely frozen. According to the account, frozen items should go to the Dayton DC 2 warehouse.",
+    "tokens": 368,
+    "retrieved": [
+     "2026-06-17",
+     "2026-07-29",
+     "2026-10-14"
+    ],
+    "ok_first": true
+   },
+   {
+    "cond": "M2",
+    "seed": 2,
+    "q": "L2-2",
+    "level": 2,
+    "ok": true,
+    "answer": "Dayton DC 2 takes frozen deliveries on Tuesdays and Thursdays now.",
+    "tokens": 319,
+    "retrieved": [
+     "2026-07-15",
+     "2026-08-19",
+     "2026-09-16"
+    ],
+    "ok_first": true
+   },
+   {
+    "cond": "M2",
+    "seed": 2,
+    "q": "L2-3",
+    "level": 2,
+    "ok": true,
+    "answer": "ValueMart's current buyer is Sam Park. You can reach him at extension 4417 or via email at sam.park@valuemart.example.",
+    "tokens": 378,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-29",
+     "2026-09-30"
+    ],
+    "ok_first": true
+   },
+   {
+    "cond": "M2",
+    "seed": 2,
+    "q": "L2-4",
+    "level": 2,
+    "ok": false,
+    "answer": "ValueMart pays cash on the 15th of the following month after month-end. So, payment for November will be on December 15th.",
+    "tokens": 370,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-15",
+     "2026-09-30"
+    ],
+    "ok_first": false
+   },
+   {
+    "cond": "M2",
+    "seed": 2,
+    "q": "L3-1",
+    "level": 3,
+    "ok": false,
+    "answer": "Confirming delivery of 100 cases of pepperoni pizza to Dayton DC 2 on Monday, 10/26. Note: Dayton DC 2 frozen deliveries are on Mon, Wed, Fri. All pepperoni pizzas will have allergen stickers per store policy.",
+    "tokens": 388,
+    "retrieved": [
+     "2026-07-01",
+     "2026-08-19",
+     "2026-10-14"
+    ],
+    "ok_first": false
+   },
+   {
+    "cond": "M2",
+    "seed": 2,
+    "q": "L3-2",
+    "level": 3,
+    "ok": false,
+    "answer": "I will prepare 50 more Nut Assortment gift sets for ValueMart. Please note, ValueMart requires allergen stickers on all products containing nuts, so ensure these gift sets have the proper labeling.",
+    "tokens": 409,
+    "retrieved": [
+     "2026-06-03",
+     "2026-07-01",
+     "2026-09-02"
+    ],
+    "ok_first": false
+   },
+   {
+    "cond": "M2",
+    "seed": 2,
+    "q": "L3-3",
+    "level": 3,
+    "ok": false,
+    "answer": "ValueMart's frozen deliveries are scheduled for Monday, Wednesday, and Friday. The November promo includes Mac & Cheese Bake frozen product samples going to the Columbus main DC. No conflicting conditions noted. Everything seems set for November 5 delivery.",
+    "tokens": 400,
+    "retrieved": [
+     "2026-06-03",
+     "2026-08-19",
+     "2026-10-14"
+    ],
+    "ok_first": false
+   },
+   {
+    "cond": "M2",
+    "seed": 2,
+    "q": "L3-4",
+    "level": 3,
+    "ok": false,
+    "answer": "I don't have information on ValueMart's account or any previous orders from them to plan the delivery.",
+    "tokens": 350,
+    "retrieved": [
+     "2026-07-29",
+     "2026-09-02",
+     "2026-10-14"
+    ],
+    "ok_first": false
+   }
+  ]
+ },
+ {
+  "cond": "M3",
+  "seed": 0,
+  "card": "{\n  \"account_code\": \"VM-2207\",\n  \"customer_name\": \"Jenna Lee\",\n  \"organization\": \"ValueMart\",\n  \"role\": \"buyer\",\n  \"contact_email\": \"ap@valuemart.example\",\n  \"next_buyer\": {\n    \"name\": \"Sam Park\",\n    \"contact_email\": \"sam.park@valuemart.example\",\n    \"phone_extension\": \"4417\",\n    \"start_date\": \"2026-10-01\"\n  },\n  \"warehouse_info\": {\n    \"Columbus_main_DC\": \"dry storage only\",\n    \"Dayton_DC_2\": \"frozen and refrigerated items, has forklifts for pallets, accepts frozen trucks only on Tuesday and Thursday\",\n    \"shipment_policy\": \"pantry items to Columbus, frozen and refrigerated to Dayton DC 2, mixed loads sent back\"\n  },\n  \"product_requirements\": {\n    \"nut_allergen_label\": \"Any product containing nuts must have an allergen sticker on the package\"\n  },\n  \"payment_terms\": \"month-end close, cash on the 10th of the following month starting October 2026\",\n  \"vendor_paperwork\": {\n    \"food_safety_certificate\": {\n      \"type\": \"HACCP certificate\",\n      \"valid_until\": \"2026-10-31\"\n    }\n  },\n  \"orders\": {\n    \"Holiday Gift Basket B\": {\n      \"quantity\": 200,\n      \"type\": \"Pantry\",\n      \"delivery_location\": \"Columbus_main_DC\",\n      \"delivery_date\": \"2026-09-20\"\n    },\n    \"Nut Assortment gift sets\": {\n      \"quantity\": 30,\n      \"delivery_location\": \"Columbus_main_DC\"\n    },\n    \"Mac & Cheese Bake samples\": {\n      \"quantity\": 1,\n      \"type\": \"Frozen\",\n      \"delivery_location\": \"Columbus_main_DC\",\n      \"order_type\": \"sample\"\n    }\n  },\n  \"history\": [\n    \"2026-06-03: Set account_code to VM-2207\",\n    \"2026-06-03: Added customer_name Jenna Lee with role buyer at organization ValueMart\",\n    \"2026-06-03: Set contact_email to ap@valuemart.example\",\n    \"2026-06-17: Added warehouse_info with Columbus main DC dry storage only, Dayton DC 2 frozen and refrigerated with forklifts, and shipment policy\",\n    \"2026-07-01: Added product requirement that any product containing nuts must have an allergen sticker on the package\",\n    \"2026-07-01: Noted good performance of pepperoni pizza in July promo and intention for another promo\",\n    \"2026-07-15: Updated Dayton DC 2 to accept frozen trucks only on Tuesdays and Thursdays\",\n    \"2026-07-15: Added payment terms: close at month-end and pay cash on the 15th of the following month\",\n    \"2026-07-29: Provided BBQ Sauce 18 oz price $102.00 per case with 3% discount for 100+ cases; booked 40 pantry cases for Columbus main DC\",\n    \"2026-08-05: Added vendor paperwork food safety certificate (HACCP) valid until 2026-10-31\",\n    \"2026-08-19: Updated Dayton DC 2 frozen truck delivery days to Monday, Wednesday and Friday\",\n    \"2026-08-19: Customer requested quote for holiday gift baskets\",\n    \"2026-09-02: Booked order of 200 Holiday Gift Basket B pantry cases for delivery to Columbus main DC by September 20\",\n    \"2026-09-02: Added 30 Nut Assortment gift sets to Columbus main DC delivery\",\n    \"2026-09-16: Updated Dayton DC 2 to accept frozen trucks only on Tuesday and Thursday due to customer staffing constraints\",\n    \"2026-09-30: Added next buyer Sam Park with email sam.park@valuemart.example and extension 4417 starting October 2026\",\n    \"2026-10-07: Updated payment_terms to month-end close, cash on the 10th of the following month starting October 2026 as requested by Sam Park\",\n    \"2026-10-14: Added sample order of 1 case Mac & Cheese Bake (frozen) for delivery to Columbus main DC for November promo consideration\"\n  ]\n}",
+  "card_tokens": 14194,
+  "answers": [
+   {
+    "cond": "M3",
+    "seed": 0,
+    "q": "L1-1",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's account code is VM-2207.",
+    "tokens": 1045,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 0,
+    "q": "L1-2",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's invoices should be sent to ap@valuemart.example.",
+    "tokens": 1051,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 0,
+    "q": "L1-3",
+    "level": 1,
+    "ok": true,
+    "answer": "We quoted ValueMart $102.00 per case for BBQ Sauce 18 oz with a 3% discount for orders of 100 or more cases.",
+    "tokens": 1071,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 0,
+    "q": "L1-4",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart ordered 200 Holiday Gift Basket B pantry cases for the fall holiday.",
+    "tokens": 1062,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 0,
+    "q": "L2-1",
+    "level": 2,
+    "ok": false,
+    "answer": "Pepperoni Pizza is a pantry item, so it should be shipped to ValueMart's Columbus main DC, which is for dry storage only.",
+    "tokens": 1074,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M3",
+    "seed": 0,
+    "q": "L2-2",
+    "level": 2,
+    "ok": true,
+    "answer": "ValueMart's Dayton DC 2 accepts frozen deliveries only on Tuesday and Thursday currently.",
+    "tokens": 1058,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 0,
+    "q": "L2-3",
+    "level": 2,
+    "ok": true,
+    "answer": "The current buyer for ValueMart is Sam Park. You can reach him by email at sam.park@valuemart.example or by phone extension 4417.",
+    "tokens": 1074,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 0,
+    "q": "L2-4",
+    "level": 2,
+    "ok": true,
+    "answer": "ValueMart will pay for November on December 10th, according to their payment terms starting October 2026: month-end close, cash on the 10th of the following month.",
+    "tokens": 1072,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 0,
+    "q": "L3-1",
+    "level": 3,
+    "ok": true,
+    "answer": "The request to deliver 100 cases of pepperoni pizza to Dayton DC 2 on Monday 10/26 is a problem because Dayton DC 2 accepts frozen trucks only on Tuesdays and Thursdays.\n\nI cannot confirm this delivery for Monday 10/26 due to the frozen truck delivery policy at Dayton DC 2. Would another delivery day on Tuesday 10/27 or Thursday 10/29 work instead?",
+    "tokens": 1139,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 0,
+    "q": "L3-2",
+    "level": 3,
+    "ok": true,
+    "answer": "I will prepare 50 more Nut Assortment gift sets for ValueMart. Please note their product requirement: any product containing nuts must have an allergen sticker on the package. Also, delivery location is Columbus main DC, which is dry storage only, so confirm if this is suitable for these gift sets. Should I proceed?",
+    "tokens": 1113,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 0,
+    "q": "L3-3",
+    "level": 3,
+    "ok": true,
+    "answer": "For ValueMart, note that frozen product deliveries to Dayton DC 2 can only arrive on Tuesday or Thursday. Since November 5, 2026, is a Thursday, frozen deliveries can be scheduled then.\n\nAlso, frozen and refrigerated items must go to Dayton DC 2, while pantry items go to Columbus main DC. Mixed loads should be avoided to prevent returns.\n\nFinally, the HACCP food safety certificate is valid until October 31, 2026, so renewal is needed before November deliveries.\n\nIs there a specific product or delivery you'd like to schedule assistance with?",
+    "tokens": 1164,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 0,
+    "q": "L3-4",
+    "level": 3,
+    "ok": true,
+    "answer": "The 200 cases of Mac & Cheese Bake are frozen items. According to ValueMart's warehouse and shipment policy:\n\n- Frozen items must be delivered to Dayton DC 2.\n- Dayton DC 2 accepts frozen truck deliveries only on Tuesdays and Thursdays.\n- Delivery to Columbus main DC for frozen items is not acceptable.\n\nPlease confirm if delivery should be scheduled to Dayton DC 2 on an upcoming Tuesday or Thursday.",
+    "tokens": 1125,
+    "retrieved": null,
+    "ok_first": true
+   }
+  ]
+ },
+ {
+  "cond": "M3",
+  "seed": 1,
+  "card": "{\n  \"account_code\": \"VM-2207\",\n  \"contact_person\": \"Sam Park\",\n  \"company\": \"ValueMart\",\n  \"role\": \"buyer\",\n  \"invoice_email\": \"ap@valuemart.example\",\n  \"contact_extension\": \"4417\",\n  \"contact_email\": \"sam.park@valuemart.example\",\n  \"warehouses\": {\n    \"Columbus\": {\n      \"type\": \"main DC\",\n      \"storage\": \"dry only\",\n      \"notes\": \"pantry items delivered here\"\n    },\n    \"Dayton DC 2\": {\n      \"storage\": \"frozen and refrigerated only\",\n      \"equipment\": \"forklifts\",\n      \"notes\": \"mixed loads get sent back; pallets fine\",\n      \"frozen_delivery_days\": \"Tuesday and Thursday only\"\n    }\n  },\n  \"product_requirements\": {\n    \"allergen_sticker_policy\": \"Any product containing nuts must have an allergen sticker on the package\"\n  },\n  \"promotions\": {\n    \"pepperoni_pizza\": {\n      \"last_promo\": \"July 2026\",\n      \"feedback\": \"did great, wants another promo together\"\n    },\n    \"mac_and_cheese_bake\": {\n      \"planned_promo\": \"November 2026\",\n      \"product_storage\": \"frozen\",\n      \"sample_request\": {\n        \"quantity\": 1,\n        \"unit\": \"case\",\n        \"delivery_location\": \"Columbus main DC\"\n      }\n    }\n  },\n  \"payment_terms\": \"Payment closes at month-end and pays cash on the 10th of the following month\",\n  \"last_price\": {\n    \"BBQ Sauce 18 oz\": {\n      \"price_per_case\": 102.00,\n      \"discount\": \"3% off for 100 cases or more\",\n      \"last_order_quantity\": 40,\n      \"last_warehouse\": \"Columbus\"\n    }\n  },\n  \"vendor_paperwork\": {\n    \"HACCP_certificate_valid_until\": \"2026-10-31\"\n  },\n  \"orders\": {\n    \"Holiday Gift Basket B\": {\n      \"quantity\": 200,\n      \"warehouse\": \"Columbus\",\n      \"delivery_date\": \"2026-09-20\"\n    },\n    \"Nut Assortment gift sets\": {\n      \"quantity\": 30,\n      \"warehouse\": \"Columbus\"\n    }\n  },\n  \"history\": [\n    \"2026-06-03: account_code set to VM-2207\",\n    \"2026-06-03: contact_person set to Jenna Lee\",\n    \"2026-06-03: company set to ValueMart\",\n    \"2026-06-03: role set to buyer\",\n    \"2026-06-03: invoice_email set to ap@valuemart.example\",\n    \"2026-06-17: warehouses details added with Columbus dry only and Dayton DC 2 frozen/refrigerated with forklifts\",\n    \"2026-07-01: added allergen sticker policy for nut-containing products\",\n    \"2026-07-01: noted success of July pepperoni pizza promo and intention for further promo\",\n    \"2026-07-15: updated Dayton DC 2 to accept frozen deliveries only on Tuesdays and Thursdays\",\n    \"2026-07-15: added payment terms: close at month-end and pay cash on the 15th of following month\",\n    \"2026-07-29: recorded price for BBQ Sauce 18 oz at $102.00 per case with 3% discount for 100+ cases; last order 40 cases to Columbus warehouse\",\n    \"2026-08-05: updated HACCP certificate expiry date to 2026-10-31\",\n    \"2026-08-19: updated Dayton DC 2 frozen delivery days to Monday, Wednesday and Friday only\",\n    \"2026-08-19: customer requested quote for holiday gift baskets\",\n    \"2026-09-02: booked order for 200 Holiday Gift Basket B to Columbus warehouse, delivery by 2026-09-20\",\n    \"2026-09-02: added order for 30 Nut Assortment gift sets to Columbus warehouse\",\n    \"2026-09-16: updated Dayton DC 2 frozen delivery days back to Tuesday and Thursday only per customer request\",\n    \"2026-09-30: contact_person changed from Jenna Lee to Sam Park; added contact_extension 4417 and contact_email sam.park@valuemart.example\",\n    \"2026-10-07: updated payment_terms to 'Payment closes at month-end and pays cash on the 10th of the following month'\",\n    \"2026-10-14: added planned November promo for Mac & Cheese Bake as frozen product; requested sample 1 case to Columbus main DC\"\n  ]\n}",
+  "card_tokens": 16175,
+  "answers": [
+   {
+    "cond": "M3",
+    "seed": 1,
+    "q": "L1-1",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's account code is VM-2207.",
+    "tokens": 1130,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 1,
+    "q": "L1-2",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's invoices go to ap@valuemart.example.",
+    "tokens": 1134,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 1,
+    "q": "L1-3",
+    "level": 1,
+    "ok": true,
+    "answer": "The quoted price for BBQ Sauce 18 oz to ValueMart was $102.00 per case, with a 3% discount for orders of 100 cases or more.",
+    "tokens": 1160,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 1,
+    "q": "L1-4",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart ordered 200 Holiday Gift Basket B for the fall holiday.",
+    "tokens": 1145,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 1,
+    "q": "L2-1",
+    "level": 2,
+    "ok": false,
+    "answer": "Pepperoni Pizza, being a pantry item, should be delivered to the Columbus main DC warehouse which stores dry items only.",
+    "tokens": 1155,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M3",
+    "seed": 1,
+    "q": "L2-2",
+    "level": 2,
+    "ok": true,
+    "answer": "ValueMart's Dayton DC 2 accepts frozen deliveries only on Tuesdays and Thursdays.",
+    "tokens": 1142,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 1,
+    "q": "L2-3",
+    "level": 2,
+    "ok": true,
+    "answer": "The current buyer for ValueMart is Sam Park. You can reach him at extension 4417 or by email at sam.park@valuemart.example.",
+    "tokens": 1158,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 1,
+    "q": "L2-4",
+    "level": 2,
+    "ok": true,
+    "answer": "ValueMart's payment closes at month-end and pays cash on the 10th of the following month, so they will pay for November on December 10th, 2026.",
+    "tokens": 1156,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 1,
+    "q": "L3-1",
+    "level": 3,
+    "ok": true,
+    "answer": "Note: Dayton DC 2 only accepts frozen deliveries on Tuesdays and Thursdays, so delivery on Monday 10/26 is not possible.\n\nReply to Sam Park at ValueMart:\n\nHi Sam, we cannot deliver 100 cases of pepperoni pizza to Dayton on Monday 10/26 because frozen deliveries are only accepted on Tuesdays and Thursdays. Please let us know if delivery on 10/27 or 10/29 works for you. Thanks!",
+    "tokens": 1231,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 1,
+    "q": "L3-2",
+    "level": 3,
+    "ok": true,
+    "answer": "I will prepare 50 more Nut Assortment gift sets for ValueMart to be delivered to the Columbus warehouse.\n\nFlag: These contain nuts, so ensure the product packaging has the required allergen sticker according to their policy.",
+    "tokens": 1177,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 1,
+    "q": "L3-3",
+    "level": 3,
+    "ok": false,
+    "answer": "For ValueMart's November promo of Mac & Cheese Bake, note that the product is frozen and a sample case was requested to be delivered to the Columbus main DC, which is dry only. The main DC is not suitable for frozen storage, so ensure the sample delivery is handled properly.\n\nAlso, Dayton DC 2 accepts frozen deliveries only on Tuesdays and Thursdays, so frozen promo deliveries to that warehouse must be scheduled accordingly.\n\nNo other special conditions or paperwork issues noted before November 5.",
+    "tokens": 1231,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M3",
+    "seed": 1,
+    "q": "L3-4",
+    "level": 3,
+    "ok": true,
+    "answer": "The Mac & Cheese Bake is a frozen product. ValueMart's Columbus warehouse is dry storage only, so it cannot receive frozen deliveries. The frozen and refrigerated Dayton DC 2 warehouse accepts frozen deliveries only on Tuesdays and Thursdays.\n\nPlease confirm if the delivery should be scheduled to Dayton DC 2 on an upcoming Tuesday or Thursday for the 200 cases of Mac & Cheese Bake.",
+    "tokens": 1203,
+    "retrieved": null,
+    "ok_first": true
+   }
+  ]
+ },
+ {
+  "cond": "M3",
+  "seed": 2,
+  "card": "{\n  \"account_code\": \"VM-2207\",\n  \"contact_person\": \"Sam Park\",\n  \"company\": \"ValueMart\",\n  \"role\": \"buyer\",\n  \"email_for_invoices\": \"ap@valuemart.example\",\n  \"contact_extension\": \"4417\",\n  \"contact_email\": \"sam.park@valuemart.example\",\n  \"warehouse_info\": {\n    \"Columbus\": {\n      \"type\": \"main DC\",\n      \"storage\": [\"dry\"]\n    },\n    \"Dayton DC 2\": {\n      \"storage\": [\"frozen\", \"refrigerated\"],\n      \"equipment\": [\"forklifts\"],\n      \"pallets_allowed\": true,\n      \"frozen_truck_days\": [\"Tuesday\", \"Thursday\"]\n    }\n  },\n  \"shipping_instructions\": {\n    \"frozen_and_refrigerated\": \"Dayton DC 2\",\n    \"pantry_items\": \"Columbus\",\n    \"mixed_loads\": \"sent back\"\n  },\n  \"product_requirements\": {\n    \"nut_allergen_sticker\": \"required on any product containing nuts or peanuts\"\n  },\n  \"payment_terms\": {\n    \"close_date\": \"month-end\",\n    \"payment_date\": \"10th of the following month\",\n    \"payment_method\": \"cash\"\n  },\n  \"food_safety_certificate\": {\n    \"type\": \"HACCP certificate\",\n    \"valid_until\": \"2026-10-31\"\n  },\n  \"recent_orders\": {\n    \"holiday_gift_basket_b\": {\n      \"quantity\": 200,\n      \"warehouse\": \"Columbus\",\n      \"delivery_date\": \"2026-09-20\"\n    },\n    \"nut_assortment_gift_sets\": {\n      \"quantity\": 30,\n      \"warehouse\": \"Columbus\"\n    },\n    \"mac_and_cheese_bake_samples\": {\n      \"quantity\": 1,\n      \"warehouse\": \"Columbus\",\n      \"order_type\": \"sample\",\n      \"order_date\": \"2026-10-14\"\n    }\n  },\n  \"history\": [\n    \"2026-06-03: Account code set to VM-2207.\",\n    \"2026-06-03: Invoice email set to ap@valuemart.example.\",\n    \"2026-06-17: Warehouse and shipping instructions added: Columbus dry storage only, frozen and refrigerated to Dayton DC 2 with forklifts and pallets allowed, pantry items to Columbus, mixed loads returned.\",\n    \"2026-07-01: Added requirement that any product containing nuts or peanuts must have an allergen sticker on the package.\",\n    \"2026-07-01: Noted successful July promo for pepperoni pizza and customer's interest in another promo.\",\n    \"2026-07-15: Added frozen truck delivery days for Dayton DC 2 as Tuesdays and Thursdays.\",\n    \"2026-07-15: Added payment terms: close at month-end, pay cash on 15th of following month.\",\n    \"2026-07-29: Quoted BBQ Sauce 18 oz price at $102.00 per case with 3% discount for 100+ cases; customer ordered 40 cases for Columbus main DC.\",\n    \"2026-08-05: Noted food safety certificate (HACCP certificate) valid until 2026-10-31 and customer request to send new copy before expiration to maintain receiving shipments.\",\n    \"2026-08-19: Changed frozen truck delivery days for Dayton DC 2 to Monday, Wednesday, and Friday.\",\n    \"2026-08-19: Customer requested quote for holiday gift baskets.\",\n    \"2026-09-02: Ordered 200 Holiday Gift Basket B to be delivered to Columbus pantry by 2026-09-20.\",\n    \"2026-09-02: Added order of 30 Nut Assortment gift sets to Columbus.\",\n    \"2026-09-16: Changed frozen truck delivery days for Dayton DC 2 back to Tuesday and Thursday per customer request due to staff availability.\",\n    \"2026-09-30: Contact person changed from Jenna Lee to Sam Park.\",\n    \"2026-09-30: Added Sam Park's extension 4417 and email sam.park@valuemart.example.\",\n    \"2026-10-07: Payment terms changed: payment date moved from 15th to 10th of the following month, month-end close and cash payment method unchanged.\",\n    \"2026-10-14: Customer planning November promo including Mac & Cheese Bake (frozen). Ordered 1 case sample to Columbus main DC for evaluation.\"\n  ]\n}",
+  "card_tokens": 15132,
+  "answers": [
+   {
+    "cond": "M3",
+    "seed": 2,
+    "q": "L1-1",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's account code is VM-2207.",
+    "tokens": 1079,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 2,
+    "q": "L1-2",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart's invoices should be sent to ap@valuemart.example.",
+    "tokens": 1085,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 2,
+    "q": "L1-3",
+    "level": 1,
+    "ok": true,
+    "answer": "We quoted ValueMart $102.00 per case for BBQ Sauce 18 oz with a 3% discount for orders of 100 or more cases.",
+    "tokens": 1105,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 2,
+    "q": "L1-4",
+    "level": 1,
+    "ok": true,
+    "answer": "ValueMart ordered 200 Holiday Gift Basket B for the fall holiday.",
+    "tokens": 1094,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 2,
+    "q": "L2-1",
+    "level": 2,
+    "ok": true,
+    "answer": "For ValueMart, Pepperoni Pizza, being a frozen product, should be shipped to the Dayton DC 2 warehouse. Note that frozen deliveries to Dayton DC 2 are accepted only on Tuesdays and Thursdays, so plan the delivery accordingly.",
+    "tokens": 1126,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 2,
+    "q": "L2-2",
+    "level": 2,
+    "ok": true,
+    "answer": "ValueMart's Dayton DC 2 takes frozen deliveries on Tuesdays and Thursdays.",
+    "tokens": 1090,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 2,
+    "q": "L2-3",
+    "level": 2,
+    "ok": true,
+    "answer": "The current buyer for ValueMart is Sam Park. You can reach him at extension 4417 or via email at sam.park@valuemart.example.",
+    "tokens": 1107,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 2,
+    "q": "L2-4",
+    "level": 2,
+    "ok": true,
+    "answer": "ValueMart's payment terms specify payment on the 10th of the following month after month-end close. For November, payment would be due on December 10th, 2026.",
+    "tokens": 1106,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 2,
+    "q": "L3-1",
+    "level": 3,
+    "ok": true,
+    "answer": "Sam, thank you for your order request. Please note Dayton DC 2 accepts frozen deliveries only on Tuesdays and Thursdays, so Monday 10/26 delivery is not possible. Would you like to reschedule for Tuesday 10/27 or Thursday 10/29?",
+    "tokens": 1145,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 2,
+    "q": "L3-2",
+    "level": 3,
+    "ok": true,
+    "answer": "I will get 50 more Nut Assortment gift sets ready for ValueMart to be delivered to Columbus main DC.\n\nFlag: The Nut Assortment gift sets contain nuts, so ensure the allergen sticker is on the packaging as required.",
+    "tokens": 1130,
+    "retrieved": null,
+    "ok_first": true
+   },
+   {
+    "cond": "M3",
+    "seed": 2,
+    "q": "L3-3",
+    "level": 3,
+    "ok": true,
+    "answer": "For ValueMart, the HACCP food safety certificate expires on 2026-10-31, so a new valid certificate should be sent before November to avoid shipment issues. Also, remember their frozen and refrigerated deliveries go to Dayton DC 2 with frozen truck days on Tuesday and Thursday, and pantry items to Columbus. No mixed loads allowed. Payment terms and nut allergen sticker requirements remain in effect.",
+    "tokens": 1164,
+    "retrieved": null,
+    "ok_first": false
+   },
+   {
+    "cond": "M3",
+    "seed": 2,
+    "q": "L3-4",
+    "level": 3,
+    "ok": true,
+    "answer": "For ValueMart's 200 cases of Mac & Cheese Bake (frozen product), please note their condition: frozen and refrigerated shipments must be delivered to their Dayton DC 2 warehouse. Deliveries to Dayton DC 2 are allowed only on frozen truck days, which are Tuesday and Thursday.\n\nSince today is Wednesday, 2026-10-21, the next available delivery day is Thursday, 2026-10-22. Schedule the delivery to Dayton DC 2 on that day.",
+    "tokens": 1176,
+    "retrieved": null,
+    "ok_first": true
+   }
+  ]
+ }
+]

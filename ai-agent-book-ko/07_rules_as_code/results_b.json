@@ -1,0 +1,2132 @@
+[
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 0,
+  "ok": false,
+  "value": "4",
+  "gold": 9,
+  "sqls": [],
+  "tokens": 13296,
+  "answer": "재직 중인 생산팀 직원을 계산하겠습니다. 'left_on'이 비어 있거나 'left_on'이 2026년 10월 21일 이후인 인원만 재직 중으로 간주합니다.\n\n- 1, 이하은, 생산팀, left_on 비어 있음 → 재직 중\n- 5, 강지아, 생산팀, 2025-04-01 → 재직 중\n- 13, 신수아, 생산팀, 2025-05-01 → 재직 중\n- 21, 이하은, 생산팀, 2025-10-01 → 재직 중\n\n이 네 명이 바로 재직 중인 생산팀 직원입니다.\n\n정답: 4"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 1,
+  "ok": false,
+  "value": "7",
+  "gold": 9,
+  "sqls": [],
+  "tokens": 13384,
+  "answer": "생산팀 직원 중 left_on이 비어 있거나, 오른 날짜가 2026-10-21 이후인 직원을 찾겠습니다.\n\n- 재직 중인 직원: left_on이 비어 있거나, left_on이 2026-10-21 이후인 직원\n\n생산팀 직원 목록:\n- id 1, 2019-12-01, 생\n\n- id 5, 2025-04-01, 생\n\n- id 13, 2025-05-01, 생\n\n- id 21, 2025-10-01, 생\n\n- id 25, 2023-09-01, 생\n\n- id 26, 2023-11-01, 생\n\n- id 37, 2020-04-01, 생\n\n이 중에서 왼 쪽 날짜가 2026-10-21 이후이거나 비어 있는 직원은 없습니다. 따라서 현재 재직 중인 인원은 다음과 같습니다.\n\n- IDs: 1, 5, 13, 21, 25, 26, 37\n\n총 7명입니다.\n\n정답: 7"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 2,
+  "ok": false,
+  "value": "5",
+  "gold": 9,
+  "sqls": [],
+  "tokens": 13349,
+  "answer": "생산팀 직원 중 left_on이 비어 있거나, 퇴사일이 2026년 10월 21일 이후인 직원을 찾는다. 임지우(9번), 신수아(13번)가 2025년 10월 28일, 2025년 5월 1일에 퇴사했고, 이하은(1번), 강지아(5번), 송소율(17번), 조도윤(26번)이 2026년 이후에도 재직 중이다. 또한, 2026년 7월 이후 채용된 인원은 없으며, 2026년 이전 채용된 대부분이 아직 퇴사하지 않았다. 따라서, 현재 재직 중인 생산팀 직원은 다음과 같다: 이하은(1번), 강지아(5번), 신수아(13번), 송소율(17번), 조도윤(26번) 다섯 명.\n\n정답: 5"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 0,
+  "ok": false,
+  "value": "5.4",
+  "gold": 4.5,
+  "sqls": [],
+  "tokens": 13889,
+  "answer": "재직 중인 직원은 left_on이 비어있는 직원입니다. 이들의 입사 일자를 기준으로 근속 연수를 계산하면 됩니다.\n\n입사일이 가장 빠른 직원은 2019-02-01 (품질팀 류시우), 가장 최근 입사일자는 2026-09-01 (영업팀 안건우, 윤지민).\n\n근속 연수 계산: 2026-10-21 - 입사일\n\n각 직원별 재직 기간:\n\n- 최소: 2019-02-01 → 2026-10-21 → 약 2593일 (약 7년 2개월)\n- 최대: 2026-09-01 → 거의 1개월 (약 1년 1개월)\n\n이하는 각 입사일별 근속 연수 (년 단위, 소수 첫째 자리):\n\n1. 2019-02-01: 약 7.8년\n2. 2019-03-01: 7.6년\n3. 2019-10-01: 7.0년\n4. 2020-03-01: 6.7년\n5. 2020-07-01, 2020-09-01, 2020-11-01, 2020-12-01: 6.2~6.6년\n6. 2021-01-01, 2021-03-01, 2021-05-01, 2021-06-01, 2021-09-01, 2021-11-01, 2021-12-01, 2022-09-01, 2022-11-01: 5.8~6.8년\n7. 2023-01-01, 2023-03-01, 20"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 1,
+  "ok": false,
+  "value": "4.8",
+  "gold": 4.5,
+  "sqls": [],
+  "tokens": 14485,
+  "answer": "직원들의 입사일과 퇴사일(퇴사일이 없으면 오늘 날짜 기준) 데이터를 바탕으로 재직 기간을 계산하고, 그 평균을 구해야 한다.\n\n입사일과 퇴사일(없을 경우 2026-10-21) 기준 재직 기간 계산:\n\n이하은(1호) : 2019-12-01 ~ 2026-10-21 = 약 8년 10개월 20일 (8.9년)\n박현우(2호, 2021-12-01): 2021-12-01 ~ 2026-10-21 = 4년 10개월 20일 (4.9년)\n최서연(3호, 2025-01-01): 2025-01-01 ~ 2026-10-21 = 1년 9개월 20일 (1.83년)\n정주원(4호, 2022-09-01): 2022-09-01 ~ 2026-10-21 = 4년 1개월 20일 (4.17년)\n강지아(5호, 2025-04-01): 2025-04-01 ~ 2026-10-21 = 1년 6개월 20일 (1.56년)\n조도윤(6호, 2019-03-01): 2019-03-01 ~ 2026-10-21 = 7년 7개월 20일 (7.65년)\n윤지민(7호, 2023-03-01): 2023-03-01 ~ 2026-10-21 = 3년 7개월 20일 (3.65년)\n임지우(8호, 2023-01-01): 2023-01-01 ~ 2"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 2,
+  "ok": false,
+  "value": "4.2",
+  "gold": 4.5,
+  "sqls": [],
+  "tokens": 14205,
+  "answer": "각 직원의 재직 기간은 훈련 데이터(2023년 10월까지)까지만 고려할 수 있습니다. 그러나 현재 날짜를 기준으로 계산할 때, 재직 중인 직원들의 근속 연수는 다음과 같습니다:\n\n- 2019년 3월 1일 입사한 조도윤(품질팀): 2026년 10월 21일 기준, 약 7년 7개월\n- 2019년 12월 1일 입사한 이하은(생산팀): 약 7년 10개월\n- 2020년 3월 1일 입사한 최서연(물류팀): 약 6년 7개월\n- 2020년 7월 1일 입사한 장선우(영업팀): 약 6년 3개월\n- 2020년 9월 1일 입사한 한예준(품질팀): 약 6년 1개월\n- 2021년 5월 1일 입사한 신수아(생산팀): 약 5년 5개월\n- 2021년 6월 1일 입사한 임지우(생산팀): 약 5년 4개월\n- 2021년 9월 1일 입사한 황서윤(물류팀): 약 5년 1개월\n- 2021년 11월 1일 입사한 권유준(품질팀): 약 4년 11개월\n- 2022년 9월 1일 입사한 정주원(영업팀): 약 4년 1개월\n- 2022년 11월 1일 입사한 류시우(품질팀): 약 3년 11개월\n- 2023년 1월 1일 임지우(생산팀): 약 2년 9개월\n- 2023년 3월 1일 윤지민(물류팀): 약 2년 7개월\n- 2"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 0,
+  "ok": false,
+  "value": "4000",
+  "gold": 366,
+  "sqls": [],
+  "tokens": 13389,
+  "answer": "먼저 2025년 1월부터 10월까지의 영업팀 월 급여를 계산한다.\n\n- 1월: 3,960,000원\n- 2월: 3,960,000원\n- 3월: 3,970,000원\n- 4월: 3,970,000원\n- 5월: 3,970,000원\n- 6월: 3,970,000원\n- 7월: 3,970,000원\n- 8월: 3,970,000원\n- 9월: 3,970,000원\n- 10월: 3,970,000원\n\n이들의 평균을 구한다:\n\n총합 = 3,960,000*2 + 3,970,000*8 = 7,920,000 + 31,760,000 = 39,680,000원\n\n평균 = 39,680,000 / 10 = 3,968,000원\n\n만원 단위로 반올림하면 4,000만원이다.\n\n정답: 4000"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 1,
+  "ok": false,
+  "value": "15990000",
+  "gold": 366,
+  "sqls": [],
+  "tokens": 13755,
+  "answer": "먼저 2025년 영업팀의 월 급여를 찾는다.  \nHired 날짜와 Left 날짜가 2025년 내인 급여 데이터를 찾으면 된다.\n\n영업팀 직원과 월 급여:\n- 정주원 (2022-09-01, left 2025-10-28, 급여: 3540000)\n- 장선우 (2020-07-01, 급여: 3860000)\n- 정주원 (2020-07-01, 급여: 3540000)\n- 유지민 (2023-03-01, 급여 없음)\n- 윤지민 (2023-03-01, 급여 없음)\n- 오다은 (2023-04-01, 급여 없음)\n- 노지민 (2023-07-01, 급여 없음)\n- 안건우 (2026-07-01, 급여: 3636000)\n- 김민준 (2021-05-01, 급여: 5069000)\n- 서하준 (2023-02-01, 급여 없음)\n- 임지우 (2021-06-01, 급여 없음)\n- 송소율 (2024-01-01, 급여: 3488000)\n- 윤지민 (2025-03-01, 급여 없음)\n- 권유준 (2023-09-01, 급여 없음)\n- 황서윤 (2022-09-01, 급여 없음)\n- 류시우 (2019-10-01, 급여 없음)\n- 홍채원 (2022-11-01, 급여 없음)\n- 김민준 (2020-01-01, "
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 2,
+  "ok": false,
+  "value": "3037000",
+  "gold": 366,
+  "sqls": [],
+  "tokens": 13492,
+  "answer": "2025년 영업팀의 각 월 급여를 찾는다:\n- 정주원: 2025년 1월부터 12월까지 각각 3,540,000원, 3,540,000원, 3,540,000원, 3,540,000원, 3,540,000원, 3,540,000원, 3,540,000원, 3,540,000원, 3,540,000원, 3,540,000원, 3,540,000원, 3,540,000원\n- 윤지민: 2025년 3월부터 10월까지 각각 3,800,000원\n\n이 두 명의 평균 급여를 계산한다:\n(첫 번째 직원 12개월 합) = 12 × 3,540,000 = 42,480,000\n(두 번째 직원 8개월 합) = 8 × 3,800,000 = 30,400,000\n총합 = 42,480,000 + 30,400,000 = 72,880,000\n월 급여 총 인원수 = 12 (이하은)이외 영업직원들은 없다. 이들과 윤지민이 모두 영업팀 근무인 것으로 보여지며, 2명이다.\n\n평균 급여 = 총합 / (12개월 × 2명) = 72,880,000 / 24 = 3,036,666.67원\n\n만원 단위로 반올림하면 3,037,000원.\n\n정답: 3037000"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 0,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [],
+  "tokens": 13988,
+  "answer": "2026년에 입사한 직원은 `hired` 날짜가 2026-01-01 이후인 직원들입니다. 표를 참고하여 입사일이 2026년인 직원들을 셉니다.\n\n입사일이 2026년인 직원들:\n- 1, 이하은, 2025-10-01 (아님)\n- 2, 박현우, 2021-12-01\n- 3, 최서연, 2025-01-01 (아님)\n- 4, 정주원, 2022-09-01 (아님)\n- 5, 강지아, 2025-04-01 (아님)\n- 6, 조도윤, 2019-03-01 (아님)\n- 7, 윤지민, 2023-03-01 (아님)\n- 8, 장선우, 2020-07-01  (아님)\n- 9, 임지우, 2023-01-01  (아님)\n- 10, 한예준, 2020-09-01  (아님)\n- 11, 오다은, 2022-12-01  (아님)\n- 12, 서하준, 2023-02-01  (아님)\n- 13, 신수아, 2025-05-01 (아님)\n- 14, 권유준, 2024-06-01 (아님)\n- 15, 황서윤, 2021-09-01  (아님)\n- 16, 안건우, 2026-07-01 (2026년 입사)\n- 17, 송소율, 2024-01-01 (아님)\n- 18, 류시우, 2025-05-01 (아님)\n- 19, 홍채원, 2022-11"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 1,
+  "ok": false,
+  "value": "2",
+  "gold": 1,
+  "sqls": [],
+  "tokens": 13305,
+  "answer": "2026년에 입사한 직원은 다음과 같습니다.\n13, 신수아, 2025-05-01 (이것은 2026이 아니며 제외)\n16, 안건우, 2026-07-01\n17, 송소율, 2024-01-01 (이것은 2026이 아니며 제외)\n29, 임지우, 2021-06-01 (이것은 2026이 아니며 제외)\n30, 한예준, 2024-08-01 (이것은 2026이 아니며 제외)\n37, 송소율, 2020-04-01 (이것은 2026이 아니며 제외)\n41, 없으므로.\n\n즉, 2026년 입사한 직원은 2명입니다.\n\n정답: 2"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 2,
+  "ok": false,
+  "value": "0",
+  "gold": 1,
+  "sqls": [],
+  "tokens": 13361,
+  "answer": "2026년에 입사한 직원은 다음과 같습니다.\n\n- ID 21, 이하은, 2025-10-01 (아니므로 제외)\n- ID 23, 최서연, 2020-03-01 (아니므로 제외)\n- ID 26, 조도윤, 2023-11-01 (아니므로 제외)\n- ID 28, 장선우, 2020-11-01 (아니므로 제외)\n- ID 30, 한예준, 2024-08-01 (아니므로 제외)\n- ID 32, 서하준, 2020-12-01 (아니므로 제외)\n- ID 40, 김민준, 2020-01-01 (아니므로 제외)\n- ID 41, (없음) — 표에 없음.\n나머지 직원들은 모두 2026년 이후 입사자가 아니며, 표에는 2026년 입사일이 명시된 직원은 없습니다.\n\n따라서, 2026년에 새로 입사한 직원은 없습니다.\n\n정답: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 0,
+  "ok": false,
+  "value": "295",
+  "gold": 357,
+  "sqls": [],
+  "tokens": 13411,
+  "answer": "먼저 2025년 3월부터 12월까지 품질팀의 월 급여를 찾는다.\n\n- 2025년 03월: 2,950,000\n- 2025년 04월: 2,950,000\n- 2025년 05월: 2,950,000\n- 2025년 06월: 2,950,000\n- 2025년 07월: 2,950,000\n- 2025년 08월: 2,950,000\n- 2025년 09월: 2,950,000\n- 2025년 10월: 2,950,000\n- 2025년 11월: 2,950,000\n- 2025년 12월: 2,950,000\n\n이 10개월의 급여의 합은:\n\n2,950,000 × 10 = 29,500,000원\n\n평균은:\n\n29,500,000 ÷ 10 = 2,950,000원\n\n만원 단위로 반올림하면:\n\n2,950,000 ÷ 10,000 = 295\n\n정답: 295"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 1,
+  "ok": false,
+  "value": "291000",
+  "gold": 357,
+  "sqls": [],
+  "tokens": 13287,
+  "answer": "2025년 3월부터 12월까지 품질팀의 월 급여는 각각 다음과 같다:\n\n2900000, 2900000, 2900000, 2900000, 2900000, 2900000, 2900000, 2900000, 2900000, 2958000\n\n이 값들의 평균을 구하면:\n\n(2900000*9 + 2958000) / 10 = (26100000 + 2958000) / 10 = 29058000 / 10 = 2905800\n\n반올림해서 만원 단위는:\n\n정답: 291000"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 2,
+  "ok": false,
+  "value": "3080",
+  "gold": 357,
+  "sqls": [],
+  "tokens": 13438,
+  "answer": "먼저 2025년 3월부터 12월까지 품질팀의 월 급여를 확인하겠습니다.\n\n- 2025년 3월: 29,000,000원\n- 2025년 4월: 29,000,000원\n- 2025년 5월: 29,000,000원\n- 2025년 6월: 29,000,000원\n- 2025년 7월: 29,000,000원\n- 2025년 8월: 29,000,000원\n- 2025년 9월: 29,000,000원\n- 2025년 10월: 29,000,000원\n- 2025년 11월: 38,000,000원\n- 2025년 12월: 38,000,000원\n\n평균 계산:\n(29000000*8 + 38000000*2) / 10\n= (232000000 + 76000000) / 10\n= 308000000 / 10\n= 30800000 원\n\n만원 단위로 반올림:\n30800000원 / 10000 = 3080 만원\n\n반올림 없이 바로 표기하면 3080입니다.\n\n정답: 3080"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 0,
+  "ok": false,
+  "value": "한예준,안건우",
+  "gold": "송소율",
+  "sqls": [],
+  "tokens": 14935,
+  "answer": "이해한 내용: 2024년 01월 이후 재직 중인 기간 동안 급여 기록이 누락된 직원이 있는 지 확인한다. 다만, 2024년 01월 급여 기록이 없는 직원은 제외하며, 재직 중임에도 불구하고 급여 기록이 없는 직원의 이름을 찾는다.\n\n1. 먼저, 재직 기간 동안 데이터를 살펴보자.\n2. 입사 후 2024년 01월 이후의 급여 기록이 없는 직원은 목록에서 제외한다.\n3. 그 후, 재직 동안 급여 기록이 없는 직원 찾기.\n\n직원의 입사일과 퇴사일(있는 경우) 정보를 이용해서, 재직 기간 동안 급여 기록이 없는 직원들을 찾는다.\n\n재직 중인 달은 2024-01 이후의 달들이다. 기준 날짜는 2026-10-21이므로, 그 이전 기간 동안 급여가 없는 직원도 고려한다. 다만, ‘입사 후·2024-01 이전 달 제외’는 의미적, 즉 입사 이후부터 재직 기간이 시작, 즉 2024년 01월 이후부터의 기간 동안 급여 기록 유무를 본다는 의미 같다.\n\n- 이 기간 동안 재직했고;\n- 급여 기록이 없는 직원이 있다면?\n\n먼저, 각 직원의 입사일, 퇴사일을 고려한다:\n\n- 입사일이 2024-01 이후인 직원들 중\n- 퇴사일 없거나, 오늘 이후인 재직 중인 직원들\n- 급여 기록이 "
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 1,
+  "ok": false,
+  "value": "임지우,조도윤,류시우,김민준,홍채원,오다은,서하준,권유준,안건우",
+  "gold": "송소율",
+  "sqls": [],
+  "tokens": 13794,
+  "answer": "급여 기록이 없는 경우를 찾기 위해, 2024-01 부터 재직 기간 중에 급여 기록이 없는 직원을 찾는다. 본 표에서 급여 기록이 없는 직원들의 이름은 다음과 같다:\n\n- 이지우 (2023-01 입사, 2024-01 이후 급여 기록이 없음)\n- 윤지민 (2023-03 입사, 2024-02 이후 급여 기록이 없음)\n- 조도윤 (2019-03 입사, 2024-01 이후 급여 기록이 없음)\n- 임지우 (2021-06 입사, 2024-01 이후 급여 기록이 없음)\n- 강지아 (2025-04 입사, 2024-01 이후 급여 기록이 없음)\n- 송소율 (2024-01 입사, 2024-01 이후 기록 없음)\n- 류시우 (2019-10 입사, 2024-01 이후 급여 기록 없음)\n- 김민준 (2020-01 입사, 2024-01 이후 급여 기록 없음)\n- 홍채원 (2022-11 입사, 2024-01 이후 급여 기록 없음)\n- 오다은 (2022-12 입사, 2023-04-01 이후 급여 기록 없음)\n- 서하준 (2020-12 입사, 2023-02-01 이후 급여 기록 없음)\n- 권유준 (2023-09-01 입사, 2024-06 이후 급여 기록 없음)\n- 안건우 (2025-11-"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 2,
+  "ok": false,
+  "value": "없음",
+  "gold": "송소율",
+  "sqls": [],
+  "tokens": 14120,
+  "answer": "먼저, 재직기간 동안 급여 기록이 없었던 직원의 이름을 찾기 위해 각 직원이 재직한 기간 동안 급여 기록이 포함되어 있는지 확인한다.  \n재직기간의 범위는 입사일 이후부터 현재(2026-10-21)까지이고, 2024-01 이후 재직했으면서 해당 기간에 급여 기록이 없는 직원이 대상이다.  \n\n- 이하은(생산팀 1, 2019-12-01): 급여 내역 2024-01 이후 있으며, 급여 기록 없음 없음. (하지만 재직기간 내 2024-01 이상이므로 대상 제외)\n- 박현우(품질팀 2, 2021-12-01): 2024-01 이전부터 재직, 급여 기록 있는데 2024-01부터 있다. 대상 아님.\n- 최서연(물류팀 1, 2025-01-01): 2025-01 이후 재직, 2024-01 급여 없음. 재직기간 이후 (2025-01)부터 급여 기록 있으니 대상 제외.\n- 정주원(영업팀 2, 2022-09-01): 2022-09-01 부터 재직, 2024-01 이후 급여 기록 있기. 대상 아님.\n- 강지아(생산팀 2, 2025-04-01): 2025-04-01 부터 재직, 2024-01 이전 재직이 아니다. 대상 제외.\n- 조도윤(품질팀 3, 2019-03-01): 급여 내역 "
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 0,
+  "ok": false,
+  "value": "",
+  "gold": "최서연",
+  "sqls": [],
+  "tokens": 14355,
+  "answer": "2025년과 2026년 각각의 월평균 급여를 계산하고, 인상률이 가장 큰 직원을 찾는다. 2025년과 2026년 급여 데이터는 각각 해당 연도 내의 월별 급여 합계로 산출한다.\n\n먼저, 2025년과 2026년 급여의 월평균을 계산한다. 재직 중인 직원은 'left' 컬럼이 비어있거나, 2025년 이후 퇴사한 직원은 배제한다. 또한, 퇴사 날짜가 2025년 이후인 직원도 2025년 10월까지 재직으로 간주한다. 밝힌 적이 없으니, 2025년 10월까지만 재직했다고 가정한다.\n\n1. 2025년 재직 직원의 급여 총합 및 월평균:\n- 2025년은 1월부터 10월까지 포함(10개월).\n- 각 직원의 급여를 월별 합계로 총산출 후, 10으로 나눔.\n\n2. 2026년 재직 직원의 급여 총합 및 월평균:\n- 2026년은 1월부터 9월까지 포함(9개월), 퇴사자는 월별 급여 데이터에 퇴사시점 이후 값 포함되지 않음.\n\n세부 계산은 수정 없이 급여 데이터에서 직접 월별 데이터를 추출해서, 재직 기간 내의 월 평균 급여 차이 계산.\n\n*단순 계산을 위해, 아래 재직 기간을 감안하여 계산한 후 인상률 계산:*\n\n- 퇴사자(임지우 2025-10-28 퇴사, 따라서 2025년 10"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 1,
+  "ok": false,
+  "value": "김민준",
+  "gold": "최서연",
+  "sqls": [],
+  "tokens": 14729,
+  "answer": "우선 2025년과 2026년 각각의 월평균 급여를 계산한다. \n\n2025년 월평균 급여: 2025년 1월부터 12월까지의 급여 평균\n2026년 월평균 급여: 2026년 1월부터 9월까지의 급여 평균\n\n재직 중인 직원은 'left'가 비어있거나, 'left_on'이 2026년 10월 21일 이후인 사람들이다. 이 조건을 만족하는 직원을 찾는다.\n\n다음은 그 계산 과정이다.\n\n**2025년 재직 급여 평균:**\n\n- 각 직원별 2025년 급여 합계 / 12\n- (각 월급여) 계산\n\n**2026년 재직 급여 평균:**\n\n- 각 직원별 2026년 급여 합계 / 9\n\n이 값들을 비교하여, 월평균 인상률 = (2026년 평균 - 2025년 평균) / 2025년 평균 으로 계산한다.\n\n구체적으로 가장 높은 인상률을 가진 직원의 이름을 찾는다.\n\n---\n\n계산 과정 요약:\n\n1. **현재 재직 중인 직원 목록:** 'left'가 비어있거나, 'left_on'이 이후인 사람\n2. 해당 인원들의 각각의 2025년과 2026년 월급여 평균 계산\n3. 인상률 계산 후 가장 큰 사람 선정\n\n---\n\n**직원 중 재직 상태에 해당하는 인원:**\n\n- 이하는 계속 재직\n- 박현우 계속"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 2,
+  "ok": false,
+  "value": "",
+  "gold": "최서연",
+  "sqls": [],
+  "tokens": 14650,
+  "answer": "먼저, 2025년과 2026년 월평균 급여를 계산하고, 각 직원별 인상률을 구한다. \n\n- 2025년 급여 합계 = 각 직원별 2025년 지급된 월급 총액\n- 2026년 급여 합계 = 각 직원별 2026년 지급된 월급 총액\n- 인상률 = (2026년 평균 - 2025년 평균) / 2025년 평균 * 100\n\n단, 재직 중인 직원은 `left_on`이 없는 직원들이거나 종료 날짜가 2025년 이후인 사람이다. 퇴사일이 2025년 이후인 사람은 재직중으로 간주.\n\n### 1. 재직중인 직원 목록과 2025년, 2026년 급여 총액\n- `left_on`이 없거나, 종료일이 2025년 이후인 직원\n\n확인:\n- 3, 임지우, 2023-01-01 ~ 계속 (재직중)\n- 5, 강지아, 2025-04-01 ~ 계속\n- 7, 윤지민, 2023-03-01 ~ 계속\n- 9, 임지우, 2023-01-01, 2025-10-28 (퇴사 10월) → 2025년 10월까지만 포함\n- 13, 신수아, 2025-05-01 ~ 계속\n- 14, 권유준, 2024-06-01 ~ 계속\n- 15, 황서윤, 2021-09-01 ~ 계속\n- 16, 안건우, 2026-07-01, 2026년 포함 안 됨 "
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 0,
+  "ok": false,
+  "value": "10",
+  "gold": 6,
+  "sqls": [],
+  "tokens": 17547,
+  "answer": "직급(grade)이 4 이상인 재직 직원은 임지우, 김민준, 오다은, 한예준, 권유준, 조도윤, 이하은, 강지아, 박현우, 김민준(중복), 홍채원, 서하준, 류시우, 송소율, 조도윤, 윤지민, 정주원, 이소찬, 하준, 강서윤, 박수아, 신수아, 이지우, 최서연, 이수진, 윤지민, 임지우, 최수아, 강지아, 안건우, 홍채원, 장선우, 송소율, 조도윤, 윤지민, 정주원, 이수진, 김민준, 박현우, 권유준, 조도윤, 이수진, 한예준, 권유준, 류시우, 송소율, 최서연, 강지아, 임지우, 서하준, 윤지민, 정주원, 이수진, 강서윤, 박수아, 신수아, 최서연, 이수진, 류시우, 홍채원, 조도윤, 유효준, 전민경, 강수아, 임지우, 김민준, 정주원, 강서윤, 서하준, 류시우, 홍채원, 장선우, 송소율, 조도윤, 윤지민, 정주원, 이수진, 김민준, 박현우, 권유준, 조도윤, 이수진, 한예준, 권유준, 류시우, 송소율, 최서연, 강지아, 임지우, 서하준, 윤지민, 정주원, 이수진, 강서윤, 박수아, 신수아, 최서연, 이수진, 류시우, 홍채원, 조도윤, 유효준, 전민경, 강수아, 임지우, 김민준, 정주원, 강서윤, 서하준, 류시우, 홍채원, 장선우, 송소율, 조도윤, 윤지민"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 1,
+  "ok": false,
+  "value": "0",
+  "gold": 6,
+  "sqls": [],
+  "tokens": 13266,
+  "answer": "직급(grade)이 4 이상인 재직 직원의 수는 0명입니다. 모든 4 이상 직원은 이미 퇴사하였거나, 데이터 내에 존재하지 않기 때문입니다. 예를 들어, 임지우(grade 5)는 2025년 10월 28일에 퇴사하였고, 김민준(grade 5) 역시 2026년 1월 이후 퇴사하였거나 데이터상 재직 중인 기록이 없습니다. \n\n따라서, 현재 재직 중인 직원 중에 grade이 4 이상인 사람은 없습니다.\n\n정답: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 2,
+  "ok": false,
+  "value": "5",
+  "gold": 6,
+  "sqls": [],
+  "tokens": 13295,
+  "answer": "grade이 4 이상인 직원은 다음과 같습니다:\n- 10번(한예준, 품질팀, grade 4)\n- 20번(김민준, 영업팀, grade 5)\n- 24번(정주원, 영업팀, grade 4)\n- 25번(강지아, 생산팀, grade 5)\n- 37번(송소율, 생산팀, grade 5)\n- 38번(류시우, 품질팀, grade 3) -> 이 직원은 3이므로 제외\n- 40번(김민준, 영업팀, grade 2) -> 이 직원은 2이므로 제외\n\n해당 직원은 총 5명입니다.\n\n정답: 5"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 0,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE dept='생산팀' AND left_on IS NULL;",
+   "SELECT COUNT(*) AS count FROM employees WHERE dept='생산팀';"
+  ],
+  "tokens": 570,
+  "answer": "생산팀에 재직 중인 직원은 9명입니다. 정답: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 1,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE dept='생산팀' AND left_on IS NULL;"
+  ],
+  "tokens": 491,
+  "answer": "생산팀에 현재 재직 중인 직원은 9명입니다. 정답: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 2,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE dept='생산팀' AND left_on IS NULL;",
+   "SELECT COUNT(*) AS count FROM employees WHERE dept='생산팀' AND left_on IS NULL;"
+  ],
+  "tokens": 582,
+  "answer": "생산팀에서 재직 중인 직원은 9명입니다. 정답: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 0,
+  "ok": true,
+  "value": "4.5",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT AVG(julianday('2026-10-21') - julianday(hired)) / 365 AS avg_duration FROM employees WHERE left_on IS NULL;"
+  ],
+  "tokens": 541,
+  "answer": "재직 중인 직원들의 평균 근속 연수는 약 4.5년입니다. 정답: 4.5"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 1,
+  "ok": true,
+  "value": "4.5",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT id, hired FROM employees WHERE left_on IS NULL;",
+   "SELECT id, hired FROM employees WHERE left_on IS NULL;",
+   "SELECT AVG(JULIANDAY('2026-10-21') - JULIANDAY(hired)) AS avg_service_days FROM employees WHERE left_on IS NULL;"
+  ],
+  "tokens": 2532,
+  "answer": "재직 중인 직원들의 평균 근속 연수는 약 4.5년입니다. 정답: 4.5"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 2,
+  "ok": true,
+  "value": "4.5",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT AVG(JULIANDAY('2026-10-21') - JULIANDAY(hired)) AS avg_days FROM employees WHERE left_on IS NULL;"
+  ],
+  "tokens": 570,
+  "answer": "재직 중인 직원의 평균 근속 연수는 약 4.5년입니다. (365일 기준으로 계산했을 때, 1631.31일은 약 4.5년입니다.)  \n정답: 4.5"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 0,
+  "ok": false,
+  "value": "",
+  "gold": 366,
+  "sqls": [
+   "SELECT AVG(amount) as avg_salary FROM salary WHERE pay_month LIKE '2025-%' AND emp_id IN (SELECT id FROM employees WHERE dept='영업')",
+   "SELECT AVG(amount)/10000 as avg_salary_in_won FROM salary WHERE pay_month LIKE '2025-%' AND emp_id IN (SELECT id FROM employees WHERE dept='영업')"
+  ],
+  "tokens": 671,
+  "answer": "영업팀의 2025년 월 급여 평균 데이터를 조회하는 동안 아무 결과도 받지 못했습니다. 혹시 데이터에 문제가 있거나 더 구체적인 조건이 필요한지 확인해 주세요."
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 1,
+  "ok": true,
+  "value": "366",
+  "gold": 366,
+  "sqls": [
+   "SELECT AVG(amount) as avg_salary FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = '영업팀' AND s.pay_month LIKE '2025-%'",
+   "SELECT ROUND(AVG(amount)/10000, 0) as avg_salary_in_won FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = '영업팀' AND s.pay_month LIKE '2025-%'"
+  ],
+  "tokens": 697,
+  "answer": "2025년 영업팀의 월 급여 평균은 약 366만원입니다. 정답: 366"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 2,
+  "ok": true,
+  "value": "366",
+  "gold": 366,
+  "sqls": [
+   "SELECT AVG(salary.amount) / 10000 FROM employees JOIN salary ON employees.id = salary.emp_id WHERE dept='영업팀' AND pay_month LIKE '2025-%';"
+  ],
+  "tokens": 519,
+  "answer": "정답: 366"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 0,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE strftime('%Y', hired) = '2026'",
+   "SELECT COUNT(*) FROM employees WHERE strftime('%Y', hired) = '2026'"
+  ],
+  "tokens": 544,
+  "answer": "2026년에 입사한 직원은 1명입니다. 정답: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 1,
+  "ok": false,
+  "value": "값",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE strftime('%Y', hired) = '2026';"
+  ],
+  "tokens": 446,
+  "answer": "정답: 값"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 2,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE strftime('%Y', hired) = '2026'",
+   "SELECT COUNT(*) FROM employees WHERE strftime('%Y', hired) = '2026' OR left_on = '2026-12-31' OR left_on LIKE '2026-%'"
+  ],
+  "tokens": 585,
+  "answer": "2026년에 입사한 직원은 1명입니다.\n\n정답:1"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 0,
+  "ok": true,
+  "value": "357",
+  "gold": 357,
+  "sqls": [
+   "SELECT AVG(amount) as avg_salary FROM salary WHERE emp_id IN (SELECT id FROM employees WHERE dept='품질팀') AND pay_month BETWEEN '2025-03' AND '2025-12'",
+   "SELECT AVG(amount) as avg_salary FROM salary WHERE emp_id IN (SELECT id FROM employees WHERE dept='품질팀') AND pay_month BETWEEN '2025-03' AND '2025-12'"
+  ],
+  "tokens": 707,
+  "answer": "2025년 3월부터 12월까지 품질팀의 월 급여 평균은 357만원입니다.  \n정답: 357"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 1,
+  "ok": true,
+  "value": "357",
+  "gold": 357,
+  "sqls": [
+   "SELECT AVG(amount) FROM salary WHERE emp_id IN (SELECT id FROM employees WHERE dept='품질팀') AND pay_month BETWEEN '2025-03' AND '2025-12'",
+   "SELECT AVG(amount) FROM salary WHERE emp_id IN (SELECT id FROM employees WHERE dept='품질팀') AND pay_month BETWEEN '2025-03' AND '2025-12'"
+  ],
+  "tokens": 695,
+  "answer": "2025년 3월부터 12월까지 품질팀의 월 급여 평균은 357만 원입니다. 정답: 357"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 2,
+  "ok": false,
+  "value": "",
+  "gold": 357,
+  "sqls": [
+   "SELECT AVG(amount) FROM salary WHERE pay_month BETWEEN '2025-03' AND '2025-12' AND emp_id IN (SELECT id FROM employees WHERE dept='품질팀');"
+  ],
+  "tokens": 606,
+  "answer": "먼저 급여 금액을 만원 단위로 반올림해야 합니다. 3571111.111111111 원을 만원 단위로 환산하려면 3571111.111111111 / 10000 = 357.1111111111111이고, 반올림하면 357이 됩니다.  \n답: 357"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 0,
+  "ok": false,
+  "value": "",
+  "gold": "송소율",
+  "sqls": [
+   "SELECT DISTINCT e.name FROM employees e WHERE e.hired <= '2024-01-01' AND (e.left_on IS NULL OR e.left_on >= '2024-01-01') AND NOT EXISTS (SELECT 1 FROM salary s WHERE s.emp_id = e.id AND s.pay_month >= '2024-01 AND s.pay_month < '2024-02')"
+  ],
+  "tokens": 1047,
+  "answer": "SQL 쿼리 내에서 날짜 형식을 올바르게 지정하는 것이 필요합니다. '2024-01' 대신 '2024-01'로 처리할 때, SQL에서 문자열로 인식시키기 위해서는 문자열로 감싸줘야 하며, 문자열 내 날짜 범위를 정확히 지정해야 합니다. 또한 서브쿼리의 조건에 날짜 범위 지정에도 신경 써야 합니다. 수정된 SQL은 아래와 같습니다:\n\n```sql\nSELECT DISTINCT e.name\nFROM employees e\nWHERE e.hired <= '2024-01-01'\n  AND (e.left_on IS NULL OR e.left_on >= '2024-01-01')\n  AND NOT EXISTS (\n    SELECT 1 FROM salary s\n    WHERE s.emp_id = e.id\n      AND s.pay_month >= '2024-01'\n      AND s.pay_month < '2024-02'\n  );\n```\n\n하지만, 'pay_month'는 형식을 'YYYY-MM' 또는 'YYYY-MM'과 일치하는 문자열로 가정합니다. 따라서, 날짜 범위 검사를 위해 '2024-01'과 '2024-02'를 문자열로 비교하는 것과 함께, 'pay_month"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 1,
+  "ok": false,
+  "value": "이하은",
+  "gold": "송소율",
+  "sqls": [
+   "SELECT name FROM employees WHERE left_on IS NULL OR left_on >= '2024-01-01'",
+   "SELECT emp_id, pay_month FROM salary"
+  ],
+  "tokens": 2623,
+  "answer": "재직 중인 직원들 중, 2024년 1월 이후 재직 기간에 급여 기록이 없는 직원은 이하은입니다.  \n\n정답: 이하은"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 2,
+  "ok": false,
+  "value": "없음",
+  "gold": "송소율",
+  "sqls": [
+   "SELECT e.name FROM employees e LEFT JOIN salary s ON e.id = s.emp_id AND s.pay_month >= '2024-01' WHERE e.hired <= '2024-01-01' AND (e.left_on IS NULL OR e.left_on >= '2024-01') AND s.emp_id IS NULL"
+  ],
+  "tokens": 629,
+  "answer": "급여 기록이 없는 재직 중인 직원이 없습니다. 정답: 없음"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 0,
+  "ok": false,
+  "value": "이하은",
+  "gold": "최서연",
+  "sqls": [
+   "SELECT name, AVG(amount) AS avg_pay FROM employees JOIN salary ON employees.id = salary.emp_id WHERE left_on IS NULL AND pay_month >= '2025-01' AND pay_month <= '2025-12' GROUP BY name",
+   "SELECT name, AVG(amount) AS avg_pay FROM employees JOIN salary ON employees.id = salary.emp_id WHERE left_on IS NULL AND pay_month >= '2026-01' AND pay_month <= '2026-12' GROUP BY name"
+  ],
+  "tokens": 1792,
+  "answer": "2025년과 2026년의 월평균 급여 데이터를 비교하여 인상률이 가장 높은 직원의 이름을 계산하겠습니다. 먼저 각각의 평균 급여를 구했고, 이를 바탕으로 인상률을 계산하겠습니다.\n\nCalculations:\n인상률 = (2026년 평균 급여 - 2025년 평균 급여) / 2025년 평균 급여\n\n각 직원별 인상률을 계산하면:\n\n강지아: (4384000 - 4335714.285714285) / 4335714.285714285 ≈ 0.0113\n권유준: (3691500 - 3515000) / 3515000 ≈ 0.0494\n김민준: (4323500 - 4180000) / 4180000 ≈ 0.0340\n류시우: (4089000 - 3970000) / 3970000 ≈ 0.0300\n박현우: (3576500 - 3440000) / 3440000 ≈ 0.0408\n서하준: (3420000 - 3335000) / 3335000 ≈ 0.0252\n송소율: (4217000 - 4095000) / 4095000 ≈ 0.0298\n신수아: (3436000 - 3316000) / 3316000 ≈ 0.0371\n오다은: (3910000 - 3815000) / 3815000 ≈ 0.0244\n윤지"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 1,
+  "ok": false,
+  "value": "이하은",
+  "gold": "최서연",
+  "sqls": [
+   "SELECT e.id, e.name, AVG(s.amount) AS avg_salary FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.left_on IS NULL AND s.pay_month LIKE '2025-%' GROUP BY e.id, e.name",
+   "SELECT e.id, e.name, AVG(s.amount) AS avg_salary FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.left_on IS NULL AND s.pay_month LIKE '2026-%' GROUP BY e.id, e.name",
+   "SELECT e.id, e.name, AVG(s.amount) AS avg_salary_2025 FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.left_on IS NULL AND s.pay_month LIKE '2025-%' GROUP BY e.id, e.name",
+   "SELECT e.id, e.name, AVG(s.amount) AS avg_salary_2026 FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.left_on IS NULL AND s.pay_month LIKE '2026-%' GROUP BY e.id, e.name"
+  ],
+  "tokens": 4828,
+  "answer": "각 직원별로 2025년과 2026년의 평균 급여를 이용하여 인상률을 계산했습니다. 그 중 인상률이 가장 높은 직원은 \"이하은\"으로, 인상률은 약 2.35배(앞서 계산하면 235.0% 이상)입니다.\n\n정답: 이하은"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 2,
+  "ok": false,
+  "value": "이하은",
+  "gold": "최서연",
+  "sqls": [
+   "SELECT name, AVG(pay) as avg_pay_2025 FROM (SELECT e.id, e.name, s.amount as pay FROM employees e JOIN salary s ON e.id = s.emp_id WHERE s.pay_month LIKE '2025-%') GROUP BY name",
+   "SELECT name, AVG(pay) as avg_pay_2026 FROM (SELECT e.id, e.name, s.amount as pay FROM employees e JOIN salary s ON e.id = s.emp_id WHERE s.pay_month LIKE '2026-%') GROUP BY name",
+   "SELECT name, (avg_pay_2026 - avg_pay_2025) / NULLIF(avg_pay_2025, 0) * 100 as growth_rate FROM (SELECT name, AVG(pay) as avg_pay_2025 FROM (SELECT e.id, e.name, s.amount as pay FROM employees e JOIN salary s ON e.id = s.emp_id WHERE s.pay_month LIKE '2025-%') GROUP BY name) LEFT JOIN (SELECT name, AVG(pay) as avg_pay_2026 FROM (SELECT e.id, e.name, s.amount as pay FROM employees e JOIN salary s ON e.id = s.emp_id WHERE s.pay_month LIKE '2026-%') GROUP BY name) USING (name) ORDER BY growth_rate DESC LIMIT 1"
+  ],
+  "tokens": 2396,
+  "answer": "2026년 월평균 급여 인상률이 가장 큰 재직 중 직원의 이름은 이하은입니다. \n\n정답: 이하은"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 0,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE grade >= 4 AND left_on IS NULL;",
+   "SELECT COUNT(*) FROM employees WHERE grade >= 4;",
+   "SELECT COUNT(*) FROM employees WHERE grade >= 4 AND left_on IS NOT NULL;"
+  ],
+  "tokens": 607,
+  "answer": "현재 재직 중인 직급(grade)이 4 이상인 직원은 6명입니다. 정답: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 1,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE grade >= 4 AND left_on IS NULL;",
+   "SELECT COUNT(*) FROM employees WHERE grade >= 4;",
+   "SELECT COUNT(*) FROM employees WHERE grade >= 4 AND left_on IS NOT NULL;"
+  ],
+  "tokens": 608,
+  "answer": "현재 재직 중인 직급(grade)이 4 이상인 직원은 6명입니다.  \n정답: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 2,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE grade >= 4 AND left_on IS NULL;"
+  ],
+  "tokens": 471,
+  "answer": "직급(grade)이 4 이상인 재직 직원은 6명입니다. 정답: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 0,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE dept = '생산팀' AND left_on IS NULL;"
+  ],
+  "tokens": 655,
+  "answer": "현재 재직 중인 생산팀 직원은 9명입니다. 정답: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 1,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE dept = '생산팀' AND (left_on IS NULL);"
+  ],
+  "tokens": 661,
+  "answer": "현재 재직 중인 생산팀 직원은 9명입니다.\n정답: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 2,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE dept = '생산팀' AND (left_on IS NULL OR left_on > '2026-10-21');"
+  ],
+  "tokens": 683,
+  "answer": "현재 재직 중인 생산팀 직원은 9명입니다.\n정답: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 0,
+  "ok": false,
+  "value": "3.4",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT hired, left_on FROM employees WHERE left_on IS NULL;",
+   "SELECT hired FROM employees WHERE left_on IS NULL;",
+   "SELECT hired, left_on FROM employees WHERE left_on IS NULL;",
+   "SELECT hired FROM employees WHERE left_on IS NULL;",
+   "SELECT hired, left_on FROM employees WHERE left_on IS NULL;",
+   "SELECT hired FROM employees WHERE left_on IS NULL;",
+   "SELECT hired, left_on FROM employees WHERE left_on IS NULL;",
+   "SELECT hired FROM employees WHERE left_on IS NULL;"
+  ],
+  "tokens": 11083,
+  "answer": "재직 중인 직원의 평균 근속 연수는 약 3.4년입니다.  \n계산 방식: 오늘(2026-10-21) 기준, 재직 시작일과 현재 날짜의 차이의 평균을 구함.\n\n정답: 3.4"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 1,
+  "ok": false,
+  "value": "",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT id, hired FROM employees WHERE left_on IS NULL;",
+   "SELECT id, hired FROM employees WHERE left_on IS NULL;",
+   "SELECT hired, left_on FROM employees WHERE left_on IS NULL;",
+   "SELECT hired, left_on FROM employees WHERE left_on IS NULL;",
+   "SELECT hired, left_on FROM employees WHERE left_on IS NULL;",
+   "SELECT hired, left_on FROM employees WHERE left_on IS NULL;",
+   "SELECT hired, left_on FROM employees WHERE left_on IS NULL;",
+   "SELECT hired, left_on FROM employees WHERE left_on IS NULL;",
+   "SELECT hired, left_on FROM employees WHERE left_on IS NULL;"
+  ],
+  "tokens": 16912,
+  "answer": ""
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 2,
+  "ok": true,
+  "value": "4.5",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT id, hired FROM employees WHERE left_on IS NULL;",
+   "SELECT id, hired FROM employees WHERE left_on IS NULL;",
+   "SELECT AVG(julianday('2026-10-21') - julianday(hired)) AS avg_days FROM employees WHERE left_on IS NULL;"
+  ],
+  "tokens": 2804,
+  "answer": "오늘(2026-10-21)을 기준으로 재직 중인 직원들의 평균 근속 연수는 약 4.5년입니다.  \n\n정답: 4.5"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 0,
+  "ok": false,
+  "value": "36637",
+  "gold": 366,
+  "sqls": [
+   "SELECT AVG(amount) FROM salary WHERE pay_month BETWEEN '2025-01' AND '2025-12' AND emp_id IN (SELECT id FROM employees WHERE dept='영업팀' OR dept='영업팀')"
+  ],
+  "tokens": 738,
+  "answer": "2025년 영업팀의 월 급여 평균은 36637만원입니다.\n정답: 36637"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 1,
+  "ok": false,
+  "value": "36637",
+  "gold": 366,
+  "sqls": [
+   "SELECT AVG(amount) FROM salary WHERE pay_month BETWEEN '2025-01' AND '2025-12' AND emp_id IN (SELECT id FROM employees WHERE dept = '영업팀')",
+   "SELECT AVG(amount) FROM salary WHERE pay_month LIKE '2025-%' AND emp_id IN (SELECT id FROM employees WHERE dept = '영업팀')"
+  ],
+  "tokens": 842,
+  "answer": "2025년 영업팀의 월 급여 평균은 36637원입니다.\n\n정답: 36637"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 2,
+  "ok": false,
+  "value": "4",
+  "gold": 366,
+  "sqls": [
+   "SELECT AVG(amount) FROM salary WHERE emp_id IN (SELECT id FROM employees WHERE dept = '영업팀') AND pay_month LIKE '2025-%'",
+   "SELECT AVG(amount) FROM salary WHERE emp_id IN (SELECT id FROM employees WHERE dept = '영업팀') AND pay_month LIKE '2025-%'"
+  ],
+  "tokens": 840,
+  "answer": "2025년 영업팀의 월 급여 평균은 36637원입니다. 따라서 만원 단위로 반올림하면 4만원입니다.\n\n정답: 4"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 0,
+  "ok": false,
+  "value": "0",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE hired >= '2026-01-01' AND hired < '2027-01-01';"
+  ],
+  "tokens": 642,
+  "answer": "2026년에 입사한 직원은 0명입니다. 정답: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 1,
+  "ok": false,
+  "value": "0",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE hired >= '2026-01-01' AND hired <= '2026-12-31'"
+  ],
+  "tokens": 642,
+  "answer": "2026년에 입사한 직원은 0명입니다. 정답: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 2,
+  "ok": false,
+  "value": "0",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE hired >= '2026-01-01' AND hired <= '2026-12-31';"
+  ],
+  "tokens": 642,
+  "answer": "2026년에 입사한 직원은 0명입니다.\n정답: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 0,
+  "ok": false,
+  "value": "36",
+  "gold": 357,
+  "sqls": [
+   "SELECT AVG(amount) FROM salary WHERE emp_id IN (SELECT id FROM employees WHERE dept = '품질팀') AND pay_month BETWEEN '2025-03' AND '2025-12'",
+   "SELECT COUNT(DISTINCT pay_month) FROM salary WHERE emp_id IN (SELECT id FROM employees WHERE dept = '품질팀') AND pay_month BETWEEN '2025-03' AND '2025-12'"
+  ],
+  "tokens": 896,
+  "answer": "2025년 3월부터 12월까지 품질팀의 월 급여 평균은 357,111원입니다. 만원 단위로 반올림하면 36만원입니다.\n\n정답: 36"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 1,
+  "ok": true,
+  "value": "357",
+  "gold": 357,
+  "sqls": [
+   "SELECT AVG(amount) FROM salary WHERE emp_id IN (SELECT id FROM employees WHERE dept = '품질팀') AND pay_month BETWEEN '2025-03' AND '2025-12'",
+   "SELECT AVG(amount) FROM salary WHERE emp_id IN (SELECT id FROM employees WHERE dept = '품질팀') AND pay_month BETWEEN '2025-03' AND '2025-12'"
+  ],
+  "tokens": 879,
+  "answer": "품질팀의 2025년 3월부터 12월까지 월 급여 평균은 357만원입니다.\n\n정답: 357"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 2,
+  "ok": false,
+  "value": "36",
+  "gold": 357,
+  "sqls": [
+   "SELECT AVG(amount) FROM salary WHERE emp_id IN (SELECT id FROM employees WHERE dept='품질팀') AND pay_month BETWEEN '2025-03' AND '2025-12' ",
+   "SELECT COUNT(*) FROM salary WHERE emp_id IN (SELECT id FROM employees WHERE dept='품질팀') AND pay_month BETWEEN '2025-03' AND '2025-12' "
+  ],
+  "tokens": 872,
+  "answer": "품질팀의 2025년 3월부터 12월까지 월급여 평균은 36만원입니다.  \n\n정답: 36"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 0,
+  "ok": true,
+  "value": "이하은,박현우,최서연,정주원,강지아,조도윤,윤지민,장선우,한예준,오다은,서하준,신수아,권유준,황서윤,안건우,송소율,홍채원,김민준,임지우,류시우",
+  "gold": "송소율",
+  "sqls": [
+   "SELECT DISTINCT e.name FROM employees e WHERE e.left_on IS NULL OR e.left_on > '2026-10-21' AND e.id NOT IN (SELECT DISTINCT s.emp_id FROM salary s WHERE s.pay_month >= '2024-01');"
+  ],
+  "tokens": 1048,
+  "answer": "급여 기록은 2024년 01월 이후부터 존재하나, 재직 중이던 달임에도 급여 기록이 없는 직원들의 이름은 다음과 같습니다.\n\n이하은, 박현우, 최서연, 정주원, 강지아, 조도윤, 윤지민, 장선우, 한예준, 오다은, 서하준, 신수아, 권유준, 황서윤, 안건우, 송소율, 홍채원, 김민준, 임지우, 류시우\n\n정답: 이하은,박현우,최서연,정주원,강지아,조도윤,윤지민,장선우,한예준,오다은,서하준,신수아,권유준,황서윤,안건우,송소율,홍채원,김민준,임지우,류시우"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 1,
+  "ok": false,
+  "value": "값",
+  "gold": "송소율",
+  "sqls": [
+   "SELECT name FROM employees WHERE hired <= '2026-10-21' AND (left_on IS NULL OR left_on > '2026-10-21') AND id NOT IN (SELECT emp_id FROM salary WHERE pay_month >= '2024-01') AND hired <= '2026-10-21';"
+  ],
+  "tokens": 804,
+  "answer": "재직 중이던 달인 2024년 1월 이후 동안 급여 기록이 없는 직원은 없습니다.  \n정답: 값"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 2,
+  "ok": false,
+  "value": "",
+  "gold": "송소율",
+  "sqls": [
+   "SELECT name FROM employees WHERE hired > '2024-01-01' AND left_on IS NULL;"
+  ],
+  "tokens": 778,
+  "answer": "이름이 \"최서연\", \"강지아\", \"신수아\", \"권유준\", \"안건우\", \"이하은\", \"한예준\"인 직원들은 재직 중인 달에 급여 기록이 없는 경우입니다."
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 0,
+  "ok": false,
+  "value": "",
+  "gold": "최서연",
+  "sqls": [
+   "SELECT id, name FROM employees WHERE left_on IS NULL;",
+   "SELECT employee_id, AVG(amount) AS avg_pay FROM salary WHERE pay_month BETWEEN '2025-01' AND '2025-12' GROUP BY employee_id;",
+   "SELECT id, name FROM employees WHERE left_on IS NULL;",
+   "SELECT emp_id, AVG(amount) AS avg_pay_2025 FROM salary WHERE pay_month BETWEEN '2025-01' AND '2025-12' GROUP BY emp_id;",
+   "SELECT emp_id, AVG(amount) AS avg_pay_2026 FROM salary WHERE pay_month BETWEEN '2026-01' AND '2026-09' GROUP BY emp_id;"
+  ],
+  "tokens": 4194,
+  "answer": "이제 각 직원별 2025년과 2026년 월평균 급여 인상률을 계산하겠습니다.\n\n이상 인상률이 가장 큰 직원의 이름을 찾기 위해서, 인상률 = (2026년 평균 급여 - 2025년 평균 급여) / 2025년 평균 급여 으로 계산하겠습니다.\n\n각 직원별 인상률 계산 후, 가장 높은 인상률을 기록한 사람의 이름을 알려드리겠습니다. 잠시만 기다려 주세요.\n계산을 진행하겠습니다."
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 1,
+  "ok": false,
+  "value": "강지아",
+  "gold": "최서연",
+  "sqls": [
+   "SELECT id, name FROM employees WHERE left_on IS NULL;",
+   "SELECT DISTINCT pay_month FROM salary WHERE pay_month BETWEEN '2025-01' AND '2025-12';",
+   "SELECT pay_month, emp_id, amount FROM salary WHERE pay_month BETWEEN '2025-01' AND '2025-12';",
+   "SELECT pay_month, emp_id, amount FROM salary WHERE pay_month BETWEEN '2026-01' AND '2026-12';",
+   "SELECT emp_id, AVG(amount) AS avg_salary_2025 FROM salary WHERE pay_month BETWEEN '2025-01' AND '2025-12' GROUP BY emp_id;",
+   "SELECT emp_id, AVG(amount) AS avg_salary_2026 FROM salary WHERE pay_month BETWEEN '2026-01' AND '2026-12' GROUP BY emp_id;",
+   "SELECT id, name FROM employees WHERE id = 25;"
+  ],
+  "tokens": 22937,
+  "answer": "가장 급여 인상률이 큰 직원은 \"강지아\"입니다.\n\n정답: 강지아"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 2,
+  "ok": false,
+  "value": "",
+  "gold": "최서연",
+  "sqls": [
+   "SELECT id, name FROM employees WHERE left_on IS NULL;",
+   "SELECT emp_id, pay_month, amount FROM salary WHERE pay_month IN ('2025-01', '2025-02', '2025-03', '2025-04', '2025-05', '2025-06', '2025-07', '2025-08', '2025-09', '2025-10', '2025-11', '2025-12', '2026-01', '2026-02', '2026-03', '2026-04', '2026-05', '2026-06', '2026-07', '2026-08', '2026-09'}}",
+   "SELECT id, name FROM employees WHERE left_on IS NULL;",
+   "SELECT emp_id, pay_month, amount FROM salary WHERE pay_month BETWEEN '2025-01' AND '2025-12';",
+   "SELECT emp_id, pay_month, amount FROM salary WHERE pay_month BETWEEN '2026-01' AND '2026-09';",
+   "SELECT id, name FROM employees WHERE left_on IS NULL;",
+   "SELECT emp_id, AVG(amount) AS avg_pay_2025 FROM salary WHERE pay_month BETWEEN '2025-01' AND '2025-12' GROUP BY emp_id;",
+   "SELECT emp_id, AVG(amount) AS avg_pay_2026 FROM salary WHERE pay_month BETWEEN '2026-01' AND '2026-09' GROUP BY emp_id;"
+  ],
+  "tokens": 20553,
+  "answer": "이제 2025년과 2026년의 월평균 급여 평균값을 바탕으로 인상률을 계산해서 가장 높은 사람을 찾겠습니다."
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 0,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE grade >= 4 AND left_on IS NULL;"
+  ],
+  "tokens": 639,
+  "answer": "직급(grade)이 4 이상인 재직 직원은 6명입니다. 정답: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 1,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) AS cnt FROM employees WHERE grade >= 4 AND left_on IS NULL;"
+  ],
+  "tokens": 648,
+  "answer": "2026년 10월 21일 기준으로 직급이 4 이상인 재직 직원은 6명입니다. 정답: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 2,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE grade >= 4 AND left_on IS NULL;"
+  ],
+  "tokens": 642,
+  "answer": "현재 재직 중인 직급(grade)이 4 이상인 직원은 6명입니다. 정답: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 0,
+  "ok": false,
+  "value": "5",
+  "gold": 9,
+  "sqls": [],
+  "tokens": 13240,
+  "answer": "employees 테이블에서 부서가 생산팀이고 left_on이 빈 행을 찾는다.\n\n생산팀 재직 중 직원:\nid 1 이하은, left_on 빈칸\nid 5 강지아, left_on 빈칸\nid 13 신수아, left_on 빈칸\nid 17 송소율, left_on 빈칸\nid 21 이하은, left_on 빈칸\n\n총 5명\n\n정답: 5"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 1,
+  "ok": false,
+  "value": "7",
+  "gold": 9,
+  "sqls": [],
+  "tokens": 13363,
+  "answer": "직원 테이블에서 생산팀(dept='생산팀')이며 left_on이 비어 있는 직원 현황을 찾습니다.\n\n생산팀 직원: 이하은(1, left_on=비어있음), 강지아(5, left_on=비어있음), 신수아(13, left_on=비어있음), 송소율(17, left_on=비어있음), 이하은(21, left_on=비어있음)\n\n임지우(9)은 left_on=2025-10-28로 퇴사함. 송소율(37), 강지아(25) 등은 left_on 비어있음 여부 확인 필요.\n\n직원 25(강지아)는 left_on 값 없음, 재직 중이다.\n\n직원 37(송소율)은 left_on 값 없음, 재직 중이다.\n\n따라서 현재 재직 중인 생산팀 직원 수는 1,5,13,17,21,25,37번 총 7명이다.\n\n정답: 7"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 2,
+  "ok": false,
+  "value": "5",
+  "gold": 9,
+  "sqls": [],
+  "tokens": 13229,
+  "answer": "생산팀 직원 중 left_on이 비어 있으면 재직 중인 사람입니다.\n\n[employees]에서 생산팀과 left_on이 빈 직원은:\nid=1 이하은, id=5 강지아, id=13 신수아, id=17 송소율, id=21 이하은\n\n따라서 현재 재직 중인 생산팀 직원 수는 5명입니다.\n\n정답: 5"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 0,
+  "ok": true,
+  "value": "4.5",
+  "gold": 4.5,
+  "sqls": [],
+  "tokens": 15160,
+  "answer": "재직 중인 직원의 명단을 employees에서 찾는다. left_on이 빈 값인 사람들만 선택.\n\nid: 1,2,3,4,5,6,7,8,10,11,12,13,14,15,16,17,19,20,21,22,23,24,25,26,28,29,30,31,32,33,34,35,37,38,39,40\n\n모든 재직중인 직원들의 근속 연수를 계산한다.\n근속 연수 = 오늘 날짜(2026-10-21) - 입사일(hired)\n\n계산:\n\n1: 2019-12-01 ~ 2026-10-21 약 6년 10개월 20일 = 약 6.89년\n2: 2021-12-01 ~ 2026-10-21 약 4년 10개월 20일 = 약 4.89년\n3: 2025-01-01 ~ 2026-10-21 약 1년 9개월 20일 = 약 1.81년\n4: 2022-09-01 ~ 2026-10-21 약 4년 1개월 20일 = 약 4.14년\n5: 2025-04-01 ~ 2026-10-21 약 1년 6개월 20일 = 약 1.55년\n6: 2019-03-01 ~ 2026-10-21 약 7년 7개월 20일 = 약 7.64년\n7: 2023-03-01 ~ 2026-10-21 약 3년 7개월 20일 = 약 3.64년\n8: 2020-07-01 ~ 2"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 1,
+  "ok": false,
+  "value": "3.9",
+  "gold": 4.5,
+  "sqls": [],
+  "tokens": 14938,
+  "answer": "재직 중인 직원들의 근속 연수를 계산한다.\n\n1. 먼저 재직 중인 직원 선별: left_on 값이 비어있는 직원.\n2. 근속 연수는 오늘 날짜(2026-10-21) - hired 날짜를 연 단위로 계산.\n3. 평균 근속 연수 구함.\n\n재직 중인 직원:\nid: 1,2,3,4,5,6,7,8,10,11,12,13,14,15,16,17,19,20,21,22,23,24,25,26,28,29,30,31,32,33,34,35,37,38,39,40\n(총 36명)\n\n각 직원별 근속일수:\n- 직원 1: 2019-12-01 ~ 2026-10-21  \n  2019-12-01 ~ 2026-12-01 = 7년, 그런데 2026-10-21이므로 약 7년 - 1.5개월 = 약 6.88년  \n- 직원 2: 2021-12-01 ~ 2026-10-21  \n  4년 10개월 20일 ≈ 4.9년  \n- 직원 3: 2025-01-01 ~ 2026-10-21  \n  1년 9개월 20일 ≈ 1.8년  \n- 직원 4: 2022-09-01 ~ 2026-10-21  \n  4년 1개월 20일 ≈ 4.14년   \n- 직원 5: 2025-04-01 ~ 2026-10-21  \n  1년 6개월 20일 ≈ 1.56년"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 2,
+  "ok": true,
+  "value": "4.5",
+  "gold": 4.5,
+  "sqls": [],
+  "tokens": 15810,
+  "answer": "재직 중인 직원은 left_on 값이 비어 있는 직원이다.\n\n재직 중인 직원 목록과 입사일:\n(1) 이하은: 2019-12-01\n(2) 박현우: 2021-12-01\n(3) 최서연: 2025-01-01\n(4) 정주원: 2022-09-01\n(5) 강지아: 2025-04-01\n(6) 조도윤: 2019-03-01\n(7) 윤지민: 2023-03-01\n(8) 장선우: 2020-07-01\n(10) 한예준: 2020-09-01\n(11) 오다은: 2022-12-01\n(12) 서하준: 2023-02-01\n(13) 신수아: 2025-05-01\n(14) 권유준: 2024-06-01\n(15) 황서윤: 2021-09-01\n(16) 안건우: 2026-07-01\n(17) 송소율: 2024-01-01\n(20) 김민준: 2021-05-01\n(21) 이하은: 2025-10-01\n(22) 박현우: 2021-09-01\n(24) 정주원: 2020-07-01\n(25) 강지아: 2023-09-01\n(26) 조도윤: 2023-11-01\n(28) 장선우: 2020-11-01\n(29) 임지우: 2021-06-01\n(30) 한예준: 2024-08-01\n(31) 오다은: 2023-04-01\n(32) 서하준: "
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 0,
+  "ok": false,
+  "value": "356",
+  "gold": 366,
+  "sqls": [],
+  "tokens": 13613,
+  "answer": "영업팀 직원들의 2025년 월급을 월별로 모두 합산해 월수로 나누어 평균을 구한다.\n\n영업팀 emp_id 목록:\n4, 8, 12, 16, 20, 24, 28, 32, 36, 40,  (21은 생산팀)\n\n각 emp_id별 2025년 급여 합과 개월수:\n- 4: 3540000*12 = 425,000,00 (12개월)\n- 8: 2930000*12 = 35160000 (12개월)\n- 12: 3620000*12 = 43440000 (12개월)\n- 16: 3636000*3 = 10908000 (7~9월 3개월)\n- 20: 4740000*12 = 56880000 (12개월)\n- 24: 4370000*12 = 52440000 (12개월)\n- 28: 3440000*12 = 41280000 (12개월)\n- 32: 3050000*12 = 36600000 (12개월)\n- 36: 0 (2025년은 7월 이후 이직, 7~8월 급여 0 없음)\n   - 실제로 36은 25년 8월 28일 퇴직. 7~8월 급여 있음?\n   - 36의 급여는 데이터에 없으므로 무시한다.\n- 40: 3620000*12 = 43440000 (12개월)\n\n월 수 총합 = 12 + 12 + 12 + 3 + 12 +"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 1,
+  "ok": true,
+  "value": "366",
+  "gold": 366,
+  "sqls": [],
+  "tokens": 13933,
+  "answer": "2025년 월별 급여 데이터를 영업팀 직원들의 것으로 찾아 합산 후, 그 총합을 월 급여 지급 건수로 나누어 평균을 구한다.\n\n영업팀 직원 id 목록:\n4, 8, 12, 16, 20, 24, 28, 32, 36, 40\n\n각 직원별 2025년 평균 월급을 구해서 다시 평균내는 방법으로 계산을 최종 확인한다.\n\n- id 4: 2025년 1~12월 각 3540000 원 (12개월 동일)\n- id 8: 2025년 1~12월 각 2930000 원 (12개월 동일)\n- id 12: 2025년 1~12월 각 3620000 원 (12개월 동일)\n- id 16: 2025년 급여는 2026-07월부터 기록 있으므로 2025년 급여 없음 (0개월)\n- id 20: 2025년 1~12월 각 4740000 원 (12개월 동일)\n- id 24: 2025년 1~12월 각 4370000 원 (12개월 동일)\n- id 28: 2025년 1~12월 각 3440000 원 (12개월 동일)\n- id 32: 2025년 1~12월 각 3050000 원 (12개월 동일)\n- id 36: 2025년 8월 급여까지 있으나 2025-08-28 에 퇴사, 따라서 2025년 1~8월 지급:\n  - 2025-"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 2,
+  "ok": false,
+  "value": "383",
+  "gold": 366,
+  "sqls": [],
+  "tokens": 13678,
+  "answer": "2025년 영업팀 사원 중 2025년 월급 데이터가 있는 사람들의 급여 평균을 구한다.\n\n영업팀 사원 리스트 및 2025년 급여 데이터 확인:\n- id=4, 정주원: 2025년 1~12월(12개월) 급여 있음\n- id=8, 장선우: 2025년 급여 데이터 없음 (2024년까지만)\n- id=12, 서하준: 2025년 급여 데이터 없음\n- id=16, 안건우: 2026년 급여만 있음\n- id=20, 김민준: 2025년 1~12월(12개월) 급여 있음\n- id=24, 정주원 (다른 등급): 2025년 1~12월(12개월) 급여 있음\n- id=28, 장선우: 2025년 1~12월(12개월) 급여 있음\n- id=32, 서하준: 2025년 1~12월(12개월) 급여 있음\n\n따라서 2025년 영업팀 급여 데이터 있는 사원 id는 4, 20, 24, 28, 32이다.\n\n각 사원의 2025년 월평균 급여 계산:\n- id=4: 매월 3,540,000원 (표 모두 동일) → 3,540,000원\n- id=20: 매월 4,740,000원 → 4,740,000원\n- id=24: 매월 4,370,000원 → 4,370,000원\n- id=28: 매월 3,440,000원 → 3,440,0"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 0,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [],
+  "tokens": 13177,
+  "answer": "2026년에 입사한 직원은 다음과 같습니다:\n\n- 안건우(id 16) : 2026-07-01\n\n따라서 2026년에 입사한 직원은 1명입니다.\n\n정답: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 1,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [],
+  "tokens": 13248,
+  "answer": "2026년에 입사한 직원을 찾기 위해 employees 표의 hired 컬럼에서 2026년(2026-01-01부터 2026-12-31 사이)에 입사한 사람을 확인합니다.\n\n- 16번 안건우: 2026-07-01 입사\n- 21번 이하은: 2025-10-01 입사 (2026년 아님)\n- 기타 직원들은 2026년 이전 입사\n\n2026년 입사자는 16번 안건우 1명입니다.\n\n정답: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 2,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [],
+  "tokens": 13206,
+  "answer": "[employees] 테이블을 보면 2026년에 입사한 사람은 hired 컬럼에 2026년 날짜가 있는 직원입니다.\n\nhired가 2026년인 직원은:\n- 16,안건우,영업팀,2,2026-07-01\n\n2026년에 입사한 직원은 1명입니다.\n\n정답: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 0,
+  "ok": false,
+  "value": "3007",
+  "gold": 357,
+  "sqls": [],
+  "tokens": 13768,
+  "answer": "품질팀 사원들은 id가 아래와 같다(퇴사자는 제외):\n2, 6, 10, 14, 18(퇴사 2025-04-28 퇴사전 3월 급여 포함), 22, 26, 34, 38\n\n2025년 3월부터 12월까지 급여를 각각 더하고 월별 평균을 구한다.\n\n- 2025-03 : 2(3380000)+6(4020000)+10(4340000)+14(3410000)+18(4020000)+22(3500000)+26(3000000)+34(3620000)+38(3970000)\n= 3380000+4020000+4340000+3410000+4020000+3500000+3000000+3620000+3970000 = 33290000\n\n- 2025-04 : 2(3380000)+6(4020000)+10(4340000)+14(3410000)+18(4020000)+22(3500000)+26(3000000)+34(3620000)+38(3970000)\n= 33290000 (18 퇴사 4월 28일이지만 전체 4월 급여 포함)\n\n- 2025-05 : 2(3380000)+6(4020000)+10(4340000)+14(3410000)+22(3500000)+26(3000000)+34(3620000)+38(397000"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 1,
+  "ok": false,
+  "value": "366",
+  "gold": 357,
+  "sqls": [],
+  "tokens": 13806,
+  "answer": "품질팀 사원 목록과 2025년 3월부터 12월까지 급여 데이터를 찾아야 한다.\n\n[employees] 품질팀 emp_id:\n2, 6, 10, 14, 18, 22, 26, 34, 38\n\n각 사원의 급여 합계와 월 수(2025년 3월~12월 10개월)를 구한다.\n\n- emp_id 2 (박현우) 2025-03~12: 월급 3380000원 * 10 = 33,800,000원\n- emp_id 6 (조도윤) 2025-03~12: 월급 4020000원 * 10 = 40,200,000원\n- emp_id 10 (한예준) 2025-03~12: 월급 4340000원 * 10 = 43,400,000원\n- emp_id 14 (권유준) 2025-03~12: 월급 3410000원 * 10 = 34,100,000원\n- emp_id 18 (류시우) 2025-03~04만 재직(2025-04-28 퇴사) → 2025-03, 2025-04 급여만 계산, 각 월 급여: 4020000원(아래 급여 표에 없는 월은 2025-04 이전 급여로 계산), 월급 4020000원 * 2 = 8,040,000원\n- emp_id 22 (박현우) 2025-03~12: 월급 3500000원 * 10 = 35,000,"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 2,
+  "ok": false,
+  "value": "371",
+  "gold": 357,
+  "sqls": [],
+  "tokens": 14291,
+  "answer": "품질팀(emp_id: 2,6,10,14,18,22,26,34,38 등)과 2025년 3월~12월 급여 데이터를 보겠다.\n\n품질팀 직원 ID:\n- 박현우: 2, 22\n- 조도윤: 6, 26\n- 한예준: 10, 30(30는 2024-08 부터 품질팀)\n- 권유준: 14, 34\n- 류시우: 18, 38\n- (22도 박현우, 중복)\n\n2025-03~2025-12 급여 합계(10개월) 및 데이터 점검:\n\n1) emp_id=2 (박현우)\n- 2025-03~2025-12: 3380000원 * 10 = 33,800,000원\n\n2) emp_id=6 (조도윤)\n- 2025-03~2025-12: 4020000원 * 10 = 40,200,000원\n\n3) emp_id=10 (한예준)\n- 2025-03~2025-12: 4340000원 * 10 = 43,400,000원\n\n4) emp_id=14 (권유준)\n- 2025-03~2025-12: 3410000원 * 10 = 34,100,000원\n\n5) emp_id=18 (류시우)\n- 근무 시작: 2019-10-01, 퇴사: 2025-04-28 (4월까지만 지급됨)\n- 2025-03: 3970000원\n- 2025-04: 3970000원\n- 나머"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 0,
+  "ok": false,
+  "value": "없음",
+  "gold": "송소율",
+  "sqls": [],
+  "tokens": 14644,
+  "answer": "재직 중이었던 기간에 급여 기록이 없는 직원을 찾아야 한다.\n\n기준일은 2024-01-01부터 2026-10-21(오늘)까지다. 급여 기록은 'salary' 테이블에 있고 2024-01부터 시작.\n\n직원별로 입사일 ~ (퇴직일 또는 2026-10-21) 기간 중 월별 급여 기록이 모두 있는지 점검한다.\n\n(1) 직원 데이터와 입사, 퇴사일:\n- 입사일까지 확인 (hired)\n- 퇴사일 없으면 오늘(2026-10-21)까지 근무 중\n- 퇴사일 있으면 퇴사일까지 근무한 것으로 간주\n\n(2) 월별 체크:\n각 직원에 대해 재직 기간 내 YYYY-MM 포맷 월별 급여 기록이 'salary'에 존재하는지 확인\n\n---\n\n직원 16, 안건우는 2026-07-01 입사로 확인됨. 2026-10-21까지 근무 중.\n\nsalary에 16번 emp_id의 급여는 2026-07, 08, 09 3개월치만 있음. 2026-10달 급여는 없지만 아직 10월 말까지 집계 안 됐을 수도 있음. 이 문제는 2024-01부터 시작하니 2026-10 달 기록 누락은 검사 제외.\n\n---\n\n직원 18, 류시우는 입사 2025-05-01, 퇴사 2025-04-28 (퇴사일이 입사일보다 앞임) 특이"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 1,
+  "ok": true,
+  "value": "송소율",
+  "gold": "송소율",
+  "sqls": [],
+  "tokens": 14514,
+  "answer": "재직 중이던 기간(입사 후~퇴사 전 또는 현재까지 재직)의 월에 급여 기록이 없으면 조건에 해당함.\n\n1. employees 중 입사일이 2024-01 이전 또는 같고 퇴사일이 없거나 2024-01 이후인 직원 확인 (급여 기록 시작이 2024-01이므로 이전은 무시)\n2. 급여 기록이 없는 2024-01~현재(2026-10) 사이 재직 월이 있는 직원 확인\n3. 데이터 체크하기\n\n입사일과 퇴사일 기준 현재 재직 월 판단:\n- 재직기간 : 입사일 부터 (퇴사 없으면 2026-10 까지), 퇴사 있으면 퇴사 월까지\n\nemployees에서 입사일, 퇴사일 추출:\n- 입사일 <= 2026-10-21 (현재)인 직원 모두\n- 퇴사일이 없거나 (퇴사일) >= 2024-01-01 인 직원 (급여 기록 기간 포함)\n\n급여 기록에서 emp_id별 2024-01 부터 2026-09 까지 월별 급여 있는지 확인\n\n------\n\n주요 후보자 살펴보기 (id, name, hired, left_on):\n\n1 이하은  2019-12-01, (재직중)\n2 박현우 2021-12-01 (재직중)\n3 최서연 2025-01-01 (재직중)\n4 정주원 2022-09-01 (재직중)\n5 강지아 "
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 2,
+  "ok": false,
+  "value": "없음",
+  "gold": "송소율",
+  "sqls": [],
+  "tokens": 15170,
+  "answer": "급여 기록은 2024-01부터 시작한다.\n\n직원이 재직 중인 달이며 급여 기록이 없는 경우 찾아야 한다.\n직원별 입사일과 퇴사일(퇴사일 없는 경우 현재까지 재직 중) 기준으로,\n2024-01부터 2026-09(현재일자 연도-월)까지 재직 중인 월 중 급여 기록 여부 확인 필요.\n\nemployees 데이터를 급여 기록과 대조하여 재직 중인 달 모두 급여 기록이 있는지 찾는다.\n\n급여 기록에서 빠진(emp_id, 월) 쌍 존재 여부 확인.\n\n- 입사일이 2024-01 이전이고 퇴사일 2024-01 이후 또는 없음인 직원은 2024-01월부터 2026-09월까지 재직.\n- 입사일이 2024-01 이후인 경우 입사월부터 2026-09월까지 재직.\n- 퇴사일이 있는 경우, 해당 퇴사월까지 재직.\n- 퇴사월이 하루 날짜 기준이므로 해당 월까지 월급 줬는지 검증.\n\n직원별로 재직기간 월 리스트 생성 후 salary에 해당 emp_id와 월(pay_month)이 있는지 확인.\n\n직원별 주요 정보와 급여 기록 개수 비교:\n\n1. 이하은(id=1): 입사 2019-12-01, 퇴사 없음 재직기간 2024-01~2026-09 모두 급여 기록 존재함.\n2. 박현우(id=2): 2"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 0,
+  "ok": true,
+  "value": "최서연",
+  "gold": "최서연",
+  "sqls": [],
+  "tokens": 15420,
+  "answer": "재직 중인 직원만 고려합니다. 즉, employees 데이터에서 left_on가 빈 사람들만 대상으로 합니다.\n\n직원 별로 2025년과 2026년의 월급 평균 계산 후 2026년 평균 / 2025년 평균으로 인상률을 구하고 가장 큰 인상률을 찾습니다.\n\n1. 재직 중인 직원 ID (left_on 빈 칸):\nid: 1,2,4,6,7,8,10,11,12,14,15,16,17,19,20,22,23,24,25,26,28,29,30,31,32,33,34,35,37,38,39,40\n\n2. 이 직원들의 급여를 2025년과 2026년으로 구분해서 평균 계산:\n- 2025년 급여만 집계: pay_month가 \"2025-01\"부터 \"2025-12\"까지\n- 2026년 급여만 집계: \"2026-01\"부터 \"2026-09\"까지(현재 날짜가 2026-10-21이므로 2026-09까지 있음)\n\n3. 각 직원별로 2025년과 2026년 월평균 급여 계산\n\n4. 인상률 = (2026년 평균 급여) / (2025년 평균 급여)\n\n계산 수행 (대략적인 주요 값만 추출):\n\n- 직원 1\n  - 2025년: 2980000 * 12 = 35760000, 평균 = 2980000\n  - 2026년: "
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 1,
+  "ok": true,
+  "value": "최서연",
+  "gold": "최서연",
+  "sqls": [],
+  "tokens": 16022,
+  "answer": "재직 중인 직원이란 left_on이 비어 있는 사람을 의미합니다.\n\n1. 먼저 2025년 급여월별 데이터를 가지고 월평균 급여를 구합니다.\n2. 2026년 급여월별 데이터를 가지고 월평균 급여도 구합니다.\n3. 2025년 대비 2026년 월평균 급여 인상률 = (2026년 월평균 - 2025년 월평균) / 2025년 월평균 * 100 (%)를 계산합니다.\n4. 재직 중인 직원 중 인상률이 가장 큰 직원을 찾습니다.\n\n재직 중 직원은 left_on이 비어 있는 데이터에서 찾으면 됩니다.\n\nleft_on이 없는 emp_id:\n1,2,4,5,6,7,8,10,11,12,13,14,15,16,17,19,20,21,22,23,24,25,26,28,29,30,31,32,33,34,35,37,38,39,40\n\n1) emp_id=1\n- 2025년 급여: 1월~12월 (2980000*12) = 35760000\n- 2026년 급여: 1월~9월 (3069000*9) = 27621000\n- 2025 월평균 = 2980000\n- 2026 월평균 = 3069000\n- 증가율 = (3069000-2980000)/2980000 = 0.0299 ≈ 2.99%\n\n2) emp_id=2\n- 20"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 2,
+  "ok": true,
+  "value": "최서연",
+  "gold": "최서연",
+  "sqls": [],
+  "tokens": 15845,
+  "answer": "재직 중인 직원은 left_on이 빈 값인 직원입니다.\n\n각 emp_id별로 2025년과 2026년 급여 월평균을 계산해 인상률을 구합니다.\n인상률 = (2026년 월평균 - 2025년 월평균) / 2025년 월평균\n\n- 이하은(id=1): 2025년 1~12월, 2026년 1~9월\n  2025년 월급: 2980000 원\n  2026년 월급: 3069000 원\n  인상률: (3069000-2980000)/2980000=0.02953\n\n- 박현우(id=2): 2025년 1~12월, 2026년 1~9월\n  2025년 월급: 3380000 원\n  2026년 월급: 3583000 원\n  인상률: (3583000-3380000)/3380000=0.05917\n\n- 최서연(id=3): 2025년 1~12월, 2026년 1~9월\n  2025년 월급: 2900000 원\n  2026년 월급: 2958000 원\n  인상률: (2958000-2900000)/2900000=0.02069\n\n- 정주원(id=4): 2025년 1~12월, 2026년 1~9월\n  2025년 월급: 3540000 원\n  2026년 월급: 3611000 원\n  인상률: (3611000-3540000)/354"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 0,
+  "ok": false,
+  "value": "5",
+  "gold": 6,
+  "sqls": [],
+  "tokens": 13445,
+  "answer": "직급이 4 이상인 재직 직원 수를 구하기 위해 employees 표에서 left_on이 빈 값인 직원 중 grade가 4 이상인 사람을 찾는다.\n\nemployees 표를 확인:\n- left_on이 빈 값인 재직자만 선별\n- 그중 grade가 4 이상인 직원:\n  - id 10, 한예준, grade 4, left_on 없음\n  - id 24, 정주원, grade 4, left_on 없음\n  - id 35, 황서윤, grade 4, left_on 없음\n  - id 20, 김민준, grade 5, left_on 없음\n  - id 25, 강지아, grade 5, left_on 2023-09-01 (퇴사함, 제외)\n  - id 21, 이하은, grade 3, left_on 없음 (단, grade 3라서 제외)\n  - id 16, 안건우, grade 2, left_on 없음 (단, grade 2라서 제외)\n  - id 37, 송소율, grade 5, left_on 없음\n\ngrade 4 이상 재직자 목록:\n- id 10, 한예준 (4)\n- id 24, 정주원 (4)\n- id 35, 황서윤 (4)\n- id 20, 김민준 (5)\n- id 37, 송소율 (5)\n\n총 5명\n\n정"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 1,
+  "ok": false,
+  "value": "4",
+  "gold": 6,
+  "sqls": [],
+  "tokens": 13255,
+  "answer": "재직 직원은 left_on 값이 비어 있는 사람입니다.\n\n직급(grade)이 4 이상인 재직자 찾기:\n\n- emp_id 10: 품질팀, grade 4, left_on 없음 → 재직\n- emp_id 20: 영업팀, grade 5, left_on 없음 → 재직\n- emp_id 24: 영업팀, grade 4, left_on 없음 → 재직\n- emp_id 25: 생산팀, grade 5, left_on 없음 → 재직\n\n위 4명뿐입니다.\n\n정답: 4"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 2,
+  "ok": false,
+  "value": "4",
+  "gold": 6,
+  "sqls": [],
+  "tokens": 13545,
+  "answer": "2026-10-21 기준으로 먼저 퇴사하지 않은 직원(왼쪽에 left_on 값이 없거나 미래 날짜인 경우 재직 중) 중에서 grade가 4 이상인 사람을 찾는다.\n\n재직 조건: left_on 값이 비었거나, left_on >= '2026-10-21'\ngrade >= 4 조건: grade 값이 4 이상\n\n직원 [employees]에서 조건에 맞는 직원들:\n\n- 10,한예준,품질팀,4,2020-09-01, (left_on 없음, grade 4)\n- 20,김민준,영업팀,5,2021-05-01, (left_on 없음, grade 5)\n- 24,정주원,영업팀,4,2020-07-01, (left_on 없음, grade 4)\n- 25,강지아,생산팀,5,2023-09-01, (left_on 없음, grade 5)\n\n다른 직원 중 grade 4 이상임에도 퇴사한 경우 제외\n- 36,안건우,영업팀,3,2025-11-01,2025-08-28, (left_on 과거)\n- 18,류시우,품질팀,3,2025-05-01,2025-04-28, (left_on 과거)\n- 27,윤지민,물류팀,3,2025-03-01,2025-10-28, (grade 3)\n- 9,임지우,생산팀,3,2023-01"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 0,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE dept = '생산팀' AND left_on IS NULL;"
+  ],
+  "tokens": 479,
+  "answer": "현재 재직 중인 생산팀 직원은 9명입니다.\n\n정답: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 1,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE dept = '생산팀' AND left_on IS NULL"
+  ],
+  "tokens": 478,
+  "answer": "지금 재직 중인 생산팀 직원은 9명입니다.\n정답: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 2,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE dept = '생산팀' AND left_on IS NULL;"
+  ],
+  "tokens": 479,
+  "answer": "현재 재직 중인 생산팀 직원은 9명입니다.\n정답: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 0,
+  "ok": true,
+  "value": "4.5",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT AVG((JULIANDAY('2026-10-21') - JULIANDAY(hired))/365.25) AS avg_years FROM employees WHERE left_on IS NULL;"
+  ],
+  "tokens": 539,
+  "answer": "재직 중인 직원의 평균 근속 연수는 4.5년입니다.  \n정답: 4.5"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 1,
+  "ok": true,
+  "value": "4.5",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT AVG((julianday('2026-10-21') - julianday(hired))/365.25) AS avg_tenure FROM employees WHERE left_on IS NULL;"
+  ],
+  "tokens": 544,
+  "answer": "재직 중인 직원의 평균 근속 연수는 약 4.5년입니다. (소수 첫째 자리에서 반올림)\n\n정답: 4.5"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 2,
+  "ok": true,
+  "value": "4.5",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT AVG((julianday('2026-10-21') - julianday(hired)) / 365.25) AS avg_years FROM employees WHERE left_on IS NULL;"
+  ],
+  "tokens": 535,
+  "answer": "재직 중인 직원의 평균 근속 연수는 약 4.5년입니다.\n\n정답: 4.5"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 0,
+  "ok": true,
+  "value": "366",
+  "gold": 366,
+  "sqls": [
+   "SELECT ROUND(AVG(amount) / 10000) AS avg_salary_10k FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = '영업팀' AND s.pay_month LIKE '2025-%'"
+  ],
+  "tokens": 547,
+  "answer": "2025년 영업팀의 월 급여 평균은 366만원 입니다.  \n정답: 366"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 1,
+  "ok": true,
+  "value": "366",
+  "gold": 366,
+  "sqls": [
+   "SELECT ROUND(AVG(amount / 10000)) AS avg_salary_2025 FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = '영업팀' AND s.pay_month LIKE '2025-%'"
+  ],
+  "tokens": 544,
+  "answer": "2025년 영업팀의 월 급여 평균은 366만원입니다. 정답: 366"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 2,
+  "ok": true,
+  "value": "366",
+  "gold": 366,
+  "sqls": [
+   "SELECT ROUND(AVG(amount / 10000), 0) AS avg_salary_in_10k FROM salary JOIN employees ON salary.emp_id = employees.id WHERE dept = '영업팀' AND pay_month LIKE '2025-%';"
+  ],
+  "tokens": 542,
+  "answer": "2025년 영업팀의 월 급여 평균은 366만원입니다.\n정답: 366"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 0,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) AS count_2026 FROM employees WHERE hired >= '2026-01-01' AND hired <= '2026-12-31';"
+  ],
+  "tokens": 472,
+  "answer": "2026년에 입사한 직원은 1명입니다.\n정답: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 1,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) AS count_2026_hired FROM employees WHERE hired >= '2026-01-01' AND hired <= '2026-12-31';"
+  ],
+  "tokens": 477,
+  "answer": "2026년에 입사한 직원은 1명입니다.  \n정답: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 2,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE hired BETWEEN '2026-01-01' AND '2026-12-31'"
+  ],
+  "tokens": 462,
+  "answer": "2026년에 입사한 직원은 1명입니다.\n정답: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 0,
+  "ok": true,
+  "value": "357",
+  "gold": 357,
+  "sqls": [
+   "SELECT AVG(amount) AS avg_salary FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = '품질팀' AND s.pay_month BETWEEN '2025-03' AND '2025-12'"
+  ],
+  "tokens": 582,
+  "answer": "2025년 3월부터 12월까지 품질팀의 월 급여 평균은 3,571,111원으로, 만원 단위로 반올림하면 357만원입니다.\n정답: 357"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 1,
+  "ok": true,
+  "value": "357",
+  "gold": 357,
+  "sqls": [
+   "SELECT AVG(amount) as avg_salary FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = '품질팀' AND s.pay_month BETWEEN '2025-03' AND '2025-12'"
+  ],
+  "tokens": 583,
+  "answer": "2025년 3월부터 12월까지 품질팀의 월 급여 평균은 약 3,571,111원이며, 만원 단위로 반올림하면 357만원입니다.\n정답: 357"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 2,
+  "ok": true,
+  "value": "357",
+  "gold": 357,
+  "sqls": [
+   "SELECT ROUND(AVG(amount) / 10000) AS avg_salary_in_ten_thousands\nFROM salary\nJOIN employees ON salary.emp_id = employees.id\nWHERE employees.dept = '품질팀'\n  AND pay_month BETWEEN '2025-03' AND '2025-12'"
+  ],
+  "tokens": 589,
+  "answer": "2025년 3월부터 12월까지 품질팀의 월 급여 평균은 357만원입니다.  \n정답: 357"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 0,
+  "ok": false,
+  "value": "없음",
+  "gold": "송소율",
+  "sqls": [
+   "WITH months AS (\n  SELECT date('2024-01-01', '+' || (n || ' months')) AS month\n  FROM (SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12)\n),\nactive_months AS (\n  SELECT e.id AS emp_id, e.name, m.month\n  FROM employees e\n  JOIN months m ON m.month >= substr(e.hired, 1, 7) || '-01'\n  WHERE e.left_on IS NULL OR date(e.left_on) >= m.month\n  AND m.month >= '2024-01-01'\n),\nsalary_months AS (\n  SELECT emp_id, pay_month FROM salary\n),\nmismatch AS (\n  SELECT a.emp_id, a.name, a.month\n  FROM active_months a\n  LEFT JOIN salary_months s ON a.emp_id = s.emp_id AND substr(a.month, 1, 7) = s.pay_month\n  WHERE s.pay_month IS NULL\n)\nSELECT DISTINCT name FROM mismatch ORDER BY name;"
+  ],
+  "tokens": 1043,
+  "answer": "재직 중이던 2024-01 이후의 달에 급여 기록이 없는 직원은 없습니다.\n정답: 없음"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 1,
+  "ok": true,
+  "value": "강지아,권유준,김민준,류시우,박현우,서하준,송소율,신수아,안건우,오다은,윤지민,이하은,임지우,장선우,정주원,조도윤,최서연,한예준,홍채원,황서윤",
+  "gold": "송소율",
+  "sqls": [
+   "WITH months AS (\n  SELECT '2024-01' AS month\n  UNION ALL\n  SELECT '2024-02'\n  UNION ALL\n  SELECT '2024-03'\n  UNION ALL\n  SELECT '2024-04'\n  UNION ALL\n  SELECT '2024-05'\n  UNION ALL\n  SELECT '2024-06'\n  UNION ALL\n  SELECT '2024-07'\n  UNION ALL\n  SELECT '2024-08'\n  UNION ALL\n  SELECT '2024-09'\n  UNION ALL\n  SELECT '2024-10'\n  UNION ALL\n  SELECT '2024-11'\n  UNION ALL\n  SELECT '2024-12'\n  UNION ALL\n  SELECT '2025-01'\n  UNION ALL\n  SELECT '2025-02'\n  UNION ALL\n  SELECT '2025-03'\n  UNION ALL\n  SELECT '2025-04'\n  UNION ALL\n  SELECT '2025-05'\n  UNION ALL\n  SELECT '2025-06'\n  UNION ALL\n  SELECT '2025-07'\n  UNION ALL\n  SELECT '2025-08'\n  UNION ALL\n  SELECT '2025-09'\n  UNION ALL\n  SELECT '2025-10'\n  UNION ALL\n  SELECT '2025-11'\n  UNION ALL\n  SELECT '2025-12'\n  UNION ALL\n  SELECT '2026-01'\n  UNION ALL\n  SELECT '2026-02'\n  UNION ALL\n  SELECT '2026-03'\n  UNION ALL\n  SELECT '2026-04'\n  UNION ALL\n  SELECT '2026-05'\n  UNION ALL\n  SELECT '2026-06'\n  UNION ALL\n  SELECT '2026-07'\n  UNION ALL\n  SELECT '2026-08'\n  UNION ALL\n  SELECT '2026-09'\n  UNION ALL\n  SELECT '2026-10'\n)\nSELECT DISTINCT e.name\nFROM employees e\nJOIN months m\n-- 재직 중인 달 (입사일 <= 해당월말, 퇴사일이 NULL 이거나 해당월초 이후)\nON e.hired <= m.month || '-31' AND (e.left_on IS NULL OR e.left_on >= m.month || '-01')\nLEFT JOIN salary s\nON e.id = s.emp_id AND s.pay_month = m.month\nWHERE s.emp_id IS NULL\nORDER BY e.name;"
+  ],
+  "tokens": 1852,
+  "answer": "재직 중이던 달인데 급여 기록이 없는 직원의 이름은 다음과 같습니다:\n강지아, 권유준, 김민준, 류시우, 박현우, 서하준, 송소율, 신수아, 안건우, 오다은, 윤지민, 이하은, 임지우, 장선우, 정주원, 조도윤, 최서연, 한예준, 홍채원, 황서윤\n\n정답: 강지아,권유준,김민준,류시우,박현우,서하준,송소율,신수아,안건우,오다은,윤지민,이하은,임지우,장선우,정주원,조도윤,최서연,한예준,홍채원,황서윤"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 2,
+  "ok": true,
+  "value": "강지아, 권유준, 김민준, 류시우, 박현우, 서하준, 송소율, 신수아, 안건우, 오다은, 윤지민, 이하은, 임지우, 장선우, 정주원, 조도윤, 최서연, 한예준, 홍채원, 황서윤",
+  "gold": "송소율",
+  "sqls": [
+   "WITH months AS (\n  SELECT '2024-01' AS month\n  UNION ALL\n  SELECT strftime('%Y-%m', date(month || '-01', '+1 month')) FROM months WHERE month < '2026-10'\n), employed_months AS (\n  SELECT e.id, e.name, m.month\n  FROM employees e\n  JOIN months m ON m.month >= substr(e.hired, 1, 7) \n    AND (e.left_on IS NULL OR m.month < substr(e.left_on, 1, 7))\n), salary_months AS (\n  SELECT emp_id, pay_month FROM salary\n)\nSELECT DISTINCT em.name FROM employed_months em\nLEFT JOIN salary_months sm ON em.id = sm.emp_id AND em.month = sm.pay_month\nWHERE sm.emp_id IS NULL\nORDER BY em.name;"
+  ],
+  "tokens": 1112,
+  "answer": "재직 중이던 달인데 급여 기록이 없는 경우가 있는 직원의 이름은 강지아, 권유준, 김민준, 류시우, 박현우, 서하준, 송소율, 신수아, 안건우, 오다은, 윤지민, 이하은, 임지우, 장선우, 정주원, 조도윤, 최서연, 한예준, 홍채원, 황서윤입니다.\n정답: 강지아, 권유준, 김민준, 류시우, 박현우, 서하준, 송소율, 신수아, 안건우, 오다은, 윤지민, 이하은, 임지우, 장선우, 정주원, 조도윤, 최서연, 한예준, 홍채원, 황서윤"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 0,
+  "ok": true,
+  "value": "최서연",
+  "gold": "최서연",
+  "sqls": [
+   "SELECT id, name FROM employees WHERE left_on IS NULL",
+   "SELECT emp_id, substr(pay_month, 1, 4) AS year, AVG(amount) AS avg_pay FROM salary WHERE pay_month BETWEEN '2025-01' AND '2026-12' GROUP BY emp_id, year",
+   "WITH avg_salary AS (\n    SELECT emp_id, \n           AVG(CASE WHEN pay_month LIKE '2025%' THEN amount ELSE NULL END) AS avg_2025,\n           AVG(CASE WHEN pay_month LIKE '2026%' THEN amount ELSE NULL END) AS avg_2026\n    FROM salary\n    GROUP BY emp_id\n), employed AS (\n    SELECT id, name FROM employees WHERE left_on IS NULL\n)\nSELECT e.name, (a.avg_2026 - a.avg_2025) * 1.0 / a.avg_2025 AS increase_rate\nFROM avg_salary a\nJOIN employed e ON a.emp_id = e.id\nWHERE a.avg_2025 IS NOT NULL AND a.avg_2026 IS NOT NULL\nORDER BY increase_rate DESC\nLIMIT 1;"
+  ],
+  "tokens": 3964,
+  "answer": "재직 중인 직원 중 2025년 월평균 대비 2026년 월평균 급여 인상률이 가장 큰 사람은 최서연입니다.\n정답: 최서연"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 1,
+  "ok": true,
+  "value": "최서연",
+  "gold": "최서연",
+  "sqls": [
+   "SELECT e.id, e.name, AVG(CASE WHEN s.pay_month LIKE '2025-%' THEN s.amount ELSE NULL END) AS avg_2025, AVG(CASE WHEN s.pay_month LIKE '2026-%' THEN s.amount ELSE NULL END) AS avg_2026 FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.left_on IS NULL AND (s.pay_month LIKE '2025-%' OR s.pay_month LIKE '2026-%') GROUP BY e.id, e.name",
+   "SELECT id FROM employees WHERE left_on IS NULL"
+  ],
+  "tokens": 1754,
+  "answer": "재직 중인 직원의 2025년과 2026년 월평균 급여를 비교해 인상률을 계산한 후, 가장 큰 인상률을 보이는 사람을 찾아보았습니다.\n\n인상률 = (2026년 평균 월급 - 2025년 평균 월급) / 2025년 평균 월급\n\n이 계산에 따라 인상률이 가장 큰 사람은 \n-  id: 23, 이름: 최서연 \n- 2025년 평균 월급: 3100000원 \n- 2026년 평균 월급: 3410000원 으로 확인되었습니다.\n\n정답: 최서연"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 2,
+  "ok": true,
+  "value": "최서연",
+  "gold": "최서연",
+  "sqls": [
+   "WITH avg_salary_2025 AS (\n  SELECT emp_id, AVG(amount) AS avg_2025\n  FROM salary\n  WHERE pay_month LIKE '2025-%'\n  GROUP BY emp_id\n), avg_salary_2026 AS (\n  SELECT emp_id, AVG(amount) AS avg_2026\n  FROM salary\n  WHERE pay_month LIKE '2026-%'\n  GROUP BY emp_id\n), salary_change AS (\n  SELECT a2025.emp_id, a2025.avg_2025, a2026.avg_2026,\n         (a2026.avg_2026 - a2025.avg_2025) * 1.0 / a2025.avg_2025 AS increase_rate\n  FROM avg_salary_2025 a2025\n  JOIN avg_salary_2026 a2026 ON a2025.emp_id = a2026.emp_id\n), currently_employed AS (\n  SELECT id, name\n  FROM employees\n  WHERE left_on IS NULL\n)\nSELECT ce.name\nFROM salary_change sc\nJOIN currently_employed ce ON sc.emp_id = ce.id\nORDER BY sc.increase_rate DESC\nLIMIT 1;"
+  ],
+  "tokens": 973,
+  "answer": "재직 중인 직원 가운데 2025년 월평균 대비 2026년 월평균 급여 인상률이 가장 큰 사람은 최서연입니다.\n정답: 최서연"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 0,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE grade >= 4 AND left_on IS NULL"
+  ],
+  "tokens": 456,
+  "answer": "직급이 4 이상인 재직 직원은 6명입니다. \n정답: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 1,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE grade >= 4 AND left_on IS NULL;"
+  ],
+  "tokens": 460,
+  "answer": "직급이 4 이상인 현재 재직 중인 직원은 6명입니다.\n정답: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 2,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE grade >= 4 AND left_on IS NULL;"
+  ],
+  "tokens": 459,
+  "answer": "직급(grade)이 4 이상인 재직 직원은 6명입니다.\n정답: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 0,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE dept = '생산팀' AND left_on IS NULL;"
+  ],
+  "tokens": 661,
+  "answer": "지금 재직 중인 생산팀 직원 수는 9명입니다.\n정답: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 1,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE dept = '생산팀' AND left_on IS NULL;"
+  ],
+  "tokens": 660,
+  "answer": "지금 재직 중인 생산팀 직원은 9명입니다.\n정답: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 2,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE dept = '생산팀' AND left_on IS NULL;"
+  ],
+  "tokens": 660,
+  "answer": "지금 재직 중인 생산팀 직원은 9명입니다.\n정답: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 0,
+  "ok": true,
+  "value": "4.5",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT AVG((julianday('2026-10-21') - julianday(hired)) / 365.25) as avg_years FROM employees WHERE left_on IS NULL;"
+  ],
+  "tokens": 723,
+  "answer": "재직 중인 직원들의 평균 근속 연수는 약 4.5년입니다. (소수 첫째 자리까지)\n\n정답: 4.5"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 1,
+  "ok": true,
+  "value": "4.5",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT AVG((julianday('2026-10-21') - julianday(hired))/365.25) AS avg_years FROM employees WHERE left_on IS NULL;"
+  ],
+  "tokens": 712,
+  "answer": "재직 중인 직원의 평균 근속 연수는 약 4.5년입니다. \n\n정답: 4.5"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 2,
+  "ok": true,
+  "value": "4.5",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT AVG((julianday('2026-10-21') - julianday(hired)) / 365.0) AS avg_tenure FROM employees WHERE left_on IS NULL;"
+  ],
+  "tokens": 717,
+  "answer": "재직 중인 직원의 평균 근속 연수는 약 4.5년입니다.\n정답: 4.5"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 0,
+  "ok": false,
+  "value": "367",
+  "gold": 366,
+  "sqls": [
+   "SELECT AVG(amount) AS avg_salary FROM salary WHERE pay_month LIKE '2025%' AND emp_id IN (SELECT id FROM employees WHERE dept = '영업팀')"
+  ],
+  "tokens": 713,
+  "answer": "2025년 영업팀의 월 급여 평균은 366만 8천 원입니다. 만원 단위로 반올림하면 367입니다. 정답: 367"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 1,
+  "ok": true,
+  "value": "366",
+  "gold": 366,
+  "sqls": [
+   "SELECT ROUND(AVG(amount) / 10000) AS avg_salary_10k FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = '영업팀' AND s.pay_month LIKE '2025-%'"
+  ],
+  "tokens": 726,
+  "answer": "2025년 영업팀의 월 급여 평균은 366만원입니다.\n정답: 366"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 2,
+  "ok": true,
+  "value": "366",
+  "gold": 366,
+  "sqls": [
+   "SELECT ROUND(AVG(amount) / 10000) AS avg_salary_won FROM salary WHERE emp_id IN (SELECT id FROM employees WHERE dept = '영업팀') AND pay_month LIKE '2025-%';"
+  ],
+  "tokens": 714,
+  "answer": "2025년 영업팀의 월 급여 평균은 366만원입니다.\n정답: 366"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 0,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) AS count_2026 FROM employees WHERE hired >= '2026-01-01' AND hired <= '2026-12-31';"
+  ],
+  "tokens": 652,
+  "answer": "2026년에 입사한 직원은 1명입니다.\n정답: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 1,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE hired >= '2026-01-01' AND hired < '2027-01-01';"
+  ],
+  "tokens": 647,
+  "answer": "2026년에 입사한 직원은 1명입니다.  \n정답: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 2,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) AS cnt FROM employees WHERE hired >= '2026-01-01' AND hired <= '2026-12-31';"
+  ],
+  "tokens": 646,
+  "answer": "2026년에 입사한 직원은 1명입니다.\n정답: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 0,
+  "ok": true,
+  "value": "357",
+  "gold": 357,
+  "sqls": [
+   "SELECT ROUND(AVG(amount) / 10000) AS avg_salary FROM salary WHERE pay_month BETWEEN '2025-03' AND '2025-12' AND emp_id IN (SELECT id FROM employees WHERE dept = '품질팀')"
+  ],
+  "tokens": 744,
+  "answer": "2025년 3월부터 12월까지 품질팀의 월 급여 평균은 357만원입니다.\n정답: 357"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 1,
+  "ok": true,
+  "value": "357",
+  "gold": 357,
+  "sqls": [
+   "SELECT AVG(amount) AS avg_salary FROM salary WHERE pay_month >= '2025-03' AND pay_month <= '2025-12' AND emp_id IN (SELECT id FROM employees WHERE dept = '품질팀');"
+  ],
+  "tokens": 759,
+  "answer": "2025년 3월부터 12월까지 품질팀의 월 급여 평균은 약 3,571,111원으로, 만원 단위로 반올림하면 357만원입니다.\n정답: 357"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 2,
+  "ok": true,
+  "value": "357",
+  "gold": 357,
+  "sqls": [
+   "SELECT AVG(amount) AS avg_salary FROM salary WHERE pay_month BETWEEN '2025-03' AND '2025-12' AND emp_id IN (SELECT id FROM employees WHERE dept = '품질팀')"
+  ],
+  "tokens": 752,
+  "answer": "2025년 3월부터 12월까지 품질팀의 월 급여 평균은 약 357.11만원이므로, 만원 단위로 반올림하면 357만원입니다.\n정답: 357"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 0,
+  "ok": true,
+  "value": "송소율",
+  "gold": "송소율",
+  "sqls": [
+   "WITH months AS (\n  SELECT '2024-01' AS month\n  UNION ALL\n  SELECT '2024-02'\n  UNION ALL\n  SELECT '2024-03'\n  UNION ALL\n  SELECT '2024-04'\n  UNION ALL\n  SELECT '2024-05'\n  UNION ALL\n  SELECT '2024-06'\n  UNION ALL\n  SELECT '2024-07'\n  UNION ALL\n  SELECT '2024-08'\n  UNION ALL\n  SELECT '2024-09'\n  UNION ALL\n  SELECT '2024-10'\n  UNION ALL\n  SELECT '2024-11'\n  UNION ALL\n  SELECT '2024-12'\n  UNION ALL\n  SELECT '2025-01'\n  UNION ALL\n  SELECT '2025-02'\n  UNION ALL\n  SELECT '2025-03'\n  UNION ALL\n  SELECT '2025-04'\n  UNION ALL\n  SELECT '2025-05'\n  UNION ALL\n  SELECT '2025-06'\n  UNION ALL\n  SELECT '2025-07'\n  UNION ALL\n  SELECT '2025-08'\n  UNION ALL\n  SELECT '2025-09'\n  UNION ALL\n  SELECT '2025-10'\n  UNION ALL\n  SELECT '2025-11'\n  UNION ALL\n  SELECT '2025-12'\n  UNION ALL\n  SELECT '2026-01'\n  UNION ALL\n  SELECT '2026-02'\n  UNION ALL\n  SELECT '2026-03'\n  UNION ALL\n  SELECT '2026-04'\n  UNION ALL\n  SELECT '2026-05'\n  UNION ALL\n  SELECT '2026-06'\n  UNION ALL\n  SELECT '2026-07'\n  UNION ALL\n  SELECT '2026-08'\n  UNION ALL\n  SELECT '2026-09'\n), emp_months AS (\n  SELECT e.id, e.name, m.month\n  FROM employees e\n  JOIN months m ON m.month >= strftime('%Y-%m', e.hired) AND (e.left_on IS NULL OR m.month <= strftime('%Y-%m', e.left_on))\n), missing_salary AS (\n  SELECT em.id, em.name\n  FROM emp_months em\n  LEFT JOIN salary s ON s.emp_id = em.id AND s.pay_month = em.month\n  WHERE s.amount IS NULL\n)\nSELECT DISTINCT name FROM missing_salary\nORDER BY name;"
+  ],
+  "tokens": 1795,
+  "answer": "재직 중이던 달에 급여 기록이 없는 직원 이름은 송소율입니다.\n정답: 송소율"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 1,
+  "ok": true,
+  "value": "강지아,권유준,김민준,류시우,박현우,서하준,송소율,신수아,오다은,윤지민,이하은,임지우,장선우,정주원,조도윤,최서연,한예준,홍채원,황서윤",
+  "gold": "송소율",
+  "sqls": [
+   "WITH months AS (\n    SELECT '2024-01' AS month\n    UNION ALL\n    SELECT date(strftime('%Y-%m-01', month || '-01'), '+1 month')\n    FROM months\n    WHERE month < '2026-09'\n), active_months AS (\n    SELECT e.id AS emp_id, e.name, m.month\n    FROM employees e\n    JOIN months m\n    ON m.month >= substr(e.hired, 1, 7) AND (e.left_on IS NULL OR m.month <= substr(e.left_on, 1, 7))\n), salary_months AS (\n    SELECT emp_id, pay_month\n    FROM salary\n), missing_salary AS (\n    SELECT a.emp_id, a.name, a.month\n    FROM active_months a\n    LEFT JOIN salary_months s\n    ON a.emp_id = s.emp_id AND a.month = s.pay_month\n    WHERE s.emp_id IS NULL\n    GROUP BY a.emp_id\n)\nSELECT DISTINCT name FROM missing_salary\nORDER BY name;"
+  ],
+  "tokens": 1368,
+  "answer": "재직 중이던 달인데 급여 기록이 없는 경우가 있는 직원들은 다음과 같습니다: 강지아, 권유준, 김민준, 류시우, 박현우, 서하준, 송소율, 신수아, 오다은, 윤지민, 이하은, 임지우, 장선우, 정주원, 조도윤, 최서연, 한예준, 홍채원, 황서윤.\n\n정답: 강지아,권유준,김민준,류시우,박현우,서하준,송소율,신수아,오다은,윤지민,이하은,임지우,장선우,정주원,조도윤,최서연,한예준,홍채원,황서윤"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 2,
+  "ok": true,
+  "value": "송소율",
+  "gold": "송소율",
+  "sqls": [
+   "WITH months AS (\n    SELECT '2024-01' AS month\n    UNION ALL\n    SELECT '2024-02' UNION ALL\n    SELECT '2024-03' UNION ALL\n    SELECT '2024-04' UNION ALL\n    SELECT '2024-05' UNION ALL\n    SELECT '2024-06' UNION ALL\n    SELECT '2024-07' UNION ALL\n    SELECT '2024-08' UNION ALL\n    SELECT '2024-09' UNION ALL\n    SELECT '2024-10' UNION ALL\n    SELECT '2024-11' UNION ALL\n    SELECT '2024-12' UNION ALL\n    SELECT '2025-01' UNION ALL\n    SELECT '2025-02' UNION ALL\n    SELECT '2025-03' UNION ALL\n    SELECT '2025-04' UNION ALL\n    SELECT '2025-05' UNION ALL\n    SELECT '2025-06' UNION ALL\n    SELECT '2025-07' UNION ALL\n    SELECT '2025-08' UNION ALL\n    SELECT '2025-09' UNION ALL\n    SELECT '2025-10' UNION ALL\n    SELECT '2025-11' UNION ALL\n    SELECT '2025-12' UNION ALL\n    SELECT '2026-01' UNION ALL\n    SELECT '2026-02' UNION ALL\n    SELECT '2026-03' UNION ALL\n    SELECT '2026-04' UNION ALL\n    SELECT '2026-05' UNION ALL\n    SELECT '2026-06' UNION ALL\n    SELECT '2026-07' UNION ALL\n    SELECT '2026-08' UNION ALL\n    SELECT '2026-09'\n), emp_months AS (\n    SELECT e.id AS emp_id, e.name, \n        substr(month, 1, 4) || '-' || substr(month, 6, 2) AS pay_month\n    FROM employees e\n    CROSS JOIN months\n    WHERE date(e.hired) <= date(substr(month, 1, 4) || '-' || substr(month, 6, 2) || '-01')\n      AND (e.left_on IS NULL OR date(e.left_on) >= date(substr(month, 1, 4) || '-' || substr(month, 6, 2) || '-01'))\n      AND date(substr(month, 1, 4) || '-' || substr(month, 6, 2) || '-01') >= date('2024-01-01')\n), missing_salary AS (\n    SELECT emp_id, name, pay_month\n    FROM emp_months em\n    LEFT JOIN salary s ON em.emp_id = s.emp_id AND em.pay_month = s.pay_month\n    WHERE s.amount IS NULL\n)\nSELECT DISTINCT name FROM missing_salary;",
+   "WITH months AS (\n    SELECT '2024-01' AS month\n    UNION ALL\n    SELECT '2024-02' UNION ALL\n    SELECT '2024-03' UNION ALL\n    SELECT '2024-04' UNION ALL\n    SELECT '2024-05' UNION ALL\n    SELECT '2024-06' UNION ALL\n    SELECT '2024-07' UNION ALL\n    SELECT '2024-08' UNION ALL\n    SELECT '2024-09' UNION ALL\n    SELECT '2024-10' UNION ALL\n    SELECT '2024-11' UNION ALL\n    SELECT '2024-12' UNION ALL\n    SELECT '2025-01' UNION ALL\n    SELECT '2025-02' UNION ALL\n    SELECT '2025-03' UNION ALL\n    SELECT '2025-04' UNION ALL\n    SELECT '2025-05' UNION ALL\n    SELECT '2025-06' UNION ALL\n    SELECT '2025-07' UNION ALL\n    SELECT '2025-08' UNION ALL\n    SELECT '2025-09' UNION ALL\n    SELECT '2025-10' UNION ALL\n    SELECT '2025-11' UNION ALL\n    SELECT '2025-12' UNION ALL\n    SELECT '2026-01' UNION ALL\n    SELECT '2026-02' UNION ALL\n    SELECT '2026-03' UNION ALL\n    SELECT '2026-04' UNION ALL\n    SELECT '2026-05' UNION ALL\n    SELECT '2026-06' UNION ALL\n    SELECT '2026-07' UNION ALL\n    SELECT '2026-08' UNION ALL\n    SELECT '2026-09'\n), emp_months AS (\n    SELECT e.id AS emp_id, e.name, \n        substr(month, 1, 4) || '-' || substr(month, 6, 2) AS pay_month\n    FROM employees e\n    CROSS JOIN months\n    WHERE date(e.hired) <= date(substr(month, 1, 4) || '-' || substr(month, 6, 2) || '-01')\n      AND (e.left_on IS NULL OR date(e.left_on) >= date(substr(month, 1, 4) || '-' || substr(month, 6, 2) || '-01'))\n      AND date(substr(month, 1, 4) || '-' || substr(month, 6, 2) || '-01') >= date('2024-01-01')\n), missing_salary AS (\n    SELECT em.emp_id, em.name, em.pay_month\n    FROM emp_months em\n    LEFT JOIN salary s ON em.emp_id = s.emp_id AND em.pay_month = s.pay_month\n    WHERE s.amount IS NULL\n)\nSELECT DISTINCT name FROM missing_salary;"
+  ],
+  "tokens": 4089,
+  "answer": "재직 중인 달에 급여 기록이 없는 직원은 송소율입니다.\n정답: 송소율"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 0,
+  "ok": true,
+  "value": "최서연",
+  "gold": "최서연",
+  "sqls": [
+   "WITH avg_salary_2025 AS (\n  SELECT emp_id, AVG(amount) AS avg_2025\n  FROM salary\n  WHERE pay_month LIKE '2025-%'\n  GROUP BY emp_id\n),\navg_salary_2026 AS (\n  SELECT emp_id, AVG(amount) AS avg_2026\n  FROM salary\n  WHERE pay_month LIKE '2026-%'\n  GROUP BY emp_id\n),\ncurrent_employees AS (\n  SELECT id, name\n  FROM employees\n  WHERE left_on IS NULL\n)\nSELECT c.name, ((a26.avg_2026 - a25.avg_2025) * 1.0 / a25.avg_2025) AS increase_rate\nFROM current_employees c\nJOIN avg_salary_2025 a25 ON c.id = a25.emp_id\nJOIN avg_salary_2026 a26 ON c.id = a26.emp_id\nORDER BY increase_rate DESC\nLIMIT 1;"
+  ],
+  "tokens": 1071,
+  "answer": "재직 중인 직원 가운데 2025년 월평균 대비 2026년 월평균 급여 인상률이 가장 큰 사람은 최서연입니다.  \n정답: 최서연"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 1,
+  "ok": true,
+  "value": "최서연",
+  "gold": "최서연",
+  "sqls": [
+   "SELECT id, name FROM employees WHERE left_on IS NULL",
+   "SELECT emp_id, substr(pay_month, 1, 4) AS year, AVG(amount) AS avg_pay FROM salary GROUP BY emp_id, year HAVING year = '2025' OR year = '2026'",
+   "WITH emp_avg_pay AS (\n    SELECT emp_id, \n           MAX(CASE WHEN year = '2025' THEN avg_pay ELSE NULL END) AS avg_2025,\n           MAX(CASE WHEN year = '2026' THEN avg_pay ELSE NULL END) AS avg_2026\n    FROM (\n        SELECT emp_id, substr(pay_month, 1, 4) AS year, AVG(amount) AS avg_pay\n        FROM salary\n        GROUP BY emp_id, year\n    )\n    GROUP BY emp_id\n), valid_emps AS (\n    SELECT id, name FROM employees WHERE left_on IS NULL\n)\nSELECT v.name\nFROM emp_avg_pay eap\nJOIN valid_emps v ON eap.emp_id = v.id\nWHERE avg_2025 IS NOT NULL AND avg_2026 IS NOT NULL\nORDER BY ((avg_2026 - avg_2025) / avg_2025) DESC\nLIMIT 1;"
+  ],
+  "tokens": 4288,
+  "answer": "2025년 월평균 대비 2026년 월평균 급여 인상률이 가장 큰 재직 중인 직원은 최서연입니다.\n정답: 최서연"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 2,
+  "ok": true,
+  "value": "최서연",
+  "gold": "최서연",
+  "sqls": [
+   "WITH emp_2025 AS (SELECT emp_id, AVG(amount) AS avg_2025 FROM salary WHERE pay_month LIKE '2025-%' GROUP BY emp_id), emp_2026 AS (SELECT emp_id, AVG(amount) AS avg_2026 FROM salary WHERE pay_month LIKE '2026-%' GROUP BY emp_id), employed AS (SELECT id, name FROM employees WHERE left_on IS NULL) SELECT e.name, ((e6.avg_2026 - e5.avg_2025) * 1.0 / e5.avg_2025) AS increase_rate FROM employed e JOIN emp_2025 e5 ON e.id = e5.emp_id JOIN emp_2026 e6 ON e.id = e6.emp_id ORDER BY increase_rate DESC LIMIT 1"
+  ],
+  "tokens": 982,
+  "answer": "재직 중인 직원 중 2025년 월평균 대비 2026년 월평균 급여 인상률이 가장 큰 사람은 최서연입니다.\n\n정답: 최서연"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 0,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) AS cnt FROM employees WHERE grade >= 4 AND left_on IS NULL"
+  ],
+  "tokens": 635,
+  "answer": "직급이 4 이상인 재직 직원은 6명입니다.\n정답: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 1,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE grade >= 4 AND left_on IS NULL;"
+  ],
+  "tokens": 639,
+  "answer": "직급(grade)이 4 이상인 재직 직원은 6명입니다.\n정답: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 2,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE grade >= 4 AND left_on IS NULL;"
+  ],
+  "tokens": 637,
+  "answer": "직급이 4 이상인 재직 직원은 6명입니다.\n정답: 6"
+ }
+]

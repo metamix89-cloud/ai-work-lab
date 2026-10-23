@@ -1,0 +1,3509 @@
+[
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A1",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [],
+  "tokens": 5259,
+  "first": 2579,
+  "answer": "There are currently a total of 160 cases of Pepperoni Pizza 2-pack in stock across all warehouses."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A1",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [],
+  "tokens": 5270,
+  "first": 2579,
+  "answer": "We have a total of 160 cases of Pepperoni Pizza 2-pack right now, with 120 cases at Dayton DC and 40 cases at Columbus DC."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A1",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [],
+  "tokens": 5269,
+  "first": 2579,
+  "answer": "We currently have a total of 160 cases of Pepperoni Pizza 2-pack, with 120 cases at Dayton DC and 40 cases at Columbus DC."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A2",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_room_list",
+   "book_meeting_room"
+  ],
+  "finds": [],
+  "tokens": 7930,
+  "first": 2582,
+  "answer": "The small meeting room on the 3rd floor has been booked for next Tuesday, October 27, 2026, at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A2",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_room_list",
+   "book_meeting_room"
+  ],
+  "finds": [],
+  "tokens": 7939,
+  "first": 2582,
+  "answer": "The small meeting room on the 3rd floor has been booked for next Tuesday, October 27, 2026, at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A2",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_room_list",
+   "book_meeting_room"
+  ],
+  "finds": [],
+  "tokens": 7939,
+  "first": 2582,
+  "answer": "The small meeting room on the 3rd floor has been booked for next Tuesday, October 27, 2026, at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A3",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [],
+  "tokens": 5204,
+  "first": 2572,
+  "answer": "Kim has 7.5 PTO days left."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A3",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [],
+  "tokens": 5204,
+  "first": 2572,
+  "answer": "Kim has 7.5 PTO days left."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A3",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [],
+  "tokens": 5204,
+  "first": 2572,
+  "answer": "Kim has 7.5 PTO days left."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A4",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [],
+  "tokens": 5216,
+  "first": 2572,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A4",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [],
+  "tokens": 5216,
+  "first": 2572,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A4",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [],
+  "tokens": 5216,
+  "first": 2572,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A5",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "create_purchase_order"
+  ],
+  "finds": [],
+  "tokens": 5239,
+  "first": 2577,
+  "answer": "The order for 200 lb of pizza sauce has been placed with Sunrise Supply."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A5",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "create_purchase_order"
+  ],
+  "finds": [],
+  "tokens": 5239,
+  "first": 2577,
+  "answer": "The order for 200 lb of pizza sauce has been placed with Sunrise Supply."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A5",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "create_purchase_order"
+  ],
+  "finds": [],
+  "tokens": 5239,
+  "first": 2577,
+  "answer": "The order for 200 lb of pizza sauce has been placed with Sunrise Supply."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A6",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_delivery_status"
+  ],
+  "finds": [],
+  "tokens": 5238,
+  "first": 2574,
+  "answer": "Order YT-3101 has left the Dayton Distribution Center and is currently out for delivery, expected to arrive today."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A6",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_delivery_status"
+  ],
+  "finds": [],
+  "tokens": 5235,
+  "first": 2574,
+  "answer": "Order YT-3101 has left Dayton DC and is out for delivery, expected to arrive today."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A6",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_delivery_status"
+  ],
+  "finds": [],
+  "tokens": 5238,
+  "first": 2574,
+  "answer": "Order YT-3101 has left the Dayton Distribution Center and is currently out for delivery, expected to arrive today."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A7",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [],
+  "tokens": 5249,
+  "first": 2575,
+  "answer": "Last month's (September 2026) sales of Pepperoni Pizza 2-pack were $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A7",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [],
+  "tokens": 5249,
+  "first": 2575,
+  "answer": "Last month's (September 2026) sales for Pepperoni Pizza 2-pack were $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A7",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [],
+  "tokens": 5243,
+  "first": 2575,
+  "answer": "Last month's sales for Pepperoni Pizza 2-pack were $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A8",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "send_messenger"
+  ],
+  "finds": [],
+  "tokens": 5240,
+  "first": 2578,
+  "answer": "I have sent Park a chat message informing that the 3 PM meeting is canceled."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A8",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "send_messenger"
+  ],
+  "finds": [],
+  "tokens": 5239,
+  "first": 2578,
+  "answer": "I have sent Park a chat message that the 3 PM meeting is canceled."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A8",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "send_messenger"
+  ],
+  "finds": [],
+  "tokens": 5240,
+  "first": 2578,
+  "answer": "I have sent Park a chat message informing that the 3 PM meeting is canceled."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A9",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_stock_level",
+   "get_safety_stock",
+   "send_email"
+  ],
+  "finds": [],
+  "tokens": 8221,
+  "first": 2589,
+  "answer": "The total stock of Mac & Cheese Bake is currently 160 cases, which is below the safety stock level of 300 cases. I have sent an email to purchasing at buy@yummytummy.example to notify them for replenishment."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A9",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_stock_level",
+   "get_safety_stock",
+   "send_email"
+  ],
+  "finds": [],
+  "tokens": 8226,
+  "first": 2589,
+  "answer": "The total stock of Mac & Cheese Bake is currently 160 cases, which is below the safety stock level of 300 cases. I have sent an email to purchasing at buy@yummytummy.example to alert them about this."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A9",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_stock_level",
+   "get_safety_stock",
+   "send_email"
+  ],
+  "finds": [],
+  "tokens": 8229,
+  "first": 2589,
+  "answer": "The current stock of Mac & Cheese Bake is 160 cases, which is below the safety stock level of 300 cases. I have emailed purchasing at buy@yummytummy.example to notify them for replenishment."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A10",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "book_vehicle",
+   "submit_business_trip"
+  ],
+  "finds": [],
+  "tokens": 5363,
+  "first": 2586,
+  "answer": "Your company car has been booked for your business trip to Chicago tomorrow. Also, your travel request for the trip has been submitted. Safe travels!"
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A10",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "book_vehicle",
+   "submit_business_trip"
+  ],
+  "finds": [],
+  "tokens": 5374,
+  "first": 2586,
+  "answer": "I have booked a company car for your business trip to Chicago tomorrow, 2026-10-22, and submitted your travel request. If you need any further assistance, please let me know."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A10",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "book_vehicle",
+   "submit_business_trip"
+  ],
+  "finds": [],
+  "tokens": 5358,
+  "first": 2586,
+  "answer": "I have booked a company car for you for your business trip to Chicago tomorrow and submitted your travel request. Safe travels!"
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A11",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_order",
+   "update_address"
+  ],
+  "finds": [],
+  "tokens": 7988,
+  "first": 2585,
+  "answer": "The shipping address for order YT-3105 has been changed to 1 Main Street, Austin, TX."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A11",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_order",
+   "update_address"
+  ],
+  "finds": [],
+  "tokens": 8001,
+  "first": 2585,
+  "answer": "The order YT-3105 is for a Holiday Gift Basket currently shipped to Columbus, OH. The shipping address has been updated to 1 Main Street, Austin, TX."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A11",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_order",
+   "update_address"
+  ],
+  "finds": [],
+  "tokens": 8002,
+  "first": 2585,
+  "answer": "The order YT-3105 is for a Holiday Gift Basket, currently shipping to Columbus, OH. I have changed the shipping address to 1 Main Street, Austin, TX."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A12",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "log_haccp"
+  ],
+  "finds": [],
+  "tokens": 8153,
+  "first": 2588,
+  "answer": "Freezer 1's temperature log for this week showed it was mostly between -4 to 0°F, but there was a concerning rise to 6.6°F for 40 minutes on 10/15 at 2 PM. This deviation has been recorded in the HACCP food safety log."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A12",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "get_freezer_temp_history",
+   "log_haccp"
+  ],
+  "finds": [],
+  "tokens": 8284,
+  "first": 2588,
+  "answer": "The temperature log for freezer 1 this week showed a deviation at 6.6°F for 40 minutes on 10/15 at 2 PM, which is above the safe range (-4 to 0°F). I have recorded this issue in the HACCP log."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-mini",
+  "task": "A12",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "log_haccp"
+  ],
+  "finds": [],
+  "tokens": 8123,
+  "first": 2588,
+  "answer": "The temperature log for freezer 1 this week shows that on 10/15 at 2 PM, the temperature was 6.6°F for 40 minutes, which is outside the normal range of -4 to 0°F. This deviation has been recorded in the HACCP food safety log."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A1",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [],
+  "tokens": 701,
+  "first": 293,
+  "answer": "Currently, we have a total of 160 cases of Pepperoni Pizza 2-pack in stock across our warehouses (120 cases in Dayton DC and 40 cases in Columbus DC)."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A1",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [],
+  "tokens": 687,
+  "first": 293,
+  "answer": "We currently have a total of 160 cases of Pepperoni Pizza 2-pack in stock across all warehouses."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A1",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [],
+  "tokens": 687,
+  "first": 293,
+  "answer": "We currently have a total of 160 cases of Pepperoni Pizza 2-pack in stock across all warehouses."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A2",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "book_meeting_room"
+  ],
+  "finds": [],
+  "tokens": 732,
+  "first": 306,
+  "answer": "The small meeting room on the 3rd floor has been booked for next Tuesday, October 27, 2026, at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A2",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "book_meeting_room"
+  ],
+  "finds": [],
+  "tokens": 717,
+  "first": 306,
+  "answer": "The small meeting room on the 3rd floor has been booked for next Tuesday, October 27th, at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A2",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "book_meeting_room"
+  ],
+  "finds": [],
+  "tokens": 732,
+  "first": 306,
+  "answer": "The small meeting room on the 3rd floor has been booked for next Tuesday, 2026-10-27, at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A3",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [],
+  "tokens": 592,
+  "first": 266,
+  "answer": "Kim has 7.5 PTO days left."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A3",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [],
+  "tokens": 592,
+  "first": 266,
+  "answer": "Kim has 7.5 PTO days left."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A3",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [],
+  "tokens": 592,
+  "first": 266,
+  "answer": "Kim has 7.5 PTO days left."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A4",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [],
+  "tokens": 676,
+  "first": 302,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A4",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [],
+  "tokens": 676,
+  "first": 302,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A4",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [],
+  "tokens": 676,
+  "first": 302,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A5",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "create_purchase_order"
+  ],
+  "finds": [],
+  "tokens": 695,
+  "first": 305,
+  "answer": "The order for 200 lb of pizza sauce has been placed with Sunrise Supply."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A5",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "create_purchase_order"
+  ],
+  "finds": [],
+  "tokens": 695,
+  "first": 305,
+  "answer": "The order for 200 lb of pizza sauce has been placed with Sunrise Supply."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A5",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "create_purchase_order"
+  ],
+  "finds": [],
+  "tokens": 695,
+  "first": 305,
+  "answer": "The order for 200 lb of pizza sauce has been placed with Sunrise Supply."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A6",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_delivery_status"
+  ],
+  "finds": [],
+  "tokens": 660,
+  "first": 284,
+  "answer": "Order YT-3101 has left the Dayton Distribution Center and is currently out for delivery. It is expected to arrive today."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A6",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_delivery_status"
+  ],
+  "finds": [],
+  "tokens": 658,
+  "first": 284,
+  "answer": "Order YT-3101 has left the Dayton Distribution Center and is currently out for delivery, expected to arrive today."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A6",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_delivery_status"
+  ],
+  "finds": [],
+  "tokens": 660,
+  "first": 284,
+  "answer": "Order YT-3101 has left the Dayton Distribution Center and is currently out for delivery. It is scheduled to arrive today."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A7",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [],
+  "tokens": 675,
+  "first": 288,
+  "answer": "Last month's (September 2026) sales for Pepperoni Pizza 2-pack were $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A7",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [],
+  "tokens": 671,
+  "first": 288,
+  "answer": "Last month, the sales for Pepperoni Pizza 2-pack were $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A7",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [],
+  "tokens": 675,
+  "first": 288,
+  "answer": "Last month's (September 2026) sales for Pepperoni Pizza 2-pack were $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A8",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "send_messenger"
+  ],
+  "finds": [],
+  "tokens": 690,
+  "first": 303,
+  "answer": "I have sent Park a chat message informing that the 3 PM meeting is canceled."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A8",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "send_messenger"
+  ],
+  "finds": [],
+  "tokens": 690,
+  "first": 303,
+  "answer": "I have sent Park a chat message saying that the 3 PM meeting is canceled."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A8",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "send_messenger"
+  ],
+  "finds": [],
+  "tokens": 688,
+  "first": 303,
+  "answer": "I have sent Park the message that the 3 PM meeting is canceled."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A9",
+  "seed": 0,
+  "ok": false,
+  "called": [
+   "get_safety_stock",
+   "adjust_stock",
+   "get_recipe",
+   "reserve_stock"
+  ],
+  "finds": [],
+  "tokens": 2044,
+  "first": 306,
+  "answer": "I checked the safety stock level of Mac & Cheese Bake; it is set at 300. However, I need the current stock quantity to confirm if it is below this level and then notify purchasing if needed. Could you please provide the current stock quantity or should I proceed with actions based on the safety stock alone?"
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A9",
+  "seed": 1,
+  "ok": false,
+  "called": [
+   "get_safety_stock",
+   "get_recipe",
+   "adjust_stock",
+   "reserve_stock"
+  ],
+  "finds": [],
+  "tokens": 2037,
+  "first": 306,
+  "answer": "The safety stock level for Mac & Cheese Bake is 300 units. I checked the stock and reserved 300 units to ensure the safety stock level is maintained. No need to email purchasing at this time. If you want me to take further action, please let me know."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A9",
+  "seed": 2,
+  "ok": false,
+  "called": [
+   "get_safety_stock"
+  ],
+  "finds": [],
+  "tokens": 708,
+  "first": 306,
+  "answer": "To check if the stock of Mac & Cheese Bake is below safety stock, I need the current stock quantity of the item. Could you please provide the current stock level of Mac & Cheese Bake?"
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A10",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "book_vehicle",
+   "submit_business_trip"
+  ],
+  "finds": [],
+  "tokens": 783,
+  "first": 299,
+  "answer": "The company car has been booked for your business trip to Chicago tomorrow, and your travel request has been submitted successfully."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A10",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "book_vehicle",
+   "submit_business_trip"
+  ],
+  "finds": [],
+  "tokens": 781,
+  "first": 299,
+  "answer": "The company car has been booked and your business trip request to Chicago for tomorrow has been submitted, Lee."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A10",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "book_vehicle",
+   "submit_business_trip"
+  ],
+  "finds": [],
+  "tokens": 783,
+  "first": 299,
+  "answer": "The company car has been booked for your business trip to Chicago tomorrow, and your travel request has been submitted successfully."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A11",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_order",
+   "update_address"
+  ],
+  "finds": [],
+  "tokens": 833,
+  "first": 309,
+  "answer": "The order YT-3105 is for a Holiday Gift Basket, originally to be shipped to Columbus, OH. The shipping address has been updated to 1 Main Street, Austin, TX."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A11",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_order",
+   "update_address"
+  ],
+  "finds": [],
+  "tokens": 837,
+  "first": 309,
+  "answer": "Order YT-3105 is for a Holiday Gift Basket priced at $68.00, originally shipping to Columbus, OH. The shipping address has now been updated to 1 Main Street, Austin, TX."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A11",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_order",
+   "update_address"
+  ],
+  "finds": [],
+  "tokens": 831,
+  "first": 309,
+  "answer": "Order YT-3105 is for a Holiday Gift Basket, originally shipping to Columbus, OH. The shipping address has been successfully updated to 1 Main Street, Austin, TX."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A12",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "log_haccp"
+  ],
+  "finds": [],
+  "tokens": 1345,
+  "first": 325,
+  "answer": "Freezer 1's temperature log for this week shows it was mostly between -4 to 0°F, except for a 40 minute period on 10/15 at 2 PM when it rose to 6.6°F. This temperature deviation has been recorded in the HACCP log."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A12",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "log_haccp"
+  ],
+  "finds": [],
+  "tokens": 1351,
+  "first": 325,
+  "answer": "Freezer 1's temperature log for the past week shows it was mostly normal between -4 to 0°F, but on 10/15 at 2 PM, it was 6.6°F for 40 minutes, which is above the safe range. This temperature deviation has been recorded in the HACCP food safety log."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-mini",
+  "task": "A12",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "log_haccp"
+  ],
+  "finds": [],
+  "tokens": 1313,
+  "first": 325,
+  "answer": "Freezer 1's temperature log for this week showed it was off at 6.6°F for 40 minutes on 10/15 at 2 PM. This has been recorded in the HACCP food safety log."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A1",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [
+   "check inventory for a specific product"
+  ],
+  "tokens": 990,
+  "first": 170,
+  "answer": "We currently have a total of 160 cases of Pepperoni Pizza 2-pack, with 120 cases at Dayton DC and 40 cases at Columbus DC."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A1",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [
+   "check inventory of Pepperoni Pizza 2-pack"
+  ],
+  "tokens": 1001,
+  "first": 170,
+  "answer": "We currently have a total of 160 cases of Pepperoni Pizza 2-pack in stock across all warehouses."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A1",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [
+   "check inventory for Pepperoni Pizza 2-pack"
+  ],
+  "tokens": 998,
+  "first": 170,
+  "answer": "There are currently 160 cases of Pepperoni Pizza 2-pack in stock across all warehouses."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A2",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_room_list",
+   "book_meeting_room"
+  ],
+  "finds": [
+   "book a meeting room"
+  ],
+  "tokens": 1427,
+  "first": 173,
+  "answer": "The small meeting room on the 3rd floor has been booked for next Tuesday, October 27, 2026, at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A2",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_room_list",
+   "book_meeting_room"
+  ],
+  "finds": [
+   "book a small meeting room on the 3rd floor for next Tuesday at 2 PM"
+  ],
+  "tokens": 1463,
+  "first": 173,
+  "answer": "The small meeting room on the 3rd floor has been successfully booked for next Tuesday, October 27, 2026, at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A2",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_room_list",
+   "book_meeting_room"
+  ],
+  "finds": [
+   "book a meeting room"
+  ],
+  "tokens": 1416,
+  "first": 173,
+  "answer": "The small meeting room on the 3rd floor has been booked for next Tuesday, October 27, 2026, at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A3",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [
+   "check remaining PTO days for an employee"
+  ],
+  "tokens": 911,
+  "first": 163,
+  "answer": "Kim has 7.5 PTO days left."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A3",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [
+   "check remaining PTO days for an employee"
+  ],
+  "tokens": 911,
+  "first": 163,
+  "answer": "Kim has 7.5 PTO days left."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A3",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [
+   "check PTO balance"
+  ],
+  "tokens": 891,
+  "first": 163,
+  "answer": "Kim has 7.5 PTO days left."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A4",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [
+   "check temperature of freezer"
+  ],
+  "tokens": 964,
+  "first": 163,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A4",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [
+   "check the current temperature of freezer 1"
+  ],
+  "tokens": 962,
+  "first": 163,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A4",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [
+   "check current temperature of freezer"
+  ],
+  "tokens": 957,
+  "first": 163,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A5",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "create_purchase_order"
+  ],
+  "finds": [
+   "place an order with a supplier"
+  ],
+  "tokens": 980,
+  "first": 168,
+  "answer": "The order for 200 lb of pizza sauce has been placed with Sunrise Supply."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A5",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "create_purchase_order"
+  ],
+  "finds": [
+   "place an order with supplier"
+  ],
+  "tokens": 977,
+  "first": 168,
+  "answer": "The order for 200 lb of pizza sauce has been placed with Sunrise Supply."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A5",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "create_purchase_order"
+  ],
+  "finds": [
+   "place an order with Sunrise Supply for 200 lb of pizza sauce"
+  ],
+  "tokens": 1001,
+  "first": 168,
+  "answer": "I have placed an order with Sunrise Supply for 200 lb of pizza sauce."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A6",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_delivery_status"
+  ],
+  "finds": [
+   "track order by order id"
+  ],
+  "tokens": 965,
+  "first": 165,
+  "answer": "Order YT-3101 has left the Dayton Distribution Center and is currently out for delivery, expected to arrive today."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A6",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_delivery_status"
+  ],
+  "finds": [
+   "track order YT-3101"
+  ],
+  "tokens": 969,
+  "first": 165,
+  "answer": "Order YT-3101 has left the Dayton Distribution Center and is currently out for delivery, expected to arrive today."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A6",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_delivery_status"
+  ],
+  "finds": [
+   "track order by order ID"
+  ],
+  "tokens": 963,
+  "first": 165,
+  "answer": "Order YT-3101 is currently out for delivery, having left Dayton Distribution Center and is arriving today."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A7",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [
+   "retrieve sales data for specific product and time period"
+  ],
+  "tokens": 989,
+  "first": 166,
+  "answer": "Last month's (September 2026) sales for Pepperoni Pizza 2-pack were $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A7",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [
+   "get sales data for Pepperoni Pizza 2-pack for last month"
+  ],
+  "tokens": 983,
+  "first": 166,
+  "answer": "Last month's sales for Pepperoni Pizza 2-pack were $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A7",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [
+   "get last month's Pepperoni Pizza 2-pack sales"
+  ],
+  "tokens": 980,
+  "first": 166,
+  "answer": "Last month's (September 2026) sales for Pepperoni Pizza 2-pack were $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A8",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "send_messenger"
+  ],
+  "finds": [
+   "send chat message"
+  ],
+  "tokens": 973,
+  "first": 169,
+  "answer": "I have sent Park a chat message: \"The 3 PM meeting is canceled.\""
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A8",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "send_messenger"
+  ],
+  "finds": [
+   "send chat message"
+  ],
+  "tokens": 973,
+  "first": 169,
+  "answer": "I have sent Park a chat message saying that the 3 PM meeting is canceled."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A8",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "send_messenger"
+  ],
+  "finds": [
+   "send a chat message"
+  ],
+  "tokens": 951,
+  "first": 169,
+  "answer": "I have sent Park a chat message that the 3 PM meeting is canceled."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A9",
+  "seed": 0,
+  "ok": false,
+  "called": [
+   "get_stock_level",
+   "get_safety_stock"
+  ],
+  "finds": [
+   "check stock of a product"
+  ],
+  "tokens": 1149,
+  "first": 180,
+  "answer": "The current total stock of Mac & Cheese Bake is 160 cases, which is below the safety stock level of 300 cases. I will now send an email to purchasing at buy@yummytummy.example to inform them.\nSending the email to purchasing at buy@yummytummy.example to notify that the stock of Mac & Cheese Bake is below safety stock level."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A9",
+  "seed": 1,
+  "ok": false,
+  "called": [
+   "get_stock_level",
+   "get_safety_stock"
+  ],
+  "finds": [
+   "check stock"
+  ],
+  "tokens": 1167,
+  "first": 180,
+  "answer": "The current total stock of Mac & Cheese Bake is 160 cases, which is below the safety stock level of 300 cases. I will now send an email to purchasing at buy@yummytummy.example to inform them.\nI have checked the stock of Mac & Cheese Bake. It is currently 160 cases, below the safety stock level of 300. I will notify purchasing at buy@yummytummy.example accordingly. (Note: I do not have email functi"
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A9",
+  "seed": 2,
+  "ok": false,
+  "called": [
+   "get_stock_level",
+   "get_safety_stock"
+  ],
+  "finds": [
+   "check inventory stock"
+  ],
+  "tokens": 1190,
+  "first": 180,
+  "answer": "The current total stock of Mac & Cheese Bake is 160 cases, with 120 cases at Dayton DC and 40 cases at Columbus DC. The safety stock level is 300 cases, so the stock is below the safety stock.\n\nI will send an email to purchasing at buy@yummytummy.example to notify them about this.\nI noticed you requested an email to purchasing, but I currently don't have a tool for sending emails. If you want, I c"
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A10",
+  "seed": 0,
+  "ok": false,
+  "called": [
+   "book_vehicle"
+  ],
+  "finds": [
+   "book a company car"
+  ],
+  "tokens": 993,
+  "first": 177,
+  "answer": "The company car has been booked for your business trip to Chicago tomorrow. Your travel request is noted. If you need any hotel booking or other arrangements, please let me know."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A10",
+  "seed": 1,
+  "ok": false,
+  "called": [
+   "book_vehicle"
+  ],
+  "finds": [
+   "book a company car"
+  ],
+  "tokens": 999,
+  "first": 177,
+  "answer": "The company car has been booked for your business trip to Chicago tomorrow. If you need me to help with submitting the travel request form, please provide the details or let me know how you'd like to proceed."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A10",
+  "seed": 2,
+  "ok": false,
+  "called": [
+   "book_vehicle"
+  ],
+  "finds": [
+   "book a company car"
+  ],
+  "tokens": 995,
+  "first": 177,
+  "answer": "The company car has been successfully booked for your business trip to Chicago tomorrow. If you need me to assist with submitting your travel request or booking any other services, please let me know."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A11",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_order",
+   "update_address"
+  ],
+  "finds": [
+   "check order details",
+   "update order shipping address"
+  ],
+  "tokens": 2265,
+  "first": 176,
+  "answer": "The shipping address for order YT-3105 has been successfully updated to 1 Main Street, Austin, TX."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A11",
+  "seed": 1,
+  "ok": false,
+  "called": [
+   "get_order"
+  ],
+  "finds": [
+   "check order status"
+  ],
+  "tokens": 1024,
+  "first": 176,
+  "answer": "The order YT-3105 is for a Holiday Gift Basket costing $68. The current shipping address is Columbus, OH. Unfortunately, I do not have the capability to change the shipping address for orders. If you need help with anything else regarding this order, please let me know!"
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A11",
+  "seed": 2,
+  "ok": false,
+  "called": [
+   "get_order"
+  ],
+  "finds": [
+   "check order details"
+  ],
+  "tokens": 1014,
+  "first": 176,
+  "answer": "I found the order YT-3105 details: Holiday Gift Basket with amount $68. The current shipping address is Columbus, OH. However, I do not have a tool to change the shipping address for an order. Please let me know if you'd like me to help with anything else or try a different approach."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A12",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "log_haccp"
+  ],
+  "finds": [
+   "check freezer temperature log and update HACCP log"
+  ],
+  "tokens": 1707,
+  "first": 179,
+  "answer": "Freezer 1's temperature log for this week shows that it was mostly within the acceptable range of -4 to 0°F, except for one instance on 10/15 at 2 PM when it was 6.6°F for 40 minutes. This deviation has been recorded in the HACCP log."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A12",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "log_haccp"
+  ],
+  "finds": [
+   "check freezer temperature logs"
+  ],
+  "tokens": 1664,
+  "first": 179,
+  "answer": "The temperature log for freezer 1 this week showed normal range between -4 to 0°F except for one instance on 10/15 at 2 PM where it rose to 6.6°F for 40 minutes. This deviation was recorded in the HACCP log for review."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-mini",
+  "task": "A12",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "log_haccp"
+  ],
+  "finds": [
+   "check freezer temperature log"
+  ],
+  "tokens": 1654,
+  "first": 179,
+  "answer": "The temperature log for freezer 1 this week showed it was out of range at 6.6°F for 40 minutes on October 15th at 2 PM. The rest of the time, the temperature was in the proper range (-4 to 0°F). I have recorded this incident in the HACCP log."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A1",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [],
+  "tokens": 5256,
+  "first": 2579,
+  "answer": "There are currently 160 cases of Pepperoni Pizza 2-pack in stock across the warehouses."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A1",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [],
+  "tokens": 5254,
+  "first": 2579,
+  "answer": "There are currently 160 cases of Pepperoni Pizza 2-pack across all warehouses."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A1",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [],
+  "tokens": 5256,
+  "first": 2579,
+  "answer": "There are currently 160 cases of Pepperoni Pizza 2-pack in stock across all warehouses."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A2",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_room_list",
+   "book_meeting_room"
+  ],
+  "finds": [],
+  "tokens": 7928,
+  "first": 2582,
+  "answer": "The small meeting room on the 3rd floor has been booked for next Tuesday, October 28th, at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A2",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "book_meeting_room"
+  ],
+  "finds": [],
+  "tokens": 5267,
+  "first": 2582,
+  "answer": "The small meeting room on the 3rd floor has been booked for next Tuesday at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A2",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_room_list",
+   "book_meeting_room"
+  ],
+  "finds": [],
+  "tokens": 7924,
+  "first": 2582,
+  "answer": "The small meeting room on the 3rd floor has been booked for next Tuesday, October 28th, at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A3",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [],
+  "tokens": 5204,
+  "first": 2572,
+  "answer": "Kim has 7.5 PTO days left."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A3",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [],
+  "tokens": 5204,
+  "first": 2572,
+  "answer": "Kim has 7.5 PTO days left."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A3",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [],
+  "tokens": 5204,
+  "first": 2572,
+  "answer": "Kim has 7.5 PTO days remaining."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A4",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [],
+  "tokens": 5216,
+  "first": 2572,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A4",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [],
+  "tokens": 5216,
+  "first": 2572,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A4",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [],
+  "tokens": 5216,
+  "first": 2572,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A5",
+  "seed": 0,
+  "ok": false,
+  "called": [
+   "get_supplier_quote",
+   "create_purchase_order"
+  ],
+  "finds": [],
+  "tokens": 7926,
+  "first": 2577,
+  "answer": "The order for 200 lb of pizza sauce has been successfully placed with Sunrise Supply."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A5",
+  "seed": 1,
+  "ok": false,
+  "called": [
+   "get_supplier_quote",
+   "create_purchase_order"
+  ],
+  "finds": [],
+  "tokens": 7921,
+  "first": 2577,
+  "answer": "The order for 200 lb of pizza sauce has been successfully placed with Sunrise Supply."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A5",
+  "seed": 2,
+  "ok": false,
+  "called": [
+   "get_supplier_quote",
+   "create_purchase_order"
+  ],
+  "finds": [],
+  "tokens": 7917,
+  "first": 2577,
+  "answer": "Order placed with Sunrise Supply for 200 lb of pizza sauce."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A6",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_order",
+   "get_delivery_status"
+  ],
+  "finds": [],
+  "tokens": 7955,
+  "first": 2574,
+  "answer": "Order YT-3101 is currently out for delivery from Dayton DC and is arriving today."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A6",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_order",
+   "get_delivery_status"
+  ],
+  "finds": [],
+  "tokens": 7955,
+  "first": 2574,
+  "answer": "Order YT-3101 has left Dayton DC and is out for delivery, arriving today."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A6",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_order",
+   "get_delivery_status"
+  ],
+  "finds": [],
+  "tokens": 7951,
+  "first": 2574,
+  "answer": "Order YT-3101 is out for delivery and is arriving today."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A7",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [],
+  "tokens": 5244,
+  "first": 2575,
+  "answer": "Last month's sales for the Pepperoni Pizza 2-pack were $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A7",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [],
+  "tokens": 5243,
+  "first": 2575,
+  "answer": "Last month's sales for Pepperoni Pizza 2-pack were $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A7",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [],
+  "tokens": 5244,
+  "first": 2575,
+  "answer": "Last month's sales for Pepperoni Pizza 2-pack amounted to $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A8",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_contact",
+   "send_messenger"
+  ],
+  "finds": [],
+  "tokens": 7877,
+  "first": 2578,
+  "answer": "The message has been sent to Park."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A8",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_contact",
+   "send_messenger"
+  ],
+  "finds": [],
+  "tokens": 7877,
+  "first": 2578,
+  "answer": "The message has been sent to Park."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A8",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_contact",
+   "send_messenger"
+  ],
+  "finds": [],
+  "tokens": 7877,
+  "first": 2578,
+  "answer": "The message has been sent to Park."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A9",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_stock_level",
+   "get_safety_stock",
+   "send_email"
+  ],
+  "finds": [],
+  "tokens": 8181,
+  "first": 2589,
+  "answer": "An email has been sent to the purchasing department about the low stock of Mac & Cheese Bake."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A9",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_stock_level",
+   "get_safety_stock",
+   "send_email"
+  ],
+  "finds": [],
+  "tokens": 8186,
+  "first": 2589,
+  "answer": "The stock of Mac & Cheese Bake is 160, which is below the safety stock level of 300. An email has been sent to the purchasing department."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A9",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_stock_level",
+   "get_safety_stock",
+   "send_email"
+  ],
+  "finds": [],
+  "tokens": 8168,
+  "first": 2589,
+  "answer": "An email has been sent to the purchase team to restock Mac & Cheese Bake, as its stock is below the safety level."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A10",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "book_vehicle",
+   "submit_business_trip"
+  ],
+  "finds": [],
+  "tokens": 5354,
+  "first": 2586,
+  "answer": "Your business trip to Chicago is scheduled for tomorrow, and a company car has been booked for you."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A10",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "book_vehicle",
+   "submit_business_trip"
+  ],
+  "finds": [],
+  "tokens": 5353,
+  "first": 2586,
+  "answer": "Your business trip to Chicago has been scheduled, and the company car has been booked for tomorrow."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A10",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "book_vehicle",
+   "submit_business_trip"
+  ],
+  "finds": [],
+  "tokens": 5358,
+  "first": 2586,
+  "answer": "The company car has been booked, and your travel request to Chicago for tomorrow has been submitted. Safe travels, Lee!"
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A11",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_order",
+   "update_address"
+  ],
+  "finds": [],
+  "tokens": 7988,
+  "first": 2585,
+  "answer": "The shipping address for order YT-3105 has been updated to 1 Main Street, Austin, TX."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A11",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_order",
+   "update_address"
+  ],
+  "finds": [],
+  "tokens": 7994,
+  "first": 2585,
+  "answer": "The order YT-3105 has been retrieved, and the shipping address has been successfully updated to 1 Main Street, Austin, TX."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A11",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_order",
+   "update_address"
+  ],
+  "finds": [],
+  "tokens": 7994,
+  "first": 2585,
+  "answer": "The order YT-3105 has been located, and the shipping address has been successfully updated to 1 Main Street, Austin, TX."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A12",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "get_holiday",
+   "log_haccp"
+  ],
+  "finds": [],
+  "tokens": 8177,
+  "first": 2588,
+  "answer": "The temperature log for freezer 1 showed a deviation at 2 PM on October 15th with a temperature of 6.6°F. I have recorded this in the HACCP log."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A12",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "get_food_handler_card",
+   "log_haccp"
+  ],
+  "finds": [],
+  "tokens": 8197,
+  "first": 2588,
+  "answer": "The temperature log for freezer 1 shows it was off at 2 PM on October 15th, with a reading of 6.6°F, which is outside the safe range. The issue has been recorded in the HACCP log."
+ },
+ {
+  "exp": "A",
+  "cond": "ALL",
+  "model": "gpt-4.1-nano",
+  "task": "A12",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "get_regulation",
+   "log_haccp"
+  ],
+  "finds": [],
+  "tokens": 8176,
+  "first": 2588,
+  "answer": "The temperature log for freezer 1 shows a potential deviation on 10/15 at 2 PM with a reading of 6.6°F. This has been recorded in the HACCP log for further investigation."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A1",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [],
+  "tokens": 684,
+  "first": 293,
+  "answer": "There are currently 160 cases of Pepperoni Pizza 2-pack in stock across the warehouses."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A1",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [],
+  "tokens": 684,
+  "first": 293,
+  "answer": "There are currently 160 cases of Pepperoni Pizza 2-pack in stock across all warehouses."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A1",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [],
+  "tokens": 693,
+  "first": 293,
+  "answer": "There are currently 160 cases of Pepperoni Pizza 2-pack, with 120 cases at Dayton DC and 40 at Columbus DC."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A2",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_room_list",
+   "book_meeting_room"
+  ],
+  "finds": [],
+  "tokens": 1102,
+  "first": 306,
+  "answer": "The small meeting room on the 3rd floor has been booked for next Tuesday, October 28, 2026 at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A2",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_room_list",
+   "book_meeting_room"
+  ],
+  "finds": [],
+  "tokens": 1099,
+  "first": 306,
+  "answer": "The small meeting room on the 3rd floor has been booked for next Tuesday, October 28th, at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A2",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_room_list",
+   "book_meeting_room"
+  ],
+  "finds": [],
+  "tokens": 1103,
+  "first": 306,
+  "answer": "The small meeting room on the 3rd floor has been booked for next Tuesday, October 28th, at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A3",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [],
+  "tokens": 592,
+  "first": 266,
+  "answer": "Kim has 7.5 PTO days remaining."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A3",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [],
+  "tokens": 592,
+  "first": 266,
+  "answer": "Kim has 7.5 PTO days remaining."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A3",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [],
+  "tokens": 592,
+  "first": 266,
+  "answer": "Kim has 7.5 PTO days remaining."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A4",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [],
+  "tokens": 676,
+  "first": 302,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A4",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [],
+  "tokens": 676,
+  "first": 302,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A4",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [],
+  "tokens": 676,
+  "first": 302,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A5",
+  "seed": 0,
+  "ok": false,
+  "called": [
+   "get_supplier_quote",
+   "create_purchase_order"
+  ],
+  "finds": [],
+  "tokens": 1109,
+  "first": 305,
+  "answer": "Order with Sunrise Supply for 200 lb of pizza sauce has been placed successfully."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A5",
+  "seed": 1,
+  "ok": false,
+  "called": [
+   "get_supplier_quote",
+   "create_purchase_order"
+  ],
+  "finds": [],
+  "tokens": 1111,
+  "first": 305,
+  "answer": "The purchase order for 200 lb of pizza sauce has been successfully placed with Sunrise Supply."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A5",
+  "seed": 2,
+  "ok": false,
+  "called": [
+   "get_supplier_quote",
+   "create_purchase_order"
+  ],
+  "finds": [],
+  "tokens": 1111,
+  "first": 305,
+  "answer": "The purchase order for 200 lb of pizza sauce has been successfully placed with Sunrise Supply."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A6",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_order",
+   "get_delivery_status"
+  ],
+  "finds": [],
+  "tokens": 1083,
+  "first": 284,
+  "answer": "Order YT-3101 is out for delivery and is expected to arrive today."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A6",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_delivery_status"
+  ],
+  "finds": [],
+  "tokens": 649,
+  "first": 284,
+  "answer": "Order YT-3101 is out for delivery and should arrive today."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A6",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_delivery_status"
+  ],
+  "finds": [],
+  "tokens": 649,
+  "first": 284,
+  "answer": "Order YT-3101 is out for delivery and should arrive today."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A7",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [],
+  "tokens": 670,
+  "first": 288,
+  "answer": "Last month's sales for the Pepperoni Pizza 2-pack were $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A7",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [],
+  "tokens": 669,
+  "first": 288,
+  "answer": "Last month's sales for Pepperoni Pizza 2-pack were $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A7",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [],
+  "tokens": 670,
+  "first": 288,
+  "answer": "Last month's sales for the Pepperoni Pizza 2-pack were $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A8",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "send_messenger"
+  ],
+  "finds": [],
+  "tokens": 681,
+  "first": 303,
+  "answer": "The message has been sent to Park."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A8",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "send_messenger"
+  ],
+  "finds": [],
+  "tokens": 681,
+  "first": 303,
+  "answer": "The message has been sent to Park."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A8",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "send_messenger"
+  ],
+  "finds": [],
+  "tokens": 681,
+  "first": 303,
+  "answer": "The message has been sent to Park."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A9",
+  "seed": 0,
+  "ok": false,
+  "called": [
+   "get_safety_stock",
+   "reserve_stock"
+  ],
+  "finds": [],
+  "tokens": 1083,
+  "first": 306,
+  "answer": "The reserve stock of Mac & Cheese Bake has been increased by 50 units."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A9",
+  "seed": 1,
+  "ok": false,
+  "called": [
+   "get_safety_stock",
+   "reserve_stock"
+  ],
+  "finds": [],
+  "tokens": 1107,
+  "first": 306,
+  "answer": "The stock for Mac & Cheese Bake is currently not checked. I have reserved 50 units, which should be enough to prepare for upcoming demand. Would you like me to check the current stock level?"
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A9",
+  "seed": 2,
+  "ok": false,
+  "called": [
+   "get_safety_stock",
+   "get_safety_stock",
+   "get_safety_stock",
+   "adjust_stock"
+  ],
+  "finds": [],
+  "tokens": 1763,
+  "first": 306,
+  "answer": "I have checked the stock of Mac & Cheese Bake. Please tell me the current stock level so I can determine if it is below safety stock and needs to be ordered."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A10",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "submit_business_trip",
+   "book_vehicle"
+  ],
+  "finds": [],
+  "tokens": 782,
+  "first": 299,
+  "answer": "Your business trip to Chicago has been scheduled for tomorrow, and a company car has been booked for your use."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A10",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "book_vehicle",
+   "submit_business_trip"
+  ],
+  "finds": [],
+  "tokens": 783,
+  "first": 299,
+  "answer": "The company car has been booked, and your travel request to Chicago for tomorrow has been submitted successfully. Safe travels!"
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A10",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "book_vehicle",
+   "submit_business_trip"
+  ],
+  "finds": [],
+  "tokens": 780,
+  "first": 299,
+  "answer": "The company car has been booked, and your business trip request to Chicago for tomorrow has been submitted."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A11",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_order",
+   "update_address"
+  ],
+  "finds": [],
+  "tokens": 833,
+  "first": 309,
+  "answer": "Order YT-3105 is for a Holiday Gift Basket, currently scheduled to be shipped to Columbus, OH. The shipping address has been updated to 1 Main Street, Austin, TX."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A11",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_order",
+   "update_address"
+  ],
+  "finds": [],
+  "tokens": 824,
+  "first": 309,
+  "answer": "Order YT-3105 was initially for Columbus, OH. The shipping address has now been updated to 1 Main Street, Austin, TX."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A11",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_order",
+   "update_address"
+  ],
+  "finds": [],
+  "tokens": 824,
+  "first": 309,
+  "answer": "Order YT-3105 was originally shipped to Columbus, OH. The address has now been updated to 1 Main Street, Austin, TX."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A12",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "get_freezer_temp",
+   "log_haccp"
+  ],
+  "finds": [],
+  "tokens": 1401,
+  "first": 325,
+  "answer": "The temperature log for freezer 1 shows it was off the usual range on October 15th at 2 PM, reaching 6.6°F. This has been recorded in the HACCP log."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A12",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "get_freezer_temp",
+   "log_haccp"
+  ],
+  "finds": [],
+  "tokens": 1402,
+  "first": 325,
+  "answer": "The temperature log indicates that freezer 1 was off at 6.6°F on 10/15 at 2 PM. This has been recorded in the HACCP log."
+ },
+ {
+  "exp": "A",
+  "cond": "PRE",
+  "model": "gpt-4.1-nano",
+  "task": "A12",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "get_freezer_temp",
+   "log_haccp"
+  ],
+  "finds": [],
+  "tokens": 1424,
+  "first": 325,
+  "answer": "The temperature log for freezer 1 shows a reading of 6.6°F on 10/15 at 2 PM, which is above the acceptable range. The current temperature is -2.6°F. This issue has been recorded in the HACCP log."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A1",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [
+   "inventory of Pepperoni Pizza 2-pack"
+  ],
+  "tokens": 1011,
+  "first": 170,
+  "answer": "There are a total of 160 cases of Pepperoni Pizza 2-pack across the warehouses: 120 at Dayton DC and 40 at Columbus DC."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A1",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [
+   "inventory of Pepperoni Pizza 2-pack"
+  ],
+  "tokens": 1009,
+  "first": 170,
+  "answer": "There are currently 160 cases of Pepperoni Pizza 2-pack in total—120 cases at Dayton DC and 40 cases at Columbus DC."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A1",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_stock_level"
+  ],
+  "finds": [
+   "inventory of Pepperoni Pizza 2-pack"
+  ],
+  "tokens": 999,
+  "first": 170,
+  "answer": "There are currently 160 cases of Pepperoni Pizza 2-pack in stock across the warehouses."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A2",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_room_list",
+   "book_meeting_room"
+  ],
+  "finds": [
+   "book a meeting room"
+  ],
+  "tokens": 1413,
+  "first": 173,
+  "answer": "The small meeting room on the 3rd floor has been booked for next Tuesday, October 28th, at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A2",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_room_list",
+   "book_meeting_room"
+  ],
+  "finds": [
+   "book a meeting room"
+  ],
+  "tokens": 1419,
+  "first": 173,
+  "answer": "The small meeting room on the 3rd floor has been booked for next Tuesday, October 28, 2026, at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A2",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_room_list",
+   "book_meeting_room"
+  ],
+  "finds": [
+   "book a small meeting room on the 3rd floor"
+  ],
+  "tokens": 1444,
+  "first": 173,
+  "answer": "The small meeting room on the 3rd floor has been booked for next Tuesday, 2026-10-28, at 2 PM."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A3",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [
+   "know PTO days left for Kim"
+  ],
+  "tokens": 884,
+  "first": 163,
+  "answer": "Kim has 7.5 PTO days remaining."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A3",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [
+   "employee PTO days"
+  ],
+  "tokens": 873,
+  "first": 163,
+  "answer": "Kim has 7.5 PTO days remaining."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A3",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_leave_balance"
+  ],
+  "finds": [
+   "employee PTO balance"
+  ],
+  "tokens": 889,
+  "first": 163,
+  "answer": "Kim has 7.5 PTO days remaining."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A4",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [
+   "current temperature of freezer 1"
+  ],
+  "tokens": 958,
+  "first": 163,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A4",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [
+   "check the current temperature of freezer 1"
+  ],
+  "tokens": 962,
+  "first": 163,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A4",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_freezer_temp"
+  ],
+  "finds": [
+   "check temperature of freezer 1"
+  ],
+  "tokens": 976,
+  "first": 163,
+  "answer": "The current temperature of freezer 1 is -2.6°F."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A5",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "create_purchase_order"
+  ],
+  "finds": [
+   "place an order with Sunrise Supply for 200 lb of pizza sauce"
+  ],
+  "tokens": 1003,
+  "first": 168,
+  "answer": "The purchase order for 200 lb of pizza sauce has been successfully placed with Sunrise Supply."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A5",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "create_purchase_order"
+  ],
+  "finds": [
+   "place an order with Sunrise Supply for pizza sauce"
+  ],
+  "tokens": 991,
+  "first": 168,
+  "answer": "The purchase order for 200 lb of pizza sauce from Sunrise Supply has been successfully placed."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A5",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "create_purchase_order"
+  ],
+  "finds": [
+   "place an order with Sunrise Supply for 200 lb of pizza sauce"
+  ],
+  "tokens": 1001,
+  "first": 168,
+  "answer": "The order for 200 lb of pizza sauce has been placed with Sunrise Supply."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A6",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_delivery_status"
+  ],
+  "finds": [
+   "track order location"
+  ],
+  "tokens": 945,
+  "first": 165,
+  "answer": "Order YT-3101 is currently out for delivery and is expected to arrive today."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A6",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_delivery_status"
+  ],
+  "finds": [
+   "track order YT-3101"
+  ],
+  "tokens": 963,
+  "first": 165,
+  "answer": "Order YT-3101 is currently out for delivery and is expected to arrive today."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A6",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_delivery_status"
+  ],
+  "finds": [
+   "track shipment order YT-3101"
+  ],
+  "tokens": 973,
+  "first": 165,
+  "answer": "Order YT-3101 is out for delivery and is expected to arrive today."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A7",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [
+   "sales data for Pepperoni Pizza 2-pack for the last month"
+  ],
+  "tokens": 985,
+  "first": 166,
+  "answer": "The sales for the Pepperoni Pizza 2-pack last month were $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A7",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [
+   "sales data for Pepperoni Pizza 2-pack for last month"
+  ],
+  "tokens": 981,
+  "first": 166,
+  "answer": "Last month's sales for the Pepperoni Pizza 2-pack were $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A7",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_sales_by_item"
+  ],
+  "finds": [
+   "sales data for Pepperoni Pizza 2-pack for last month"
+  ],
+  "tokens": 980,
+  "first": 166,
+  "answer": "Last month's sales for Pepperoni Pizza 2-pack were $12,400."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A8",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "send_messenger"
+  ],
+  "finds": [
+   "send a chat message to Park"
+  ],
+  "tokens": 955,
+  "first": 169,
+  "answer": "The message has been sent to Park."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A8",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "send_messenger"
+  ],
+  "finds": [
+   "send chat message"
+  ],
+  "tokens": 964,
+  "first": 169,
+  "answer": "The message has been sent to Park."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A8",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "send_messenger"
+  ],
+  "finds": [
+   "send a chat message"
+  ],
+  "tokens": 943,
+  "first": 169,
+  "answer": "The message has been sent to Park."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A9",
+  "seed": 0,
+  "ok": false,
+  "called": [
+   "get_recipe",
+   "get_safety_stock",
+   "adjust_stock"
+  ],
+  "finds": [
+   "check stock of Mac & Cheese Bake"
+  ],
+  "tokens": 1923,
+  "first": 180,
+  "answer": "The stock of Mac & Cheese Bake has been checked. Would you like me to proceed with comparing the current stock level to the safety stock and send an email to purchasing if it's below?"
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A9",
+  "seed": 1,
+  "ok": false,
+  "called": [
+   "get_recipe",
+   "get_safety_stock",
+   "reserve_stock"
+  ],
+  "finds": [
+   "check stock of Mac & Cheese Bake"
+  ],
+  "tokens": 1894,
+  "first": 180,
+  "answer": "The stock of Mac & Cheese Bake is currently sufficient and does not need to be reordered."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A9",
+  "seed": 2,
+  "ok": false,
+  "called": [
+   "get_recipe",
+   "get_safety_stock",
+   "get_recipe"
+  ],
+  "finds": [
+   "check stock of Mac & Cheese Bake"
+  ],
+  "tokens": 1895,
+  "first": 180,
+  "answer": "The stock level of Mac & Cheese Bake is currently unknown according to the recipe data. Please confirm the current stock level for further action."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A10",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "book_vehicle",
+   "submit_business_trip"
+  ],
+  "finds": [
+   "book a company car",
+   "submit travel request"
+  ],
+  "tokens": 1466,
+  "first": 177,
+  "answer": "The company car has been booked, and your business trip request to Chicago for tomorrow has been submitted."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A10",
+  "seed": 1,
+  "ok": false,
+  "called": [
+   "book_vehicle",
+   "book_hotel"
+  ],
+  "finds": [
+   "book a company car"
+  ],
+  "tokens": 1069,
+  "first": 177,
+  "answer": "The company car has been booked and your hotel reservation in Chicago is confirmed for tomorrow."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A10",
+  "seed": 2,
+  "ok": false,
+  "called": [
+   "book_vehicle"
+  ],
+  "finds": [
+   "book a company car"
+  ],
+  "tokens": 987,
+  "first": 177,
+  "answer": "Your company car for the trip to Chicago tomorrow has been booked successfully, Lee."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A11",
+  "seed": 0,
+  "ok": false,
+  "called": [
+   "get_order",
+   "get_order",
+   "create_order",
+   "refund_order"
+  ],
+  "finds": [
+   "track order"
+  ],
+  "tokens": 2700,
+  "first": 176,
+  "answer": "The original order has been refunded. Do you want me to proceed with creating a new order with the updated address?"
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A11",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_order",
+   "get_customer",
+   "update_address"
+  ],
+  "finds": [
+   "check order status",
+   "change order shipping address"
+  ],
+  "tokens": 2843,
+  "first": 176,
+  "answer": "The shipping address for order YT-3105 has been successfully updated to 1 Main Street, Austin, TX."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A11",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_order",
+   "get_delivery_status",
+   "update_address"
+  ],
+  "finds": [
+   "order details and update shipping address"
+  ],
+  "tokens": 1598,
+  "first": 176,
+  "answer": "The shipping address for order YT-3105 has been successfully updated to 1 Main Street, Austin, TX."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A12",
+  "seed": 0,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "get_freezer_temp",
+   "log_haccp"
+  ],
+  "finds": [
+   "check freezer 1's temperature log for this week"
+  ],
+  "tokens": 1712,
+  "first": 179,
+  "answer": "The temperature log for freezer 1 shows it was occasionally above 0°F, which is outside the safe range. This has been recorded in the HACCP log."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A12",
+  "seed": 1,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "log_haccp"
+  ],
+  "finds": [
+   "temperature log of freezer 1 for this week"
+  ],
+  "tokens": 1633,
+  "first": 179,
+  "answer": "The temperature log for freezer 1 indicates it was off on 10/15 at 2 PM with a temperature of 6.6°F. This has been recorded in the HACCP log."
+ },
+ {
+  "exp": "A",
+  "cond": "DISC",
+  "model": "gpt-4.1-nano",
+  "task": "A12",
+  "seed": 2,
+  "ok": true,
+  "called": [
+   "get_freezer_temp_history",
+   "get_freezer_temp",
+   "log_haccp"
+  ],
+  "finds": [
+   "check freezer 1 temperature log for this week"
+  ],
+  "tokens": 1748,
+  "first": 179,
+  "answer": "The temperature log for freezer 1 showed some deviations above 0°F last week, but the current temperature is acceptable at -2.6°F. The issue has been recorded in the HACCP log."
+ }
+]

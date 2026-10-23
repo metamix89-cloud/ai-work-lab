@@ -1,0 +1,685 @@
+[
+ {
+  "method": "SOM",
+  "task": "T1",
+  "seed": 0,
+  "ok": true,
+  "answer": "이천센터의 냉동만두 1kg 현재고는 320박스입니다.",
+  "steps": 5,
+  "tokens": 25950,
+  "sec": 11.5,
+  "actions": [
+   "type({\"id\": 4, \"text\": \"냉동만두 1kg\"})",
+   "click({\"id\": 5})",
+   "click({\"id\": 7})",
+   "click({\"id\": 6})",
+   "done({\"answer\": \"이천센터의 냉동만두 1kg 현재고는 320박스입니다.\"})"
+  ],
+  "state": {
+   "orders_po": [],
+   "customers": [
+    {
+     "name": "가나마트",
+     "code": "GM-2207",
+     "person": "이수진",
+     "tel": "내선 4100"
+    },
+    {
+     "name": "다라슈퍼",
+     "code": "DS-1180",
+     "person": "최다라",
+     "tel": "내선 5200"
+    },
+    {
+     "name": "마바상회",
+     "code": "MB-3301",
+     "person": "김마바",
+     "tel": "내선 6300"
+    }
+   ]
+  }
+ },
+ {
+  "method": "SOM",
+  "task": "T1",
+  "seed": 1,
+  "ok": true,
+  "answer": "냉동만두 1kg의 이천센터 현재고는 320박스입니다.",
+  "steps": 5,
+  "tokens": 25950,
+  "sec": 11.3,
+  "actions": [
+   "type({\"id\": 4, \"text\": \"냉동만두 1kg\"})",
+   "click({\"id\": 5})",
+   "click({\"id\": 7})",
+   "click({\"id\": 6})",
+   "done({\"answer\": \"냉동만두 1kg의 이천센터 현재고는 320박스입니다.\"})"
+  ],
+  "state": {
+   "orders_po": [],
+   "customers": [
+    {
+     "name": "가나마트",
+     "code": "GM-2207",
+     "person": "이수진",
+     "tel": "내선 4100"
+    },
+    {
+     "name": "다라슈퍼",
+     "code": "DS-1180",
+     "person": "최다라",
+     "tel": "내선 5200"
+    },
+    {
+     "name": "마바상회",
+     "code": "MB-3301",
+     "person": "김마바",
+     "tel": "내선 6300"
+    }
+   ]
+  }
+ },
+ {
+  "method": "SOM",
+  "task": "T1",
+  "seed": 2,
+  "ok": true,
+  "answer": "냉동만두 1kg의 이천센터 현재고는 320 박스입니다.",
+  "steps": 5,
+  "tokens": 25950,
+  "sec": 11.3,
+  "actions": [
+   "type({\"id\": 4, \"text\": \"냉동만두 1kg\"})",
+   "click({\"id\": 5})",
+   "click({\"id\": 7})",
+   "click({\"id\": 6})",
+   "done({\"answer\": \"냉동만두 1kg의 이천센터 현재고는 320 박스입니다.\"})"
+  ],
+  "state": {
+   "orders_po": [],
+   "customers": [
+    {
+     "name": "가나마트",
+     "code": "GM-2207",
+     "person": "이수진",
+     "tel": "내선 4100"
+    },
+    {
+     "name": "다라슈퍼",
+     "code": "DS-1180",
+     "person": "최다라",
+     "tel": "내선 5200"
+    },
+    {
+     "name": "마바상회",
+     "code": "MB-3301",
+     "person": "김마바",
+     "tel": "내선 6300"
+    }
+   ]
+  }
+ },
+ {
+  "method": "SOM",
+  "task": "T2",
+  "seed": 0,
+  "ok": true,
+  "answer": "",
+  "steps": 15,
+  "tokens": 202453,
+  "sec": 33.3,
+  "actions": [
+   "click({\"id\": 1})",
+   "click({\"id\": 10})",
+   "click({\"id\": 4})",
+   "click({\"id\": 8})",
+   "click({\"id\": 4})",
+   "click({\"id\": 4})",
+   "click({\"id\": 5})",
+   "click({\"id\": 5})",
+   "click({\"id\": 10})",
+   "type({\"id\": 6, \"text\": \"200\"})",
+   "click({\"id\": 6})",
+   "type({\"id\": 6, \"text\": \"200\"})",
+   "type({\"id\": 7, \"text\": \"2026-10-28\"})",
+   "click({\"id\": 8})",
+   "click({\"id\": 10})"
+  ],
+  "state": {
+   "orders_po": [
+    {
+     "supplier": "가나공급",
+     "item": "떡볶이 소스",
+     "qty": "200",
+     "due": "2026-10-28"
+    }
+   ],
+   "customers": [
+    {
+     "name": "가나마트",
+     "code": "GM-2207",
+     "person": "이수진",
+     "tel": "내선 4100"
+    },
+    {
+     "name": "다라슈퍼",
+     "code": "DS-1180",
+     "person": "최다라",
+     "tel": "내선 5200"
+    },
+    {
+     "name": "마바상회",
+     "code": "MB-3301",
+     "person": "김마바",
+     "tel": "내선 6300"
+    }
+   ]
+  }
+ },
+ {
+  "method": "SOM",
+  "task": "T2",
+  "seed": 1,
+  "ok": true,
+  "answer": "가나공급, 떡볶이 소스, 수량 200kg, 납기일 2026-10-28 발주 저장 완료했습니다.",
+  "steps": 13,
+  "tokens": 153908,
+  "sec": 29.5,
+  "actions": [
+   "click({\"id\": 1})",
+   "click({\"id\": 10})",
+   "click({\"id\": 4})",
+   "click({\"id\": 8})",
+   "click({\"id\": 5})",
+   "click({\"id\": 5})",
+   "click({\"id\": 10})",
+   "click({\"id\": 6})",
+   "type({\"id\": 6, \"text\": \"200\"})",
+   "type({\"id\": 7, \"text\": \"2026-10-28\"})",
+   "click({\"id\": 8})",
+   "click({\"id\": 10})",
+   "done({\"answer\": \"가나공급, 떡볶이 소스, 수량 200kg, 납기일 2026-10-28 발주 저장 완료했습니다.\"})"
+  ],
+  "state": {
+   "orders_po": [
+    {
+     "supplier": "가나공급",
+     "item": "떡볶이 소스",
+     "qty": "200",
+     "due": "2026-10-28"
+    }
+   ],
+   "customers": [
+    {
+     "name": "가나마트",
+     "code": "GM-2207",
+     "person": "이수진",
+     "tel": "내선 4100"
+    },
+    {
+     "name": "다라슈퍼",
+     "code": "DS-1180",
+     "person": "최다라",
+     "tel": "내선 5200"
+    },
+    {
+     "name": "마바상회",
+     "code": "MB-3301",
+     "person": "김마바",
+     "tel": "내선 6300"
+    }
+   ]
+  }
+ },
+ {
+  "method": "SOM",
+  "task": "T2",
+  "seed": 2,
+  "ok": false,
+  "answer": "",
+  "steps": 15,
+  "tokens": 196558,
+  "sec": 33.1,
+  "actions": [
+   "click({\"id\": 1})",
+   "click({\"id\": 10})",
+   "click({\"id\": 4})",
+   "click({\"id\": 8})",
+   "click({\"id\": 5})",
+   "click({\"id\": 5})",
+   "click({\"id\": 10})",
+   "type({\"id\": 6, \"text\": \"200\"})",
+   "type({\"id\": 7, \"text\": \"2026-10-28\"})",
+   "click({\"id\": 12})",
+   "click({\"id\": 6})",
+   "type({\"id\": 6, \"text\": \"200\"})",
+   "type({\"id\": 7, \"text\": \"2026-10-28\"})",
+   "click({\"id\": 8})"
+  ],
+  "state": {
+   "orders_po": [],
+   "customers": [
+    {
+     "name": "가나마트",
+     "code": "GM-2207",
+     "person": "이수진",
+     "tel": "내선 4100"
+    },
+    {
+     "name": "다라슈퍼",
+     "code": "DS-1180",
+     "person": "최다라",
+     "tel": "내선 5200"
+    },
+    {
+     "name": "마바상회",
+     "code": "MB-3301",
+     "person": "김마바",
+     "tel": "내선 6300"
+    }
+   ]
+  }
+ },
+ {
+  "method": "SOM",
+  "task": "T3",
+  "seed": 0,
+  "ok": true,
+  "answer": "거래처 가나마트의 담당자명을 박민호, 연락처를 내선 4417로 수정하여 저장했습니다.",
+  "steps": 7,
+  "tokens": 47864,
+  "sec": 13.9,
+  "actions": [
+   "click({\"id\": 2})",
+   "click({\"id\": 4})",
+   "type({\"id\": 7, \"text\": \"박민호\"})",
+   "type({\"id\": 8, \"text\": \"내선 4417\"})",
+   "click({\"id\": 9})",
+   "click({\"id\": 10})",
+   "done({\"answer\": \"거래처 가나마트의 담당자명을 박민호, 연락처를 내선 4417로 수정하여 저장했습니다.\"})"
+  ],
+  "state": {
+   "orders_po": [],
+   "customers": [
+    {
+     "name": "가나마트",
+     "code": "GM-2207",
+     "person": "박민호",
+     "tel": "내선 4417"
+    },
+    {
+     "name": "다라슈퍼",
+     "code": "DS-1180",
+     "person": "최다라",
+     "tel": "내선 5200"
+    },
+    {
+     "name": "마바상회",
+     "code": "MB-3301",
+     "person": "김마바",
+     "tel": "내선 6300"
+    }
+   ]
+  }
+ },
+ {
+  "method": "SOM",
+  "task": "T3",
+  "seed": 1,
+  "ok": true,
+  "answer": "가나마트 담당자를 박민호, 연락처를 내선 4417로 수정하여 저장했습니다.",
+  "steps": 7,
+  "tokens": 47859,
+  "sec": 13.9,
+  "actions": [
+   "click({\"id\": 2})",
+   "click({\"id\": 4})",
+   "type({\"id\": 7, \"text\": \"박민호\"})",
+   "type({\"id\": 8, \"text\": \"내선 4417\"})",
+   "click({\"id\": 9})",
+   "click({\"id\": 10})",
+   "done({\"answer\": \"가나마트 담당자를 박민호, 연락처를 내선 4417로 수정하여 저장했습니다.\"})"
+  ],
+  "state": {
+   "orders_po": [],
+   "customers": [
+    {
+     "name": "가나마트",
+     "code": "GM-2207",
+     "person": "박민호",
+     "tel": "내선 4417"
+    },
+    {
+     "name": "다라슈퍼",
+     "code": "DS-1180",
+     "person": "최다라",
+     "tel": "내선 5200"
+    },
+    {
+     "name": "마바상회",
+     "code": "MB-3301",
+     "person": "김마바",
+     "tel": "내선 6300"
+    }
+   ]
+  }
+ },
+ {
+  "method": "SOM",
+  "task": "T3",
+  "seed": 2,
+  "ok": true,
+  "answer": "거래처 가나마트의 담당자를 박민호, 연락처를 내선 4417로 수정하여 저장 완료했습니다.",
+  "steps": 7,
+  "tokens": 47864,
+  "sec": 14.0,
+  "actions": [
+   "click({\"id\": 2})",
+   "click({\"id\": 4})",
+   "type({\"id\": 7, \"text\": \"박민호\"})",
+   "type({\"id\": 8, \"text\": \"내선 4417\"})",
+   "click({\"id\": 9})",
+   "click({\"id\": 10})",
+   "done({\"answer\": \"거래처 가나마트의 담당자를 박민호, 연락처를 내선 4417로 수정하여 저장 완료했습니다.\"})"
+  ],
+  "state": {
+   "orders_po": [],
+   "customers": [
+    {
+     "name": "가나마트",
+     "code": "GM-2207",
+     "person": "박민호",
+     "tel": "내선 4417"
+    },
+    {
+     "name": "다라슈퍼",
+     "code": "DS-1180",
+     "person": "최다라",
+     "tel": "내선 5200"
+    },
+    {
+     "name": "마바상회",
+     "code": "MB-3301",
+     "person": "김마바",
+     "tel": "내선 6300"
+    }
+   ]
+  }
+ },
+ {
+  "method": "SOM",
+  "task": "T4",
+  "seed": 0,
+  "ok": true,
+  "answer": "주문번호 GND-4410의 상태는 배송 중입니다.",
+  "steps": 4,
+  "tokens": 17364,
+  "sec": 9.8,
+  "actions": [
+   "click({\"id\": 3})",
+   "click({\"id\": 5})",
+   "click({\"id\": 5})",
+   "done({\"answer\": \"주문번호 GND-4410의 상태는 배송 중입니다.\"})"
+  ],
+  "state": {
+   "orders_po": [],
+   "customers": [
+    {
+     "name": "가나마트",
+     "code": "GM-2207",
+     "person": "이수진",
+     "tel": "내선 4100"
+    },
+    {
+     "name": "다라슈퍼",
+     "code": "DS-1180",
+     "person": "최다라",
+     "tel": "내선 5200"
+    },
+    {
+     "name": "마바상회",
+     "code": "MB-3301",
+     "person": "김마바",
+     "tel": "내선 6300"
+    }
+   ]
+  }
+ },
+ {
+  "method": "SOM",
+  "task": "T4",
+  "seed": 1,
+  "ok": true,
+  "answer": "주문번호 GND-4410의 상태는 배송 중입니다.",
+  "steps": 4,
+  "tokens": 17364,
+  "sec": 10.5,
+  "actions": [
+   "click({\"id\": 3})",
+   "click({\"id\": 5})",
+   "click({\"id\": 5})",
+   "done({\"answer\": \"주문번호 GND-4410의 상태는 배송 중입니다.\"})"
+  ],
+  "state": {
+   "orders_po": [],
+   "customers": [
+    {
+     "name": "가나마트",
+     "code": "GM-2207",
+     "person": "이수진",
+     "tel": "내선 4100"
+    },
+    {
+     "name": "다라슈퍼",
+     "code": "DS-1180",
+     "person": "최다라",
+     "tel": "내선 5200"
+    },
+    {
+     "name": "마바상회",
+     "code": "MB-3301",
+     "person": "김마바",
+     "tel": "내선 6300"
+    }
+   ]
+  }
+ },
+ {
+  "method": "SOM",
+  "task": "T4",
+  "seed": 2,
+  "ok": true,
+  "answer": "주문번호 GND-4410의 상태는 배송 중입니다.",
+  "steps": 4,
+  "tokens": 17364,
+  "sec": 9.7,
+  "actions": [
+   "click({\"id\": 3})",
+   "click({\"id\": 5})",
+   "click({\"id\": 5})",
+   "done({\"answer\": \"주문번호 GND-4410의 상태는 배송 중입니다.\"})"
+  ],
+  "state": {
+   "orders_po": [],
+   "customers": [
+    {
+     "name": "가나마트",
+     "code": "GM-2207",
+     "person": "이수진",
+     "tel": "내선 4100"
+    },
+    {
+     "name": "다라슈퍼",
+     "code": "DS-1180",
+     "person": "최다라",
+     "tel": "내선 5200"
+    },
+    {
+     "name": "마바상회",
+     "code": "MB-3301",
+     "person": "김마바",
+     "tel": "내선 6300"
+    }
+   ]
+  }
+ },
+ {
+  "method": "SOM",
+  "task": "T5",
+  "seed": 0,
+  "ok": true,
+  "answer": "떡볶이 밀키트 재고가 0인 센터는 이천센터이며, 입고 예정일은 11월 12일입니다.",
+  "steps": 3,
+  "tokens": 10657,
+  "sec": 9.0,
+  "actions": [
+   "type({\"id\": 4, \"text\": \"떡볶이 밀키트\"})",
+   "click({\"id\": 6})",
+   "done({\"answer\": \"떡볶이 밀키트 재고가 0인 센터는 이천센터이며, 입고 예정일은 11월 12일입니다.\"})"
+  ],
+  "state": {
+   "orders_po": [],
+   "customers": [
+    {
+     "name": "가나마트",
+     "code": "GM-2207",
+     "person": "이수진",
+     "tel": "내선 4100"
+    },
+    {
+     "name": "다라슈퍼",
+     "code": "DS-1180",
+     "person": "최다라",
+     "tel": "내선 5200"
+    },
+    {
+     "name": "마바상회",
+     "code": "MB-3301",
+     "person": "김마바",
+     "tel": "내선 6300"
+    }
+   ]
+  }
+ },
+ {
+  "method": "SOM",
+  "task": "T5",
+  "seed": 1,
+  "ok": true,
+  "answer": "떡볶이 밀키트 재고가 0인 센터는 이천센터이며, 입고 예정일은 11월 12일입니다.",
+  "steps": 3,
+  "tokens": 10657,
+  "sec": 8.6,
+  "actions": [
+   "type({\"id\": 4, \"text\": \"떡볶이 밀키트\"})",
+   "click({\"id\": 6})",
+   "done({\"answer\": \"떡볶이 밀키트 재고가 0인 센터는 이천센터이며, 입고 예정일은 11월 12일입니다.\"})"
+  ],
+  "state": {
+   "orders_po": [],
+   "customers": [
+    {
+     "name": "가나마트",
+     "code": "GM-2207",
+     "person": "이수진",
+     "tel": "내선 4100"
+    },
+    {
+     "name": "다라슈퍼",
+     "code": "DS-1180",
+     "person": "최다라",
+     "tel": "내선 5200"
+    },
+    {
+     "name": "마바상회",
+     "code": "MB-3301",
+     "person": "김마바",
+     "tel": "내선 6300"
+    }
+   ]
+  }
+ },
+ {
+  "method": "SOM",
+  "task": "T5",
+  "seed": 2,
+  "ok": true,
+  "answer": "떡볶이 밀키트 재고가 0인 센터는 이천센터이며, 입고 예정일은 11월 12일입니다.",
+  "steps": 3,
+  "tokens": 10657,
+  "sec": 7.8,
+  "actions": [
+   "type({\"id\": 4, \"text\": \"떡볶이 밀키트\"})",
+   "click({\"id\": 6})",
+   "done({\"answer\": \"떡볶이 밀키트 재고가 0인 센터는 이천센터이며, 입고 예정일은 11월 12일입니다.\"})"
+  ],
+  "state": {
+   "orders_po": [],
+   "customers": [
+    {
+     "name": "가나마트",
+     "code": "GM-2207",
+     "person": "이수진",
+     "tel": "내선 4100"
+    },
+    {
+     "name": "다라슈퍼",
+     "code": "DS-1180",
+     "person": "최다라",
+     "tel": "내선 5200"
+    },
+    {
+     "name": "마바상회",
+     "code": "MB-3301",
+     "person": "김마바",
+     "tel": "내선 6300"
+    }
+   ]
+  }
+ },
+ {
+  "method": "RPA",
+  "task": "T1",
+  "seed": 0,
+  "ok": true,
+  "sec": 2.95,
+  "tokens": 0,
+  "steps": 0
+ },
+ {
+  "method": "RPA",
+  "task": "T2",
+  "seed": 0,
+  "ok": true,
+  "sec": 2.9,
+  "tokens": 0,
+  "steps": 0
+ },
+ {
+  "method": "RPA",
+  "task": "T3",
+  "seed": 0,
+  "ok": true,
+  "sec": 2.86,
+  "tokens": 0,
+  "steps": 0
+ },
+ {
+  "method": "RPA",
+  "task": "T4",
+  "seed": 0,
+  "ok": true,
+  "sec": 2.62,
+  "tokens": 0,
+  "steps": 0
+ },
+ {
+  "method": "RPA",
+  "task": "T5",
+  "seed": 0,
+  "ok": true,
+  "sec": 2.56,
+  "tokens": 0,
+  "steps": 0
+ }
+]

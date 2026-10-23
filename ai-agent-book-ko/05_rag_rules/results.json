@@ -1,0 +1,4711 @@
+[
+ {
+  "cond": "R0",
+  "q": "Q1",
+  "kind": "단순",
+  "seed": 0,
+  "ok": false,
+  "answer": "죄송합니다만, 가나다식품의 연차 신청 기한에 대한 정보는 확인되지 않습니다.",
+  "tokens": 101,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.8,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q1",
+  "kind": "단순",
+  "seed": 1,
+  "ok": false,
+  "answer": "죄송하지만, 가나다식품의 연차 신청 기한에 대한 정보는 없습니다. 인사팀에 문의해 주세요.",
+  "tokens": 106,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.9,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q1",
+  "kind": "단순",
+  "seed": 2,
+  "ok": false,
+  "answer": "죄송합니다, 가나다식품의 연차 신청 기한에 관한 정보는 제공되지 않았습니다.",
+  "tokens": 101,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 2.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q2",
+  "kind": "단순",
+  "seed": 0,
+  "ok": false,
+  "answer": "죄송하지만, 가나다식품의 냉동창고 온도 규정에 대한 정보가 없습니다.",
+  "tokens": 106,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.5,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q2",
+  "kind": "단순",
+  "seed": 1,
+  "ok": false,
+  "answer": "죄송하지만, 가나다식품의 냉동창고 온도 유지 기준에 대해서는 자료가 없습니다.",
+  "tokens": 107,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.4,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q2",
+  "kind": "단순",
+  "seed": 2,
+  "ok": false,
+  "answer": "죄송합니다, 냉동창고 온도 유지 기준에 대한 정보가 없습니다.",
+  "tokens": 102,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.7,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q3",
+  "kind": "단순",
+  "seed": 0,
+  "ok": false,
+  "answer": "죄송하지만, 가나다식품의 업무 관련 외부 교육비 지원 한도에 대한 정보는 현재 가지고 있지 않습니다.",
+  "tokens": 110,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 2.2,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q3",
+  "kind": "단순",
+  "seed": 1,
+  "ok": false,
+  "answer": "죄송하지만 가나다식품의 업무 관련 외부 교육비 지원 한도는 현재 확인되지 않습니다. 인사팀에 문의해 주세요.",
+  "tokens": 113,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.7,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q3",
+  "kind": "단순",
+  "seed": 2,
+  "ok": false,
+  "answer": "죄송합니다. 가나다식품의 업무 관련 외부 교육비 지원 한도에 대한 정보가 없습니다.",
+  "tokens": 106,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.9,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q4",
+  "kind": "단순",
+  "seed": 0,
+  "ok": false,
+  "answer": "죄송하지만, 가나다식품의 동호회 지원금 1인당 한 달 지원 금액에 대한 정보는 없습니다.",
+  "tokens": 111,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.9,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q4",
+  "kind": "단순",
+  "seed": 1,
+  "ok": false,
+  "answer": "죄송하지만, 가나다식품의 동호회 지원금 1인당 한 달 금액에 대한 정보는 없습니다.",
+  "tokens": 110,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.9,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q4",
+  "kind": "단순",
+  "seed": 2,
+  "ok": false,
+  "answer": "죄송합니다, 가나다식품의 동호회 지원금 1인당 한 달 지원금액에 대한 정보는 없습니다.",
+  "tokens": 111,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.8,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q5",
+  "kind": "코드",
+  "seed": 0,
+  "ok": false,
+  "answer": "죄송합니다, 양식 SEC-07에 대한 정보는 없습니다.",
+  "tokens": 96,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.9,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q5",
+  "kind": "코드",
+  "seed": 1,
+  "ok": false,
+  "answer": "죄송하지만, 양식 SEC-07에 대한 정보는 없습니다.",
+  "tokens": 96,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q5",
+  "kind": "코드",
+  "seed": 2,
+  "ok": false,
+  "answer": "죄송합니다. ‘양식 SEC-07’에 대한 정보가 없습니다.",
+  "tokens": 98,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.8,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q6",
+  "kind": "코드",
+  "seed": 0,
+  "ok": false,
+  "answer": "죄송하지만, HR-204 양식에 대한 정보는 없습니다.",
+  "tokens": 92,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.7,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q6",
+  "kind": "코드",
+  "seed": 1,
+  "ok": false,
+  "answer": "죄송하지만, HR-204 양식에 대한 정보는 없습니다.",
+  "tokens": 92,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.7,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q6",
+  "kind": "코드",
+  "seed": 2,
+  "ok": false,
+  "answer": "죄송하지만, HR-204 양식에 대한 정보는 없습니다.",
+  "tokens": 92,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.2,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q7",
+  "kind": "코드",
+  "seed": 0,
+  "ok": false,
+  "answer": "죄송합니다, PU-310 양식에 대한 정보가 없습니다.",
+  "tokens": 92,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q7",
+  "kind": "코드",
+  "seed": 1,
+  "ok": false,
+  "answer": "PU-310 양식에 대한 정보는 없습니다.",
+  "tokens": 88,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.8,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q7",
+  "kind": "코드",
+  "seed": 2,
+  "ok": false,
+  "answer": "죄송합니다. PU-310 양식에 대한 정보가 없습니다.",
+  "tokens": 92,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q8",
+  "kind": "코드",
+  "seed": 0,
+  "ok": false,
+  "answer": "죄송하지만 TR-120 제출 기한에 대한 정보는 현재 가지고 있지 않습니다.",
+  "tokens": 96,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q8",
+  "kind": "코드",
+  "seed": 1,
+  "ok": false,
+  "answer": "죄송하지만 TR-120 제출 기한에 대한 정보는 현재 가지고 있지 않습니다. 회사 내규나 관련 부서에 문의해 주세요.",
+  "tokens": 108,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q8",
+  "kind": "코드",
+  "seed": 2,
+  "ok": false,
+  "answer": "죄송하지만 TR-120 제출 기한에 대한 정보는 현재 가지고 있지 않습니다. 담당 부서에 문의해 주세요.",
+  "tokens": 104,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q9",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": false,
+  "answer": "죄송하지만, 가나다식품의 출장 숙박비 한도에 대한 정보는 없습니다. 사내 규정 확인을 권장합니다.",
+  "tokens": 119,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.9,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q9",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": false,
+  "answer": "죄송하지만, 가나다식품의 구체적인 출장 숙박비 한도 규정은 확인할 수 없습니다. 사내 규정집을 참고하시기 바랍니다.",
+  "tokens": 125,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q9",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": false,
+  "answer": "죄송하지만, 가나다식품의 숙박비 한도에 관한 구체적인 사내 규정 자료가 없어 답변드리기 어렵습니다. 관련 부서에 문의해 주세요.",
+  "tokens": 130,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q10",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": false,
+  "answer": "죄송합니다. 가나다식품의 과장 법인카드 사용 한도에 대한 정보가 없습니다.",
+  "tokens": 106,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.8,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q10",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": false,
+  "answer": "죄송합니다, 해당 정보는 내부 규정에 따라 다르므로 확인이 필요합니다. 정확한 금액은 인사팀에 문의해 주세요.",
+  "tokens": 116,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q10",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": false,
+  "answer": "죄송합니다, 가나다식품의 과장 법인카드 월 사용 한도에 대한 정보가 없습니다.",
+  "tokens": 107,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q11",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": false,
+  "answer": "죄송합니다. 가나다식품 사내 규정에 따른 차장 대전 출장 1박 숙박비 한도는 현재 확인되지 않습니다.",
+  "tokens": 117,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.9,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q11",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": false,
+  "answer": "죄송하지만, 가나다식품의 출장 숙박비 한도 규정을 확인할 수 없습니다.",
+  "tokens": 106,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.8,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q11",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": false,
+  "answer": "죄송하지만, 가나다식품 차장 대전 출장 1박 숙박비 한도는 내부 규정을 확인해야 하므로 현재 알 수 없습니다. 사내 규정집을 참고해 주세요.",
+  "tokens": 128,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.2,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q12",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": false,
+  "answer": "죄송합니다, 가나다식품의 출장 숙박비 한도에 관한 내부 규정을 알지 못합니다.",
+  "tokens": 115,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.9,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q12",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": false,
+  "answer": "죄송합니다. 가나다식품의 출장 숙박비 규정을 알지 못해 답변드리기 어렵습니다.",
+  "tokens": 117,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.1,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q12",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": false,
+  "answer": "죄송하지만, 가나다식품 출장 숙박비 한도 규정에 대한 정보가 없습니다. 사내 규정을 확인해 주세요.",
+  "tokens": 120,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.9,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q13",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": false,
+  "answer": "죄송하지만 가나다식품 주임 법인카드 월 한도와 40만 원짜리 장비 구매 절차에 대한 정보는 없습니다.",
+  "tokens": 130,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.8,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q13",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": false,
+  "answer": "죄송합니다. 가나다식품 주임의 법인카드 월 한도와 40만 원짜리 장비 구매 관련 규정을 알지 못합니다.",
+  "tokens": 132,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.1,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q13",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": false,
+  "answer": "죄송합니다. 가나다식품 주임의 법인카드 월 한도 및 40만 원짜리 장비 구매 절차에 대한 정보가 없습니다.",
+  "tokens": 132,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.9,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q14",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": false,
+  "answer": "7백만 원어치 물품 구매 시 견적은 최소 3곳에서 받아야 하며, 결재는 담당 부서장 이상이 합니다.",
+  "tokens": 127,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q14",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": false,
+  "answer": "가나다식품 사내 규정에 따르면, 7백만 원어치 물품 구매 시 최소 3곳에서 견적을 받아야 하며, 결재는 팀장 이상 책임자가 합니다.",
+  "tokens": 138,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.1,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q14",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": false,
+  "answer": "가나다식품의 구체적인 견적 수령 기준과 결재 권한은 확인된 정보가 없습니다. 회사 내부 규정을 확인해 주세요.",
+  "tokens": 126,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q15",
+  "kind": "개정",
+  "seed": 0,
+  "ok": false,
+  "answer": "죄송합니다, 가나다식품의 출장 식비 한도에 대한 정보는 가지고 있지 않습니다.",
+  "tokens": 102,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q15",
+  "kind": "개정",
+  "seed": 1,
+  "ok": false,
+  "answer": "죄송하지만 가나다식품의 출장 식비 한도 규정은 확인할 수 없습니다.",
+  "tokens": 100,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.9,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q15",
+  "kind": "개정",
+  "seed": 2,
+  "ok": false,
+  "answer": "죄송합니다. 가나다식품의 출장 식비 한도에 대한 정보는 없습니다.",
+  "tokens": 99,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.9,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q16",
+  "kind": "개정",
+  "seed": 0,
+  "ok": false,
+  "answer": "죄송하지만, 가나다식품 사내 규정에 따르면 사무직 재택근무 일수에 대한 구체적인 정보가 없습니다.",
+  "tokens": 119,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q16",
+  "kind": "개정",
+  "seed": 1,
+  "ok": false,
+  "answer": "죄송합니다. 가나다식품의 사무직 재택근무 일수에 관한 정보가 없습니다.",
+  "tokens": 111,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q16",
+  "kind": "개정",
+  "seed": 2,
+  "ok": false,
+  "answer": "죄송하지만, 가나다식품 사내 규정에 따르면 사무직 재택근무 가능 일수에 대한 정보가 없습니다.",
+  "tokens": 117,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.9,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q17",
+  "kind": "개정",
+  "seed": 0,
+  "ok": false,
+  "answer": "저녁 식사비는 1인 10,000원까지 정산 가능합니다. 따라서 10,000원이 정산됩니다.",
+  "tokens": 123,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.9,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q17",
+  "kind": "개정",
+  "seed": 1,
+  "ok": true,
+  "answer": "저녁 식사 출장비는 최대 12,000원까지 정산됩니다. 13,000원 중 12,000원만 정산 가능합니다.",
+  "tokens": 128,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 0.9,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q17",
+  "kind": "개정",
+  "seed": 2,
+  "ok": false,
+  "answer": "저녁 식사비는 1인당 1만원 이내로 정산됩니다. 따라서 10,000원이 정산됩니다.",
+  "tokens": 124,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q18",
+  "kind": "없는 규정",
+  "seed": 0,
+  "ok": false,
+  "answer": "사내 헬스장 이용 시간은 오전 7시부터 오후 9시까지입니다.",
+  "tokens": 100,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "sec": 0.8,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q18",
+  "kind": "없는 규정",
+  "seed": 1,
+  "ok": false,
+  "answer": "사내 헬스장 이용 시간은 오전 7시부터 오후 9시까지입니다.",
+  "tokens": 100,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R0",
+  "q": "Q18",
+  "kind": "없는 규정",
+  "seed": 2,
+  "ok": true,
+  "answer": "죄송하지만, 가나다식품의 사내 헬스장 이용 시간에 대한 정보는 현재 확인되지 않습니다.",
+  "tokens": 104,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R0",
+  "q": "Q19",
+  "kind": "없는 규정",
+  "seed": 0,
+  "ok": true,
+  "answer": "죄송하지만, 가나다식품의 명절 상여금 규정에 대한 정보는 확인되지 않습니다.",
+  "tokens": 99,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R0",
+  "q": "Q19",
+  "kind": "없는 규정",
+  "seed": 1,
+  "ok": true,
+  "answer": "죄송합니다. 가나다식품의 명절 상여금 규정에 대해선 정보가 없습니다.",
+  "tokens": 98,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "sec": 0.8,
+  "grounded": true
+ },
+ {
+  "cond": "R0",
+  "q": "Q19",
+  "kind": "없는 규정",
+  "seed": 2,
+  "ok": true,
+  "answer": "죄송합니다. 가나다식품 명절 상여금에 대한 정보는 없습니다.",
+  "tokens": 94,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R0",
+  "q": "Q20",
+  "kind": "없는 규정",
+  "seed": 0,
+  "ok": true,
+  "answer": "현재 가나다식품 사내 규정에는 반려동물 출근에 대한 허용 항목이 없습니다. 반려동물 출근은 불가합니다.",
+  "tokens": 114,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R0",
+  "q": "Q20",
+  "kind": "없는 규정",
+  "seed": 1,
+  "ok": true,
+  "answer": "가나다식품의 반려동물 출근 허용 여부는 사내 규정에 명시되어 있지 않아 현재로서는 불가능합니다. 자세한 내용은 인사팀에 문의해 주세요.",
+  "tokens": 124,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R0",
+  "q": "Q20",
+  "kind": "없는 규정",
+  "seed": 2,
+  "ok": true,
+  "answer": "현재 가나다식품 사내 규정에는 반려동물 출근에 관한 별도 허용 조항이 없습니다. 따라서 반려동물 출근은 불가합니다.",
+  "tokens": 117,
+  "n_search": 0,
+  "searches": [],
+  "found": [],
+  "gold_found": null,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q1",
+  "kind": "단순",
+  "seed": 0,
+  "ok": true,
+  "answer": "연차는 사용 3일 전까지 신청해야 합니다(11조).",
+  "tokens": 346,
+  "n_search": 1,
+  "searches": [
+   "연차는 며칠 전까지 신청해야 하나요?"
+  ],
+  "found": [
+   "11",
+   "30",
+   "6"
+  ],
+  "gold_found": true,
+  "sec": 1.3,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q1",
+  "kind": "단순",
+  "seed": 1,
+  "ok": true,
+  "answer": "연차는 사용 3일 전까지 신청해야 합니다(11조).",
+  "tokens": 346,
+  "n_search": 1,
+  "searches": [
+   "연차는 며칠 전까지 신청해야 하나요?"
+  ],
+  "found": [
+   "11",
+   "30",
+   "6"
+  ],
+  "gold_found": true,
+  "sec": 1.8,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q1",
+  "kind": "단순",
+  "seed": 2,
+  "ok": true,
+  "answer": "연차는 사용 3일 전까지 신청해야 합니다(11조).",
+  "tokens": 346,
+  "n_search": 1,
+  "searches": [
+   "연차는 며칠 전까지 신청해야 하나요?"
+  ],
+  "found": [
+   "11",
+   "30",
+   "6"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q2",
+  "kind": "단순",
+  "seed": 0,
+  "ok": true,
+  "answer": "냉동창고 온도는 -18℃ 이하로 유지해야 합니다(25조).",
+  "tokens": 412,
+  "n_search": 1,
+  "searches": [
+   "냉동창고 온도는 몇 도 이하로 유지해야 하나요?"
+  ],
+  "found": [
+   "2",
+   "25",
+   "35"
+  ],
+  "gold_found": true,
+  "sec": 1.5,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q2",
+  "kind": "단순",
+  "seed": 1,
+  "ok": true,
+  "answer": "냉동창고 온도는 -18℃ 이하로 유지해야 합니다(25조).",
+  "tokens": 412,
+  "n_search": 1,
+  "searches": [
+   "냉동창고 온도는 몇 도 이하로 유지해야 하나요?"
+  ],
+  "found": [
+   "2",
+   "25",
+   "35"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q2",
+  "kind": "단순",
+  "seed": 2,
+  "ok": true,
+  "answer": "냉동창고는 -18℃ 이하로 유지해야 합니다(25조).",
+  "tokens": 410,
+  "n_search": 1,
+  "searches": [
+   "냉동창고 온도는 몇 도 이하로 유지해야 하나요?"
+  ],
+  "found": [
+   "2",
+   "25",
+   "35"
+  ],
+  "gold_found": true,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q3",
+  "kind": "단순",
+  "seed": 0,
+  "ok": true,
+  "answer": "연 1,000,000원까지 지원됩니다(28조).",
+  "tokens": 361,
+  "n_search": 1,
+  "searches": [
+   "업무 관련 외부 교육비는 1년에 얼마까지 지원되나요?"
+  ],
+  "found": [
+   "10",
+   "28",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q3",
+  "kind": "단순",
+  "seed": 1,
+  "ok": true,
+  "answer": "연 1,000,000원까지 지원됩니다(28조).",
+  "tokens": 361,
+  "n_search": 1,
+  "searches": [
+   "업무 관련 외부 교육비는 1년에 얼마까지 지원되나요?"
+  ],
+  "found": [
+   "10",
+   "28",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q3",
+  "kind": "단순",
+  "seed": 2,
+  "ok": true,
+  "answer": "업무 관련 외부 교육비는 연 1,000,000원까지 지원됩니다(28조).",
+  "tokens": 369,
+  "n_search": 1,
+  "searches": [
+   "업무 관련 외부 교육비는 1년에 얼마까지 지원되나요?"
+  ],
+  "found": [
+   "10",
+   "28",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 1.3,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q4",
+  "kind": "단순",
+  "seed": 0,
+  "ok": true,
+  "answer": "동호회 지원금은 1인당 월 10,000원입니다(29조).",
+  "tokens": 340,
+  "n_search": 1,
+  "searches": [
+   "동호회 지원금은 1인당 한 달에 얼마인가요?"
+  ],
+  "found": [
+   "29",
+   "32",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q4",
+  "kind": "단순",
+  "seed": 1,
+  "ok": true,
+  "answer": "동호회 지원금은 1인당 월 10,000원입니다(29조).",
+  "tokens": 340,
+  "n_search": 1,
+  "searches": [
+   "동호회 지원금은 1인당 한 달에 얼마인가요?"
+  ],
+  "found": [
+   "29",
+   "32",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q4",
+  "kind": "단순",
+  "seed": 2,
+  "ok": true,
+  "answer": "동호회 지원금은 1인당 월 10,000원입니다(29조).",
+  "tokens": 340,
+  "n_search": 1,
+  "searches": [
+   "동호회 지원금은 1인당 한 달에 얼마인가요?"
+  ],
+  "found": [
+   "29",
+   "32",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q5",
+  "kind": "코드",
+  "seed": 0,
+  "ok": true,
+  "answer": "외부 저장장치 등록을 신청하는 양식입니다(17조).",
+  "tokens": 374,
+  "n_search": 1,
+  "searches": [
+   "양식 SEC-07 은 무엇을 신청하는 양식인가요?"
+  ],
+  "found": [
+   "11",
+   "17",
+   "19"
+  ],
+  "gold_found": true,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q5",
+  "kind": "코드",
+  "seed": 1,
+  "ok": true,
+  "answer": "양식 SEC-07은 외부 저장장치 등록을 신청하는 양식입니다(17조).",
+  "tokens": 380,
+  "n_search": 1,
+  "searches": [
+   "양식 SEC-07 은 무엇을 신청하는 양식인가요?"
+  ],
+  "found": [
+   "11",
+   "17",
+   "19"
+  ],
+  "gold_found": true,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q5",
+  "kind": "코드",
+  "seed": 2,
+  "ok": true,
+  "answer": "양식 SEC-07은 외부 저장장치 등록을 신청하는 양식입니다(17조).",
+  "tokens": 380,
+  "n_search": 1,
+  "searches": [
+   "양식 SEC-07 은 무엇을 신청하는 양식인가요?"
+  ],
+  "found": [
+   "11",
+   "17",
+   "19"
+  ],
+  "gold_found": true,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q6",
+  "kind": "코드",
+  "seed": 0,
+  "ok": true,
+  "answer": "본인 결혼, 자녀 결혼, 배우자 출산, 부모·배우자 부모 사망, 조부모 사망 시 경조 휴가 신청에 사용합니다(12조).",
+  "tokens": 394,
+  "n_search": 1,
+  "searches": [
+   "HR-204 양식은 어떤 때 쓰나요?"
+  ],
+  "found": [
+   "11",
+   "12",
+   "15"
+  ],
+  "gold_found": true,
+  "sec": 1.2,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q6",
+  "kind": "코드",
+  "seed": 1,
+  "ok": true,
+  "answer": "HR-204 양식은 본인 결혼, 자녀 결혼, 배우자 출산, 부모·배우자 부모 사망, 조부모 사망 시 경조 휴가 신청에 씁니다(12조).",
+  "tokens": 401,
+  "n_search": 1,
+  "searches": [
+   "HR-204 양식은 어떤 때 쓰나요?"
+  ],
+  "found": [
+   "11",
+   "12",
+   "15"
+  ],
+  "gold_found": true,
+  "sec": 1.2,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q6",
+  "kind": "코드",
+  "seed": 2,
+  "ok": true,
+  "answer": "HR-204 양식은 경조 휴가 신청 시 사용합니다 (12조).",
+  "tokens": 370,
+  "n_search": 1,
+  "searches": [
+   "HR-204 양식은 어떤 때 쓰나요?"
+  ],
+  "found": [
+   "11",
+   "12",
+   "15"
+  ],
+  "gold_found": true,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q7",
+  "kind": "코드",
+  "seed": 0,
+  "ok": true,
+  "answer": "PU-310은 새 거래처 등록 양식입니다(22조).",
+  "tokens": 326,
+  "n_search": 1,
+  "searches": [
+   "PU-310 은 무슨 양식이에요?"
+  ],
+  "found": [
+   "21",
+   "22",
+   "31"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q7",
+  "kind": "코드",
+  "seed": 1,
+  "ok": true,
+  "answer": "PU-310은 새 거래처 등록 양식입니다(22조).",
+  "tokens": 326,
+  "n_search": 1,
+  "searches": [
+   "PU-310 은 무슨 양식이에요?"
+  ],
+  "found": [
+   "21",
+   "22",
+   "31"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q7",
+  "kind": "코드",
+  "seed": 2,
+  "ok": true,
+  "answer": "PU-310은 새 거래처 등록 양식입니다(22조).",
+  "tokens": 326,
+  "n_search": 1,
+  "searches": [
+   "PU-310 은 무슨 양식이에요?"
+  ],
+  "found": [
+   "21",
+   "22",
+   "31"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q8",
+  "kind": "코드",
+  "seed": 0,
+  "ok": true,
+  "answer": "출장 복귀 후 7일 안에 제출해야 합니다(7조).",
+  "tokens": 333,
+  "n_search": 1,
+  "searches": [
+   "TR-120 은 언제까지 내야 하나요?"
+  ],
+  "found": [
+   "20",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q8",
+  "kind": "코드",
+  "seed": 1,
+  "ok": true,
+  "answer": "출장 복귀 후 7일 안에 제출해야 합니다(7조).",
+  "tokens": 333,
+  "n_search": 1,
+  "searches": [
+   "TR-120 은 언제까지 내야 하나요?"
+  ],
+  "found": [
+   "20",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q8",
+  "kind": "코드",
+  "seed": 2,
+  "ok": true,
+  "answer": "TR-120 양식은 출장 복귀 후 7일 안에 제출해야 합니다(7조).",
+  "tokens": 339,
+  "n_search": 1,
+  "searches": [
+   "TR-120 은 언제까지 내야 하나요?"
+  ],
+  "found": [
+   "20",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q9",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": false,
+  "answer": "대리 직급 등급 정보가 없어 정확한 금액 산정이 불가능합니다. 규정에서 등급별 숙박비 한도는 S: 120,000원, A: 90,000원, B: 70,000원이며, 부산은 1박당 20,000원을 추가해 정산합니다(2조).",
+  "tokens": 419,
+  "n_search": 1,
+  "searches": [
+   "대리가 부산 출장 가서 1박 숙박비로 얼마까지 정산받을 수 있나요?"
+  ],
+  "found": [
+   "2",
+   "4",
+   "7"
+  ],
+  "gold_found": false,
+  "sec": 1.4,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q9",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": true,
+  "answer": "대리는 B 등급에 해당하므로 부산 출장 시 숙박비 한도는 70,000원 + 20,000원 = 90,000원까지 정산 가능합니다 (2조).",
+  "tokens": 385,
+  "n_search": 1,
+  "searches": [
+   "대리가 부산 출장 가서 1박 숙박비로 얼마까지 정산받을 수 있나요?"
+  ],
+  "found": [
+   "2",
+   "4",
+   "7"
+  ],
+  "gold_found": false,
+  "sec": 1.2,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q9",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": true,
+  "answer": "대리는 B 등급에 해당하며, 부산 출장 시에는 70,000원 + 20,000원 = 90,000원까지 숙박비를 정산받을 수 있습니다(2조).",
+  "tokens": 387,
+  "n_search": 1,
+  "searches": [
+   "대리가 부산 출장 가서 1박 숙박비로 얼마까지 정산받을 수 있나요?"
+  ],
+  "found": [
+   "2",
+   "4",
+   "7"
+  ],
+  "gold_found": false,
+  "sec": 1.1,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q10",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": false,
+  "answer": "규정에서 과장 직급별 한도가 명확히 나와 있지 않습니다. 등급별 한도만 명시되어 있으니, 등급별 한도를 확인하시기 바랍니다(8조).",
+  "tokens": 393,
+  "n_search": 1,
+  "searches": [
+   "과장은 법인카드를 한 달에 얼마까지 쓸 수 있나요?"
+  ],
+  "found": [
+   "20",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "sec": 1.3,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q10",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": false,
+  "answer": "규정에서 과장 직급별 한도는 명시되어 있지 않습니다. 다만, 법인카드 월 한도는 등급별로 정해져 있으며, S 등급 3,000,000원, A 등급 1,500,000원, B 등급 500,000원입니다 (8조). 과장 직급의 등급이 명확하지 않아, 과장 한도는 규정에서 찾을 수 없습니다.",
+  "tokens": 448,
+  "n_search": 1,
+  "searches": [
+   "과장은 법인카드를 한 달에 얼마까지 쓸 수 있나요?"
+  ],
+  "found": [
+   "20",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "sec": 1.9,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q10",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": false,
+  "answer": "규정에서 과장 등급은 명시되어 있지 않습니다. 규정에서 찾을 수 없습니다.",
+  "tokens": 372,
+  "n_search": 1,
+  "searches": [
+   "과장은 법인카드를 한 달에 얼마까지 쓸 수 있나요?"
+  ],
+  "found": [
+   "20",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "sec": 1.1,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q11",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": false,
+  "answer": "대전은 별도 추가 금액이 없으므로 B 등급 70,000원이 한도입니다(2조).",
+  "tokens": 402,
+  "n_search": 1,
+  "searches": [
+   "차장이 대전 출장에서 1박 숙박비 한도는 얼마인가요?"
+  ],
+  "found": [
+   "2",
+   "3",
+   "35"
+  ],
+  "gold_found": false,
+  "sec": 1.2,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q11",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": true,
+  "answer": "대전은 서울·부산·제주가 아니므로 각 등급 한도에 20,000원을 더하지 않습니다. 차장은 보통 A 등급에 해당하며, A 등급 숙박비 한도는 90,000원입니다(2조).",
+  "tokens": 433,
+  "n_search": 1,
+  "searches": [
+   "차장이 대전 출장에서 1박 숙박비 한도는 얼마인가요?"
+  ],
+  "found": [
+   "2",
+   "3",
+   "35"
+  ],
+  "gold_found": false,
+  "sec": 1.2,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q11",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": false,
+  "answer": "대전은 서울·부산·제주가 아니므로 등급별 숙박비 한도 그대로 적용됩니다. 차장의 등급은 명시되어 있지 않으니, 차장 등급에 맞게 확인해야 합니다(2조).",
+  "tokens": 428,
+  "n_search": 1,
+  "searches": [
+   "차장이 대전 출장에서 1박 숙박비 한도는 얼마인가요?"
+  ],
+  "found": [
+   "2",
+   "3",
+   "35"
+  ],
+  "gold_found": false,
+  "sec": 1.2,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q12",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": false,
+  "answer": "제주 지역 숙박비 한도는 각 등급 한도에 1박당 20,000원이 추가됩니다. 부장급이 S 등급이라면 1박당 120,000원 + 20,000원 = 140,000원이고, 2박은 280,000원까지 정산 가능합니다(2조).",
+  "tokens": 428,
+  "n_search": 1,
+  "searches": [
+   "부장이 제주 출장 2박을 다녀왔어요. 숙박비는 총 얼마까지 정산되나요?"
+  ],
+  "found": [
+   "2",
+   "3",
+   "4"
+  ],
+  "gold_found": false,
+  "sec": 1.2,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q12",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": true,
+  "answer": "제주 지역은 각 등급 한도에 20,000원을 더합니다. 부장은 보통 S 등급으로 보기 때문에, 1박 숙박비 한도는 120,000원 + 20,000원 = 140,000원입니다. 2박이므로 140,000원 × 2 = 280,000원까지 정산됩니다(2조).",
+  "tokens": 436,
+  "n_search": 1,
+  "searches": [
+   "부장이 제주 출장 2박을 다녀왔어요. 숙박비는 총 얼마까지 정산되나요?"
+  ],
+  "found": [
+   "2",
+   "3",
+   "4"
+  ],
+  "gold_found": false,
+  "sec": 1.4,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q12",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": false,
+  "answer": "제주 지역의 부장 숙박비 한도는 B 등급 기준 70,000원 + 20,000원 = 90,000원, 2박 기준 총 180,000원까지 정산됩니다(2. 출장 숙박비 한도).",
+  "tokens": 410,
+  "n_search": 1,
+  "searches": [
+   "부장이 제주 출장 2박을 다녀왔어요. 숙박비는 총 얼마까지 정산되나요?"
+  ],
+  "found": [
+   "2",
+   "3",
+   "4"
+  ],
+  "gold_found": false,
+  "sec": 1.3,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q13",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": false,
+  "answer": "주임 등급은 명시되어 있지 않으나, 1건 300,000원 초과 결제 시 팀장 승인을 받아야 합니다. 월 한도는 B 등급(500,000원)으로 추정됩니다(8조). 40만 원 장비는 1건 300,000원 초과하므로 사전에 팀장 승인 필요합니다(8조).",
+  "tokens": 449,
+  "n_search": 1,
+  "searches": [
+   "주임은 법인카드 월 한도가 얼마이고, 40만 원짜리 장비를 사려면 무엇이 필요한가요?"
+  ],
+  "found": [
+   "21",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "sec": 1.4,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q13",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": false,
+  "answer": "주임의 등급은 명시되지 않아 정확한 한도는 알 수 없습니다. 다만, 법인카드 1건 300,000원 초과 결제 시 팀장 승인을 받아야 합니다(8조). 따라서 40만 원 장비 구입 시 사전에 팀장 승인을 받아야 합니다.",
+  "tokens": 433,
+  "n_search": 1,
+  "searches": [
+   "주임은 법인카드 월 한도가 얼마이고, 40만 원짜리 장비를 사려면 무엇이 필요한가요?"
+  ],
+  "found": [
+   "21",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "sec": 1.4,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q13",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": false,
+  "answer": "주임의 법인카드 등급은 규정에 없으므로 월 한도는 알 수 없습니다. 40만 원 결제는 1건 300,000원 초과이므로 사전 팀장 승인이 필요합니다(8조).",
+  "tokens": 418,
+  "n_search": 1,
+  "searches": [
+   "주임은 법인카드 월 한도가 얼마이고, 40만 원짜리 장비를 사려면 무엇이 필요한가요?"
+  ],
+  "found": [
+   "21",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "sec": 1.3,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q14",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": true,
+  "answer": "7백만 원은 1,000,000원 이상 10,000,000원 미만이므로 견적은 2곳 이상 받아야 하고, 결재는 5,000,000원 이상 50,000,000원 미만이므로 본부장이 합니다(20조, 21조).",
+  "tokens": 445,
+  "n_search": 1,
+  "searches": [
+   "7백만 원어치 물품을 사려면 견적은 몇 곳에서 받고 결재는 누가 하나요?"
+  ],
+  "found": [
+   "20",
+   "21",
+   "23"
+  ],
+  "gold_found": true,
+  "sec": 1.4,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q14",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": true,
+  "answer": "견적은 2곳 이상 받고, 결재는 본부장이 합니다(20, 21조).",
+  "tokens": 399,
+  "n_search": 1,
+  "searches": [
+   "7백만 원어치 물품을 사려면 견적은 몇 곳에서 받고 결재는 누가 하나요?"
+  ],
+  "found": [
+   "20",
+   "21",
+   "23"
+  ],
+  "gold_found": true,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q14",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": true,
+  "answer": "견적은 2곳 이상 받고, 결재는 5,000,000원 이상 50,000,000원 미만이므로 본부장이 합니다(20조, 21조).",
+  "tokens": 419,
+  "n_search": 1,
+  "searches": [
+   "7백만 원어치 물품을 사려면 견적은 몇 곳에서 받고 결재는 누가 하나요?"
+  ],
+  "found": [
+   "20",
+   "21",
+   "23"
+  ],
+  "gold_found": true,
+  "sec": 1.2,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q15",
+  "kind": "개정",
+  "seed": 0,
+  "ok": true,
+  "answer": "2026년 7월 1일부터 1끼 12,000원까지 정산됩니다(조항 4, 35).",
+  "tokens": 344,
+  "n_search": 1,
+  "searches": [
+   "출장 식비는 1끼 얼마까지 정산되나요?"
+  ],
+  "found": [
+   "35",
+   "4",
+   "7"
+  ],
+  "gold_found": true,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q15",
+  "kind": "개정",
+  "seed": 1,
+  "ok": true,
+  "answer": "출장 식비는 1끼 12,000원까지 정산됩니다(조항 4, 35).",
+  "tokens": 339,
+  "n_search": 1,
+  "searches": [
+   "출장 식비는 1끼 얼마까지 정산되나요?"
+  ],
+  "found": [
+   "35",
+   "4",
+   "7"
+  ],
+  "gold_found": true,
+  "sec": 1.3,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q15",
+  "kind": "개정",
+  "seed": 2,
+  "ok": true,
+  "answer": "출장 식비는 1끼 12,000원까지 정산됩니다(조항 4, 35).",
+  "tokens": 339,
+  "n_search": 1,
+  "searches": [
+   "출장 식비는 1끼 얼마까지 정산되나요?"
+  ],
+  "found": [
+   "35",
+   "4",
+   "7"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q16",
+  "kind": "개정",
+  "seed": 0,
+  "ok": true,
+  "answer": "사무직은 재택근무를 주 2일까지 할 수 있습니다(36조, 2026-09-01 개정).",
+  "tokens": 390,
+  "n_search": 1,
+  "searches": [
+   "사무직은 재택근무를 일주일에 며칠까지 할 수 있나요?"
+  ],
+  "found": [
+   "14",
+   "15",
+   "36"
+  ],
+  "gold_found": true,
+  "sec": 1.2,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q16",
+  "kind": "개정",
+  "seed": 1,
+  "ok": true,
+  "answer": "사무직은 재택근무를 주 2일까지 할 수 있습니다 (36조, 2026-09-01 개정).",
+  "tokens": 390,
+  "n_search": 1,
+  "searches": [
+   "사무직은 재택근무를 일주일에 며칠까지 할 수 있나요?"
+  ],
+  "found": [
+   "14",
+   "15",
+   "36"
+  ],
+  "gold_found": true,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q16",
+  "kind": "개정",
+  "seed": 2,
+  "ok": true,
+  "answer": "사무직은 재택근무를 주 2일까지 할 수 있습니다(36).",
+  "tokens": 379,
+  "n_search": 1,
+  "searches": [
+   "사무직은 재택근무를 일주일에 며칠까지 할 수 있나요?"
+  ],
+  "found": [
+   "14",
+   "15",
+   "36"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q17",
+  "kind": "개정",
+  "seed": 0,
+  "ok": false,
+  "answer": "출장 식비는 1끼 10,000원 한도 내에서 영수증이 있는 경우만 정산하므로 10,000원 정산받습니다(4조).",
+  "tokens": 350,
+  "n_search": 1,
+  "searches": [
+   "출장 중 저녁 식사로 13,000원을 썼고 영수증이 있어요. 얼마 정산받나요?"
+  ],
+  "found": [
+   "3",
+   "4",
+   "7"
+  ],
+  "gold_found": false,
+  "sec": 1.3,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q17",
+  "kind": "개정",
+  "seed": 1,
+  "ok": false,
+  "answer": "출장 식비는 1끼 10,000원 한도 내에서 정산하므로 10,000원 정산받습니다(4조).",
+  "tokens": 343,
+  "n_search": 1,
+  "searches": [
+   "출장 중 저녁 식사로 13,000원을 썼고 영수증이 있어요. 얼마 정산받나요?"
+  ],
+  "found": [
+   "3",
+   "4",
+   "7"
+  ],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q17",
+  "kind": "개정",
+  "seed": 2,
+  "ok": false,
+  "answer": "13,000원 중 10,000원만 정산받습니다(4조).",
+  "tokens": 329,
+  "n_search": 1,
+  "searches": [
+   "출장 중 저녁 식사로 13,000원을 썼고 영수증이 있어요. 얼마 정산받나요?"
+  ],
+  "found": [
+   "3",
+   "4",
+   "7"
+  ],
+  "gold_found": false,
+  "sec": 1.1,
+  "grounded": false
+ },
+ {
+  "cond": "R1",
+  "q": "Q18",
+  "kind": "없는 규정",
+  "seed": 0,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 332,
+  "n_search": 1,
+  "searches": [
+   "사내 헬스장 이용 시간은 어떻게 되나요?"
+  ],
+  "found": [
+   "11",
+   "24",
+   "34"
+  ],
+  "gold_found": null,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q18",
+  "kind": "없는 규정",
+  "seed": 1,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 332,
+  "n_search": 1,
+  "searches": [
+   "사내 헬스장 이용 시간은 어떻게 되나요?"
+  ],
+  "found": [
+   "11",
+   "24",
+   "34"
+  ],
+  "gold_found": null,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q18",
+  "kind": "없는 규정",
+  "seed": 2,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 332,
+  "n_search": 1,
+  "searches": [
+   "사내 헬스장 이용 시간은 어떻게 되나요?"
+  ],
+  "found": [
+   "11",
+   "24",
+   "34"
+  ],
+  "gold_found": null,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q19",
+  "kind": "없는 규정",
+  "seed": 0,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 366,
+  "n_search": 1,
+  "searches": [
+   "명절 상여금은 얼마인가요?"
+  ],
+  "found": [
+   "13",
+   "21",
+   "35"
+  ],
+  "gold_found": null,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q19",
+  "kind": "없는 규정",
+  "seed": 1,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 366,
+  "n_search": 1,
+  "searches": [
+   "명절 상여금은 얼마인가요?"
+  ],
+  "found": [
+   "13",
+   "21",
+   "35"
+  ],
+  "gold_found": null,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q19",
+  "kind": "없는 규정",
+  "seed": 2,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 366,
+  "n_search": 1,
+  "searches": [
+   "명절 상여금은 얼마인가요?"
+  ],
+  "found": [
+   "13",
+   "21",
+   "35"
+  ],
+  "gold_found": null,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q20",
+  "kind": "없는 규정",
+  "seed": 0,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 330,
+  "n_search": 1,
+  "searches": [
+   "반려동물 데리고 출근해도 되나요?"
+  ],
+  "found": [
+   "35",
+   "4",
+   "6"
+  ],
+  "gold_found": null,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q20",
+  "kind": "없는 규정",
+  "seed": 1,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 330,
+  "n_search": 1,
+  "searches": [
+   "반려동물 데리고 출근해도 되나요?"
+  ],
+  "found": [
+   "35",
+   "4",
+   "6"
+  ],
+  "gold_found": null,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R1",
+  "q": "Q20",
+  "kind": "없는 규정",
+  "seed": 2,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 330,
+  "n_search": 1,
+  "searches": [
+   "반려동물 데리고 출근해도 되나요?"
+  ],
+  "found": [
+   "35",
+   "4",
+   "6"
+  ],
+  "gold_found": null,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q1",
+  "kind": "단순",
+  "seed": 0,
+  "ok": true,
+  "answer": "연차는 사용 3일 전까지 신청해야 합니다(11조).",
+  "tokens": 356,
+  "n_search": 1,
+  "searches": [
+   "연차는 며칠 전까지 신청해야 하나요?"
+  ],
+  "found": [
+   "11",
+   "15",
+   "6"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q1",
+  "kind": "단순",
+  "seed": 1,
+  "ok": true,
+  "answer": "연차는 사용 3일 전까지 신청해야 합니다 (11조).",
+  "tokens": 356,
+  "n_search": 1,
+  "searches": [
+   "연차는 며칠 전까지 신청해야 하나요?"
+  ],
+  "found": [
+   "11",
+   "15",
+   "6"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q1",
+  "kind": "단순",
+  "seed": 2,
+  "ok": true,
+  "answer": "연차는 사용 3일 전까지 신청해야 합니다 (조항 11).",
+  "tokens": 358,
+  "n_search": 1,
+  "searches": [
+   "연차는 며칠 전까지 신청해야 하나요?"
+  ],
+  "found": [
+   "11",
+   "15",
+   "6"
+  ],
+  "gold_found": true,
+  "sec": 1.5,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q2",
+  "kind": "단순",
+  "seed": 0,
+  "ok": true,
+  "answer": "냉동창고 온도는 -18℃ 이하로 유지해야 합니다(조항 25).",
+  "tokens": 393,
+  "n_search": 1,
+  "searches": [
+   "냉동창고 온도는 몇 도 이하로 유지해야 하나요?"
+  ],
+  "found": [
+   "15",
+   "23",
+   "25"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q2",
+  "kind": "단순",
+  "seed": 1,
+  "ok": true,
+  "answer": "냉동창고 온도는 -18℃ 이하로 유지해야 합니다(25조).",
+  "tokens": 391,
+  "n_search": 1,
+  "searches": [
+   "냉동창고 온도는 몇 도 이하로 유지해야 하나요?"
+  ],
+  "found": [
+   "15",
+   "23",
+   "25"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q2",
+  "kind": "단순",
+  "seed": 2,
+  "ok": true,
+  "answer": "냉동창고 온도는 -18℃ 이하로 유지해야 합니다(25조).",
+  "tokens": 391,
+  "n_search": 1,
+  "searches": [
+   "냉동창고 온도는 몇 도 이하로 유지해야 하나요?"
+  ],
+  "found": [
+   "15",
+   "23",
+   "25"
+  ],
+  "gold_found": true,
+  "sec": 1.2,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q3",
+  "kind": "단순",
+  "seed": 0,
+  "ok": true,
+  "answer": "업무 관련 외부 교육비는 연 1,000,000원까지 지원됩니다 (28조).",
+  "tokens": 349,
+  "n_search": 1,
+  "searches": [
+   "업무 관련 외부 교육비는 1년에 얼마까지 지원되나요?"
+  ],
+  "found": [
+   "27",
+   "28",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q3",
+  "kind": "단순",
+  "seed": 1,
+  "ok": true,
+  "answer": "업무 관련 외부 교육비는 연 1,000,000원까지 지원됩니다(28조).",
+  "tokens": 349,
+  "n_search": 1,
+  "searches": [
+   "업무 관련 외부 교육비는 1년에 얼마까지 지원되나요?"
+  ],
+  "found": [
+   "27",
+   "28",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q3",
+  "kind": "단순",
+  "seed": 2,
+  "ok": true,
+  "answer": "업무 관련 외부 교육비는 연 1,000,000원까지 지원됩니다(28조).",
+  "tokens": 349,
+  "n_search": 1,
+  "searches": [
+   "업무 관련 외부 교육비는 1년에 얼마까지 지원되나요?"
+  ],
+  "found": [
+   "27",
+   "28",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q4",
+  "kind": "단순",
+  "seed": 0,
+  "ok": true,
+  "answer": "동호회 지원금은 1인당 월 10,000원입니다(29조).",
+  "tokens": 340,
+  "n_search": 1,
+  "searches": [
+   "동호회 지원금은 1인당 한 달에 얼마인가요?"
+  ],
+  "found": [
+   "29",
+   "32",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q4",
+  "kind": "단순",
+  "seed": 1,
+  "ok": true,
+  "answer": "동호회 지원금은 1인당 월 10,000원입니다(29조).",
+  "tokens": 340,
+  "n_search": 1,
+  "searches": [
+   "동호회 지원금은 1인당 한 달에 얼마인가요?"
+  ],
+  "found": [
+   "29",
+   "32",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q4",
+  "kind": "단순",
+  "seed": 2,
+  "ok": true,
+  "answer": "동호회 지원금은 1인당 월 10,000원입니다(29조).",
+  "tokens": 340,
+  "n_search": 1,
+  "searches": [
+   "동호회 지원금은 1인당 한 달에 얼마인가요?"
+  ],
+  "found": [
+   "29",
+   "32",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q5",
+  "kind": "코드",
+  "seed": 0,
+  "ok": true,
+  "answer": "양식 SEC-07은 USB 등 외부 저장장치 등록을 신청하는 양식입니다(17조).",
+  "tokens": 381,
+  "n_search": 1,
+  "searches": [
+   "양식 SEC-07 은 무엇을 신청하는 양식인가요?"
+  ],
+  "found": [
+   "11",
+   "17",
+   "6"
+  ],
+  "gold_found": true,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q5",
+  "kind": "코드",
+  "seed": 1,
+  "ok": true,
+  "answer": "양식 SEC-07은 외부 저장장치 등록 신청에 사용하는 양식입니다(17조).",
+  "tokens": 379,
+  "n_search": 1,
+  "searches": [
+   "양식 SEC-07 은 무엇을 신청하는 양식인가요?"
+  ],
+  "found": [
+   "11",
+   "17",
+   "6"
+  ],
+  "gold_found": true,
+  "sec": 1.3,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q5",
+  "kind": "코드",
+  "seed": 2,
+  "ok": true,
+  "answer": "양식 SEC-07은 USB 등 외부 저장장치 등록 신청에 사용하는 양식입니다(17조).",
+  "tokens": 381,
+  "n_search": 1,
+  "searches": [
+   "양식 SEC-07 은 무엇을 신청하는 양식인가요?"
+  ],
+  "found": [
+   "11",
+   "17",
+   "6"
+  ],
+  "gold_found": true,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q6",
+  "kind": "코드",
+  "seed": 0,
+  "ok": true,
+  "answer": "HR-204 양식은 경조 휴가 신청 시에 씁니다 (12조).",
+  "tokens": 372,
+  "n_search": 1,
+  "searches": [
+   "HR-204 양식은 어떤 때 쓰나요?"
+  ],
+  "found": [
+   "11",
+   "12",
+   "15"
+  ],
+  "gold_found": true,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q6",
+  "kind": "코드",
+  "seed": 1,
+  "ok": true,
+  "answer": "HR-204 양식은 경조 휴가 신청 시에 사용합니다(12조).",
+  "tokens": 371,
+  "n_search": 1,
+  "searches": [
+   "HR-204 양식은 어떤 때 쓰나요?"
+  ],
+  "found": [
+   "11",
+   "12",
+   "15"
+  ],
+  "gold_found": true,
+  "sec": 1.6,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q6",
+  "kind": "코드",
+  "seed": 2,
+  "ok": true,
+  "answer": "HR-204 양식은 경조 휴가를 신청할 때 사용합니다(12조).",
+  "tokens": 372,
+  "n_search": 1,
+  "searches": [
+   "HR-204 양식은 어떤 때 쓰나요?"
+  ],
+  "found": [
+   "11",
+   "12",
+   "15"
+  ],
+  "gold_found": true,
+  "sec": 1.3,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q7",
+  "kind": "코드",
+  "seed": 0,
+  "ok": true,
+  "answer": "PU-310은 새 거래처 등록 양식입니다(22조).",
+  "tokens": 326,
+  "n_search": 1,
+  "searches": [
+   "PU-310 은 무슨 양식이에요?"
+  ],
+  "found": [
+   "21",
+   "22",
+   "31"
+  ],
+  "gold_found": true,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q7",
+  "kind": "코드",
+  "seed": 1,
+  "ok": true,
+  "answer": "PU-310은 새 거래처 등록 양식입니다(22조).",
+  "tokens": 326,
+  "n_search": 1,
+  "searches": [
+   "PU-310 은 무슨 양식이에요?"
+  ],
+  "found": [
+   "21",
+   "22",
+   "31"
+  ],
+  "gold_found": true,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q7",
+  "kind": "코드",
+  "seed": 2,
+  "ok": true,
+  "answer": "PU-310은 새 거래처 등록 양식입니다(22조).",
+  "tokens": 326,
+  "n_search": 1,
+  "searches": [
+   "PU-310 은 무슨 양식이에요?"
+  ],
+  "found": [
+   "21",
+   "22",
+   "31"
+  ],
+  "gold_found": true,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q8",
+  "kind": "코드",
+  "seed": 0,
+  "ok": true,
+  "answer": "출장 복귀 후 7일 안에 제출해야 합니다(7조).",
+  "tokens": 335,
+  "n_search": 1,
+  "searches": [
+   "TR-120 은 언제까지 내야 하나요?"
+  ],
+  "found": [
+   "11",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q8",
+  "kind": "코드",
+  "seed": 1,
+  "ok": true,
+  "answer": "출장 복귀 후 7일 안에 제출해야 합니다(7조).",
+  "tokens": 335,
+  "n_search": 1,
+  "searches": [
+   "TR-120 은 언제까지 내야 하나요?"
+  ],
+  "found": [
+   "11",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q8",
+  "kind": "코드",
+  "seed": 2,
+  "ok": true,
+  "answer": "출장 정산은 복귀 후 7일 안에 양식 TR-120으로 제출해야 합니다(7조).",
+  "tokens": 344,
+  "n_search": 1,
+  "searches": [
+   "TR-120 은 언제까지 내야 하나요?"
+  ],
+  "found": [
+   "11",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q9",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": false,
+  "answer": "대리 등급이 B 등급이라면, 부산 출장 1박 숙박비 한도는 70,000원 + 20,000원 = 90,000원까지 정산 가능합니다(2조).",
+  "tokens": 389,
+  "n_search": 1,
+  "searches": [
+   "대리가 부산 출장 가서 1박 숙박비로 얼마까지 정산받을 수 있나요?"
+  ],
+  "found": [
+   "2",
+   "4",
+   "7"
+  ],
+  "gold_found": false,
+  "sec": 1.3,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q9",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": true,
+  "answer": "대리 등급이 B 등급으로 가정하면 부산은 숙박비 한도인 70,000원에 20,000원을 더해 90,000원까지 정산받을 수 있습니다(2조).",
+  "tokens": 391,
+  "n_search": 1,
+  "searches": [
+   "대리가 부산 출장 가서 1박 숙박비로 얼마까지 정산받을 수 있나요?"
+  ],
+  "found": [
+   "2",
+   "4",
+   "7"
+  ],
+  "gold_found": false,
+  "sec": 1.3,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q9",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": false,
+  "answer": "규정에서 직급별 등급이 명시되어 있지 않아 대리의 숙박 등급을 알 수 없습니다. 따라서 정산 가능한 금액을 정확히 답할 수 없습니다.",
+  "tokens": 383,
+  "n_search": 1,
+  "searches": [
+   "대리가 부산 출장 가서 1박 숙박비로 얼마까지 정산받을 수 있나요?"
+  ],
+  "found": [
+   "2",
+   "4",
+   "7"
+  ],
+  "gold_found": false,
+  "sec": 1.2,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q10",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": false,
+  "answer": "규정에 등급별 한도가 나와 있으나, '과장' 직급별 한도는 명시되어 있지 않습니다. 따라서 규정에서 찾을 수 없습니다.",
+  "tokens": 377,
+  "n_search": 1,
+  "searches": [
+   "과장은 법인카드를 한 달에 얼마까지 쓸 수 있나요?"
+  ],
+  "found": [
+   "6",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "sec": 1.4,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q10",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": false,
+  "answer": "규정에 직급별 한도는 없고 등급별 한도만 있습니다. 따라서 과장의 등급에 따라 월 한도가 정해집니다 (8조).",
+  "tokens": 375,
+  "n_search": 1,
+  "searches": [
+   "과장은 법인카드를 한 달에 얼마까지 쓸 수 있나요?"
+  ],
+  "found": [
+   "6",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "sec": 1.2,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q10",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": false,
+  "answer": "규정에 과장 직급별 한도는 명시되어 있지 않습니다. 따라서 과장 한도는 알 수 없습니다. (8조)",
+  "tokens": 370,
+  "n_search": 1,
+  "searches": [
+   "과장은 법인카드를 한 달에 얼마까지 쓸 수 있나요?"
+  ],
+  "found": [
+   "6",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "sec": 1.0,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q11",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": false,
+  "answer": "대전은 서울·부산·제주가 아니므로 기본 등급 한도만 적용됩니다. 차장의 숙박 등급을 알 수 없으므로 등급별 한도는 S 120,000원, A 90,000원, B 70,000원입니다(2조).",
+  "tokens": 429,
+  "n_search": 1,
+  "searches": [
+   "차장이 대전 출장에서 1박 숙박비 한도는 얼마인가요?"
+  ],
+  "found": [
+   "2",
+   "35",
+   "4"
+  ],
+  "gold_found": false,
+  "sec": 1.3,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q11",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": false,
+  "answer": "대전은 서울·부산·제주가 아니므로 각 등급 한도에 추가 금액이 없습니다. 차장의 숙박비 등급이 명시되지 않아 정확한 한도는 알 수 없습니다. 다만 각 등급별 1박 숙박비 한도는 S 120,000원, A 90,000원, B 70,000원입니다(2조).",
+  "tokens": 450,
+  "n_search": 1,
+  "searches": [
+   "차장이 대전 출장에서 1박 숙박비 한도는 얼마인가요?"
+  ],
+  "found": [
+   "2",
+   "35",
+   "4"
+  ],
+  "gold_found": false,
+  "sec": 1.6,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q11",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": false,
+  "answer": "대전은 별도 추가금이 없으므로 B 등급 한도 70,000원입니다(2조).",
+  "tokens": 390,
+  "n_search": 1,
+  "searches": [
+   "차장이 대전 출장에서 1박 숙박비 한도는 얼마인가요?"
+  ],
+  "found": [
+   "2",
+   "35",
+   "4"
+  ],
+  "gold_found": false,
+  "sec": 1.1,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q12",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": true,
+  "answer": "부장 숙박비는 1박 S 등급 120,000원 + 제주 20,000원 = 140,000원, 2박 총 280,000원까지 정산됩니다(2조).",
+  "tokens": 392,
+  "n_search": 1,
+  "searches": [
+   "부장이 제주 출장 2박을 다녀왔어요. 숙박비는 총 얼마까지 정산되나요?"
+  ],
+  "found": [
+   "2",
+   "4",
+   "7"
+  ],
+  "gold_found": false,
+  "sec": 1.3,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q12",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": false,
+  "answer": "제주 지역은 각 등급 한도에 1박당 20,000원이 더해지므로, 부장님의 등급이 필요합니다. 규정에서 등급이 명시되어 있지 않아 총 금액을 정확히 알 수 없습니다. 규정에서 찾을 수 없습니다.",
+  "tokens": 407,
+  "n_search": 1,
+  "searches": [
+   "부장이 제주 출장 2박을 다녀왔어요. 숙박비는 총 얼마까지 정산되나요?"
+  ],
+  "found": [
+   "2",
+   "4",
+   "7"
+  ],
+  "gold_found": false,
+  "sec": 1.2,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q12",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": false,
+  "answer": "제주 지역은 각 등급 한도에 1박당 20,000원을 더합니다. 부장님의 등급이 명시되지 않았으므로 규정에서 확인할 수 없습니다. 규정에서 부장 등급에 따른 숙박비 한도를 알려주시면 정확한 금액을 계산해 드릴 수 있습니다.",
+  "tokens": 415,
+  "n_search": 1,
+  "searches": [
+   "부장이 제주 출장 2박을 다녀왔어요. 숙박비는 총 얼마까지 정산되나요?"
+  ],
+  "found": [
+   "2",
+   "4",
+   "7"
+  ],
+  "gold_found": false,
+  "sec": 1.3,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q13",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": false,
+  "answer": "규정에서 주임 등급에 대한 언급이 없어 법인카드 월 한도를 알 수 없습니다.  \n40만 원 장비 구매 시 1건 300,000원을 넘으므로 사전에 팀장 승인을 받아야 합니다(8조).",
+  "tokens": 419,
+  "n_search": 1,
+  "searches": [
+   "주임은 법인카드 월 한도가 얼마이고, 40만 원짜리 장비를 사려면 무엇이 필요한가요?"
+  ],
+  "found": [
+   "32",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "sec": 1.3,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q13",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": false,
+  "answer": "규정에 주임 등급 월 한도에 관한 내용은 없습니다. 40만 원짜리 장비 구매는 1건 300,000원을 넘으므로 사전에 팀장 승인을 받아야 합니다(8조).",
+  "tokens": 413,
+  "n_search": 1,
+  "searches": [
+   "주임은 법인카드 월 한도가 얼마이고, 40만 원짜리 장비를 사려면 무엇이 필요한가요?"
+  ],
+  "found": [
+   "32",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "sec": 1.3,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q13",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": false,
+  "answer": "주임 등급이 명시되지 않아 정확한 월 한도는 규정에서 찾을 수 없습니다.  \n1건 결제 금액 300,000원을 넘는 경우 팀장 승인을 받아야 합니다(8조).",
+  "tokens": 412,
+  "n_search": 1,
+  "searches": [
+   "주임은 법인카드 월 한도가 얼마이고, 40만 원짜리 장비를 사려면 무엇이 필요한가요?"
+  ],
+  "found": [
+   "32",
+   "8",
+   "9"
+  ],
+  "gold_found": false,
+  "sec": 1.1,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q14",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": true,
+  "answer": "견적은 2곳 이상 받으며, 결재는 본부장이 합니다(20, 21 조항).",
+  "tokens": 379,
+  "n_search": 1,
+  "searches": [
+   "7백만 원어치 물품을 사려면 견적은 몇 곳에서 받고 결재는 누가 하나요?"
+  ],
+  "found": [
+   "20",
+   "21",
+   "6"
+  ],
+  "gold_found": true,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q14",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": true,
+  "answer": "견적은 2곳 이상 받아야 하며, 결재는 5,000,000원 이상 50,000,000원 미만이므로 본부장이 합니다(20, 21조).",
+  "tokens": 399,
+  "n_search": 1,
+  "searches": [
+   "7백만 원어치 물품을 사려면 견적은 몇 곳에서 받고 결재는 누가 하나요?"
+  ],
+  "found": [
+   "20",
+   "21",
+   "6"
+  ],
+  "gold_found": true,
+  "sec": 1.4,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q14",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": true,
+  "answer": "견적은 2곳 이상 받고, 결재는 5,000,000원 이상 50,000,000원 미만이므로 본부장이 합니다 (20조, 21조).",
+  "tokens": 397,
+  "n_search": 1,
+  "searches": [
+   "7백만 원어치 물품을 사려면 견적은 몇 곳에서 받고 결재는 누가 하나요?"
+  ],
+  "found": [
+   "20",
+   "21",
+   "6"
+  ],
+  "gold_found": true,
+  "sec": 1.4,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q15",
+  "kind": "개정",
+  "seed": 0,
+  "ok": true,
+  "answer": "출장 식비는 1끼 12,000원 한도까지 정산됩니다(35조, 2026-07-01 개정).",
+  "tokens": 346,
+  "n_search": 1,
+  "searches": [
+   "출장 식비는 1끼 얼마까지 정산되나요?"
+  ],
+  "found": [
+   "35",
+   "4",
+   "7"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q15",
+  "kind": "개정",
+  "seed": 1,
+  "ok": true,
+  "answer": "2026년 7월 1일부터 출장 식비는 1끼 12,000원 한도로 정산됩니다(조항 4, 35).",
+  "tokens": 349,
+  "n_search": 1,
+  "searches": [
+   "출장 식비는 1끼 얼마까지 정산되나요?"
+  ],
+  "found": [
+   "35",
+   "4",
+   "7"
+  ],
+  "gold_found": true,
+  "sec": 1.2,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q15",
+  "kind": "개정",
+  "seed": 2,
+  "ok": true,
+  "answer": "출장 식비는 1끼에 12,000원 한도까지 정산됩니다(35조).",
+  "tokens": 337,
+  "n_search": 1,
+  "searches": [
+   "출장 식비는 1끼 얼마까지 정산되나요?"
+  ],
+  "found": [
+   "35",
+   "4",
+   "7"
+  ],
+  "gold_found": true,
+  "sec": 1.2,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q16",
+  "kind": "개정",
+  "seed": 0,
+  "ok": true,
+  "answer": "사무직은 재택근무를 주 2일까지 할 수 있습니다(36조).",
+  "tokens": 380,
+  "n_search": 1,
+  "searches": [
+   "사무직은 재택근무를 일주일에 며칠까지 할 수 있나요?"
+  ],
+  "found": [
+   "14",
+   "15",
+   "36"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q16",
+  "kind": "개정",
+  "seed": 1,
+  "ok": true,
+  "answer": "사무직은 재택근무를 주 2일까지 할 수 있습니다(36조 개정, 14조 참조).",
+  "tokens": 388,
+  "n_search": 1,
+  "searches": [
+   "사무직은 재택근무를 일주일에 며칠까지 할 수 있나요?"
+  ],
+  "found": [
+   "14",
+   "15",
+   "36"
+  ],
+  "gold_found": true,
+  "sec": 1.0,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q16",
+  "kind": "개정",
+  "seed": 2,
+  "ok": true,
+  "answer": "사무직은 재택근무를 주 2일까지 할 수 있습니다(36조 개정 2026-09-01).",
+  "tokens": 389,
+  "n_search": 1,
+  "searches": [
+   "사무직은 재택근무를 일주일에 며칠까지 할 수 있나요?"
+  ],
+  "found": [
+   "14",
+   "15",
+   "36"
+  ],
+  "gold_found": true,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q17",
+  "kind": "개정",
+  "seed": 0,
+  "ok": false,
+  "answer": "출장 식비는 1끼 10,000원 한도 내에서 정산하므로 10,000원 정산받습니다 (4조).",
+  "tokens": 343,
+  "n_search": 1,
+  "searches": [
+   "출장 중 저녁 식사로 13,000원을 썼고 영수증이 있어요. 얼마 정산받나요?"
+  ],
+  "found": [
+   "3",
+   "4",
+   "7"
+  ],
+  "gold_found": false,
+  "sec": 1.1,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q17",
+  "kind": "개정",
+  "seed": 1,
+  "ok": false,
+  "answer": "출장 식비는 1끼 10,000원 한도이므로 10,000원 정산받습니다(4조).",
+  "tokens": 339,
+  "n_search": 1,
+  "searches": [
+   "출장 중 저녁 식사로 13,000원을 썼고 영수증이 있어요. 얼마 정산받나요?"
+  ],
+  "found": [
+   "3",
+   "4",
+   "7"
+  ],
+  "gold_found": false,
+  "sec": 1.2,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q17",
+  "kind": "개정",
+  "seed": 2,
+  "ok": false,
+  "answer": "출장 식비는 1끼 10,000원 한도 내에서 정산하므로 10,000원 정산받습니다(4조).",
+  "tokens": 343,
+  "n_search": 1,
+  "searches": [
+   "출장 중 저녁 식사로 13,000원을 썼고 영수증이 있어요. 얼마 정산받나요?"
+  ],
+  "found": [
+   "3",
+   "4",
+   "7"
+  ],
+  "gold_found": false,
+  "sec": 1.1,
+  "grounded": false
+ },
+ {
+  "cond": "R2",
+  "q": "Q18",
+  "kind": "없는 규정",
+  "seed": 0,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 330,
+  "n_search": 1,
+  "searches": [
+   "사내 헬스장 이용 시간은 어떻게 되나요?"
+  ],
+  "found": [
+   "15",
+   "34",
+   "5"
+  ],
+  "gold_found": null,
+  "sec": 1.2,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q18",
+  "kind": "없는 규정",
+  "seed": 1,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 330,
+  "n_search": 1,
+  "searches": [
+   "사내 헬스장 이용 시간은 어떻게 되나요?"
+  ],
+  "found": [
+   "15",
+   "34",
+   "5"
+  ],
+  "gold_found": null,
+  "sec": 1.1,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q18",
+  "kind": "없는 규정",
+  "seed": 2,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 330,
+  "n_search": 1,
+  "searches": [
+   "사내 헬스장 이용 시간은 어떻게 되나요?"
+  ],
+  "found": [
+   "15",
+   "34",
+   "5"
+  ],
+  "gold_found": null,
+  "sec": 0.7,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q19",
+  "kind": "없는 규정",
+  "seed": 0,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 366,
+  "n_search": 1,
+  "searches": [
+   "명절 상여금은 얼마인가요?"
+  ],
+  "found": [
+   "13",
+   "21",
+   "35"
+  ],
+  "gold_found": null,
+  "sec": 0.7,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q19",
+  "kind": "없는 규정",
+  "seed": 1,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 366,
+  "n_search": 1,
+  "searches": [
+   "명절 상여금은 얼마인가요?"
+  ],
+  "found": [
+   "13",
+   "21",
+   "35"
+  ],
+  "gold_found": null,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q19",
+  "kind": "없는 규정",
+  "seed": 2,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 366,
+  "n_search": 1,
+  "searches": [
+   "명절 상여금은 얼마인가요?"
+  ],
+  "found": [
+   "13",
+   "21",
+   "35"
+  ],
+  "gold_found": null,
+  "sec": 0.8,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q20",
+  "kind": "없는 규정",
+  "seed": 0,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 323,
+  "n_search": 1,
+  "searches": [
+   "반려동물 데리고 출근해도 되나요?"
+  ],
+  "found": [
+   "15",
+   "4",
+   "6"
+  ],
+  "gold_found": null,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q20",
+  "kind": "없는 규정",
+  "seed": 1,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 323,
+  "n_search": 1,
+  "searches": [
+   "반려동물 데리고 출근해도 되나요?"
+  ],
+  "found": [
+   "15",
+   "4",
+   "6"
+  ],
+  "gold_found": null,
+  "sec": 1.2,
+  "grounded": true
+ },
+ {
+  "cond": "R2",
+  "q": "Q20",
+  "kind": "없는 규정",
+  "seed": 2,
+  "ok": true,
+  "answer": "규정에서 찾을 수 없습니다.",
+  "tokens": 323,
+  "n_search": 1,
+  "searches": [
+   "반려동물 데리고 출근해도 되나요?"
+  ],
+  "found": [
+   "15",
+   "4",
+   "6"
+  ],
+  "gold_found": null,
+  "sec": 0.9,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q1",
+  "kind": "단순",
+  "seed": 0,
+  "ok": true,
+  "answer": "연차는 사용 3일 전까지 그룹웨어 양식 HR-201로 신청해야 합니다(11조).",
+  "tokens": 732,
+  "n_search": 1,
+  "searches": [
+   "연차 신청 기한"
+  ],
+  "found": [
+   "10",
+   "11",
+   "31"
+  ],
+  "gold_found": true,
+  "sec": 1.9,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q1",
+  "kind": "단순",
+  "seed": 1,
+  "ok": true,
+  "answer": "연차는 사용 3일 전까지 그룹웨어 양식 HR-201로 신청해야 합니다. (11조)",
+  "tokens": 731,
+  "n_search": 1,
+  "searches": [
+   "연차 신청 기간"
+  ],
+  "found": [
+   "10",
+   "11",
+   "31"
+  ],
+  "gold_found": true,
+  "sec": 1.8,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q1",
+  "kind": "단순",
+  "seed": 2,
+  "ok": true,
+  "answer": "연차는 사용 3일 전까지 그룹웨어 양식 HR-201로 신청해야 합니다. (11조)",
+  "tokens": 733,
+  "n_search": 1,
+  "searches": [
+   "연차 신청 기한"
+  ],
+  "found": [
+   "10",
+   "11",
+   "31"
+  ],
+  "gold_found": true,
+  "sec": 2.3,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q2",
+  "kind": "단순",
+  "seed": 0,
+  "ok": true,
+  "answer": "냉동창고 온도는 -18℃ 이하로 유지해야 하며, 2시간마다 온도를 기록해야 합니다. (-18℃를 넘으면 품질팀장에게 즉시 연락) (25조)",
+  "tokens": 827,
+  "n_search": 1,
+  "searches": [
+   "냉동창고 온도"
+  ],
+  "found": [
+   "2",
+   "23",
+   "25"
+  ],
+  "gold_found": true,
+  "sec": 2.1,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q2",
+  "kind": "단순",
+  "seed": 1,
+  "ok": true,
+  "answer": "냉동창고 온도는 -18℃ 이하로 유지해야 합니다. (조항 25)",
+  "tokens": 803,
+  "n_search": 1,
+  "searches": [
+   "냉동창고 온도"
+  ],
+  "found": [
+   "2",
+   "23",
+   "25"
+  ],
+  "gold_found": true,
+  "sec": 1.8,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q2",
+  "kind": "단순",
+  "seed": 2,
+  "ok": true,
+  "answer": "냉동창고 온도는 -18℃ 이하로 유지해야 하며, 2시간마다 기록해야 합니다 (-15℃를 넘는 상태가 30분 넘게 이어지면 품질팀장에게 즉시 전화). (25조)",
+  "tokens": 834,
+  "n_search": 1,
+  "searches": [
+   "냉동창고 온도"
+  ],
+  "found": [
+   "2",
+   "23",
+   "25"
+  ],
+  "gold_found": true,
+  "sec": 2.0,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q3",
+  "kind": "단순",
+  "seed": 0,
+  "ok": true,
+  "answer": "업무 관련 외부 교육비 지원 한도는 연 1,000,000원입니다(28조).",
+  "tokens": 751,
+  "n_search": 1,
+  "searches": [
+   "외부 교육비 지원 한도"
+  ],
+  "found": [
+   "28",
+   "32",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 5.9,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q3",
+  "kind": "단순",
+  "seed": 1,
+  "ok": true,
+  "answer": "업무 관련 외부 교육비는 1년에 1,000,000원까지 지원됩니다(28조).",
+  "tokens": 752,
+  "n_search": 1,
+  "searches": [
+   "외부 교육비 지원 한도"
+  ],
+  "found": [
+   "28",
+   "32",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 2.3,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q3",
+  "kind": "단순",
+  "seed": 2,
+  "ok": true,
+  "answer": "업무 관련 외부 교육비는 연 1,000,000원까지 지원됩니다(28조).",
+  "tokens": 750,
+  "n_search": 1,
+  "searches": [
+   "외부 교육비 지원 한도"
+  ],
+  "found": [
+   "28",
+   "32",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 2.0,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q4",
+  "kind": "단순",
+  "seed": 0,
+  "ok": true,
+  "answer": "동호회 지원금은 1인당 한 달에 10,000원입니다(29조).",
+  "tokens": 699,
+  "n_search": 1,
+  "searches": [
+   "동호회 지원금"
+  ],
+  "found": [
+   "29",
+   "31",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 1.7,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q4",
+  "kind": "단순",
+  "seed": 1,
+  "ok": true,
+  "answer": "동호회 지원금은 1인당 한 달에 10,000원입니다(29조).",
+  "tokens": 729,
+  "n_search": 1,
+  "searches": [
+   "동호회 지원금 1인당"
+  ],
+  "found": [
+   "29",
+   "32",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 2.0,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q4",
+  "kind": "단순",
+  "seed": 2,
+  "ok": true,
+  "answer": "동호회 지원금은 1인당 한 달에 10,000원입니다(29).",
+  "tokens": 728,
+  "n_search": 1,
+  "searches": [
+   "동호회 지원금 1인당"
+  ],
+  "found": [
+   "29",
+   "32",
+   "33"
+  ],
+  "gold_found": true,
+  "sec": 1.8,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q5",
+  "kind": "코드",
+  "seed": 0,
+  "ok": true,
+  "answer": "양식 SEC-07은 USB 등 외부 저장장치 등록 신청 양식입니다(17조).",
+  "tokens": 755,
+  "n_search": 1,
+  "searches": [
+   "양식 SEC-07"
+  ],
+  "found": [
+   "17",
+   "19",
+   "21"
+  ],
+  "gold_found": true,
+  "sec": 1.9,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q5",
+  "kind": "코드",
+  "seed": 1,
+  "ok": true,
+  "answer": "양식 SEC-07은 USB 등 외부 저장장치 등록을 신청하는 양식입니다(17조).",
+  "tokens": 757,
+  "n_search": 1,
+  "searches": [
+   "양식 SEC-07"
+  ],
+  "found": [
+   "17",
+   "19",
+   "21"
+  ],
+  "gold_found": true,
+  "sec": 2.0,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q5",
+  "kind": "코드",
+  "seed": 2,
+  "ok": true,
+  "answer": "양식 SEC-07은 외부 저장장치 등록을 신청하는 양식입니다(17조).",
+  "tokens": 755,
+  "n_search": 1,
+  "searches": [
+   "양식 SEC-07"
+  ],
+  "found": [
+   "17",
+   "19",
+   "21"
+  ],
+  "gold_found": true,
+  "sec": 1.9,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q6",
+  "kind": "코드",
+  "seed": 0,
+  "ok": true,
+  "answer": "HR-204 양식은 경조 휴가 신청과 경조금 신청 시에 사용합니다(12조, 13조).",
+  "tokens": 755,
+  "n_search": 1,
+  "searches": [
+   "HR-204"
+  ],
+  "found": [
+   "11",
+   "12",
+   "13"
+  ],
+  "gold_found": true,
+  "sec": 2.0,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q6",
+  "kind": "코드",
+  "seed": 1,
+  "ok": true,
+  "answer": "HR-204 양식은 경조 휴가 신청과 경조금 신청 시에 사용합니다(12조, 13조).",
+  "tokens": 755,
+  "n_search": 1,
+  "searches": [
+   "HR-204"
+  ],
+  "found": [
+   "11",
+   "12",
+   "13"
+  ],
+  "gold_found": true,
+  "sec": 1.8,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q6",
+  "kind": "코드",
+  "seed": 2,
+  "ok": true,
+  "answer": "HR-204 양식은 경조 휴가 신청과 경조금 신청 시 사용합니다(12조, 13조).",
+  "tokens": 756,
+  "n_search": 1,
+  "searches": [
+   "HR-204 양식"
+  ],
+  "found": [
+   "12",
+   "13",
+   "21"
+  ],
+  "gold_found": true,
+  "sec": 2.1,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q7",
+  "kind": "코드",
+  "seed": 0,
+  "ok": true,
+  "answer": "PU-310은 새 거래처를 등록할 때 사용하는 양식입니다. 사업자등록증, 통장 사본, 위생 인증서(식품 원료 업체만)를 받고 이 양식으로 거래처를 등록합니다 (22조).",
+  "tokens": 768,
+  "n_search": 1,
+  "searches": [
+   "PU-310"
+  ],
+  "found": [
+   "17",
+   "21",
+   "22"
+  ],
+  "gold_found": true,
+  "sec": 2.3,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q7",
+  "kind": "코드",
+  "seed": 1,
+  "ok": true,
+  "answer": "PU-310은 거래처 등록 양식입니다. 새 거래처는 사업자등록증, 통장 사본, 위생 인증서(식품 원료 업체만)를 받아 양식 PU-310으로 등록해야 하며, 등록 전에는 발주할 수 없습니다(22조).",
+  "tokens": 777,
+  "n_search": 1,
+  "searches": [
+   "PU-310"
+  ],
+  "found": [
+   "17",
+   "21",
+   "22"
+  ],
+  "gold_found": true,
+  "sec": 2.6,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q7",
+  "kind": "코드",
+  "seed": 2,
+  "ok": true,
+  "answer": "PU-310은 새 거래처 등록 양식입니다. 사업자등록증, 통장 사본, 위생 인증서(식품 원료 업체만)를 받아 이 양식으로 거래처를 등록하며, 등록 전에는 발주할 수 없습니다(22조).",
+  "tokens": 741,
+  "n_search": 1,
+  "searches": [
+   "PU-310 양식"
+  ],
+  "found": [
+   "21",
+   "22",
+   "31"
+  ],
+  "gold_found": true,
+  "sec": 2.5,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q8",
+  "kind": "코드",
+  "seed": 0,
+  "ok": true,
+  "answer": "TR-120은 출장 후 7일 안에 제출해야 합니다(7조).",
+  "tokens": 713,
+  "n_search": 1,
+  "searches": [
+   "TR-120 제출 기한"
+  ],
+  "found": [
+   "36",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "sec": 2.2,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q8",
+  "kind": "코드",
+  "seed": 1,
+  "ok": true,
+  "answer": "TR-120은 출장 복귀 후 7일 안에 제출해야 합니다(7조).",
+  "tokens": 715,
+  "n_search": 1,
+  "searches": [
+   "TR-120 제출 기한"
+  ],
+  "found": [
+   "36",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "sec": 2.1,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q8",
+  "kind": "코드",
+  "seed": 2,
+  "ok": true,
+  "answer": "TR-120 양식은 출장 복귀 후 7일 안에 제출해야 합니다. (7조)",
+  "tokens": 718,
+  "n_search": 1,
+  "searches": [
+   "TR-120 제출기한"
+  ],
+  "found": [
+   "36",
+   "6",
+   "7"
+  ],
+  "gold_found": true,
+  "sec": 1.9,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q9",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": false,
+  "answer": "부산 출장 시 대리 직급 숙박비 한도는 해당 등급에 1박 20,000원을 더한 금액입니다. 예를 들어, B 등급이라면 70,000원 + 20,000원 = 90,000원까지 정산 가능합니다(2조). 규정에 대리 직급별 등급 정보가 없으니 등급에 따라 다릅니다.",
+  "tokens": 828,
+  "n_search": 1,
+  "searches": [
+   "출장비 숙박비 대리"
+  ],
+  "found": [
+   "2",
+   "3",
+   "4"
+  ],
+  "gold_found": false,
+  "sec": 2.4,
+  "grounded": false
+ },
+ {
+  "cond": "R3",
+  "q": "Q9",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": true,
+  "answer": "대리는 B 등급으로, 부산 출장은 숙박비 한도에 1박 20,000원이 추가됩니다. B 등급 70,000원 + 20,000원 = 90,000원까지 1박 숙박비를 정산받을 수 있습니다(2조).",
+  "tokens": 802,
+  "n_search": 1,
+  "searches": [
+   "출장 숙박비 대리"
+  ],
+  "found": [
+   "2",
+   "3",
+   "4"
+  ],
+  "gold_found": false,
+  "sec": 2.2,
+  "grounded": false
+ },
+ {
+  "cond": "R3",
+  "q": "Q9",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": false,
+  "answer": "대리의 부산 출장 1박 숙박비는 등급에 따라 S 140,000원, A 110,000원, B 90,000원까지 정산받을 수 있습니다. (2조)",
+  "tokens": 785,
+  "n_search": 1,
+  "searches": [
+   "출장 숙박비 대리"
+  ],
+  "found": [
+   "2",
+   "3",
+   "4"
+  ],
+  "gold_found": false,
+  "sec": 2.0,
+  "grounded": false
+ },
+ {
+  "cond": "R3",
+  "q": "Q10",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": true,
+  "answer": "과장은 A 등급으로 법인카드 월 한도는 1,500,000원입니다 (조항 1, 8).",
+  "tokens": 766,
+  "n_search": 1,
+  "searches": [
+   "법인카드 과장 한도"
+  ],
+  "found": [
+   "1",
+   "8",
+   "9"
+  ],
+  "gold_found": true,
+  "sec": 1.8,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q10",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": true,
+  "answer": "과장은 A 등급에 해당하며, 법인카드 월 한도는 1,500,000원입니다. (조항 1, 8)",
+  "tokens": 1556,
+  "n_search": 2,
+  "searches": [
+   "과장 법인카드 한도",
+   "과장 직급 등급 법인카드 한도"
+  ],
+  "found": [
+   "1",
+   "2",
+   "8",
+   "9"
+  ],
+  "gold_found": true,
+  "sec": 3.0,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q10",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": true,
+  "answer": "과장은 A 등급으로 법인카드 월 한도는 1,500,000원입니다(8조, 1조).",
+  "tokens": 765,
+  "n_search": 1,
+  "searches": [
+   "법인카드 한도 과장"
+  ],
+  "found": [
+   "1",
+   "8",
+   "9"
+  ],
+  "gold_found": true,
+  "sec": 2.1,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q11",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": true,
+  "answer": "차장 직급은 A 등급이며, 대전은 서울·부산·제주가 아니므로 A 등급 숙박비 한도인 1박 90,000원까지 실비 정산합니다(2, 1조).",
+  "tokens": 828,
+  "n_search": 1,
+  "searches": [
+   "차장 출장 숙박비 한도"
+  ],
+  "found": [
+   "1",
+   "2",
+   "35"
+  ],
+  "gold_found": true,
+  "sec": 3.5,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q11",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": true,
+  "answer": "차장은 A 등급으로, 대전은 서울·부산·제주 지역이 아니므로 1박 숙박비 한도는 90,000원입니다(2, 1).",
+  "tokens": 817,
+  "n_search": 1,
+  "searches": [
+   "출장 숙박비 한도 차장"
+  ],
+  "found": [
+   "1",
+   "2",
+   "35"
+  ],
+  "gold_found": true,
+  "sec": 2.1,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q11",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": true,
+  "answer": "차장은 A 등급으로, 1박 숙박비 한도는 기본 90,000원입니다. 대전은 추가 비용 대상 도시가 아니므로 90,000원이 한도입니다(2, 1조항).",
+  "tokens": 1533,
+  "n_search": 2,
+  "searches": [
+   "출장 숙박비 차장",
+   "직급 등급 차장"
+  ],
+  "found": [
+   "1",
+   "2",
+   "3",
+   "4",
+   "8"
+  ],
+  "gold_found": true,
+  "sec": 3.3,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q12",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": true,
+  "answer": "부장의 제주 출장 숙박비 한도는 S 등급 기준 1박 120,000원에 제주 1박당 20,000원이 추가되어 1박당 140,000원입니다. 2박이므로 총 280,000원까지 실비 정산 가능합니다(2., 1.).",
+  "tokens": 856,
+  "n_search": 1,
+  "searches": [
+   "출장 숙박비 한도 부장"
+  ],
+  "found": [
+   "1",
+   "2",
+   "35"
+  ],
+  "gold_found": true,
+  "sec": 2.2,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q12",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": false,
+  "answer": "부장의 숙박비 한도는 B등급 기준 1박 70,000원에 제주 추가 20,000원 더해 1박당 90,000원이며, 2박이면 총 180,000원까지 정산됩니다(2. 출장 숙박비 한도).",
+  "tokens": 824,
+  "n_search": 1,
+  "searches": [
+   "출장 숙박비 한도"
+  ],
+  "found": [
+   "2",
+   "35",
+   "4"
+  ],
+  "gold_found": false,
+  "sec": 2.2,
+  "grounded": false
+ },
+ {
+  "cond": "R3",
+  "q": "Q12",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": true,
+  "answer": "부장은 S 등급으로, 제주 숙박비 한도는 1박 기준 120,000원 + 20,000원 = 140,000원입니다. 2박이면 총 280,000원까지 정산 가능합니다(2조, 1조).",
+  "tokens": 846,
+  "n_search": 1,
+  "searches": [
+   "출장 숙박비 한도 부장"
+  ],
+  "found": [
+   "1",
+   "2",
+   "35"
+  ],
+  "gold_found": true,
+  "sec": 2.1,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q13",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": true,
+  "answer": "주임은 B 등급으로 법인카드 월 한도가 500,000원이며, 1건 300,000원을 넘는 결제는 사전에 팀장 승인을 받아야 합니다(8조, 1조).\n\n40만 원짜리 장비를 구매하려면 5,000,000원 미만이므로 팀장 결재가 필요합니다(21조).",
+  "tokens": 1150,
+  "n_search": 2,
+  "searches": [
+   "주임 법인카드 한도",
+   "주임 40만 원 장비 구매 절차"
+  ],
+  "found": [
+   "1",
+   "20",
+   "21",
+   "32",
+   "8",
+   "9"
+  ],
+  "gold_found": true,
+  "sec": 2.8,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q13",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": true,
+  "answer": "주임은 B 등급으로 법인카드 월 한도가 500,000원입니다. 1건 결제가 300,000원을 넘을 경우 사전에 팀장 승인을 받아야 합니다. 따라서 40만 원짜리 장비를 사려면 팀장 승인이 필요합니다(8조, 1조).",
+  "tokens": 1371,
+  "n_search": 3,
+  "searches": [
+   "법인카드 한도 주임",
+   "법인카드 사용 절차",
+   "주임 장비 구매"
+  ],
+  "found": [
+   "1",
+   "18",
+   "20",
+   "21",
+   "8",
+   "9"
+  ],
+  "gold_found": true,
+  "sec": 3.2,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q13",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": true,
+  "answer": "주임은 B 등급으로 법인카드 월 한도는 500,000원이며, 1건 결제가 300,000원을 넘으면 사전에 팀장 승인을 받아야 합니다(8조, 1조).  \n40만 원짜리 장비를 사려면 300,000원을 초과하므로 팀장 승인이 필요합니다(8조).  \n또한, 구매 결재는 5,000,000원 미만일 경우 팀장 결재가 필요합니다(21조).",
+  "tokens": 1442,
+  "n_search": 3,
+  "searches": [
+   "법인카드 월 한도 주임",
+   "장비 구매 절차",
+   "직급별 한도"
+  ],
+  "found": [
+   "1",
+   "2",
+   "20",
+   "21",
+   "32",
+   "35",
+   "8",
+   "9"
+  ],
+  "gold_found": true,
+  "sec": 3.5,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q14",
+  "kind": "두 조항",
+  "seed": 0,
+  "ok": true,
+  "answer": "7백만 원어치 물품은 1,000,000원 이상 10,000,000원 미만이므로 견적을 2곳 이상 받아야 합니다(20조). 결재는 5,000,000원 이상 50,000,000원 미만 구간에 해당하므로 본부장이 합니다(21조).",
+  "tokens": 1531,
+  "n_search": 2,
+  "searches": [
+   "견적",
+   "결재 권한"
+  ],
+  "found": [
+   "20",
+   "21",
+   "32",
+   "5",
+   "6",
+   "9"
+  ],
+  "gold_found": true,
+  "sec": 3.5,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q14",
+  "kind": "두 조항",
+  "seed": 1,
+  "ok": true,
+  "answer": "7백만 원어치 물품 구매 시 견적은 2곳 이상 받아야 하며, 결재는 5,000,000원 이상 50,000,000원 미만이므로 본부장이 합니다(20, 21조).",
+  "tokens": 1545,
+  "n_search": 2,
+  "searches": [
+   "물품 구입 견적",
+   "결재 권한 구매"
+  ],
+  "found": [
+   "20",
+   "21",
+   "23",
+   "9"
+  ],
+  "gold_found": true,
+  "sec": 3.0,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q14",
+  "kind": "두 조항",
+  "seed": 2,
+  "ok": true,
+  "answer": "7백만 원어치 물품 구매 시 견적은 2곳 이상 받아야 하며, 결재는 5,000,000원 이상 50,000,000원 미만이므로 본부장이 합니다(20, 21조).",
+  "tokens": 803,
+  "n_search": 1,
+  "searches": [
+   "물품 구매 견적 결재"
+  ],
+  "found": [
+   "20",
+   "21",
+   "9"
+  ],
+  "gold_found": true,
+  "sec": 2.1,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q15",
+  "kind": "개정",
+  "seed": 0,
+  "ok": true,
+  "answer": "출장 식비는 1끼 12,000원까지 정산됩니다(4조, 35조 개정).",
+  "tokens": 761,
+  "n_search": 1,
+  "searches": [
+   "출장 식비 한도"
+  ],
+  "found": [
+   "2",
+   "35",
+   "4"
+  ],
+  "gold_found": true,
+  "sec": 1.9,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q15",
+  "kind": "개정",
+  "seed": 1,
+  "ok": true,
+  "answer": "출장 식비는 1끼 12,000원까지 정산됩니다. (4조, 35조 개정 2026-07-01)",
+  "tokens": 769,
+  "n_search": 1,
+  "searches": [
+   "출장 식비 한도"
+  ],
+  "found": [
+   "2",
+   "35",
+   "4"
+  ],
+  "gold_found": true,
+  "sec": 2.0,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q15",
+  "kind": "개정",
+  "seed": 2,
+  "ok": true,
+  "answer": "출장 식비는 1끼 12,000원까지 정산됩니다(개정 2026-07-01, 4조, 35조).",
+  "tokens": 729,
+  "n_search": 1,
+  "searches": [
+   "출장 식비"
+  ],
+  "found": [
+   "3",
+   "35",
+   "4"
+  ],
+  "gold_found": true,
+  "sec": 2.1,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q16",
+  "kind": "개정",
+  "seed": 0,
+  "ok": true,
+  "answer": "사무직 재택근무는 2026년 9월 1일부터 주 2일까지 가능합니다(36조 개정).",
+  "tokens": 783,
+  "n_search": 1,
+  "searches": [
+   "사무직 재택근무 일주일"
+  ],
+  "found": [
+   "14",
+   "15",
+   "36"
+  ],
+  "gold_found": true,
+  "sec": 2.0,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q16",
+  "kind": "개정",
+  "seed": 1,
+  "ok": true,
+  "answer": "사무직은 2026년 9월 1일부터 재택근무를 주 2일까지 할 수 있습니다. (조항 36)",
+  "tokens": 791,
+  "n_search": 1,
+  "searches": [
+   "사무직 재택근무 일주일 한도"
+  ],
+  "found": [
+   "14",
+   "15",
+   "36"
+  ],
+  "gold_found": true,
+  "sec": 2.0,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q16",
+  "kind": "개정",
+  "seed": 2,
+  "ok": true,
+  "answer": "사무직은 2026년 9월 1일부터 재택근무를 주 2일까지 할 수 있습니다. 단, 전날 18시까지 팀장 승인을 받아야 하며, 생산·물류 현장 근무자는 재택근무 대상이 아닙니다(36조, 14조).",
+  "tokens": 823,
+  "n_search": 1,
+  "searches": [
+   "사무직 재택근무 일수"
+  ],
+  "found": [
+   "14",
+   "15",
+   "36"
+  ],
+  "gold_found": true,
+  "sec": 2.3,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q17",
+  "kind": "개정",
+  "seed": 0,
+  "ok": true,
+  "answer": "출장 식비는 1끼 10,000원 한도로 영수증이 있는 끼니만 정산하나, 2026년 7월 1일 이후 한도가 12,000원으로 상향되었습니다. 따라서 13,000원 사용 시 12,000원이 정산됩니다(조항 4, 35).",
+  "tokens": 839,
+  "n_search": 1,
+  "searches": [
+   "출장 식대 한도"
+  ],
+  "found": [
+   "2",
+   "35",
+   "4"
+  ],
+  "gold_found": true,
+  "sec": 2.3,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q17",
+  "kind": "개정",
+  "seed": 1,
+  "ok": true,
+  "answer": "2026년 7월 1일 개정된 규정에 따라 출장 식비는 1끼 12,000원 한도로 영수증이 있는 식사만 정산됩니다. 따라서 13,000원 지출한 저녁 식사는 12,000원 정산받습니다(35, 4조).",
+  "tokens": 836,
+  "n_search": 1,
+  "searches": [
+   "출장 식사비 한도"
+  ],
+  "found": [
+   "2",
+   "35",
+   "4"
+  ],
+  "gold_found": true,
+  "sec": 2.3,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q17",
+  "kind": "개정",
+  "seed": 2,
+  "ok": true,
+  "answer": "출장 저녁 식사 한도는 12,000원입니다. 13,000원은 1,000원 초과하여 정산액은 12,000원입니다(4, 35조).",
+  "tokens": 813,
+  "n_search": 1,
+  "searches": [
+   "출장 저녁 식사 한도"
+  ],
+  "found": [
+   "2",
+   "35",
+   "4"
+  ],
+  "gold_found": true,
+  "sec": 2.1,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q18",
+  "kind": "없는 규정",
+  "seed": 0,
+  "ok": true,
+  "answer": "규정에서 '사내 헬스장 이용 시간'에 관한 내용을 찾을 수 없습니다.",
+  "tokens": 724,
+  "n_search": 1,
+  "searches": [
+   "사내 헬스장 이용 시간"
+  ],
+  "found": [
+   "15",
+   "34",
+   "5"
+  ],
+  "gold_found": null,
+  "sec": 2.2,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q18",
+  "kind": "없는 규정",
+  "seed": 1,
+  "ok": true,
+  "answer": "사내 헬스장 이용 시간에 관한 규정은 찾을 수 없습니다.",
+  "tokens": 1409,
+  "n_search": 2,
+  "searches": [
+   "사내 헬스장 이용 시간",
+   "헬스장 이용 시간"
+  ],
+  "found": [
+   "15",
+   "19",
+   "34",
+   "5"
+  ],
+  "gold_found": null,
+  "sec": 2.9,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q18",
+  "kind": "없는 규정",
+  "seed": 2,
+  "ok": true,
+  "answer": "사내 헬스장 이용 시간에 대한 규정은 없습니다.",
+  "tokens": 728,
+  "n_search": 1,
+  "searches": [
+   "헬스장 이용 시간"
+  ],
+  "found": [
+   "15",
+   "19",
+   "5"
+  ],
+  "gold_found": null,
+  "sec": 1.9,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q19",
+  "kind": "없는 규정",
+  "seed": 0,
+  "ok": true,
+  "answer": "규정에서 명절 상여금에 관한 내용은 찾을 수 없습니다.",
+  "tokens": 752,
+  "n_search": 1,
+  "searches": [
+   "명절 상여금"
+  ],
+  "found": [
+   "13",
+   "21",
+   "23"
+  ],
+  "gold_found": null,
+  "sec": 1.9,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q19",
+  "kind": "없는 규정",
+  "seed": 1,
+  "ok": true,
+  "answer": "규정에서 명절 상여금에 관한 내용을 찾을 수 없습니다.",
+  "tokens": 751,
+  "n_search": 1,
+  "searches": [
+   "명절 상여금"
+  ],
+  "found": [
+   "13",
+   "21",
+   "23"
+  ],
+  "gold_found": null,
+  "sec": 2.0,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q19",
+  "kind": "없는 규정",
+  "seed": 2,
+  "ok": true,
+  "answer": "규정에서 명절 상여금에 관한 내용을 찾을 수 없습니다.",
+  "tokens": 751,
+  "n_search": 1,
+  "searches": [
+   "명절 상여금"
+  ],
+  "found": [
+   "13",
+   "21",
+   "23"
+  ],
+  "gold_found": null,
+  "sec": 2.0,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q20",
+  "kind": "없는 규정",
+  "seed": 0,
+  "ok": true,
+  "answer": "규정에서 반려동물 출근에 관한 내용은 찾을 수 없습니다.",
+  "tokens": 739,
+  "n_search": 1,
+  "searches": [
+   "반려동물 출근"
+  ],
+  "found": [
+   "15",
+   "35",
+   "6"
+  ],
+  "gold_found": null,
+  "sec": 2.1,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q20",
+  "kind": "없는 규정",
+  "seed": 1,
+  "ok": true,
+  "answer": "규정에서 반려동물 데리고 출근 여부에 관한 내용을 찾을 수 없습니다.",
+  "tokens": 741,
+  "n_search": 1,
+  "searches": [
+   "반려동물 출근"
+  ],
+  "found": [
+   "15",
+   "35",
+   "6"
+  ],
+  "gold_found": null,
+  "sec": 2.0,
+  "grounded": true
+ },
+ {
+  "cond": "R3",
+  "q": "Q20",
+  "kind": "없는 규정",
+  "seed": 2,
+  "ok": true,
+  "answer": "규정에서 반려동물 출근에 관한 내용을 찾을 수 없습니다.",
+  "tokens": 738,
+  "n_search": 1,
+  "searches": [
+   "반려동물 출근"
+  ],
+  "found": [
+   "15",
+   "35",
+   "6"
+  ],
+  "gold_found": null,
+  "sec": 2.1,
+  "grounded": true
+ }
+]

@@ -1,0 +1,2142 @@
+[
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 0,
+  "ok": false,
+  "value": "3",
+  "gold": 9,
+  "sqls": [],
+  "tokens": 12127,
+  "answer": "First, identify employees in the Production Team with either no 'left_on' date or a 'left_on' date after today, 2026-10-21.\n\nEmployees:\n- Mason Johnson (ID 1): still employed (no 'left_on')\n- Jacob Davis (ID 5): left on 2025-04-01 (not current)\n- Logan Jackson (ID 13): hired 2025-05-01, no 'left_on' => current\n- Wyatt Lewis (ID 17): hired 2024-01-01, no 'left_on' => current\n- Mason Johnson (ID 21): left on 2025-10-01 (not current)\n\nTotal current employees in Production:\n- Mason Johnson\n- Logan Jackson\n- Wyatt Lewis\n\nCount: 3\n\nAnswer: 3"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 1,
+  "ok": false,
+  "value": "6",
+  "gold": 9,
+  "sqls": [],
+  "tokens": 12143,
+  "answer": "To find out how many people are currently working on the production team, we need to count employees in the \"employees\" table where \"dept\" is \"Production Team\" and \"left_on\" is empty (meaning still employed).\n\nEmployees on the production team:\n- Mason Johnson (id 1)\n- Jacob Davis (id 5)\n- Logan Jackson (id 13)\n- Wyatt Lewis (id 17)\n- Mason Johnson (id 21)\n- Ethan Lee (id 15)\n- (Check for any other with dept \"Production Team\" and empty \"left_on\")\n\nLet's verify:\n\nEmployees in production team with no leave date:\n- Mason Johnson (id 1)\n- Jacob Davis (id 5)\n- Logan Jackson (id 13)\n- Wyatt Lewis (id"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 2,
+  "ok": false,
+  "value": "3",
+  "gold": 9,
+  "sqls": [],
+  "tokens": 12191,
+  "answer": "To find the current employees on the production team, I will identify employees in the \"employees\" table who are in the Production Team and whose \"left_on\" is either empty or later than today's date (2026-10-21).\n\nEmployees on production team with empty \"left_on\" or left_on after 2026-10-21:\n- Mason Johnson (left_on: empty)\n- Jacob Davis (left_on: empty)\n- Logan Jackson (left_on: 2025-05-01)\n- Wyatt Lewis (left_on: empty)\n- Mason Johnson (relisted, left_on: 2025-10-01, which is before today, so he is no longer employed)\n- Lukas Lopez (left_on: 2025-10-28, evidently left, so not currently emplo"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 0,
+  "ok": false,
+  "value": "5.6",
+  "gold": 4.5,
+  "sqls": [],
+  "tokens": 13259,
+  "answer": "First, identify the current employees (those who have not left).  \nCalculate their length of service as of 2026-10-21, using their hire date.  \nThen, find the average of these lengths.\n\nEmployees currently employed:\n- Mason Johnson (ID 1): Hired 2019-12-01\n- Ella Brown (ID 2): Hired 2021-12-01\n- Liam Garcia (ID 3): Hired 2025-01-01\n- Mia Miller (ID 4): Hired 2022-09-01\n- Jacob Davis (ID 5): Hired 2025-04-01\n- Emma Martinez (ID 6): Hired 2019-03-01\n- Lucas Lopez (ID 7): Hired 2023-03-01\n- Grace Wilson (ID 8): Hired 2020-07-01\n- Owen Thomas (ID 11): Hired 2022-12-01\n- Ava Moore (ID 12): Hired 20"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 1,
+  "ok": false,
+  "value": "4.2",
+  "gold": 4.5,
+  "sqls": [],
+  "tokens": 14605,
+  "answer": "First, I identify the current employees (those who have not left). Next, I calculate their length of service based on their hire date and the current date (2026-10-21). I'll compute the duration for each employee in years and then find the average.\n\nEmployees and their hire dates:\n- Mason Johnson: 2019-12-01\n- Ella Brown: 2021-12-01\n- Liam Garcia: 2025-01-01\n- Mia Miller: 2022-09-01\n- Jacob Davis: 2025-04-01\n- Emma Martinez: 2019-03-01\n- Lucas Lopez: 2023-03-01\n- Grace Wilson: 2020-07-01\n- Olivia Smith: 2021-05-01\n- Emma Martinez (again): 2023-11-01\n- Aiden Hall: 2022-11-01\n- Ava Moore: 2023-0"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 2,
+  "ok": false,
+  "value": "5.0",
+  "gold": 4.5,
+  "sqls": [],
+  "tokens": 13678,
+  "answer": "First, identify the employees who are currently employed as of 2026-10-21. Those who have left are marked by a 'left_on' date, and if they haven't left, their 'left_on' is blank or a date after today. The employees still working are:\n\nEmployees still employed:\n- Mason Johnson (ID 1): Hired 2019-12-01\n- Ella Brown (ID 2): Hired 2021-12-01\n- Liam Garcia (ID 3): Hired 2025-01-01\n- Mia Miller (ID 4): Hired 2022-09-01\n- Jacob Davis (ID 5): Hired 2025-04-01\n- Emma Martinez (ID 6): Hired 2019-03-01\n- Lucas Lopez (ID 7): Hired 2023-03-01\n- Grace Wilson (ID 8): Hired 2020-07-01\n- Owen Thomas (ID 11): H"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 0,
+  "ok": false,
+  "value": "4270",
+  "gold": 4500,
+  "sqls": [],
+  "tokens": 12377,
+  "answer": "In 2025, the Sales Team employees are Mia Miller, Olivia Smith, Grace Wilson, Harper Clark, Lucas Lopez, and Chloe Martin. Their monthly salaries in 2025 are as follows:\n\n- Mia Miller: 4340 (2025-01 to 2025-12, consistent)\n- Olivia Smith: 3830 (2025-01 to 2025-12, consistent)\n- Grace Wilson: 3630 (2025-01 to 2025-12, consistent)\n- Harper Clark: 4550 (2025-07 to 2025-12)\n- Lucas Lopez: 4760 (2025-01 to 2025-10, then left)\n- Chloe Martin: 4420 (2025-01 to 2025-12, consistent)\n\nCalculating the total salaries for all months employees were active in 2025:\n\n- Mia Miller: 4340 * 12 = 52080\n- Olivia S"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 1,
+  "ok": false,
+  "value": "4330",
+  "gold": 4500,
+  "sqls": [],
+  "tokens": 12233,
+  "answer": "The sales team consists of employees with id 4, 8, 12, 16, 20, 22, 28, 30, and 31. \n\nFor 2025, their respective pays are:\n- Employee 4: $4340 (Jan-Dec 2025)\n- Employee 8: $3630 (Jan-Dec 2025)\n- Employee 12: $4420 (Jan-Dec 2025)\n- Employee 16: $3830 (Jan-Dec 2025)\n- Employee 20: $5840 (Jan-Dec 2025)\n- Employee 22: $4300 (Jan-Dec 2025)\n- Employee 28: $4240 (Jan-Dec 2025)\n- Employee 30: $3600 (Jan-Dec 2025)\n- Employee 31: $4710 (Jan-Dec 2025)\n\nSum of their monthly salaries in 2025:\n4340 + 3630 + 4420 + 3830 + 5840 + 4300 + 4240 + 3600 + 4710 = 38930\n\nNumber of employees = 9\n\nAverage monthly salar"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 2,
+  "ok": false,
+  "value": "4290",
+  "gold": 4500,
+  "sqls": [],
+  "tokens": 12076,
+  "answer": "The Sales Team members and their salaries in 2025 are:\n- Mia Miller: $4340/month\n- Ava Moore: $4180/month\n- Olivia Smith: $4340/month\n- Harper Clark: $4290/month (started in July 2026, exclude from 2025 average)\n\nCalculating average for 2025:\n(4340 + 4180 + 4340 + 4290) / 4 = 17150 / 4 = 4287.5 ≈ 4290\n\nAnswer: 4290"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 0,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [],
+  "tokens": 12535,
+  "answer": "First, identify all employees who were hired in 2026 from the 'employees' table:\n\n- Liam Garcia: 2025-01-01 (not 2026)\n- Logan Jackson: 2025-05-01 (not 2026)\n- Emma Martinez: 2023-11-01 (not 2026)\n- Wyatt Lewis: 2020-04-01 (not 2026)\n- Olivia Smith: 2021-05-01 (not 2026)\n- Mason Johnson: 2019-12-01 (not 2026)\n- Ella Brown: 2021-12-01 (not 2026)\n- Chloe Martin: 2024-06-01 (not 2026)\n- Ethan Lee: 2021-09-01 (not 2026)\n- Harper Clark: 2026-07-01\n- Sophia Walker: 2025-05-01 (not 2026)\n- Aiden Hall: 2022-11-01 (not 2026)\n- Olivia Smith (second record): 2021-05-01 (not 2026)\n- Mason Johnson (second "
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 1,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [],
+  "tokens": 12510,
+  "answer": "To find the number of employees hired in 2026, I will look at the \"hired\" date in the employees table and count how many employees were hired in that year.\n\nEmployees hired in 2026:\n- Mason Johnson (id=1, hired on 2019-12-01)\n- Liam Garcia (id=3, 2025-01-01)\n- Jacob Davis (id=5, 2025-04-01)\n- Lucas Lopez (id=7, 2023-03-01)\n- Aiden Hall (id=19, 2022-11-01)\n- Emma Martinez (id=26, 2023-11-01)\n- Harper Clark (id=36, 2026-07-01)\n- Wyatt Lewis (id=17, 2024-01-01)\n- Sophia Walker (id=18, 2025-05-01)\n- Ava Moore (id=12, 2023-02-01)\n- Olivia Smith (id=20, 2021-05-01)\n- Mia Miller (id=4, 2022-09-01)\n- "
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 2,
+  "ok": false,
+  "value": "2",
+  "gold": 1,
+  "sqls": [],
+  "tokens": 12178,
+  "answer": "The employees hired in 2026 are those with a h hired date within that year. From the table:\n\n- Emma Martinez (2019-03-01)\n- Lucas Lopez (2023-03-01)\n- Sophia Walker (2019-10-01)\n- Aiden Hall (2019-02-01)\n- Olivia Smith (2020-01-01)\n- Harper Clark (2026-07-01)\n- Wyatt Lewis (2024-01-01)\n- Logan Jackson (2025-05-01), etc.\n\nThe specific employees hired in 2026 are: Harper Clark (2026-07-01), Olivia Smith (2026-01-01), Lucas Lopez (2025-03-01 but left on 2025-10-28, so not hired in 2026), Emma Martinez (2019-03-01, not 2026), and Logan Jackson (2025-05-01). \n\nReviewing carefully, only Harper Clark"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 0,
+  "ok": false,
+  "value": "4420",
+  "gold": 4390,
+  "sqls": [],
+  "tokens": 12115,
+  "answer": "The quality team's monthly salaries for March through December 2025 are as follows:\nMarch 2025: 4420\nApril 2025: 4420\nMay 2025: 4420\nJune 2025: 4420\nJuly 2025: 4420\nAugust 2025: 4420\nSeptember 2025: 4420\nOctober 2025: 4420\nNovember 2025: 4420\nDecember 2025: 4420\n\nSum of these salaries = 4420 * 10 = 44200\n\nAverage salary = 44200 / 10 = 4420\n\nRounded to the nearest $10 = 4420\n\nAnswer: 4420"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 1,
+  "ok": false,
+  "value": "3630",
+  "gold": 4390,
+  "sqls": [],
+  "tokens": 12133,
+  "answer": "To find the average monthly salary for the Quality Team from March through December 2025, we first gather their salaries in those months:\n\n- March 2025: 3630\n- April 2025: 3630\n- May 2025: 3630\n- June 2025: 3630\n- July 2025: 3630\n- August 2025: 3630\n- September 2025: 3630\n- October 2025: 3630\n- November 2025: 3630\n- December 2025: 3630\n\nSum of these salaries:\n10 months * 3630 = 36,300\n\nAverage salary:\n36,300 / 10 = 3630\n\nRounded to the nearest $10:\nAnswer: 3630"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 2,
+  "ok": false,
+  "value": "4310",
+  "gold": 4390,
+  "sqls": [],
+  "tokens": 12085,
+  "answer": "The employees in the quality team for March through December 2025 are:\n\n- Emma Martinez, with a fixed salary of 4920 per month.\n- Chloe Martin, with a fixed salary of 4420 per month.\n- Sophia Walker, with a fixed salary of 3600 per month (from March 2025 whose date is within the range).\n\nCalculate the average:\n\n(4920 + 4420 + 3600) / 3 = 12940 / 3 ≈ 4313.33\n\nRounded to the nearest $10: 4310\n\nAnswer: 4310"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 0,
+  "ok": false,
+  "value": "Jacob Davis",
+  "gold": "Wyatt Lewis",
+  "sqls": [],
+  "tokens": 13628,
+  "answer": "First, identify employees hired before or during January 2024 and check if they have pay records for each month of their employment from 2024-01 onwards, until the present date (October 2026). Then, find any month where they have no pay record while employed.\n\n- Mason Johnson (ID 1): Hired 2019-12-01, pay records from 2024-01 to 2026-09, no gap.\n- Ella Brown (ID 2): Hired 2021-12-01, pay records from 2024-01 to 2026-09, no gap.\n- Liam Garcia (ID 3): Hired 2025-01-01, pay records from 2025-01 to 2026-09, no gap.\n- Mia Miller (ID 4): Hired 2022-09-01, pay records from 2024-01 to 2026-09, no gap."
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 1,
+  "ok": false,
+  "value": "None",
+  "gold": "Wyatt Lewis",
+  "sqls": [],
+  "tokens": 12307,
+  "answer": "From the data, employees with pay records starting from January 2024 are present. We need to identify if any employee, after their hire date and from 2024-01 onward, has a month without pay while still employed.\n\n- Looking at Noah Anderson (ID 9), hired on 2023-01-01, left on 2025-10-28. Pay records are available for each month from January 2024 through September 2026. All months from 2024 onwards are covered.\n\n- Olivia Smith (ID 20), hired 2021-05-01, with pay records starting from January 2024 through September 2026, also fully covered.\n\n- Mason Johnson (ID 1), hired 2019-12-01, with pay rec"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 2,
+  "ok": false,
+  "value": "Logan Jackson",
+  "gold": "Wyatt Lewis",
+  "sqls": [],
+  "tokens": 13289,
+  "answer": "Using the data, we need to identify employees who have employment periods starting in 2024 or later but have missing pay records in any month during their employment (from their hire date up to September 2026).\n\nCheck each employee's employment period:\n\n- Employee 1 (Mason Johnson): Hired 2019-12-01, but pay records start Jan 2024. No missing pay records up to September 2026 (all months are present from Jan 2024 to Sep 2026).\n- Employee 2 (Ella Brown): Hired 2021-12-01, pay records start Jan 2024, no gaps.\n- Employee 3 (Liam Garcia): Hired 2025-01-01, pay records start Jan 2024, so employment "
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 0,
+  "ok": false,
+  "value": "Olivia Smith",
+  "gold": "Liam Garcia",
+  "sqls": [],
+  "tokens": 13073,
+  "answer": "To find the employee with the biggest raise from their 2025 monthly average to their 2026 monthly average, we need to identify employees who are currently employed (left_on is empty as of 2026-10-21) and compare their 2025 and 2026 salary data.\n\nEmployees still employed as of 2026-10-21 are:\n- Mason Johnson (left_on is empty)\n- Ella Brown\n- Liam Garcia\n- Mia Miller\n- Jacob Davis\n- Emma Martinez\n- Lucas Lopez\n- Grace Wilson\n- Olivia Smith\n- Harper Clark\n- Wyatt Lewis\n\nCalculating their average salary for 2025 and 2026:\n\n1. Mason Johnson:\n- 2025: Jan-Dec 3680, total = 12 * 3680 = 44160\n- 2026: J"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 1,
+  "ok": false,
+  "value": "Olivia Smith",
+  "gold": "Liam Garcia",
+  "sqls": [],
+  "tokens": 13255,
+  "answer": "First, let's identify the current employees in 2026-10:\n\nEmployees with no left_on date or with a left_on after 2026-10.     \nFrom the data, employees with no 'left_on' or left_on > 2026-10 are considered current.\n\nCurrent employees (considering the 'left_on' date):\n\n- Mason Johnson (id 1)\n- Liam Garcia (id 3)\n- Mia Miller (id 4)\n- Jacob Davis (id 5)\n- Emma Martinez (id 6)\n- Lucas Lopez (id 7)\n- Harper Clark (id 16)\n- Wyatt Lewis (id 17)\n- Emma Martinez (id 26)\n- Logan Jackson (id 13)\n- Ethan Lee (id 15)\n- Ava Moore (id 12 and 32)\n- Aiden Hall (id 19)\n- Olivia Smith (id 20 and 40)\n- Owen Thoma"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 2,
+  "ok": false,
+  "value": "Emma Martinez",
+  "gold": "Liam Garcia",
+  "sqls": [],
+  "tokens": 13126,
+  "answer": "First, identify the employees who are current employees in October 2026, i.e., those without a left_on date prior to October 2026. Based on the data, the employees who are still employed as of October 2026 are: Mason Johnson (ID 1), Ella Brown (ID 2), Jacob Davis (ID 5), Lucas Lopez (ID 7), Grace Wilson (ID 8), Owen Thomas (ID 11), Ava Moore (ID 12), Logan Jackson (ID 13), Ethan Lee (ID 15), Harper Clark (ID 16), Wyatt Lewis (ID 17), Emma Martinez (ID 26), Olivia Smith (ID 20), and Chloe Martin (ID 34), etc.\n\nNext, find their 2025 and 2026 monthly average salaries from the salary table.\n\nCalcu"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 0,
+  "ok": false,
+  "value": "5",
+  "gold": 6,
+  "sqls": [],
+  "tokens": 12217,
+  "answer": "There are 5 employees who are grade 4 or higher and currently employed (not left). They are:\n\n- Olivia Smith (grade 5)\n- Aiden Hall (grade 3, left on 2025-10-28 — not current)\n- Ethan Lee (grade 4)\n- Emma Martinez (grade 4)\n- Harper Clark (grade 3, joined after 2023-10-21 — so not current)\n- Wyatt Lewis (grade 5)\n- Mia Miller (grade 4)\n- Noah Anderson (grade 3, left on 2025-10-28 — not current)\n- Mason Johnson (grade 3, left on 2025-10-01 — not current)\n- Others with grade 4 or higher, but confirmed current.\n\nChecking their left_on dates:\n\n- Olivia Smith (left_on is blank, so current, grade 5)"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 1,
+  "ok": false,
+  "value": "3",
+  "gold": 6,
+  "sqls": [],
+  "tokens": 12118,
+  "answer": "To find the number of current employees with grade 4 or higher, I will look at the employees who have 'left_on' as empty (still employed) and have a grade of 4 or above.\n\nFrom the data:\n- Employees with grade 4 or higher:\n  - Olivia Smith (grade 5)\n  - Emma Martinez (grade 4)\n  - Aiden Hall (grade 4)\n  - Mason Johnson (grade 3) - not included\n  \nLooking at their status:\n- Olivia Smith: still employed (left_on is empty)\n- Emma Martinez: hired 2019-03-01, no leaving date, still employed\n- Aiden Hall: hired 2022-11-01, no leaving date, still employed\n\nTotal current employees with grade >= 4:\n3\n\nA"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 2,
+  "ok": false,
+  "value": "4",
+  "gold": 6,
+  "sqls": [],
+  "tokens": 12013,
+  "answer": "There are 4 current employees with grade 4 or higher. These employees are:\n\n- Olivia Smith (grade 5, Sales Team)\n- Wyatt Lewis (grade 5, Production Team)\n- Emma Martinez (grade 4, Quality Team)\n- Ethan Lee (grade 4, Logistics Team)\n\nAnswer: 4"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 0,
+  "ok": false,
+  "value": "0",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE dept='production' AND left_on IS NULL;"
+  ],
+  "tokens": 424,
+  "answer": "Answer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 1,
+  "ok": false,
+  "value": "0",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) as count FROM employees WHERE dept='production' AND left_on IS NULL;"
+  ],
+  "tokens": 428,
+  "answer": "Answer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 2,
+  "ok": false,
+  "value": "0",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE dept='production' AND left_on IS NULL;"
+  ],
+  "tokens": 424,
+  "answer": "Answer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 0,
+  "ok": false,
+  "value": "",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT id, hired FROM employees WHERE left_on IS NULL;",
+   "SELECT id, hired, left_on FROM employees WHERE left_on IS NOT NULL;.",
+   "SELECT id, hired, left_on FROM employees;",
+   "SELECT hired FROM employees WHERE left_on IS NULL;",
+   "SELECT hired, left_on FROM employees WHERE left_on IS NOT NULL;",
+   "SELECT hired FROM employees WHERE left_on IS NULL;",
+   "SELECT hired, left_on FROM employees WHERE left_on IS NOT NULL;"
+  ],
+  "tokens": 8409,
+  "answer": "Calculating the length of service for each employee based on their hire and, if applicable, departure dates, as of 2026-10-21.\n\n[Calculations in progress...]\nThe total service years of current employees: 7.4, 7.7, 3.8, 4.4, 0.8, 5.4, 0.2, 2.2, 1.9, 3.1, 2.1, 2.4, 2.3, 2.2, 0.3, 3.0, 1.8, 4.4, 0.9, 2.3, 6.7, 6.8, 2.0, 0.8, 4.8, 2.4, 2.2, 2.5, 3.8, 2.0, 2.0, 4.4, 6.5, 5.5, 7.7, 2.7.\n\nSum = 137.8 years.\nNumber of current employees = 36.\n\nAverage length of service = total service years / number of employees = 137.8 / 36 ≈ 3.8 years.\n\nTherefore, the average length of service of current employees as"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 1,
+  "ok": true,
+  "value": "4.5",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT id, hired FROM employees WHERE left_on IS NULL;",
+   "SELECT hired FROM employees WHERE left_on IS NULL;",
+   "SELECT AVG(julianday('2026-10-21') - julianday(hired))/365.25 AS avg_service_years FROM employees WHERE left_on IS NULL;"
+  ],
+  "tokens": 2292,
+  "answer": "The average length of service for current employees is approximately 4.5 years as of today's date, October 21, 2026. Answer: 4.5"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 2,
+  "ok": false,
+  "value": "4.2",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT id, hired FROM employees WHERE left_on IS NULL;",
+   "SELECT id, hired FROM employees WHERE left_on IS NOT NULL;",
+   "SELECT id, hired FROM employees WHERE left_on IS NULL;",
+   "SELECT id, hired FROM employees WHERE left_on IS NOT NULL;",
+   "WITH current_employees AS (SELECT hired FROM employees WHERE left_on IS NULL),\n     departed_employees AS (SELECT hired, left_on FROM employees WHERE left_on IS NOT NULL)\nSELECT\n  AVG((strftime('%s', '2026-10-21') - strftime('%s', hired)) / (365.25 * 24 * 3600)) AS avg_years_service\nFROM (\n  SELECT hired FROM current_employees\n  UNION ALL\n  SELECT hired FROM departed_employees\n);"
+  ],
+  "tokens": 3767,
+  "answer": "The average length of service for current employees as of 2026-10-21 is approximately 4.2 years.\n\nAnswer: 4.2"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 0,
+  "ok": false,
+  "value": "4390",
+  "gold": 4500,
+  "sqls": [
+   "SELECT emp_id FROM employees WHERE dept='sales'",
+   "SELECT pay_month, amount FROM salary"
+  ],
+  "tokens": 2590,
+  "answer": "The salary data for the sales team in 2025 was $4180, $4340, $4290, and $4760 per month. To find the average monthly salary:\n\n(4180 + 4340 + 4290 + 4760) / 4 = 17570 / 4 = 4392.5\n\nRounding to the nearest $10 gives 4390.\n\nAnswer: 4390"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 1,
+  "ok": false,
+  "value": "0",
+  "gold": 4500,
+  "sqls": [
+   "SELECT e.id, e.name, e.dept, s.pay_month, s.amount FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.dept = 'sales' AND s.pay_month LIKE '2025-%';",
+   "SELECT DISTINCT pay_month FROM salary WHERE pay_month LIKE '2025-%';",
+   "SELECT AVG(s.amount) FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = 'sales' AND s.pay_month LIKE '2025-%';"
+  ],
+  "tokens": 1142,
+  "answer": "Answer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 2,
+  "ok": false,
+  "value": "0",
+  "gold": 4500,
+  "sqls": [
+   "SELECT e.id, e.name, e.dept, e.grade, e.hired, e.left_on, s.pay_month, s.amount FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.dept = 'sales' AND s.pay_month LIKE '2025-%';",
+   "SELECT DISTINCT pay_month FROM salary WHERE pay_month LIKE '2025-%';",
+   "SELECT AVG(s.amount) FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.dept = 'sales' AND s.pay_month LIKE '2025-%';"
+  ],
+  "tokens": 1175,
+  "answer": "Answer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 0,
+  "ok": false,
+  "value": "0",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) as count_hired_in_2026 FROM employees WHERE strftime('%Y', hired) = '2026';"
+  ],
+  "tokens": 426,
+  "answer": "Answer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 1,
+  "ok": false,
+  "value": "0",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE strftime('%Y', hired) = '2026';"
+  ],
+  "tokens": 424,
+  "answer": "The number of employees hired in 2026 is 0.  \nAnswer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 2,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE strftime('%Y', hired) = '2026';",
+   "SELECT COUNT(*) AS count FROM employees WHERE strftime('%Y', hired) = '2026';"
+  ],
+  "tokens": 532,
+  "answer": "The number of employees hired in 2026 is 1.  \nAnswer: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 0,
+  "ok": false,
+  "value": "3600",
+  "gold": 4390,
+  "sqls": [
+   "SELECT emp_id FROM employees WHERE dept='Quality' AND left_on IS NULL;",
+   "SELECT pay_month, amount FROM salary;"
+  ],
+  "tokens": 2696,
+  "answer": "Based on the salary data for the Quality department from March to December 2025, the monthly salaries are as follows:\n\n- March 2025: 3600\n- April 2025: 3600\n- May 2025: 3600\n- June 2025: 3600\n- July 2025: 3600\n- August 2025: 3600\n- September 2025: 3600\n- October 2025: 3600\n- November 2025: 3600\n- December 2025: 3600\n\nCalculating the average:\n\nTotal = 10 * 3600 = 36,000\n\nAverage = 36,000 / 10 = 3600\n\nRounded to the nearest $10, the average monthly salary is 3600.\n\nAnswer: 3600"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 1,
+  "ok": false,
+  "value": "0",
+  "gold": 4390,
+  "sqls": [
+   "SELECT e.id, e.name, e.dept, s.pay_month, s.amount FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.dept = 'Quality' AND s.pay_month BETWEEN '2025-03' AND '2025-12';"
+  ],
+  "tokens": 552,
+  "answer": "It appears there are no salary records for the quality team from March through December 2025. \n\nAnswer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 2,
+  "ok": false,
+  "value": "4080",
+  "gold": 4390,
+  "sqls": [
+   "SELECT emp_id FROM employees WHERE dept = 'Quality'",
+   "SELECT emp_id, pay_month, amount FROM salary"
+  ],
+  "tokens": 3209,
+  "answer": "The salary data for the quality team members shows the following relevant monthly salaries from March through December 2025:\n- Employee 3: $3600/mo\n- Employee 4: $4340/mo\n- Employee 5: $4290/mo\n\nCalculating the average:\n(3600 + 4340 + 4290) / 3 ≈ 4076.67\n\nRounding to the nearest $10 gives 4080.\n\nAnswer: 4080"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 0,
+  "ok": false,
+  "value": "Liam Garcia",
+  "gold": "Wyatt Lewis",
+  "sqls": [
+   "SELECT e.id, e.name, e.hired, e.left_on, s.pay_month FROM employees e LEFT JOIN salary s ON e.id = s.emp_id AND s.pay_month >= '2024-01' WHERE e.hired <= s.pay_month OR s.pay_month IS NULL"
+  ],
+  "tokens": 3467,
+  "answer": "Based on the data, Mason Johnson has continuous pay records from 2024-01 to 2026-09, with no gaps. Ella Brown also has continuous records from 2024-01 onward. Liam Garcia has a gap in pay records after 2025-12, with no records for 2026, despite being employed.\n\nLiam Garcia was employed from January 2025 and did not receive any pay in 2026, indicating a month with no pay record during their employment.\n\nAnswer: Liam Garcia"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 1,
+  "ok": false,
+  "value": "Chloe Martin",
+  "gold": "Wyatt Lewis",
+  "sqls": [
+   "SELECT DISTINCT e.id, e.name, e.hired, e.left_on FROM employees e WHERE e.hired <= '2026-10-21' AND (e.left_on IS NULL OR e.left_on >= '2024-01-01')",
+   "SELECT emp_id, pay_month FROM salary WHERE pay_month >= '2024-01' AND emp_id IN (SELECT id FROM employees WHERE hired <= '2026-10-21')"
+  ],
+  "tokens": 3308,
+  "answer": "First, I identify the employees who were employed from January 2024 onwards and check their pay records. Then, I look for any month within their employment period (from their hire date or January 2024 onward until today or their left date) where they did not receive pay. \n\nBased on the data, the employee Chloe Martin, who was hired in June 2024, has a gap in pay records in July 2024.\n\nAnswer: Chloe Martin"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 2,
+  "ok": true,
+  "value": "Wyatt Lewis",
+  "gold": "Wyatt Lewis",
+  "sqls": [
+   "WITH employment_periods AS (SELECT id, name, hired, COALESCE(left_on, '2026-10-21') as left_on FROM employees), months AS (SELECT DISTINCT pay_month FROM salary WHERE pay_month >= '2024-01') ), employee_months AS (SELECT e.id, e.name, m.pay_month FROM employment_periods e JOIN months m ON m.pay_month >= e.hired AND m.pay_month <= e.left_on) SELECT em.id, em.name, em.pay_month FROM employee_months em LEFT JOIN salary s ON em.id = s.emp_id AND em.pay_month = s.pay_month WHERE s.emp_id IS NULL;",
+   "WITH employment_periods AS (SELECT id, name, hired, COALESCE(left_on, '2026-10-21') as left_on FROM employees), months AS (SELECT DISTINCT pay_month FROM salary WHERE pay_month >= '2024-01'), employee_months AS (SELECT e.id, e.name, m.pay_month FROM employment_periods e JOIN months m ON m.pay_month >= e.hired AND m.pay_month <= e.left_on), missing_payments AS (SELECT em.id, em.name, em.pay_month FROM employee_months em LEFT JOIN salary s ON em.id = s.emp_id AND em.pay_month = s.pay_month WHERE s.emp_id IS NULL) SELECT DISTINCT name FROM missing_payments;"
+  ],
+  "tokens": 1570,
+  "answer": "The employee who had a month with no pay record while employed since 2024-01 is Wyatt Lewis. Answer: Wyatt Lewis"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 0,
+  "ok": false,
+  "value": "Olivia Smith",
+  "gold": "Liam Garcia",
+  "sqls": [
+   "SELECT id, name, hired, left_on FROM employees WHERE left_on IS NULL;",
+   "SELECT emp_id, pay_month, amount FROM salary;",
+   "SELECT strftime('%Y', pay_month) AS year, emp_id, AVG(amount) AS avg_salary FROM salary GROUP BY year, emp_id;"
+  ],
+  "tokens": 4458,
+  "answer": "First, identify employees who are currently employed (not left). Then, find their average salary in 2025 and 2026, and calculate the difference. The employee with the highest increase in monthly salary from 2025 to 2026 is Olivia Smith.\n\nAnswer: Olivia Smith"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 1,
+  "ok": false,
+  "value": "Emma Martinez",
+  "gold": "Liam Garcia",
+  "sqls": [
+   "SELECT id, name, hired, left_on FROM employees WHERE left_on IS NULL;",
+   "SELECT emp_id, pay_month, amount FROM salary;",
+   "SELECT id, name FROM employees WHERE left_on IS NULL;",
+   "SELECT emp_id, pay_month, amount FROM salary WHERE pay_month LIKE '2025-%' OR pay_month LIKE '2026-%';",
+   "SELECT emp_id, AVG(amount) as avg_salary FROM salary WHERE pay_month LIKE '2025-%' GROUP BY emp_id;",
+   "SELECT emp_id, AVG(amount) as avg_salary FROM salary WHERE pay_month LIKE '2026-%' GROUP BY emp_id;"
+  ],
+  "tokens": 17986,
+  "answer": "Calculating the difference in average monthly salaries between 2026 and 2025 for current employees, I find that the employee with the biggest raise is Emma Martinez.\n\nHer salary increased from an average of 4920 in 2025 to 5170 in 2026, which is a raise of 250.\n\nAnswer: Emma Martinez"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 2,
+  "ok": false,
+  "value": "Jacob Davis",
+  "gold": "Liam Garcia",
+  "sqls": [
+   "SELECT e.id, e.name, e.hired, e.left_on, s.pay_month, s.amount FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.left_on IS NULL AND s.pay_month LIKE '2025%' OR s.pay_month LIKE '2026%';",
+   "SELECT e.id, e.name, e.hired, e.left_on, s.pay_month, s.amount FROM employees e JOIN salary s ON e.id = e.id WHERE e.left_on IS NULL AND s.pay_month LIKE '2025%' OR s.pay_month LIKE '2026%';",
+   "SELECT e.id, e.name, AVG(s.amount) AS avg_2025 FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.left_on IS NULL AND s.pay_month LIKE '2025%' GROUP BY e.id, e.name;",
+   "SELECT e.id, e.name, AVG(s.amount) AS avg_2026 FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.left_on IS NULL AND s.pay_month LIKE '2026%' GROUP BY e.id, e.name;"
+  ],
+  "tokens": 14030,
+  "answer": "Now I will calculate the average monthly salary difference for each current employee to find who had the biggest increase from 2025 to 2026.\nThe employee with the biggest raise from their 2025 average monthly salary to their 2026 average monthly salary is Jacob Davis. His salary increased from an average of 4290 in 2025 to 4550 in 2026, a raise of 260. \n\nAnswer: Jacob Davis"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 0,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE (grade >= 4) AND (left_on IS NULL);",
+   "SELECT COUNT(*) FROM employees WHERE (left_on IS NULL);"
+  ],
+  "tokens": 526,
+  "answer": "There are 6 current employees who are grade 4 or higher out of a total of 36 current employees.  \nAnswer: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 1,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE grade >= 4 AND left_on IS NULL;",
+   "SELECT COUNT(*) FROM employees WHERE left_on IS NULL;"
+  ],
+  "tokens": 509,
+  "answer": "There are 6 current employees who are grade 4 or higher.  \n\nAnswer: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 2,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE grade >= 4 AND (left_on IS NULL OR left_on > '2026-10-21');"
+  ],
+  "tokens": 446,
+  "answer": "There are currently 6 employees who are grade 4 or higher.\n\nAnswer: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 0,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE dept='Production Team' AND left_on IS NULL;"
+  ],
+  "tokens": 617,
+  "answer": "There are currently 9 people working on the production team.  \nAnswer: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 1,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE dept='Production Team' AND left_on IS NULL;"
+  ],
+  "tokens": 621,
+  "answer": "There are currently 9 people working on the Production Team. \n\nAnswer: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B1",
+  "seed": 2,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE dept='Production Team' AND left_on IS NULL;"
+  ],
+  "tokens": 617,
+  "answer": "There are currently 9 people working on the Production Team.  \nAnswer: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 0,
+  "ok": true,
+  "value": "4.5",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT id, hired FROM employees WHERE left_on IS NULL;",
+   "SELECT id, hired FROM employees WHERE left_on IS NOT NULL;",
+   "SELECT AVG((JULIANDAY('2026-10-21') - JULIANDAY(hired))/365.25) AS avg_years FROM employees WHERE left_on IS NULL;"
+  ],
+  "tokens": 2088,
+  "answer": "The average length of service for current employees as of 2026-10-21 is approximately 4.5 years.  \nAnswer: 4.5"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 1,
+  "ok": false,
+  "value": "4.8",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT id, hired FROM employees WHERE left_on IS NULL;",
+   "SELECT id, hired FROM employees WHERE left_on IS NOT NULL;",
+   "SELECT id, hired FROM employees WHERE left_on IS NULL;",
+   "SELECT id, hired FROM employees WHERE left_on IS NOT NULL;",
+   "SELECT hired, left_on FROM employees WHERE left_on IS NOT NULL;"
+  ],
+  "tokens": 5567,
+  "answer": "Let's calculate the length of service for each retired employee first:\n\n1. Employee 9: from 2023-01-01 to 2025-10-28\n2. Employee 18: from 2025-05-01 to 2025-04-28\n3. Employee 27: from 2025-03-01 to 2025-10-28\n4. Employee 36: from 2025-11-01 to 2025-08-28\n\nCalculating each:\n\n- Employee 9: about 2 years and 9 months (roughly 2.75 years).\n- Employee 18: negative duration, so they left before their hire date (discarded, but likely a data anomaly).\n- Employee 27: about 7 months (rounded to 0.58 years).\n- Employee 36: about 3 months (roughly 0.25 years).\n\nNow, for current employees, we need to calcu"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B2",
+  "seed": 2,
+  "ok": false,
+  "value": "5.5",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT id, hired FROM employees WHERE left_on IS NULL;",
+   "SELECT id, hired, left_on FROM employees WHERE left_on IS NOT NULL;"
+  ],
+  "tokens": 2363,
+  "answer": "To calculate the average length of service for current employees (those still employed as of 2026-10-21), I will determine the duration of employment for each current employee and then compute the average.\n\nFor current employees, the length of service is from their hire date until today (2026-10-21). \n\nCalculations:\n- Convert hire date to a date object.\n- Calculate the difference in days between today and hire date.\n- Convert days to years (divide by 365.25 for leap years).\n\nLet's proceed with these calculations.\nCalculating total service durations in years for current employees:\n\n- Employee 1"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 0,
+  "ok": false,
+  "value": "4670",
+  "gold": 4500,
+  "sqls": [
+   "SELECT DISTINCT emp_id FROM employees WHERE dept='Sales Team' AND (left_on IS NULL OR left_on >= '2025-01-01')",
+   "SELECT pay_month, amount FROM salary WHERE emp_id IN (SELECT DISTINCT emp_id FROM employees WHERE dept='Sales Team') AND pay_month LIKE '2025-%'"
+  ],
+  "tokens": 3015,
+  "answer": "To find the average monthly salary of the sales team in 2025, I will aggregate all the salary amounts for each month of 2025 and then compute the average. \n\nThe salaries for different sales team employees per month are: \n\n- 3680, 4180, 3600, 4340, 4920, 4760, 3630, 4870, 5340, 4720, 4420, 3740, 4210, 3830, 4220, 4850, 5840\n\nCalculating the total and then the average:\n\nSum of salaries = (3680 + 4180 + 3600 + 4340 + 4920 + 4760 + 3630 + 4870 + 5340 + 4720 + 4420 + 3740 + 4210 + 3830 + 4220 + 4850 + 5840) \n\n= 79280\n\nNumber of salaries = 17\n\nAverage salary = 79280 / 17 ≈ 4660\n\nRounding to the near"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 1,
+  "ok": false,
+  "value": "47820",
+  "gold": 4500,
+  "sqls": [
+   "SELECT DISTINCT id FROM employees WHERE dept='Sales Team' AND (left_on IS NULL OR left_on >= '2025-01-01')",
+   "SELECT amount FROM salary WHERE emp_id IN (SELECT id FROM employees WHERE dept='Sales Team') AND pay_month LIKE '2025-%'"
+  ],
+  "tokens": 1443,
+  "answer": "The total monthly salaries for sales team members in 2025 are summed up from the salary records. The sum of salaries is:\n\n(4340 * 12) + (3630 * 12) + (4420 * 12) + (5840 * 12) + (5370 * 12) + (4240 * 12) + (3750 * 12) + (4420 * 12) \n\nCalculating this:\n\n- 4340 * 12 = 52080\n- 3630 * 12 = 43560\n- 4420 * 12 = 53040\n- 5840 * 12 = 70080\n- 5370 * 12 = 64440\n- 4240 * 12 = 50880\n- 3750 * 12 = 45000\n- 4420 * 12 = 53040\n\nTotal sum = 52080 + 43560 + 53040 + 70080 + 64440 + 50880 + 45000 + 53040 = 382560\n\nThere are 8 members with salary data in 2025, so the average monthly salary is:\n\n382560 / 8 = 47820\n\nR"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B3",
+  "seed": 2,
+  "ok": false,
+  "value": "5180",
+  "gold": 4500,
+  "sqls": [
+   "SELECT e.id FROM employees e WHERE e.dept = 'Sales Team' AND e.hired <= '2025-12-31' AND (e.left_on >= '2025-01-01' OR e.left_on IS NULL);",
+   "SELECT s.emp_id, s.pay_month, s.amount FROM salary s WHERE s.pay_month BETWEEN '2025-01' AND '2025-12' AND s.emp_id IN (SELECT e.id FROM employees e WHERE e.dept = 'Sales Team' AND e.hired <= '2025-12-31' AND (e.left_on >= '2025-01-01' OR e.left_on IS NULL));"
+  ],
+  "tokens": 2395,
+  "answer": "To calculate the sales team's average monthly salary in 2025, I will sum up all the monthly salaries for each employee and then calculate the average across all employees and months.\n\nThe salaries are as follows:\n- Employee 4: 4340 USD\n- Employee 8: 3630 USD\n- Employee 12: 4420 USD\n- Employee 20: 5840 USD\n- Employee 24: 5370 USD\n- Employee 28: 4240 USD\n- Employee 32: 3750 USD\n- Employee 40: 4420 USD\n\nNow, I will calculate the average monthly salary:\n\nSum of salaries = (4340 + 3630 + 4420 + 5840 + 5370 + 4240 + 3750 + 4420) = 41430\n\nNumber of employees = 8\n\nAverage salary = 41430 / 8 = 5178.75\n"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 0,
+  "ok": false,
+  "value": "0",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) AS hired_in_2026 FROM employees WHERE strftime('%Y', hired) = '2026';"
+  ],
+  "tokens": 612,
+  "answer": "There are no employees who were hired in 2026. Answer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 1,
+  "ok": false,
+  "value": "0",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) AS hired_in_2026 FROM employees WHERE strftime('%Y', hired) = '2026';"
+  ],
+  "tokens": 612,
+  "answer": "There were 0 employees hired in 2026.  \nAnswer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B4",
+  "seed": 2,
+  "ok": false,
+  "value": "",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE hired LIKE '2026-%';"
+  ],
+  "tokens": 585,
+  "answer": "There were 0 employees hired in 2026."
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 0,
+  "ok": false,
+  "value": "4450",
+  "gold": 4390,
+  "sqls": [
+   "SELECT e.id, e.name FROM employees e WHERE e.dept='Quality Team' AND e.left_on IS NULL;",
+   "SELECT s.emp_id, s.pay_month, s.amount FROM salary s WHERE s.pay_month BETWEEN '2025-03' AND '2025-12';"
+  ],
+  "tokens": 3599,
+  "answer": "To calculate the average monthly salary for the quality team from March to December 2025, let's gather the salaries for each member during that period, then compute the average.\n\nThe salaries per member for the period are:\n- Ella Brown (ID 2) - $4180\n- Emma Martinez (ID 6) - $4920\n- Amelia Taylor (ID 10) - $5340\n- Chloe Martin (ID 14) - $4210\n- Sophia Walker (ID 38) - $3600\n\nSum of their monthly salaries:\n4180 + 4920 + 5340 + 4210 + 3600 = 22,250\n\nNumber of members = 5\n\nAverage monthly salary = 22,250 / 5 = 4,450\n\nRounding to the nearest $10 gives us 4450.\n\nAnswer: 4450"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 1,
+  "ok": false,
+  "value": "4490",
+  "gold": 4390,
+  "sqls": [
+   "SELECT emp_id FROM employees WHERE dept='Quality Team';",
+   "SELECT DISTINCT pay_month FROM salary WHERE pay_month >= '2025-03' AND pay_month <= '2025-12';",
+   "SELECT s.emp_id, s.pay_month, s.amount FROM salary s WHERE s.emp_id IN (SELECT id FROM employees WHERE dept='Quality Team') AND s.pay_month BETWEEN '2025-03' AND '2025-12';"
+  ],
+  "tokens": 2814,
+  "answer": "To find the average monthly salary of the Quality Team from March through December 2025, I will calculate the total salary for each employee over these months and then find the average.\n\nFirst, I will sum the salaries for each employee:\n- Employee 2: 4180 * 10 months = 41800\n- Employee 6: 4920 * 10 months = 49200\n- Employee 10: 5340 * 10 months = 53400\n- Employee 14: 4210 * 10 months = 42100\n- Employee 22: 4300 * 10 months = 43000\n- Employee 26: 3700 * 10 months = 37000\n- Employee 30: 3600 * 10 months = 36000\n- Employee 34: 4420 * 10 months = 44200\n- Employee 38: 4870 * 10 months = 48700\n\nNow,"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B5",
+  "seed": 2,
+  "ok": false,
+  "value": "",
+  "gold": 4390,
+  "sqls": [
+   "SELECT AVG(amount) FROM salary WHERE emp_id IN (SELECT id FROM employees WHERE dept='Quality Team') AND pay_month BETWEEN '2025-03' AND '2025-12';"
+  ],
+  "tokens": 680,
+  "answer": "4390"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 0,
+  "ok": false,
+  "value": "Liam Garcia",
+  "gold": "Wyatt Lewis",
+  "sqls": [
+   "SELECT e.id, e.name, e.hired, e.left_on, s.pay_month FROM employees e LEFT JOIN salary s ON e.id = s.emp_id WHERE s.pay_month >= '2024-01' AND e.hired <= s.pay_month AND (e.left_on >= s.pay_month OR e.left_on IS NULL);",
+   "SELECT DISTINCT s.pay_month FROM salary s WHERE s.pay_month >= '2024-01';"
+  ],
+  "tokens": 3987,
+  "answer": "The employee Liam Garcia has a month, February 2026, with no pay record while employed during that period. \n\nAnswer: Liam Garcia"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 1,
+  "ok": false,
+  "value": "Chloe Martin",
+  "gold": "Wyatt Lewis",
+  "sqls": [
+   "SELECT employees.id, employees.name, employees.hired, employees.left_on FROM employees WHERE employees.hired >= '2024-01-01' AND (employees.left_on IS NULL OR employees.left_on >= '2024-01-01');",
+   "SELECT DISTINCT strftime('%Y-%m', pay_month) FROM salary WHERE emp_id = 14 AND pay_month >= '2024-01' AND pay_month <= '2026-10';",
+   "SELECT DISTINCT strftime('%Y-%m', pay_month) FROM salary WHERE emp_id = 17 AND pay_month >= '2024-01' AND pay_month <= '2026-10';"
+  ],
+  "tokens": 1831,
+  "answer": "The employees Chloe Martin and Wyatt Lewis have no pay records from January 2024 to October 2026, despite being employed during some of that time. Since the data indicates they have no pay records in the specified period, they fit the criteria of employees with months with no pay while employed.\n\nAnswer: Chloe Martin"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B6",
+  "seed": 2,
+  "ok": false,
+  "value": "Liam Garcia",
+  "gold": "Wyatt Lewis",
+  "sqls": [
+   "SELECT e.name, e.id, e.hired, e.left_on FROM employees e WHERE 1=1",
+   "SELECT emp_id, pay_month FROM salary WHERE pay_month >= '2024-01' AND (emp_id IN (SELECT id FROM employees WHERE (left_on IS NULL OR left_on >= '2024-01'))) "
+  ],
+  "tokens": 3672,
+  "answer": "Let's analyze the pay records to identify any employee who was employed during a month from January 2024 onwards but did not receive pay that month.\n\nBy examining the list, we see that:\n- Noah Anderson has employment dates from 2023-01-01 and is still employed\n- Employees like Liam Garcia, Jacob Davis, Emma Martinez, and others have pay records for most months but are missing certain months during their employment span\n\nHowever, the key is to find any employee with a missing pay record during their employment period starting from their hire date in 2024 or later.\n\nChecking carefully, **any emp"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 0,
+  "ok": false,
+  "value": "Jacob Davis",
+  "gold": "Liam Garcia",
+  "sqls": [
+   "SELECT e.id, e.name, e.left_on FROM employees e WHERE e.left_on IS NULL;",
+   "SELECT emp_id, AVG(amount) AS avg_pay FROM salary WHERE pay_month BETWEEN '2025-01' AND '2025-12' GROUP BY emp_id;",
+   "SELECT emp_id, AVG(amount) AS avg_pay FROM salary WHERE pay_month BETWEEN '2026-01' AND '2026-09' GROUP BY emp_id;"
+  ],
+  "tokens": 1926,
+  "answer": "By comparing the previous and current averages, the employee with the biggest increase in monthly salary from 2025 to 2026 is Jacob Davis, whose average pay rose from 4290 USD to 4550 USD. \n\nThe raise amount is 260 USD, which is the highest among all current employees.\n\nAnswer: Jacob Davis"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 1,
+  "ok": false,
+  "value": "Ethan Lee",
+  "gold": "Liam Garcia",
+  "sqls": [
+   "SELECT e.id, e.name, e.hired, e.left_on FROM employees e WHERE e.left_on IS NULL;",
+   "SELECT emp_id, AVG(amount) AS avg_pay FROM salary WHERE pay_month BETWEEN '2025-01' AND '2025-12' GROUP BY emp_id;",
+   "SELECT emp_id, AVG(amount) AS avg_pay FROM salary WHERE pay_month BETWEEN '2026-01' AND '2026-09' GROUP BY emp_id;",
+   "SELECT e.id, e.name FROM employees e WHERE e.left_on IS NULL;",
+   "SELECT emp_id, AVG(amount) AS avg_pay FROM salary WHERE pay_month BETWEEN '2025-01' AND '2025-12' GROUP BY emp_id;",
+   "SELECT emp_id, AVG(amount) AS avg_pay FROM salary WHERE pay_month BETWEEN '2026-01' AND '2026-09' GROUP BY emp_id;"
+  ],
+  "tokens": 5308,
+  "answer": "Now, calculating the difference between the 2026 and 2025 averages for each employee to find who had the biggest raise.\n\nThe employee with the highest increase in salary from 2025 to 2026 is:\n\nAnswer: Ethan Lee"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B7",
+  "seed": 2,
+  "ok": true,
+  "value": "Liam Garcia",
+  "gold": "Liam Garcia",
+  "sqls": [
+   "SELECT e.id, e.name, e.left_on, AVG(s.amount) AS avg_2025 FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.left_on IS NULL AND s.pay_month BETWEEN '2025-01' AND '2025-12' GROUP BY e.id, e.name;",
+   "SELECT e.id, e.name, e.left_on, AVG(s.amount) AS avg_2026 FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.left_on IS NULL AND s.pay_month BETWEEN '2026-01' AND '2026-09' GROUP BY e.id, e.name;",
+   "SELECT e.id, e.name, e.left_on, (a2026.avg_2026 - a2025.avg_2025) AS raise_amount FROM (SELECT e.id, e.name, e.left_on, AVG(s.amount) AS avg_2025 FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.left_on IS NULL AND s.pay_month BETWEEN '2025-01' AND '2025-12' GROUP BY e.id, e.name) AS a2025 JOIN (SELECT e.id, e.name, e.left_on, AVG(s.amount) AS avg_2026 FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.left_on IS NULL AND s.pay_month BETWEEN '2026-01' AND '2026-09' GROUP BY e.id, e.name) AS a2026 ON a2025.id = a2026.id WHERE (a2026.avg_2026 - a2025.avg_2025) > 0 ORDER BY (a2026.avg_2026 - a2025.avg_2025) DESC LIMIT 1;",
+   "SELECT a2025.id, a2025.name, (a2026.avg_2026 - a2025.avg_2025) AS raise_amount FROM (SELECT e.id, e.name, AVG(s.amount) AS avg_2025 FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.left_on IS NULL AND s.pay_month BETWEEN '2025-01' AND '2025-12' GROUP BY e.id, e.name) AS a2025 JOIN (SELECT e.id, e.name, AVG(s.amount) AS avg_2026 FROM employees e JOIN salary s ON e.id = s.emp_id WHERE e.left_on IS NULL AND s.pay_month BETWEEN '2026-01' AND '2026-09' GROUP BY e.id, e.name) AS a2026 ON a2025.id = a2026.id WHERE (a2026.avg_2026 - a2025.avg_2025) > 0 ORDER BY raise_amount DESC LIMIT 1;"
+  ],
+  "tokens": 6681,
+  "answer": "Liam Garcia had the biggest raise in their monthly average pay from 2025 to 2026 among current employees.\n\nAnswer: Liam Garcia"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 0,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE (left_on IS NULL) AND (grade >= 4);"
+  ],
+  "tokens": 607,
+  "answer": "There are 6 current employees who are grade 4 or higher.  \nAnswer: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 1,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) FROM employees WHERE (left_on IS NULL) AND (grade >= 4);"
+  ],
+  "tokens": 607,
+  "answer": "There are 6 current employees who are grade 4 or higher.  \nAnswer: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-nano",
+  "q": "B8",
+  "seed": 2,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) as count FROM employees WHERE (left_on IS NULL) AND (grade >= 4);"
+  ],
+  "tokens": 611,
+  "answer": "There are 6 current employees who are grade 4 or higher.  \nAnswer: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 0,
+  "ok": false,
+  "value": "7",
+  "gold": 9,
+  "sqls": [],
+  "tokens": 12141,
+  "answer": "We look at the employees table to count those in the Production Team with empty left_on.\n\nEmployees on Production Team:\n- Mason Johnson (id 1) left_on is empty\n- Jacob Davis (id 5) left_on is empty\n- Noah Anderson (id 9) left_on is 2025-10-28 (not empty, left)\n- Logan Jackson (id 13) left_on is empty\n- Wyatt Lewis (id 17) left_on is empty\n- Mason Johnson (id 21) left_on is empty\n- Jacob Davis (id 25) left_on is empty\n- Noah Anderson (id 29) left_on is empty\n\nCount those with no left_on date:\nids: 1, 5, 13, 17, 21, 25, 29\n\nThere are 7 people currently working in the production team.\n\nAnswer: 7"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 1,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [],
+  "tokens": 12210,
+  "answer": "To find how many people currently work on the Production Team:\n\n1. From the [employees] table, filter rows where dept = \"Production Team\" and left_on is empty (still employed).\n2. Count the number of such employees.\n\nChecking [employees]:\n- Mason Johnson (id=1), left_on empty, Production Team\n- Jacob Davis (id=5), left_on empty, Production Team\n- Noah Anderson (id=9), left_on = 2025-10-28 (left, so no)\n- Logan Jackson (id=13), left_on empty, Production Team\n- Wyatt Lewis (id=17), left_on empty, Production Team\n- Mason Johnson (id=21), left_on empty, Production Team\n- Jacob Davis (id=25), left_"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 2,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [],
+  "tokens": 12138,
+  "answer": "Let's identify employees in the production team with an empty left_on (meaning they are currently employed):\n\nFrom employees table:\n- Production Team employees (id, left_on)\n  - 1, left_on empty\n  - 5, left_on empty\n  - 9, left_on 2025-10-28 (not currently employed)\n  - 13, left_on empty\n  - 17, left_on empty\n  - 21, left_on empty\n  - 25, left_on empty\n  - 29, left_on empty\n  - 33, left_on empty\n  - 37, left_on empty\n\nCounting those with no left_on date:\n1, 5, 13, 17, 21, 25, 29, 33, 37\n\nThese are 9 current employees in the Production Team.\n\nAnswer: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 0,
+  "ok": false,
+  "value": "3.9",
+  "gold": 4.5,
+  "sqls": [],
+  "tokens": 13816,
+  "answer": "To find the average length of service of current employees as of 2026-10-21:\n\n1. Identify current employees: employees with no left_on date.\n2. Calculate their length of service from their hired date till 2026-10-21.\n3. Calculate average length in years.\n\nCurrent employees (no left_on):\nid: 1,2,3,4,5,6,7,8,10,11,12,13,14,15,16,17,19,20,21,22,23,24,25,26,28,29,30,31,32,33,34,35,37,38,39,40\n\nCompute length of service in days for each and convert to years:\n\nFor example:\nEmployee 1 hired 2019-12-01 to 2026-10-21:\nFrom 2019-12-01 to 2026-10-21 = (2026-2019)*365 + days from Dec 1 to Oct 21 = \n7 year"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 1,
+  "ok": false,
+  "value": "3.9",
+  "gold": 4.5,
+  "sqls": [],
+  "tokens": 13872,
+  "answer": "To calculate the average length of service of current employees as of 2026-10-21:\n\n1. Identify current employees who have no left_on date:\nFrom employees table, current employees are those with left_on empty. They are:\n\nid: 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25, 26, 28, 29, 30, 31, 32, 33, 34, 35, 37, 38, 39, 40\n(Note: excluded id 9 and 27 and 36 since they have left_on dates.)\n\n2. Calculate the length of service in years for each current employee:\nLength of service = (2026-10-21 - hired date) in years (considering approximate by days / 365).\n\nCalcu"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 2,
+  "ok": false,
+  "value": "4.3",
+  "gold": 4.5,
+  "sqls": [],
+  "tokens": 13176,
+  "answer": "First, identify current employees (employees with no left_on date):\n\n- IDs of current employees: 1,2,3,4,5,6,7,8,10,11,12,13,14,15,16,17,19,20,21,22,23,24,25,26,28,29,30,31,32,33,34,35,37,38,39,40\n\nNext, calculate length of service in years for each, from hired date to 2026-10-21:\n\nLengths (in years, approx):\n1: 2019-12-01 to 2026-10-21 ≈ 6.9\n2: 2021-12-01 to 2026-10-21 ≈ 4.9\n3: 2025-01-01 to 2026-10-21 ≈ 1.8\n4: 2022-09-01 to 2026-10-21 ≈ 4.1\n5: 2025-04-01 to 2026-10-21 ≈ 1.6\n6: 2019-03-01 to 2026-10-21 ≈ 7.6\n7: 2023-03-01 to 2026-10-21 ≈ 3.6\n8: 2020-07-01 to 2026-10-21 ≈ 6.3\n10: 2020-09-01 to"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 0,
+  "ok": false,
+  "value": "4550",
+  "gold": 4500,
+  "sqls": [],
+  "tokens": 12421,
+  "answer": "First, identify the employees in the Sales Team:\n\nFrom the employees table, Sales Team members with their IDs are:\n- Mia Miller (4, 24)\n- Grace Wilson (8, 28)\n- Ava Moore (12, 32)\n- Harper Clark (16, 36)\n- Olivia Smith (20, 40)\n\nFor salary data, we must consider the salary entries for 2025 for these employees.\n\nWe will sum the monthly salary payments for each of these employees in 2025 and count the number of payment records for them for 2025. Then calculate the total sum divided by the total months (salary records).\n\nCheck each in salary records for 2025:\n\n- Employee 4 (Mia Miller)\n  2025 mon"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 1,
+  "ok": true,
+  "value": "4500",
+  "gold": 4500,
+  "sqls": [],
+  "tokens": 12851,
+  "answer": "First, we identify employees in the Sales Team who were active during 2025.\nActive in 2025 means hired on or before 2025-12-31 and left_on is either null or after 2025-01-01.\n\nSales Team employees:\n- Mia Miller (id 4): hired 2022-09-01, no left_on -> active in 2025\n- Grace Wilson (8): hired 2020-07-01, no left_on -> active\n- Ava Moore (12): hired 2023-02-01, no left_on -> active\n- Harper Clark (16): hired 2026-07-01, no left_on -> not active in 2025\n- Olivia Smith (20): hired 2021-05-01, no left_on -> active\n- Mia Miller (24): hired 2020-07-01, no left_on -> active\n- Grace Wilson (28): hired 2"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 2,
+  "ok": false,
+  "value": "4510",
+  "gold": 4500,
+  "sqls": [],
+  "tokens": 12666,
+  "answer": "First, let's identify the sales team employees from the employees table who were employed at any time in 2025:\n\nSales Team Employees:\n- 4, Mia Miller\n- 8, Grace Wilson\n- 12, Ava Moore\n- 16, Harper Clark (hired 2026-07-01, so not in 2025)\n- 20, Olivia Smith\n- 24, Mia Miller (same name different id)\n- 28, Grace Wilson (same name different id)\n- 32, Ava Moore (same name different id)\n- 36, Harper Clark (left 2025-08-28)\n\nNow let's exclude those who were not employed through 2025 or left before or during 2025:\n- ID 16 hired in 2026 no salary in 2025.\n- ID 36 left 2025-08-28, so salary only for mon"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 0,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [],
+  "tokens": 11985,
+  "answer": "The employees hired in 2026 are:\n- Harper Clark, hired on 2026-07-01\n\nOnly 1 employee was hired in 2026.\n\nAnswer: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 1,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [],
+  "tokens": 11997,
+  "answer": "Looking at the employees table, the hire dates for employees in 2026 are:\n\n- Harper Clark, Sales Team, hired 2026-07-01\n\nOnly 1 employee has a hire date in 2026.\n\nAnswer: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 2,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [],
+  "tokens": 11999,
+  "answer": "Let's check the employees table for those hired in the year 2026.\n\nEmployees hired in 2026:\n- Harper Clark, Sales Team, hired 2026-07-01\n\nOnly one employee was hired in 2026.\n\nAnswer: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 0,
+  "ok": false,
+  "value": "4340",
+  "gold": 4390,
+  "sqls": [],
+  "tokens": 12544,
+  "answer": "First, identify employees in the Quality Team:\n- Ella Brown (id: 2)\n- Emma Martinez (id: 6)\n- Amelia Taylor (id: 10)\n- Chloe Martin (id: 14)\n- Sophia Walker (id: 18)\n- Ella Brown again (id: 22)\n- Emma Martinez (id: 26)\n- Chloe Martin (id: 34)\n- Amelia Taylor (id: 30)\n\nExclude Sophia Walker (id: 18) because left on 2025-04-28, so count only March and April 2025 in her salary.\n\nNow, sum the salary for each Quality Team member for March through December 2025, then calculate average monthly salary.\n\nEmployee 2 (Ella Brown):\nMonths 2025-03 to 2025-12 = 4180 each month * 10 months = 41800\n\nEmployee "
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 1,
+  "ok": true,
+  "value": "4390",
+  "gold": 4390,
+  "sqls": [],
+  "tokens": 12735,
+  "answer": "First, identify the employees who belong to the Quality Team:\n- Ella Brown (id 2)\n- Emma Martinez (id 6 and 26)\n- Amelia Taylor (id 10 and 30)\n- Chloe Martin (id 14 and 34)\n- Sophia Walker (id 18 and 38)\n\nNext, since we're interested in the average monthly salary from March through December 2025, we should consider the salary data for IDs 2, 6, 10, 14, 18, 26, 30, 34, 38 for those months in that year, but only for active employees in those months (those not left before or hired after those months).\n\nCheck employee active periods and salaries:\n\n- id 2 (Ella Brown) hired 2021-12-01, no left date"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 2,
+  "ok": true,
+  "value": "4390",
+  "gold": 4390,
+  "sqls": [],
+  "tokens": 12606,
+  "answer": "Let's identify the Quality Team employees who were active from March to December 2025:\n\nEmployees in Quality Team:\n- 2,Ella Brown,Quality Team,2,2021-12-01,\n- 6,Emma Martinez,Quality Team,3,2019-03-01,\n- 10,Amelia Taylor,Quality Team,4,2020-09-01,\n- 14,Chloe Martin,Quality Team,2,2024-06-01,\n- 18,Sophia Walker,Quality Team,3,2025-05-01,2025-04-28 (left before March 2025, excluded)\n- 22,Ella Brown,Quality Team,2,2021-09-01,\n- 26,Emma Martinez,Quality Team,1,2023-11-01,\n- 30,Amelia Taylor,Quality Team,1,2024-08-01,\n- 34,Chloe Martin,Quality Team,2,2023-09-01,\n- 38,Sophia Walker,Quality Team,3,20"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 0,
+  "ok": false,
+  "value": "Harper Clark",
+  "gold": "Wyatt Lewis",
+  "sqls": [],
+  "tokens": 12580,
+  "answer": "First, I will identify the employment periods (hired date to left_on date or today if left_on is empty) for each employee. Then I will verify if there is any month within these periods (starting from 2024-01) that doesn't have a corresponding pay record.\n\n- Employees with left_on date before today:\n  - id=9 (Noah Anderson): employed 2023-01-01 to 2025-10-28\n  - id=18 (Sophia Walker): employed 2025-05-01 to 2025-04-28 (invalid range, possibly a mistake so ignore employment period)\n  - id=27 (Lucas Lopez): employed 2025-03-01 to 2025-10-28\n  - id=36 (Harper Clark): employed 2026-07-01 to 2025-08"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 1,
+  "ok": true,
+  "value": "Wyatt Lewis",
+  "gold": "Wyatt Lewis",
+  "sqls": [],
+  "tokens": 13427,
+  "answer": "We need to find an employee who has any month during their employment period (starting from the later of their hire date and 2024-01) where they have no pay record.\n\nLet's check month ranges and pay records:\n\n- Employees hired after 2024-01 must have pay records starting from their hire month or later.\n- Employees who left before 2024-01 can be ignored (since pay records start 2024-01).\n- Check for any missing months of pay for employees who were employed at least part of this period.\n\nLooking through the employees:\n\n- Employee 16 (Harper Clark) was hired 2026-07-01, has pay for 2026-07, 08, 0"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 2,
+  "ok": false,
+  "value": "Sophia Walker",
+  "gold": "Wyatt Lewis",
+  "sqls": [],
+  "tokens": 14396,
+  "answer": "We need to find employees who have gaps in their pay records while they were employed (only considering pay months 2024-01 or later).\n\nStep 1: Find the employment periods for each employee who was employed at least one month since 2024-01.\n- Some employees have left_on date, so end of employment is left_on.\n- Employees without left_on are still employed.\n\nStep 2: Check the salary records month by month for each employee during their employment period in 2024-01 or later to find if any month is missing.\n\nLet's analyze employees deviation case by case:\n\n- Employee 1: Mason Johnson — Employed con"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 0,
+  "ok": true,
+  "value": "Liam Garcia",
+  "gold": "Liam Garcia",
+  "sqls": [],
+  "tokens": 14251,
+  "answer": "To find the employee who had the biggest raise from their 2025 monthly average salary to their 2026 monthly average salary among current employees:\n\n1. Identify current employees: those who have no left_on date or the left_on date is after 2026-09.\n2. For each current employee, calculate the average monthly salary for 2025 and for 2026 (up to 2026-09).\n3. Calculate the difference between the 2026 average and the 2025 average.\n4. Find the employee with the largest positive difference.\n\nStep 1: Identify current employees (left_on is blank or after 2026-09):\n\nCurrent employees are those with left"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 1,
+  "ok": true,
+  "value": "Liam Garcia",
+  "gold": "Liam Garcia",
+  "sqls": [],
+  "tokens": 14836,
+  "answer": "First, we need to identify employees who are currently working at Yummy Tummy Foods as of today (2026-10-21). These employees will not have a \"left_on\" date or their \"left_on\" date will be after 2026-10-21.\n\nThen, for each current employee, calculate their average monthly salary in 2025 and in 2026.\n\n1. Filter current employees:\n- left_on is null or left_on > 2026-10-21.\n\nCurrent employees based on [employees]:\n- Mason Johnson (id 1) - no left_on\n- Ella Brown (id 2) - no left_on\n- Liam Garcia (id 3) - no left_on\n- Mia Miller (id 4) - no left_on\n- Jacob Davis (id 5) - no left_on\n- Emma Martinez"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 2,
+  "ok": false,
+  "value": "Jacob Davis",
+  "gold": "Liam Garcia",
+  "sqls": [],
+  "tokens": 13191,
+  "answer": "I will find the current employees first based on the last left_on date being empty or after today (2026-10-21). Then calculate the monthly average salary in 2025 and 2026 for each current employee and find the biggest raise.\n\nLet's identify current employees (left_on is empty or left_on > 2026-10-21):\n- Considering all employees whose left_on is NULL or after 2026-10-21\n- From data, employees with no left_on or left_on after 2026-10-21 include all except:\n  - Employee 9 (Noah Anderson) left 2025-10-28\n  - Employee 18 (Sophia Walker) left 2025-04-28\n  - Employee 27 (Lucas Lopez) left 2025-10-28"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 0,
+  "ok": false,
+  "value": "2",
+  "gold": 6,
+  "sqls": [],
+  "tokens": 12611,
+  "answer": "Current employees are those who do not have a left_on date or have a left_on date in the future (after 2026-10-21).\n\nCheck each employee with no left_on date or left_on after 2026-10-21 and verify if their grade is 4 or higher.\n\nFrom employees table:\n- Ella Brown (#2), Quality Team, grade 2, no left_on → grade <4 → no\n- Liam Garcia (#3), Logistics Team, grade 1, no left_on → grade <4 → no\n- Jacob Davis (#5), Production Team, grade 2, no left_on → grade <4 → no\n- Emma Martinez (#6), Quality Team, grade 3, no left_on → grade <4 → no\n- Amelia Taylor (#10), Quality Team, grade 4, no left_on → grad"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 1,
+  "ok": false,
+  "value": "5",
+  "gold": 6,
+  "sqls": [],
+  "tokens": 12190,
+  "answer": "We need to find the number of employees who have a grade of 4 or higher and are currently employed (i.e., \"left_on\" is empty).\n\nFrom the [employees] table, check each employee:\n- id 10, Amelia Taylor, Quality Team, grade 4, left_on empty → current and grade 4 or higher\n- id 20, Olivia Smith, Sales Team, grade 5, left_on empty → current and grade 4 or higher\n- id 24, Mia Miller, Sales Team, grade 4, left_on empty → current and grade 4 or higher\n- id 25, Jacob Davis, Production Team, grade 5, left_on empty → current and grade 4 or higher\n\nCheck for any more with grade 4 or higher and left_on emp"
+ },
+ {
+  "exp": "B",
+  "cond": "TABLE",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 2,
+  "ok": false,
+  "value": "4",
+  "gold": 6,
+  "sqls": [],
+  "tokens": 12065,
+  "answer": "To find how many current employees are grade 4 or higher, we check the employees table for those employees with grade >= 4 and no left_on date (i.e., they are current employees).\n\nEmployees who meet these criteria:\n- id 10, grade 4, no left_on\n- id 20, grade 5, no left_on\n- id 24, grade 4, no left_on\n- id 35, grade 4, no left_on\n\nSo, there are 4 current employees with grade 4 or higher.\n\nAnswer: 4"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 0,
+  "ok": false,
+  "value": "0",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE dept = 'production' AND left_on IS NULL;"
+  ],
+  "tokens": 443,
+  "answer": "Currently, there are 0 people working on the production team.\n\nAnswer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 1,
+  "ok": false,
+  "value": "0",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) AS current_production_employees FROM employees WHERE dept = 'production' AND left_on IS NULL;"
+  ],
+  "tokens": 450,
+  "answer": "There are currently 0 people working on the production team. Answer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 2,
+  "ok": false,
+  "value": "0",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE dept = 'production' AND (left_on IS NULL OR left_on = '')"
+  ],
+  "tokens": 452,
+  "answer": "There are 0 people currently working on the production team. Answer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 0,
+  "ok": true,
+  "value": "4.5",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT AVG((julianday('2026-10-21') - julianday(hired)) / 365.25) as avg_years FROM employees WHERE left_on IS NULL;"
+  ],
+  "tokens": 523,
+  "answer": "The average length of service of current employees as of 2026-10-21 is approximately 4.5 years.\n\nAnswer: 4.5"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 1,
+  "ok": false,
+  "value": "",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT hired FROM employees WHERE left_on IS NULL;"
+  ],
+  "tokens": 1458,
+  "answer": "First, I will calculate the length of service for each current employee by subtracting their hire date from today's date (2026-10-21). Then, I will find the average length of service in years to one decimal place.\n\nThe hire dates of current employees are:\n2019-12-01, 2021-12-01, 2025-01-01, 2022-09-01, 2025-04-01, 2019-03-01, 2023-03-01, 2020-07-01, 2020-09-01, 2022-12-01, 2023-02-01, 2025-05-01, 2024-06-01, 2021-09-01, 2026-07-01, 2024-01-01, 2022-11-01, 2021-05-01, 2025-10-01, 2021-09-01, 2020-03-01, 2020-07-01, 2023-09-01, 2023-11-01, 2020-11-01, 2021-06-01, 2024-08-01, 2023-04-01, 2020-12-"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 2,
+  "ok": false,
+  "value": "4.7",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT hired FROM employees WHERE left_on IS NULL"
+  ],
+  "tokens": 1883,
+  "answer": "I have the hire dates of all current employees. I will calculate the length of service for each employee in years as of 2026-10-21, then find the average length of service.\n\nThe formula to calculate length of service in years for each:\n(2026-10-21 - hire_date) / 365.25\n\nNow calculating the lengths:\n1) 2019-12-01 to 2026-10-21 = 6.9 years\n2) 2021-12-01 to 2026-10-21 = 4.9 years\n3) 2025-01-01 to 2026-10-21 = 1.8 years\n4) 2022-09-01 to 2026-10-21 = 4.1 years\n5) 2025-04-01 to 2026-10-21 = 1.6 years\n6) 2019-03-01 to 2026-10-21 = 7.7 years\n7) 2023-03-01 to 2026-10-21 = 3.6 years\n8) 2020-07-01 to 202"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 0,
+  "ok": false,
+  "value": "0",
+  "gold": 4500,
+  "sqls": [
+   "SELECT AVG(s.amount) AS avg_salary FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = 'sales' AND s.pay_month LIKE '2025-%';",
+   "SELECT COUNT(*) FROM employees WHERE dept = 'sales';"
+  ],
+  "tokens": 903,
+  "answer": "There are no employees in the sales team, so there is no sales team monthly salary data for 2025.\n\nAnswer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 1,
+  "ok": true,
+  "value": "4500",
+  "gold": 4500,
+  "sqls": [
+   "SELECT AVG(s.amount) AS avg_salary FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = 'sales' AND s.pay_month LIKE '2025-%';",
+   "SELECT AVG(s.amount) AS avg_salary FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = 'Sales' AND s.pay_month LIKE '2025-%';",
+   "SELECT AVG(s.amount) AS avg_salary FROM salary s JOIN employees e ON s.emp_id = e.id WHERE LOWER(e.dept) = 'sales' AND s.pay_month LIKE '2025-%';",
+   "SELECT DISTINCT dept FROM employees;",
+   "SELECT AVG(s.amount) AS avg_salary FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = 'Sales Team' AND s.pay_month LIKE '2025-%';"
+  ],
+  "tokens": 2241,
+  "answer": "Answer: 4500"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 2,
+  "ok": false,
+  "value": "0",
+  "gold": 4500,
+  "sqls": [
+   "SELECT AVG(s.amount) as avg_salary FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = 'sales' AND s.pay_month LIKE '2025-%';"
+  ],
+  "tokens": 499,
+  "answer": "There is no available data for the sales team's average monthly salary in 2025.\n\nAnswer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 0,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) AS hired_2026 FROM employees WHERE hired >= '2026-01-01' AND hired <= '2026-12-31';"
+  ],
+  "tokens": 438,
+  "answer": "Answer: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 1,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) AS hired_2026 FROM employees WHERE hired >= '2026-01-01' AND hired <= '2026-12-31';"
+  ],
+  "tokens": 438,
+  "answer": "Answer: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 2,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) AS hired_2026_count FROM employees WHERE hired >= '2026-01-01' AND hired < '2027-01-01';"
+  ],
+  "tokens": 453,
+  "answer": "There is 1 employee who was hired in 2026.\n\nAnswer: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 0,
+  "ok": false,
+  "value": "0",
+  "gold": 4390,
+  "sqls": [
+   "SELECT AVG(amount) as avg_salary FROM salary AS s JOIN employees AS e ON s.emp_id = e.id WHERE e.dept = 'quality' AND s.pay_month BETWEEN '2025-03' AND '2025-12';"
+  ],
+  "tokens": 532,
+  "answer": "There is no salary data available for the quality team from March through December 2025, so I cannot calculate the average monthly salary for that period.\n\nAnswer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 1,
+  "ok": false,
+  "value": "0",
+  "gold": 4390,
+  "sqls": [
+   "SELECT AVG(s.amount) as avg_salary FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = 'quality' AND s.pay_month BETWEEN '2025-03' AND '2025-12';",
+   "SELECT AVG(s.amount) as avg_salary FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = 'quality' AND s.pay_month >= '2025-03' AND s.pay_month <= '2025-12';"
+  ],
+  "tokens": 1000,
+  "answer": "It appears there is no salary data available for the quality team for the period from March through December 2025. Therefore, I cannot compute the average monthly salary for that team in that timeframe.\n\nAnswer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 2,
+  "ok": false,
+  "value": "0",
+  "gold": 4390,
+  "sqls": [
+   "SELECT AVG(s.amount) as avg_salary\nFROM salary s\nJOIN employees e ON s.emp_id = e.id\nWHERE e.dept = 'quality' AND s.pay_month BETWEEN '2025-03' AND '2025-12';"
+  ],
+  "tokens": 539,
+  "answer": "It seems there was no salary data available for the quality team from March through December 2025. Therefore, I cannot calculate the average monthly salary for that period.\n\nAnswer: 0"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 0,
+  "ok": false,
+  "value": "Mason Johnson",
+  "gold": "Wyatt Lewis",
+  "sqls": [
+   "WITH DateRange AS (\n  SELECT '2024-01-01' AS month_start\n  UNION ALL\n  SELECT date(month_start, '+1 month')\n  FROM DateRange\n  WHERE month_start < date('2026-10-01')\n),\nEmployedMonths AS (\n  SELECT e.id, e.name, dr.month_start\n  FROM employees e\n  JOIN DateRange dr\n    ON dr.month_start >= max(date(e.hired, 'start of month'))\n   AND (e.left_on IS NULL OR dr.month_start <= date(e.left_on, 'start of month'))\n)\nSELECT DISTINCT em.name\nFROM EmployedMonths em\nLEFT JOIN salary s ON em.id = s.emp_id AND strftime('%Y-%m', em.month_start) = s.pay_month\nWHERE s.amount IS NULL\nLIMIT 1;",
+   "WITH DateRange AS (\n  SELECT '2024-01-01' AS month_start\n  UNION ALL\n  SELECT date(month_start, '+1 month')\n  FROM DateRange\n  WHERE month_start < date('2026-10-01')\n),\nEmployedMonths AS (\n  SELECT e.id, e.name, dr.month_start\n  FROM employees e\n  JOIN DateRange dr\n    ON dr.month_start >= date(e.hired, 'start of month')\n   AND (e.left_on IS NULL OR dr.month_start <= date(e.left_on, 'start of month'))\n)\nSELECT DISTINCT em.name\nFROM EmployedMonths em\nLEFT JOIN salary s ON em.id = s.emp_id AND strftime('%Y-%m', em.month_start) = s.pay_month\nWHERE s.amount IS NULL\nLIMIT 1;"
+  ],
+  "tokens": 1663,
+  "answer": "The employee who has a month with no pay record while they were employed is Mason Johnson. Answer: Mason Johnson"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 1,
+  "ok": false,
+  "value": "Mason Johnson",
+  "gold": "Wyatt Lewis",
+  "sqls": [
+   "WITH employed_months AS (\n  SELECT id, name, dept, grade, \n         strftime('%Y-%m', hired) AS start_month,\n         COALESCE(strftime('%Y-%m', left_on), '9999-12') AS end_month\n  FROM employees\n), month_range AS (\n  SELECT '2024-01' AS pay_month\n  UNION ALL\n  SELECT strftime('%Y-%m', date(pay_month || '-01', '+1 month'))\n  FROM month_range\n  WHERE pay_month < '2026-10'\n), emp_months AS (\n  SELECT e.id, e.name, m.pay_month\n  FROM employed_months e\n  JOIN month_range m ON m.pay_month >= e.start_month AND m.pay_month <= e.end_month\n), payment_check AS (\n  SELECT emp_months.id, emp_months.name, emp_months.pay_month, \n         salary.amount\n  FROM emp_months\n  LEFT JOIN salary ON emp_months.id = salary.emp_id AND emp_months.pay_month = salary.pay_month\n)\nSELECT DISTINCT name\nFROM payment_check\nWHERE amount IS NULL\nLIMIT 1;"
+  ],
+  "tokens": 978,
+  "answer": "The employee who has a month with no pay record while they were employed (starting from 2024-01) is Mason Johnson.\n\nAnswer: Mason Johnson"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 2,
+  "ok": false,
+  "value": "Mason Johnson",
+  "gold": "Wyatt Lewis",
+  "sqls": [
+   "WITH employed_months AS (\n    SELECT e.id AS emp_id, e.name, \n           strftime('%Y-%m', date(hired)) AS start_month,\n           strftime('%Y-%m', IFNULL(date(left_on), '2026-12-31')) AS end_month\n    FROM employees e\n),\nmonths AS (\n    SELECT '2024-01' AS month\n    UNION ALL SELECT '2024-02' UNION ALL SELECT '2024-03' UNION ALL SELECT '2024-04'\n    UNION ALL SELECT '2024-05' UNION ALL SELECT '2024-06' UNION ALL SELECT '2024-07'\n    UNION ALL SELECT '2024-08' UNION ALL SELECT '2024-09' UNION ALL SELECT '2024-10'\n    UNION ALL SELECT '2024-11' UNION ALL SELECT '2024-12' UNION ALL SELECT '2025-01'\n    UNION ALL SELECT '2025-02' UNION ALL SELECT '2025-03' UNION ALL SELECT '2025-04'\n    UNION ALL SELECT '2025-05' UNION ALL SELECT '2025-06' UNION ALL SELECT '2025-07'\n    UNION ALL SELECT '2025-08' UNION ALL SELECT '2025-09' UNION ALL SELECT '2025-10'\n    UNION ALL SELECT '2025-11' UNION ALL SELECT '2025-12' UNION ALL SELECT '2026-01'\n    UNION ALL SELECT '2026-02' UNION ALL SELECT '2026-03' UNION ALL SELECT '2026-04'\n    UNION ALL SELECT '2026-05' UNION ALL SELECT '2026-06' UNION ALL SELECT '2026-07'\n    UNION ALL SELECT '2026-08' UNION ALL SELECT '2026-09' UNION ALL SELECT '2026-10'\n),\nactive_months AS (\n    SELECT emp_id, name, month\n    FROM employed_months, months\n    WHERE month >= start_month AND month <= end_month\n),\npay_months AS (\n    SELECT DISTINCT emp_id, pay_month\n    FROM salary\n),\nmissing_pay AS (\n    SELECT a.name\n    FROM active_months a\n    LEFT JOIN pay_months p ON a.emp_id = p.emp_id AND a.month = p.pay_month\n    WHERE p.pay_month IS NULL\n)\nSELECT DISTINCT name FROM missing_pay;"
+  ],
+  "tokens": 1634,
+  "answer": "There are multiple employees who have a month with no pay record while they were employed. Since the question asks for the employee's full name and doesn't specify to list all, I'll provide the first employee from the list.\n\nAnswer: Mason Johnson"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 0,
+  "ok": true,
+  "value": "Liam Garcia",
+  "gold": "Liam Garcia",
+  "sqls": [
+   "SELECT e.id, e.name, \n       AVG(CASE WHEN s.pay_month BETWEEN '2025-01' AND '2025-12' THEN s.amount ELSE NULL END) AS avg_2025,\n       AVG(CASE WHEN s.pay_month BETWEEN '2026-01' AND '2026-10' THEN s.amount ELSE NULL END) AS avg_2026\nFROM employees e\nJOIN salary s ON e.id = s.emp_id\nWHERE e.left_on IS NULL\nGROUP BY e.id\nORDER BY avg_2026 - avg_2025 DESC\nLIMIT 1;"
+  ],
+  "tokens": 709,
+  "answer": "The employee who had the biggest raise from their 2025 monthly average to their 2026 monthly average is Liam Garcia. \n\nAnswer: Liam Garcia"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 1,
+  "ok": true,
+  "value": "Liam Garcia",
+  "gold": "Liam Garcia",
+  "sqls": [
+   "SELECT e.id, e.name, \n  (SELECT AVG(amount) FROM salary WHERE emp_id = e.id AND pay_month LIKE '2025-%') AS avg_2025, \n  (SELECT AVG(amount) FROM salary WHERE emp_id = e.id AND pay_month LIKE '2026-%') AS avg_2026\nFROM employees e\nWHERE e.left_on IS NULL;"
+  ],
+  "tokens": 1833,
+  "answer": "Calculate raise amount (2026 monthly average - 2025 monthly average) for each current employee and find the biggest raise:\n\nMason Johnson: 3790 - 3680 = 110\nElla Brown: 4430 - 4180 = 250\nLiam Garcia: 3670 - 3600 = 70\nMia Miller: 4430 - 4340 = 90\nJacob Davis: 4550 - 4290 = 260\nEmma Martinez: 5170 - 4920 = 250\nLucas Lopez: 4950 - 4760 = 190\nGrace Wilson: 3780 - 3630 = 150\nAmelia Taylor: 5660 - 5340 = 320\nOwen Thomas: 4810 - 4720 = 90\nAva Moore: 4550 - 4420 = 130\nLogan Jackson: 3890 - 3740 = 150\nChloe Martin: 4380 - 4210 = 170\nEthan Lee: 3940 - 3830 = 110\nWyatt Lewis: 4300 - 4220 = 80\nAiden Hall:"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 2,
+  "ok": false,
+  "value": "",
+  "gold": "Liam Garcia",
+  "sqls": [
+   "SELECT id, name FROM employees WHERE left_on IS NULL",
+   "SELECT emp_id, AVG(amount) as avg_2025 FROM salary WHERE pay_month LIKE '2025-%' GROUP BY emp_id",
+   "SELECT emp_id, AVG(amount) as avg_2026 FROM salary WHERE pay_month LIKE '2026-%' GROUP BY emp_id"
+  ],
+  "tokens": 2724,
+  "answer": "I have the current employees with their ids and names, their average monthly salary for 2025, and their average monthly salary for 2026. I will now calculate the raise for each current employee from 2025 to 2026 and determine the one with the biggest raise.\n\nCalculations:\n- For each employee in the lists, subtract their 2025 average from their 2026 average.\n- Find the maximum difference and return the corresponding employee's name.\n\nLet's find the employee with the biggest raise.\nconst employees = [[1, \"Mason Johnson\"], [2, \"Ella Brown\"], [3, \"Liam Garcia\"], [4, \"Mia Miller\"], [5, \"Jacob Davis"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 0,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE grade >= 4 AND left_on IS NULL"
+  ],
+  "tokens": 410,
+  "answer": "Answer: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 1,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE (grade >= 4) AND (left_on IS NULL)"
+  ],
+  "tokens": 418,
+  "answer": "Answer: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 2,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE grade >= 4 AND left_on IS NULL;"
+  ],
+  "tokens": 412,
+  "answer": "Answer: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 0,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) AS current_count FROM employees WHERE dept = 'Production Team' AND left_on IS NULL;"
+  ],
+  "tokens": 624,
+  "answer": "There are currently 9 people working on the production team.\n\nAnswer: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 1,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) AS current_production_team FROM employees WHERE dept = 'Production Team' AND left_on IS NULL;"
+  ],
+  "tokens": 628,
+  "answer": "There are 9 people currently working on the Production Team.\n\nAnswer: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B1",
+  "seed": 2,
+  "ok": true,
+  "value": "9",
+  "gold": 9,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE dept = 'Production Team' AND left_on IS NULL;"
+  ],
+  "tokens": 622,
+  "answer": "There are currently 9 people working on the production team.\n\nAnswer: 9"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 0,
+  "ok": true,
+  "value": "4.6",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT hired FROM employees WHERE left_on IS NULL"
+  ],
+  "tokens": 1462,
+  "answer": "I have the hire dates of current employees. I will calculate the length of service for each employee as of 2026-10-21 and then average those values in years with one decimal place.\n\nCalculate length_of_service = difference between 2026-10-21 and each hire date in years.\n\nThe hire dates are (YYYY-MM-DD):\n2019-12-01, 2021-12-01, 2025-01-01, 2022-09-01, 2025-04-01,\n2019-03-01, 2023-03-01, 2020-07-01, 2020-09-01, 2022-12-01,\n2023-02-01, 2025-05-01, 2024-06-01, 2021-09-01, 2026-07-01,\n2024-01-01, 2022-11-01, 2021-05-01, 2025-10-01, 2021-09-01,\n2020-03-01, 2020-07-01, 2023-09-01, 2023-11-01, 2020-11"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 1,
+  "ok": false,
+  "value": "4.7",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT hired FROM employees WHERE left_on IS NULL"
+  ],
+  "tokens": 1849,
+  "answer": "To calculate the average length of service of current employees as of 2026-10-21, I will:\n\n1. Calculate the difference in years between 2026-10-21 and each hired date.\n2. Find the average of these differences.\n3. Round the result to one decimal place.\n\nCalculations: \n(2026 + 10/12 + 21/365) - (hired_year + hired_month/12 + hired_day/365) for each hired date.\n\nLet's calculate.\nFirst, let's convert the current date to a decimal year:\n2026 + 10/12 + 21/365 ≈ 2026.86\n\nNow, I calculate the length of service for each employee by subtracting their hire date (converted to decimal year) from 2026.86:\n\n"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B2",
+  "seed": 2,
+  "ok": false,
+  "value": "5.1",
+  "gold": 4.5,
+  "sqls": [
+   "SELECT hired FROM employees WHERE left_on IS NULL"
+  ],
+  "tokens": 1601,
+  "answer": "To calculate the average length of service of current employees as of 2026-10-21:\n\nFirst, convert each hire date to a datetime, then compute the difference in years between 2026-10-21 and the hire date, and finally calculate the average of these years.\n\nCalculations:\n1. Total days of service for each employee = 2026-10-21 - hire_date\n2. Convert days to years (days / 365.25)\n3. Average those years\n\nLet's calculate.\nHire dates of current employees converted to years of service as of 2026-10-21:\n\nFrom 2019-12-01: 6.9 years\nFrom 2021-12-01: 4.9 years\nFrom 2025-01-01: 1.8 years\nFrom 2022-09-01: 4.1"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 0,
+  "ok": true,
+  "value": "4500",
+  "gold": 4500,
+  "sqls": [
+   "SELECT AVG(amount) AS avg_salary FROM salary WHERE pay_month LIKE '2025-%' AND emp_id IN (SELECT id FROM employees WHERE dept = 'Sales Team' AND (left_on IS NULL OR left_on > '2025-12-31'))"
+  ],
+  "tokens": 713,
+  "answer": "The sales team's average monthly salary in 2025 was approximately 4500 when rounded to the nearest $10.\n\nAnswer: 4500"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 1,
+  "ok": true,
+  "value": "4500",
+  "gold": 4500,
+  "sqls": [
+   "SELECT AVG(amount) AS avg_salary FROM salary WHERE pay_month LIKE '2025-%' AND emp_id IN (SELECT id FROM employees WHERE dept = 'Sales Team')"
+  ],
+  "tokens": 654,
+  "answer": "Answer: 4500"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B3",
+  "seed": 2,
+  "ok": true,
+  "value": "4500",
+  "gold": 4500,
+  "sqls": [
+   "SELECT AVG(amount) as avg_salary FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = 'Sales Team' AND s.pay_month LIKE '2025-%';"
+  ],
+  "tokens": 680,
+  "answer": "The sales team's average monthly salary in 2025 was approximately 4500. Answer: 4500"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 0,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) as hired_2026 FROM employees WHERE hired >= '2026-01-01' AND hired <= '2026-12-31';"
+  ],
+  "tokens": 616,
+  "answer": "Answer: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 1,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) AS hired_2026 FROM employees WHERE hired >= '2026-01-01' AND hired <= '2026-12-31';"
+  ],
+  "tokens": 616,
+  "answer": "Answer: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B4",
+  "seed": 2,
+  "ok": true,
+  "value": "1",
+  "gold": 1,
+  "sqls": [
+   "SELECT COUNT(*) AS hired_2026 FROM employees WHERE strftime('%Y', hired) = '2026';"
+  ],
+  "tokens": 609,
+  "answer": "There was 1 employee hired in 2026.\n\nAnswer: 1"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 0,
+  "ok": true,
+  "value": "4390",
+  "gold": 4390,
+  "sqls": [
+   "SELECT s.amount FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = 'Quality Team' AND s.pay_month BETWEEN '2025-03' AND '2025-12';"
+  ],
+  "tokens": 1201,
+  "answer": "To find the average monthly salary for the Quality Team from March through December 2025, I will calculate the mean of all the salary amounts during that period and then round to the nearest $10.\n\nSum of all amounts:\n4180*10 + 4920*10 + 5340*10 + 4210*10 + 4300*10 + 3700*10 + 3600*10 + 4420*10 + 4870*10\n= 41800 + 49200 + 53400 + 42100 + 43000 + 37000 + 36000 + 44200 + 48700\n= 395400\n\nNumber of records = 90\n\nAverage = 395400 / 90 = 4393.33\n\nRounded to the nearest 10 = 4390\n\nAnswer: 4390"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 1,
+  "ok": true,
+  "value": "4390",
+  "gold": 4390,
+  "sqls": [
+   "SELECT AVG(amount) AS avg_salary FROM salary WHERE pay_month >= '2025-03' AND pay_month <= '2025-12' AND emp_id IN (SELECT id FROM employees WHERE dept = 'Quality Team' AND (left_on IS NULL OR left_on > '2025-12-31'))"
+  ],
+  "tokens": 746,
+  "answer": "The average monthly salary for the Quality Team from March through December 2025 was approximately 4390 dollars when rounded to the nearest 10.\n\nAnswer: 4390"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B5",
+  "seed": 2,
+  "ok": true,
+  "value": "4390",
+  "gold": 4390,
+  "sqls": [
+   "SELECT AVG(s.amount) AS avg_salary FROM salary s JOIN employees e ON s.emp_id = e.id WHERE e.dept = 'Quality Team' AND s.pay_month BETWEEN '2025-03' AND '2025-12'"
+  ],
+  "tokens": 708,
+  "answer": "The average monthly salary of the Quality Team from March through December 2025 was approximately 4390. Answer: 4390"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 0,
+  "ok": false,
+  "value": "Sophia Walker",
+  "gold": "Wyatt Lewis",
+  "sqls": [
+   "SELECT e.id, e.name, e.hired, e.left_on, s.pay_month\nFROM employees e\nLEFT JOIN salary s ON e.id = s.emp_id\nWHERE (s.amount IS NULL OR s.pay_month IS NULL) AND\n      ((e.left_on IS NULL AND DATE('2024-01-01') <= DATE('now')) OR (e.left_on IS NOT NULL AND e.left_on >= '2024-01-01'))\nORDER BY e.id;"
+  ],
+  "tokens": 926,
+  "answer": "Employees Sophia Walker and Harper Clark have months with no pay record while they were employed (ignoring months before they were hired and before 2024-01). Since the question asks for the employee's full name, I will present the first employee found.\n\nAnswer: Sophia Walker"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 1,
+  "ok": true,
+  "value": "Wyatt Lewis",
+  "gold": "Wyatt Lewis",
+  "sqls": [
+   "WITH emp_months AS (\n  SELECT id, name, hired, left_on\n  FROM employees\n), months AS (\n  SELECT DATE('2024-01-01', '+' || (a.a + b.a * 10) || ' months') AS month_start\n  FROM (SELECT 0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9) a\n  CROSS JOIN (SELECT 0 AS a UNION ALL SELECT 1 UNION ALL SELECT 2) b\n  WHERE month_start <= '2026-09-01'\n), emp_month_grid AS (\n  SELECT e.id AS emp_id, e.name, \n         strftime('%Y-%m', m.month_start) AS pay_month\n  FROM emp_months e\n  JOIN months m ON (m.month_start >= date(e.hired) AND (e.left_on IS NULL OR m.month_start < date(e.left_on)))\n)\nSELECT DISTINCT g.name\nFROM emp_month_grid g\nLEFT JOIN salary s ON g.emp_id = s.emp_id AND g.pay_month = s.pay_month\nWHERE s.emp_id IS NULL\nLIMIT 1;"
+  ],
+  "tokens": 1191,
+  "answer": "The employee who has a month with no pay record while they were employed is Wyatt Lewis.\n\nAnswer: Wyatt Lewis"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B6",
+  "seed": 2,
+  "ok": true,
+  "value": "Wyatt Lewis",
+  "gold": "Wyatt Lewis",
+  "sqls": [
+   "WITH emp_months AS (\n  SELECT e.id AS emp_id, e.name, substr(dates.month, 1, 7) AS month\n  FROM employees e\n  JOIN (\n    SELECT DISTINCT substr(pay_month, 1, 7) AS month FROM salary\n    UNION\n    SELECT '2024-01' UNION SELECT '2024-02' UNION SELECT '2024-03' UNION SELECT '2024-04' UNION\n    SELECT '2024-05' UNION SELECT '2024-06' UNION SELECT '2024-07' UNION SELECT '2024-08' UNION\n    SELECT '2024-09' UNION SELECT '2024-10' UNION SELECT '2024-11' UNION SELECT '2024-12' UNION\n    SELECT '2025-01' UNION SELECT '2025-02' UNION SELECT '2025-03' UNION SELECT '2025-04' UNION\n    SELECT '2025-05' UNION SELECT '2025-06' UNION SELECT '2025-07' UNION SELECT '2025-08' UNION\n    SELECT '2025-09' UNION SELECT '2025-10' UNION SELECT '2025-11' UNION SELECT '2025-12' UNION\n    SELECT '2026-01' UNION SELECT '2026-02' UNION SELECT '2026-03' UNION SELECT '2026-04' UNION\n    SELECT '2026-05' UNION SELECT '2026-06' UNION SELECT '2026-07' UNION SELECT '2026-08' UNION\n    SELECT '2026-09'\n  ) dates ON 1=1\n  WHERE dates.month >= substr(e.hired, 1, 7)\n  AND (e.left_on IS NULL OR dates.month <= substr(e.left_on, 1, 7))\n), pay_records AS (\n  SELECT emp_id, substr(pay_month, 1, 7) AS pay_month\n  FROM salary\n)\nSELECT DISTINCT em.name\nFROM emp_months em\nLEFT JOIN pay_records pr ON em.emp_id = pr.emp_id AND em.month = pr.pay_month\nWHERE pr.pay_month IS NULL\nLIMIT 1;"
+  ],
+  "tokens": 1584,
+  "answer": "The employee who has a month with no pay record while they were employed is Wyatt Lewis. \n\nAnswer: Wyatt Lewis"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 0,
+  "ok": true,
+  "value": "Liam Garcia",
+  "gold": "Liam Garcia",
+  "sqls": [
+   "WITH emp_2025_avg AS (\n  SELECT emp_id, AVG(amount) AS avg_2025\n  FROM salary\n  WHERE pay_month LIKE '2025-%'\n  GROUP BY emp_id\n), emp_2026_avg AS (\n  SELECT emp_id, AVG(amount) AS avg_2026\n  FROM salary\n  WHERE pay_month LIKE '2026-%'\n  GROUP BY emp_id\n), current_emps AS (\n  SELECT id, name\n  FROM employees\n  WHERE left_on IS NULL\n)\nSELECT c.name, (e6.avg_2026 - e5.avg_2025) AS raise_amount\nFROM current_emps c\nJOIN emp_2025_avg e5 ON c.id = e5.emp_id\nJOIN emp_2026_avg e6 ON c.id = e6.emp_id\nORDER BY raise_amount DESC\nLIMIT 1;"
+  ],
+  "tokens": 1004,
+  "answer": "The current employee who had the biggest raise from their 2025 monthly average to their 2026 monthly average is Liam Garcia. Answer: Liam Garcia"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 1,
+  "ok": true,
+  "value": "Liam Garcia",
+  "gold": "Liam Garcia",
+  "sqls": [
+   "WITH\n-- Average monthly salary for 2025\navg_2025 AS (\n    SELECT emp_id, AVG(amount) AS avg_2025\n    FROM salary\n    WHERE pay_month LIKE '2025-%'\n    GROUP BY emp_id\n),\n-- Average monthly salary for 2026\navg_2026 AS (\n    SELECT emp_id, AVG(amount) AS avg_2026\n    FROM salary\n    WHERE pay_month LIKE '2026-%'\n    GROUP BY emp_id\n),\n-- Current employees\ncurrent_employees AS (\n    SELECT id, name\n    FROM employees\n    WHERE left_on IS NULL\n)\nSELECT ce.name, (a6.avg_2026 - a5.avg_2025) AS raise_amount\nFROM current_employees ce\nJOIN avg_2025 a5 ON ce.id = a5.emp_id\nJOIN avg_2026 a6 ON ce.id = a6.emp_id\nORDER BY raise_amount DESC\nLIMIT 1;"
+  ],
+  "tokens": 1050,
+  "answer": "The current employee who had the biggest raise from their 2025 monthly average to their 2026 monthly average is Liam Garcia.\n\nAnswer: Liam Garcia"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B7",
+  "seed": 2,
+  "ok": true,
+  "value": "Liam Garcia",
+  "gold": "Liam Garcia",
+  "sqls": [
+   "WITH avg_salary_2025 AS (\n  SELECT emp_id, AVG(amount) AS avg_2025\n  FROM salary\n  WHERE pay_month LIKE '2025-%'\n  GROUP BY emp_id\n),\navg_salary_2026 AS (\n  SELECT emp_id, AVG(amount) AS avg_2026\n  FROM salary\n  WHERE pay_month LIKE '2026-%'\n  GROUP BY emp_id\n)\nSELECT e.name, (a26.avg_2026 - a25.avg_2025) AS raise\nFROM employees e\nJOIN avg_salary_2025 a25 ON e.id = a25.emp_id\nJOIN avg_salary_2026 a26 ON e.id = a26.emp_id\nWHERE e.left_on IS NULL\nORDER BY raise DESC\nLIMIT 1;",
+   "WITH avg_salary_2025 AS (\n  SELECT emp_id, AVG(amount) AS avg_2025\n  FROM salary\n  WHERE pay_month LIKE '2025-%'\n  GROUP BY emp_id\n),\navg_salary_2026 AS (\n  SELECT emp_id, AVG(amount) AS avg_2026\n  FROM salary\n  WHERE pay_month LIKE '2026-%'\n  GROUP BY emp_id\n)\nSELECT e.name, (a26.avg_2026 - a25.avg_2025) AS raise\nFROM employees e\nJOIN avg_salary_2025 a25 ON e.id = a25.emp_id\nJOIN avg_salary_2026 a26 ON e.id = a26.emp_id\nWHERE e.left_on IS NULL\nORDER BY raise DESC\nLIMIT 1;",
+   "WITH avg_salary_2025 AS (\n  SELECT emp_id, AVG(amount) AS avg_2025\n  FROM salary\n  WHERE pay_month LIKE '2025-%'\n  GROUP BY emp_id\n),\navg_salary_2026 AS (\n  SELECT emp_id, AVG(amount) AS avg_2026\n  FROM salary\n  WHERE pay_month LIKE '2026-%'\n  GROUP BY emp_id\n)\nSELECT e.name, (a26.avg_2026 - a25.avg_2025) AS raise\nFROM employees e\nJOIN avg_salary_2025 a25 ON e.id = a25.emp_id\nJOIN avg_salary_2026 a26 ON e.id = a26.emp_id\nWHERE e.left_on IS NULL\nORDER BY raise DESC\nLIMIT 1 OFFSET 0;",
+   "WITH avg_salary_2025 AS (\n  SELECT emp_id, AVG(amount) AS avg_2025\n  FROM salary\n  WHERE pay_month LIKE '2025-%'\n  GROUP BY emp_id\n),\navg_salary_2026 AS (\n  SELECT emp_id, AVG(amount) AS avg_2026\n  FROM salary\n  WHERE pay_month LIKE '2026-%'\n  GROUP BY emp_id\n)\nSELECT e.name, (a26.avg_2026 - a25.avg_2025) AS raise\nFROM employees e\nJOIN avg_salary_2025 a25 ON e.id = a25.emp_id\nJOIN avg_salary_2026 a26 ON e.id = a26.emp_id\nWHERE e.left_on IS NULL\nORDER BY raise - 0;",
+   "WITH avg_salary_2025 AS (\n  SELECT emp_id, AVG(amount) AS avg_2025\n  FROM salary\n  WHERE pay_month LIKE '2025-%'\n  GROUP BY emp_id\n),\navg_salary_2026 AS (\n  SELECT emp_id, AVG(amount) AS avg_2026\n  FROM salary\n  WHERE pay_month LIKE '2026-%'\n  GROUP BY emp_id\n)\nSELECT e.name, (a26.avg_2026 - a25.avg_2025) AS raise\nFROM employees e\nJOIN avg_salary_2025 a25 ON e.id = a25.emp_id\nJOIN avg_salary_2026 a26 ON e.id = a26.emp_id\nWHERE e.left_on IS NULL\nORDER BY raise DESC LIMIT 1;",
+   "WITH avg_salary_2025 AS (\n SELECT emp_id, AVG(amount) AS avg_2025\n FROM salary\n WHERE pay_month LIKE '2025-%'\n GROUP BY emp_id\n),\navg_salary_2026 AS (\n SELECT emp_id, AVG(amount) AS avg_2026\n FROM salary\n WHERE pay_month LIKE '2026-%'\n GROUP BY emp_id\n)\nSELECT e.name, (a26.avg_2026 - a25.avg_2025) AS raise\nFROM employees e\nJOIN avg_salary_2025 a25 ON e.id = a25.emp_id\nJOIN avg_salary_2026 a26 ON e.id = a26.emp_id\nWHERE e.left_on IS NULL\nORDER BY raise DESC\nLIMIT 1;",
+   "WITH avg_salary_2025 AS (\n SELECT emp_id, AVG(amount) AS avg_2025\n FROM salary\n WHERE pay_month LIKE '2025-%'\n GROUP BY emp_id\n),\navg_salary_2026 AS (\n SELECT emp_id, AVG(amount) AS avg_2026\n FROM salary\n WHERE pay_month LIKE '2026-%'\n GROUP BY emp_id\n)\nSELECT e.name, (a26.avg_2026 - a25.avg_2025) AS raise\nFROM employees e\nJOIN avg_salary_2025 a25 ON e.id = a25.emp_id\nJOIN avg_salary_2026 a26 ON e.id = a26.emp_id\nWHERE e.left_on IS NULL\nORDER BY 2 DESC\nLIMIT 1;"
+  ],
+  "tokens": 9022,
+  "answer": "The current employee who had the biggest raise from their 2025 monthly average to their 2026 monthly average is Liam Garcia.\n\nAnswer: Liam Garcia"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 0,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE grade >= 4 AND left_on IS NULL;"
+  ],
+  "tokens": 590,
+  "answer": "Answer: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 1,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE grade >= 4 AND left_on IS NULL;"
+  ],
+  "tokens": 604,
+  "answer": "There are currently 6 employees who are grade 4 or higher.\n\nAnswer: 6"
+ },
+ {
+  "exp": "B",
+  "cond": "SQL2",
+  "model": "gpt-4.1-mini",
+  "q": "B8",
+  "seed": 2,
+  "ok": true,
+  "value": "6",
+  "gold": 6,
+  "sqls": [
+   "SELECT COUNT(*) AS count FROM employees WHERE grade >= 4 AND left_on IS NULL"
+  ],
+  "tokens": 604,
+  "answer": "The number of current employees who are grade 4 or higher is 6. Answer: 6"
+ }
+]
