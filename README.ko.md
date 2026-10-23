@@ -7,40 +7,150 @@
 `.env` 파일에 `OPENAI_API_KEY` 를 넣고(절대 커밋하지 마세요) 각 파일 머리말대로 `python lab.py` 를 실행합니다.
 가상 시험 데이터의 전화번호는 공개본에서 `010-0000-xxxx` 자리표시로 바꿨습니다(코드와 결과에서 같은 번호는 같은 자리표시).
 이 저장소의 코드는 MIT 라이선스입니다(`LICENSE`). 각색한 원작 과정은 원래 라이선스를 따르며 시리즈마다 적어 두었습니다.
+아래는 편마다 무엇을 해 봤고 무엇이 나왔는지와, 그 과정을 보여 주는 영상입니다. 채널: [AI워크랩](https://www.youtube.com/channel/UCKmzGL7o4zaaDQTxLxwTmKQ)
 
 ## AI 에이전트 제대로 이해하기 (ep034~046)
 
 원작 bojieli/ai-agent-book — Apache-2.0 — 예시를 새로 만들어 다시 쓴 것으로, 저자의 공식 과정이 아닙니다.
 
-| 편 | 영상 | 폴더 | 무엇을 재는가 |
-|---|---|---|---|
-| 01_agent_basics | [video](https://youtu.be/0iSV-KVNSj0) | `ai-agent-book-ko/01_agent_basics` | ep034 실습 — 가나다식품 고객 문의 에이전트. 핵심 루프를 프레임워크 없이 직접 짠다. |
-| 02_prompt_rules | [video](https://youtu.be/kvBYZtUoa5Y) | `ai-agent-book-ko/02_prompt_rules` | ep035 실습 — 시스템 프롬프트 · 도구 설명이 성능을 바꾸는가 (원서 2장 실험 2-4 방식, 가나다식품 반품 상담으로 각색). |
-| 03_agent_skills | [video](https://youtu.be/vWE5A2DKG4g) | `ai-agent-book-ko/03_agent_skills` | ep038 실습 — 스킬을 필요할 때만 펼치기 (원서 2장 실험 2-6 방식, 가나다식품 업무 스킬 9개로 각색). |
-| 04_context_compress | [video](https://youtu.be/jA9syaQtgd4) | `ai-agent-book-ko/04_context_compress` | ep039 실습 — 대화가 길어지면: 컨텍스트 압축 전략 비교 (원서 2장 실험 2-10 방식, 가나다식품 거래처 상담 하루로 각색). |
-| 05_rag_rules | [video](https://youtu.be/G3vib43f0ug) | `ai-agent-book-ko/05_rag_rules` | ep040 실습 — 사내 규정집 질의: 검색 없음 · 일반 RAG · 혼합 검색 · Agentic RAG (원서 3장 실험 3-6 · 3-8 방식, 가나다식품 규정집으로 각색). |
-| 06_tools_safety | [video](https://youtu.be/NEctp4NR0Rk) | `ai-agent-book-ko/06_tools_safety` | ep041 실습 — 도구가 100개면: 전부 넣기 · 미리 골라 넣기 · 필요할 때 찾기 (원서 4장 실험 4-1 방식) + 실행 전 승인 검토자 (4장 사전 승인). |
-| 07_rules_as_code | [video](https://youtu.be/JvgLt7Xx0h8) | `ai-agent-book-ko/07_rules_as_code` | ep042 실습 — 규칙은 코드로 (원서 5장 실험 5-5 · 5-13 방식, 가나다식품으로 각색). 모든 데이터는 가상. |
-| 08_eval_cost | [video](https://youtu.be/6vtiP_QLcXU) | `ai-agent-book-ko/08_eval_cost` | ep043 실습 — 잘 되는지 어떻게 아나: 평가와 비용 (원서 7장 Pass@k · Pass^k · LLM-as-a-Judge · 실험 7-10 비용 분해, 가나다식품으로 각색). |
-| 09_multi_agent | [video](https://youtu.be/8qIvHLS_6i4) | `ai-agent-book-ko/09_multi_agent` | ep044 실습 — 여러 에이전트가 일을 나눌 때 (원서 10장 '멀티 에이전트가 정말 나은 때' 표 10-1 · 실패 모드 '오류의 연쇄 증폭', 가나다식품으로 각색). |
-| 10_user_memory | [video](https://youtu.be/NDw1PviT8bQ) | `ai-agent-book-ko/10_user_memory` | ep045 실습 — 보너스 1: 기억하는 에이전트, 사용자 메모리 (원서 3장 '사용자 메모리 · 3단계 평가 · 메모리 저장 형식' · 실험 3-1 · 3-2 방식). |
-| 11_computer_use | [video](https://youtu.be/_CXoGzy73mM) | `ai-agent-book-ko/11_computer_use` | ep046 실습 — 보너스 2: 화면을 조작하는 에이전트 (원서 6장 '컴퓨터 사용 · 행동 공간 · 시각적 그라운딩' · 실험 6-9 방식). |
+### 01 · AI 에이전트는 무엇으로 움직이나
+
+에이전트를 30줄 루프로 직접 만들고, 컨텍스트 부품을 하나씩 빼 보며 조건마다 10번씩 돌렸습니다. 도구 정의를 빼자 10번 중 5번은 확인도 없이 "반품 가능합니다"라고 지어냈고, 도구 결과를 빼자 10번 모두 고객에게 주문번호를 다시 물었습니다. 모델 밖에서 품질을 끌어올리는 하네스(제약 · 검증 · 교정)가 왜 필요한지 여기서 시작합니다.
+
+[▶ 영상 보기](https://youtu.be/0iSV-KVNSj0) · [📁 코드](ai-agent-book-ko/01_agent_basics)
+
+### 02 · 시스템 프롬프트가 결과를 바꾼다
+
+같은 모델 · 같은 도구에 시스템 프롬프트만 바꿔 반품 상담 10건을 200번 돌렸습니다. 말투를 '반품 요정'으로 바꿔도 40/40 정답이었지만, 규칙을 '적절히 · 합리적으로'처럼 흐리자 18/40으로 떨어지고 5만 원 넘는 환불이 승인 없이 나갔습니다. 말투 말고 규칙을 숫자로 써야 하는 이유입니다.
+
+[▶ 영상 보기](https://youtu.be/kvBYZtUoa5Y) · [📁 코드](ai-agent-book-ko/02_prompt_rules)
+
+### 03 · 스킬은 전부 넣지 말고 필요할 때만
+
+업무 스킬 9개를 설명서째 프롬프트에 넣으면 36/50 정답에 요청당 약 6,900 토큰, 목록만 보여 주고 필요할 때 펼치게 하면 40/50에 약 1,760 토큰이었습니다. 그런데 스킬 설명을 '고객 응대를 돕는다'처럼 대충 쓰면 반품 스킬을 한 번도 펼치지 않았습니다. 에이전트가 설명서를 건너뛰고 빈 PPT 를 만든 문제를 코드로 막은 과정도 들어 있습니다.
+
+[▶ 영상 보기](https://youtu.be/vWE5A2DKG4g) · [📁 코드](ai-agent-book-ko/03_agent_skills)
+
+### 04 · 긴 대화, 잘라내면 결정부터 사라진다
+
+하루 20턴 동안 카탈로그 · 재고표 · 공지문이 쌓이는 영업 상담에서, 중간에 정한 사실 6개가 마지막 발주 확인서에 남는지 압축 전략 7개로 35번 쟀습니다. 아무것도 줄이지 않으면 15번째 턴에 창이 넘쳤고, 오래된 대화를 잘라내면 대화로만 정한 결제 조건을 잃었습니다. 긴 도구 결과만 요약하면 30개 중 29개를 남기면서 토큰은 4분의 1도 쓰지 않았습니다.
+
+[▶ 영상 보기](https://youtu.be/jA9syaQtgd4) · [📁 코드](ai-agent-book-ko/04_context_compress)
+
+### 05 · 회사 규정, AI가 찾아서 답할까
+
+규정집 36개 조항에 질문 20개를 조건 4개로 240번 돌렸습니다. 검색 없이는 있지도 않은 사내 헬스장 이용 시간을 지어냈습니다. 한 번 찾아 붙이는 일반 RAG 는 근거 있는 정답 42/60, 에이전트가 검색어를 다듬어 다시 찾는 Agentic RAG 는 56/60. 차이는 직급 등급표와 숙박비 조항을 이어야 하는 질문에서 났고, 숫자가 맞아도 짐작일 수 있다는 걸 그 사례로 봅니다.
+
+[▶ 영상 보기](https://youtu.be/G3vib43f0ug) · [📁 코드](ai-agent-book-ko/05_rag_rules)
+
+### 06 · 도구 100개, 전부 넣을까 골라 넣을까
+
+사내 시스템 도구 100개를 연결하고 전부 넣기 · 미리 골라 넣기 · 필요할 때 찾기로 돌렸더니, 원서의 예상과 달리 전부 넣기가 36/36 으로 가장 정확했습니다. 원인은 모델이 아니라 도구 검색이었습니다. 후보 8개 안에 정답 도구가 있으면 48/48, 없으면 0/24. 환불 · 대량 메일 · 삭제 앞에 승인 검토자를 둔 실험과, 병렬 실행 중 캐시 파일이 깨진 실수도 그대로 적었습니다.
+
+[▶ 영상 보기](https://youtu.be/NEctp4NR0Rk) · [📁 코드](ai-agent-book-ko/06_tools_safety)
+
+### 07 · 환불 실수 37번 → 0번, 규칙은 코드로
+
+반품 규칙을 프롬프트에만 쓰면 작은 모델이 48번 중 37번 잘못된 환불을 실행했습니다. 환불 도구 안에서 DB 사실로 다시 계산하는 코드 검사를 넣자 두 모델 모두 0번. 작은 모델은 '받은 날 포함' 날짜 세기를 20번이나 하루씩 틀렸고 코드가 전부 막았습니다. 인사 DB 질문도 표를 보고 세게 하면 10/24, SQL 로 계산하면 23/24 였습니다.
+
+[▶ 영상 보기](https://youtu.be/JvgLt7Xx0h8) · [📁 코드](ai-agent-book-ko/07_rules_as_code)
+
+### 08 · 평균 68% 인데 5번 연속은 44%
+
+같은 상담 16건을 5번씩 다시 돌려 '한 번이라도 맞힘'과 '5번 연속 다 맞힘'을 따로 쟀습니다. 평균 68%, Pass@5 는 81% 지만 Pass^5 는 44% 였습니다. AI 심판은 기준 없이 채점하면 정답과 39% 만 일치했고, 루브릭을 줘도 기간이 지난 환불을 4번 통과시켰습니다. 8턴 환불 작업의 비용은 프롬프트 맨 앞만 고정해도 캐시 덕에 66% 가 줄었습니다.
+
+[▶ 영상 보기](https://youtu.be/6vtiP_QLcXU) · [📁 코드](ai-agent-book-ko/08_eval_cost)
+
+### 09 · 에이전트를 여럿 두면 더 잘할까
+
+품질 클레임 12건을 혼자 처리 · 세 에이전트가 나눠 처리 · 글 검토 · 도구 검토로 144번 돌렸습니다. 혼자가 34/36 으로 가장 나았습니다. 나눠 처리하면 인계 메모에서 '50,000원 이하'가 50,000원 환불로 바뀌거나 일을 서로 떠넘겨 아무도 처리하지 않았습니다. 새 정보 없이 글만 다시 읽는 검토는 근거 없는 지적으로 환불을 한 번 더 실행해 28/36 이었습니다.
+
+[▶ 영상 보기](https://youtu.be/8qIvHLS_6i4) · [📁 코드](ai-agent-book-ko/09_multi_agent)
+
+### 10 · AI가 지난 상담을 기억할까
+
+거래처와 넉 달 동안 나눈 상담 12회를 기억하는 방식 네 가지로 질문 12개를 3번씩 돌렸습니다. 기록을 전부 넣으면 32/36, 비슷한 상담만 찾아 넣으면 22/36. 찾아 쓰기는 옛 기록만 가져와 '월 · 수 · 금이라 문제없다'고 답했고 '먼저 챙기기'는 한 번도 못 했습니다. 상담마다 메모 카드를 고쳐 쓰면 33/36 으로 가장 높았지만 인증서 만료는 카드로도 못 챙겼습니다.
+
+[▶ 영상 보기](https://youtu.be/NDw1PviT8bQ) · [📁 코드](ai-agent-book-ko/10_user_memory)
+
+### 11 · AI가 사내 화면을 직접 클릭한다면
+
+API 가 없는 업무 화면을 직접 만들어 요청 5건을 네 가지 방법으로 시켰습니다. 화면 구조에서 버튼 목록을 뽑아 번호를 붙여 주면 15/15, 스크린샷만 보고 좌표를 찍게 하면 버튼 몇 픽셀 위를 계속 누르다 0/15 에 토큰은 30배. 번호표를 칸 바깥에 그렸을 땐 6/15 였다가 안쪽으로 옮기자 14/15 가 된 시행착오도 있습니다. 한 번 성공한 순서를 코드로 굳히면 5건 모두 약 2초, 토큰 0 으로 끝났습니다.
+
+[▶ 영상 보기](https://youtu.be/_CXoGzy73mM) · [📁 코드](ai-agent-book-ko/11_computer_use)
 
 ## AI에게 일 맡기기 전에 — 시즌 2 (ep047~058)
 
 원작 rohitg00/ai-engineering-from-scratch — MIT — 예시를 새로 만들어 다시 쓴 것으로, 저자의 공식 과정이 아닙니다.
 
-| 편 | 영상 | 폴더 | 무엇을 재는가 |
-|---|---|---|---|
-| 01_outcome_first | [video](https://youtu.be/aAH6g5oSMtI) | `ai-engineering-from-scratch-ko/01_outcome_first` | ep047 실습 — 시즌 2 1편: 결과물 말고 성과부터 (원본 Phase 14 레슨 47 'Outcomes before output' · 6칸 성과 틀). |
-| 02_real_workflow | [video](https://youtu.be/tk7-q1yGr3k) | `ai-engineering-from-scratch-ko/02_real_workflow` | ep048 실습 — 시즌 2 2편: 실제 업무 흐름 찾기 (원본 Phase 14 레슨 48 'Discover the Workflow People Actually Perform'). |
-| 03_riskiest_first | [video](https://youtu.be/2BUlX9mde5g) | `ai-engineering-from-scratch-ko/03_riskiest_first` | ep049 실습 — 시즌 2 3편: 가장 위험한 가정부터 (원본 Phase 14 레슨 49 'Map Assumptions and Resolve the Riskiest One First'). |
-| 04_smallest_slice | (아직 미공개) | `ai-engineering-from-scratch-ko/04_smallest_slice` | ep050 실습 — 시즌 2 4편: 가장 작은 시험 조각 (원본 Phase 14 레슨 50 'Choose the Smallest Slice That Can Change the Decision'). |
-| 05_judgment_spec | (아직 미공개) | `ai-engineering-from-scratch-ko/05_judgment_spec` | ep051 실습 — 시즌 2 5편: 판단을 남기는 지시서 (원본 Phase 14 레슨 51 'Write Specifications That Preserve Judgment'). |
-| 06_success_metrics | (아직 미공개) | `ai-engineering-from-scratch-ko/06_success_metrics` | ep052 실습 — 시즌 2 6편: 성공 기준은 결과 보기 전에 (원본 Phase 14 레슨 52 'Design Success Metrics Before the Result Exists'). |
-| 07_stage_drift | (아직 미공개) | `ai-engineering-from-scratch-ko/07_stage_drift` | ep053 실습 — 시즌 2 7편: 시제품 · 시범 · 운영 (원본 Phase 14 레슨 53 'Choose Prototype, Pilot, or Production Deliberately'). |
-| 08_task_frame | (아직 미공개) | `ai-engineering-from-scratch-ko/08_task_frame` | ep054 실습 — 시즌 2 8편: 맡기기 전 과제 정의서 (원본 Phase 14 레슨 43 'Frame the Task Before the Agent Writes Code'). |
-| 09_evidence_plan | (아직 미공개) | `ai-engineering-from-scratch-ko/09_evidence_plan` | ep055 실습 — 시즌 2 9편: 근거 있는 실행 계획 (원본 Phase 14 레슨 44 'Build an Evidence-Backed Execution Plan'). |
-| 10_isolate_work | (아직 미공개) | `ai-engineering-from-scratch-ko/10_isolate_work` | ep056 실습 — 시즌 2 10편: 나눠 맡길 때는 칸을 나눠라 (원본 Phase 14 레슨 45 'Delegate Agent Work with Isolation and Merge Contracts'). |
-| 11_feedback_system | (아직 미공개) | `ai-engineering-from-scratch-ko/11_feedback_system` | ep057 실습 — 시즌 2 11편: 같은 지적을 두 번 하지 않으려면 (원본 Phase 14 레슨 46 'Turn Every Agent Correction into a System Improvement'). |
-| 12_feedback_ratchet | (아직 미공개) | `ai-engineering-from-scratch-ko/12_feedback_ratchet` | ep058 실습 — 시즌 2 12편: 운영하며 계속 좋아지게 (원본 Phase 14 레슨 54 'Build a Feedback Ratchet with Ownership and Retirement'). |
+### 01 · '보고서 만들어 줘' 말고 성과부터
+
+재고 26품목으로 "주간 재고 보고서 만들어 줘"를 여섯 가지 방식으로 60번 돌렸습니다. 결과물만 말하면 회의에 띄우면 안 되는 매입단가가 10번 중 최대 7번 들어갔습니다. 성과 틀 6칸을 주자 단가 노출 0, 길이는 3분의 1. 그런데 정말 중요한 '다음 입고 전에 바닥날 품목 6개 찾기'는 여전히 0/10 이었습니다. 확인 방법을 정하고 계산을 코드로 넘기자 10/10 이 됐습니다.
+
+[▶ 영상 보기](https://youtu.be/aAH6g5oSMtI) · [📁 코드](ai-engineering-from-scratch-ko/01_outcome_first)
+
+### 02 · 매뉴얼만 주면 숨은 일을 0개 찾는다
+
+반품 처리 매뉴얼은 4단계지만 처리 로그 · 메신저 · 개인 메모에는 숨은 일 7가지가 있었습니다. 단톡 사진 판정, 팀장 구두 승인, 개인 엑셀, 택배사 재입력, 금요일 마감 예외까지. 매뉴얼과 인터뷰만 주면 70개 중 0개를 찾았고 인터뷰의 "건당 5분"을 10번 모두 사실로 받았습니다. 실제 기록을 주자 54개, 단계마다 근거와 근거의 세기를 적게 하자 68개를 찾았습니다.
+
+[▶ 영상 보기](https://youtu.be/tk7-q1yGr3k) · [📁 코드](ai-engineering-from-scratch-ko/02_real_workflow)
+
+### 03 · 기준은 결과 보기 전에
+
+반품 사진 AI 판정 프로젝트의 첫 2주 계획을 세 방식으로 30개 받았습니다. 결과를 보기 전에 숫자 기준을 정한 계획은 바로 계획 2/10, 원작 방식 9/10. 그런데 서른 개 계획 모두에 같은 시험 결과(일치 82%)를 주자 30번 모두 '범위를 줄여 계속'을 골랐고, 자기 기준(85~90%)을 짚은 계획은 1개뿐이었습니다. 기준은 미리 정하고 적용은 사람이 해야 하는 이유입니다.
+
+[▶ 영상 보기](https://youtu.be/2BUlX9mde5g) · [📁 코드](ai-engineering-from-scratch-ko/03_riskiest_first)
+
+### 04 · '가장 작게 시작하자'의 함정
+
+잘못된 환불은 대부분 냉동 · 냉장 변질 건에서 나는데, "가장 작은 걸 골라"라고 하면 10번 모두 판정이 쉬운 상온 박스 파손만 시험하는 범위를 골랐습니다. 팀장이 다음 주 경영 회의를 들어 압박해도 같았습니다. '꼭 증명할 것'을 먼저 정하고 그걸 못 덮는 후보를 탈락시키게 하자 10번 모두 변질 건을 포함했습니다. 코드 채점에 실패해 사람이 직접 분류한 이야기도 있습니다.
+
+▶ 영상은 공개되면 여기에 링크합니다 · [📁 코드](ai-engineering-from-scratch-ko/04_smallest_slice)
+
+### 05 · '알아서 잘' vs 대본 vs 3단 지시서
+
+AI 상담원에게 문의 12건을 지시서 세 가지로 108번 맡겼습니다. "친절하게 알아서 잘"은 21/36 에 규정 밖 환불 53만 6천 원, 단계별 대본은 18/36 에 머리카락 · 두드러기 문의에도 쿠폰만 줬습니다. 둘 다 남의 전화번호를 알려 줬습니다. 성과 · 불변 조건 · 결정 방식(고정/범위/위임) · 예시 · 비목표 · 증거를 적은 지시서는 36/36, 규칙 위반 0. 그러면서도 쿠폰 금액과 답장 문구는 스스로 정했습니다.
+
+▶ 영상은 공개되면 여기에 링크합니다 · [📁 코드](ai-engineering-from-scratch-ko/05_judgment_spec)
+
+### 06 · 성공 기준은 결과 보기 전에
+
+'AI 1차 응답' 2주 시범 결과는 첫 응답 4시간 → 3분, 재문의율 8% → 14%, 규정 밖 환불 2건, 알레르기 문의 누락 1건이었습니다. 결과표만 보고 판단하게 하면 10번 모두 '고치면서 확대'. AI 가 측정 계획을 먼저 세워도 9번은 확대였습니다. 가드레일을 '5% 이하' 같은 비율로 잡았기 때문입니다. 사람이 '가드레일 0건, 하나라도 깨지면 보류'로 써 둔 계획을 주자 10번 모두 보류했습니다.
+
+▶ 영상은 공개되면 여기에 링크합니다 · [📁 코드](ai-engineering-from-scratch-ko/06_success_metrics)
+
+### 07 · 시제품이 몰래 운영이 되지 않게
+
+'AI 견적서 작성기' 시제품을 두고 사내 AI 비서에게 40명 공유 · 실제 단가 DB 연결 · 고객 자동 메일 · 운영 전환을 75번 요청했습니다. 그냥 비서는 위험한 요청을 5번 모두 실행했습니다. 단계 규칙을 말로 알려 줘도 공유와 운영 전환은 그대로 실행하고 '시범'이라는 이름표와 통제 이름만 붙였습니다. 도구 자체가 단계를 막게 하자 위험한 실행은 0 이 됐고, 무엇이 빠졌는지도 정확히 안내했습니다.
+
+▶ 영상은 공개되면 여기에 링크합니다 · [📁 코드](ai-engineering-from-scratch-ko/07_stage_drift)
+
+### 08 · 정의서보다 '정찰'이 먼저
+
+"단가 인상분 반영해 줘" 한 줄을 공유 폴더에서 일하는 파일 에이전트에게 네 방식으로 40번 맡겼습니다. 막연하게 맡기면 10번 모두 규칙 파일을 찾지 않고 멈췄습니다. AI 가 과제 정의서를 먼저 쓰게 하면 형식은 갖췄지만 README 를 한 번도 읽지 않았고 4번은 옛 단가 행을 덮어썼습니다. '정찰은 제약 찾기'를 알려 주자 규칙 파일을 9번 읽었고 3번은 계약서의 30일 통지 조항을 찾아 사람에게 물었습니다.
+
+▶ 영상은 공개되면 여기에 링크합니다 · [📁 코드](ai-engineering-from-scratch-ko/08_task_frame)
+
+### 09 · AI가 짠 계획, 무엇을 보고 승인하나
+
+'냉동 반품 기간 7일 → 14일' 변경의 실행 계획을 세 방식으로 30개 받았습니다. 핵심 질문은 하나 — 되돌릴 수 없는 고객 문자가 시스템 변경 뒤에 있나. 그냥 계획은 7/10, 항목마다 근거 · 의존 · 완료 증거를 적는 원작 방식은 오히려 3/10 이었습니다. 일을 잘게 쪼개다 문자 발송이 공지 문구 줄에만 이어진 겁니다. 되돌릴 수 없는 일마다 '끝난 직후 상대가 할 행동'을 검사하게 하자 6/10 으로 돌아왔습니다.
+
+▶ 영상은 공개되면 여기에 링크합니다 · [📁 코드](ai-engineering-from-scratch-ko/09_evidence_plan)
+
+### 10 · 나눠 맡길 때는 칸을 나눠라
+
+에이전트 3명이 상품 안내 문서 하나를 동시에 고치게 했습니다. 한 파일을 같이 고치면 셋 다 "완료"라고 했지만 수정 7개 중 평균 2.7개만 살아남았습니다. 마지막에 저장한 쪽이 앞사람 수정을 지운 겁니다. "네 칸만 고쳐라"라고 말로 나눠도 같았습니다. 파일 자체를 나누고 자기 파일에만 쓰게 한 뒤 코드가 이어 붙이자 10번 모두 완벽했고 가장 빨랐습니다. 한 명씩 차례로 하면 3배 느렸고 4번은 남의 칸을 망가뜨렸습니다.
+
+▶ 영상은 공개되면 여기에 링크합니다 · [📁 코드](ai-engineering-from-scratch-ko/10_isolate_work)
+
+### 11 · 같은 지적을 두 번 하지 않으려면
+
+견적서 AI 가 팀장에게 받은 지적 3가지를 어떻게 남기느냐에 따라 새 견적 20건을 비교했습니다. 받은 말을 그대로 메모하면 완벽한 견적은 0. "떡볶이는 79,270원" 메모는 10월 견적에도 11월 단가를 쓰게 했고, "부가세 별도라고 쓰지 마"는 부가세 이야기 자체를 빼 버리게 했습니다. 원인을 규칙으로 바꾸자 19/20, 어긴 규칙 이름만 알려 주는 검사기를 붙이자 20/20 이 됐습니다.
+
+▶ 영상은 공개되면 여기에 링크합니다 · [📁 코드](ai-engineering-from-scratch-ko/11_feedback_system)
+
+### 12 · 운영하며 계속 좋아지게 — 피드백 래칫
+
+운영 4주차 신호 12개를 주고 개선 계획을 두 방식으로 20개 받았습니다. 그냥 계획은 같은 원인 신호를 한 줄로 묶은 게 4번, 담당이 한 사람인 줄은 0% 였습니다. 원작의 래칫(원인으로 묶기 · 가장 이른 층 · 담당 1명 · 확인 방법 · 다시 볼 날 · 지울 조건)으로 시키자 묶기 10/10, 담당 한 사람 99%. 12주 동안 위반 0 인데 하루 40분을 쓰는 낡은 통제를 줄이자고 한 건 그냥 계획 0~1번, 래칫 5~6번 — 래칫도 통제를 오히려 늘린 경우가 있어 약점까지 적었습니다.
+
+▶ 영상은 공개되면 여기에 링크합니다 · [📁 코드](ai-engineering-from-scratch-ko/12_feedback_ratchet)
