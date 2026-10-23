@@ -155,6 +155,16 @@ AI 상담원에게 문의 12건을 지시서 세 가지로 108번 맡겼습니�
 
 ▶ 영상은 공개되면 여기에 링크합니다 · [📁 코드](ai-engineering-from-scratch-ko/12_feedback_ratchet)
 
+## 이 화면, PRD 로는 이렇게 (ep071~)
+
+공용 코드는 `tools/` 에 있다: `run_build.py`(Claude Code 비대화 빌드, 조건 A · B · C) · `grade_run.py`(DoD 테스트로 채점) · `results_table.py` · `shot_mockup.py`(목업 PNG). 편 폴더에는 `mockup.html` · `PRD.md` · `CLAUDE.md` · `tests/test_dod.py`(완료 기준 = 채점기) · `test_grade.py`(채점기 자가 시험) · `runs/`(AI 가 만든 결과물 9벌) · `results.json` · `NOTES.md`. 빌더는 Claude Code 가 필요하다(`CLAUDE_BIN` 또는 PATH 의 `claude`).
+
+### 01 · 오늘의 현황판 — 한 줄 3/9, PRD 9/9
+
+숫자 3개와 막대 1개짜리 '오늘의 현황판' 을 Claude Code 에 한 줄 요청 · PRD 10칸 · PRD + CLAUDE.md + 테스트로 각 3번 만들게 하고 Playwright 테스트 9개로 채점했습니다. 한 줄 요청은 3/9 × 3 — 취소라는 상태를 아예 안 만들었고, 빈 데이터 상태 · 갱신 시각 대신 다크 모드 · 자동 새로고침이 들어왔습니다. PRD 를 주면 9/9 × 3. CLAUDE.md 는 점수가 아니라 '끝났다' 는 말을 바꿨습니다(PRD 만: 서버를 안 띄우거나 자기 테스트를 새로 씀 → 주어진 테스트 9/9 확인 · 4줄 보고). 첫 실측은 Claude Code 가 상위 폴더의 CLAUDE.md 를 읽어 오염됐고(한 줄 요청도 9/9), 임시 폴더에서 다시 돌렸습니다.
+
+▶ 영상은 공개되면 여기에 링크합니다 · [📁 코드](screen-to-spec-ko/01_s2s_dashboard)
+
 ## 가나다식품 LLM 위키 (ep059~070)
 
 원작 Andrej Karpathy, 'LLM Wiki' (GitHub Gist, 2026-04) — 아이디어를 바탕으로 업무용 예제로 재구성, 원문 미사용 — 예시를 새로 만들어 다시 쓴 것으로, 저자의 공식 과정이 아닙니다.

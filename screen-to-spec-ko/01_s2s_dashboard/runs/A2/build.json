@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '오늘의 현황판' 웹앱을 만들어 줘. 오늘 주문 수, 재고 경고 품목 수, 미처리 문의 수 세 숫자와 최근 7일 주문 수 막대그래프가 보이면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 44452,
+ "num_turns": 6,
+ "total_cost_usd": 0.16194199999999997,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 8,
+  "cache_creation_input_tokens": 22813,
+  "cache_read_input_tokens": 122740,
+  "output_tokens": 5840,
+  "output_tokens_details": {
+   "thinking_tokens": 211
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 22813,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 610,
+    "cache_read_input_tokens": 38995,
+    "cache_creation_input_tokens": 490,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 490
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "가나다식품 '오늘의 현황판'을 만들었습니다. API와 페이지가 응답하는 것까지 확인했습니다. 브라우저 화면은 직접 열어보지 않았습니다.\n\n**실행**\n```\npip install -r requirements.txt\nuvicorn main:app --reload\n```\n실행한 뒤 http://127.0.0.1:8000 을 열면 됩니다. 처음 실행할 때 `ganada.db`가 자동으로 만들어지고 가상 데이터가 들어갑니다.\n\n**화면**\n- 카드 3개: 오늘 주문 수, 재고 경고 품목 수(재고가 안전재고보다 적은 품목), 미처리 문의 수\n- 최근 7일(오늘 포함) 주문 수 막대그래프. 오늘 막대는 진한 색이고, 막대에 마우스를 올리면 건수가 나옵니다.\n- 1분마다 자동으로 새로고침되고, 다크 모드도 지원합니다.\n- 데이터는 `/api/dashboard`가 JSON으로 내려줍니다.\n\n**가상 데이터**\n- 주문: 최근 7일 동안 하루 14~38건\n- 상품: 12개 품목, 이 중 5개가 재고 경고 상태\n- 문의: 10건, 이 중 5건이 미처리\n\n테스트 실행 기준(2026-10-23)으로는 오늘 주문 38건, 재고 경고 5개, 미처리 문의 5건이었습니다.\n\n가상 데이터를 새로 만들고 싶으면 서버를 끄고 `ganada.db`를 지운 뒤 다시 실행하세요. 파일은 `main.py`, `index.html`, `requirements.txt` 세 개입니다.",
+ "wall_s": 50.4
+}

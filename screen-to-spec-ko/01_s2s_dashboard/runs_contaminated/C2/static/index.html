@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 오늘의 현황판</title>
+<style>
+  body { font-family: "Pretendard", "Malgun Gothic", sans-serif; margin: 0; background: #f5f6f8; color: #1f2933; }
+  main { max-width: 960px; margin: 0 auto; padding: 24px; }
+  header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; }
+  h1 { font-size: 24px; margin: 0; }
+  #updated-at { color: #627d98; font-size: 14px; }
+  .cards { display: flex; gap: 16px; }
+  .card { flex: 1; background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+  .label { font-size: 14px; color: #52606d; }
+  .num { font-size: 48px; font-weight: 700; margin-top: 8px; }
+  .chart { margin-top: 24px; background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+  .chart h2 { font-size: 16px; margin: 0 0 16px; }
+  .bars { display: flex; gap: 12px; align-items: flex-end; height: 200px; }
+  .col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; }
+  .bar { width: 100%; background: #3e7cb1; border-radius: 4px 4px 0 0; }
+  .cnt { font-size: 12px; margin-bottom: 4px; }
+  .dates { display: flex; gap: 12px; margin-top: 8px; }
+  .dates span { flex: 1; text-align: center; font-size: 12px; color: #52606d; }
+  #empty-notice, #error { text-align: center; color: #52606d; padding: 40px 0; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>가나다식품 오늘의 현황판</h1>
+    <span id="updated-at" data-testid="updated-at"></span>
+  </header>
+  <section class="cards" id="cards">
+    <div class="card"><div class="label">오늘 주문</div><div class="num" data-testid="today-orders">—</div></div>
+    <div class="card"><div class="label">재고 경고</div><div class="num" data-testid="stock-alerts">—</div></div>
+    <div class="card"><div class="label">미처리 문의</div><div class="num" data-testid="open-inquiries">—</div></div>
+  </section>
+  <section class="chart">
+    <h2>최근 7일 주문</h2>
+    <div id="bars-wrap" hidden>
+      <div class="bars" id="bars"></div>
+      <div class="dates" id="dates"></div>
+    </div>
+    <div id="empty-notice" data-testid="empty-notice" hidden>데이터 없음</div>
+  </section>
+  <div id="error" hidden>불러오지 못했습니다 <button id="retry" type="button">다시 시도</button></div>
+</main>
+<script>
+const $ = (s) => document.querySelector(s);
+const ids = { today_orders: "today-orders", stock_alerts: "stock-alerts", open_inquiries: "open-inquiries" };
+
+function showError() {
+  $("#cards").hidden = true;
+  $(".chart").hidden = true;
+  $("#error").hidden = false;
+}
+
+function render(d) {
+  $("#error").hidden = true;
+  $("#cards").hidden = false;
+  $(".chart").hidden = false;
+  $("#updated-at").textContent = "갱신 " + d.updated_at;
+  for (const k in ids) {
+    $('[data-testid="' + ids[k] + '"]').textContent = d.empty ? "—" : String(d[k]);
+  }
+  $("#empty-notice").hidden = !d.empty;
+  $("#bars-wrap").hidden = d.empty;
+  if (d.empty) return;
+  const max = Math.max(1, ...d.daily_orders.map((x) => x.count));
+  $("#bars").innerHTML = d.daily_orders.map((x) =>
+    '<div class="col"><div class="cnt">' + x.count + '</div>' +
+    '<div class="bar" data-testid="daily-bar" style="height:' + (x.count / max * 160) + 'px"></div></div>').join("");
+  $("#dates").innerHTML = d.daily_orders.map((x) => "<span>" + x.date.slice(5) + "</span>").join("");
+}
+
+async function load() {
+  try {
+    const r = await fetch("/api/summary", { cache: "no-store" });
+    if (!r.ok) throw new Error(r.status);
+    render(await r.json());
+  } catch (e) {
+    showError();
+  }
+}
+$("#retry").addEventListener("click", load);
+load();
+</script>
+</body>
+</html>

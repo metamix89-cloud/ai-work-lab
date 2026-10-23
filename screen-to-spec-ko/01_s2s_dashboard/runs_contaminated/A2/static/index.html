@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>가나다식품 오늘의 현황판</title>
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--indigo:#6366F1;--indigo2:#C7D2FE;--amber:#F59E0B;--rose:#EF4444}
+*{box-sizing:border-box}
+body{margin:0;font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+main{max-width:1100px;margin:0 auto;padding:26px 34px;display:flex;flex-direction:column;gap:18px}
+.top{display:flex;justify-content:space-between;align-items:center}
+h1{margin:0;font-size:24px}
+.upd{font-size:13px;color:var(--ink2);background:#fff;border:1px solid var(--line);padding:6px 12px;border-radius:999px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card,.chart{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.lb{font-size:14px;color:var(--ink2)}
+.v{font-size:44px;font-weight:800;margin-top:6px;line-height:1}
+.v.dash{color:var(--mute)}
+.warn .v{color:var(--amber)}.alert .v{color:var(--rose)}
+.bars{height:240px;display:flex;align-items:flex-end;gap:22px;padding:30px 10px 0}
+.col{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.bar{width:100%;max-width:70px;background:var(--indigo2);border-radius:6px 6px 0 0;position:relative}
+.bar.today{background:var(--indigo)}
+.bar span{position:absolute;top:-20px;left:0;right:0;text-align:center;font-size:12px;font-weight:700;color:var(--ink2)}
+.date{font-size:12px;color:var(--mute);margin-top:6px}
+.empty{height:240px;display:flex;align-items:center;justify-content:center;color:var(--mute);font-weight:700}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:14px;padding:22px;display:flex;justify-content:space-between;align-items:center}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:8px 14px;font-weight:700;cursor:pointer}
+</style></head><body>
+<main>
+  <div class="top"><h1>가나다식품 오늘의 현황판</h1><div class="upd" data-testid="updated-at" id="upd">갱신 …</div></div>
+  <div id="body"></div>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+
+function card(cls, label, tid, v) {
+  return `<div class="card ${cls}"><div class="lb">${label}</div>` +
+    `<div class="v${v === '—' ? ' dash' : ''}" data-testid="${tid}">${v}</div></div>`;
+}
+
+function render(d) {
+  $('upd').textContent = '갱신 ' + d.updated_at;
+  const e = d.empty, n = (x) => (e ? '—' : String(x));
+  const max = Math.max(1, ...d.daily_orders.map((x) => x.count));
+  const chart = e
+    ? '<div class="empty" data-testid="empty-notice">데이터 없음</div>'
+    : '<div class="bars">' + d.daily_orders.map((x, i) =>
+        `<div class="col"><div class="bar${i === 6 ? ' today' : ''}" data-testid="daily-bar" ` +
+        `style="height:${x.count / max * 100}%"><span>${x.count}</span></div>` +
+        `<div class="date">${x.date.slice(5)}</div></div>`).join('') + '</div>';
+  $('body').innerHTML =
+    '<div class="cards">' +
+    card('', '오늘 주문', 'today-orders', n(d.today_orders)) +
+    card('warn', '재고 경고', 'stock-alerts', n(d.stock_alerts)) +
+    card('alert', '미처리 문의', 'open-inquiries', n(d.open_inquiries)) +
+    '</div><div class="chart"><div class="lb">최근 7일 주문 수</div>' + chart + '</div>';
+}
+
+async function load() {
+  try {
+    const r = await fetch('/api/summary', {cache: 'no-store'});
+    if (!r.ok) throw new Error(r.status);
+    render(await r.json());
+  } catch (err) {
+    $('upd').textContent = '갱신 실패';
+    $('body').innerHTML = '<div class="err"><div><b>불러오지 못했습니다</b></div>' +
+      '<button id="retry">다시 시도</button></div>';
+    $('retry').onclick = load;
+  }
+}
+load();
+</script>
+</body></html>

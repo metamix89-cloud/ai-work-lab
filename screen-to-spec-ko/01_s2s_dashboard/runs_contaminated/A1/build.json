@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '오늘의 현황판' 웹앱을 만들어 줘. 오늘 주문 수, 재고 경고 품목 수, 미처리 문의 수 세 숫자와 최근 7일 주문 수 막대그래프가 보이면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 83183,
+ "num_turns": 8,
+ "total_cost_usd": 0.3216828,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 44198,
+  "cache_read_input_tokens": 276968,
+  "output_tokens": 11717,
+  "output_tokens_details": {
+   "thinking_tokens": 997
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 44198,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 360,
+    "cache_read_input_tokens": 60570,
+    "cache_creation_input_tokens": 300,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 300
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (orders · stock · inquiries)\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음\n```\n\n- **위치:** `runs\\A1`\n- **실행:** 위 폴더에서 `python -m uvicorn main:app --port 8000`\n- **검증:** `tests/test_dod.py`는 상위 폴더 것을 고치지 않고, `APP_DIR`로 이 폴더를 가리켜 돌렸습니다.\n- **참고:** `seed/`의 가상 데이터는 오늘 날짜 기준으로 만들었습니다. 날짜가 바뀌면 \"오늘\" 숫자와 막대는 다시 생성해야 맞습니다.",
+ "wall_s": 96.0
+}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 오늘의 현황판</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f5f6f8; color: #222; }
+  main { max-width: 900px; margin: 0 auto; padding: 24px; }
+  header { display: flex; justify-content: space-between; align-items: baseline; }
+  h1 { font-size: 22px; margin: 0; }
+  #updated-at { color: #666; font-size: 14px; }
+  .cards { display: flex; gap: 16px; margin: 24px 0; }
+  .card { flex: 1; background: #fff; border-radius: 8px; padding: 20px; text-align: center; border: 1px solid #e0e3e8; }
+  .label { font-size: 14px; color: #555; }
+  .num { font-size: 44px; font-weight: bold; margin-top: 8px; }
+  .chart { background: #fff; border-radius: 8px; border: 1px solid #e0e3e8; padding: 20px; }
+  .chart h2 { font-size: 15px; margin: 0 0 12px; }
+  .bars { display: flex; gap: 12px; align-items: flex-end; height: 180px; }
+  .col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; }
+  .bar { width: 100%; background: #3b78e7; }
+  .cnt { font-size: 12px; margin-bottom: 2px; }
+  .dates { display: flex; gap: 12px; margin-top: 6px; }
+  .dates span { flex: 1; text-align: center; font-size: 12px; color: #666; }
+  #empty-notice { text-align: center; color: #888; padding: 60px 0; }
+  #error { text-align: center; color: #b00020; padding: 24px 0; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>가나다식품 오늘의 현황판</h1>
+    <span id="updated-at" data-testid="updated-at"></span>
+  </header>
+  <div id="error" hidden>불러오지 못했습니다 <button id="retry">다시 시도</button></div>
+  <section class="cards" id="cards">
+    <div class="card"><div class="label">오늘 주문</div><div class="num" data-testid="today-orders">—</div></div>
+    <div class="card"><div class="label">재고 경고</div><div class="num" data-testid="stock-alerts">—</div></div>
+    <div class="card"><div class="label">미처리 문의</div><div class="num" data-testid="open-inquiries">—</div></div>
+  </section>
+  <section class="chart" id="chart">
+    <h2>최근 7일 주문 수</h2>
+    <div id="empty-notice" data-testid="empty-notice" hidden>데이터 없음</div>
+    <div id="bars-wrap">
+      <div class="bars" id="bars"></div>
+      <div class="dates" id="dates"></div>
+    </div>
+  </section>
+</main>
+<script>
+const $ = (s) => document.querySelector(s);
+const tid = (id) => $('[data-testid="' + id + '"]');
+
+function render(d) {
+  $('#error').hidden = true;
+  $('#cards').hidden = false;
+  $('#chart').hidden = false;
+  $('#updated-at').textContent = '갱신 ' + d.updated_at;
+  const show = (id, v) => { tid(id).textContent = d.empty ? '—' : String(v); };
+  show('today-orders', d.today_orders);
+  show('stock-alerts', d.stock_alerts);
+  show('open-inquiries', d.open_inquiries);
+  $('#empty-notice').hidden = !d.empty;
+  $('#bars-wrap').hidden = d.empty;
+  const bars = $('#bars'), dates = $('#dates');
+  bars.innerHTML = ''; dates.innerHTML = '';
+  if (d.empty) return;
+  const max = Math.max(1, ...d.daily_orders.map((x) => x.count));
+  for (const x of d.daily_orders) {
+    const col = document.createElement('div');
+    col.className = 'col';
+    const cnt = document.createElement('div');
+    cnt.className = 'cnt'; cnt.textContent = x.count;
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.setAttribute('data-testid', 'daily-bar');
+    bar.style.height = (x.count / max * 140) + 'px';
+    col.append(cnt, bar);
+    bars.append(col);
+    const dt = document.createElement('span');
+    dt.textContent = x.date.slice(5);
+    dates.append(dt);
+  }
+}
+
+async function load() {
+  try {
+    const r = await fetch('/api/summary', { cache: 'no-store' });
+    if (!r.ok) throw new Error(r.status);
+    render(await r.json());
+  } catch (e) {
+    $('#error').hidden = false;
+    $('#cards').hidden = true;
+    $('#chart').hidden = true;
+  }
+}
+$('#retry').addEventListener('click', load);
+load();
+</script>
+</body>
+</html>

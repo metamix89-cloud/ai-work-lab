@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 오늘의 현황판</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f4f6f8; color: #1f2933; font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; }
+  main { max-width: 960px; margin: 0 auto; padding: 24px; }
+  header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; }
+  h1 { margin: 0; font-size: 24px; }
+  #updated-at { color: #6b7785; font-size: 14px; }
+  .cards { display: flex; gap: 16px; }
+  .card { flex: 1; background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .card .label { color: #6b7785; font-size: 15px; }
+  .card .num { font-size: 48px; font-weight: 700; margin-top: 8px; }
+  #error { display: none; background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  #error button { margin-left: 12px; padding: 6px 14px; cursor: pointer; }
+  .chart { margin-top: 16px; background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .chart h2 { margin: 0 0 12px; font-size: 16px; }
+  .bars { display: flex; gap: 12px; align-items: flex-end; height: 200px; border-bottom: 1px solid #cbd2d9; }
+  .col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; }
+  .bar { width: 100%; max-width: 56px; background: #2f7dd1; border-radius: 4px 4px 0 0; }
+  .count { font-size: 13px; margin-bottom: 4px; }
+  .dates { display: flex; gap: 12px; margin-top: 6px; }
+  .dates span { flex: 1; text-align: center; font-size: 13px; color: #6b7785; }
+  #empty-notice { display: none; text-align: center; color: #6b7785; padding: 80px 0; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>가나다식품 오늘의 현황판</h1>
+    <div id="updated-at" data-testid="updated-at"></div>
+  </header>
+
+  <div id="error">불러오지 못했습니다<button id="retry" type="button">다시 시도</button></div>
+
+  <section class="cards" id="cards">
+    <div class="card"><div class="label">오늘 주문</div><div class="num" data-testid="today-orders">—</div></div>
+    <div class="card"><div class="label">재고 경고</div><div class="num" data-testid="stock-alerts">—</div></div>
+    <div class="card"><div class="label">미처리 문의</div><div class="num" data-testid="open-inquiries">—</div></div>
+  </section>
+
+  <section class="chart" id="chart">
+    <h2>최근 7일 주문 수</h2>
+    <div id="bars" class="bars"></div>
+    <div id="dates" class="dates"></div>
+    <div id="empty-notice" data-testid="empty-notice">데이터 없음</div>
+  </section>
+</main>
+<script>
+const $ = (s) => document.querySelector(s);
+const val = (v) => (v === null || v === undefined ? "—" : String(v));
+
+function render(d) {
+  $("#error").style.display = "none";
+  $("#cards").style.display = "";
+  $("#chart").style.display = "";
+  $('[data-testid="today-orders"]').textContent = val(d.today_orders);
+  $('[data-testid="stock-alerts"]').textContent = val(d.stock_alerts);
+  $('[data-testid="open-inquiries"]').textContent = val(d.open_inquiries);
+  $("#updated-at").textContent = "갱신 " + d.updated_at;
+  const bars = $("#bars"), dates = $("#dates");
+  bars.innerHTML = dates.innerHTML = "";
+  $("#empty-notice").style.display = d.empty ? "block" : "none";
+  bars.style.display = dates.style.display = d.empty ? "none" : "";
+  if (d.empty) return;
+  const max = Math.max(1, ...d.daily_orders.map((x) => x.count));
+  for (const x of d.daily_orders) {
+    const col = document.createElement("div");
+    col.className = "col";
+    const n = document.createElement("div");
+    n.className = "count";
+    n.textContent = x.count;
+    const bar = document.createElement("div");
+    bar.className = "bar";
+    bar.dataset.testid = "daily-bar";
+    bar.style.height = Math.round((x.count / max) * 160) + "px";
+    col.append(n, bar);
+    bars.append(col);
+    const dl = document.createElement("span");
+    dl.textContent = x.date.slice(5);
+    dates.append(dl);
+  }
+}
+
+function fail() {
+  $("#cards").style.display = "none";
+  $("#chart").style.display = "none";
+  $("#updated-at").textContent = "";
+  $("#error").style.display = "block";
+}
+
+async function load() {
+  try {
+    const r = await fetch("/api/summary", { cache: "no-store" });
+    if (!r.ok) throw new Error(r.status);
+    render(await r.json());
+  } catch (e) {
+    fail();
+  }
+}
+$("#retry").addEventListener("click", load);
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 83471,
+ "num_turns": 11,
+ "total_cost_usd": 0.31790290000000004,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 18,
+  "cache_creation_input_tokens": 43289,
+  "cache_read_input_tokens": 417909,
+  "output_tokens": 10292,
+  "output_tokens_details": {
+   "thinking_tokens": 873
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 43289,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 215,
+    "cache_read_input_tokens": 59803,
+    "cache_creation_input_tokens": 158,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 158
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 아래 두 가지\n- 이 폴더에는 `tests/`가 없어서, 상위 폴더의 `test_dod.py`를 변경 없이 `tests/`에 복사해 돌렸습니다.\n- 데이터 없음 상태에서는 `/api/summary`의 세 숫자를 `null`로 내려줍니다. PRD에 값 규정이 없어서, 0과 구분하려고 이렇게 했습니다.",
+ "wall_s": 98.0
+}

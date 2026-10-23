@@ -1,0 +1,766 @@
+{
+ "A1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "pass",
+   "T7": "fail",
+   "T9": "fail",
+   "T8": "fail"
+  },
+  "detail": {
+   "T3": "AssertionError: assert 28 == 4\n +  where 28 = as_int('28')\n +    where '28' = metric(<Page url='http://127.0.0.1:8765/'>, 'today-orders')",
+   "T4": "AssertionError: assert 5 == 2\n +  where 5 = as_int('5')\n +    where '5' = metric(<Page url='http://127.0.0.1:8765/'>, 'stock-alerts')",
+   "T5": "AssertionError: assert 7 == 3\n +  where 7 = as_int('7')\n +    where '7' = metric(<Page url='http://127.0.0.1:8765/'>, 'open-inquiries')",
+   "T7": "AssertionError: 갱신 YYYY-MM-DD HH:MM 형식이 없음\nassert None\n +  where None = <function search at 0x0000020CC164CF60>('갱신[^\\\\n]{0,20}\\\\d{4}-\\\\d{2}-\\\\d{2}[ T]\\\\d{2}:\\\\d{2}', '가나다식품 오늘의 현황판\\n2026-10-23 기준\\n오늘 주문 수\\n28건\\n재고 경고 품목 수\\n5개\\n미처리 문의 수\\n7건\\n최근 7일 주문 수\\n21\\n17\\n20\\n34\\n30\\n34\\n28\\n10/17(토)\\n10/18(일)\\n10/19(월)\\n10/20(화)\\n10/21(수)\\n10/22(목)\\n10/23(금)')\n +    where <function search at 0x0000020CC164CF60> = re.search",
+   "T9": "urllib.error.HTTPError: HTTP Error 404: Not Found",
+   "T8": "AssertionError: assert '데이터 없음' in '가나다식품 오늘의 현황판\\n2026-10-23 기준\\n오늘 주문 수\\n28건\\n재고 경고 품목 수\\n5개\\n미처리 문의 수\\n7건\\n최근 7일 주문 수\\n21\\n17\\n20\\n34\\n30\\n34\\n28\\n10/17(토)\\n10/18(일)\\n10/19(월)\\n10/20(화)\\n10/21(수)\\n10/22(목)\\n10/23(금)'"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "14\\Lib\\urllib\\request.py:531: in error\n    return self._call_chain(*args)\n           ^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python314\\Lib\\urllib\\request.py:464: in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <urllib.request.HTTPDefaultErrorHandler object at 0x0000020CC5F52BA0>\nreq = <urllib.request.Request object at 0x0000020CC65DD6E0>\nfp = <http.client.HTTPResponse object at 0x0000020CC6223C10>, code = 404\nmsg = 'Not Found', hdrs = <http.client.HTTPMessage object at 0x0000020CC5C58050>\n\n    def http_error_default(self, req, fp, code, msg, hdrs):\n>       raise HTTPError(req.full_url, code, msg, hdrs, fp)\nE       urllib.error.HTTPError: HTTP Error 404: Not Found\n\nC:\\Python314\\Lib\\urllib\\request.py:611: HTTPError\n___________________ test_T8_empty_data_shows_dash_not_zero ____________________\n\nempty = (<test_dod.Server object at 0x0000020CC662D810>, <Page url='http://127.0.0.1:8766/'>)\n\n    def test_T8_empty_data_shows_dash_not_zero(empty):\n        _, page = empty\n        body = page.inner_text(\"body\")\n>       assert \"데이터 없음\" in body\nE       AssertionError: assert '데이터 없음' in '가나다식품 오늘의 현황판\\n2026-10-23 기준\\n오늘 주문 수\\n28건\\n재고 경고 품목 수\\n5개\\n미처리 문의 수\\n7건\\n최근 7일 주문 수\\n21\\n17\\n20\\n34\\n30\\n34\\n28\\n10/17(토)\\n10/18(일)\\n10/19(월)\\n10/20(화)\\n10/21(수)\\n10/22(목)\\n10/23(금)'\n\n_grader\\test_dod.py:320: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T3_today_orders_excludes_cancel_and_yesterday\nFAILED _grader/test_dod.py::test_T4_stock_alert_is_strictly_below_safety - As...\nFAILED _grader/test_dod.py::test_T5_open_inquiries_exclude_done - AssertionEr...\nFAILED _grader/test_dod.py::test_T7_updated_at_shown - AssertionError: 갱신 Y...\nFAILED _grader/test_dod.py::test_T9_summary_api_contract - urllib.error.HTTPE...\nFAILED _grader/test_dod.py::test_T8_empty_data_shows_dash_not_zero - Assertio...\n6 failed, 3 passed in 7.84s\n",
+  "passed": 3,
+  "routes": [
+   "/",
+   "/api/dashboard"
+  ],
+  "extra_routes": [
+   "/api/dashboard"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '오늘의 현황판' 웹앱을 만들어 줘. 오늘 주문 수, 재고 경고 품목 수, 미처리 문의 수 세 숫자와 최근 7일 주문 수 막대그래프가 보이면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 47699,
+   "num_turns": 6,
+   "total_cost_usd": 0.1612883,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 22769,
+    "cache_read_input_tokens": 122163,
+    "output_tokens": 5798,
+    "output_tokens_details": {
+     "thinking_tokens": 228
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 22769,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 702,
+      "cache_read_input_tokens": 38987,
+      "cache_creation_input_tokens": 454,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 454
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "가나다식품 '오늘의 현황판'을 만들었고, API와 페이지 응답은 테스트로 확인했습니다. 브라우저 화면은 직접 열어 보지 못했습니다.\n\n**실행 방법** (프로젝트 폴더에서):\n```\npip install -r requirements.txt\npython main.py\n```\n그다음 http://127.0.0.1:8000 을 열면 됩니다. 처음 실행할 때 `ganada.db`가 만들어지고 가상 데이터가 들어갑니다. 지금 환경에는 fastapi와 uvicorn이 이미 설치돼 있습니다.\n\n**화면 구성**\n- 상단에 카드 세 개가 있습니다. 오늘 주문 수는 28건, 재고 경고 품목 수는 5개, 미처리 문의 수는 7건입니다. 이 숫자는 테스트 실행 때 값이고, 가상 데이터는 처음 실행할 때 오늘 날짜 기준으로 만들어집니다.\n- 그 아래에 최근 7일 주문 수 막대그래프가 있습니다. 오늘 막대는 진한 색이고 막대 위에 건수가 표시됩니다.\n- 화면은 60초마다 자동으로 갱신되고, 다크 모드와 모바일 화면에도 맞춰집니다.\n- 그래프는 외부 라이브러리 없이 CSS로 그려서 인터넷이 없어도 동작합니다.\n\n**집계 기준**\n- 재고 경고는 `재고 < 안전재고`인 품목입니다.\n- 미처리 문의는 상태가 '미처리'인 문의입니다.\n\n**파일**\n- `main.py`: FastAPI 서버, DB 생성과 가상 데이터 입력, `/api/dashboard` API\n- `static/index.html`: 화면\n- `requirements.txt`: 필요한 패키지 목록\n\n가상 데이터를 다시 만들고 싶으면 `ganada.db`를 지우고 다시 실행하세요.",
+   "wall_s": 53.8
+  }
+ },
+ "A2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "pass",
+   "T7": "fail",
+   "T9": "fail",
+   "T8": "fail"
+  },
+  "detail": {
+   "T3": "AssertionError: assert 38 == 4\n +  where 38 = as_int('38')\n +    where '38' = metric(<Page url='http://127.0.0.1:8767/'>, 'today-orders')",
+   "T4": "AssertionError: assert 5 == 2\n +  where 5 = as_int('5')\n +    where '5' = metric(<Page url='http://127.0.0.1:8767/'>, 'stock-alerts')",
+   "T5": "AssertionError: assert 5 == 3\n +  where 5 = as_int('5')\n +    where '5' = metric(<Page url='http://127.0.0.1:8767/'>, 'open-inquiries')",
+   "T7": "AssertionError: 갱신 YYYY-MM-DD HH:MM 형식이 없음\nassert None\n +  where None = <function search at 0x000002CAAA1BCF60>('갱신[^\\\\n]{0,20}\\\\d{4}-\\\\d{2}-\\\\d{2}[ T]\\\\d{2}:\\\\d{2}', '가나다식품 오늘의 현황판\\n2026-10-23 기준\\n오늘 주문 수\\n38건\\n재고 경고 품목 수\\n5개\\n미처리 문의 수\\n5건\\n최근 7일 주문 수\\n0\\n10\\n20\\n30\\n40\\n34\\n10/17(토)\\n38\\n10/18(일)\\n23\\n10/19(월)\\n15\\n10/20(화)\\n23\\n10/21(수)\\n21\\n10/22(목)\\n38\\n10/23(금)')\n +    where <function search at 0x000002CAAA1BCF60> = re.search",
+   "T9": "urllib.error.HTTPError: HTTP Error 404: Not Found",
+   "T8": "AssertionError: assert '데이터 없음' in '가나다식품 오늘의 현황판\\n2026-10-23 기준\\n오늘 주문 수\\n38건\\n재고 경고 품목 수\\n5개\\n미처리 문의 수\\n5건\\n최근 7일 주문 수\\n0\\n10\\n20\\n30\\n40\\n34\\n10/17(토)\\n38\\n10/18(일)\\n23\\n10/19(월)\\n15\\n10/20(화)\\n23\\n10/21(수)\\n21\\n10/22(목)\\n38\\n10/23(금)'"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "st.py:531: in error\n    return self._call_chain(*args)\n           ^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python314\\Lib\\urllib\\request.py:464: in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <urllib.request.HTTPDefaultErrorHandler object at 0x000002CAAE9D2BA0>\nreq = <urllib.request.Request object at 0x000002CAAF05D940>\nfp = <http.client.HTTPResponse object at 0x000002CAAECA6770>, code = 404\nmsg = 'Not Found', hdrs = <http.client.HTTPMessage object at 0x000002CAABBD4050>\n\n    def http_error_default(self, req, fp, code, msg, hdrs):\n>       raise HTTPError(req.full_url, code, msg, hdrs, fp)\nE       urllib.error.HTTPError: HTTP Error 404: Not Found\n\nC:\\Python314\\Lib\\urllib\\request.py:611: HTTPError\n___________________ test_T8_empty_data_shows_dash_not_zero ____________________\n\nempty = (<test_dod.Server object at 0x000002CAAF0ADBD0>, <Page url='http://127.0.0.1:8768/'>)\n\n    def test_T8_empty_data_shows_dash_not_zero(empty):\n        _, page = empty\n        body = page.inner_text(\"body\")\n>       assert \"데이터 없음\" in body\nE       AssertionError: assert '데이터 없음' in '가나다식품 오늘의 현황판\\n2026-10-23 기준\\n오늘 주문 수\\n38건\\n재고 경고 품목 수\\n5개\\n미처리 문의 수\\n5건\\n최근 7일 주문 수\\n0\\n10\\n20\\n30\\n40\\n34\\n10/17(토)\\n38\\n10/18(일)\\n23\\n10/19(월)\\n15\\n10/20(화)\\n23\\n10/21(수)\\n21\\n10/22(목)\\n38\\n10/23(금)'\n\n_grader\\test_dod.py:320: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T3_today_orders_excludes_cancel_and_yesterday\nFAILED _grader/test_dod.py::test_T4_stock_alert_is_strictly_below_safety - As...\nFAILED _grader/test_dod.py::test_T5_open_inquiries_exclude_done - AssertionEr...\nFAILED _grader/test_dod.py::test_T7_updated_at_shown - AssertionError: 갱신 Y...\nFAILED _grader/test_dod.py::test_T9_summary_api_contract - urllib.error.HTTPE...\nFAILED _grader/test_dod.py::test_T8_empty_data_shows_dash_not_zero - Assertio...\n6 failed, 3 passed in 7.82s\n",
+  "passed": 3,
+  "routes": [
+   "/",
+   "/api/dashboard"
+  ],
+  "extra_routes": [
+   "/api/dashboard"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "index.html",
+   "main.py",
+   "requirements.txt",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '오늘의 현황판' 웹앱을 만들어 줘. 오늘 주문 수, 재고 경고 품목 수, 미처리 문의 수 세 숫자와 최근 7일 주문 수 막대그래프가 보이면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 44452,
+   "num_turns": 6,
+   "total_cost_usd": 0.16194199999999997,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 22813,
+    "cache_read_input_tokens": 122740,
+    "output_tokens": 5840,
+    "output_tokens_details": {
+     "thinking_tokens": 211
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 22813,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 610,
+      "cache_read_input_tokens": 38995,
+      "cache_creation_input_tokens": 490,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 490
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "가나다식품 '오늘의 현황판'을 만들었습니다. API와 페이지가 응답하는 것까지 확인했습니다. 브라우저 화면은 직접 열어보지 않았습니다.\n\n**실행**\n```\npip install -r requirements.txt\nuvicorn main:app --reload\n```\n실행한 뒤 http://127.0.0.1:8000 을 열면 됩니다. 처음 실행할 때 `ganada.db`가 자동으로 만들어지고 가상 데이터가 들어갑니다.\n\n**화면**\n- 카드 3개: 오늘 주문 수, 재고 경고 품목 수(재고가 안전재고보다 적은 품목), 미처리 문의 수\n- 최근 7일(오늘 포함) 주문 수 막대그래프. 오늘 막대는 진한 색이고, 막대에 마우스를 올리면 건수가 나옵니다.\n- 1분마다 자동으로 새로고침되고, 다크 모드도 지원합니다.\n- 데이터는 `/api/dashboard`가 JSON으로 내려줍니다.\n\n**가상 데이터**\n- 주문: 최근 7일 동안 하루 14~38건\n- 상품: 12개 품목, 이 중 5개가 재고 경고 상태\n- 문의: 10건, 이 중 5건이 미처리\n\n테스트 실행 기준(2026-10-23)으로는 오늘 주문 38건, 재고 경고 5개, 미처리 문의 5건이었습니다.\n\n가상 데이터를 새로 만들고 싶으면 서버를 끄고 `ganada.db`를 지운 뒤 다시 실행하세요. 파일은 `main.py`, `index.html`, `requirements.txt` 세 개입니다.",
+   "wall_s": 50.4
+  }
+ },
+ "A3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "pass",
+   "T7": "fail",
+   "T9": "fail",
+   "T8": "fail"
+  },
+  "detail": {
+   "T3": "AssertionError: assert 12 == 4\n +  where 12 = as_int('12')\n +    where '12' = metric(<Page url='http://127.0.0.1:8769/'>, 'today-orders')",
+   "T4": "AssertionError: assert 4 == 2\n +  where 4 = as_int('4')\n +    where '4' = metric(<Page url='http://127.0.0.1:8769/'>, 'stock-alerts')",
+   "T5": "AssertionError: assert 5 == 3\n +  where 5 = as_int('5')\n +    where '5' = metric(<Page url='http://127.0.0.1:8769/'>, 'open-inquiries')",
+   "T7": "AssertionError: 갱신 YYYY-MM-DD HH:MM 형식이 없음\nassert None\n +  where None = <function search at 0x000001CB14B1CF60>('갱신[^\\\\n]{0,20}\\\\d{4}-\\\\d{2}-\\\\d{2}[ T]\\\\d{2}:\\\\d{2}', '가나다식품 오늘의 현황판\\n2026-10-23\\n오늘 주문 수\\n12건\\n재고 경고 품목 수\\n4개\\n미처리 문의 수\\n5건\\n최근 7일 주문 수\\n11\\n10\\n19\\n16\\n23\\n11\\n12\\n10/17(토)\\n10/18(일)\\n10/19(월)\\n10/20(화)\\n10/21(수)\\n10/22(목)\\n오늘')\n +    where <function search at 0x000001CB14B1CF60> = re.search",
+   "T9": "urllib.error.HTTPError: HTTP Error 404: Not Found",
+   "T8": "AssertionError: assert '데이터 없음' in '가나다식품 오늘의 현황판\\n2026-10-23\\n오늘 주문 수\\n12건\\n재고 경고 품목 수\\n4개\\n미처리 문의 수\\n5건\\n최근 7일 주문 수\\n11\\n10\\n19\\n16\\n23\\n11\\n12\\n10/17(토)\\n10/18(일)\\n10/19(월)\\n10/20(화)\\n10/21(수)\\n10/22(목)\\n오늘'"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": ":\\Python314\\Lib\\urllib\\request.py:531: in error\n    return self._call_chain(*args)\n           ^^^^^^^^^^^^^^^^^^^^^^^\nC:\\Python314\\Lib\\urllib\\request.py:464: in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <urllib.request.HTTPDefaultErrorHandler object at 0x000001CB193C2BA0>\nreq = <urllib.request.Request object at 0x000001CB19A4D6E0>\nfp = <http.client.HTTPResponse object at 0x000001CB19693D30>, code = 404\nmsg = 'Not Found', hdrs = <http.client.HTTPMessage object at 0x000001CB190C8050>\n\n    def http_error_default(self, req, fp, code, msg, hdrs):\n>       raise HTTPError(req.full_url, code, msg, hdrs, fp)\nE       urllib.error.HTTPError: HTTP Error 404: Not Found\n\nC:\\Python314\\Lib\\urllib\\request.py:611: HTTPError\n___________________ test_T8_empty_data_shows_dash_not_zero ____________________\n\nempty = (<test_dod.Server object at 0x000001CB19A9D810>, <Page url='http://127.0.0.1:8770/'>)\n\n    def test_T8_empty_data_shows_dash_not_zero(empty):\n        _, page = empty\n        body = page.inner_text(\"body\")\n>       assert \"데이터 없음\" in body\nE       AssertionError: assert '데이터 없음' in '가나다식품 오늘의 현황판\\n2026-10-23\\n오늘 주문 수\\n12건\\n재고 경고 품목 수\\n4개\\n미처리 문의 수\\n5건\\n최근 7일 주문 수\\n11\\n10\\n19\\n16\\n23\\n11\\n12\\n10/17(토)\\n10/18(일)\\n10/19(월)\\n10/20(화)\\n10/21(수)\\n10/22(목)\\n오늘'\n\n_grader\\test_dod.py:320: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T3_today_orders_excludes_cancel_and_yesterday\nFAILED _grader/test_dod.py::test_T4_stock_alert_is_strictly_below_safety - As...\nFAILED _grader/test_dod.py::test_T5_open_inquiries_exclude_done - AssertionEr...\nFAILED _grader/test_dod.py::test_T7_updated_at_shown - AssertionError: 갱신 Y...\nFAILED _grader/test_dod.py::test_T9_summary_api_contract - urllib.error.HTTPE...\nFAILED _grader/test_dod.py::test_T8_empty_data_shows_dash_not_zero - Assertio...\n6 failed, 3 passed in 7.83s\n",
+  "passed": 3,
+  "routes": [
+   "/",
+   "/api/dashboard"
+  ],
+  "extra_routes": [
+   "/api/dashboard"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '오늘의 현황판' 웹앱을 만들어 줘. 오늘 주문 수, 재고 경고 품목 수, 미처리 문의 수 세 숫자와 최근 7일 주문 수 막대그래프가 보이면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 40746,
+   "num_turns": 5,
+   "total_cost_usd": 0.15211149999999998,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 6,
+    "cache_creation_input_tokens": 22296,
+    "cache_read_input_tokens": 88255,
+    "output_tokens": 5409,
+    "output_tokens_details": {
+     "thinking_tokens": 175
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 22296,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 623,
+      "cache_read_input_tokens": 38474,
+      "cache_creation_input_tokens": 494,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 494
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "가나다식품 '오늘의 현황판'을 만들었고, API와 페이지가 응답하는 것까지 확인했습니다. 브라우저 화면은 열어 보지 않았습니다.\n\n**실행 방법** (작업 폴더에서):\n```\npip install -r requirements.txt\nuvicorn main:app --reload\n```\n그다음 http://127.0.0.1:8000 에 접속하면 됩니다.\n\n**화면 구성**\n- **숫자 세 개:** 오늘 주문 수, 재고 경고 품목 수(재고가 안전재고보다 적은 품목), 미처리 문의 수를 보여 줍니다.\n- **막대그래프:** 최근 7일(오늘 포함) 일별 주문 수입니다. 오늘 막대는 진하게, 막대 위에 건수가 표시됩니다. 외부 라이브러리 없이 HTML과 CSS로 그렸습니다.\n- **자동 갱신:** 60초마다 데이터를 다시 불러옵니다.\n\n**가상 데이터**\n- 처음 실행할 때 `ganada.db`가 자동으로 만들어지고 가상 데이터가 들어갑니다.\n- 주문은 최근 7일치가 오늘 날짜 기준으로 생성되고, 고정 시드를 써서 실행할 때마다 같은 값이 나옵니다.\n- 테스트 시점 값은 오늘 주문 12건, 재고 경고 4개, 미처리 문의 5건입니다.\n- 데이터를 새로 만들고 싶으면 `ganada.db`를 지우고 다시 실행하세요.\n\n**파일**\n- `main.py`: DB 생성, 가상 데이터, `/api/dashboard` API\n- `static/index.html`: 화면\n- `requirements.txt`",
+   "wall_s": 46.9
+  }
+ },
+ "B1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T9": "pass",
+   "T8": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 7.20s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/summary"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 86838,
+   "num_turns": 11,
+   "total_cost_usd": 0.29697340000000005,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 34365,
+    "cache_read_input_tokens": 225294,
+    "output_tokens": 13696,
+    "output_tokens_details": {
+     "thinking_tokens": 681
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 34365,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 750,
+      "cache_read_input_tokens": 50676,
+      "cache_creation_input_tokens": 361,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 361
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD.md대로 웹앱을 만들었습니다. 집계 함수는 직접 호출해 값을 확인했고, 서버를 띄워 브라우저에서 화면을 확인하지는 못했습니다. `tests/test_dod.py`는 폴더에 없어서 9개 완료 기준(T1~T9)은 돌려 보지 못했습니다.\n\n집계 함수의 결과는 오늘 주문 4, 재고 경고 2, 미처리 문의 3이고, 막대 7칸에는 주문 0건인 날 2칸이 포함됩니다. 이 값은 PRD의 T3~T6 기대값과 일치합니다.\n\n**만든 파일**\n- `main.py`: 서버를 시작할 때마다 `dash.db`를 지우고 `seed/` CSV 3개로 `dash_orders`·`dash_stock`·`dash_inquiries`를 새로 만듭니다. `GET /api/summary`와 `/`를 제공합니다.\n- `static/index.html`: 순수 HTML/JS 화면입니다. 지표 카드 3개, `div` 막대 7개, 날짜(MM-DD), `갱신 …` 시각이 있습니다. `data-testid` 이름은 PRD 그대로입니다.\n- `seed/`: 주문 14건·재고 6품목·문의 6건의 가상 데이터입니다.\n- 세 CSV가 모두 비어 있거나 없으면 숫자 자리에 `—`와 `데이터 없음`이 나옵니다. API가 실패하면 `불러오지 못했습니다`와 다시 시도 버튼이 나옵니다.\n\n**주의할 점**\n- 시드 데이터의 날짜가 2026-10-23 기준으로 고정돼 있습니다. 다른 날 서버를 띄우면 \"오늘 주문\"과 막대는 0이 됩니다. 날짜를 오늘 기준으로 자동 생성하게 바꿀 수도 있습니다.\n- 서버를 직접 띄운 적이 없습니다. 실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`입니다.",
+   "wall_s": 92.6
+  }
+ },
+ "B2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T9": "pass",
+   "T8": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 7.20s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/summary"
+  ],
+  "extra_routes": [],
+  "tests_modified": true,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 81041,
+   "num_turns": 13,
+   "total_cost_usd": 0.28645059999999994,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 33972,
+    "cache_read_input_tokens": 222586,
+    "output_tokens": 12828,
+    "output_tokens_details": {
+     "thinking_tokens": 506
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 33972,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1020,
+      "cache_read_input_tokens": 49739,
+      "cache_creation_input_tokens": 905,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 905
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD대로 현황판을 만들었습니다. 내가 쓴 테스트 5개는 통과했지만, 브라우저에서 화면을 직접 열어보지는 못했습니다. 막대와 카드 렌더링, 오류 상태는 아직 눈으로 확인하지 않았습니다.\n\n**실행:** 프로젝트 폴더에서 `python -m uvicorn main:app --port 8000`을 실행하면 됩니다. `PORT` 환경 변수가 있으면 그 포트를 쓰라는 규칙은 uvicorn 명령 자체가 처리하지 않아서 따로 구현하지 않았습니다. 필요하면 `--port $PORT`처럼 넘기세요.\n\n**만든 파일**\n- `main.py`: 서버가 시작할 때마다 `dash.db`를 지우고 CSV 3개로 `dash_orders`, `dash_stock`, `dash_inquiries`를 새로 만듭니다. `GET /api/summary`는 R1~R6 계산식대로 집계하고, 매 요청마다 다시 계산합니다.\n- `static/index.html`: 프레임워크 없이 만든 한 페이지입니다. 카드 3개, `div` 막대 7개(주문 0건인 날도 높이 0으로 그림), `갱신 …` 시각, 데이터 없음 상태, 오류 상태와 다시 시도 버튼이 있습니다. `data-testid` 이름은 PRD 그대로 썼습니다.\n- `seed/`: 주문 14건, 재고 6품목, 문의 6건의 가상 데이터입니다. 이 데이터로 오늘 주문 4, 재고 경고 2, 미처리 문의 3이 나옵니다.\n- `tests/test_dod.py`: PRD에 `tests/test_dod.py`가 완료 기준이라고 되어 있는데 파일이 없어서, PRD의 T1~T9를 5개 테스트로 묶어 새로 썼습니다. 실행은 `python -m pytest tests`입니다(`pytest`와 `httpx`가 있어야 합니다).\n\n**알아둘 점**\n- 가상 데이터의 날짜는 2026-10-23 기준으로 고정되어 있습니다. 다른 날 서버를 띄우면 \"오늘\" 숫자가 달라지니, 그때는 CSV 날짜를 바꿔야 합니다. 내 테스트는 날짜를 실행 시점 기준으로 생성하므로 이 영향을 받지 않습니다.\n- 내 테스트는 서버 API와 HTML 문자열만 확인합니다. 막대 7개나 `—` 표시가 실제 화면에 그려지는지는 확인하지 못했습니다.\n- 데이터 없음 상태에서는 API가 세 숫자를 `0`이 아니라 `null`로 내려보내고, 화면이 이를 `—`로 보여줍니다.",
+   "wall_s": 88.8
+  }
+ },
+ "B3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T9": "pass",
+   "T8": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 7.20s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/summary"
+  ],
+  "extra_routes": [],
+  "tests_modified": true,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 84442,
+   "num_turns": 12,
+   "total_cost_usd": 0.2900004,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 34061,
+    "cache_read_input_tokens": 224124,
+    "output_tokens": 13132,
+    "output_tokens_details": {
+     "thinking_tokens": 948
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 34061,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 875,
+      "cache_read_input_tokens": 50042,
+      "cache_creation_input_tokens": 691,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 691
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD.md대로 웹앱을 만들었습니다. 집계 API는 `seed/` 기본 데이터에서 오늘 주문 4, 재고 경고 2, 미처리 문의 3을 돌려줍니다. 브라우저 화면은 열어 보지 않았습니다. 화면 로직(`static/index.html`)은 코드로만 확인했고, 자동 테스트는 API와 HTML 텍스트까지만 확인합니다.\n\n`tests/test_dod.py`는 폴더에 없어서 제가 새로 썼습니다. PRD의 T1~T9를 5개 테스트로 묶었고 모두 통과했습니다. 원래 쓰기로 한 테스트가 따로 있다면 그쪽 기준으로 다시 확인해야 합니다.\n\n**실행:** 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`을 실행하면 됩니다. `PORT` 환경 변수는 제가 따로 코드로 읽지 않습니다. 포트를 바꾸려면 `--port`에 그 값을 직접 넘겨야 합니다. 이 부분은 PRD와 다르니 필요하면 알려 주세요.\n\n**파일 구성:**\n- `main.py`는 서버를 시작할 때마다 `dash.db`를 지우고 `seed/` CSV 3개로 `dash_orders`, `dash_stock`, `dash_inquiries`를 다시 만듭니다. `GET /api/summary`는 요청마다 새로 집계하고 R1~R6을 따릅니다.\n- `static/index.html`은 순수 HTML/JS로, 지표 카드 3개와 `div` 막대 7개를 그립니다. 갱신 시각, 데이터 없음(`—`, `데이터 없음`), 오류(`불러오지 못했습니다`와 다시 시도 버튼) 상태도 있습니다. `data-testid`는 PRD의 이름 그대로입니다.\n- `seed/`에는 주문 14건, 재고 6품목, 문의 6건이 들어 있습니다.\n\n**알아둘 점:**\n- 시드 데이터의 날짜는 2026-10-23 기준으로 고정돼 있습니다. 다른 날 실행하면 오늘 주문이 0으로 나옵니다.\n- CSV를 다른 곳에서 읽게 하는 `SEED_DIR` 환경 변수는 테스트를 위해 제가 추가한 것입니다. PRD에는 없습니다.",
+   "wall_s": 91.9
+  }
+ },
+ "C1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T9": "pass",
+   "T8": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 7.68s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/summary"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 55951,
+   "num_turns": 13,
+   "total_cost_usd": 0.2790132,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 38077,
+    "cache_read_input_tokens": 342632,
+    "output_tokens": 9241,
+    "output_tokens_details": {
+     "thinking_tokens": 356
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 38077,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 65,
+      "cache_read_input_tokens": 54548,
+      "cache_creation_input_tokens": 201,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 201
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음",
+   "wall_s": 69.9
+  }
+ },
+ "C2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T9": "pass",
+   "T8": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 8.71s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/summary"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 71164,
+   "num_turns": 12,
+   "total_cost_usd": 0.27593120000000004,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 37710,
+    "cache_read_input_tokens": 340092,
+    "output_tokens": 9105,
+    "output_tokens_details": {
+     "thinking_tokens": 332
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 37710,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 69,
+      "cache_read_input_tokens": 54148,
+      "cache_creation_input_tokens": 234,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 234
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음\n```",
+   "wall_s": 84.1
+  }
+ },
+ "C3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T9": "pass",
+   "T8": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 7.18s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/summary"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 63595,
+   "num_turns": 9,
+   "total_cost_usd": 0.2669965,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 37612,
+    "cache_read_input_tokens": 236945,
+    "output_tokens": 9283,
+    "output_tokens_details": {
+     "thinking_tokens": 359
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 37612,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 65,
+      "cache_read_input_tokens": 53975,
+      "cache_creation_input_tokens": 309,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 309
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음",
+   "wall_s": 76.1
+  }
+ }
+}

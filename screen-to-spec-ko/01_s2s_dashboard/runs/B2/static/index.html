@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 오늘의 현황판</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f4f6f8; color: #222; }
+  main { max-width: 860px; margin: 0 auto; padding: 24px; }
+  header { display: flex; justify-content: space-between; align-items: baseline; }
+  h1 { font-size: 22px; margin: 0; }
+  .updated { color: #666; font-size: 14px; }
+  .cards { display: flex; gap: 16px; margin: 24px 0; }
+  .card { flex: 1; background: #fff; border-radius: 8px; padding: 20px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+  .label { color: #555; font-size: 15px; }
+  .num { font-size: 44px; font-weight: bold; margin-top: 8px; }
+  .chart { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+  .chart h2 { font-size: 15px; margin: 0 0 12px; color: #555; }
+  .bars { display: flex; gap: 12px; align-items: flex-end; height: 180px; }
+  .col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; }
+  .bar { width: 100%; background: #3b82f6; border-radius: 4px 4px 0 0; }
+  .cnt { font-size: 13px; margin-bottom: 4px; }
+  .dates { display: flex; gap: 12px; margin-top: 6px; }
+  .dates span { flex: 1; text-align: center; font-size: 12px; color: #666; }
+  .empty { text-align: center; color: #888; padding: 60px 0; }
+  #error { display: none; text-align: center; background: #fff; padding: 30px; border-radius: 8px; margin: 24px 0; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>가나다식품 오늘의 현황판</h1>
+    <span class="updated" data-testid="updated-at"></span>
+  </header>
+  <div id="error"><p>불러오지 못했습니다</p><button id="retry">다시 시도</button></div>
+  <section class="cards" id="cards">
+    <div class="card"><div class="label">오늘 주문</div><div class="num" data-testid="today-orders">—</div></div>
+    <div class="card"><div class="label">재고 경고</div><div class="num" data-testid="stock-alerts">—</div></div>
+    <div class="card"><div class="label">미처리 문의</div><div class="num" data-testid="open-inquiries">—</div></div>
+  </section>
+  <section class="chart" id="chart">
+    <h2>최근 7일 주문 수</h2>
+    <div id="chart-body"></div>
+  </section>
+</main>
+<script>
+const $ = (t) => document.querySelector('[data-testid="' + t + '"]');
+const set = (t, v) => { $(t).textContent = v === null || v === undefined ? "—" : String(v); };
+
+function render(d) {
+  document.getElementById("error").style.display = "none";
+  document.getElementById("cards").style.display = "flex";
+  document.getElementById("chart").style.display = "block";
+  $("updated-at").textContent = "갱신 " + d.updated_at;
+  set("today-orders", d.today_orders);
+  set("stock-alerts", d.stock_alerts);
+  set("open-inquiries", d.open_inquiries);
+  const body = document.getElementById("chart-body");
+  body.textContent = "";
+  if (d.empty) {
+    const n = document.createElement("div");
+    n.className = "empty";
+    n.setAttribute("data-testid", "empty-notice");
+    n.textContent = "데이터 없음";
+    body.appendChild(n);
+    return;
+  }
+  const max = Math.max(1, ...d.daily_orders.map((x) => x.count));
+  const bars = document.createElement("div");
+  bars.className = "bars";
+  const dates = document.createElement("div");
+  dates.className = "dates";
+  for (const x of d.daily_orders) {
+    const col = document.createElement("div");
+    col.className = "col";
+    const cnt = document.createElement("div");
+    cnt.className = "cnt";
+    cnt.textContent = x.count;
+    const bar = document.createElement("div");
+    bar.className = "bar";
+    bar.setAttribute("data-testid", "daily-bar");
+    bar.style.height = Math.round((x.count / max) * 140) + "px";
+    col.append(cnt, bar);
+    bars.appendChild(col);
+    const lab = document.createElement("span");
+    lab.textContent = x.date.slice(5);
+    dates.appendChild(lab);
+  }
+  body.append(bars, dates);
+}
+
+function showError() {
+  document.getElementById("cards").style.display = "none";
+  document.getElementById("chart").style.display = "none";
+  document.getElementById("error").style.display = "block";
+}
+
+async function load() {
+  try {
+    const r = await fetch("/api/summary", { cache: "no-store" });
+    if (!r.ok) throw new Error(r.status);
+    render(await r.json());
+  } catch (e) {
+    showError();
+  }
+}
+document.getElementById("retry").addEventListener("click", load);
+load();
+</script>
+</body>
+</html>

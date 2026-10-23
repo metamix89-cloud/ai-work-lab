@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 오늘의 현황판</title>
+<style>
+  :root {
+    --bg: #f5f6f8; --card: #fff; --text: #1f2733; --muted: #6b7686;
+    --line: #e3e7ed; --bar: #2f6fed; --bar-today: #1546b8;
+    --warn: #d9480f; --info: #b45309;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #14181f; --card: #1d232d; --text: #e8ecf2; --muted: #93a0b3;
+            --line: #2c3542; --bar: #5b90ff; --bar-today: #8fb3ff; --warn: #ff8a5c; --info: #f5b94a; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font-family: "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif; }
+  main { max-width: 960px; margin: 0 auto; padding: 28px 20px 48px; }
+  header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; }
+  h1 { font-size: 22px; margin: 0; }
+  .date { color: var(--muted); font-size: 14px; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card, .chart { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
+  .card .label { color: var(--muted); font-size: 14px; }
+  .card .value { font-size: 44px; font-weight: 700; margin-top: 8px; font-variant-numeric: tabular-nums; }
+  .card .unit { font-size: 16px; font-weight: 400; color: var(--muted); margin-left: 4px; }
+  .card.warn .value { color: var(--warn); }
+  .card.info .value { color: var(--info); }
+  .chart { margin-top: 16px; }
+  .chart h2 { font-size: 16px; margin: 0 0 16px; }
+  .bars { display: flex; align-items: flex-end; gap: 14px; height: 240px; border-bottom: 1px solid var(--line); }
+  .bar-col { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }
+  .bar-val { font-size: 13px; font-weight: 600; margin-bottom: 4px; font-variant-numeric: tabular-nums; }
+  .bar { width: 100%; max-width: 64px; background: var(--bar); border-radius: 6px 6px 0 0; min-height: 2px;
+         transition: height .4s ease; }
+  .bar.today { background: var(--bar-today); }
+  .labels { display: flex; gap: 14px; margin-top: 8px; }
+  .labels span { flex: 1; text-align: center; font-size: 12px; color: var(--muted); }
+  .labels span.today { color: var(--text); font-weight: 700; }
+  .err { color: var(--warn); margin-top: 12px; }
+  @media (max-width: 640px) { .cards { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>가나다식품 오늘의 현황판</h1>
+    <span class="date" id="date"></span>
+  </header>
+
+  <section class="cards">
+    <div class="card"><div class="label">오늘 주문 수</div>
+      <div class="value"><span id="orders">-</span><span class="unit">건</span></div></div>
+    <div class="card warn"><div class="label">재고 경고 품목 수</div>
+      <div class="value"><span id="stock">-</span><span class="unit">개</span></div></div>
+    <div class="card info"><div class="label">미처리 문의 수</div>
+      <div class="value"><span id="inq">-</span><span class="unit">건</span></div></div>
+  </section>
+
+  <section class="chart">
+    <h2>최근 7일 주문 수</h2>
+    <div class="bars" id="bars"></div>
+    <div class="labels" id="labels"></div>
+  </section>
+  <div class="err" id="err"></div>
+</main>
+
+<script>
+async function load() {
+  try {
+    const res = await fetch("/api/dashboard");
+    if (!res.ok) throw new Error(res.status);
+    const d = await res.json();
+
+    document.getElementById("date").textContent = d.today + " 기준";
+    document.getElementById("orders").textContent = d.today_orders;
+    document.getElementById("stock").textContent = d.low_stock_items;
+    document.getElementById("inq").textContent = d.pending_inquiries;
+
+    const max = Math.max(...d.daily_orders.map(x => x.orders), 1);
+    const bars = document.getElementById("bars");
+    const labels = document.getElementById("labels");
+    bars.innerHTML = labels.innerHTML = "";
+    d.daily_orders.forEach((x, i) => {
+      const isToday = x.date === d.today;
+      const col = document.createElement("div");
+      col.className = "bar-col";
+      col.innerHTML = `<div class="bar-val">${x.orders}</div>
+        <div class="bar${isToday ? " today" : ""}" style="height:${(x.orders / max) * 85}%"
+             title="${x.label}: ${x.orders}건"></div>`;
+      bars.appendChild(col);
+      const l = document.createElement("span");
+      l.textContent = x.label;
+      if (isToday) l.className = "today";
+      labels.appendChild(l);
+    });
+    document.getElementById("err").textContent = "";
+  } catch (e) {
+    document.getElementById("err").textContent = "데이터를 불러오지 못했습니다: " + e.message;
+  }
+}
+load();
+setInterval(load, 60000);
+</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>가나다식품 오늘의 현황판 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 1편 목업. 가상 회사 · 가상 숫자. ?state=ok|empty|error 로 상태 3개. Mock-IT 라이트 테마. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--card:#FFFFFF;--indigo:#6366F1;--indigo2:#C7D2FE;--emerald:#10B981;--amber:#F59E0B;--rose:#EF4444}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:var(--indigo);display:inline-block}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#EEF0FF;color:var(--indigo);font-weight:700}
+.main{padding:26px 34px 22px 34px;display:flex;flex-direction:column;gap:18px}
+.top{display:flex;justify-content:space-between;align-items:flex-end}
+h1{margin:0;font-size:24px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:13px;margin-top:4px}
+.upd{font-size:13px;color:var(--ink2);background:#fff;border:1px solid var(--line);padding:6px 12px;border-radius:999px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;position:relative}
+.card .lb{font-size:14px;color:var(--ink2);display:flex;justify-content:space-between}
+.card .lb small{color:var(--mute);font-size:12px}
+.card .v{font-size:44px;font-weight:800;letter-spacing:-1px;margin-top:6px;line-height:1}
+.card .v em{font-style:normal;font-size:18px;color:var(--mute);font-weight:600;margin-left:4px}
+.card .foot{font-size:12px;color:var(--mute);margin-top:10px}
+.card.warn .v{color:var(--amber)}.card.alert .v{color:var(--rose)}
+.chart{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px 12px;flex:1;display:flex;flex-direction:column;min-height:0}
+.chart .lb{font-size:14px;color:var(--ink2);display:flex;justify-content:space-between}
+.bars{flex:1;display:flex;align-items:flex-end;gap:22px;padding:14px 10px 0;min-height:0}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.bar{width:100%;max-width:70px;background:var(--indigo2);border-radius:6px 6px 0 0;position:relative}
+.bar.today{background:var(--indigo)}
+.bar span{position:absolute;top:-20px;left:0;right:0;text-align:center;font-size:12px;color:var(--ink2);font-weight:700}
+.date{font-size:12px;color:var(--mute);margin-top:6px}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mute);gap:6px}
+.empty b{font-size:16px;color:var(--ink2)}.empty small{font-size:12px}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:14px;padding:22px;display:flex;justify-content:space-between;align-items:center;font-size:15px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:8px 14px;font-size:14px;font-weight:700}
+.dash{color:var(--mute)}
+</style></head><body>
+<div class="app">
+ <div class="side">
+  <div class="logo"><i></i>가나다식품</div>
+  <div class="nav"><div class="on">오늘의 현황판</div><div>주문</div><div>재고</div><div>문의</div><div>거래처</div></div>
+ </div>
+ <div class="main" id="main"></div>
+</div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const today=new Date('2026-10-23T09:00:00');
+const days=[...Array(7)].map((_,i)=>{const d=new Date(today);d.setDate(d.getDate()-6+i);return (d.getMonth()+1).toString().padStart(2,'0')+'-'+d.getDate().toString().padStart(2,'0');});
+const counts=[0,1,2,0,3,2,4];
+const head=(upd)=>`<div class="top"><div><h1>오늘의 현황판</h1><div class="sub">영업지원팀 · 주문 · 재고 · 문의를 한 화면에서</div></div><div class="upd">${upd}</div></div>`;
+let html='';
+if(state==='ok'){
+  html=head('갱신 2026-10-23 09:00')+`
+  <div class="cards">
+   <div class="card"><div class="lb">오늘 주문<small>취소 제외</small></div><div class="v">4<em>건</em></div><div class="foot">주문 시각이 오늘인 주문 · 취소 1건 제외</div></div>
+   <div class="card warn"><div class="lb">재고 경고<small>현재고 &lt; 안전재고</small></div><div class="v">2<em>품목</em></div><div class="foot">같으면 경고 아님 · 두부 300g 는 60 = 60</div></div>
+   <div class="card alert"><div class="lb">미처리 문의<small>접수 · 처리중</small></div><div class="v">3<em>건</em></div><div class="foot">완료 3건은 세지 않음</div></div>
+  </div>
+  <div class="chart"><div class="lb">최근 7일 주문 수<small>오늘 포함 · 취소 제외</small></div>
+   <div class="bars">${counts.map((c,i)=>`<div class="col"><div class="bar ${i===6?'today':''}" style="height:${Math.max(4,c/4*86)}%"><span>${c}</span></div><div class="date">${days[i]}</div></div>`).join('')}</div></div>`;
+}else if(state==='empty'){
+  html=head('갱신 2026-10-23 09:00')+`
+  <div class="cards">
+   <div class="card"><div class="lb">오늘 주문<small>취소 제외</small></div><div class="v dash">—</div><div class="foot">데이터 없음</div></div>
+   <div class="card"><div class="lb">재고 경고<small>현재고 &lt; 안전재고</small></div><div class="v dash">—</div><div class="foot">데이터 없음</div></div>
+   <div class="card"><div class="lb">미처리 문의<small>접수 · 처리중</small></div><div class="v dash">—</div><div class="foot">데이터 없음</div></div>
+  </div>
+  <div class="chart"><div class="lb">최근 7일 주문 수<small>오늘 포함 · 취소 제외</small></div>
+   <div class="empty"><b>데이터 없음</b><small>seed/ 폴더에 CSV 가 없거나 비어 있습니다 — 0 이 아니라 '없음' 입니다</small></div></div>`;
+}else{
+  html=head('갱신 실패')+`
+  <div class="err"><div><b>불러오지 못했습니다.</b> 집계 API(/api/summary) 가 응답하지 않습니다.</div><button>다시 시도</button></div>
+  <div class="chart"><div class="lb">최근 7일 주문 수</div><div class="empty"><b>표시할 수 없음</b><small>서버가 응답하면 자동으로 다시 그립니다</small></div></div>`;
+}
+document.getElementById('main').innerHTML=html;
+</script></body></html>

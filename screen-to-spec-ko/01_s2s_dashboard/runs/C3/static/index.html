@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 오늘의 현황판</title>
+<style>
+body{margin:0;font-family:"Malgun Gothic",sans-serif;background:#f5f6f8;color:#222}
+main{max-width:960px;margin:0 auto;padding:24px}
+header{display:flex;justify-content:space-between;align-items:baseline}
+h1{font-size:22px;margin:0}
+#updated-at{color:#666;font-size:14px}
+.cards{display:flex;gap:16px;margin:24px 0}
+.card{flex:1;background:#fff;border-radius:8px;padding:20px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.label{color:#555;font-size:15px}
+.num{font-size:44px;font-weight:bold;margin-top:8px}
+.chart{background:#fff;border-radius:8px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.bars{display:flex;gap:12px;align-items:flex-end;height:180px}
+.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.bar{width:100%;background:#3b82f6;border-radius:4px 4px 0 0}
+.cnt{font-size:13px;margin-bottom:2px}
+.dates{display:flex;gap:12px;margin-top:6px}
+.dates span{flex:1;text-align:center;font-size:13px;color:#666}
+#empty-notice,#error{text-align:center;color:#666;padding:60px 0}
+#error{padding:20px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+<header><h1>가나다식품 오늘의 현황판</h1><div id="updated-at" data-testid="updated-at"></div></header>
+<div id="error" hidden><span>불러오지 못했습니다</span> <button id="retry" type="button">다시 시도</button></div>
+<section class="cards" id="cards">
+<div class="card"><div class="label">오늘 주문</div><div class="num" data-testid="today-orders">—</div></div>
+<div class="card"><div class="label">재고 경고</div><div class="num" data-testid="stock-alerts">—</div></div>
+<div class="card"><div class="label">미처리 문의</div><div class="num" data-testid="open-inquiries">—</div></div>
+</section>
+<section class="chart" id="chart">
+<div id="empty-notice" data-testid="empty-notice" hidden>데이터 없음</div>
+<div id="plot"><div class="bars" id="bars"></div><div class="dates" id="dates"></div></div>
+</section>
+</main>
+<script>
+const q = s => document.querySelector(s);
+const ids = {today_orders:'today-orders', stock_alerts:'stock-alerts', open_inquiries:'open-inquiries'};
+function setNums(d){
+  for (const k in ids) q('[data-testid="'+ids[k]+'"]').textContent = (d && d[k] != null) ? String(d[k]) : '—';
+}
+async function load(){
+  q('#error').hidden = true;
+  try{
+    const r = await fetch('/api/summary', {cache:'no-store'});
+    if(!r.ok) throw new Error(r.status);
+    const d = await r.json();
+    q('#cards').hidden = false; q('#chart').hidden = false;
+    setNums(d.empty ? null : d);
+    q('#updated-at').textContent = '갱신 ' + d.updated_at;
+    q('#empty-notice').hidden = !d.empty;
+    q('#plot').hidden = d.empty;
+    const bars = q('#bars'), dates = q('#dates');
+    bars.innerHTML = ''; dates.innerHTML = '';
+    const max = Math.max(1, ...d.daily_orders.map(x => x.count));
+    for (const x of d.daily_orders){
+      const c = document.createElement('div'); c.className = 'col';
+      c.innerHTML = '<div class="cnt"></div><div class="bar" data-testid="daily-bar"></div>';
+      c.firstChild.textContent = x.count;
+      c.lastChild.style.height = (x.count / max * 140) + 'px';
+      bars.appendChild(c);
+      const s = document.createElement('span'); s.textContent = x.date.slice(5); dates.appendChild(s);
+    }
+  }catch(e){
+    q('#cards').hidden = true; q('#chart').hidden = true; q('#error').hidden = false;
+  }
+}
+q('#retry').addEventListener('click', load);
+load();
+</script>
+</body>
+</html>

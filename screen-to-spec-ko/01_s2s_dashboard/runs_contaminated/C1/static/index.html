@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>가나다식품 오늘의 현황판</title>
+<style>
+body{font-family:'Malgun Gothic',sans-serif;margin:0;padding:24px;background:#f6f7f9;color:#222}
+header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px}
+h1{margin:0;font-size:24px}
+#cards{display:flex;gap:16px;margin-bottom:24px}
+.card{flex:1;background:#fff;border-radius:8px;padding:20px;box-shadow:0 1px 3px #0002}
+.label{font-size:14px;color:#666}
+.num{font-size:48px;font-weight:bold;margin-top:8px}
+#chart{background:#fff;border-radius:8px;padding:20px;box-shadow:0 1px 3px #0002}
+#bars{display:flex;gap:12px;align-items:flex-end;height:180px}
+.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.bar{width:100%;background:#3b82f6;border-radius:4px 4px 0 0}
+.cnt{font-size:12px;margin-bottom:2px}
+.date{display:flex;gap:12px;margin-top:6px}
+.date span{flex:1;text-align:center;font-size:12px;color:#666}
+#err{background:#fff;border-radius:8px;padding:20px;color:#b91c1c}
+</style>
+</head>
+<body>
+<header>
+  <h1>가나다식품 오늘의 현황판</h1>
+  <span data-testid="updated-at" id="updated">&nbsp;</span>
+</header>
+<div id="err" hidden><span>불러오지 못했습니다</span> <button id="retry" type="button">다시 시도</button></div>
+<div id="cards">
+  <div class="card"><div class="label">오늘 주문</div><div class="num" data-testid="today-orders">—</div></div>
+  <div class="card"><div class="label">재고 경고</div><div class="num" data-testid="stock-alerts">—</div></div>
+  <div class="card"><div class="label">미처리 문의</div><div class="num" data-testid="open-inquiries">—</div></div>
+</div>
+<div id="chart">
+  <div id="bars"></div>
+  <div class="date" id="dates"></div>
+  <div data-testid="empty-notice" id="empty" hidden>데이터 없음</div>
+</div>
+<script>
+const $ = (s) => document.querySelector(s);
+const NUM = {orders: '[data-testid="today-orders"]', stock: '[data-testid="stock-alerts"]', inq: '[data-testid="open-inquiries"]'};
+function setNums(a, b, c) { $(NUM.orders).textContent = a; $(NUM.stock).textContent = b; $(NUM.inq).textContent = c; }
+async function load() {
+  $('#err').hidden = true;
+  try {
+    const r = await fetch('/api/summary', {cache: 'no-store'});
+    if (!r.ok) throw new Error(r.status);
+    const d = await r.json();
+    $('#cards').hidden = false; $('#chart').hidden = false;
+    $('#updated').textContent = '갱신 ' + d.updated_at;
+    const bars = $('#bars'), dates = $('#dates');
+    bars.innerHTML = ''; dates.innerHTML = '';
+    if (d.empty) {
+      setNums('—', '—', '—');
+      $('#empty').hidden = false;
+      return;
+    }
+    $('#empty').hidden = true;
+    setNums(d.today_orders, d.stock_alerts, d.open_inquiries);
+    const max = Math.max(1, ...d.daily_orders.map(x => x.count));
+    for (const x of d.daily_orders) {
+      const col = document.createElement('div'); col.className = 'col';
+      const cnt = document.createElement('div'); cnt.className = 'cnt'; cnt.textContent = x.count;
+      const bar = document.createElement('div'); bar.className = 'bar'; bar.dataset.testid = 'daily-bar';
+      bar.style.height = (x.count / max * 140) + 'px';
+      col.append(cnt, bar); bars.append(col);
+      const dl = document.createElement('span'); dl.textContent = x.date.slice(5); dates.append(dl);
+    }
+  } catch (e) {
+    $('#cards').hidden = true; $('#chart').hidden = true; $('#err').hidden = false;
+    $('#updated').textContent = '';
+  }
+}
+$('#retry').addEventListener('click', load);
+load();
+</script>
+</body>
+</html>

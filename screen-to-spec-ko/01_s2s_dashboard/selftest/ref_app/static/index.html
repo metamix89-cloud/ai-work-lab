@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>가나다식품 오늘의 현황판</title>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif;background:#F6F7FB;color:#111318;margin:0;padding:32px}
+h1{font-size:22px;margin:0}.top{display:flex;justify-content:space-between;align-items:center}
+.cards{display:flex;gap:16px;margin:24px 0}.card{flex:1;background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:20px}
+.label{font-size:14px;color:#6B7280}.val{font-size:40px;font-weight:800;margin-top:6px}
+.chart{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:20px;height:220px;display:flex;align-items:flex-end;gap:12px}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.bar{width:60%;background:#6366F1;border-radius:4px 4px 0 0;min-height:2px}.date{font-size:12px;color:#6B7280;margin-top:6px}
+.empty{color:#6B7280;align-self:center;margin:auto}
+</style></head><body>
+<div class="top"><h1>가나다식품 오늘의 현황판</h1><div class="label" data-testid="updated-at"></div></div>
+<div class="cards">
+ <div class="card"><div class="label">오늘 주문</div><div class="val" data-testid="today-orders">…</div></div>
+ <div class="card"><div class="label">재고 경고</div><div class="val" data-testid="stock-alerts">…</div></div>
+ <div class="card"><div class="label">미처리 문의</div><div class="val" data-testid="open-inquiries">…</div></div>
+</div>
+<div class="chart" id="chart"></div>
+<script>
+fetch('/api/summary').then(r=>r.json()).then(d=>{
+  document.querySelector('[data-testid=updated-at]').textContent='갱신 '+d.updated_at;
+  const set=(id,v)=>document.querySelector('[data-testid='+id+']').textContent=(v===null||v===undefined)?'—':v;
+  set('today-orders',d.today_orders);set('stock-alerts',d.stock_alerts);set('open-inquiries',d.open_inquiries);
+  const ch=document.getElementById('chart');
+  if(d.empty){ch.innerHTML='<div class="empty" data-testid="empty-notice">데이터 없음</div>';return;}
+  const max=Math.max(1,...d.daily_orders.map(x=>x.count));
+  ch.innerHTML=d.daily_orders.map(x=>'<div class="col"><div class="bar" data-testid="daily-bar" style="height:'+(x.count/max*150)+'px"></div><div class="date">'+x.date.slice(5)+'</div></div>').join('');
+}).catch(()=>{document.querySelector('.cards').innerHTML='<div class="card">불러오지 못했습니다 <button onclick="location.reload()">다시 시도</button></div>';});
+</script></body></html>

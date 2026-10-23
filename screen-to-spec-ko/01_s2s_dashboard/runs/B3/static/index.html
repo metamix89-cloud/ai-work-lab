@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 오늘의 현황판</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f4f6f8; color: #222; }
+  main { max-width: 900px; margin: 0 auto; padding: 24px; }
+  header { display: flex; justify-content: space-between; align-items: baseline; }
+  h1 { font-size: 22px; margin: 0; }
+  #updated-at { color: #666; font-size: 14px; }
+  .cards { display: flex; gap: 16px; margin: 24px 0; }
+  .card { flex: 1; background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px #0002; }
+  .label { color: #666; font-size: 14px; }
+  .num { font-size: 40px; font-weight: bold; margin-top: 8px; }
+  .chart { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px #0002; }
+  .bars { display: flex; align-items: flex-end; gap: 12px; height: 180px; }
+  .col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; }
+  .bar { width: 100%; background: #3b82f6; border-radius: 4px 4px 0 0; }
+  .cnt { font-size: 13px; margin-bottom: 2px; }
+  .dates { display: flex; gap: 12px; margin-top: 6px; }
+  .dates span { flex: 1; text-align: center; font-size: 12px; color: #666; }
+  #empty-notice { text-align: center; color: #888; padding: 60px 0; }
+  #error { background: #fff; border-radius: 8px; padding: 24px; text-align: center; margin: 24px 0; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>가나다식품 오늘의 현황판</h1>
+    <span id="updated-at" data-testid="updated-at"></span>
+  </header>
+
+  <div id="error" hidden>
+    <p>불러오지 못했습니다</p>
+    <button id="retry" type="button">다시 시도</button>
+  </div>
+
+  <section id="content">
+    <div class="cards">
+      <div class="card"><div class="label">오늘 주문</div><div class="num" data-testid="today-orders">—</div></div>
+      <div class="card"><div class="label">재고 경고</div><div class="num" data-testid="stock-alerts">—</div></div>
+      <div class="card"><div class="label">미처리 문의</div><div class="num" data-testid="open-inquiries">—</div></div>
+    </div>
+    <div class="chart">
+      <div class="label" style="margin-bottom:12px">최근 7일 주문 수</div>
+      <div id="empty-notice" data-testid="empty-notice" hidden>데이터 없음</div>
+      <div id="chart-area">
+        <div class="bars" id="bars"></div>
+        <div class="dates" id="dates"></div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const q = (t) => document.querySelector(`[data-testid="${t}"]`);
+
+function render(d) {
+  $("error").hidden = true;
+  $("content").hidden = false;
+  $("updated-at").textContent = "갱신 " + d.updated_at;
+  const empty = d.empty;
+  q("today-orders").textContent = empty ? "—" : d.today_orders;
+  q("stock-alerts").textContent = empty ? "—" : d.stock_alerts;
+  q("open-inquiries").textContent = empty ? "—" : d.open_inquiries;
+  $("empty-notice").hidden = !empty;
+  $("chart-area").hidden = empty;
+  const bars = $("bars"), dates = $("dates");
+  bars.innerHTML = ""; dates.innerHTML = "";
+  if (empty) return;
+  const max = Math.max(1, ...d.daily_orders.map((x) => x.count));
+  for (const x of d.daily_orders) {
+    const col = document.createElement("div");
+    col.className = "col";
+    col.innerHTML = `<div class="cnt">${x.count}</div>`;
+    const bar = document.createElement("div");
+    bar.className = "bar";
+    bar.dataset.testid = "daily-bar";
+    bar.setAttribute("data-testid", "daily-bar");
+    bar.style.height = (x.count / max) * 140 + "px";
+    col.appendChild(bar);
+    bars.appendChild(col);
+    const s = document.createElement("span");
+    s.textContent = x.date.slice(5);
+    dates.appendChild(s);
+  }
+}
+
+async function load() {
+  try {
+    const r = await fetch("/api/summary", { cache: "no-store" });
+    if (!r.ok) throw new Error(r.status);
+    render(await r.json());
+  } catch (e) {
+    $("content").hidden = true;
+    $("error").hidden = false;
+  }
+}
+$("retry").addEventListener("click", load);
+load();
+</script>
+</body>
+</html>

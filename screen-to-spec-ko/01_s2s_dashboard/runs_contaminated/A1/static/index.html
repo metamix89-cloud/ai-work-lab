@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 오늘의 현황판</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Pretendard", "Malgun Gothic", sans-serif; background: #f4f6f8; color: #1d2430; }
+  main { max-width: 960px; margin: 0 auto; padding: 24px 20px 40px; }
+  header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  h1 { font-size: 24px; margin: 0; }
+  #updated-at { color: #5b6675; font-size: 14px; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; }
+  .card { background: #fff; border: 1px solid #dfe3e8; border-radius: 10px; padding: 18px 20px; }
+  .label { font-size: 14px; color: #5b6675; }
+  .num { font-size: 44px; font-weight: 700; margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .chart { background: #fff; border: 1px solid #dfe3e8; border-radius: 10px; padding: 18px 20px; margin-top: 16px; }
+  .chart h2 { font-size: 15px; margin: 0 0 12px; color: #5b6675; font-weight: 600; }
+  .bars { display: flex; align-items: flex-end; gap: 12px; height: 200px; border-bottom: 1px solid #c9d0d8; }
+  .col { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; }
+  .val { font-size: 13px; margin-bottom: 4px; font-variant-numeric: tabular-nums; }
+  .bar { width: 100%; max-width: 64px; background: #2f6fed; border-radius: 4px 4px 0 0; }
+  .dates { display: flex; gap: 12px; margin-top: 6px; }
+  .dates span { flex: 1; text-align: center; font-size: 13px; color: #5b6675; }
+  #empty-notice { height: 200px; display: flex; align-items: center; justify-content: center; color: #5b6675; }
+  #error { background: #fff; border: 1px solid #e3b4b4; border-radius: 10px; padding: 18px 20px; margin-top: 20px; color: #a12b2b; }
+  button { margin-left: 12px; padding: 6px 14px; font: inherit; cursor: pointer; }
+  [hidden] { display: none !important; }
+  @media (max-width: 640px) { .cards { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>가나다식품 오늘의 현황판</h1>
+    <span id="updated-at" data-testid="updated-at"></span>
+  </header>
+
+  <div id="error" hidden>불러오지 못했습니다<button id="retry" type="button">다시 시도</button></div>
+
+  <section class="cards" id="cards">
+    <div class="card"><div class="label">오늘 주문</div><div class="num" data-testid="today-orders">—</div></div>
+    <div class="card"><div class="label">재고 경고</div><div class="num" data-testid="stock-alerts">—</div></div>
+    <div class="card"><div class="label">미처리 문의</div><div class="num" data-testid="open-inquiries">—</div></div>
+  </section>
+
+  <section class="chart" id="chart">
+    <h2>최근 7일 주문 수</h2>
+    <div id="empty-notice" data-testid="empty-notice" hidden>데이터 없음</div>
+    <div id="bars-wrap">
+      <div class="bars" id="bars"></div>
+      <div class="dates" id="dates"></div>
+    </div>
+  </section>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const TIDS = ["today-orders", "stock-alerts", "open-inquiries"];
+const KEYS = ["today_orders", "stock_alerts", "open_inquiries"];
+
+function setNums(values) {
+  TIDS.forEach((t, i) => {
+    document.querySelector('[data-testid="' + t + '"]').textContent = values[i];
+  });
+}
+
+function render(d) {
+  $("error").hidden = true;
+  $("cards").hidden = false;
+  $("chart").hidden = false;
+  $("updated-at").textContent = "갱신 " + d.updated_at;
+  $("bars").innerHTML = "";
+  $("dates").innerHTML = "";
+  if (d.empty) {
+    setNums(["—", "—", "—"]);
+    $("empty-notice").hidden = false;
+    $("bars-wrap").hidden = true;
+    return;
+  }
+  $("empty-notice").hidden = true;
+  $("bars-wrap").hidden = false;
+  setNums(KEYS.map((k) => String(d[k])));
+  const max = Math.max(1, ...d.daily_orders.map((x) => x.count));
+  d.daily_orders.forEach((x) => {
+    const col = document.createElement("div");
+    col.className = "col";
+    const val = document.createElement("div");
+    val.className = "val";
+    val.textContent = x.count;
+    const bar = document.createElement("div");
+    bar.className = "bar";
+    bar.dataset.testid = "daily-bar";
+    bar.style.height = (x.count / max * 85) + "%";
+    bar.title = x.date + " " + x.count + "건";
+    col.append(val, bar);
+    $("bars").appendChild(col);
+    const lab = document.createElement("span");
+    lab.textContent = x.date.slice(5);
+    $("dates").appendChild(lab);
+  });
+}
+
+async function load() {
+  try {
+    const r = await fetch("/api/summary", { cache: "no-store" });
+    if (!r.ok) throw new Error(r.status);
+    render(await r.json());
+  } catch (e) {
+    $("cards").hidden = true;
+    $("chart").hidden = true;
+    $("error").hidden = false;
+  }
+}
+$("retry").addEventListener("click", load);
+load();
+</script>
+</body>
+</html>

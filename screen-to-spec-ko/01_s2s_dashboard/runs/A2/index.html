@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 · 오늘의 현황판</title>
+<style>
+  :root { --bg:#f5f6f8; --card:#fff; --text:#1f2937; --muted:#6b7280; --bar:#3b82f6; --today:#1d4ed8; --warn:#d97706; --alert:#dc2626; --line:#e5e7eb; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#111827; --card:#1f2937; --text:#f3f4f6; --muted:#9ca3af; --bar:#60a5fa; --today:#93c5fd; --warn:#fbbf24; --alert:#f87171; --line:#374151; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:24px; background:var(--bg); color:var(--text); font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif; }
+  .wrap { max-width:900px; margin:0 auto; }
+  header { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:20px; }
+  h1 { font-size:22px; margin:0; }
+  .date { color:var(--muted); font-size:14px; }
+  .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:20px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px; }
+  .card .label { color:var(--muted); font-size:14px; }
+  .card .value { font-size:40px; font-weight:700; margin-top:8px; }
+  .card .value small { font-size:16px; font-weight:400; color:var(--muted); margin-left:4px; }
+  .card.warn .value { color:var(--warn); }
+  .card.alert .value { color:var(--alert); }
+  .chart-card h2 { font-size:16px; margin:0 0 12px; }
+  svg { width:100%; height:auto; display:block; }
+  svg text { fill:var(--muted); font-size:12px; }
+  svg text.val { fill:var(--text); font-weight:600; }
+  .err { color:var(--alert); }
+  @media (max-width:600px) { .cards { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>가나다식품 오늘의 현황판</h1>
+    <span class="date" id="date"></span>
+  </header>
+  <section class="cards">
+    <div class="card"><div class="label">오늘 주문 수</div><div class="value"><span id="orders">-</span><small>건</small></div></div>
+    <div class="card warn"><div class="label">재고 경고 품목 수</div><div class="value"><span id="stock">-</span><small>개</small></div></div>
+    <div class="card alert"><div class="label">미처리 문의 수</div><div class="value"><span id="inq">-</span><small>건</small></div></div>
+  </section>
+  <section class="card chart-card">
+    <h2>최근 7일 주문 수</h2>
+    <div id="chart"></div>
+  </section>
+</div>
+<script>
+const NS = "http://www.w3.org/2000/svg";
+function el(name, attrs, text) {
+  const e = document.createElementNS(NS, name);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+function drawChart(daily) {
+  const W = 800, H = 320, padL = 40, padR = 10, padT = 28, padB = 36;
+  const max = Math.max(...daily.map(d => d.count), 1);
+  const top = Math.ceil(max / 10) * 10;
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "최근 7일 주문 수 막대그래프" });
+  const ph = H - padT - padB, pw = W - padL - padR;
+  for (let i = 0; i <= 4; i++) {
+    const v = top * i / 4, y = padT + ph - ph * i / 4;
+    svg.append(el("line", { x1: padL, x2: W - padR, y1: y, y2: y, stroke: "var(--line)" }));
+    svg.append(el("text", { x: padL - 6, y: y + 4, "text-anchor": "end" }, Math.round(v)));
+  }
+  const slot = pw / daily.length, bw = slot * 0.55;
+  daily.forEach((d, i) => {
+    const h = ph * d.count / top, x = padL + slot * i + (slot - bw) / 2, y = padT + ph - h;
+    const isToday = i === daily.length - 1;
+    const bar = el("rect", { x, y, width: bw, height: h, rx: 4, fill: isToday ? "var(--today)" : "var(--bar)" });
+    bar.append(el("title", {}, `${d.label}: ${d.count}건`));
+    svg.append(bar);
+    svg.append(el("text", { x: x + bw / 2, y: y - 6, "text-anchor": "middle", class: "val" }, d.count));
+    svg.append(el("text", { x: x + bw / 2, y: H - 14, "text-anchor": "middle" }, d.label));
+  });
+  const box = document.getElementById("chart");
+  box.replaceChildren(svg);
+}
+async function load() {
+  try {
+    const r = await fetch("/api/dashboard");
+    if (!r.ok) throw new Error(r.status);
+    const d = await r.json();
+    document.getElementById("date").textContent = d.today + " 기준";
+    document.getElementById("orders").textContent = d.today_orders;
+    document.getElementById("stock").textContent = d.low_stock_items;
+    document.getElementById("inq").textContent = d.pending_inquiries;
+    drawChart(d.daily_orders);
+  } catch (e) {
+    document.getElementById("chart").innerHTML = '<p class="err">데이터를 불러오지 못했습니다.</p>';
+  }
+}
+load();
+setInterval(load, 60000);
+</script>
+</body>
+</html>

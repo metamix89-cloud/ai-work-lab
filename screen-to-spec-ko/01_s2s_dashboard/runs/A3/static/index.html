@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 오늘의 현황판</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --text:#1f2937; --muted:#6b7280; --line:#e5e7eb; --bar:#2563eb; --warn:#c2410c; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#111827; --card:#1f2937; --text:#f3f4f6; --muted:#9ca3af; --line:#374151; --bar:#60a5fa; --warn:#fb923c; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Malgun Gothic",system-ui,sans-serif; background:var(--bg); color:var(--text); }
+  main { max-width:880px; margin:0 auto; padding:28px 16px; }
+  header { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:20px; }
+  h1 { font-size:22px; margin:0; }
+  .date { color:var(--muted); font-size:14px; }
+  .tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px 20px; }
+  .label { color:var(--muted); font-size:14px; }
+  .value { font-size:40px; font-weight:700; margin-top:6px; }
+  .value small { font-size:16px; font-weight:400; color:var(--muted); margin-left:4px; }
+  .warn .value { color:var(--warn); }
+  .chart { margin-top:14px; }
+  .chart h2 { font-size:16px; margin:0 0 14px; }
+  .bars { display:flex; align-items:flex-end; gap:12px; height:220px; border-bottom:1px solid var(--line); padding-top:20px; }
+  .col { flex:1; height:100%; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; }
+  .num { font-size:13px; font-weight:600; margin-bottom:4px; }
+  .bar { width:100%; max-width:56px; background:var(--bar); border-radius:4px 4px 0 0; min-height:2px; }
+  .col.today .bar { opacity:1; } .col:not(.today) .bar { opacity:.55; }
+  .names { display:flex; gap:12px; margin-top:6px; }
+  .names div { flex:1; text-align:center; font-size:12px; color:var(--muted); }
+  .names .today { color:var(--text); font-weight:700; }
+  .err { color:var(--warn); margin-top:12px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>가나다식품 오늘의 현황판</h1>
+    <span class="date" id="date"></span>
+  </header>
+
+  <section class="tiles">
+    <div class="card"><div class="label">오늘 주문 수</div><div class="value"><span id="orders">-</span><small>건</small></div></div>
+    <div class="card warn"><div class="label">재고 경고 품목 수</div><div class="value"><span id="stock">-</span><small>개</small></div></div>
+    <div class="card warn"><div class="label">미처리 문의 수</div><div class="value"><span id="inq">-</span><small>건</small></div></div>
+  </section>
+
+  <section class="card chart">
+    <h2>최근 7일 주문 수</h2>
+    <div class="bars" id="bars" role="img" aria-label="최근 7일 일별 주문 수 막대그래프"></div>
+    <div class="names" id="names"></div>
+  </section>
+  <div class="err" id="err"></div>
+</main>
+<script>
+const DAYS = ["일","월","화","수","목","금","토"];
+async function load() {
+  try {
+    const res = await fetch("/api/dashboard");
+    if (!res.ok) throw new Error(res.status);
+    const d = await res.json();
+    document.getElementById("date").textContent = d.today;
+    document.getElementById("orders").textContent = d.orders_today;
+    document.getElementById("stock").textContent = d.low_stock_items;
+    document.getElementById("inq").textContent = d.open_inquiries;
+
+    const max = Math.max(1, ...d.daily_orders.map(x => x.count));
+    const bars = document.getElementById("bars"), names = document.getElementById("names");
+    bars.innerHTML = names.innerHTML = "";
+    d.daily_orders.forEach((x, i) => {
+      const last = i === d.daily_orders.length - 1;
+      const dt = new Date(x.date + "T00:00:00");
+      const col = document.createElement("div");
+      col.className = "col" + (last ? " today" : "");
+      col.innerHTML = `<div class="num">${x.count}</div><div class="bar" style="height:${x.count / max * 85}%"></div>`;
+      bars.appendChild(col);
+      const n = document.createElement("div");
+      n.className = last ? "today" : "";
+      n.textContent = last ? "오늘" : `${dt.getMonth() + 1}/${dt.getDate()}(${DAYS[dt.getDay()]})`;
+      names.appendChild(n);
+    });
+    document.getElementById("err").textContent = "";
+  } catch (e) {
+    document.getElementById("err").textContent = "데이터를 불러오지 못했습니다. (" + e.message + ")";
+  }
+}
+load();
+setInterval(load, 60000);
+</script>
+</body>
+</html>

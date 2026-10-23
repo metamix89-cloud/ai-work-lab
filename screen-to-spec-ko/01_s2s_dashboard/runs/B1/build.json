@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 86838,
+ "num_turns": 11,
+ "total_cost_usd": 0.29697340000000005,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 34365,
+  "cache_read_input_tokens": 225294,
+  "output_tokens": 13696,
+  "output_tokens_details": {
+   "thinking_tokens": 681
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 34365,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 750,
+    "cache_read_input_tokens": 50676,
+    "cache_creation_input_tokens": 361,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 361
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD.md대로 웹앱을 만들었습니다. 집계 함수는 직접 호출해 값을 확인했고, 서버를 띄워 브라우저에서 화면을 확인하지는 못했습니다. `tests/test_dod.py`는 폴더에 없어서 9개 완료 기준(T1~T9)은 돌려 보지 못했습니다.\n\n집계 함수의 결과는 오늘 주문 4, 재고 경고 2, 미처리 문의 3이고, 막대 7칸에는 주문 0건인 날 2칸이 포함됩니다. 이 값은 PRD의 T3~T6 기대값과 일치합니다.\n\n**만든 파일**\n- `main.py`: 서버를 시작할 때마다 `dash.db`를 지우고 `seed/` CSV 3개로 `dash_orders`·`dash_stock`·`dash_inquiries`를 새로 만듭니다. `GET /api/summary`와 `/`를 제공합니다.\n- `static/index.html`: 순수 HTML/JS 화면입니다. 지표 카드 3개, `div` 막대 7개, 날짜(MM-DD), `갱신 …` 시각이 있습니다. `data-testid` 이름은 PRD 그대로입니다.\n- `seed/`: 주문 14건·재고 6품목·문의 6건의 가상 데이터입니다.\n- 세 CSV가 모두 비어 있거나 없으면 숫자 자리에 `—`와 `데이터 없음`이 나옵니다. API가 실패하면 `불러오지 못했습니다`와 다시 시도 버튼이 나옵니다.\n\n**주의할 점**\n- 시드 데이터의 날짜가 2026-10-23 기준으로 고정돼 있습니다. 다른 날 서버를 띄우면 \"오늘 주문\"과 막대는 0이 됩니다. 날짜를 오늘 기준으로 자동 생성하게 바꿀 수도 있습니다.\n- 서버를 직접 띄운 적이 없습니다. 실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`입니다.",
+ "wall_s": 92.6
+}
