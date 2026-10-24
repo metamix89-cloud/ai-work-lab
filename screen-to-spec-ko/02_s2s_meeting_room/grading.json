@@ -1,0 +1,14 @@
+{
+ "allowed_routes": ["/", "/api/rooms", "/api/reservations", "/api/reservations/{res_id}", "/api/reservations/{id}", "/api/reservations/{reservation_id}", "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "회의 제목 · 참석자": "회의 제목|회의명|meeting_title|\"title\"|참석자|attendee",
+  "지난 시간 막기": "지난 시간|과거|is_past|isPast|before now|지난 시각",
+  "자동 새로고침": "setInterval|meta http-equiv=\"refresh\"",
+  "로그인 · 권한": "login|password|로그인|auth|admin|관리자",
+  "반복 예약": "반복|recurring|repeat",
+  "알림 · 메일": "알림|notify|mail",
+  "주간 · 월간 보기": "주간 보기|월간 보기|weekly|monthly|week view|month view",
+  "내 예약 목록": "내 예약 목록|my-reservations|my_reservations",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}

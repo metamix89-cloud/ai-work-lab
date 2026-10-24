@@ -1,0 +1,816 @@
+{
+ "A1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: assert 62 == 54\n +  where 62 = slot_count(<Page url='http://127.0.0.1:8765/?date=2026-11-03'>)",
+   "T3": "AssertionError: None\nassert None in ('booked', 'mine')\n +  where None = state(<Page url='http://127.0.0.1:8765/?date=2026-11-03'>, 'A', '10:00')",
+   "T4": "AssertionError: GET /api/reservations 가 422\nassert 422 == 200",
+   "T5": "AssertionError: ('10:00~11:00 뒤에 11:00~11:30 은 겹침이 아니다', 422, {'detail': [{'type': 'int_parsing', 'loc': ['body', 'room_id'], 'msg': '...'], 'msg': 'Field required', 'input': {'room_id': 'A', 'date': '2026-11-03', 'start': '11:00', 'end': '11:30', ...}}]})\nassert 422 == 201",
+   "T6": "AssertionError: ('10:15 는 30분 단위가 아니다', 422, {'detail': [{'type': 'int_parsing', 'loc': ['body', 'room_id'], 'msg': 'Input should be a...'], 'msg': 'Field required', 'input': {'room_id': 'A', 'date': '2026-11-03', 'start': '10:15', 'end': '10:45', ...}}]})\nassert 422 == 400",
+   "T7": "AssertionError: ('2시간 30분은 거부', 422, {'detail': [{'type': 'int_parsing', 'loc': ['body', 'room_id'], 'msg': 'Input should be a valid i...'], 'msg': 'Field required', 'input': {'room_id': 'C', 'date': '2026-11-03', 'start': '09:00', 'end': '11:30', ...}}]})\nassert 422 == 400",
+   "T8": "AssertionError: ('남의 예약 취소는 403', 401)\nassert 401 == 403",
+   "T9": "Failed: 사용자 선택 상자(user-select)가 없음"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "___________________\n\nsrv = <test_dod.Server object at 0x00000180D4506BA0>\n\n    def test_T8_delete_only_by_owner(srv):\n        st, _ = http(\"DELETE\", srv.base + \"/api/reservations/1?user=%s\" % urllib.request.quote(\"박지연\"))\n>       assert st == 403, (\"남의 예약 취소는 403\", st)\nE       AssertionError: ('남의 예약 취소는 403', 401)\nE       assert 401 == 403\n\n_grader\\test_dod.py:260: AssertionError\n___________________ test_T9_cancel_button_only_on_my_slots ____________________\n\nsrv = <test_dod.Server object at 0x00000180D4506BA0>\npw = <Browser type=<BrowserType name=chromium executable_path=C:\\Users\\DESKTOP_KIM\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_cancel_button_only_on_my_slots(srv, pw):\n        page = open_page(pw, srv)\n>       select_user(page, \"김민수\")\n\n_grader\\test_dod.py:269: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\npage = <Page url='http://127.0.0.1:8765/?date=2026-11-03'>, name = '김민수'\n\n    def select_user(page, name):\n        sel = page.query_selector('[data-testid=\"user-select\"]')\n        if not sel:\n>           pytest.fail(\"사용자 선택 상자(user-select)가 없음\")\nE           Failed: 사용자 선택 상자(user-select)가 없음\n\n_grader\\test_dod.py:173: Failed\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_grid_is_3_rooms_x_18_slots - AssertionErr...\nFAILED _grader/test_dod.py::test_T3_seeded_reservations_show_as_booked_or_mine\nFAILED _grader/test_dod.py::test_T4_overlap_is_409_and_count_unchanged - Asse...\nFAILED _grader/test_dod.py::test_T5_adjacent_end_equals_start_is_allowed - As...\nFAILED _grader/test_dod.py::test_T6_30min_unit_and_business_hours - Assertion...\nFAILED _grader/test_dod.py::test_T7_max_two_hours - AssertionError: ('2시간 3...\nFAILED _grader/test_dod.py::test_T8_delete_only_by_owner - AssertionError: ('...\nFAILED _grader/test_dod.py::test_T9_cancel_button_only_on_my_slots - Failed: ...\n8 failed, 1 passed in 8.91s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/config",
+   "/api/reservations",
+   "/api/reservations/{rid}",
+   "/api/rooms"
+  ],
+  "extra_routes": [
+   "/api/config"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "index.html",
+   "main.py",
+   "requirements.txt",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 다온소프트 '회의실 예약' 웹앱을 만들어 줘. 회의실 3개의 하루 시간표(9시~18시, 30분 단위)가 보이고, 빈 칸을 눌러 예약하고, 내 예약은 취소할 수 있으면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 54672,
+   "num_turns": 6,
+   "total_cost_usd": 0.1959746,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 24729,
+    "cache_read_input_tokens": 121826,
+    "output_tokens": 8486,
+    "output_tokens_details": {
+     "thinking_tokens": 337
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 24729,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 885,
+      "cache_read_input_tokens": 40951,
+      "cache_creation_input_tokens": 450,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 450
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "회의실 예약 앱을 만들었습니다. API는 테스트 클라이언트로 확인했습니다. 예약 생성, 같은 시간대 중복 예약 거절(409), 다른 사람 예약 취소 거절(403), 본인 예약 취소는 모두 기대대로 동작했습니다. 브라우저 화면은 직접 열어보지 못했습니다.\n\n**실행 방법**\n```\ncd C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\s2s_runs\\02_s2s_meeting_room\\A1\npip install -r requirements.txt\npython main.py\n```\n실행한 뒤 http://127.0.0.1:8000 에 접속하면 됩니다.\n\n**기능**\n- **시간표:** 회의실 3개(대회의실 12인, 중회의실 6인, 소회의실 4인)의 하루 시간표가 9:00~18:00, 30분 단위로 나옵니다. 날짜는 ◀ ▶ 버튼이나 날짜 선택기로 바꿉니다.\n- **예약:** 빈 칸을 누르면 회의 제목과 종료 시간을 입력하는 창이 열립니다. 종료 시간은 다음 예약이 시작되기 전까지만 고를 수 있고, 지난 시간은 눌러도 예약되지 않습니다.\n- **내 예약:** 내 예약은 파란색, 다른 사람 예약은 회색으로 표시되고, 파란 칸을 누르면 취소 창이 열립니다.\n- **가상 데이터:** 처음 실행할 때 오늘과 내일 날짜로 예약 10건이 들어갑니다. 데이터는 `rooms.db` 파일에 저장되며, 이 파일을 지우면 다시 초기화됩니다.\n\n**알아둘 점**\n- 로그인은 만들지 않았습니다. 화면 상단 드롭다운에서 가상 사용자를 고르는 방식입니다. 서버가 사용자 이름을 요청 헤더(`X-User`)로만 받기 때문에 누구나 다른 이름으로 바꿀 수 있습니다. 실제로 쓰려면 SSO나 로그인으로 바꿔야 합니다.\n- 서버는 `127.0.0.1`에만 열려 있습니다. 사내 다른 PC에서 접속하게 하려면 `main.py` 맨 아래의 host를 바꿔야 합니다.\n\n파일은 `main.py`(서버), `index.html`(화면), `requirements.txt` 세 개입니다.",
+   "wall_s": 60.1
+  }
+ },
+ "A2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: assert 36 == 54\n +  where 36 = slot_count(<Page url='http://127.0.0.1:8767/?date=2026-11-03'>)",
+   "T3": "AssertionError: None\nassert None in ('booked', 'mine')\n +  where None = state(<Page url='http://127.0.0.1:8767/?date=2026-11-03'>, 'A', '10:00')",
+   "T4": "AssertionError: GET /api/reservations 가 422\nassert 422 == 200",
+   "T5": "AssertionError: ('10:00~11:00 뒤에 11:00~11:30 은 겹침이 아니다', 422, {'detail': [{'type': 'int_parsing', 'loc': ['body', 'room_id'], 'msg': '...'], 'msg': 'Field required', 'input': {'room_id': 'A', 'date': '2026-11-03', 'start': '11:00', 'end': '11:30', ...}}]})\nassert 422 == 201",
+   "T6": "AssertionError: ('10:15 는 30분 단위가 아니다', 422, {'detail': [{'type': 'int_parsing', 'loc': ['body', 'room_id'], 'msg': 'Input should be a...'], 'msg': 'Field required', 'input': {'room_id': 'A', 'date': '2026-11-03', 'start': '10:15', 'end': '10:45', ...}}]})\nassert 422 == 400",
+   "T7": "AssertionError: ('2시간 30분은 거부', 422, {'detail': [{'type': 'int_parsing', 'loc': ['body', 'room_id'], 'msg': 'Input should be a valid i...'], 'msg': 'Field required', 'input': {'room_id': 'C', 'date': '2026-11-03', 'start': '09:00', 'end': '11:30', ...}}]})\nassert 422 == 400",
+   "T8": "AssertionError: GET /api/reservations 가 422\nassert 422 == 200",
+   "T9": "Failed: 사용자 선택 상자(user-select)가 없음"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": " _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\ns = <test_dod.Server object at 0x0000022167F82BA0>\n\n    def reservations(s):\n        st, data = http(\"GET\", s.base + \"/api/reservations?date=\" + DATE)\n>       assert st == 200, \"GET /api/reservations 가 %s\" % st\nE       AssertionError: GET /api/reservations 가 422\nE       assert 422 == 200\n\n_grader\\test_dod.py:196: AssertionError\n___________________ test_T9_cancel_button_only_on_my_slots ____________________\n\nsrv = <test_dod.Server object at 0x0000022167F82BA0>\npw = <Browser type=<BrowserType name=chromium executable_path=C:\\Users\\DESKTOP_KIM\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_cancel_button_only_on_my_slots(srv, pw):\n        page = open_page(pw, srv)\n>       select_user(page, \"김민수\")\n\n_grader\\test_dod.py:269: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\npage = <Page url='http://127.0.0.1:8767/?date=2026-11-03'>, name = '김민수'\n\n    def select_user(page, name):\n        sel = page.query_selector('[data-testid=\"user-select\"]')\n        if not sel:\n>           pytest.fail(\"사용자 선택 상자(user-select)가 없음\")\nE           Failed: 사용자 선택 상자(user-select)가 없음\n\n_grader\\test_dod.py:173: Failed\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_grid_is_3_rooms_x_18_slots - AssertionErr...\nFAILED _grader/test_dod.py::test_T3_seeded_reservations_show_as_booked_or_mine\nFAILED _grader/test_dod.py::test_T4_overlap_is_409_and_count_unchanged - Asse...\nFAILED _grader/test_dod.py::test_T5_adjacent_end_equals_start_is_allowed - As...\nFAILED _grader/test_dod.py::test_T6_30min_unit_and_business_hours - Assertion...\nFAILED _grader/test_dod.py::test_T7_max_two_hours - AssertionError: ('2시간 3...\nFAILED _grader/test_dod.py::test_T8_delete_only_by_owner - AssertionError: GE...\nFAILED _grader/test_dod.py::test_T9_cancel_button_only_on_my_slots - Failed: ...\n8 failed, 1 passed in 10.94s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/config",
+   "/api/reservations",
+   "/api/reservations/{rid}",
+   "/api/rooms"
+  ],
+  "extra_routes": [
+   "/api/config"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "index.html",
+   "main.py",
+   "requirements.txt",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 다온소프트 '회의실 예약' 웹앱을 만들어 줘. 회의실 3개의 하루 시간표(9시~18시, 30분 단위)가 보이고, 빈 칸을 눌러 예약하고, 내 예약은 취소할 수 있으면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 72204,
+   "num_turns": 6,
+   "total_cost_usd": 0.2326799,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 27561,
+    "cache_read_input_tokens": 126999,
+    "output_tokens": 10972,
+    "output_tokens_details": {
+     "thinking_tokens": 900
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 27561,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1006,
+      "cache_read_input_tokens": 43018,
+      "cache_creation_input_tokens": 1215,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 1215
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "회의실 예약 앱을 만들었습니다. API는 PowerShell로 직접 호출해서 확인했습니다. 브라우저 화면은 열어서 확인하지 못했습니다. 마지막 `/` 페이지 요청은 PowerShell 환경 제한으로 실행되지 않았습니다.\n\n**실행 방법**\n```\ncd C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\s2s_runs\\02_s2s_meeting_room\\A2\npython -m uvicorn main:app --reload\n```\n브라우저에서 http://127.0.0.1:8000 을 열면 됩니다. 첫 실행 때 `rooms.db`가 자동으로 만들어지고 가상 데이터가 들어갑니다.\n\n**기능**\n- **시간표:** 회의실 A(4인), 회의실 B(8인), 대회의실(16인)의 09:00~18:00 시간표가 30분 단위로 보입니다. 날짜는 이전날, 다음날, 오늘 버튼이나 날짜 선택으로 바꿉니다.\n- **예약:** 빈 칸을 누르면 제목과 사용 시간을 고르는 창이 뜹니다. 사용 시간은 다음 예약 직전까지 고를 수 있습니다.\n- **취소:** 내 예약은 초록색으로 표시되고 \"예약 취소\" 버튼이 붙습니다. 다른 사람 예약은 회색이고 취소할 수 없습니다. 이 날짜의 내 예약을 모아 보는 목록에서도 취소할 수 있습니다.\n- **가상 데이터:** 오늘부터 3일간 예약 13건이 들어 있고, 사용자는 김민준, 이서연, 박지훈, 최유나, 정도현입니다.\n\n**서버 검증**\n- 겹치는 시간 예약은 막힙니다(409 오류).\n- 09:00~18:00 밖이나 30분 단위가 아닌 시간은 막힙니다.\n- 이미 지난 시간은 예약할 수 없습니다.\n- 남의 예약을 취소하려 하면 막힙니다(403 오류). 겹치는 시간으로 예약해 보고 남의 예약을 취소해 봤는데, 둘 다 위 오류로 막혔습니다.\n\n**알아둘 점**\n- 로그인이 없어서 화면 오른쪽 위 드롭다운에서 사용자를 고릅니다. 그래서 \"내 예약\"은 선택한 이름이 같은 예약을 뜻하고, 실제로 본인 확인을 하지는 않습니다. 실제로 쓰려면 로그인이나 SSO를 붙여야 합니다.\n- 다른 사람의 예약은 30초마다 자동으로 새로 불러옵니다.\n\n파일은 `main.py`(백엔드), `index.html`(화면), `requirements.txt`입니다.",
+   "wall_s": 89.3
+  }
+ },
+ "A3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T3": "AssertionError: None\nassert None in ('booked', 'mine')\n +  where None = state(<Page url='http://127.0.0.1:8769/?date=2026-11-03'>, 'A', '10:00')",
+   "T4": "AssertionError: GET /api/reservations 가 404\nassert 404 == 200",
+   "T5": "AssertionError: ('10:00~11:00 뒤에 11:00~11:30 은 겹침이 아니다', 404, {'detail': 'Not Found'})\nassert 404 == 201",
+   "T6": "AssertionError: ('10:15 는 30분 단위가 아니다', 404, {'detail': 'Not Found'})\nassert 404 == 400",
+   "T7": "AssertionError: ('2시간 30분은 거부', 404, {'detail': 'Not Found'})\nassert 404 == 400",
+   "T8": "AssertionError: ('남의 예약 취소는 403', 404)\nassert 404 == 403",
+   "T9": "Failed: 사용자 선택 상자(user-select)가 없음"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": ":253: AssertionError\n________________________ test_T8_delete_only_by_owner _________________________\n\nsrv = <test_dod.Server object at 0x0000017ADFA72BA0>\n\n    def test_T8_delete_only_by_owner(srv):\n        st, _ = http(\"DELETE\", srv.base + \"/api/reservations/1?user=%s\" % urllib.request.quote(\"박지연\"))\n>       assert st == 403, (\"남의 예약 취소는 403\", st)\nE       AssertionError: ('남의 예약 취소는 403', 404)\nE       assert 404 == 403\n\n_grader\\test_dod.py:260: AssertionError\n___________________ test_T9_cancel_button_only_on_my_slots ____________________\n\nsrv = <test_dod.Server object at 0x0000017ADFA72BA0>\npw = <Browser type=<BrowserType name=chromium executable_path=C:\\Users\\DESKTOP_KIM\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_cancel_button_only_on_my_slots(srv, pw):\n        page = open_page(pw, srv)\n>       select_user(page, \"김민수\")\n\n_grader\\test_dod.py:269: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\npage = <Page url='http://127.0.0.1:8769/?date=2026-11-03'>, name = '김민수'\n\n    def select_user(page, name):\n        sel = page.query_selector('[data-testid=\"user-select\"]')\n        if not sel:\n>           pytest.fail(\"사용자 선택 상자(user-select)가 없음\")\nE           Failed: 사용자 선택 상자(user-select)가 없음\n\n_grader\\test_dod.py:173: Failed\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T3_seeded_reservations_show_as_booked_or_mine\nFAILED _grader/test_dod.py::test_T4_overlap_is_409_and_count_unchanged - Asse...\nFAILED _grader/test_dod.py::test_T5_adjacent_end_equals_start_is_allowed - As...\nFAILED _grader/test_dod.py::test_T6_30min_unit_and_business_hours - Assertion...\nFAILED _grader/test_dod.py::test_T7_max_two_hours - AssertionError: ('2시간 3...\nFAILED _grader/test_dod.py::test_T8_delete_only_by_owner - AssertionError: ('...\nFAILED _grader/test_dod.py::test_T9_cancel_button_only_on_my_slots - Failed: ...\n7 failed, 2 passed in 8.87s\n",
+  "passed": 2,
+  "routes": [
+   "/",
+   "/api/bookings",
+   "/api/bookings/{booking_id}",
+   "/api/meta",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/bookings",
+   "/api/bookings/{booking_id}",
+   "/api/meta"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "run.bat",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "server.log",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 다온소프트 '회의실 예약' 웹앱을 만들어 줘. 회의실 3개의 하루 시간표(9시~18시, 30분 단위)가 보이고, 빈 칸을 눌러 예약하고, 내 예약은 취소할 수 있으면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 95498,
+   "num_turns": 7,
+   "total_cost_usd": 0.31288799999999994,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 33066,
+    "cache_read_input_tokens": 207600,
+    "output_tokens": 15984,
+    "output_tokens_details": {
+     "thinking_tokens": 700
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 33066,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1016,
+      "cache_read_input_tokens": 43368,
+      "cache_creation_input_tokens": 6370,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 6370
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "회의실 예약 웹앱을 만들어 서버를 켜 뒀고, 브라우저에서 http://localhost:8000 으로 열면 됩니다. API는 curl로 확인했고, 화면은 브라우저에서 직접 열어 보지 못했습니다.\n\ncurl로 확인한 것:\n- 오늘 날짜 예약 목록 조회가 됩니다.\n- 시간이 겹치는 예약은 409 오류로 거절됩니다.\n- 다른 사람의 예약을 취소하려 하면 403 오류로 거절됩니다.\n- 첫 화면이 열립니다.\n\n## 기능\n- **시간표**: 다온룸(6인), 한강룸(10인), 남산룸(20인)을 열로 두고 9:00~18:00을 30분 단위로 보여줍니다. 날짜는 ◀ ▶, 오늘 버튼, 날짜 선택으로 바꿉니다.\n- **예약**: 빈 칸을 누르면 회의 제목과 사용 시간(30분~4시간, 뒤에 다른 예약이 있으면 그 앞까지)을 정하는 창이 뜹니다. 지난 시간은 눌러도 예약되지 않습니다.\n- **취소**: 내 예약은 파란색으로 표시되고, 누르면 취소할 수 있습니다. 다른 사람 예약은 회색이라 눌러도 취소되지 않습니다.\n- **가상 데이터**: 직원 6명(개발·디자인·영업·인사·기획)과, 오늘부터 3일간의 예약 11건이 처음 실행할 때 `rooms.db`에 들어갑니다.\n\n## 실행\n```\npip install -r requirements.txt\npython -m uvicorn main:app --port 8000\n```\n`run.bat`을 더블클릭해도 됩니다. 지금 켜 둔 서버는 이 세션에서 띄운 것이라, 나중에 다시 쓰려면 위 방법으로 켜 주세요.\n\n## 참고\n- **로그인 없음**: 화면 오른쪽 위 드롭다운으로 사용자를 고르는 방식입니다. 서버는 본인 예약만 취소되게 막지만, 사용자 선택 자체는 인증이 아니라서 실제로 쓰려면 로그인(SSO 등)을 붙여야 합니다.\n- **자동 갱신**: 화면은 1분마다 새로고침되어 다른 사람의 예약이 반영됩니다.\n- **데이터 초기화**: 가상 데이터를 처음 상태로 되돌리려면 `rooms.db`를 지우고 서버를 다시 켜면 됩니다.\n\n파일은 `main.py`(API와 DB), `static/index.html`(화면), `requirements.txt`, `run.bat`입니다.",
+   "wall_s": 111.3
+  }
+ },
+ "B1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 12.27s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users"
+  ],
+  "extra_routes": [
+   "/api/users"
+  ],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 68571,
+   "num_turns": 9,
+   "total_cost_usd": 0.2418584,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 31216,
+    "cache_read_input_tokens": 129684,
+    "output_tokens": 10401,
+    "output_tokens_details": {
+     "thinking_tokens": 1244
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 31216,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1083,
+      "cache_read_input_tokens": 47385,
+      "cache_creation_input_tokens": 503,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 503
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD 대로 웹앱을 만들었습니다. 서버 API 는 직접 호출해서 확인했고, 화면은 브라우저로 열어 보지 못했습니다. `tests/test_dod.py` 는 폴더에 없어서 DoD 9개 테스트도 돌리지 못했습니다.\n\n**확인한 것 (API, FastAPI TestClient 로 호출):**\n- `/` 가 200 으로 열립니다.\n- 겹치는 예약은 409 입니다.\n- 끝나는 시각과 시작 시각이 같은 예약은 201 입니다.\n- 시작 `10:15` 와 `17:30~18:30` 은 400 입니다.\n- 2시간 30분은 400 이고 2시간은 201 입니다.\n- 남의 예약을 지우면 403, 본인은 204, 없는 예약은 404 입니다.\n\n**확인 못 한 것:** 칸 54개, `booked`/`mine` 상태와 취소 버튼 표시 같은 화면 쪽 동작입니다. `data-testid` 와 `data-*` 이름은 PRD 대로 붙였습니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `rooms.db` 를 지우고 `seed/` CSV 로 `mr_rooms`/`mr_users`/`mr_reservations` 를 새로 만듭니다. API 4개와 규칙 R1~R5 를 구현했고, 겹침 검사와 저장은 락으로 묶었습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. 시간표, 사용자 선택 상자, 예약 폼(30·60·90·120분), 취소 버튼, 메시지 줄, \"불러오지 못했습니다\"와 다시 시도 버튼이 들어 있습니다. 날짜는 `?date=` 로 바꾸고, 기본은 오늘입니다.\n- `seed/*.csv`: 폴더에 `seed/` 가 없어서 PRD 의 수치(방 3 · 직원 6 · 예약 5건)에 맞춰 가상 데이터를 만들었습니다. A 10:00~11:00 은 김민수 예약이고, 예약 날짜는 `2026-11-03`(1건만 11-04)입니다. 실제 CSV 가 있으면 같은 파일 이름으로 바꿔 끼우면 됩니다.\n\n**PRD 에 없는 추가 사항**\n- 사용자 선택 상자를 채우려고 `GET /api/users` 를 하나 더 만들었습니다.\n- 날짜를 쉽게 바꾸려고 이전/다음 버튼과 날짜 입력 상자를 넣었습니다.\n\n**실행:** `python -m uvicorn main:app --port 8000` 으로 띄운 뒤 `http://localhost:8000/?date=2026-11-03` 을 열면 됩니다.",
+   "wall_s": 77.4
+  }
+ },
+ "B2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 10.72s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/users"
+  ],
+  "tests_modified": true,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 54608,
+   "num_turns": 7,
+   "total_cost_usd": 0.21199730000000003,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 29000,
+    "cache_read_input_tokens": 126313,
+    "output_tokens": 8335,
+    "output_tokens_details": {
+     "thinking_tokens": 469
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 29000,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 710,
+      "cache_read_input_tokens": 44646,
+      "cache_creation_input_tokens": 1026,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 1026
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD대로 회의실 예약 웹앱을 만들었습니다. API 규칙(T1, T4~T8)은 제가 쓴 테스트 6개로 확인해 통과했습니다. 화면 동작(T2, T3, T9)은 브라우저에서 열어 보지 못했습니다.\n\n폴더에 `tests/test_dod.py`가 원래 없어서 제가 새로 만들었습니다. 그래서 PRD가 말하는 9개 완료 기준 테스트는 아직 돌려 보지 못했습니다. 그 파일이 따로 있다면 그것으로 다시 확인해야 합니다.\n\n- **서버:** `main.py`에 API 4개와 업무 규칙 R1~R5가 들어 있습니다. 시작할 때마다 `rooms.db`를 지우고 `seed/`의 CSV로 다시 만듭니다. 화면의 사용자 선택 상자를 채우려고 `GET /api/users`를 하나 더 만들었습니다.\n- **화면:** `static/index.html`이 `/`에서 열립니다. PRD의 `data-testid`와 `data-*` 이름을 그대로 썼고, 날짜는 `?date=`, 전날·다음날 버튼, 날짜 선택으로 바꿀 수 있습니다. 서버가 거부하면 그 사유를 메시지 줄에 보여 주고, API가 실패하면 \"불러오지 못했습니다\"와 다시 시도 버튼이 나옵니다.\n- **시드 데이터:** `seed/` 폴더도 없어서 PRD 예시에 맞춰 가상 데이터를 만들었습니다. 회의실 3개, 직원 6명, 예약 5건이고 모두 2026-11-03 날짜입니다. A 회의실 10:00~11:00은 김민수입니다.\n\n실행은 프로젝트 폴더에서 `python -m uvicorn main:app --port 8000`입니다. 데이터를 확인하려면 `/?date=2026-11-03`으로 여세요.",
+   "wall_s": 62.3
+  }
+ },
+ "B3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 10.68s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users"
+  ],
+  "extra_routes": [
+   "/api/users"
+  ],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 87509,
+   "num_turns": 13,
+   "total_cost_usd": 0.30250520000000003,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 34186,
+    "cache_read_input_tokens": 320592,
+    "output_tokens": 13367,
+    "output_tokens_details": {
+     "thinking_tokens": 404
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 34186,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 942,
+      "cache_read_input_tokens": 50346,
+      "cache_creation_input_tokens": 512,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 512
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD의 웹앱을 만들었습니다. API는 TestClient로 확인했습니다. 브라우저 화면(칸 54개, 상태 표시, 취소 버튼)은 열어서 확인하지 못했습니다. PRD가 말하는 `tests/test_dod.py`는 폴더에 없어서 T1~T9는 돌리지 못했습니다.\n\n**확인한 것**\n- `/`가 200으로 열립니다.\n- 겹치는 예약은 409입니다.\n- 끝나는 시각과 시작 시각이 같은 붙여 예약은 201입니다.\n- `10:15` 시작과 `17:30~18:30`은 400입니다.\n- 2시간 30분은 400, 2시간은 201입니다.\n- 남의 예약을 지우면 403이고, 본인이 지우면 204입니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/*.csv`로 `rooms.db`를 새로 만듭니다. 테이블은 `mr_` 접두어를 씁니다. 규칙 R1~R5가 들어 있고, `GET /api/rooms`, `GET`/`POST /api/reservations`, `DELETE /api/reservations/{id}`를 제공합니다. 사용자 선택 상자를 채우려고 PRD에 없는 `GET /api/users`를 하나 추가했습니다.\n- `static/index.html`: 순수 HTML/JS 화면 한 장입니다. PRD가 정한 `data-testid`와 `data-*` 이름을 그대로 썼습니다. 날짜는 `?date=`로 바꾸고, 기본은 오늘입니다. 서버가 거부하면 그 `detail`을 메시지 줄에 그대로 보여 주고, API가 실패하면 `불러오지 못했습니다`와 다시 시도 버튼이 나옵니다.\n- `seed/rooms.csv`, `seed/users.csv`, `seed/reservations.csv`: 폴더에 없어서 제가 만들었습니다. 회의실 3개, 직원 6명, 예약 5건이고 모두 가상 데이터입니다. A 10:00~11:00은 김민수 예약이라 PRD의 T3 조건과 맞습니다.\n\n**실행:** 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`을 실행하세요. 예약 확인용 날짜는 `/?date=2026-11-03`입니다. 이 PC에는 `fastapi`, `uvicorn`, `httpx`를 새로 설치했습니다. `httpx`는 TestClient용이고 앱 실행에는 필요 없습니다.",
+   "wall_s": 100.5
+  }
+ },
+ "C1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 10.84s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/users"
+  ],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 69506,
+   "num_turns": 10,
+   "total_cost_usd": 0.29122129999999996,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 38682,
+    "cache_read_input_tokens": 231093,
+    "output_tokens": 11336,
+    "output_tokens_details": {
+     "thinking_tokens": 707
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 38682,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 233,
+      "cache_read_input_tokens": 55128,
+      "cache_creation_input_tokens": 226,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 226
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: ① 사용자 선택 상자의 이름을 seed/users.csv 에서 가져오려고 읽기 전용 `GET /api/users` 를 추가했다. PRD 5의 API 4개 외 1개다. ② 필수 값이 비었을 때(400)와 없는 회의실(404)의 `detail` 문구는 PRD 6에 없어서 직접 정했다(`모든 값을 입력해 주세요`, `회의실을 찾을 수 없습니다`).\n```",
+   "wall_s": 87.9
+  }
+ },
+ "C2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 11.45s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users"
+  ],
+  "extra_routes": [
+   "/api/users"
+  ],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 74860,
+   "num_turns": 12,
+   "total_cost_usd": 0.29739140000000003,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 38593,
+    "cache_read_input_tokens": 339174,
+    "output_tokens": 10907,
+    "output_tokens_details": {
+     "thinking_tokens": 549
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 38593,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 149,
+      "cache_read_input_tokens": 55083,
+      "cache_creation_input_tokens": 182,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 182
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (rooms.csv · users.csv · reservations.csv)\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음. 사용자 선택 상자를 채우려고 `GET /api/users` 를 하나 더 두었습니다. 이 API 는 PRD 의 API 4개에 없습니다.",
+   "wall_s": 93.5
+  }
+ },
+ "C3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 13.48s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users"
+  ],
+  "extra_routes": [
+   "/api/users"
+  ],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 47460,
+   "num_turns": 9,
+   "total_cost_usd": 0.22880399999999998,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 34565,
+    "cache_read_input_tokens": 227300,
+    "output_tokens": 6779,
+    "output_tokens_details": {
+     "thinking_tokens": 432
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 34565,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 254,
+      "cache_read_input_tokens": 50967,
+      "cache_creation_input_tokens": 270,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 270
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/rooms.csv, seed/users.csv, seed/reservations.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 화면이 사용자 이름 목록을 읽을 수 있도록 `GET /api/users` 를 하나 더 만들었습니다. PRD 의 API 4개에는 없는 것입니다. 존재하지 않는 회의실이나 사용자로 예약하면 400 으로 거부하는데, PRD 6 에 이 사유 문구가 없어서 \"존재하지 않는 회의실입니다\", \"존재하지 않는 사용자입니다\" 라고 직접 정했습니다.",
+   "wall_s": 63.1
+  }
+ }
+}

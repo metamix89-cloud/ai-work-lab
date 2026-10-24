@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 68571,
+ "num_turns": 9,
+ "total_cost_usd": 0.2418584,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 8,
+  "cache_creation_input_tokens": 31216,
+  "cache_read_input_tokens": 129684,
+  "output_tokens": 10401,
+  "output_tokens_details": {
+   "thinking_tokens": 1244
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 31216,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1083,
+    "cache_read_input_tokens": 47385,
+    "cache_creation_input_tokens": 503,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 503
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD 대로 웹앱을 만들었습니다. 서버 API 는 직접 호출해서 확인했고, 화면은 브라우저로 열어 보지 못했습니다. `tests/test_dod.py` 는 폴더에 없어서 DoD 9개 테스트도 돌리지 못했습니다.\n\n**확인한 것 (API, FastAPI TestClient 로 호출):**\n- `/` 가 200 으로 열립니다.\n- 겹치는 예약은 409 입니다.\n- 끝나는 시각과 시작 시각이 같은 예약은 201 입니다.\n- 시작 `10:15` 와 `17:30~18:30` 은 400 입니다.\n- 2시간 30분은 400 이고 2시간은 201 입니다.\n- 남의 예약을 지우면 403, 본인은 204, 없는 예약은 404 입니다.\n\n**확인 못 한 것:** 칸 54개, `booked`/`mine` 상태와 취소 버튼 표시 같은 화면 쪽 동작입니다. `data-testid` 와 `data-*` 이름은 PRD 대로 붙였습니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `rooms.db` 를 지우고 `seed/` CSV 로 `mr_rooms`/`mr_users`/`mr_reservations` 를 새로 만듭니다. API 4개와 규칙 R1~R5 를 구현했고, 겹침 검사와 저장은 락으로 묶었습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. 시간표, 사용자 선택 상자, 예약 폼(30·60·90·120분), 취소 버튼, 메시지 줄, \"불러오지 못했습니다\"와 다시 시도 버튼이 들어 있습니다. 날짜는 `?date=` 로 바꾸고, 기본은 오늘입니다.\n- `seed/*.csv`: 폴더에 `seed/` 가 없어서 PRD 의 수치(방 3 · 직원 6 · 예약 5건)에 맞춰 가상 데이터를 만들었습니다. A 10:00~11:00 은 김민수 예약이고, 예약 날짜는 `2026-11-03`(1건만 11-04)입니다. 실제 CSV 가 있으면 같은 파일 이름으로 바꿔 끼우면 됩니다.\n\n**PRD 에 없는 추가 사항**\n- 사용자 선택 상자를 채우려고 `GET /api/users` 를 하나 더 만들었습니다.\n- 날짜를 쉽게 바꾸려고 이전/다음 버튼과 날짜 입력 상자를 넣었습니다.\n\n**실행:** `python -m uvicorn main:app --port 8000` 으로 띄운 뒤 `http://localhost:8000/?date=2026-11-03` 을 열면 됩니다.",
+ "wall_s": 77.4
+}

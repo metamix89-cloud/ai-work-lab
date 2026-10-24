@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 회의실 예약</title>
+<style>
+  :root { --primary:#2563eb; --line:#e2e8f0; --mine:#2563eb; --other:#94a3b8; --free:#f8fafc; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif; background:#f1f5f9; color:#0f172a; }
+  header { background:#fff; border-bottom:1px solid var(--line); padding:12px 24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  header h1 { font-size:18px; margin:0; flex:1; }
+  header h1 span { color:var(--primary); }
+  select, input, button { font:inherit; }
+  select, input[type=text], input[type=date] { padding:6px 10px; border:1px solid #cbd5e1; border-radius:6px; background:#fff; }
+  button { padding:6px 12px; border:1px solid #cbd5e1; background:#fff; border-radius:6px; cursor:pointer; }
+  button:hover { background:#f1f5f9; }
+  button.primary { background:var(--primary); color:#fff; border-color:var(--primary); }
+  button.danger { background:#dc2626; color:#fff; border-color:#dc2626; }
+  main { max-width:1000px; margin:20px auto; padding:0 16px; }
+  .bar { display:flex; align-items:center; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+  .bar .date { font-size:18px; font-weight:700; min-width:190px; text-align:center; }
+  .legend { margin-left:auto; display:flex; gap:12px; font-size:13px; color:#475569; }
+  .legend i { display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:4px; vertical-align:-1px; }
+  .grid { display:grid; grid-template-columns:64px repeat(3,1fr); background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .head { padding:10px 8px; text-align:center; background:#fff; border-bottom:2px solid var(--line); font-weight:700; }
+  .head small { display:block; font-weight:400; color:#64748b; font-size:12px; }
+  .time { font-size:12px; color:#64748b; padding:2px 8px; text-align:right; border-top:1px solid var(--line); }
+  .time.half { color:transparent; border-top-style:dashed; }
+  .cell { border-top:1px solid var(--line); border-left:1px solid var(--line); background:var(--free); cursor:pointer; }
+  .cell.half { border-top-style:dashed; }
+  .cell:hover { background:#dbeafe; }
+  .cell.past { background:#e2e8f0; cursor:not-allowed; opacity:.55; }
+  .bk { margin:2px 3px; padding:4px 8px; border-radius:6px; background:var(--other); color:#fff; font-size:12px; overflow:hidden; z-index:1; border:0; text-align:left; line-height:1.35; cursor:default; }
+  .bk:hover { background:var(--other); }
+  .bk b { display:block; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .bk.mine { background:var(--mine); cursor:pointer; }
+  .bk.mine:hover { filter:brightness(.9); background:var(--mine); }
+  dialog { border:0; border-radius:12px; padding:20px 24px; width:360px; box-shadow:0 20px 50px rgba(0,0,0,.25); }
+  dialog::backdrop { background:rgba(15,23,42,.4); }
+  dialog h2 { margin:0 0 12px; font-size:17px; }
+  dialog label { display:block; margin:10px 0 4px; font-size:13px; color:#475569; }
+  dialog input, dialog select { width:100%; }
+  dialog .btns { margin-top:18px; display:flex; justify-content:flex-end; gap:8px; }
+  .err { color:#dc2626; font-size:13px; min-height:18px; margin-top:8px; }
+  .toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#0f172a; color:#fff; padding:10px 18px; border-radius:8px; opacity:0; transition:.25s; pointer-events:none; }
+  .toast.show { opacity:1; }
+</style>
+</head>
+<body>
+<header>
+  <h1><span>다온소프트</span> 회의실 예약</h1>
+  <label>사용자&nbsp;<select id="user"></select></label>
+</header>
+<main>
+  <div class="bar">
+    <button id="prev">◀</button>
+    <div class="date" id="dateLabel"></div>
+    <button id="next">▶</button>
+    <button id="today">오늘</button>
+    <input type="date" id="picker">
+    <div class="legend"><span><i style="background:var(--mine)"></i>내 예약</span><span><i style="background:var(--other)"></i>다른 사람 예약</span><span><i style="background:var(--free);border:1px solid var(--line)"></i>예약 가능</span></div>
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<dialog id="bookDlg">
+  <h2>회의실 예약</h2>
+  <div id="bookInfo" style="color:#475569;font-size:14px"></div>
+  <label>회의 제목</label><input type="text" id="title" maxlength="60" placeholder="예: 주간 업무 회의">
+  <label>사용 시간</label><select id="dur"></select>
+  <div class="err" id="bookErr"></div>
+  <div class="btns"><button id="bookCancel">닫기</button><button class="primary" id="bookOk">예약하기</button></div>
+</dialog>
+
+<dialog id="viewDlg">
+  <h2 id="viewTitle"></h2>
+  <div id="viewInfo" style="line-height:1.7;font-size:14px;white-space:pre-line"></div>
+  <div class="err" id="viewErr"></div>
+  <div class="btns"><button id="viewClose">닫기</button><button class="danger" id="viewDel">예약 취소</button></div>
+</dialog>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2, "0");
+const iso = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const DOW = ["일","월","화","수","목","금","토"];
+let meta, day = iso(new Date()), bookings = [], me = +localStorage.getItem("uid") || 1;
+
+const slotTime = s => { const m = meta.open_hour*60 + s*30; return `${pad(Math.floor(m/60))}:${pad(m%60)}`; };
+const nowSlot = () => { const n = new Date(); return (n.getHours()-meta.open_hour)*2 + Math.floor(n.getMinutes()/30); };
+const isPast = s => day < iso(new Date()) || (day === iso(new Date()) && s < nowSlot());
+
+async function api(url, opt) {
+  const r = await fetch(url, opt);
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(typeof j.detail === "string" ? j.detail : "요청에 실패했습니다.");
+  return j;
+}
+function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.add("show"); setTimeout(() => t.classList.remove("show"), 2200); }
+
+async function load() {
+  const [y, m, d] = day.split("-").map(Number);
+  $("dateLabel").textContent = `${y}년 ${m}월 ${d}일 (${DOW[new Date(y, m-1, d).getDay()]})`;
+  $("picker").value = day;
+  bookings = await api(`/api/bookings?day=${day}`);
+  render();
+}
+
+function render() {
+  const g = $("grid");
+  g.innerHTML = "";
+  g.style.gridTemplateRows = `auto repeat(${meta.slots}, 40px)`;
+  g.append(Object.assign(document.createElement("div"), { className: "head" }));
+  meta.rooms.forEach(r => {
+    const h = document.createElement("div");
+    h.className = "head";
+    h.append(r.name);
+    const sm = document.createElement("small");
+    sm.textContent = `${r.capacity}인 · ${r.note}`;
+    h.append(sm);
+    g.append(h);
+  });
+  const taken = new Set();
+  bookings.forEach(b => { for (let s = b.start_slot; s < b.end_slot; s++) taken.add(`${b.room_id}:${s}`); });
+
+  for (let s = 0; s < meta.slots; s++) {
+    const t = document.createElement("div");
+    t.className = "time" + (s % 2 ? " half" : "");
+    t.textContent = slotTime(s);
+    t.style.gridArea = `${s+2} / 1`;
+    g.append(t);
+    meta.rooms.forEach((r, i) => {
+      const c = document.createElement("div");
+      c.className = "cell" + (s % 2 ? " half" : "");
+      c.style.gridArea = `${s+2} / ${i+2}`;
+      if (taken.has(`${r.id}:${s}`)) c.style.visibility = "hidden";
+      else if (isPast(s)) c.classList.add("past");
+      else c.onclick = () => openBook(r, s);
+      g.append(c);
+    });
+  }
+  bookings.forEach(b => {
+    const col = meta.rooms.findIndex(r => r.id === b.room_id) + 2;
+    const el = document.createElement("button");
+    el.className = "bk" + (b.user_id === me ? " mine" : "");
+    el.style.gridArea = `${b.start_slot+2} / ${col} / span ${b.end_slot-b.start_slot} / ${col+1}`;
+    const t = document.createElement("b");
+    t.textContent = b.title;
+    el.append(t, `${slotTime(b.start_slot)}–${slotTime(b.end_slot)} · ${b.user_name} (${b.dept})`);
+    el.title = `${b.title} · ${b.user_name}`;
+    if (b.user_id === me) el.onclick = () => openView(b);
+    g.append(el);
+  });
+}
+
+// ---- 예약 ----
+let pending;
+function openBook(room, s) {
+  pending = { room, s };
+  let free = 0;  // 시작 칸부터 연속으로 비어 있는 칸 수
+  while (s + free < meta.slots && !bookings.some(b => b.room_id === room.id && b.start_slot <= s+free && b.end_slot > s+free)) free++;
+  const sel = $("dur");
+  sel.innerHTML = "";
+  for (let n = 1; n <= Math.min(free, 8); n++) sel.add(new Option(`${n*30}분 (${slotTime(s)}–${slotTime(s+n)})`, n));
+  sel.value = Math.min(2, free);
+  $("bookInfo").textContent = `${room.name} · ${day} ${slotTime(s)} 시작`;
+  $("title").value = "";
+  $("bookErr").textContent = "";
+  $("bookDlg").showModal();
+  $("title").focus();
+}
+$("bookOk").onclick = async () => {
+  const title = $("title").value.trim();
+  if (!title) { $("bookErr").textContent = "회의 제목을 입력해 주세요."; return; }
+  try {
+    await api("/api/bookings", { method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ room_id: pending.room.id, user_id: me, day, start_slot: pending.s, slots: +$("dur").value, title }) });
+    $("bookDlg").close(); toast("예약되었습니다."); load();
+  } catch (e) { $("bookErr").textContent = e.message; load(); }
+};
+$("bookCancel").onclick = () => $("bookDlg").close();
+$("title").addEventListener("keydown", e => { if (e.key === "Enter") $("bookOk").click(); });
+
+// ---- 내 예약 취소 ----
+let viewing;
+function openView(b) {
+  viewing = b;
+  const room = meta.rooms.find(r => r.id === b.room_id);
+  $("viewTitle").textContent = b.title;
+  $("viewInfo").textContent = `${room.name}\n${b.day} ${slotTime(b.start_slot)}–${slotTime(b.end_slot)}\n예약자: ${b.user_name} (${b.dept})`;
+  $("viewErr").textContent = "";
+  $("viewDlg").showModal();
+}
+$("viewDel").onclick = async () => {
+  try {
+    await api(`/api/bookings/${viewing.id}?user_id=${me}`, { method: "DELETE" });
+    $("viewDlg").close(); toast("예약이 취소되었습니다."); load();
+  } catch (e) { $("viewErr").textContent = e.message; }
+};
+$("viewClose").onclick = () => $("viewDlg").close();
+
+// ---- 날짜/사용자 ----
+function shift(n) { const [y,m,d] = day.split("-").map(Number); day = iso(new Date(y, m-1, d+n)); load(); }
+$("prev").onclick = () => shift(-1);
+$("next").onclick = () => shift(1);
+$("today").onclick = () => { day = iso(new Date()); load(); };
+$("picker").onchange = e => { if (e.target.value) { day = e.target.value; load(); } };
+$("user").onchange = e => { me = +e.target.value; localStorage.setItem("uid", me); render(); };
+
+(async () => {
+  meta = await api("/api/meta");
+  if (!meta.users.some(u => u.id === me)) me = meta.users[0].id;
+  meta.users.forEach(u => $("user").add(new Option(`${u.name} (${u.dept})`, u.id)));
+  $("user").value = me;
+  load();
+  setInterval(load, 60000);  // 다른 사용자의 변경/시간 경과 반영
+})();
+</script>
+</body>
+</html>

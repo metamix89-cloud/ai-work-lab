@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>다온소프트 회의실 예약</title>
+<style>
+  body { font-family: sans-serif; margin: 16px; color: #222; }
+  header { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  h1 { font-size: 20px; margin: 0; }
+  table { border-collapse: collapse; margin-top: 12px; }
+  th, td { border: 1px solid #ccc; padding: 2px; font-size: 11px; text-align: center; min-width: 62px; height: 48px; }
+  th.room { min-width: 90px; background: #f3f3f3; }
+  td.free { background: #fff; cursor: pointer; }
+  td.free:hover { background: #e8f4ff; }
+  td.booked { background: #ddd; }
+  td.mine { background: #cfe8cf; }
+  td button { font-size: 10px; margin-top: 2px; }
+  #form { margin-top: 12px; padding: 8px; border: 1px solid #aaa; display: none; }
+  #message { margin-top: 12px; min-height: 20px; color: #b00020; }
+  #error { display: none; margin-top: 12px; }
+  .wrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+<header>
+  <h1>다온소프트 회의실 예약</h1>
+  <label>날짜 <input type="date" id="date" data-testid="date"></label>
+  <label>사용자 <select id="user" data-testid="user-select"></select></label>
+</header>
+<div id="error">불러오지 못했습니다 <button id="retry">다시 시도</button></div>
+<div class="wrap"><table id="grid"></table></div>
+<div id="form">
+  <span id="formInfo"></span>
+  <label>끝 <select id="len"></select></label>
+  <button id="submit">예약</button> <button id="close">닫기</button>
+</div>
+<div id="message" data-testid="message"></div>
+<script>
+const $ = id => document.getElementById(id);
+function fmt(m) { return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); }
+function toMin(t) { return +t.slice(0, 2) * 60 + +t.slice(3); }
+const TIMES = [];
+for (let m = 540; m < 1080; m += 30) TIMES.push(fmt(m));
+function today() {
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+
+let rooms = [], users = [], res = [], pending = null;
+$("date").value = new URLSearchParams(location.search).get("date") || today();
+
+async function api(url, opt) {
+  const r = await fetch(url, opt);
+  const body = r.status === 204 ? null : await r.json().catch(() => null);
+  return { ok: r.ok, body };
+}
+function msg(t) { $("message").textContent = t || ""; }
+function failText(r) { return (r.body && r.body.detail) || "오류가 발생했습니다"; }
+
+async function load() {
+  try {
+    if (!rooms.length) {
+      const a = await api("/api/rooms"), b = await api("/api/users");
+      if (!a.ok || !b.ok) throw new Error("load");
+      rooms = a.body; users = b.body;
+      $("user").innerHTML = users.map(u => `<option>${u}</option>`).join("");
+    }
+    const r = await api("/api/reservations?date=" + encodeURIComponent($("date").value));
+    if (!r.ok) throw new Error("load");
+    res = r.body;
+  } catch (e) {
+    $("error").style.display = "block";
+    $("grid").innerHTML = "";
+    return;
+  }
+  $("error").style.display = "none";
+  render();
+}
+
+function render() {
+  const me = $("user").value;
+  let h = "<tr><th class='room'>회의실</th>" + TIMES.map(t => `<th>${t}</th>`).join("") + "</tr>";
+  for (const room of rooms) {
+    h += `<tr><th class="room">${room.name}</th>`;
+    for (const t of TIMES) {
+      const m = toMin(t);
+      const r = res.find(x => x.room_id === room.room_id && toMin(x.start) <= m && m < toMin(x.end));
+      const st = !r ? "free" : r.user === me ? "mine" : "booked";
+      let inner = "";
+      if (r) {
+        inner = r.user;
+        if (st === "mine") inner += `<br><button data-testid="cancel-btn" data-id="${r.res_id}">취소</button>`;
+      }
+      h += `<td class="${st}" data-testid="slot" data-room="${room.room_id}" data-start="${t}" data-state="${st}">${inner}</td>`;
+    }
+    h += "</tr>";
+  }
+  $("grid").innerHTML = h;
+}
+
+$("grid").addEventListener("click", async e => {
+  const btn = e.target.closest("[data-testid=cancel-btn]");
+  if (btn) {
+    const r = await api(`/api/reservations/${btn.dataset.id}?user=${encodeURIComponent($("user").value)}`, { method: "DELETE" });
+    msg(r.ok ? "예약을 취소했습니다" : failText(r));
+    return load();
+  }
+  const td = e.target.closest("td[data-state=free]");
+  if (!td) return;
+  pending = { room: td.dataset.room, start: td.dataset.start };
+  const s = toMin(pending.start);
+  $("len").innerHTML = [30, 60, 90, 120].map(d => `<option value="${fmt(s + d)}">${fmt(s + d)} (${d}분)</option>`).join("");
+  $("formInfo").textContent = `${pending.room} 회의실 ${pending.start} 부터`;
+  $("form").style.display = "block";
+});
+
+$("submit").onclick = async () => {
+  if (!pending) return;
+  const r = await api("/api/reservations", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ room_id: pending.room, date: $("date").value, start: pending.start, end: $("len").value, user: $("user").value })
+  });
+  msg(r.ok ? "예약했습니다" : failText(r));
+  if (r.ok) { $("form").style.display = "none"; pending = null; }
+  load();
+};
+$("close").onclick = () => { $("form").style.display = "none"; pending = null; };
+$("retry").onclick = load;
+$("user").onchange = render;
+$("date").onchange = () => { msg(""); history.replaceState(null, "", "?date=" + $("date").value); load(); };
+load();
+</script>
+</body>
+</html>

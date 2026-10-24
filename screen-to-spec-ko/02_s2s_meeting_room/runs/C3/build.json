@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 47460,
+ "num_turns": 9,
+ "total_cost_usd": 0.22880399999999998,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 34565,
+  "cache_read_input_tokens": 227300,
+  "output_tokens": 6779,
+  "output_tokens_details": {
+   "thinking_tokens": 432
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 34565,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 254,
+    "cache_read_input_tokens": 50967,
+    "cache_creation_input_tokens": 270,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 270
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/rooms.csv, seed/users.csv, seed/reservations.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 화면이 사용자 이름 목록을 읽을 수 있도록 `GET /api/users` 를 하나 더 만들었습니다. PRD 의 API 4개에는 없는 것입니다. 존재하지 않는 회의실이나 사용자로 예약하면 400 으로 거부하는데, PRD 6 에 이 사유 문구가 없어서 \"존재하지 않는 회의실입니다\", \"존재하지 않는 사용자입니다\" 라고 직접 정했습니다.",
+ "wall_s": 63.1
+}

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 회의실 예약</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 20px; color: #222; }
+  h1 { font-size: 22px; margin: 0 0 12px; }
+  .top { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+  #date { font-weight: bold; font-size: 18px; }
+  table { border-collapse: collapse; }
+  th, td { border: 1px solid #ccc; text-align: center; font-size: 12px; }
+  th { background: #f3f4f6; padding: 4px 6px; }
+  th.room { min-width: 90px; }
+  .slot { width: 62px; height: 52px; padding: 2px; vertical-align: middle; }
+  .slot[data-state="free"] { background: #fff; cursor: pointer; }
+  .slot[data-state="free"]:hover { background: #e8f4ff; }
+  .slot[data-state="booked"] { background: #e5e7eb; color: #555; }
+  .slot[data-state="mine"] { background: #d1fae5; color: #065f46; font-weight: bold; }
+  .slot button { font-size: 11px; margin-top: 2px; cursor: pointer; }
+  .legend span { display: inline-block; padding: 2px 8px; border: 1px solid #ccc; margin-right: 6px; font-size: 12px; }
+  #form { margin: 14px 0; padding: 10px; border: 1px solid #93c5fd; background: #eff6ff; display: none; }
+  #form label { margin-right: 10px; }
+  #message { margin-top: 12px; min-height: 22px; font-weight: bold; }
+  #message.error { color: #b91c1c; }
+  #message.ok { color: #047857; }
+  #load-error { display: none; color: #b91c1c; margin: 12px 0; }
+  .wrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+<h1>다온소프트 회의실 예약</h1>
+
+<div class="top">
+  <button id="prev" type="button">◀</button>
+  <span id="date" data-testid="date"></span>
+  <button id="next" type="button">▶</button>
+  <input type="date" id="date-input" aria-label="날짜 선택">
+  <label>사용자
+    <select id="user-select" data-testid="user-select"></select>
+  </label>
+  <span class="legend">
+    <span style="background:#fff">빈 칸</span><span style="background:#e5e7eb">예약</span><span style="background:#d1fae5">내 예약</span>
+  </span>
+</div>
+
+<div id="load-error">불러오지 못했습니다 <button id="retry" type="button">다시 시도</button></div>
+
+<div class="wrap"><table id="grid"></table></div>
+
+<form id="form">
+  <strong id="form-title"></strong>
+  <label>시작 <input id="f-start" readonly size="5"></label>
+  <label>끝
+    <select id="f-end">
+      <option value="30">30분</option>
+      <option value="60">60분</option>
+      <option value="90">90분</option>
+      <option value="120">120분</option>
+    </select>
+  </label>
+  <button type="submit">예약</button>
+  <button type="button" id="f-cancel">닫기</button>
+</form>
+
+<div id="message" data-testid="message"></div>
+
+<script>
+(function () {
+  var rooms = [], users = [], reservations = [];
+  var current = null; // {room, start}
+  var $ = function (id) { return document.getElementById(id); };
+
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function today() {
+    var d = new Date();
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  }
+  function getDate() {
+    var q = new URLSearchParams(location.search).get("date");
+    return q && /^\d{4}-\d{2}-\d{2}$/.test(q) ? q : today();
+  }
+  function shiftDate(s, days) {
+    var p = s.split("-");
+    var d = new Date(+p[0], +p[1] - 1, +p[2] + days);
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  }
+  function toMin(t) { var p = t.split(":"); return +p[0] * 60 + +p[1]; }
+  function fromMin(m) { return pad(Math.floor(m / 60)) + ":" + pad(m % 60); }
+
+  function setMessage(text, kind) {
+    var m = $("message");
+    m.textContent = text || "";
+    m.className = kind || "";
+  }
+
+  function api(method, url, body) {
+    var opt = { method: method, headers: {} };
+    if (body) { opt.headers["Content-Type"] = "application/json"; opt.body = JSON.stringify(body); }
+    return fetch(url, opt).then(function (r) {
+      if (r.status === 204) return { ok: true, status: 204, data: null };
+      return r.json().catch(function () { return {}; }).then(function (data) {
+        return { ok: r.ok, status: r.status, data: data };
+      });
+    });
+  }
+
+  function load() {
+    var date = getDate();
+    $("date").textContent = date;
+    $("date-input").value = date;
+    return Promise.all([
+      rooms.length ? Promise.resolve(rooms) : fetch("/api/rooms").then(chk),
+      users.length ? Promise.resolve(users) : fetch("/api/users").then(chk),
+      fetch("/api/reservations?date=" + encodeURIComponent(date)).then(chk)
+    ]).then(function (res) {
+      rooms = res[0]; users = res[1]; reservations = res[2];
+      $("load-error").style.display = "none";
+      $("grid").style.display = "";
+      fillUsers();
+      render();
+    }).catch(function () {
+      $("grid").style.display = "none";
+      $("form").style.display = "none";
+      $("load-error").style.display = "block";
+    });
+  }
+  function chk(r) {
+    if (!r.ok) throw new Error("fail");
+    return r.json();
+  }
+
+  function fillUsers() {
+    var sel = $("user-select");
+    if (sel.options.length === users.length && users.length) return;
+    sel.innerHTML = "";
+    users.forEach(function (u) {
+      var o = document.createElement("option");
+      o.value = u; o.textContent = u;
+      sel.appendChild(o);
+    });
+  }
+
+  function findRes(room, minute) {
+    for (var i = 0; i < reservations.length; i++) {
+      var r = reservations[i];
+      if (r.room_id === room && toMin(r.start) <= minute && minute < toMin(r.end)) return r;
+    }
+    return null;
+  }
+
+  function render() {
+    var user = $("user-select").value;
+    var grid = $("grid");
+    grid.innerHTML = "";
+    var head = document.createElement("tr");
+    head.appendChild(document.createElement("th"));
+    for (var m = 540; m < 1080; m += 30) {
+      var th = document.createElement("th");
+      th.textContent = fromMin(m);
+      head.appendChild(th);
+    }
+    grid.appendChild(head);
+    rooms.forEach(function (room) {
+      var tr = document.createElement("tr");
+      var rh = document.createElement("th");
+      rh.className = "room";
+      rh.textContent = room.name;
+      tr.appendChild(rh);
+      for (var m = 540; m < 1080; m += 30) {
+        (function (m) {
+          var td = document.createElement("td");
+          td.className = "slot";
+          td.setAttribute("data-testid", "slot");
+          td.setAttribute("data-room", room.room_id);
+          td.setAttribute("data-start", fromMin(m));
+          var r = findRes(room.room_id, m);
+          if (!r) {
+            td.setAttribute("data-state", "free");
+            td.addEventListener("click", function () { openForm(room, fromMin(m)); });
+          } else if (r.user === user) {
+            td.setAttribute("data-state", "mine");
+            td.appendChild(document.createTextNode(r.user));
+            td.appendChild(document.createElement("br"));
+            var b = document.createElement("button");
+            b.type = "button";
+            b.textContent = "취소";
+            b.setAttribute("data-testid", "cancel-btn");
+            b.addEventListener("click", function (ev) { ev.stopPropagation(); cancel(r); });
+            td.appendChild(b);
+          } else {
+            td.setAttribute("data-state", "booked");
+            td.textContent = r.user;
+          }
+          tr.appendChild(td);
+        })(m);
+      }
+      grid.appendChild(tr);
+    });
+  }
+
+  function openForm(room, start) {
+    current = { room: room, start: start };
+    $("form-title").textContent = room.name + " · " + getDate();
+    $("f-start").value = start;
+    $("form").style.display = "block";
+    setMessage("");
+  }
+
+  function cancel(r) {
+    api("DELETE", "/api/reservations/" + r.res_id + "?user=" + encodeURIComponent($("user-select").value))
+      .then(function (res) {
+        if (res.ok) setMessage("예약을 취소했습니다", "ok");
+        else setMessage(res.data.detail || "취소하지 못했습니다", "error");
+        return load();
+      }).catch(function () { setMessage("불러오지 못했습니다", "error"); });
+  }
+
+  $("form").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    if (!current) return;
+    var end = fromMin(toMin(current.start) + +$("f-end").value);
+    api("POST", "/api/reservations", {
+      room_id: current.room.room_id,
+      date: getDate(),
+      start: current.start,
+      end: end,
+      user: $("user-select").value
+    }).then(function (res) {
+      if (res.ok) {
+        setMessage("예약했습니다: " + current.room.name + " " + current.start + "~" + end, "ok");
+        $("form").style.display = "none";
+        current = null;
+      } else {
+        setMessage(res.data.detail || "예약하지 못했습니다", "error");
+      }
+      return load();
+    }).catch(function () { setMessage("불러오지 못했습니다", "error"); });
+  });
+  $("f-cancel").addEventListener("click", function () { $("form").style.display = "none"; current = null; });
+  $("user-select").addEventListener("change", render);
+  $("retry").addEventListener("click", load);
+  function go(d) { location.search = "?date=" + d; }
+  $("prev").addEventListener("click", function () { go(shiftDate(getDate(), -1)); });
+  $("next").addEventListener("click", function () { go(shiftDate(getDate(), 1)); });
+  $("date-input").addEventListener("change", function (e) { if (e.target.value) go(e.target.value); });
+
+  load();
+})();
+</script>
+</body>
+</html>

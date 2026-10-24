@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>다온소프트 회의실 예약</title>
+<style>
+  :root { --brand:#2f5bea; --line:#e3e6ee; --mine:#2f5bea; --other:#9aa3b5; --free:#fff; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Malgun Gothic",system-ui,sans-serif; background:#f5f6fa; color:#222; }
+  header { background:#fff; border-bottom:1px solid var(--line); padding:14px 24px; display:flex; flex-wrap:wrap; gap:16px; align-items:center; }
+  header h1 { font-size:18px; margin:0; color:var(--brand); margin-right:auto; }
+  header label { font-size:13px; color:#555; display:flex; align-items:center; gap:6px; }
+  select,input,button { font:inherit; padding:6px 10px; border:1px solid #ccd; border-radius:6px; background:#fff; }
+  button { cursor:pointer; }
+  button.primary { background:var(--brand); color:#fff; border-color:var(--brand); }
+  button.danger { background:#d9363e; color:#fff; border-color:#d9363e; }
+  main { padding:20px 24px; overflow-x:auto; }
+  .legend { font-size:12px; color:#666; margin-bottom:10px; display:flex; gap:14px; }
+  .legend i { display:inline-block; width:12px; height:12px; border-radius:3px; vertical-align:-2px; margin-right:4px; }
+  table { border-collapse:collapse; background:#fff; min-width:640px; width:100%; table-layout:fixed; }
+  th,td { border:1px solid var(--line); text-align:center; height:34px; font-size:12px; }
+  th { background:#eef1f8; height:44px; font-size:13px; }
+  th small { display:block; color:#667; font-weight:normal; }
+  td.time { width:70px; color:#667; background:#fafbfd; }
+  td.free { cursor:pointer; }
+  td.free:hover { background:#e8efff; }
+  td.past { background:#f0f0f3; cursor:not-allowed; }
+  td.busy { color:#fff; padding:2px 6px; vertical-align:top; text-align:left; background:var(--other); }
+  td.busy.mine { background:var(--mine); cursor:pointer; }
+  td.busy b { display:block; font-size:12px; }
+  dialog { border:none; border-radius:12px; padding:22px; width:340px; box-shadow:0 10px 40px #0004; }
+  dialog::backdrop { background:#0005; }
+  dialog h2 { margin:0 0 12px; font-size:16px; }
+  dialog .row { margin:10px 0; display:flex; flex-direction:column; gap:4px; font-size:13px; }
+  dialog .actions { display:flex; justify-content:flex-end; gap:8px; margin-top:16px; }
+  .err { color:#d9363e; font-size:13px; min-height:18px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🏢 다온소프트 회의실 예약</h1>
+  <label>사용자 <select id="user"></select></label>
+  <label>날짜
+    <button id="prev">◀</button><input type="date" id="day"><button id="next">▶</button>
+  </label>
+</header>
+<main>
+  <div class="legend">
+    <span><i style="background:#fff;border:1px solid #ccd"></i>예약 가능(클릭)</span>
+    <span><i style="background:var(--mine)"></i>내 예약(클릭하면 취소)</span>
+    <span><i style="background:var(--other)"></i>다른 사람 예약</span>
+  </div>
+  <table id="grid"></table>
+</main>
+
+<dialog id="bookDlg">
+  <h2>회의실 예약</h2>
+  <div id="bookInfo" style="font-size:13px;color:#555"></div>
+  <div class="row"><label for="title">회의 제목</label><input id="title" maxlength="50" placeholder="예: 주간 회의"></div>
+  <div class="row"><label for="end">종료 시간</label><select id="end"></select></div>
+  <div class="err" id="bookErr"></div>
+  <div class="actions"><button id="bookCancel">닫기</button><button class="primary" id="bookOk">예약</button></div>
+</dialog>
+
+<dialog id="cancelDlg">
+  <h2>내 예약 취소</h2>
+  <div id="cancelInfo" style="font-size:14px;line-height:1.6"></div>
+  <div class="err" id="cancelErr"></div>
+  <div class="actions"><button id="cancelClose">닫기</button><button class="danger" id="cancelOk">예약 취소</button></div>
+</dialog>
+
+<script>
+const $ = id => document.getElementById(id);
+const toMin = s => { const [h,m] = s.split(':'); return +h*60 + +m; };
+const hhmm = m => String(m/60|0).padStart(2,'0') + ':' + String(m%60).padStart(2,'0');
+let cfg, rooms = [], resv = [], pending = null, target = null;
+
+const headers = () => ({ 'Content-Type':'application/json', 'X-User': encodeURIComponent($('user').value) });
+async function api(url, opt = {}) {
+  const r = await fetch(url, { ...opt, headers: headers() });
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(body.detail || '요청 실패');
+  return body;
+}
+
+async function load() {
+  resv = await api('/api/reservations?day=' + $('day').value);
+  render();
+}
+
+function render() {
+  const open = toMin(cfg.open), close = toMin(cfg.close), step = cfg.step;
+  const day = $('day').value, now = new Date();
+  const nowMin = day === cfg.today ? now.getHours()*60 + now.getMinutes() : (day < cfg.today ? 1e9 : -1);
+  let h = '<tr><th>시간</th>' + rooms.map(r => `<th>${r.name}<small>${r.capacity}인실</small></th>`).join('') + '</tr>';
+  const skip = {}; // room_id -> 남은 rowspan 행 수
+  for (let t = open; t < close; t += step) {
+    h += `<tr><td class="time">${hhmm(t)}</td>`;
+    for (const r of rooms) {
+      if (skip[r.id] > 0) { skip[r.id]--; continue; }
+      const b = resv.find(x => x.room_id === r.id && toMin(x.start) <= t && t < toMin(x.end));
+      if (b) {
+        const span = (toMin(b.end) - t) / step;
+        skip[r.id] = span - 1;
+        const mine = b.user === $('user').value;
+        h += `<td class="busy ${mine?'mine':''}" rowspan="${span}" data-id="${b.id}"><b>${b.title}</b>${b.user} · ${b.start}~${b.end}</td>`;
+      } else if (t + step <= nowMin) {
+        h += '<td class="past"></td>';
+      } else {
+        h += `<td class="free" data-room="${r.id}" data-t="${t}"></td>`;
+      }
+    }
+    h += '</tr>';
+  }
+  $('grid').innerHTML = h;
+}
+
+$('grid').onclick = e => {
+  const td = e.target.closest('td');
+  if (!td) return;
+  if (td.classList.contains('free')) openBook(+td.dataset.room, +td.dataset.t);
+  else if (td.classList.contains('mine')) openCancel(+td.dataset.id);
+};
+
+function openBook(roomId, t) {
+  const room = rooms.find(r => r.id === roomId);
+  pending = { room_id: roomId, start: t };
+  // 다음 예약 시작 전까지만 종료시간 선택 가능
+  let limit = toMin(cfg.close);
+  for (const b of resv) if (b.room_id === roomId && toMin(b.start) > t) limit = Math.min(limit, toMin(b.start));
+  let opts = '';
+  for (let e = t + cfg.step; e <= limit; e += cfg.step) opts += `<option value="${hhmm(e)}">${hhmm(e)}</option>`;
+  $('end').innerHTML = opts;
+  $('bookInfo').textContent = `${room.name} · ${$('day').value} · ${hhmm(t)}부터`;
+  $('title').value = ''; $('bookErr').textContent = '';
+  $('bookDlg').showModal(); $('title').focus();
+}
+
+$('bookOk').onclick = async () => {
+  try {
+    await api('/api/reservations', { method:'POST', body: JSON.stringify({
+      room_id: pending.room_id, day: $('day').value, start: hhmm(pending.start),
+      end: $('end').value, title: $('title').value }) });
+    $('bookDlg').close(); await load();
+  } catch (err) { $('bookErr').textContent = err.message; await load(); }
+};
+$('bookCancel').onclick = () => $('bookDlg').close();
+
+function openCancel(id) {
+  target = resv.find(x => x.id === id);
+  const room = rooms.find(r => r.id === target.room_id);
+  $('cancelInfo').innerHTML = `<b>${target.title}</b><br>${room.name}<br>${target.day} ${target.start}~${target.end}`;
+  $('cancelErr').textContent = '';
+  $('cancelDlg').showModal();
+}
+$('cancelOk').onclick = async () => {
+  try { await api('/api/reservations/' + target.id, { method:'DELETE' }); $('cancelDlg').close(); await load(); }
+  catch (err) { $('cancelErr').textContent = err.message; }
+};
+$('cancelClose').onclick = () => $('cancelDlg').close();
+
+const shift = n => { const d = new Date($('day').value + 'T00:00'); d.setDate(d.getDate() + n);
+  $('day').value = d.toLocaleDateString('sv-SE'); load(); };
+$('prev').onclick = () => shift(-1);
+$('next').onclick = () => shift(1);
+$('day').onchange = load;
+$('user').onchange = () => { localStorage.setItem('user', $('user').value); render(); };
+
+(async () => {
+  cfg = await (await fetch('/api/config')).json();
+  rooms = await (await fetch('/api/rooms')).json();
+  $('user').innerHTML = cfg.users.map(u => `<option>${u}</option>`).join('');
+  $('user').value = localStorage.getItem('user') || cfg.users[0];
+  $('day').value = cfg.today;
+  load();
+})();
+</script>
+</body>
+</html>

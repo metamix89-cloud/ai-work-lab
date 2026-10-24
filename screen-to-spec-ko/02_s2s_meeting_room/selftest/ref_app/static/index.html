@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>다온소프트 회의실 예약</title>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif;background:#F6F7FB;color:#111318;margin:0;padding:24px}
+.top{display:flex;gap:16px;align-items:center}h1{font-size:20px;margin:0}
+table{border-collapse:collapse;margin-top:16px;background:#fff}td,th{border:1px solid #E5E7EB;font-size:11px;padding:0;height:44px;min-width:54px;text-align:center}
+th{background:#F3F4F6;font-weight:600;color:#6B7280}td.free{cursor:pointer}td.booked{background:#E5E7EB;color:#4B5563}td.mine{background:#E0E7FF;color:#3730A3}
+td button{font-size:10px;margin-left:2px}.msg{margin-top:12px;color:#B91C1C;min-height:18px}
+.form{margin-top:12px;display:none;gap:8px}.form.on{display:flex}
+</style></head><body>
+<div class="top"><h1>다온소프트 회의실 예약</h1><span data-testid="date" id="date"></span>
+ <label>사용자 <select data-testid="user-select" id="user"></select></label></div>
+<table id="grid"></table>
+<div class="form" id="form"><span id="ftitle"></span>
+ <select id="len"><option value="30">30분</option><option value="60">60분</option><option value="90">90분</option><option value="120">120분</option></select>
+ <button id="ok">예약</button><button id="no">닫기</button></div>
+<div class="msg" data-testid="message" id="msg"></div>
+<script>
+const date=(new URLSearchParams(location.search).get('date'))||new Date().toISOString().slice(0,10);
+document.getElementById('date').textContent=date;
+const SLOTS=[];for(let m=9*60;m<18*60;m+=30)SLOTS.push(String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0'));
+const mm=t=>+t.slice(0,2)*60+ +t.slice(3);
+let rooms=[],res=[],pick=null;
+const me=()=>document.getElementById('user').value;
+async function load(){
+  try{
+    const [r,u,v]=await Promise.all([fetch('/api/rooms'),fetch('/api/users'),fetch('/api/reservations?date='+date)]);
+    rooms=await r.json();const users=await u.json();res=await v.json();
+    const sel=document.getElementById('user');if(!sel.options.length){sel.innerHTML=users.map(x=>'<option>'+x+'</option>').join('');}
+    draw();
+  }catch(e){document.getElementById('grid').innerHTML='<tr><td>불러오지 못했습니다 <button onclick="load()">다시 시도</button></td></tr>';}
+}
+function draw(){
+  let h='<tr><th></th>'+SLOTS.map(s=>'<th>'+s+'</th>').join('')+'</tr>';
+  for(const r of rooms){
+    h+='<tr><th>'+r.name+'</th>';
+    for(const s of SLOTS){
+      const hit=res.find(x=>x.room_id===r.room_id&&mm(x.start)<=mm(s)&&mm(x.end)>mm(s));
+      const st=!hit?'free':(hit.user===me()?'mine':'booked');
+      h+='<td data-testid="slot" data-room="'+r.room_id+'" data-start="'+s+'" data-state="'+st+'" class="'+st+'">'
+        +(hit?hit.user:'')+(st==='mine'?' <button data-testid="cancel-btn" data-id="'+hit.res_id+'">취소</button>':'')+'</td>';
+    }
+    h+='</tr>';
+  }
+  document.getElementById('grid').innerHTML=h;
+}
+document.getElementById('user').onchange=draw;
+document.getElementById('grid').onclick=async e=>{
+  const b=e.target.closest('[data-testid=cancel-btn]');
+  if(b){const r=await fetch('/api/reservations/'+b.dataset.id+'?user='+encodeURIComponent(me()),{method:'DELETE'});
+    document.getElementById('msg').textContent=r.ok?'':(await r.json()).detail;return load();}
+  const td=e.target.closest('td[data-state=free]');if(!td)return;
+  pick={room:td.dataset.room,start:td.dataset.start};
+  document.getElementById('ftitle').textContent=pick.room+' 회의실 '+pick.start+' 부터';
+  document.getElementById('form').classList.add('on');
+};
+document.getElementById('no').onclick=()=>document.getElementById('form').classList.remove('on');
+document.getElementById('ok').onclick=async()=>{
+  const len=+document.getElementById('len').value,e=mm(pick.start)+len;
+  const end=String(Math.floor(e/60)).padStart(2,'0')+':'+String(e%60).padStart(2,'0');
+  const r=await fetch('/api/reservations',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({room_id:pick.room,date,start:pick.start,end,user:me()})});
+  document.getElementById('msg').textContent=r.ok?'':(await r.json()).detail;
+  document.getElementById('form').classList.remove('on');load();
+};
+load();
+</script></body></html>

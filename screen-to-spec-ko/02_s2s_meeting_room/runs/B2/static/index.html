@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 회의실 예약</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 20px; color: #222; }
+  header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 14px; }
+  h1 { font-size: 20px; margin: 0 12px 0 0; }
+  .grid { display: grid; grid-template-columns: 90px repeat(18, minmax(52px, 1fr)); gap: 2px; overflow-x: auto; }
+  .hd { font-size: 11px; text-align: center; color: #555; padding: 2px 0; }
+  .room { font-weight: bold; display: flex; align-items: center; }
+  .slot { min-height: 56px; border: 1px solid #ccc; border-radius: 3px; font-size: 11px; padding: 2px; text-align: center; background: #fff; }
+  .slot[data-state="free"] { cursor: pointer; background: #f4fbf4; }
+  .slot[data-state="free"]:hover { background: #d9f2d9; }
+  .slot[data-state="booked"] { background: #e3e3e3; color: #555; }
+  .slot[data-state="mine"] { background: #cfe3ff; border-color: #4a8be0; }
+  .slot button { font-size: 10px; margin-top: 2px; }
+  #form { margin: 14px 0; padding: 10px; border: 1px solid #aaa; border-radius: 4px; display: none; }
+  #message { min-height: 1.5em; margin-top: 10px; font-weight: bold; }
+  #message.error { color: #c00; }
+  #fail { display: none; color: #c00; margin: 10px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>다온소프트 회의실 예약</h1>
+  <span>날짜: <strong data-testid="date" id="date"></strong></span>
+  <button id="prev" type="button">◀ 전날</button>
+  <input type="date" id="datepick">
+  <button id="next" type="button">다음날 ▶</button>
+  <label>사용자 <select data-testid="user-select" id="user"></select></label>
+</header>
+
+<div id="fail">불러오지 못했습니다 <button id="retry" type="button">다시 시도</button></div>
+<div id="board" class="grid"></div>
+
+<form id="form">
+  <span id="formInfo"></span>
+  <label> 끝 <select id="end"></select></label>
+  <button type="submit">예약</button>
+  <button type="button" id="formCancel">닫기</button>
+</form>
+
+<div id="message" data-testid="message"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2, "0");
+const hhmm = m => pad(Math.floor(m / 60)) + ":" + pad(m % 60);
+const toMin = s => +s.slice(0, 2) * 60 + +s.slice(3);
+const SLOTS = Array.from({ length: 18 }, (_, i) => hhmm(540 + i * 30));
+
+let rooms = [], users = [], reservations = [], pending = null;
+
+function today() {
+  const d = new Date();
+  return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+}
+let curDate = new URLSearchParams(location.search).get("date") || today();
+
+function say(text, isErr) {
+  $("message").textContent = text || "";
+  $("message").className = isErr ? "error" : "";
+}
+
+async function api(url, opts) {
+  const r = await fetch(url, opts);
+  if (r.status === 204) return null;
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error(data.detail || "오류"), { api: true });
+  return data;
+}
+
+async function load() {
+  try {
+    if (!rooms.length) rooms = await api("/api/rooms");
+    if (!users.length) {
+      users = await api("/api/users");
+      $("user").innerHTML = users.map(u => `<option>${u}</option>`).join("");
+    }
+    reservations = await api("/api/reservations?date=" + encodeURIComponent(curDate));
+    $("fail").style.display = "none";
+    render();
+  } catch (e) {
+    $("fail").style.display = "block";
+    $("board").innerHTML = "";
+  }
+}
+
+function render() {
+  $("date").textContent = curDate;
+  $("datepick").value = curDate;
+  const me = $("user").value;
+  const b = $("board");
+  b.innerHTML = "";
+  b.appendChild(Object.assign(document.createElement("div"), { className: "hd" }));
+  SLOTS.forEach(t => b.appendChild(Object.assign(document.createElement("div"), { className: "hd", textContent: t })));
+  rooms.forEach(rm => {
+    b.appendChild(Object.assign(document.createElement("div"), { className: "room", textContent: rm.name }));
+    SLOTS.forEach(t => {
+      const m = toMin(t);
+      const res = reservations.find(r => r.room_id === rm.room_id && toMin(r.start) <= m && m < toMin(r.end));
+      const el = document.createElement("div");
+      el.className = "slot";
+      el.dataset.testid = "slot";
+      el.setAttribute("data-testid", "slot");
+      el.dataset.room = rm.room_id;
+      el.dataset.start = t;
+      el.dataset.state = !res ? "free" : res.user === me ? "mine" : "booked";
+      if (res) {
+        el.appendChild(document.createTextNode(res.user));
+        if (res.user === me) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.textContent = "취소";
+          btn.setAttribute("data-testid", "cancel-btn");
+          btn.onclick = () => cancel(res.res_id);
+          el.appendChild(document.createElement("br"));
+          el.appendChild(btn);
+        }
+      } else {
+        el.onclick = () => openForm(rm, t);
+      }
+      b.appendChild(el);
+    });
+  });
+}
+
+function openForm(rm, t) {
+  pending = { room_id: rm.room_id, start: t };
+  $("formInfo").textContent = `${rm.name} ${curDate} ${t} 시작`;
+  const s = toMin(t);
+  $("end").innerHTML = [30, 60, 90, 120].map(d => `<option value="${hhmm(s + d)}">${hhmm(s + d)} (${d}분)</option>`).join("");
+  $("form").style.display = "block";
+}
+
+$("form").onsubmit = async ev => {
+  ev.preventDefault();
+  const body = { ...pending, date: curDate, end: $("end").value, user: $("user").value };
+  try {
+    await api("/api/reservations", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    $("form").style.display = "none";
+    say("예약되었습니다");
+  } catch (e) {
+    if (!e.api) return say("불러오지 못했습니다", true);
+    say(e.message, true);
+  }
+  load();
+};
+$("formCancel").onclick = () => { $("form").style.display = "none"; };
+
+async function cancel(id) {
+  try {
+    await api(`/api/reservations/${id}?user=${encodeURIComponent($("user").value)}`, { method: "DELETE" });
+    say("취소되었습니다");
+  } catch (e) {
+    say(e.api ? e.message : "불러오지 못했습니다", true);
+  }
+  load();
+}
+
+function go(d) {
+  curDate = d;
+  history.replaceState(null, "", "?date=" + d);
+  $("form").style.display = "none";
+  load();
+}
+function shift(n) {
+  const [y, m, d] = curDate.split("-").map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d + n));
+  go(dt.getUTCFullYear() + "-" + pad(dt.getUTCMonth() + 1) + "-" + pad(dt.getUTCDate()));
+}
+$("prev").onclick = () => shift(-1);
+$("next").onclick = () => shift(1);
+$("datepick").onchange = e => e.target.value && go(e.target.value);
+$("user").onchange = render;
+$("retry").onclick = load;
+load();
+</script>
+</body>
+</html>

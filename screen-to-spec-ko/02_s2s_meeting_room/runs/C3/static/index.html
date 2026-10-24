@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>다온소프트 회의실 예약</title>
+<style>
+  body { font-family: sans-serif; margin: 16px; color: #222; }
+  header { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  h1 { font-size: 20px; margin: 0; }
+  table { border-collapse: collapse; margin-top: 12px; }
+  th, td { border: 1px solid #ccc; font-size: 11px; text-align: center; }
+  th { background: #f3f3f3; padding: 4px; }
+  td.slot { width: 62px; height: 44px; vertical-align: top; }
+  td.free { background: #fff; cursor: pointer; }
+  td.free:hover { background: #e8f3ff; }
+  td.booked { background: #ddd; }
+  td.mine { background: #cfe8cf; }
+  td button { font-size: 10px; margin-top: 2px; }
+  #form { margin-top: 12px; padding: 8px; border: 1px solid #aaa; display: none; }
+  #message { margin-top: 12px; min-height: 20px; font-weight: bold; }
+  #error { display: none; margin-top: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>다온소프트 회의실 예약</h1>
+  <label>날짜 <input type="date" id="date" data-testid="date"></label>
+  <label>사용자 <select id="user" data-testid="user-select"></select></label>
+</header>
+
+<div id="error">불러오지 못했습니다 <button id="retry">다시 시도</button></div>
+<table id="grid"></table>
+
+<div id="form">
+  <span id="formInfo"></span>
+  <label>끝
+    <select id="len">
+      <option value="30">30분</option>
+      <option value="60">60분</option>
+      <option value="90">90분</option>
+      <option value="120">120분</option>
+    </select>
+  </label>
+  <button id="submit">예약</button>
+  <button id="close">닫기</button>
+</div>
+
+<div id="message" data-testid="message"></div>
+
+<script>
+const START = 9 * 60, SLOTS = 18;
+let rooms = [], users = [], reservations = [], pending = null;
+
+const $ = (id) => document.getElementById(id);
+const hhmm = (m) => String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0");
+const toMin = (s) => Number(s.slice(0, 2)) * 60 + Number(s.slice(3));
+const say = (t) => { $("message").textContent = t; };
+
+function today() {
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+
+async function api(method, url, body) {
+  const res = await fetch(url, {
+    method,
+    headers: body ? { "Content-Type": "application/json" } : {},
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  let data = null;
+  if (res.status !== 204) { try { data = await res.json(); } catch (e) {} }
+  return { ok: res.ok, status: res.status, data };
+}
+
+async function loadReservations() {
+  const r = await api("GET", "/api/reservations?date=" + encodeURIComponent($("date").value));
+  if (!r.ok) throw new Error("load");
+  reservations = r.data;
+}
+
+function render() {
+  const me = $("user").value;
+  let html = "<tr><th>회의실</th>";
+  for (let i = 0; i < SLOTS; i++) html += "<th>" + hhmm(START + i * 30) + "</th>";
+  html += "</tr>";
+  for (const room of rooms) {
+    html += "<tr><th>" + room.name + "</th>";
+    for (let i = 0; i < SLOTS; i++) {
+      const m = START + i * 30;
+      const res = reservations.find((x) => x.room_id === room.room_id && toMin(x.start) <= m && m < toMin(x.end));
+      const st = !res ? "free" : res.user === me ? "mine" : "booked";
+      html += '<td class="slot ' + st + '" data-testid="slot" data-room="' + room.room_id +
+        '" data-start="' + hhmm(m) + '" data-state="' + st + '"';
+      if (res) html += ' data-res="' + res.res_id + '"';
+      html += ">";
+      if (res) html += res.user;
+      if (st === "mine") html += '<br><button data-testid="cancel-btn">취소</button>';
+      html += "</td>";
+    }
+    html += "</tr>";
+  }
+  $("grid").innerHTML = html;
+}
+
+async function refresh() {
+  try {
+    await loadReservations();
+    $("error").style.display = "none";
+    $("grid").style.display = "";
+    render();
+  } catch (e) {
+    $("grid").style.display = "none";
+    $("error").style.display = "block";
+  }
+}
+
+$("grid").addEventListener("click", async (ev) => {
+  const td = ev.target.closest("td.slot");
+  if (!td) return;
+  if (ev.target.matches('[data-testid="cancel-btn"]')) {
+    const r = await api("DELETE", "/api/reservations/" + td.dataset.res + "?user=" + encodeURIComponent($("user").value));
+    say(r.ok ? "예약을 취소했습니다" : (r.data && r.data.detail) || "취소하지 못했습니다");
+    await refresh();
+    return;
+  }
+  if (td.dataset.state !== "free") return;
+  pending = { room_id: td.dataset.room, start: td.dataset.start };
+  $("formInfo").textContent = td.dataset.room + " 회의실 " + td.dataset.start + " 부터";
+  $("form").style.display = "block";
+});
+
+$("submit").onclick = async () => {
+  if (!pending) return;
+  const end = hhmm(toMin(pending.start) + Number($("len").value));
+  const r = await api("POST", "/api/reservations", {
+    room_id: pending.room_id, date: $("date").value, start: pending.start, end, user: $("user").value,
+  });
+  say(r.ok ? "예약했습니다" : (r.data && r.data.detail) || "예약하지 못했습니다");
+  if (r.ok) { $("form").style.display = "none"; pending = null; }
+  await refresh();
+};
+$("close").onclick = () => { $("form").style.display = "none"; pending = null; };
+$("user").onchange = () => { say(""); render(); };
+$("date").onchange = () => {
+  history.replaceState(null, "", "?date=" + $("date").value);
+  say("");
+  refresh();
+};
+$("retry").onclick = init;
+
+async function init() {
+  try {
+    const [r, u] = await Promise.all([api("GET", "/api/rooms"), api("GET", "/api/users")]);
+    if (!r.ok || !u.ok) throw new Error("load");
+    rooms = r.data;
+    users = u.data;
+    if (!$("user").options.length) {
+      $("user").innerHTML = users.map((n) => "<option>" + n + "</option>").join("");
+    }
+    if (!$("date").value) $("date").value = new URLSearchParams(location.search).get("date") || today();
+    await loadReservations();
+    $("error").style.display = "none";
+    $("grid").style.display = "";
+    render();
+  } catch (e) {
+    $("grid").style.display = "none";
+    $("error").style.display = "block";
+  }
+}
+init();
+</script>
+</body>
+</html>

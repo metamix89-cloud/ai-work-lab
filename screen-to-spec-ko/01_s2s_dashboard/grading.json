@@ -1,0 +1,12 @@
+{
+ "allowed_routes": ["/", "/api/summary", "/static", "/favicon.ico", "/health", "/healthz"],
+ "extra_patterns": {
+  "자동 새로고침": "setInterval|setTimeout\\([^)]*(load|fetch|refresh)|meta http-equiv=\"refresh\"",
+  "다크 모드": "prefers-color-scheme|dark-mode|darkmode|data-theme",
+  "기간 선택 · 필터": "<select|type=\"date\"|기간|filter",
+  "로그인 · 권한": "login|password|로그인|auth",
+  "상세 · 드릴다운": "detail|drilldown|/orders/|/inquiries/|/stock/",
+  "매출 금액 지표": "매출|revenue|total_amount|sum\\(amount\\)",
+  "툴팁 · 호버": "title=\"|tooltip|:hover"
+ }
+}

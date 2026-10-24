@@ -53,6 +53,25 @@ def neutral_root():
     return root
 
 
+def kill_servers(work):
+    """빌더(Claude Code)가 확인용으로 띄우고 안 끈 uvicorn 을 정리한다 — 작업 폴더를 cwd 로 가진 python 프로세스."""
+    if os.name != "nt":
+        return
+    try:
+        out = subprocess.run(["wmic", "process", "where", "name='python.exe'", "get", "ProcessId,CommandLine", "/format:list"],
+                             capture_output=True, text=True, encoding="utf-8", errors="ignore", timeout=20).stdout
+    except Exception:
+        return
+    pid, cmd = None, ""
+    for line in out.splitlines() + ["ProcessId="]:
+        if line.startswith("CommandLine="):
+            cmd = line[12:]
+        elif line.startswith("ProcessId="):
+            if pid and "uvicorn" in cmd and os.path.basename(work) in cmd + os.getcwd():
+                subprocess.run(["taskkill", "/PID", pid, "/F", "/T"], capture_output=True)
+            pid, cmd = line[10:].strip(), ""
+
+
 def prepare(lab, cond, run_dir):
     shutil.rmtree(run_dir, ignore_errors=True)
     os.makedirs(run_dir)
@@ -120,7 +139,10 @@ def main():
             final = os.path.join(lab, "runs", name)
             shutil.rmtree(final, ignore_errors=True)
             os.makedirs(os.path.dirname(final), exist_ok=True)
-            shutil.move(work, final)
+            # 빌더가 띄워 둔 서버가 로그 파일을 쥐고 있을 수 있어(ep072 A3 server.log) move 대신 복사 + 지울 수 있는 만큼만 지운다
+            shutil.copytree(work, final, ignore=shutil.ignore_patterns("__pycache__", "*.db", ".pytest_cache"))
+            kill_servers(work)
+            shutil.rmtree(work, ignore_errors=True)
 
 
 if __name__ == "__main__":

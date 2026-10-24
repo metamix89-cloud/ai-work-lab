@@ -11,14 +11,9 @@ sys.stdout.reconfigure(encoding="utf-8")
 lab = os.path.abspath(sys.argv[1])
 R = json.load(open(os.path.join(lab, "results.json"), encoding="utf-8"))
 
-# PRD 8 범위 밖 목록을 코드 패턴으로 (사람이 다시 확인한다)
-EXTRA = [("자동 새로고침", r"setInterval|setTimeout\([^)]*(load|fetch|refresh)|meta http-equiv=\"refresh\""),
-         ("다크 모드", r"prefers-color-scheme|dark-mode|darkmode|data-theme"),
-         ("기간 선택 · 필터", r"<select|type=\"date\"|기간|filter"),
-         ("로그인 · 권한", r"login|password|로그인|auth"),
-         ("상세 · 드릴다운", r"detail|drilldown|/orders/|/inquiries/|/stock/"),
-         ("매출 금액 지표", r"매출|revenue|total_amount|sum\(amount\)"),
-         ("툴팁 · 호버", r"title=\"|tooltip|:hover")]
+# PRD 8 범위 밖 목록을 코드 패턴으로 — 편마다 lab/grading.json 의 extra_patterns (사람이 다시 확인한다)
+_g = os.path.join(lab, "grading.json")
+EXTRA = list(json.load(open(_g, encoding="utf-8")).get("extra_patterns", {}).items()) if os.path.exists(_g) else []
 
 
 def scan(run_dir):

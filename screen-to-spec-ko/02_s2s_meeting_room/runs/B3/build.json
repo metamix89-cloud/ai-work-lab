@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 87509,
+ "num_turns": 13,
+ "total_cost_usd": 0.30250520000000003,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 16,
+  "cache_creation_input_tokens": 34186,
+  "cache_read_input_tokens": 320592,
+  "output_tokens": 13367,
+  "output_tokens_details": {
+   "thinking_tokens": 404
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 34186,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 942,
+    "cache_read_input_tokens": 50346,
+    "cache_creation_input_tokens": 512,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 512
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD의 웹앱을 만들었습니다. API는 TestClient로 확인했습니다. 브라우저 화면(칸 54개, 상태 표시, 취소 버튼)은 열어서 확인하지 못했습니다. PRD가 말하는 `tests/test_dod.py`는 폴더에 없어서 T1~T9는 돌리지 못했습니다.\n\n**확인한 것**\n- `/`가 200으로 열립니다.\n- 겹치는 예약은 409입니다.\n- 끝나는 시각과 시작 시각이 같은 붙여 예약은 201입니다.\n- `10:15` 시작과 `17:30~18:30`은 400입니다.\n- 2시간 30분은 400, 2시간은 201입니다.\n- 남의 예약을 지우면 403이고, 본인이 지우면 204입니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/*.csv`로 `rooms.db`를 새로 만듭니다. 테이블은 `mr_` 접두어를 씁니다. 규칙 R1~R5가 들어 있고, `GET /api/rooms`, `GET`/`POST /api/reservations`, `DELETE /api/reservations/{id}`를 제공합니다. 사용자 선택 상자를 채우려고 PRD에 없는 `GET /api/users`를 하나 추가했습니다.\n- `static/index.html`: 순수 HTML/JS 화면 한 장입니다. PRD가 정한 `data-testid`와 `data-*` 이름을 그대로 썼습니다. 날짜는 `?date=`로 바꾸고, 기본은 오늘입니다. 서버가 거부하면 그 `detail`을 메시지 줄에 그대로 보여 주고, API가 실패하면 `불러오지 못했습니다`와 다시 시도 버튼이 나옵니다.\n- `seed/rooms.csv`, `seed/users.csv`, `seed/reservations.csv`: 폴더에 없어서 제가 만들었습니다. 회의실 3개, 직원 6명, 예약 5건이고 모두 가상 데이터입니다. A 10:00~11:00은 김민수 예약이라 PRD의 T3 조건과 맞습니다.\n\n**실행:** 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`을 실행하세요. 예약 확인용 날짜는 `/?date=2026-11-03`입니다. 이 PC에는 `fastapi`, `uvicorn`, `httpx`를 새로 설치했습니다. `httpx`는 TestClient용이고 앱 실행에는 필요 없습니다.",
+ "wall_s": 100.5
+}

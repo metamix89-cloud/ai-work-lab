@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>다온소프트 회의실 예약 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 2편 목업. 가상 회사 · 가상 직원. ?state=ok|empty|error 로 상태 3개. Mock-IT 라이트 테마. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--card:#FFFFFF;--indigo:#6366F1;--indigo2:#E0E7FF;--indigo3:#3730A3;--gray:#E9EBF0;--rose:#EF4444}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:var(--indigo);display:inline-block}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#EEF0FF;color:var(--indigo);font-weight:700}
+.main{padding:24px 30px 20px 30px;display:flex;flex-direction:column;gap:14px}
+.top{display:flex;justify-content:space-between;align-items:center}
+h1{margin:0;font-size:22px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:13px;margin-top:4px}
+.ctl{display:flex;gap:10px;align-items:center;font-size:13px;color:var(--ink2)}
+.chip{background:#fff;border:1px solid var(--line);padding:6px 12px;border-radius:999px}
+.chip b{color:var(--indigo3)}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--ink2)}.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid var(--line)}
+.grid{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;flex:1;display:flex;flex-direction:column;min-height:0}
+table{border-collapse:separate;border-spacing:3px;width:100%;height:100%;table-layout:fixed}
+th{font-size:11px;color:var(--mute);font-weight:600;padding:0 0 4px;height:1px}th.r{text-align:left;font-size:13px;color:var(--ink);width:112px;padding-right:8px;white-space:nowrap}
+td{border-radius:6px;background:#F7F8FB;border:1px solid var(--line);font-size:11px;text-align:center;position:relative;color:var(--ink2);height:70px}
+td.booked{background:var(--gray);border-color:#D9DCE5;color:var(--ink2)}
+td.mine{background:var(--indigo2);border-color:#C7D2FE;color:var(--indigo3);font-weight:700}
+td.mine .x{position:absolute;right:4px;top:4px;font-size:10px;background:#fff;border:1px solid #C7D2FE;border-radius:4px;padding:1px 5px;font-weight:600}
+td.pick{outline:2px solid var(--indigo);background:#fff}
+.msg{font-size:13px;color:var(--rose);min-height:18px}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mute);gap:6px}
+.empty b{font-size:16px;color:var(--ink2)}.empty small{font-size:12px}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:14px;padding:22px;display:flex;justify-content:space-between;align-items:center;font-size:15px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:8px 14px;font-size:14px;font-weight:700}
+</style></head><body>
+<div class="app">
+ <div class="side">
+  <div class="logo"><i></i>다온소프트</div>
+  <div class="nav"><div class="on">회의실 예약</div><div>휴가 · 출장</div><div>사내 피드</div><div>온보딩</div></div>
+ </div>
+ <div class="main" id="main"></div>
+</div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const SLOTS=[];for(let m=9*60;m<18*60;m+=30)SLOTS.push(String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0'));
+const mm=t=>+t.slice(0,2)*60+ +t.slice(3);
+const ROOMS=[['A','A 회의실 · 8명'],['B','B 회의실 · 6명'],['C','C 회의실 · 12명']];
+const RES=[['A','10:00','11:00','김민수'],['A','14:00','14:30','박지연'],['B','10:00','10:30','이서준'],['C','16:00','18:00','최유나'],['B','13:00','15:00','김민수']];
+const ME='김민수';
+const head=(right)=>`<div class="top"><div><h1>회의실 예약</h1><div class="sub">2026-11-03 (화) · 09:00 ~ 18:00 · 30분 단위 · 한 번에 최대 2시간</div></div><div class="ctl">${right}</div></div>`;
+const legend=`<div class="legend"><span><i style="background:#F7F8FB"></i>빈 칸 — 눌러서 예약</span><span><i style="background:#E9EBF0"></i>예약됨 — 이름만, 취소 불가</span><span><i style="background:#E0E7FF"></i>내 예약 — 취소 가능</span></div>`;
+let html='';
+if(state==='ok'||state==='empty'){
+  const res=state==='ok'?RES:[];
+  let t='<table><tr><th class="r"></th>'+SLOTS.map(s=>'<th>'+s+'</th>').join('')+'</tr>';
+  for(const [id,name] of ROOMS){
+    t+='<tr><th class="r">'+name+'</th>';
+    for(const s of SLOTS){
+      const hit=res.find(x=>x[0]===id&&mm(x[1])<=mm(s)&&mm(x[2])>mm(s));
+      const st=!hit?'free':(hit[3]===ME?'mine':'booked');
+      const pick=(state==='ok'&&id==='A'&&s==='11:00')?' pick':'';
+      t+='<td class="'+st+pick+'">'+(hit&&mm(hit[1])===mm(s)?hit[3]:'')+(st==='mine'&&mm(hit[1])===mm(s)?'<span class="x">취소</span>':'')+(pick?'<b style="color:#6366F1">11:00 부터 ▾</b>':'')+'</td>';
+    }
+    t+='</tr>';
+  }
+  t+='</table>';
+  html=head(`<span class="chip">사용자 <b>${ME}</b> ▾</span><span class="chip">◀ 2026-11-03 ▶</span>`)+legend
+      +'<div class="grid">'+(state==='ok'?t:t)+'</div>'
+      +'<div class="msg">'+(state==='ok'?'이미 예약된 시간입니다 — A 회의실 10:30~11:30 (김민수 10:00~11:00 과 겹침)':'')+'</div>';
+  if(state==='empty'){html=html.replace('<div class="msg"></div>','<div class="msg" style="color:#8A94A6">이 날은 예약이 없습니다 — 빈 칸을 눌러 첫 예약을 잡으세요</div>');}
+}else{
+  html=head('<span class="chip">사용자 <b>김민수</b> ▾</span>')+legend+`
+  <div class="err"><div><b>불러오지 못했습니다.</b> 예약 API(/api/reservations) 가 응답하지 않습니다 — 빈 칸처럼 보이면 안 되므로 시간표를 그리지 않습니다.</div><button>다시 시도</button></div>`;
+}
+document.getElementById('main').innerHTML=html;
+</script></body></html>

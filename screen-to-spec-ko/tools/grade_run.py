@@ -17,8 +17,13 @@ import xml.etree.ElementTree as ET
 sys.stdout.reconfigure(encoding="utf-8")
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# PRD 가 허용한 경로. 그 밖의 라우트는 '시키지 않은 기능' 후보.
-ALLOWED_ROUTES = {"/", "/api/summary", "/static", "/favicon.ico", "/health", "/healthz"}
+# PRD 가 허용한 경로(편마다 lab/grading.json 의 allowed_routes). 그 밖의 라우트는 '시키지 않은 기능' 후보.
+ALLOWED_ROUTES = {"/", "/static", "/favicon.ico", "/health", "/healthz"}
+
+
+def load_grading(lab):
+    p = os.path.join(lab, "grading.json")
+    return json.load(open(p, encoding="utf-8")) if os.path.exists(p) else {}
 
 
 def sha(p):
@@ -38,8 +43,9 @@ def routes_of(app_dir):
     return sorted(set(found))
 
 
-def grade_dir(app_dir, tests_src, port=8765, timeout=420):
+def grade_dir(app_dir, tests_src, port=8765, timeout=420, allowed=None):
     """app_dir 에 tests_src 사본을 _grader/ 로 넣고 pytest. 결과 dict."""
+    allowed = set(allowed or []) | ALLOWED_ROUTES
     grader = os.path.join(app_dir, "_grader")
     shutil.rmtree(grader, ignore_errors=True)
     shutil.copytree(tests_src, grader)
@@ -75,8 +81,8 @@ def grade_dir(app_dir, tests_src, port=8765, timeout=420):
     # 시키지 않은 기능 후보 · 테스트 수정 여부 · 파일 목록
     rts = routes_of(app_dir)
     res["routes"] = rts
-    res["extra_routes"] = [r for r in rts if r.rstrip("/") not in {a.rstrip("/") for a in ALLOWED_ROUTES}
-                           and not r.startswith("/static")]
+    norm = {re.sub(r"\{[^}]*\}", "{}", a.rstrip("/")) for a in allowed}
+    res["extra_routes"] = [r for r in rts if re.sub(r"\{[^}]*\}", "{}", r.rstrip("/")) not in norm and not r.startswith("/static")]
     given = os.path.join(app_dir, "tests", "test_dod.py")
     res["tests_modified"] = (os.path.exists(given) and sha(given) != sha(os.path.join(tests_src, "test_dod.py"))) if os.path.exists(given) else None
     res["files"] = sorted(os.path.relpath(p, app_dir).replace(os.sep, "/") for p in glob.glob(os.path.join(app_dir, "**", "*"), recursive=True)
@@ -93,6 +99,7 @@ def main():
         if a.startswith("--only="):
             only = set(a.split("=", 1)[1].split(","))
     tests_src = os.path.join(lab, "tests")
+    allowed = load_grading(lab).get("allowed_routes", [])
     out_path = os.path.join(lab, "results.json")
     results = json.load(open(out_path, encoding="utf-8")) if os.path.exists(out_path) else {}
     runs = sorted(d for d in glob.glob(os.path.join(lab, "runs", "*")) if os.path.isdir(d))
@@ -102,7 +109,7 @@ def main():
         if only and name not in only:
             continue
         print("채점", name, "...", end=" ", flush=True)
-        r = grade_dir(d, tests_src, port=port)
+        r = grade_dir(d, tests_src, port=port, allowed=allowed)
         port += 2
         b = os.path.join(d, "build.json")
         if os.path.exists(b):
