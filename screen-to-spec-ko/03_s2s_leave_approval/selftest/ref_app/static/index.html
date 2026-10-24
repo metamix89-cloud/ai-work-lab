@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>다온소프트 휴가 · 출장</title>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif;background:#F6F7FB;color:#111318;margin:0;padding:24px}
+h1{font-size:20px;margin:0}.top{display:flex;gap:16px;align-items:center}
+.card{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:16px;margin-top:14px}
+.bal span{margin-right:18px}.bal b{font-size:24px}
+table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid #E5E7EB;padding:6px 8px;text-align:left}
+.msg{color:#B91C1C;min-height:18px;margin-top:8px}.form input,.form select{margin-right:6px}
+</style></head><body>
+<div class="top"><h1>다온소프트 휴가 · 출장</h1><label>사용자 <select data-testid="user-select" id="user"></select></label></div>
+<div class="card bal" id="bal"></div>
+<div class="card form">
+ <select data-testid="type" id="type"><option>연차</option><option>출장</option></select>
+ <input data-testid="start" id="start" type="date"> ~ <input data-testid="end" id="end" type="date">
+ <input data-testid="reason" id="reason" placeholder="사유">
+ <button data-testid="submit-btn" id="submit">신청</button>
+ <div class="msg" data-testid="message" id="msg"></div>
+</div>
+<div class="card"><b>내 신청</b><table id="mine"></table></div>
+<div class="card" id="pendingCard" style="display:none"><b>결재 대기</b><table id="pending"></table></div>
+<script>
+let users=[];const me=()=>document.getElementById('user').value;
+const api=async(m,u,b)=>{const r=await fetch(u,{method:m,headers:{'Content-Type':'application/json'},body:b?JSON.stringify(b):undefined});
+  const j=await r.json().catch(()=>({}));if(!r.ok){document.getElementById('msg').textContent=j.detail||'오류';throw 0;}return j;};
+async function init(){
+  try{users=await api('GET','/api/users');}catch(e){document.body.innerHTML='<div class="card">불러오지 못했습니다 <button onclick="location.reload()">다시 시도</button></div>';return;}
+  const sel=document.getElementById('user');sel.innerHTML=users.map(u=>'<option>'+u.user+'</option>').join('');sel.onchange=load;load();
+}
+async function load(){
+  document.getElementById('msg').textContent='';
+  const b=await api('GET','/api/balance?user='+encodeURIComponent(me()));
+  document.getElementById('bal').innerHTML=`<span>총 <b>${b.total}</b></span><span>사용 <b>${b.used}</b></span><span>대기 <b>${b.pending}</b></span><span>잔여 <b data-testid="remaining">${b.remaining}</b></span>`;
+  const mine=await api('GET','/api/requests?user='+encodeURIComponent(me()));
+  document.getElementById('mine').innerHTML='<tr><th>종류</th><th>기간</th><th>일수</th><th>상태</th><th>결재자</th><th>반려 사유</th><th></th></tr>'+
+    mine.map(r=>`<tr data-testid="my-request" data-id="${r.req_id}" data-status="${r.status}"><td>${r.type}</td><td>${r.start} ~ ${r.end}</td><td>${r.days}</td><td>${r.status}</td><td>${r.approver||''}</td><td>${r.reject_reason||''}</td>
+      <td>${r.status==='신청'?`<button data-testid="cancel-btn" onclick="cancelReq(${r.req_id})">취소</button>`:''}</td></tr>`).join('');
+  const u=users.find(x=>x.user===me());const pc=document.getElementById('pendingCard');
+  if(u&&u.role==='manager'){
+    const p=await api('GET','/api/requests?approver='+encodeURIComponent(me()));pc.style.display='';
+    document.getElementById('pending').innerHTML='<tr><th>신청자</th><th>종류</th><th>기간</th><th>일수</th><th>사유</th><th></th></tr>'+
+      p.map(r=>`<tr data-testid="pending-request" data-id="${r.req_id}"><td>${r.user}</td><td>${r.type}</td><td>${r.start} ~ ${r.end}</td><td>${r.days}</td><td>${r.reason}</td>
+        <td><button data-testid="approve-btn" onclick="decide(${r.req_id},'approve')">승인</button> <button data-testid="reject-btn" onclick="rejectReq(${r.req_id})">반려</button>
+        <input data-testid="reject-reason" id="rr${r.req_id}" placeholder="반려 사유"></td></tr>`).join('');
+  }else{pc.style.display='none';document.getElementById('pending').innerHTML='';}
+}
+async function decide(id,act,reason){await api('POST',`/api/requests/${id}/${act}`,{approver:me(),reason:reason||''});load();}
+function rejectReq(id){decide(id,'reject',document.getElementById('rr'+id).value);}
+async function cancelReq(id){await api('POST',`/api/requests/${id}/cancel`,{user:me()});load();}
+document.getElementById('submit').onclick=async()=>{
+  await api('POST','/api/requests',{user:me(),type:document.getElementById('type').value,start:document.getElementById('start').value,end:document.getElementById('end').value,reason:document.getElementById('reason').value});load();};
+init();
+</script></body></html>

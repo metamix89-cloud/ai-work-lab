@@ -1,0 +1,6 @@
+user,team,role,manager,leave_total
+김민수,개발팀,manager,,15
+박지연,개발팀,member,김민수,15
+이서준,개발팀,member,김민수,15
+최유나,디자인팀,manager,,15
+정하늘,디자인팀,member,최유나,15

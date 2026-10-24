@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 휴가 · 출장 신청</title>
+<style>
+  :root { --pri:#2563eb; --bg:#f4f6fa; --card:#fff; --line:#e3e7ee; --txt:#1f2937; --sub:#6b7280;
+          --ok:#16a34a; --no:#dc2626; --wait:#d97706; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Pretendard","Malgun Gothic",sans-serif; background:var(--bg); color:var(--txt); }
+  header { background:#fff; border-bottom:1px solid var(--line); padding:12px 24px; display:flex; align-items:center; gap:16px; }
+  header h1 { font-size:18px; margin:0; flex:1; } header h1 span { color:var(--pri); }
+  select, input, textarea, button { font:inherit; }
+  select, input, textarea { border:1px solid var(--line); border-radius:8px; padding:8px 10px; background:#fff; width:100%; }
+  main { max-width:1000px; margin:20px auto; padding:0 16px; }
+  .tabs { display:flex; gap:4px; margin-bottom:16px; }
+  .tab { padding:9px 18px; border:0; background:transparent; border-radius:8px; cursor:pointer; color:var(--sub); font-weight:600; }
+  .tab.active { background:var(--pri); color:#fff; }
+  .badge { background:var(--no); color:#fff; border-radius:10px; padding:0 7px; font-size:12px; margin-left:4px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px; margin-bottom:16px; }
+  .card h2 { font-size:15px; margin:0 0 14px; }
+  .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  .stat { text-align:center; padding:14px 6px; border-radius:10px; background:var(--bg); }
+  .stat b { display:block; font-size:26px; } .stat span { font-size:12px; color:var(--sub); }
+  .stat.main b { color:var(--pri); }
+  .bar { height:8px; background:var(--line); border-radius:4px; margin-top:14px; overflow:hidden; display:flex; }
+  .bar i { display:block; height:100%; } .bar .u { background:var(--pri); } .bar .p { background:#93c5fd; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .full { grid-column:1/-1; } label { font-size:13px; color:var(--sub); display:block; margin-bottom:4px; }
+  .btn { border:0; border-radius:8px; padding:9px 18px; cursor:pointer; font-weight:600; background:var(--pri); color:#fff; }
+  .btn.ghost { background:#fff; color:var(--txt); border:1px solid var(--line); }
+  .btn.ok { background:var(--ok); } .btn.no { background:var(--no); } .btn.sm { padding:5px 11px; font-size:13px; }
+  .hint { font-size:13px; color:var(--sub); margin-top:6px; }
+  .err { color:var(--no); font-size:13px; margin-top:8px; min-height:18px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { text-align:left; padding:10px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--sub); font-weight:600; font-size:12px; }
+  .tag { display:inline-block; padding:2px 9px; border-radius:10px; font-size:12px; font-weight:600; }
+  .t-대기 { background:#fef3c7; color:var(--wait); } .t-승인 { background:#dcfce7; color:var(--ok); }
+  .t-반려 { background:#fee2e2; color:var(--no); } .t-취소 { background:#e5e7eb; color:var(--sub); }
+  .trip { color:#7c3aed; font-weight:600; }
+  .empty { text-align:center; color:var(--sub); padding:28px; }
+  .sub { color:var(--sub); font-size:12px; } .row-actions { display:flex; gap:6px; flex-wrap:wrap; }
+  #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#111827; color:#fff;
+           padding:10px 20px; border-radius:8px; opacity:0; transition:.3s; pointer-events:none; }
+  #toast.show { opacity:.95; }
+  @media (max-width:700px) { .stats { grid-template-columns:repeat(2,1fr); } .grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1><span>다온소프트</span> 휴가 · 출장 신청</h1>
+  <div style="width:260px"><select id="userSel" aria-label="사용자 전환"></select></div>
+</header>
+<main>
+  <div class="tabs">
+    <button class="tab active" data-tab="apply">신청하기</button>
+    <button class="tab" data-tab="mine">내 신청 내역</button>
+    <button class="tab" data-tab="team" id="teamTab" hidden>팀 승인 관리<span class="badge" id="pendBadge" hidden></span></button>
+  </div>
+
+  <section id="apply">
+    <div class="card">
+      <h2 id="balTitle">잔여 연차</h2>
+      <div class="stats">
+        <div class="stat main"><b id="bRem">-</b><span>잔여</span></div>
+        <div class="stat"><b id="bTot">-</b><span>부여</span></div>
+        <div class="stat"><b id="bUsed">-</b><span>사용</span></div>
+        <div class="stat"><b id="bPend">-</b><span>승인 대기</span></div>
+      </div>
+      <div class="bar"><i class="u" id="barU"></i><i class="p" id="barP"></i></div>
+    </div>
+    <div class="card">
+      <h2>새 신청</h2>
+      <form id="form" class="grid">
+        <div><label for="type">유형</label><select id="type"></select></div>
+        <div><label>승인자</label><input id="approver" disabled></div>
+        <div><label for="start">시작일</label><input type="date" id="start" required></div>
+        <div><label for="end">종료일</label><input type="date" id="end" required></div>
+        <div class="full" id="destWrap" hidden><label for="dest">출장지</label><input id="dest" maxlength="100" placeholder="예) 부산 센텀 고객사"></div>
+        <div class="full"><label for="reason">사유</label><textarea id="reason" rows="3" maxlength="200" required></textarea></div>
+        <div class="full">
+          <div class="hint" id="calcHint">기간을 선택하면 일수가 계산됩니다. (주말·공휴일 제외)</div>
+          <div class="err" id="formErr"></div>
+          <button class="btn" type="submit">신청</button>
+        </div>
+      </form>
+    </div>
+    <div class="card">
+      <h2>우리 팀 이번 달 일정</h2>
+      <div id="teamCal"></div>
+    </div>
+  </section>
+
+  <section id="mine" hidden><div class="card"><h2>내 신청 내역</h2><div id="mineList"></div></div></section>
+  <section id="team" hidden>
+    <div class="card"><h2>승인 대기</h2><div id="pendList"></div></div>
+    <div class="card"><h2>처리 완료</h2><div id="doneList"></div></div>
+  </section>
+</main>
+<div id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+let me = null;
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = n => Number.isInteger(n) ? n : n.toFixed(1);
+const period = r => r.start_date === r.end_date ? r.start_date : `${r.start_date} ~ ${r.end_date}`;
+
+async function api(path, opts = {}) {
+  const res = await fetch(path, {
+    ...opts,
+    headers: { "Content-Type": "application/json", "X-User-Id": localStorage.uid || "", ...(opts.headers || {}) },
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(typeof data.detail === "string" ? data.detail : "요청을 처리할 수 없습니다. 입력값을 확인해 주세요.");
+  return data;
+}
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); setTimeout(() => t.classList.remove("show"), 2200); }
+
+function showTab(name) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+  ["apply", "mine", "team"].forEach(id => $("#" + id).hidden = id !== name);
+  if (name === "mine") loadMine();
+  if (name === "team") loadTeam();
+}
+document.querySelectorAll(".tab").forEach(t => t.onclick = () => showTab(t.dataset.tab));
+
+async function init() {
+  const users = await api("/api/users");
+  if (!users.some(u => String(u.id) === localStorage.uid)) localStorage.uid = users.find(u => u.role === "employee").id;
+  const sel = $("#userSel");
+  sel.innerHTML = users.map(u => `<option value="${u.id}">${esc(u.name)} · ${esc(u.team)} ${esc(u.position)}</option>`).join("");
+  sel.value = localStorage.uid;
+  sel.onchange = () => { localStorage.uid = sel.value; refresh(); showTab("apply"); };
+  await refresh();
+}
+
+async function refresh() {
+  me = await api("/api/me");
+  $("#type").innerHTML = me.types.map(t => `<option>${esc(t)}</option>`).join("");
+  $("#approver").value = me.approver || "(상위 승인자 없음)";
+  $("#teamTab").hidden = me.role !== "manager";
+  const b = me.balance;
+  $("#balTitle").textContent = `${b.year}년 잔여 연차`;
+  $("#bRem").textContent = fmt(b.remaining) + "일";
+  $("#bTot").textContent = fmt(b.total); $("#bUsed").textContent = fmt(b.used); $("#bPend").textContent = fmt(b.pending);
+  $("#barU").style.width = (b.used / b.total * 100) + "%";
+  $("#barP").style.width = (b.pending / b.total * 100) + "%";
+  onTypeChange(); loadCal(); updateBadge();
+}
+
+function onTypeChange() {
+  const t = $("#type").value;
+  $("#destWrap").hidden = t !== "출장";
+  if (t.startsWith("반차")) $("#end").value = $("#start").value;
+  $("#end").disabled = t.startsWith("반차");
+  calc();
+}
+async function calc() {
+  const t = $("#type").value, s = $("#start").value;
+  let e = $("#end").value;
+  if (t.startsWith("반차")) e = s;
+  const hint = $("#calcHint");
+  if (!s || !e) return;
+  try {
+    const { days } = await api(`/api/calc?type=${encodeURIComponent(t)}&start_date=${s}&end_date=${e}`);
+    const deducts = ["연차", "반차(오전)", "반차(오후)"].includes(t);
+    hint.textContent = `신청 일수 ${fmt(days)}일` + (deducts ? ` · 승인 시 잔여 ${fmt(me.balance.remaining - days)}일` : " · 연차 차감 없음");
+  } catch (err) { hint.textContent = err.message; }
+}
+$("#type").onchange = onTypeChange;
+$("#start").onchange = () => { if (!$("#end").value || $("#end").value < $("#start").value || $("#type").value.startsWith("반차")) $("#end").value = $("#start").value; calc(); };
+$("#end").onchange = calc;
+
+$("#form").onsubmit = async ev => {
+  ev.preventDefault(); $("#formErr").textContent = "";
+  const type = $("#type").value;
+  try {
+    const r = await api("/api/requests", { method: "POST", body: JSON.stringify({
+      type, start_date: $("#start").value, end_date: type.startsWith("반차") ? $("#start").value : $("#end").value,
+      reason: $("#reason").value, destination: type === "출장" ? $("#dest").value : null }) });
+    toast(`신청되었습니다. (${fmt(r.days)}일)`);
+    $("#form").reset(); await refresh(); showTab("mine");
+  } catch (err) { $("#formErr").textContent = err.message; }
+};
+
+async function loadCal() {
+  const m = new Date().toISOString().slice(0, 7);
+  const rows = await api("/api/team-calendar?month=" + m);
+  $("#teamCal").innerHTML = rows.length ? `<table><tr><th>이름</th><th>유형</th><th>기간</th><th>상태</th></tr>${rows.map(r =>
+    `<tr><td>${esc(r.name)}</td><td>${esc(r.type)}</td><td>${esc(period({start_date:r.start_date,end_date:r.end_date}))}</td><td><span class="tag t-${esc(r.status)}">${esc(r.status)}</span></td></tr>`).join("")}</table>`
+    : `<div class="empty">이번 달 팀 일정이 없습니다.</div>`;
+}
+
+function typeCell(r) { return `<span class="${r.type === "출장" ? "trip" : ""}">${esc(r.type)}</span>` + (r.destination ? `<div class="sub">${esc(r.destination)}</div>` : ""); }
+
+async function loadMine() {
+  const rows = await api("/api/requests?scope=mine");
+  $("#mineList").innerHTML = rows.length ? `<table><tr><th>유형</th><th>기간</th><th>일수</th><th>사유</th><th>상태</th><th></th></tr>${rows.map(r => `
+    <tr><td>${typeCell(r)}</td><td>${esc(period(r))}</td><td>${fmt(r.days)}</td><td>${esc(r.reason)}</td>
+    <td><span class="tag t-${esc(r.status)}">${esc(r.status)}</span>${r.approver_name ? `<div class="sub">${esc(r.approver_name)}</div>` : ""}
+      ${r.comment ? `<div class="sub">“${esc(r.comment)}”</div>` : ""}</td>
+    <td>${r.status === "대기" ? `<button class="btn ghost sm" data-cancel="${r.id}">취소</button>` : ""}</td></tr>`).join("")}</table>`
+    : `<div class="empty">신청 내역이 없습니다.</div>`;
+  document.querySelectorAll("[data-cancel]").forEach(b => b.onclick = async () => {
+    if (!confirm("이 신청을 취소할까요?")) return;
+    try { await api(`/api/requests/${b.dataset.cancel}/cancel`, { method: "POST" }); toast("취소했습니다."); await refresh(); loadMine(); }
+    catch (err) { toast(err.message); }
+  });
+}
+
+async function updateBadge() {
+  const b = $("#pendBadge");
+  if (me.role !== "manager") { b.hidden = true; return; }
+  const n = (await api("/api/requests?scope=team&status=대기")).length;
+  b.hidden = !n; b.textContent = n;
+}
+
+async function loadTeam() {
+  const rows = await api("/api/requests?scope=team");
+  const pend = rows.filter(r => r.status === "대기"), done = rows.filter(r => r.status !== "대기");
+  const who = r => `${esc(r.emp_name)}<div class="sub">${esc(r.emp_position)}</div>`;
+  $("#pendList").innerHTML = pend.length ? `<table><tr><th>신청자</th><th>유형</th><th>기간</th><th>일수</th><th>사유</th><th>코멘트 / 처리</th></tr>${pend.map(r => `
+    <tr><td>${who(r)}</td><td>${typeCell(r)}</td><td>${esc(period(r))}</td><td>${fmt(r.days)}</td><td>${esc(r.reason)}</td>
+    <td><input placeholder="코멘트 (반려 시 필수)" id="cm${r.id}" maxlength="200" style="margin-bottom:6px">
+      <div class="row-actions"><button class="btn ok sm" data-dec="${r.id}" data-ap="1">승인</button>
+      <button class="btn no sm" data-dec="${r.id}" data-ap="0">반려</button></div></td></tr>`).join("")}</table>`
+    : `<div class="empty">대기 중인 신청이 없습니다.</div>`;
+  $("#doneList").innerHTML = done.length ? `<table><tr><th>신청자</th><th>유형</th><th>기간</th><th>일수</th><th>상태</th><th>코멘트</th></tr>${done.map(r => `
+    <tr><td>${who(r)}</td><td>${typeCell(r)}</td><td>${esc(period(r))}</td><td>${fmt(r.days)}</td>
+    <td><span class="tag t-${esc(r.status)}">${esc(r.status)}</span></td><td>${esc(r.comment || "")}</td></tr>`).join("")}</table>`
+    : `<div class="empty">처리된 내역이 없습니다.</div>`;
+  document.querySelectorAll("[data-dec]").forEach(b => b.onclick = async () => {
+    try {
+      const out = await api(`/api/requests/${b.dataset.dec}/decision`, { method: "POST",
+        body: JSON.stringify({ approve: b.dataset.ap === "1", comment: $("#cm" + b.dataset.dec).value }) });
+      toast(out.status + " 처리했습니다."); await refresh(); loadTeam();
+    } catch (err) { toast(err.message); }
+  });
+}
+
+init();
+</script>
+</body>
+</html>

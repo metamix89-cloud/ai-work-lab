@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>다온소프트 휴가 · 출장</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:"Malgun Gothic",sans-serif;margin:0;background:#f5f6f8;color:#222}
+main{max-width:860px;margin:0 auto;padding:20px}
+h1{font-size:22px;margin:0 0 12px}
+h2{font-size:16px;margin:0 0 8px}
+section{background:#fff;border:1px solid #dde;border-radius:8px;padding:14px;margin-bottom:14px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:6px;border-bottom:1px solid #eee}
+input,select,button{font:inherit;padding:5px 8px}
+button{cursor:pointer}
+.card b{font-size:20px}
+#message{color:#c0392b;min-height:1.3em;margin:8px 0 0}
+#error{background:#fdecea;color:#c0392b;padding:12px;border-radius:8px;margin-bottom:14px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<main>
+  <h1>다온소프트 휴가 · 출장</h1>
+  <p><label>사용자 <select data-testid="user-select" id="user-select"></select></label></p>
+  <div id="error" class="hidden">불러오지 못했습니다 <button id="retry-btn" data-testid="retry-btn">다시 시도</button></div>
+
+  <section class="card">
+    <h2>잔여 연차</h2>
+    <div>총 <b id="b-total">-</b> · 사용 <b id="b-used">-</b> · 대기 <b id="b-pending">-</b> · 잔여 <b data-testid="remaining" id="b-remaining">-</b></div>
+  </section>
+
+  <section>
+    <h2>신청</h2>
+    <select data-testid="type"><option value="연차">연차</option><option value="출장">출장</option></select>
+    <input type="date" data-testid="start" aria-label="시작일">
+    <input type="date" data-testid="end" aria-label="종료일">
+    <input type="text" data-testid="reason" placeholder="사유">
+    <button data-testid="submit-btn" id="submit-btn">신청</button>
+    <div id="message" data-testid="message"></div>
+  </section>
+
+  <section>
+    <h2>내 신청</h2>
+    <table><thead><tr><th>종류</th><th>기간</th><th>일수</th><th>상태</th><th>결재자</th><th>반려 사유</th><th></th></tr></thead>
+    <tbody id="my-list"></tbody></table>
+  </section>
+
+  <section id="pending-section" class="hidden">
+    <h2>결재 대기</h2>
+    <table><thead><tr><th>신청자</th><th>종류</th><th>기간</th><th>일수</th><th>사유</th><th></th></tr></thead>
+    <tbody id="pending-list"></tbody></table>
+  </section>
+</main>
+<script>
+var users = [], current = null;
+var $ = function (sel) { return document.querySelector(sel); };
+var tid = function (n) { return document.querySelector('[data-testid="' + n + '"]'); };
+
+function esc(t) {
+  return String(t == null ? "" : t).replace(/[&<>"']/g, function (c) {
+    return {"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c];
+  });
+}
+
+function api(method, url, body) {
+  var opt = {method: method, headers: {}};
+  if (body) { opt.headers["Content-Type"] = "application/json"; opt.body = JSON.stringify(body); }
+  return fetch(url, opt).then(function (r) {
+    return r.json().catch(function () { return null; }).then(function (data) {
+      return {ok: r.ok, status: r.status, data: data};
+    });
+  });
+}
+
+function showMsg(t) { tid("message").textContent = t || ""; }
+
+function refresh() {
+  if (!current) return Promise.resolve();
+  var u = encodeURIComponent(current.user);
+  return Promise.all([
+    api("GET", "/api/balance?user=" + u),
+    api("GET", "/api/requests?user=" + u),
+    current.role === "manager" ? api("GET", "/api/requests?approver=" + u) : Promise.resolve({ok: true, data: []})
+  ]).then(function (res) {
+    if (!res[0].ok || !res[1].ok || !res[2].ok) throw new Error("fail");
+    $("#error").classList.add("hidden");
+    var b = res[0].data;
+    $("#b-total").textContent = b.total;
+    $("#b-used").textContent = b.used;
+    $("#b-pending").textContent = b.pending;
+    $("#b-remaining").textContent = b.remaining;
+    $("#my-list").innerHTML = res[1].data.map(function (r) {
+      return '<tr data-testid="my-request" data-id="' + r.req_id + '" data-status="' + esc(r.status) + '">' +
+        "<td>" + esc(r.type) + "</td><td>" + esc(r.start) + " ~ " + esc(r.end) + "</td><td>" + r.days + "</td><td>" +
+        esc(r.status) + "</td><td>" + esc(r.approver) + "</td><td>" + esc(r.reject_reason) + "</td><td>" +
+        (r.status === "신청" ? '<button data-testid="cancel-btn" data-id="' + r.req_id + '">취소</button>' : "") +
+        "</td></tr>";
+    }).join("");
+    var isMgr = current.role === "manager";
+    $("#pending-section").classList.toggle("hidden", !isMgr);
+    $("#pending-list").innerHTML = isMgr ? res[2].data.map(function (r) {
+      return '<tr data-testid="pending-request" data-id="' + r.req_id + '">' +
+        "<td>" + esc(r.user) + "</td><td>" + esc(r.type) + "</td><td>" + esc(r.start) + " ~ " + esc(r.end) + "</td><td>" +
+        r.days + "</td><td>" + esc(r.reason) + "</td><td>" +
+        '<button data-testid="approve-btn" data-id="' + r.req_id + '">승인</button> ' +
+        '<button data-testid="reject-btn" data-id="' + r.req_id + '">반려</button></td></tr>';
+    }).join("") : "";
+  }).catch(function () {
+    $("#error").classList.remove("hidden");
+  });
+}
+
+function selectUser() {
+  var name = $("#user-select").value;
+  current = users.filter(function (u) { return u.user === name; })[0] || null;
+  showMsg("");
+  refresh();
+}
+
+function load() {
+  return api("GET", "/api/users").then(function (r) {
+    if (!r.ok) throw new Error("fail");
+    users = r.data;
+    $("#user-select").innerHTML = users.map(function (u) {
+      return "<option>" + esc(u.user) + "</option>";
+    }).join("");
+    $("#error").classList.add("hidden");
+    selectUser();
+  }).catch(function () { $("#error").classList.remove("hidden"); });
+}
+
+function act(url, body) {
+  return api("POST", url, body).then(function (r) {
+    showMsg(r.ok ? "" : (r.data && r.data.detail) || "오류가 발생했습니다");
+    return refresh();
+  }).catch(function () { $("#error").classList.remove("hidden"); });
+}
+
+$("#user-select").addEventListener("change", selectUser);
+$("#retry-btn").addEventListener("click", function () { users.length ? refresh() : load(); });
+$("#submit-btn").addEventListener("click", function () {
+  if (!current) return;
+  act("/api/requests", {
+    user: current.user, type: tid("type").value, start: tid("start").value,
+    end: tid("end").value, reason: tid("reason").value
+  });
+});
+
+document.addEventListener("click", function (e) {
+  var t = e.target, kind = t.getAttribute && t.getAttribute("data-testid"), id = t.getAttribute && t.getAttribute("data-id");
+  if (!kind || !current) return;
+  if (kind === "cancel-btn") {
+    act("/api/requests/" + id + "/cancel", {user: current.user});
+  } else if (kind === "approve-btn") {
+    act("/api/requests/" + id + "/approve", {approver: current.user});
+  } else if (kind === "reject-btn") {
+    var td = t.parentNode;
+    var inp = td.querySelector('[data-testid="reject-reason"]');
+    if (!inp) {
+      inp = document.createElement("input");
+      inp.type = "text"; inp.placeholder = "반려 사유";
+      inp.setAttribute("data-testid", "reject-reason");
+      td.insertBefore(inp, t);
+      inp.focus();
+    } else {
+      act("/api/requests/" + id + "/reject", {approver: current.user, reason: inp.value});
+    }
+  }
+});
+
+load();
+</script>
+</body>
+</html>

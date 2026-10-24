@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 다온소프트 '휴가 · 출장 신청' 웹앱을 만들어 줘. 직원이 잔여 연차를 보면서 휴가나 출장을 신청하고, 팀장이 승인하거나 반려하면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 160463,
+ "num_turns": 9,
+ "total_cost_usd": 0.4495325,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 41881,
+  "cache_read_input_tokens": 294505,
+  "output_tokens": 25253,
+  "output_tokens_details": {
+   "thinking_tokens": 1839
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 41881,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1187,
+    "cache_read_input_tokens": 57895,
+    "cache_creation_input_tokens": 658,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 658
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "휴가·출장 신청 웹앱을 만들었습니다. API는 `fastapi.testclient`로 확인했고, 브라우저 화면은 열어서 확인하지 않았습니다. 서버도 띄워 두지 않았고, 테스트로 만든 `daon.db`는 지웠습니다.\n\n**실행 방법**\n```\npip install -r requirements.txt\npython main.py\n```\n`http://127.0.0.1:8000`으로 접속하세요. 첫 실행 때 DB(`daon.db`)가 만들어지고 가상 데이터가 들어갑니다. 데이터를 초기화하려면 `daon.db`를 지우고 다시 실행하면 됩니다.\n\n**가상 데이터**\n- 대표 1명, 팀장 3명(개발·영업·디자인팀), 직원 6명입니다.\n- 승인, 반려, 대기 상태의 신청 16건이 들어 있고, 날짜는 오늘 기준으로 잡았습니다.\n\n**직원 화면 (기본 박민준)**\n- 올해 부여, 사용, 결재 대기 중(차감 예정), 사용 가능 연차를 카드와 막대로 보여 줍니다.\n- 신청 유형은 연차, 오전·오후 반차, 병가, 경조휴가, 출장입니다. 출장을 고르면 출장지 입력란이 나옵니다.\n- 일수는 주말과 2026년 공휴일을 뺀 근무일로 계산해 미리 보여 줍니다.\n- 연차와 반차만 연차에서 차감되고, 병가·경조휴가·출장은 차감되지 않습니다.\n- 결재 대기 중인 신청은 직접 취소할 수 있습니다.\n\n**팀장 화면 (김서연, 정우진, 임나연)**\n- 결재함에서 팀원의 신청을 승인하거나 반려합니다.\n- 반려할 때는 사유를 꼭 적어야 하고, 사유는 신청자에게 보입니다.\n- 결재함에서 신청자의 잔여 연차를 보면서 판단할 수 있습니다.\n- 팀장 본인의 신청은 대표(한도윤)가 결재합니다.\n\n**서버 검증**\n- 잔여 연차 초과, 같은 기간에 겹치는 신청, 주말·공휴일만 있는 기간은 신청이 거절됩니다.\n- 다른 사람의 결재 대기 건을 승인하는 요청은 403으로 거절됩니다.\n- 이미 처리된 건을 다시 처리하려는 요청은 409로 거절됩니다.\n\n**알아둘 점**\n- 로그인은 없습니다. 화면 오른쪽 위에서 사용자를 전환해서 직원과 팀장 역할을 시연하는 방식입니다. 요청 헤더로 사용자를 식별하므로, 실제로 쓰려면 사내 SSO나 세션 인증으로 바꿔야 합니다.\n- 연차는 신청 시작일의 연도 기준으로 집계하고, 이월이나 발생 규칙은 넣지 않았습니다.\n- 공휴일 목록은 `main.py`의 `HOLIDAYS`에 2026년분만 있습니다. 내년에는 추가해야 합니다.\n\n파일은 `main.py`(API, DB, 가상 데이터), `static/index.html`(화면), `requirements.txt`입니다.",
+ "wall_s": 176.1
+}

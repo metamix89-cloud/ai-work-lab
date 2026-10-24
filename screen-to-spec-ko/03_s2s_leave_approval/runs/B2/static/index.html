@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>다온소프트 휴가 · 출장</title>
+<style>
+body{font-family:sans-serif;max-width:860px;margin:24px auto;padding:0 12px;color:#222}
+section{border:1px solid #ddd;border-radius:6px;padding:12px;margin:14px 0}
+h1{font-size:22px} h2{font-size:16px;margin:0 0 8px}
+table{border-collapse:collapse;width:100%} td,th{border-bottom:1px solid #eee;padding:6px;text-align:left;font-size:14px}
+input,select,button{padding:5px;margin:2px}
+#message{color:#c0392b;min-height:1.2em}
+#error{color:#c0392b}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<h1>다온소프트 휴가 · 출장</h1>
+<label>사용자 <select data-testid="user-select" id="user-select"></select></label>
+<div id="error" class="hidden">불러오지 못했습니다 <button id="retry">다시 시도</button></div>
+<div id="main">
+<section><h2>잔여 연차</h2>
+<div id="balance">총 <span id="b-total"></span> · 사용 <span id="b-used"></span> · 대기 <span id="b-pending"></span> · 잔여 <b data-testid="remaining" id="b-remaining"></b></div></section>
+<section><h2>휴가 · 출장 신청</h2>
+<select data-testid="type"><option>연차</option><option>출장</option></select>
+<input type="date" data-testid="start"> ~ <input type="date" data-testid="end">
+<input type="text" data-testid="reason" placeholder="사유">
+<button data-testid="submit-btn" id="submit">신청</button>
+<div data-testid="message" id="message"></div></section>
+<section><h2>내 신청</h2>
+<table><thead><tr><th>종류</th><th>기간</th><th>일수</th><th>상태</th><th>결재자</th><th>반려 사유</th><th></th></tr></thead>
+<tbody id="my-list"></tbody></table></section>
+<section id="pending-section" class="hidden"><h2>결재 대기</h2>
+<table><thead><tr><th>신청자</th><th>종류</th><th>기간</th><th>일수</th><th>사유</th><th></th></tr></thead>
+<tbody id="pending-list"></tbody></table></section>
+</div>
+<script>
+const $ = s => document.querySelector(s);
+const sel = $('#user-select');
+let users = [];
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+async function api(url, opts) {
+  const r = await fetch(url, opts);
+  let data = null;
+  try { data = await r.json(); } catch (e) {}
+  return {ok: r.ok, status: r.status, data};
+}
+const post = (url, body) => api(url, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)});
+const detail = r => (r.data && r.data.detail) || '요청에 실패했습니다';
+
+async function loadUsers() {
+  const r = await api('/api/users');
+  if (!r.ok) throw new Error();
+  users = r.data;
+  sel.innerHTML = users.map(u => `<option value="${esc(u.user)}">${esc(u.user)}</option>`).join('');
+}
+
+async function refresh() {
+  try {
+    const user = sel.value;
+    const me = users.find(u => u.user === user);
+    const [b, l] = await Promise.all([
+      api('/api/balance?user=' + encodeURIComponent(user)),
+      api('/api/requests?user=' + encodeURIComponent(user))]);
+    if (!b.ok || !l.ok) throw new Error();
+    $('#b-total').textContent = b.data.total;
+    $('#b-used').textContent = b.data.used;
+    $('#b-pending').textContent = b.data.pending;
+    $('#b-remaining').textContent = b.data.remaining;
+    $('#my-list').innerHTML = l.data.map(r => `<tr data-testid="my-request" data-id="${r.req_id}" data-status="${esc(r.status)}">
+      <td>${esc(r.type)}</td><td>${esc(r.start)} ~ ${esc(r.end)}</td><td>${r.days}</td><td>${esc(r.status)}</td>
+      <td>${esc(r.approver)}</td><td>${esc(r.reject_reason)}</td>
+      <td>${r.status === '신청' ? `<button data-testid="cancel-btn" data-id="${r.req_id}">취소</button>` : ''}</td></tr>`).join('');
+    const ps = $('#pending-section');
+    if (me && me.role === 'manager') {
+      const p = await api('/api/requests?approver=' + encodeURIComponent(user));
+      if (!p.ok) throw new Error();
+      ps.classList.remove('hidden');
+      $('#pending-list').innerHTML = p.data.map(r => `<tr data-testid="pending-request" data-id="${r.req_id}">
+        <td>${esc(r.user)}</td><td>${esc(r.type)}</td><td>${esc(r.start)} ~ ${esc(r.end)}</td><td>${r.days}</td><td>${esc(r.reason)}</td>
+        <td><button data-testid="approve-btn">승인</button>
+        <input data-testid="reject-reason" class="hidden" placeholder="반려 사유">
+        <button data-testid="reject-btn">반려</button></td></tr>`).join('');
+    } else {
+      ps.classList.add('hidden');
+      $('#pending-list').innerHTML = '';
+    }
+    $('#error').classList.add('hidden');
+    $('#main').classList.remove('hidden');
+  } catch (e) { showError(); }
+}
+
+function showError() {
+  $('#error').classList.remove('hidden');
+  $('#main').classList.add('hidden');
+}
+
+sel.addEventListener('change', () => { $('#message').textContent = ''; refresh(); });
+$('#retry').addEventListener('click', init);
+
+$('#submit').addEventListener('click', async () => {
+  const msg = $('#message');
+  msg.textContent = '';
+  const r = await post('/api/requests', {
+    user: sel.value, type: $('[data-testid=type]').value, start: $('[data-testid=start]').value,
+    end: $('[data-testid=end]').value, reason: $('[data-testid=reason]').value});
+  if (!r.ok) { msg.textContent = detail(r); return; }
+  $('[data-testid=reason]').value = '';
+  refresh();
+});
+
+$('#my-list').addEventListener('click', async e => {
+  const b = e.target.closest('[data-testid=cancel-btn]');
+  if (!b) return;
+  const r = await post(`/api/requests/${b.dataset.id}/cancel`, {user: sel.value});
+  if (!r.ok) $('#message').textContent = detail(r);
+  refresh();
+});
+
+$('#pending-list').addEventListener('click', async e => {
+  const tr = e.target.closest('tr');
+  if (!tr) return;
+  const id = tr.dataset.id, msg = $('#message');
+  if (e.target.matches('[data-testid=approve-btn]')) {
+    const r = await post(`/api/requests/${id}/approve`, {approver: sel.value});
+    if (!r.ok) msg.textContent = detail(r);
+    refresh();
+  } else if (e.target.matches('[data-testid=reject-btn]')) {
+    const inp = tr.querySelector('[data-testid=reject-reason]');
+    if (inp.classList.contains('hidden')) { inp.classList.remove('hidden'); inp.focus(); return; }
+    const r = await post(`/api/requests/${id}/reject`, {approver: sel.value, reason: inp.value});
+    if (!r.ok) msg.textContent = detail(r);
+    refresh();
+  }
+});
+
+async function init() {
+  try { await loadUsers(); await refresh(); } catch (e) { showError(); }
+}
+init();
+</script>
+</body>
+</html>

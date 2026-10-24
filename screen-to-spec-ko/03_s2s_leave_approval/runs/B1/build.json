@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 82367,
+ "num_turns": 12,
+ "total_cost_usd": 0.21995220000000004,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 18,
+  "cache_creation_input_tokens": 15880,
+  "cache_read_input_tokens": 382462,
+  "output_tokens": 11815,
+  "output_tokens_details": {
+   "thinking_tokens": 1313
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 15880,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 934,
+    "cache_read_input_tokens": 49911,
+    "cache_creation_input_tokens": 1148,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1148
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD대로 웹앱을 만들었고, API는 직접 호출해서 확인했습니다. 화면(`/`)은 브라우저에서 열어 보지 않았습니다. `tests/test_dod.py`는 폴더에 없어서 T1~T9 전체를 돌려 보지는 못했습니다.\n\n**확인한 것**\n- 박지연의 잔여 연차는 12입니다. 11-05~11-09 신청은 201이고 `days`가 3입니다.\n- 같은 기간을 다시 신청하면 409, 잔여를 넘으면 400입니다.\n- 팀장이 아닌 사람의 승인은 403이고, 사유 없는 반려는 400입니다.\n- 팀장 승인은 200이고, 이후 잔여가 그만큼 줄었습니다.\n- 이미 처리된 건을 다시 승인·반려하면 409입니다.\n- 출장은 잔여 검사를 하지 않습니다.\n\n**파일**\n- `main.py`: FastAPI 서버로 API 8개와 규칙 R1~R8을 구현했습니다. 시작할 때마다 `seed/*.csv`로 `leave.db`를 새로 만들고, 테이블은 `lv_users`와 `lv_requests`입니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. 잔여 카드, 신청 폼, 내 신청 목록, 팀장 전용 결재 대기, 오류 상태(`불러오지 못했습니다` + 다시 시도)가 들어 있고 `data-testid`는 PRD 이름 그대로 썼습니다.\n- `seed/users.csv`, `seed/requests.csv`: PRD 폴더에 시드가 없어서 직접 만든 가상 데이터입니다. 직원 5명(팀장 2명)과 신청 4건이고, 박지연은 총 15·사용 2·대기 1입니다. 박지연의 신청 행은 2개입니다.\n\n**실행**\n- 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`을 실행하면 됩니다.\n- 이 환경에 `fastapi`, `uvicorn`, `httpx`(검증용)를 `pip`로 설치했습니다.\n\n**PRD에 없어서 정한 동작**\n- 잔여 부족(400)과 기간 겹침(409)이 동시에 해당하면 잔여 부족을 먼저 알립니다.\n- 주말만 고른 신청은 일수가 0이라 400으로 거부합니다.",
+ "wall_s": 102.3
+}

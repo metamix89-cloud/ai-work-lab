@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 휴가 · 출장</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; max-width: 880px; margin: 24px auto; padding: 0 16px; color: #222; }
+  h1 { font-size: 22px; }
+  h2 { font-size: 16px; margin-top: 28px; }
+  section { margin-bottom: 8px; }
+  .card { background: #f3f6fb; border-radius: 8px; padding: 14px 18px; font-size: 18px; }
+  .card b { font-size: 24px; color: #1d4ed8; }
+  form { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  input, select, button { font: inherit; padding: 5px 8px; }
+  button { cursor: pointer; }
+  #message { min-height: 1.4em; margin-top: 8px; color: #b91c1c; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { border-bottom: 1px solid #ddd; padding: 6px 8px; text-align: left; font-size: 14px; }
+  #error { background: #fee2e2; padding: 12px; border-radius: 8px; margin: 12px 0; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<h1>다온소프트 휴가 · 출장</h1>
+<label>사용자 <select data-testid="user-select" id="user-select"></select></label>
+
+<div id="error" hidden>불러오지 못했습니다 <button id="retry-btn" type="button">다시 시도</button></div>
+
+<div id="main" hidden>
+  <section>
+    <h2>잔여 연차</h2>
+    <div class="card" id="balance"></div>
+  </section>
+
+  <section>
+    <h2>신청</h2>
+    <form id="form">
+      <select data-testid="type"><option>연차</option><option>출장</option></select>
+      <input type="date" data-testid="start">
+      <input type="date" data-testid="end">
+      <input type="text" data-testid="reason" placeholder="사유">
+      <button type="submit" data-testid="submit-btn">신청</button>
+    </form>
+    <div id="message" data-testid="message"></div>
+  </section>
+
+  <section>
+    <h2>내 신청</h2>
+    <table>
+      <thead><tr><th>종류</th><th>기간</th><th>일수</th><th>상태</th><th>결재자</th><th>반려 사유</th><th></th></tr></thead>
+      <tbody id="my-list"></tbody>
+    </table>
+  </section>
+
+  <section id="approval" hidden>
+    <h2>결재 대기</h2>
+    <table>
+      <thead><tr><th>신청자</th><th>종류</th><th>기간</th><th>일수</th><th>사유</th><th></th></tr></thead>
+      <tbody id="pending-list"></tbody>
+    </table>
+  </section>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const tid = (id) => document.querySelector('[data-testid="' + id + '"]');
+let users = [];
+let current = null;
+
+async function api(method, url, body) {
+  const res = await fetch(url, {
+    method,
+    headers: body ? { "Content-Type": "application/json" } : {},
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok) { const err = new Error((data && data.detail) || "오류"); err.status = res.status; throw err; }
+  return data;
+}
+
+function cell(tr, text) {
+  const td = document.createElement("td");
+  td.textContent = text == null ? "" : text;
+  tr.appendChild(td);
+  return td;
+}
+
+function button(label, testid, onclick) {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.textContent = label;
+  b.setAttribute("data-testid", testid);
+  b.addEventListener("click", onclick);
+  return b;
+}
+
+async function run(fn) {
+  try { await fn(); $("error").hidden = true; $("main").hidden = false; }
+  catch (e) { $("error").hidden = false; $("main").hidden = true; }
+}
+
+async function loadUsers() {
+  users = await api("GET", "/api/users");
+  const sel = $("user-select");
+  const prev = sel.value;
+  sel.innerHTML = "";
+  users.forEach((u) => { const o = document.createElement("option"); o.value = o.textContent = u.user; sel.appendChild(o); });
+  if (prev && users.some((u) => u.user === prev)) sel.value = prev;
+  current = sel.value;
+}
+
+async function refresh() {
+  const me = users.find((u) => u.user === current);
+  if (!me) return;
+  const q = encodeURIComponent(current);
+  const [bal, mine, pending] = await Promise.all([
+    api("GET", "/api/balance?user=" + q),
+    api("GET", "/api/requests?user=" + q),
+    me.role === "manager" ? api("GET", "/api/requests?approver=" + q) : Promise.resolve(null),
+  ]);
+  $("balance").innerHTML = "총 <span>" + bal.total + "</span> · 사용 <span>" + bal.used + "</span> · 대기 <span>" +
+    bal.pending + "</span> · 잔여 <b data-testid=\"remaining\">" + bal.remaining + "</b>";
+
+  const tbody = $("my-list");
+  tbody.innerHTML = "";
+  mine.forEach((r) => {
+    const tr = document.createElement("tr");
+    tr.setAttribute("data-testid", "my-request");
+    tr.dataset.id = r.req_id;
+    tr.dataset.status = r.status;
+    cell(tr, r.type); cell(tr, r.start + " ~ " + r.end); cell(tr, r.days); cell(tr, r.status);
+    cell(tr, r.approver); cell(tr, r.reject_reason);
+    const td = cell(tr, "");
+    if (r.status === "신청") td.appendChild(button("취소", "cancel-btn", () => act("POST", "/api/requests/" + r.req_id + "/cancel", { user: current })));
+    tbody.appendChild(tr);
+  });
+
+  const area = $("approval");
+  area.hidden = pending === null;
+  const pb = $("pending-list");
+  pb.innerHTML = "";
+  (pending || []).forEach((r) => {
+    const tr = document.createElement("tr");
+    tr.setAttribute("data-testid", "pending-request");
+    tr.dataset.id = r.req_id;
+    cell(tr, r.user); cell(tr, r.type); cell(tr, r.start + " ~ " + r.end); cell(tr, r.days); cell(tr, r.reason);
+    const td = cell(tr, "");
+    td.appendChild(button("승인", "approve-btn", () => act("POST", "/api/requests/" + r.req_id + "/approve", { approver: current })));
+    const input = document.createElement("input");
+    input.type = "text"; input.placeholder = "반려 사유"; input.hidden = true;
+    input.setAttribute("data-testid", "reject-reason");
+    const rejectBtn = button("반려", "reject-btn", () => {
+      if (input.hidden) { input.hidden = false; input.focus(); return; }
+      act("POST", "/api/requests/" + r.req_id + "/reject", { approver: current, reason: input.value });
+    });
+    td.appendChild(rejectBtn);
+    td.appendChild(input);
+    pb.appendChild(tr);
+  });
+}
+
+async function act(method, url, body) {
+  try {
+    await api(method, url, body);
+    tid("message").textContent = "";
+  } catch (e) {
+    if (e.status) { tid("message").textContent = e.message; return; }
+    await run(async () => { throw e; });
+    return;
+  }
+  await run(refresh);
+}
+
+$("user-select").addEventListener("change", (e) => { current = e.target.value; tid("message").textContent = ""; run(refresh); });
+$("retry-btn").addEventListener("click", () => run(async () => { await loadUsers(); await refresh(); }));
+$("form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  try {
+    await api("POST", "/api/requests", {
+      user: current, type: tid("type").value, start: tid("start").value, end: tid("end").value, reason: tid("reason").value,
+    });
+    tid("message").textContent = "";
+    tid("reason").value = "";
+  } catch (err) {
+    if (err.status) { tid("message").textContent = err.message; return; }
+    await run(async () => { throw err; });
+    return;
+  }
+  await run(refresh);
+});
+
+run(async () => { await loadUsers(); await refresh(); });
+</script>
+</body>
+</html>

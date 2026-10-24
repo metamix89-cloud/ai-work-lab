@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 99894,
+ "num_turns": 12,
+ "total_cost_usd": 0.35061080000000006,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 38453,
+  "cache_read_input_tokens": 283408,
+  "output_tokens": 16843,
+  "output_tokens_details": {
+   "thinking_tokens": 1386
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 38453,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 931,
+    "cache_read_input_tokens": 54783,
+    "cache_creation_input_tokens": 342,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 342
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD대로 웹앱을 만들었습니다. 브라우저 화면은 열어 보지 않았고, API만 간단히 확인했습니다. 확인한 건 T3, T4, T5, T6, T7 해당 항목이고, T1·T2·T9(화면)와 T8(기간 겹침)은 확인하지 못했습니다. `tests/test_dod.py`는 폴더에 없어서 정식 완료 기준 테스트는 돌리지 못했습니다.\n\n실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000` 입니다.\n\n**만든 파일**\n- `main.py`: API 8개와 규칙 R1~R8입니다. 서버를 시작할 때마다 `seed/` CSV로 `leave.db`(SQLite)를 새로 만듭니다.\n- `static/index.html`: `/`에 나오는 한 페이지 화면입니다. PRD가 정한 `data-testid`를 그대로 썼고, 순수 HTML/JS입니다.\n- `seed/users.csv`, `seed/requests.csv`: PRD에 가상 데이터 내용이 없어서 제가 만들었습니다.\n  - 직원은 5명이고 김민수·이서연이 팀장입니다.\n  - 신청은 4건입니다. 박지연은 사용 2일(승인)과 대기 1일(신청)이라 잔여가 12가 됩니다.\n  - 최우진의 신청 1건은 김민수 팀, 정하늘의 신청 1건은 이서연 팀입니다.\n\n**API로 확인한 결과**\n- 박지연의 잔여는 12로 나옵니다.\n- 11-05~11-09 연차 신청은 201이고 `days`는 3입니다.\n- 잔여를 넘는 연차 신청은 400입니다.\n- 팀장이 아닌 사람의 승인은 403입니다.\n- 사유 없는 반려는 400입니다.\n- 이미 처리된 신청을 다시 승인·반려하면 409입니다.\n- 팀장의 승인은 200입니다.\n- `/`는 200으로 열립니다.\n\n**제가 정한 부분**\n- 연차 신청 검사 순서는 입력 검사(400), 잔여 부족(400), 기간 겹침(409) 순입니다. 겹침과 잔여 부족이 함께 걸리면 400이 먼저 나옵니다.\n- 승인·반려 검사 순서는 권한(403), 이미 처리됨(409), 반려 사유 없음(400) 순입니다.\n- 토·일만 고른 신청은 400으로 거부합니다.\n\n시험용으로 만든 파일은 지웠습니다.",
+ "wall_s": 110.8
+}

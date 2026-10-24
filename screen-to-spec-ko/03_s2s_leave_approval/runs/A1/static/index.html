@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 휴가·출장 신청</title>
+<style>
+  :root { --bg:#f4f6f9; --card:#fff; --line:#e3e7ee; --text:#1f2937; --sub:#6b7280; --pri:#2563eb; --ok:#15803d; --no:#b91c1c; --wait:#b45309; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif; background:var(--bg); color:var(--text); }
+  header { background:#fff; border-bottom:1px solid var(--line); padding:12px 24px; display:flex; align-items:center; gap:16px; }
+  header h1 { font-size:18px; margin:0; flex:1; } header h1 span { color:var(--pri); }
+  select, input, textarea, button { font:inherit; }
+  select, input, textarea { border:1px solid var(--line); border-radius:6px; padding:8px 10px; width:100%; background:#fff; }
+  header select { width:auto; }
+  main { max-width:1000px; margin:0 auto; padding:20px; }
+  nav { display:flex; gap:4px; margin-bottom:16px; }
+  nav button { border:0; background:none; padding:10px 18px; border-radius:8px; cursor:pointer; color:var(--sub); font-weight:600; }
+  nav button.on { background:var(--pri); color:#fff; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px; margin-bottom:16px; }
+  .card h2 { font-size:15px; margin:0 0 14px; }
+  .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  .stat { text-align:center; padding:12px; border-radius:8px; background:var(--bg); }
+  .stat b { display:block; font-size:26px; margin-top:4px; } .stat small { color:var(--sub); }
+  .bar { height:10px; background:var(--line); border-radius:5px; overflow:hidden; display:flex; margin-top:14px; }
+  .bar i { display:block; height:100%; } .bar .u { background:var(--pri); } .bar .p { background:#f59e0b; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  label { font-size:13px; color:var(--sub); display:block; margin-bottom:4px; }
+  .full { grid-column:1/-1; }
+  .btn { background:var(--pri); color:#fff; border:0; border-radius:6px; padding:9px 16px; cursor:pointer; font-weight:600; }
+  .btn.sm { padding:5px 10px; font-size:13px; } .btn.ok { background:var(--ok); } .btn.no { background:var(--no); } .btn.ghost { background:#fff; color:var(--sub); border:1px solid var(--line); }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { padding:10px 8px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+  th { color:var(--sub); font-weight:600; font-size:13px; }
+  .tag { padding:2px 9px; border-radius:10px; font-size:12px; font-weight:700; white-space:nowrap; }
+  .대기 { background:#fef3c7; color:var(--wait); } .승인 { background:#dcfce7; color:var(--ok); } .반려 { background:#fee2e2; color:var(--no); } .취소 { background:#e5e7eb; color:var(--sub); }
+  .hint { font-size:13px; color:var(--sub); margin-top:8px; } .err { color:var(--no); font-size:13px; margin-top:8px; min-height:18px; }
+  .empty { color:var(--sub); text-align:center; padding:24px; } .mut { color:var(--sub); font-size:12px; }
+  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#111827; color:#fff; padding:10px 18px; border-radius:8px; display:none; }
+  @media(max-width:700px){ .stats{grid-template-columns:repeat(2,1fr);} .grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<header>
+  <h1><span>다온소프트</span> 휴가 · 출장 신청</h1>
+  <label style="margin:0">사용자</label>
+  <select id="userSel"></select>
+</header>
+<main>
+  <nav>
+    <button id="tabMy" class="on">내 신청</button>
+    <button id="tabApr" style="display:none">승인함 <span id="aprCnt"></span></button>
+  </nav>
+
+  <section id="viewMy">
+    <div class="card">
+      <h2>내 연차 현황 <span class="mut" id="who"></span></h2>
+      <div class="stats">
+        <div class="stat"><small>총 연차</small><b id="bTotal">-</b></div>
+        <div class="stat"><small>사용(승인)</small><b id="bUsed">-</b></div>
+        <div class="stat"><small>승인 대기</small><b id="bPend">-</b></div>
+        <div class="stat"><small>잔여 연차</small><b id="bRem" style="color:var(--pri)">-</b></div>
+      </div>
+      <div class="bar"><i class="u" id="barU"></i><i class="p" id="barP"></i></div>
+    </div>
+
+    <div class="card">
+      <h2>새 신청</h2>
+      <form id="form" class="grid">
+        <div><label>구분</label>
+          <select id="category"><option>휴가</option><option>출장</option></select></div>
+        <div><label>종류</label><select id="kind"></select></div>
+        <div><label>시작일</label><input type="date" id="start" required></div>
+        <div><label>종료일</label><input type="date" id="end" required></div>
+        <div class="full" id="destWrap" style="display:none"><label>출장지</label><input id="dest" placeholder="예) 부산 고객사"></div>
+        <div class="full"><label>사유</label><textarea id="reason" rows="2" required></textarea></div>
+        <div class="full">
+          <div class="hint" id="preview"></div>
+          <div class="err" id="err"></div>
+          <button class="btn" type="submit">신청하기</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>내 신청 내역</h2>
+      <table><thead><tr><th>구분</th><th>기간</th><th>일수</th><th>사유</th><th>상태</th><th>처리 의견</th><th></th></tr></thead>
+        <tbody id="myBody"></tbody></table>
+    </div>
+  </section>
+
+  <section id="viewApr" style="display:none">
+    <div class="card">
+      <h2>팀원 신청 승인함</h2>
+      <table><thead><tr><th>신청자</th><th>구분</th><th>기간</th><th>일수</th><th>사유</th><th>상태</th><th>처리</th></tr></thead>
+        <tbody id="aprBody"></tbody></table>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+let uid = Number(localStorage.getItem('uid')) || 1, me = null, meta = null;
+const DOW = ['일','월','화','수','목','금','토'];
+
+async function api(path, opts = {}) {
+  const res = await fetch('/api' + path, {
+    ...opts, headers: { 'Content-Type': 'application/json', 'X-User-Id': uid, ...(opts.headers || {}) },
+    body: opts.body ? JSON.stringify(opts.body) : undefined });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(typeof data.detail === 'string' ? data.detail : '요청 처리에 실패했습니다.');
+  return data;
+}
+function toast(msg) { const t = $('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 2200); }
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtDate = s => { const d = new Date(s + 'T00:00:00'); return `${s.slice(2)}(${DOW[d.getDay()]})`; };
+const period = r => r.start_date === r.end_date ? fmtDate(r.start_date) : `${fmtDate(r.start_date)} ~ ${fmtDate(r.end_date)}`;
+const kindLabel = r => r.kind + (r.destination ? `<div class="mut">${esc(r.destination)}</div>` : '');
+const tag = s => `<span class="tag ${s}">${s}</span>`;
+
+async function boot() {
+  meta = await api('/meta');
+  const emps = await api('/employees');
+  $('userSel').innerHTML = emps.map(e =>
+    `<option value="${e.id}">${esc(e.name)} · ${esc(e.title)}${e.is_manager ? ' (팀장)' : ''}</option>`).join('');
+  if (!emps.some(e => e.id === uid)) uid = emps[0].id;
+  $('userSel').value = uid;
+  $('start').value = $('end').value = meta.today;
+  fillKinds();
+  await refresh();
+}
+
+function fillKinds() {
+  const kinds = $('category').value === '휴가' ? meta.leave_kinds : meta.trip_kinds;
+  $('kind').innerHTML = kinds.map(k => `<option>${k}</option>`).join('');
+  $('destWrap').style.display = $('category').value === '출장' ? '' : 'none';
+  updatePreview();
+}
+
+async function refresh() {
+  me = await api('/me');
+  $('who').textContent = `— ${me.name} (${me.team})`;
+  const b = me.balance;
+  $('bTotal').textContent = b.total; $('bUsed').textContent = b.used;
+  $('bPend').textContent = b.pending; $('bRem').textContent = b.remaining;
+  $('barU').style.width = (b.used / b.total * 100) + '%';
+  $('barP').style.width = (b.pending / b.total * 100) + '%';
+  $('tabApr').style.display = me.is_manager ? '' : 'none';
+  if (!me.is_manager && $('viewApr').style.display !== 'none') showTab('My');
+  await loadMine();
+  if (me.is_manager) await loadApprovals();
+}
+
+async function loadMine() {
+  const rows = await api('/requests');
+  $('myBody').innerHTML = rows.length ? rows.map(r => `<tr>
+    <td>${r.category}<div class="mut">${kindLabel(r)}</div></td><td>${period(r)}</td><td>${r.days}</td>
+    <td>${esc(r.reason)}</td><td>${tag(r.status)}</td>
+    <td>${esc(r.review_comment || '')}${r.reviewer_name ? `<div class="mut">${esc(r.reviewer_name)}</div>` : ''}</td>
+    <td>${r.status === '대기' ? `<button class="btn sm ghost" onclick="cancelReq(${r.id})">취소</button>` : ''}</td>
+  </tr>`).join('') : '<tr><td colspan="7" class="empty">신청 내역이 없습니다.</td></tr>';
+}
+
+async function loadApprovals() {
+  const rows = await api('/approvals');
+  const pending = rows.filter(r => r.status === '대기').length;
+  $('aprCnt').textContent = pending ? `(${pending})` : '';
+  $('aprBody').innerHTML = rows.length ? rows.map(r => `<tr>
+    <td>${esc(r.emp_name)}<div class="mut">${esc(r.emp_title)} · 잔여 ${r.balance.remaining}일</div></td>
+    <td>${r.category}<div class="mut">${kindLabel(r)}</div></td><td>${period(r)}</td><td>${r.days}</td>
+    <td>${esc(r.reason)}</td><td>${tag(r.status)}</td>
+    <td>${r.status === '대기' ? `
+      <input id="cm${r.id}" placeholder="의견 (반려 시 필수)" style="margin-bottom:6px">
+      <button class="btn sm ok" onclick="decide(${r.id},'승인')">승인</button>
+      <button class="btn sm no" onclick="decide(${r.id},'반려')">반려</button>`
+      : `${esc(r.review_comment || '')}<div class="mut">${esc(r.reviewer_name || '')}</div>`}</td>
+  </tr>`).join('') : '<tr><td colspan="7" class="empty">팀원의 신청이 없습니다.</td></tr>';
+}
+
+async function decide(id, action) {
+  try {
+    await api(`/requests/${id}/decision`, { method: 'POST', body: { action, comment: $('cm' + id).value } });
+    toast(`${action} 처리되었습니다.`); await refresh();
+  } catch (e) { toast(e.message); }
+}
+async function cancelReq(id) {
+  if (!confirm('이 신청을 취소할까요?')) return;
+  try { await api(`/requests/${id}/cancel`, { method: 'POST' }); toast('취소되었습니다.'); await refresh(); }
+  catch (e) { toast(e.message); }
+}
+
+async function updatePreview() {
+  const kind = $('kind').value, s = $('start').value, e = $('end').value;
+  if (kind.startsWith('반차')) $('end').value = $('start').value;
+  if (!s || !e) { $('preview').textContent = ''; return; }
+  try {
+    const { days } = await api(`/calc?kind=${encodeURIComponent(kind)}&start=${$('start').value}&end=${$('end').value}`);
+    const deduct = meta.deduct.includes(kind);
+    $('preview').textContent = `신청 일수 ${days}일 (주말·공휴일 제외)` +
+      (deduct && me ? ` · 승인 시 잔여 연차 ${me.balance.remaining} → ${me.balance.remaining - days}일` : '');
+  } catch (err) { $('preview').textContent = err.message; }
+}
+
+function showTab(t) {
+  $('viewMy').style.display = t === 'My' ? '' : 'none';
+  $('viewApr').style.display = t === 'Apr' ? '' : 'none';
+  $('tabMy').classList.toggle('on', t === 'My'); $('tabApr').classList.toggle('on', t === 'Apr');
+}
+
+$('tabMy').onclick = () => showTab('My');
+$('tabApr').onclick = () => showTab('Apr');
+$('userSel').onchange = async e => { uid = Number(e.target.value); localStorage.setItem('uid', uid); $('err').textContent = ''; await refresh(); updatePreview(); };
+$('category').onchange = fillKinds;
+['kind', 'start', 'end'].forEach(id => $(id).addEventListener('change', updatePreview));
+$('form').onsubmit = async ev => {
+  ev.preventDefault(); $('err').textContent = '';
+  try {
+    const r = await api('/requests', { method: 'POST', body: {
+      category: $('category').value, kind: $('kind').value, start_date: $('start').value, end_date: $('end').value,
+      destination: $('dest').value, reason: $('reason').value } });
+    toast(r.status === '승인' ? '신청되어 자동 승인되었습니다.' : '신청되었습니다. 팀장 승인을 기다려 주세요.');
+    $('reason').value = ''; $('dest').value = '';
+    await refresh(); updatePreview();
+  } catch (e) { $('err').textContent = e.message; }
+};
+boot().then(updatePreview);
+</script>
+</body>
+</html>

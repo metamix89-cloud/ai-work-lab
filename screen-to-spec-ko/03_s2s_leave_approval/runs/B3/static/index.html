@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 휴가 · 출장</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; max-width: 860px; margin: 24px auto; padding: 0 16px; color: #222; }
+  h1 { font-size: 22px; margin: 0; }
+  header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  section { border: 1px solid #ddd; border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
+  h2 { font-size: 16px; margin: 0 0 10px; }
+  .card { font-size: 18px; }
+  .card b { font-size: 24px; color: #1a5fd0; }
+  label { display: inline-block; margin: 0 8px 8px 0; font-size: 14px; }
+  input, select, button { font: inherit; padding: 4px 8px; }
+  button { cursor: pointer; }
+  #message { min-height: 1.4em; color: #c0392b; margin-top: 6px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { border-bottom: 1px solid #eee; padding: 6px 4px; text-align: left; }
+  .error { color: #c0392b; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>다온소프트 휴가 · 출장</h1>
+  <label>사용자 <select data-testid="user-select" id="user-select"></select></label>
+</header>
+
+<div id="error" class="error hidden">불러오지 못했습니다 <button id="retry-btn">다시 시도</button></div>
+
+<div id="main">
+  <section>
+    <h2>잔여 연차</h2>
+    <div class="card">총 <span id="b-total">0</span> · 사용 <span id="b-used">0</span> · 대기 <span id="b-pending">0</span> · 잔여 <b data-testid="remaining" id="b-remaining">0</b></div>
+  </section>
+
+  <section>
+    <h2>신청</h2>
+    <label>종류 <select data-testid="type" id="f-type"><option>연차</option><option>출장</option></select></label>
+    <label>시작 <input type="date" data-testid="start" id="f-start"></label>
+    <label>종료 <input type="date" data-testid="end" id="f-end"></label>
+    <label>사유 <input type="text" data-testid="reason" id="f-reason"></label>
+    <button data-testid="submit-btn" id="submit-btn">신청</button>
+    <div data-testid="message" id="message"></div>
+  </section>
+
+  <section>
+    <h2>내 신청</h2>
+    <table>
+      <thead><tr><th>종류</th><th>기간</th><th>일수</th><th>상태</th><th>결재자</th><th>반려 사유</th><th></th></tr></thead>
+      <tbody id="my-list"></tbody>
+    </table>
+  </section>
+
+  <section id="pending-section" class="hidden">
+    <h2>결재 대기</h2>
+    <table>
+      <thead><tr><th>신청자</th><th>종류</th><th>기간</th><th>일수</th><th>사유</th><th></th></tr></thead>
+      <tbody id="pending-list"></tbody>
+    </table>
+  </section>
+</div>
+
+<script>
+let users = [];
+const $ = (id) => document.getElementById(id);
+const current = () => users.find((u) => u.user === $("user-select").value);
+
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+async function api(path, opts) {
+  const res = await fetch(path, opts);
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  return { ok: res.ok, status: res.status, data };
+}
+
+function post(path, body) {
+  return api(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+}
+
+function showError(on) {
+  $("error").classList.toggle("hidden", !on);
+  $("main").classList.toggle("hidden", on);
+}
+
+async function loadUsers() {
+  const r = await api("/api/users");
+  if (!r.ok) throw new Error("users");
+  users = r.data;
+  $("user-select").innerHTML = users.map((u) => `<option value="${esc(u.user)}">${esc(u.user)}</option>`).join("");
+}
+
+async function refresh() {
+  const u = current();
+  if (!u) return;
+  try {
+    const [b, mine, pend] = await Promise.all([
+      api("/api/balance?user=" + encodeURIComponent(u.user)),
+      api("/api/requests?user=" + encodeURIComponent(u.user)),
+      u.role === "manager" ? api("/api/requests?approver=" + encodeURIComponent(u.user)) : Promise.resolve({ ok: true, data: [] }),
+    ]);
+    if (!b.ok || !mine.ok || !pend.ok) throw new Error("api");
+    showError(false);
+    $("b-total").textContent = b.data.total;
+    $("b-used").textContent = b.data.used;
+    $("b-pending").textContent = b.data.pending;
+    $("b-remaining").textContent = b.data.remaining;
+
+    $("my-list").innerHTML = mine.data.map((r) => `
+      <tr data-testid="my-request" data-id="${r.req_id}" data-status="${esc(r.status)}">
+        <td>${esc(r.type)}</td><td>${esc(r.start)} ~ ${esc(r.end)}</td><td>${r.days}</td>
+        <td>${esc(r.status)}</td><td>${esc(r.approver)}</td><td>${esc(r.reject_reason)}</td>
+        <td>${r.status === "신청" ? `<button data-testid="cancel-btn" data-id="${r.req_id}">취소</button>` : ""}</td>
+      </tr>`).join("");
+
+    const isMgr = u.role === "manager";
+    $("pending-section").classList.toggle("hidden", !isMgr);
+    $("pending-list").innerHTML = isMgr ? pend.data.map((r) => `
+      <tr data-testid="pending-request" data-id="${r.req_id}">
+        <td>${esc(r.user)}</td><td>${esc(r.type)}</td><td>${esc(r.start)} ~ ${esc(r.end)}</td><td>${r.days}</td><td>${esc(r.reason)}</td>
+        <td>
+          <button data-testid="approve-btn" data-id="${r.req_id}">승인</button>
+          <button data-testid="reject-btn" data-id="${r.req_id}">반려</button>
+        </td>
+      </tr>`).join("") : "";
+  } catch (e) {
+    showError(true);
+  }
+}
+
+$("user-select").addEventListener("change", () => { $("message").textContent = ""; refresh(); });
+$("retry-btn").addEventListener("click", init);
+
+$("submit-btn").addEventListener("click", async () => {
+  const r = await post("/api/requests", {
+    user: current().user, type: $("f-type").value, start: $("f-start").value,
+    end: $("f-end").value, reason: $("f-reason").value,
+  });
+  if (r.ok) {
+    $("message").textContent = "";
+    $("f-reason").value = "";
+  } else {
+    $("message").textContent = (r.data && r.data.detail) || "신청에 실패했습니다";
+  }
+  refresh();
+});
+
+document.addEventListener("click", async (ev) => {
+  const t = ev.target;
+  const tid = t.dataset && t.dataset.testid;
+  const id = t.dataset && t.dataset.id;
+  if (!tid || !id) return;
+  const me = current().user;
+  let r;
+  if (tid === "cancel-btn") {
+    r = await post(`/api/requests/${id}/cancel`, { user: me });
+  } else if (tid === "approve-btn") {
+    r = await post(`/api/requests/${id}/approve`, { approver: me });
+  } else if (tid === "reject-btn") {
+    const row = t.closest("tr");
+    let input = row.querySelector('[data-testid="reject-reason"]');
+    if (!input) {
+      input = document.createElement("input");
+      input.type = "text";
+      input.placeholder = "반려 사유";
+      input.setAttribute("data-testid", "reject-reason");
+      t.before(input);
+      input.focus();
+      return;
+    }
+    r = await post(`/api/requests/${id}/reject`, { approver: me, reason: input.value });
+  } else return;
+  $("message").textContent = r.ok ? "" : (r.data && r.data.detail) || "처리에 실패했습니다";
+  refresh();
+});
+
+async function init() {
+  try {
+    await loadUsers();
+    showError(false);
+    await refresh();
+  } catch (e) {
+    showError(true);
+  }
+}
+init();
+</script>
+</body>
+</html>

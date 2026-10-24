@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 · 휴가/출장 신청</title>
+<style>
+  :root { --bg:#f4f6fa; --card:#fff; --line:#e3e7ee; --text:#1c2430; --mute:#6b7685; --brand:#2f5bea;
+          --ok:#12805c; --okbg:#e3f5ee; --warn:#a15c00; --warnbg:#fff1d6; --bad:#c0362c; --badbg:#fde8e6; --gray:#eef0f4; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:"Pretendard","Malgun Gothic",system-ui,sans-serif; background:var(--bg); color:var(--text); font-size:14px; }
+  header { background:#fff; border-bottom:1px solid var(--line); padding:12px 24px; display:flex; align-items:center; gap:16px; position:sticky; top:0; z-index:5; }
+  header h1 { font-size:18px; margin:0; } header h1 span { color:var(--brand); }
+  header .sp { flex:1; }
+  header label { color:var(--mute); font-size:12px; }
+  main { max-width:1040px; margin:20px auto; padding:0 16px 60px; }
+  .tabs { display:flex; gap:4px; margin-bottom:16px; }
+  .tab { border:0; background:transparent; padding:9px 16px; border-radius:8px; font-size:14px; cursor:pointer; color:var(--mute); font-weight:600; }
+  .tab.on { background:var(--brand); color:#fff; }
+  .tab .badge { background:var(--bad); color:#fff; border-radius:10px; padding:1px 7px; font-size:11px; margin-left:4px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px; margin-bottom:16px; }
+  .card h2 { margin:0 0 14px; font-size:15px; }
+  .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  .stat { background:var(--gray); border-radius:10px; padding:12px 14px; }
+  .stat .n { font-size:24px; font-weight:700; } .stat .l { color:var(--mute); font-size:12px; }
+  .stat.main { background:var(--brand); color:#fff; } .stat.main .l { color:#dbe4ff; }
+  .bar { height:8px; background:var(--gray); border-radius:4px; margin-top:14px; overflow:hidden; display:flex; }
+  .bar i { display:block; height:100%; } .bar .u { background:var(--brand); } .bar .p { background:#f4b942; }
+  .legend { color:var(--mute); font-size:12px; margin-top:6px; }
+  form .row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px; }
+  form .full { grid-column:1/-1; }
+  label.f { display:block; font-size:12px; color:var(--mute); margin-bottom:4px; font-weight:600; }
+  input, select, textarea { width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:8px; font:inherit; background:#fff; }
+  input:focus, select:focus, textarea:focus { outline:2px solid #c9d6ff; border-color:var(--brand); }
+  textarea { resize:vertical; min-height:60px; }
+  button.btn { border:0; border-radius:8px; padding:9px 16px; font:inherit; font-weight:600; cursor:pointer; background:var(--brand); color:#fff; }
+  button.btn.ok { background:var(--ok); } button.btn.bad { background:var(--bad); }
+  button.btn.ghost { background:var(--gray); color:var(--text); } button.btn.sm { padding:5px 10px; font-size:12px; }
+  button:disabled { opacity:.5; cursor:default; }
+  .hint { color:var(--mute); font-size:12px; margin:0 0 0 12px; }
+  .actions { display:flex; align-items:center; }
+  table { width:100%; border-collapse:collapse; }
+  th, td { text-align:left; padding:10px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--mute); font-size:12px; font-weight:600; }
+  tr:last-child td { border-bottom:0; }
+  .pill { display:inline-block; padding:2px 9px; border-radius:10px; font-size:12px; font-weight:600; }
+  .pending { background:var(--warnbg); color:var(--warn); } .approved { background:var(--okbg); color:var(--ok); }
+  .rejected { background:var(--badbg); color:var(--bad); } .cancelled { background:var(--gray); color:var(--mute); }
+  .kind { font-weight:600; } .kind.trip { color:#7a3fd1; }
+  .sub { color:var(--mute); font-size:12px; margin-top:2px; }
+  .empty { color:var(--mute); text-align:center; padding:28px 0; }
+  .sw { display:inline-flex; background:var(--gray); border-radius:8px; padding:3px; margin-bottom:12px; }
+  .sw button { border:0; background:transparent; padding:5px 12px; border-radius:6px; cursor:pointer; font:inherit; color:var(--mute); }
+  .sw button.on { background:#fff; color:var(--text); font-weight:600; }
+  #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#1c2430; color:#fff; padding:10px 18px; border-radius:8px; opacity:0; transition:.25s; pointer-events:none; z-index:20; }
+  #toast.show { opacity:1; } #toast.err { background:var(--bad); }
+  dialog { border:0; border-radius:12px; padding:20px; width:min(420px,92vw); box-shadow:0 10px 40px rgba(0,0,0,.25); }
+  dialog::backdrop { background:rgba(20,28,40,.4); }
+  @media (max-width:700px){ .stats{grid-template-columns:1fr 1fr;} form .row{grid-template-columns:1fr;} header{flex-wrap:wrap;} }
+</style>
+</head>
+<body>
+<header>
+  <h1><span>다온소프트</span> 휴가 · 출장 신청</h1>
+  <div class="sp"></div>
+  <label for="who">사용자 전환(데모)</label>
+  <select id="who" style="width:auto"></select>
+</header>
+<main>
+  <div class="tabs">
+    <button class="tab on" data-tab="mine">내 신청</button>
+    <button class="tab" data-tab="inbox" id="inboxTab" hidden>결재함 <span class="badge" id="inboxCount" hidden></span></button>
+  </div>
+
+  <section id="mine">
+    <div class="card">
+      <h2 id="hello"></h2>
+      <div class="stats">
+        <div class="stat main"><div class="n" id="sRem">-</div><div class="l">사용 가능 연차(일)</div></div>
+        <div class="stat"><div class="n" id="sTotal">-</div><div class="l">올해 부여</div></div>
+        <div class="stat"><div class="n" id="sUsed">-</div><div class="l">사용(승인 완료)</div></div>
+        <div class="stat"><div class="n" id="sPend">-</div><div class="l">결재 대기 중(차감 예정)</div></div>
+      </div>
+      <div class="bar"><i class="u" id="bU"></i><i class="p" id="bP"></i></div>
+      <div class="legend">파랑: 사용 · 노랑: 대기 중 · 나머지: 사용 가능</div>
+    </div>
+
+    <div class="card">
+      <h2>새 신청</h2>
+      <form id="form">
+        <div class="row">
+          <div><label class="f" for="kind">유형</label><select id="kind"></select></div>
+          <div><label class="f" for="start">시작일</label><input type="date" id="start" required></div>
+          <div><label class="f" for="end">종료일</label><input type="date" id="end" required></div>
+        </div>
+        <div class="row" id="destRow" hidden><div class="full"><label class="f" for="dest">출장지</label><input id="dest" maxlength="100" placeholder="예: 부산 고객사"></div></div>
+        <div class="row"><div class="full"><label class="f" for="reason">사유</label><textarea id="reason" maxlength="500" required placeholder="신청 사유를 입력하세요"></textarea></div></div>
+        <div class="actions">
+          <button class="btn" id="submit">신청하기</button>
+          <p class="hint" id="preview"></p>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>신청 내역</h2>
+      <div id="myList"></div>
+    </div>
+  </section>
+
+  <section id="inbox" hidden>
+    <div class="card">
+      <h2>결재함</h2>
+      <div class="sw"><button class="on" data-st="pending">대기</button><button data-st="done">처리 완료</button></div>
+      <div id="inList"></div>
+    </div>
+  </section>
+</main>
+
+<dialog id="rejDlg">
+  <h3 style="margin-top:0">반려 사유</h3>
+  <textarea id="rejReason" maxlength="300" placeholder="신청자에게 전달됩니다"></textarea>
+  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+    <button class="btn ghost" id="rejCancel" type="button">닫기</button>
+    <button class="btn bad" id="rejOk" type="button">반려</button>
+  </div>
+</dialog>
+<div id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const KIND = {annual:"연차", half_am:"오전 반차", half_pm:"오후 반차", sick:"병가", special:"경조휴가", trip:"출장"};
+const STATUS = {pending:"결재 대기", approved:"승인", rejected:"반려", cancelled:"취소"};
+const ROLE = {ceo:"대표", manager:"팀장", employee:"직원"};
+let me = null, inboxStatus = "pending";
+
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = n => Number(n).toString();
+
+async function api(path, opts = {}) {
+  const res = await fetch("/api" + path, {
+    ...opts,
+    headers: {"Content-Type": "application/json", "X-User-Id": localStorage.uid || "", ...(opts.headers || {})},
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const d = data.detail;
+    throw new Error(typeof d === "string" ? d : Array.isArray(d) ? "입력값을 확인해 주세요." : "요청에 실패했습니다.");
+  }
+  return data;
+}
+
+let toastTimer;
+function toast(msg, err) {
+  const t = $("#toast"); t.textContent = msg; t.className = "show" + (err ? " err" : "");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.className = "", 2600);
+}
+
+function period(r) {
+  const same = r.start_date === r.end_date;
+  const wd = d => "일월화수목금토"[new Date(d + "T00:00:00").getDay()];
+  return same ? `${r.start_date} (${wd(r.start_date)})` : `${r.start_date} (${wd(r.start_date)}) ~ ${r.end_date} (${wd(r.end_date)})`;
+}
+
+async function loadMe() {
+  me = await api("/me");
+  const b = me.balance;
+  $("#hello").textContent = `${me.name} ${me.position} · ${me.team}` + (me.approver ? ` (결재자: ${me.approver.name} ${me.approver.position})` : "");
+  $("#sRem").textContent = fmt(b.remaining); $("#sTotal").textContent = fmt(b.total);
+  $("#sUsed").textContent = fmt(b.used); $("#sPend").textContent = fmt(b.pending);
+  $("#bU").style.width = (b.used / b.total * 100) + "%"; $("#bP").style.width = (b.pending / b.total * 100) + "%";
+  $("#inboxTab").hidden = me.role === "employee";
+  if (me.role === "employee" && !$("#inbox").hidden) showTab("mine");
+}
+
+async function loadMine() {
+  const rows = await api("/requests/mine");
+  $("#myList").innerHTML = rows.length ? `<table><thead><tr><th>유형</th><th>기간</th><th>일수</th><th>사유</th><th>상태</th><th></th></tr></thead><tbody>` +
+    rows.map(r => `<tr>
+      <td><span class="kind ${r.kind === "trip" ? "trip" : ""}">${esc(KIND[r.kind])}</span>${r.destination ? `<div class="sub">📍 ${esc(r.destination)}</div>` : ""}</td>
+      <td>${esc(period(r))}</td><td>${fmt(r.days)}일</td>
+      <td>${esc(r.reason)}${r.reject_reason ? `<div class="sub" style="color:var(--bad)">반려: ${esc(r.reject_reason)}</div>` : ""}</td>
+      <td><span class="pill ${r.status}">${STATUS[r.status]}</span><div class="sub">${esc(r.approver_name)}</div></td>
+      <td>${r.status === "pending" ? `<button class="btn ghost sm" data-cancel="${r.id}">취소</button>` : ""}</td></tr>`).join("") + `</tbody></table>`
+    : `<div class="empty">신청 내역이 없습니다.</div>`;
+}
+
+async function loadInbox() {
+  if (me.role === "employee") return;
+  const [pend, rows] = await Promise.all([api("/requests/inbox?status=pending"), inboxStatus === "pending" ? null : api("/requests/inbox?status=done")]);
+  const list = rows || pend;
+  const cnt = $("#inboxCount"); cnt.hidden = !pend.length; cnt.textContent = pend.length;
+  $("#inList").innerHTML = list.length ? `<table><thead><tr><th>신청자</th><th>유형</th><th>기간</th><th>일수</th><th>사유</th><th>${inboxStatus === "pending" ? "처리" : "결과"}</th></tr></thead><tbody>` +
+    list.map(r => `<tr>
+      <td><b>${esc(r.user_name)}</b> <span class="sub">${esc(r.team)} ${esc(r.position)}</span><div class="sub">잔여 연차 ${fmt(r.balance.remaining)}일</div></td>
+      <td><span class="kind ${r.kind === "trip" ? "trip" : ""}">${esc(KIND[r.kind])}</span>${r.destination ? `<div class="sub">📍 ${esc(r.destination)}</div>` : ""}</td>
+      <td>${esc(period(r))}</td><td>${fmt(r.days)}일</td><td>${esc(r.reason)}${r.reject_reason ? `<div class="sub" style="color:var(--bad)">반려: ${esc(r.reject_reason)}</div>` : ""}</td>
+      <td>${r.status === "pending"
+        ? `<div style="display:flex;gap:6px"><button class="btn ok sm" data-approve="${r.id}">승인</button><button class="btn bad sm" data-reject="${r.id}">반려</button></div>`
+        : `<span class="pill ${r.status}">${STATUS[r.status]}</span>`}</td></tr>`).join("") + `</tbody></table>`
+    : `<div class="empty">${inboxStatus === "pending" ? "대기 중인 결재가 없습니다." : "처리한 내역이 없습니다."}</div>`;
+}
+
+const refresh = () => Promise.all([loadMe(), loadMine()]).then(loadInbox);
+
+function showTab(t) {
+  document.querySelectorAll(".tab").forEach(b => b.classList.toggle("on", b.dataset.tab === t));
+  $("#mine").hidden = t !== "mine"; $("#inbox").hidden = t !== "inbox";
+}
+
+async function updatePreview() {
+  const k = $("#kind").value, s = $("#start").value, e = $("#end").value;
+  $("#destRow").hidden = k !== "trip";
+  const half = k.startsWith("half_");
+  if (half) $("#end").value = $("#start").value;
+  $("#end").disabled = half;
+  if (!s || !$("#end").value) { $("#preview").textContent = ""; return; }
+  try {
+    const r = await api(`/preview?kind=${k}&start_date=${s}&end_date=${$("#end").value}`);
+    const deduct = ["annual", "half_am", "half_pm"].includes(k);
+    $("#preview").textContent = `근무일 기준 ${fmt(r.days)}일` + (deduct ? ` · 승인 시 연차 ${fmt(r.days)}일 차감` : " · 연차 차감 없음");
+  } catch (err) { $("#preview").textContent = "⚠ " + err.message; }
+}
+
+document.addEventListener("click", async ev => {
+  const t = ev.target;
+  try {
+    if (t.dataset.cancel) {
+      if (!confirm("이 신청을 취소할까요?")) return;
+      await api(`/requests/${t.dataset.cancel}/cancel`, {method: "POST"}); toast("취소되었습니다."); await refresh();
+    } else if (t.dataset.approve) {
+      await api(`/requests/${t.dataset.approve}/approve`, {method: "POST"}); toast("승인했습니다."); await refresh();
+    } else if (t.dataset.reject) {
+      $("#rejOk").dataset.id = t.dataset.reject; $("#rejReason").value = ""; $("#rejDlg").showModal();
+    } else if (t.classList.contains("tab")) showTab(t.dataset.tab);
+    else if (t.closest(".sw") && t.dataset.st) {
+      inboxStatus = t.dataset.st;
+      t.parentElement.querySelectorAll("button").forEach(b => b.classList.toggle("on", b === t)); await loadInbox();
+    }
+  } catch (err) { toast(err.message, true); await refresh().catch(() => {}); }
+});
+
+$("#rejCancel").onclick = () => $("#rejDlg").close();
+$("#rejOk").onclick = async ev => {
+  const reason = $("#rejReason").value.trim();
+  if (!reason) return toast("반려 사유를 입력해 주세요.", true);
+  try {
+    await api(`/requests/${ev.target.dataset.id}/reject`, {method: "POST", body: JSON.stringify({reason})});
+    $("#rejDlg").close(); toast("반려했습니다."); await refresh();
+  } catch (err) { $("#rejDlg").close(); toast(err.message, true); await refresh().catch(() => {}); }
+};
+
+["kind", "start", "end"].forEach(id => $("#" + id).addEventListener("change", () => {
+  if (id === "start" && (!$("#end").value || $("#end").value < $("#start").value)) $("#end").value = $("#start").value;
+  updatePreview();
+}));
+
+$("#form").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const btn = $("#submit"); btn.disabled = true;
+  try {
+    await api("/requests", {method: "POST", body: JSON.stringify({
+      kind: $("#kind").value, start_date: $("#start").value, end_date: $("#end").value,
+      destination: $("#dest").value, reason: $("#reason").value})});
+    toast("신청이 접수되었습니다."); $("#reason").value = ""; $("#dest").value = ""; await refresh();
+  } catch (err) { toast(err.message, true); }
+  finally { btn.disabled = false; }
+});
+
+$("#who").addEventListener("change", async () => {
+  localStorage.uid = $("#who").value; showTab("mine"); await refresh();
+});
+
+(async function init() {
+  const users = await fetch("/api/users").then(r => r.json());
+  $("#who").innerHTML = users.map(u => `<option value="${u.id}">${esc(u.name)} · ${esc(u.team)} ${esc(u.position)} (${ROLE[u.role]})</option>`).join("");
+  if (!users.some(u => String(u.id) === localStorage.uid)) localStorage.uid = users[2].id;
+  $("#who").value = localStorage.uid;
+  $("#kind").innerHTML = Object.entries(KIND).map(([k, v]) => `<option value="${k}">${v}</option>`).join("");
+  const today = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  $("#start").value = $("#end").value = today;
+  await refresh(); updatePreview();
+})();
+</script>
+</body>
+</html>

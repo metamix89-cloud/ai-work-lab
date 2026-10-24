@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>다온소프트 휴가 · 출장 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 3편 목업. 가상 회사 · 가상 직원. ?state=ok(직원 화면)|empty(팀장 화면 · 결재 대기 없음)|error. Mock-IT 라이트 테마. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--card:#FFFFFF;--indigo:#6366F1;--indigo2:#E0E7FF;--indigo3:#3730A3;--emerald:#10B981;--amber:#F59E0B;--rose:#EF4444}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:var(--indigo);display:inline-block}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#EEF0FF;color:var(--indigo);font-weight:700}
+.main{padding:22px 30px 18px 30px;display:flex;flex-direction:column;gap:12px}
+.top{display:flex;justify-content:space-between;align-items:center}
+h1{margin:0;font-size:22px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:13px;margin-top:4px}
+.chip{font-size:13px;color:var(--ink2);background:#fff;border:1px solid var(--line);padding:6px 12px;border-radius:999px}.chip b{color:var(--indigo3)}
+.row{display:grid;grid-template-columns:1fr 1.6fr;gap:12px;flex:1;min-height:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;min-height:0}
+.card h3{margin:0 0 8px;font-size:14px;color:var(--ink2);font-weight:600;display:flex;justify-content:space-between}
+.bal{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.bal div{background:#F7F8FB;border:1px solid var(--line);border-radius:10px;padding:10px}
+.bal small{display:block;color:var(--mute);font-size:11px}.bal b{font-size:26px;letter-spacing:-.5px}.bal .r b{color:var(--indigo)}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.form label{font-size:11px;color:var(--mute);display:block;margin-bottom:3px}
+.form .f{background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px}
+.form .w{grid-column:1/3}
+.btn{background:var(--indigo);color:#fff;border-radius:8px;padding:9px;text-align:center;font-weight:700;font-size:13px;margin-top:8px}
+table{border-collapse:collapse;width:100%;font-size:12px}th{text-align:left;color:var(--mute);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--line)}
+td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+.st{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700}
+.st.p{background:#FEF3C7;color:#92400E}.st.a{background:#D1FAE5;color:#065F46}.st.r{background:#FEE2E2;color:#991B1B}.st.c{background:#F3F4F6;color:#6B7280}
+.x{font-size:11px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:2px 8px;color:var(--ink2)}
+.ok{font-size:11px;background:#D1FAE5;border-radius:6px;padding:3px 9px;color:#065F46;font-weight:700}.no{font-size:11px;background:#FEE2E2;border-radius:6px;padding:3px 9px;color:#991B1B;font-weight:700;margin-left:4px}
+.msg{font-size:13px;color:var(--rose);min-height:16px}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mute);gap:6px}
+.empty b{font-size:16px;color:var(--ink2)}.empty small{font-size:12px}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:14px;padding:22px;display:flex;justify-content:space-between;align-items:center;font-size:15px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:8px 14px;font-size:14px;font-weight:700}
+.reason{font-size:11px;color:var(--mute)}
+</style></head><body>
+<div class="app">
+ <div class="side">
+  <div class="logo"><i></i>다온소프트</div>
+  <div class="nav"><div>회의실 예약</div><div class="on">휴가 · 출장</div><div>사내 피드</div><div>온보딩</div></div>
+ </div>
+ <div class="main" id="main"></div>
+</div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const head=(who,role)=>`<div class="top"><div><h1>휴가 · 출장</h1><div class="sub">신청 → 팀장 승인 · 반려 → 완료 · 일수는 서버가 센다(주말 제외)</div></div><span class="chip">사용자 <b>${who}</b> · ${role} ▾</span></div>`;
+let html='';
+if(state==='ok'){
+  html=head('박지연','개발팀')+`<div class="row">
+   <div class="card"><h3>잔여 연차 <span>2026년</span></h3>
+    <div class="bal"><div><small>총</small><b>15</b></div><div><small>사용(승인)</small><b>2</b></div><div><small>대기(신청 중)</small><b>1</b></div><div class="r"><small>잔여</small><b>12</b></div></div>
+    <div class="form"><div><label>종류</label><div class="f">연차 ▾</div></div><div><label>사유</label><div class="f">가족 행사</div></div>
+     <div><label>시작</label><div class="f">2026-11-05 (목)</div></div><div><label>종료</label><div class="f">2026-11-09 (월)</div></div>
+     <div class="w"><div class="btn">신청 — 3일 (주말 제외, 서버가 다시 센다)</div></div></div>
+    <div class="msg">잔여 연차가 부족합니다 — 13일 신청, 잔여 12일</div>
+   </div>
+   <div class="card"><h3>내 신청 <span>3건</span></h3>
+    <table><tr><th>종류</th><th>기간</th><th>일수</th><th>상태</th><th>결재자</th><th></th></tr>
+     <tr><td>연차</td><td>12-01 ~ 12-02</td><td>2</td><td><span class="st r">반려</span><div class="reason">분기 마감 주간</div></td><td>김민수</td><td></td></tr>
+     <tr><td>연차</td><td>11-20</td><td>1</td><td><span class="st p">신청</span></td><td>—</td><td><span class="x">취소</span></td></tr>
+     <tr><td>연차</td><td>10-12 ~ 10-13</td><td>2</td><td><span class="st a">승인</span></td><td>김민수</td><td></td></tr>
+    </table>
+    <div class="empty" style="flex:1"><small>결재 대기 구역은 팀장에게만 보입니다</small></div>
+   </div></div>`;
+}else if(state==='empty'){
+  html=head('김민수','개발팀 팀장')+`<div class="row">
+   <div class="card"><h3>잔여 연차 <span>2026년</span></h3>
+    <div class="bal"><div><small>총</small><b>15</b></div><div><small>사용(승인)</small><b>5</b></div><div><small>대기(신청 중)</small><b>0</b></div><div class="r"><small>잔여</small><b>10</b></div></div>
+    <div class="empty"><b>내 신청 없음</b><small>팀장의 신청은 그 팀장의 팀장이 결재 — 이 편에서는 범위 밖</small></div>
+   </div>
+   <div class="card"><h3>결재 대기 <span>개발팀 · 0건</span></h3>
+    <div class="empty"><b>결재할 건이 없습니다</b><small>팀원의 '신청' 상태 건만 여기에 온다 — 다른 팀 신청은 보이지 않는다</small></div>
+   </div></div>`;
+}else{
+  html=head('박지연','개발팀')+`<div class="err"><div><b>불러오지 못했습니다.</b> 잔여 연차 API(/api/balance) 가 응답하지 않습니다 — 잔여를 모르면 신청 버튼을 열지 않습니다.</div><button>다시 시도</button></div>
+  <div class="card" style="flex:1"><div class="empty"><b>신청 폼 잠금</b><small>잔여 일수를 확인한 뒤에만 신청할 수 있습니다</small></div></div>`;
+}
+document.getElementById('main').innerHTML=html;
+</script></body></html>

@@ -1,0 +1,14 @@
+{
+ "allowed_routes": ["/", "/api/users", "/api/balance", "/api/requests", "/api/requests/{id}/approve", "/api/requests/{id}/reject", "/api/requests/{id}/cancel", "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "다단계 · 대결": "본부장|2차 결재|대결|delegate|second_approver",
+  "반차 · 시간 단위": "반차|half_day|half-day|시간 단위",
+  "공휴일 달력": "공휴일|holiday",
+  "연차 이월 · 촉진": "이월|carry_over|carryover|촉진",
+  "알림 · 메일": "알림|notify|mail",
+  "캘린더 · 월간 보기": "캘린더|calendar|월간 보기|monthly",
+  "첨부 · 엑셀": "첨부|attachment|엑셀|xlsx|csv 내보내기|export",
+  "로그인 · 권한 관리": "login|password|로그인|auth",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}
