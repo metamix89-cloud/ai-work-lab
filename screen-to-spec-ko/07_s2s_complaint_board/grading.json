@@ -1,0 +1,15 @@
+{
+ "allowed_routes": ["/", "/api/staff", "/api/summary", "/api/complaints", "/api/complaints/{id}", "/api/complaints/{id}/transition", "/api/complaints/{id}/history",
+                    "/api/complaints/{complaint_id}", "/api/complaints/{complaint_id}/transition", "/api/complaints/{complaint_id}/history", "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "되돌리기 · 재오픈": "되돌리|reopen|rollback|undo|revert|재오픈|재접수",
+  "민원 등록 · 수정 화면": "민원 등록|새 민원|@app\\.post\\(\\s*['\"]/api/complaints['\"]|@app\\.(put|patch|delete)",
+  "드래그 앤 드롭": "draggable|dragstart|ondrop|sortable",
+  "알림 · 문자": "알림|notify|sms|문자 발송|메일",
+  "공휴일 계산": "공휴일|holiday",
+  "차트 · 통계": "chart|canvas|svg.*bar|통계",
+  "엑셀": "xlsx|엑셀|csv 내보내기|export",
+  "로그인 · 권한": "login|password|로그인|auth",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}

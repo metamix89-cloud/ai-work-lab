@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>푸른구청 민원 처리 현황판</title>
+<style>
+  :root{
+    --bg:#f3f6fa; --card:#fff; --ink:#1c2733; --mute:#6b7a8c; --line:#dde4ec;
+    --brand:#1f6feb; --red:#d92d20; --red-bg:#fef0ee; --amber:#b54708; --amber-bg:#fff4e0; --green:#12805c;
+    --c-received:#6b7a8c; --c-assigned:#1f6feb; --c-processing:#8a5cf6; --c-closed:#12805c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 "Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif}
+  header{background:#0f3d7a;color:#fff;padding:14px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  header h1{font-size:19px;margin:0}
+  header .sub{opacity:.75;font-size:12px}
+  header .sp{flex:1}
+  button{font:inherit;cursor:pointer;border:1px solid var(--line);background:#fff;border-radius:6px;padding:6px 12px;color:var(--ink)}
+  button:hover{background:#eef3f9}
+  button.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  button.primary:hover{background:#1858bd}
+  button.danger{color:var(--red)}
+  header button{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);color:#fff}
+  header button:hover{background:rgba(255,255,255,.22)}
+  header button.primary{background:#fff;color:#0f3d7a}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;padding:14px 24px 0}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
+  .stat b{display:block;font-size:24px;line-height:1.2}
+  .stat span{color:var(--mute);font-size:12px}
+  .stat.bad{background:var(--red-bg);border-color:#f4b8b1}.stat.bad b{color:var(--red)}
+  .stat.warn b{color:var(--amber)}
+  .filters{display:flex;gap:8px;flex-wrap:wrap;padding:12px 24px;align-items:center}
+  input,select,textarea{font:inherit;border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:#fff;color:var(--ink)}
+  textarea{width:100%;resize:vertical}
+  .filters label{display:flex;gap:4px;align-items:center;color:var(--mute)}
+  .board{display:grid;grid-template-columns:repeat(4,minmax(240px,1fr));gap:12px;padding:0 24px 24px;align-items:start}
+  .col{background:#e8eef5;border-radius:10px;min-height:200px;display:flex;flex-direction:column}
+  .col.over{outline:2px dashed var(--brand)}
+  .col h2{margin:0;padding:10px 12px;font-size:14px;display:flex;align-items:center;gap:8px;border-top:4px solid var(--cc);border-radius:10px 10px 0 0}
+  .col h2 .n{background:#fff;border-radius:10px;padding:0 8px;font-size:12px;color:var(--mute)}
+  .col h2 .od{margin-left:auto;font-size:11px;color:#fff;background:var(--red);border-radius:10px;padding:1px 8px}
+  .list{padding:4px 8px 10px;display:flex;flex-direction:column;gap:8px}
+  .card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--cc);border-radius:8px;padding:9px 10px;cursor:pointer}
+  .card:hover{box-shadow:0 2px 8px rgba(0,0,0,.12)}
+  .card.dragging{opacity:.4}
+  .card.overdue{background:var(--red-bg);border-color:var(--red);border-left-color:var(--red);animation:pulse 2s infinite}
+  @keyframes pulse{50%{box-shadow:0 0 0 3px rgba(217,45,32,.25)}}
+  .card .top{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--mute)}
+  .card .t{font-weight:600;margin:4px 0 6px;word-break:keep-all}
+  .card .bot{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--mute);gap:6px}
+  .tag{border-radius:4px;padding:0 6px;font-size:11px;background:#edf1f6;color:#41505f}
+  .tag.urgent{background:#ffe3e0;color:var(--red);font-weight:700}
+  .dday{font-weight:700;border-radius:4px;padding:1px 6px;font-size:11px}
+  .dday.ok{background:#e6f4ee;color:var(--green)}
+  .dday.soon{background:var(--amber-bg);color:var(--amber)}
+  .dday.late{background:var(--red);color:#fff}
+  .dday.done{background:#e6f4ee;color:var(--green)}
+  .dday.donelate{background:#fde7c8;color:var(--amber)}
+  .none{color:var(--red);font-weight:600}
+  .empty{color:var(--mute);text-align:center;padding:20px 0;font-size:12px}
+  dialog{border:none;border-radius:12px;padding:0;width:min(640px,94vw);box-shadow:0 10px 40px rgba(0,0,0,.3)}
+  dialog::backdrop{background:rgba(15,30,50,.5)}
+  .dlg{padding:20px 22px;max-height:88vh;overflow:auto}
+  .dlg h3{margin:0 0 4px;font-size:17px}
+  .grid{display:grid;grid-template-columns:90px 1fr;gap:6px 10px;margin:12px 0}
+  .grid dt{color:var(--mute)} .grid dd{margin:0}
+  .box{background:#f6f8fb;border:1px solid var(--line);border-radius:8px;padding:10px;white-space:pre-wrap;margin:6px 0 12px}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}
+  .sec{font-weight:700;margin:16px 0 4px}
+  .hist{list-style:none;margin:0;padding:0;color:var(--mute);font-size:12px}
+  .hist li{padding:2px 0}.hist time{color:var(--ink);margin-right:8px}
+  .alert{background:var(--red-bg);color:var(--red);border-radius:6px;padding:6px 10px;margin:8px 0;font-weight:600}
+  form .f{display:grid;gap:4px;margin-bottom:10px}
+  form .f input,form .f select{width:100%}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:8px;opacity:0;transition:.25s;pointer-events:none;z-index:99}
+  .toast.show{opacity:1}
+  @media(max-width:900px){.board{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.board{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>푸른구청 민원 접수 · 처리 현황판</h1><div class="sub" id="clock"></div></div>
+  <div class="sp"></div>
+  <button id="btnReset" title="가상 데이터로 초기화">데이터 초기화</button>
+  <button id="btnNew" class="primary">+ 민원 접수</button>
+</header>
+
+<section class="stats" id="stats"></section>
+
+<section class="filters">
+  <input id="q" placeholder="제목 · 접수번호 · 신청인 검색" size="26">
+  <select id="fCat"><option value="">전체 분류</option></select>
+  <select id="fStaff"><option value="">전체 담당자</option><option value="none">미배정</option></select>
+  <label><input type="checkbox" id="fOver"> 기한 초과만</label>
+  <label><input type="checkbox" id="fUrgent"> 긴급만</label>
+  <span style="color:var(--mute);font-size:12px">카드를 끌어서 다음 단계로 옮길 수 있습니다 (배정은 카드 상세에서 담당자 선택).</span>
+</section>
+
+<main class="board" id="board"></main>
+
+<dialog id="dlg"><div class="dlg" id="dlgBody"></div></dialog>
+<dialog id="dlgNew"><div class="dlg">
+  <h3>민원 접수</h3>
+  <form id="formNew" method="dialog">
+    <div class="f"><label>제목</label><input name="title" required maxlength="100"></div>
+    <div class="f"><label>내용</label><textarea name="content" rows="4" required maxlength="2000"></textarea></div>
+    <div class="row">
+      <div class="f" style="flex:1"><label>분류</label><select name="category" id="newCat"></select></div>
+      <div class="f" style="flex:1"><label>우선순위</label><select name="priority"><option value="normal">일반</option><option value="urgent">긴급 (기한 단축)</option></select></div>
+    </div>
+    <div class="row">
+      <div class="f" style="flex:1"><label>신청인</label><input name="applicant" required maxlength="30"></div>
+      <div class="f" style="flex:1"><label>연락처</label><input name="contact" placeholder="010-0000-0011"></div>
+    </div>
+    <div class="row" style="justify-content:flex-end">
+      <button type="button" id="newCancel">취소</button><button class="primary" type="submit">접수</button>
+    </div>
+  </form>
+</div></dialog>
+<div class="toast" id="toast"></div>
+
+<script>
+const STAT = [["received","접수"],["assigned","배정"],["processing","처리"],["closed","종결"]];
+const COLOR = {received:"var(--c-received)",assigned:"var(--c-assigned)",processing:"var(--c-processing)",closed:"var(--c-closed)"};
+let data = [], staff = [], meta = null, dragId = null, openId = null;
+
+const $ = s => document.querySelector(s);
+function el(tag, attrs = {}, ...kids){
+  const e = document.createElement(tag);
+  for (const [k,v] of Object.entries(attrs)){
+    if (k === "class") e.className = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else if (v !== false && v != null) e.setAttribute(k, v);
+  }
+  for (const c of kids.flat()) if (c != null) e.append(c.nodeType ? c : document.createTextNode(c));
+  return e;
+}
+async function api(path, method = "GET", body){
+  const r = await fetch("/api" + path, {method, headers: body ? {"Content-Type":"application/json"} : {}, body: body ? JSON.stringify(body) : undefined});
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok){
+    const d = j.detail;
+    throw new Error(typeof d === "string" ? d : "요청을 처리할 수 없습니다.");
+  }
+  return j;
+}
+function toast(msg){ const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 2600); }
+const fmt = s => s ? s.slice(0,16).replace("T"," ") : "-";
+
+function dday(c){
+  if (c.status === "closed") return el("span", {class:"dday " + (c.closed_late ? "donelate" : "done")}, c.closed_late ? "기한 후 종결" : "기한 내 종결");
+  const h = c.remaining_hours;
+  if (c.overdue){
+    const ah = -h;
+    return el("span", {class:"dday late"}, ah >= 24 ? `기한 초과 ${Math.floor(ah/24)}일` : `기한 초과 ${Math.max(1,Math.floor(ah))}시간`);
+  }
+  if (h < 24) return el("span", {class:"dday soon"}, `D-day · ${Math.floor(h)}시간`);
+  const d = Math.ceil(h/24);
+  return el("span", {class:"dday " + (d <= 2 ? "soon" : "ok")}, `D-${d}`);
+}
+
+function filtered(){
+  const q = $("#q").value.trim().toLowerCase(), cat = $("#fCat").value, st = $("#fStaff").value;
+  return data.filter(c =>
+    (!q || [c.title,c.no,c.applicant].some(x => x.toLowerCase().includes(q))) &&
+    (!cat || c.category === cat) &&
+    (!st || (st === "none" ? !c.assignee_id : String(c.assignee_id) === st)) &&
+    (!$("#fOver").checked || c.overdue) &&
+    (!$("#fUrgent").checked || c.priority === "urgent"));
+}
+
+function renderStats(s){
+  const items = [
+    ["전체", s.total, ""], ["접수 대기", s.by_status.received, ""],
+    ["진행 중(배정·처리)", s.by_status.assigned + s.by_status.processing, ""],
+    ["기한 초과", s.overdue, s.overdue ? "bad" : ""], ["48시간 내 마감", s.due_soon, s.due_soon ? "warn" : ""],
+    ["종결", s.by_status.closed, ""], ["기한 내 종결률", s.on_time_rate == null ? "-" : s.on_time_rate + "%", ""],
+  ];
+  $("#stats").replaceChildren(...items.map(([l,v,cls]) => el("div", {class:"stat " + cls}, el("b", {}, v), el("span", {}, l))));
+}
+
+function renderBoard(){
+  const rows = filtered();
+  $("#board").replaceChildren(...STAT.map(([key,label]) => {
+    const list = rows.filter(c => c.status === key);
+    if (key === "closed") list.sort((a,b) => (b.closed_at||"").localeCompare(a.closed_at||""));
+    const od = list.filter(c => c.overdue).length;
+    const col = el("section", {class:"col", style:`--cc:${COLOR[key]}`},
+      el("h2", {}, label, el("span", {class:"n"}, list.length), od ? el("span", {class:"od"}, `초과 ${od}`) : null),
+      el("div", {class:"list"}, list.length ? list.map(card) : el("div", {class:"empty"}, "해당 민원 없음")));
+    col.addEventListener("dragover", e => { e.preventDefault(); col.classList.add("over"); });
+    col.addEventListener("dragleave", () => col.classList.remove("over"));
+    col.addEventListener("drop", async e => {
+      e.preventDefault(); col.classList.remove("over");
+      if (dragId == null) return;
+      const id = dragId; dragId = null;
+      const c = data.find(x => x.id === id);
+      if (!c || c.status === key) return;
+      if (key === "assigned"){ toast("담당자를 선택해 배정해 주세요."); return openDetail(id); }
+      if (key === "closed" && !c.answer){ toast("답변 등록 후 종결할 수 있습니다."); return openDetail(id); }
+      try { await api(`/complaints/${id}/status`, "POST", {status:key}); toast(`'${label}' 단계로 이동했습니다.`); await load(); }
+      catch (err){ toast(err.message); if (/담당자/.test(err.message)) openDetail(id); }
+    });
+    return col;
+  }));
+}
+
+function card(c){
+  const e = el("article", {class:"card" + (c.overdue ? " overdue" : ""), style:`--cc:${COLOR[c.status]}`, draggable: c.status !== "closed" ? "true" : "false", onclick:() => openDetail(c.id)},
+    el("div", {class:"top"}, c.no, el("span", {class:"tag"}, c.category), c.priority === "urgent" ? el("span", {class:"tag urgent"}, "긴급") : null),
+    el("div", {class:"t"}, c.title),
+    el("div", {class:"bot"},
+      c.assignee_name ? `담당 ${c.assignee_name}` : el("span", {class:"none"}, "미배정"),
+      dday(c)));
+  e.addEventListener("dragstart", ev => { dragId = c.id; e.classList.add("dragging"); ev.dataTransfer.setData("text/plain", c.id); });
+  e.addEventListener("dragend", () => e.classList.remove("dragging"));
+  return e;
+}
+
+async function openDetail(id){
+  openId = id;
+  const c = await api("/complaints/" + id);
+  const body = $("#dlgBody");
+  const sel = el("select", {}, el("option", {value:""}, "담당자 선택"),
+    staff.map(s => el("option", {value:s.id, selected: s.id === c.assignee_id}, `${s.dept} ${s.name} ${s.title} (진행 ${s.open_count}건)`)));
+  const closed = c.status === "closed";
+  const ta = el("textarea", {rows:5, placeholder: c.assignee_id ? "민원인에게 전달할 답변을 입력하세요." : "담당자 배정 후 답변을 등록할 수 있습니다.", disabled: closed || !c.assignee_id}); ta.value = c.answer || "";
+  const act = async (fn, msg) => { try { await fn(); toast(msg); await load(); await openDetail(id); } catch (err){ toast(err.message); } };
+  const needAns = () => { if (!ta.value.trim()) throw new Error("답변 내용을 입력해 주세요."); return ta.value.trim(); };
+
+  body.replaceChildren(
+    el("div", {class:"row"}, el("h3", {style:"margin:0;flex:1"}, c.title), el("button", {onclick:() => $("#dlg").close()}, "닫기")),
+    el("div", {class:"row"}, el("span", {class:"tag"}, STAT.find(s => s[0] === c.status)[1]), el("span", {class:"tag"}, c.category),
+      c.priority === "urgent" ? el("span", {class:"tag urgent"}, "긴급") : null, dday(c)),
+    c.overdue ? el("div", {class:"alert"}, `처리 기한(${fmt(c.due_at)})을 넘겼습니다. 신속한 처리가 필요합니다.`) : null,
+    el("dl", {class:"grid"},
+      el("dt", {}, "접수번호"), el("dd", {}, c.no),
+      el("dt", {}, "신청인"), el("dd", {}, `${c.applicant}  ${c.contact || ""}`),
+      el("dt", {}, "접수일시"), el("dd", {}, fmt(c.received_at)),
+      el("dt", {}, "처리기한"), el("dd", {}, fmt(c.due_at)),
+      c.closed_at ? [el("dt", {}, "종결일시"), el("dd", {}, fmt(c.closed_at))] : null),
+    el("div", {class:"box"}, c.content),
+    el("div", {class:"sec"}, "담당자 배정"),
+    el("div", {class:"row"}, sel, el("button", {class:"primary", disabled: closed,
+      onclick:() => act(async () => { if (!sel.value) throw new Error("담당자를 선택해 주세요."); await api(`/complaints/${id}/assign`, "POST", {staff_id:+sel.value}); }, "담당자를 배정했습니다.")},
+      c.assignee_id ? "재배정" : "배정")),
+    el("div", {class:"sec"}, "답변"),
+    ta,
+    closed ? null : el("div", {class:"row"},
+      el("button", {disabled: !c.assignee_id, onclick:() => act(() => api(`/complaints/${id}/answer`, "POST", {answer:needAns()}), "답변을 저장했습니다.")}, "답변 저장"),
+      el("button", {class:"primary", disabled: !c.assignee_id, onclick:() => act(() => api(`/complaints/${id}/answer`, "POST", {answer:needAns(), close:true}), "답변 등록 후 종결했습니다.")}, "답변 등록 및 종결"),
+      c.status === "assigned" ? el("button", {onclick:() => act(() => api(`/complaints/${id}/status`, "POST", {status:"processing"}), "처리를 시작했습니다.")}, "처리 시작") : null),
+    c.answered_at ? el("div", {style:"color:var(--mute);font-size:12px"}, `답변 일시 ${fmt(c.answered_at)}`) : null,
+    el("div", {class:"sec"}, "처리 이력"),
+    el("ul", {class:"hist"}, c.history.map(h => el("li", {}, el("time", {}, fmt(h.at)), h.text))));
+  if (!$("#dlg").open) $("#dlg").showModal();
+}
+
+async function load(){
+  [data, staff] = await Promise.all([api("/complaints"), api("/staff")]);
+  renderStats(await api("/stats"));
+  renderBoard();
+  $("#clock").textContent = "마지막 갱신 " + new Date().toLocaleTimeString("ko-KR") + " · 1분마다 자동 갱신";
+}
+
+async function init(){
+  meta = await api("/meta");
+  const cats = Object.keys(meta.categories);
+  $("#fCat").append(...cats.map(c => el("option", {value:c}, c)));
+  $("#newCat").append(...cats.map(c => el("option", {value:c}, `${c} (기한 ${meta.categories[c]}일)`)));
+  await load();
+  $("#fStaff").append(...staff.map(s => el("option", {value:s.id}, `${s.name} (${s.dept})`)));
+  ["q","fCat","fStaff","fOver","fUrgent"].forEach(i => $("#" + i).addEventListener("input", renderBoard));
+  $("#btnNew").onclick = () => { $("#formNew").reset(); $("#dlgNew").showModal(); };
+  $("#newCancel").onclick = () => $("#dlgNew").close();
+  $("#formNew").addEventListener("submit", async e => {
+    e.preventDefault();
+    try { await api("/complaints", "POST", Object.fromEntries(new FormData(e.target))); $("#dlgNew").close(); toast("민원이 접수되었습니다."); await load(); }
+    catch (err){ toast(err.message); }
+  });
+  $("#btnReset").onclick = async () => {
+    if (!confirm("모든 민원을 지우고 가상 데이터로 초기화할까요?")) return;
+    await api("/reset", "POST"); toast("초기화했습니다."); await load();
+  };
+  $("#dlg").addEventListener("click", e => { if (e.target === $("#dlg")) $("#dlg").close(); });
+  setInterval(() => load().catch(() => {}), 60000);
+}
+init().catch(e => toast(e.message));
+</script>
+</body>
+</html>

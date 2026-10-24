@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>푸른구청 민원 현황판 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 7편 목업. 가상 구청 · 가상 민원. ?state=ok|empty|error. Mock-IT 라이트 테마. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--card:#FFFFFF;--teal:#0D9488;--indigo:#6366F1;--amber:#F59E0B;--rose:#EF4444}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:var(--teal);display:inline-block}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#F0FDFA;color:#0F766E;font-weight:700}
+.main{padding:18px 26px 14px 26px;display:flex;flex-direction:column;gap:9px}
+.top{display:flex;justify-content:space-between;align-items:center}
+h1{margin:0;font-size:21px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:12px;margin-top:3px}
+.ctl{display:flex;gap:8px;font-size:12px}.chip{background:#fff;border:1px solid var(--line);padding:5px 11px;border-radius:999px;color:var(--ink2)}.chip b{color:var(--ink)}
+.nums{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.num{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:12px;color:var(--ink2);display:flex;justify-content:space-between;align-items:center}
+.num b{font-size:22px;color:var(--ink)}.num.od{border-color:#FCA5A5;background:#FFF5F5;color:#B91C1C}.num.od b{color:#B91C1C}
+.row{display:grid;grid-template-columns:1fr 330px;gap:10px;flex:1;min-height:0}
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;min-height:0}
+.col{background:#EDEFF4;border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:6px;min-height:0}
+.col h3{margin:0 2px 2px;font-size:12px;color:var(--ink2);display:flex;justify-content:space-between}
+.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:7px 9px;font-size:11.5px}
+.card b{display:block;font-size:12.5px;margin-bottom:2px}.card .m{color:var(--mute)}
+.card.od{border:2px solid var(--rose)}.card .late{color:var(--rose);font-weight:700}.card .dd{color:var(--amber);font-weight:700}
+.card.sel{outline:2px solid var(--teal)}
+.detail{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:12px;display:flex;flex-direction:column;gap:6px}
+.detail h4{margin:0;font-size:14px}.kv{color:var(--ink2)}.kv b{color:var(--ink)}
+.step{display:flex;gap:6px;align-items:center;margin-top:4px}.step .sel{flex:1;border:1px solid var(--line);border-radius:6px;padding:5px 8px}.step .btn{background:var(--teal);color:#fff;border-radius:6px;padding:6px 10px;font-weight:700}
+.hist{border-top:1px dashed var(--line);padding-top:6px;color:var(--ink2);font-size:11px;line-height:1.7}
+.msg{color:var(--rose);font-size:11.5px}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mute);gap:4px;font-size:11px;text-align:center}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:12px;padding:20px;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700}
+</style></head><body>
+<div class="app">
+ <div class="side">
+  <div class="logo"><i></i>푸른구청</div>
+  <div class="nav"><div class="on">민원 현황판</div><div>고시 · 공고 열람</div><div>보조금 신청</div><div>시설 대관</div></div>
+ </div>
+ <div class="main" id="main"></div>
+</div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const head=`<div class="top"><div><h1>민원 현황판</h1><div class="sub">접수 → 배정 → 처리중 → 종결, 한 방향 한 칸씩 · 기한 = 접수일 + 7일 · 기준일은 서버</div></div><div class="ctl"><span class="chip">처리자 <b>최팀장</b> ▾</span><span class="chip">기준일 2026-10-24</span></div></div>`;
+const nums=(a,b,c,d,o)=>`<div class="nums"><div class="num">접수<b>${a}</b></div><div class="num">배정<b>${b}</b></div><div class="num">처리중<b>${c}</b></div><div class="num">종결<b>${d}</b></div><div class="num od">기한 넘김<b>${o}</b></div></div>`;
+const card=(t,m,s,cls='')=>`<div class="card ${cls}"><b>${t}</b><span class="m">${m}</span> · ${s}</div>`;
+let html='';
+if(state==='ok'){
+  html=head+nums(3,1,2,2,2)+`<div class="row"><div class="board">
+   <div class="col"><h3>접수 <span>3</span></h3>${card('가로등 고장 신고','도로 · 10-23','<span class="dd">D-6</span>')}${card('불법 주차 단속 요청','교통 · 10-16','<span class="late">1일 지남</span>','od')}${card('하수구 악취','환경 · 10-17','<span class="dd">D-0 (오늘까지)</span>')}</div>
+   <div class="col"><h3>배정 <span>1</span></h3>${card('놀이터 시설 파손','공원 · 10-22 · 김민수','<span class="dd">D-5</span>')}</div>
+   <div class="col"><h3>처리중 <span>2</span></h3>${card('소음 민원(공사장)','환경 · 10-15 · 박지연','<span class="late">2일 지남</span>','od sel')}${card('쓰레기 무단 투기','환경 · 10-20 · 이서준','<span class="dd">D-3</span>')}</div>
+   <div class="col"><h3>종결 <span>2</span></h3>${card('보도블록 파손','도로 · 10-14 · 김민수','종결')}${card('버스 정류장 의자','교통 · 10-21 · 박지연','종결')}</div></div>
+   <div class="detail"><h4>소음 민원(공사장)</h4><div class="kv">상태 <b>처리중</b> · 담당 <b>박지연</b> · 기한 10-22 (<span style="color:#EF4444;font-weight:700">2일 지남</span>)</div>
+    <div class="step"><span class="sel">답변: 공사장에 작업 시간 준수를 요청했습니다…</span><span class="btn">종결로</span></div>
+    <div class="msg">상태를 되돌릴 수 없습니다 — '배정' 으로 되돌리기 시도 거부(409)</div>
+    <div class="hist">10-15 09:12 접수 → 배정 · 최팀장<br>10-16 14:30 배정 → 처리중 · 박지연</div>
+    <div class="empty">되돌리기 버튼은 없다 — 이력은 한 방향으로만 쌓인다</div></div></div>`;
+}else if(state==='empty'){
+  html=head+nums(0,0,0,3,0)+`<div class="row"><div class="board">
+   <div class="col"><h3>접수 <span>0</span></h3><div class="empty">새 민원 없음</div></div>
+   <div class="col"><h3>배정 <span>0</span></h3><div class="empty">—</div></div>
+   <div class="col"><h3>처리중 <span>0</span></h3><div class="empty">—</div></div>
+   <div class="col"><h3>종결 <span>3</span></h3>${card('보도블록 파손','도로 · 10-14','종결')}${card('버스 정류장 의자','교통 · 10-21','종결')}${card('가로수 가지치기','공원 · 10-19','종결')}</div></div>
+   <div class="detail"><div class="empty">처리할 민원이 없습니다<br>기한 넘김 0 — 종결된 건은 기한이 지났어도 넘김이 아니다</div></div></div>`;
+}else{
+  html=head+`<div class="err"><div><b>불러오지 못했습니다.</b> 민원 API(/api/complaints) 가 응답하지 않습니다 — 지난 칸반을 그대로 두지 않습니다(기한 넘김이 바뀌었을 수 있다).</div><button>다시 시도</button></div>
+  <div class="detail" style="flex:1"><div class="empty">서버가 응답하면 기준일과 함께 다시 불러옵니다</div></div>`;
+}
+document.getElementById('main').innerHTML=html;
+</script></body></html>

@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 푸른구청 '민원 접수 · 처리 현황판' 웹앱을 만들어 줘. 민원이 접수 → 배정 → 처리 → 종결로 흘러가는 걸 칸반처럼 보여 주고, 기한 넘긴 건은 눈에 띄게, 담당자 배정과 답변 등록도 되면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 126767,
+ "num_turns": 10,
+ "total_cost_usd": 0.38316259999999996,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 16,
+  "cache_creation_input_tokens": 37366,
+  "cache_read_input_tokens": 315366,
+  "output_tokens": 20213,
+  "output_tokens_details": {
+   "thinking_tokens": 537
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 37366,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1060,
+    "cache_read_input_tokens": 53359,
+    "cache_creation_input_tokens": 679,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 679
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "푸른구청 민원 현황판을 만들었습니다. 백엔드 API는 테스트로 확인했습니다. 브라우저 화면은 열어 보지 않았고, 서버를 띄워 둔 상태도 아닙니다.\n\n**실행:** 이 폴더에서 `run.bat`을 더블클릭하거나 `python -m uvicorn main:app` 을 실행한 뒤 http://127.0.0.1:8000 으로 접속하세요. 처음 실행하면 `complaints.db`가 생기고 가상 민원 20건과 담당자 7명이 들어갑니다. 데이터를 초기화하려면 이 파일을 지우면 됩니다.\n\n**화면 기능**\n- **칸반 보드:** 접수 → 배정 → 처리 → 종결 4개 열로 나뉩니다. 카드를 드래그해서 다음 단계로 옮길 수 있습니다.\n- **기한 표시:**\n  - 기한을 넘긴 건은 붉은 배경과 테두리로 깜빡이고 \"⚠ N일 초과\"가 붙습니다.\n  - 마감이 2일 이내인 건은 주황색, 종결된 건은 \"기한 내/후 종결\"로 표시됩니다.\n  - 각 열 안에서는 기한 초과 건이 맨 위에 옵니다.\n- **상단 요약:** 전체, 단계별 건수, 기한 초과, 마감 임박 건수가 보입니다. 담당자·분류별 필터와 \"기한 초과만\" 보기도 있습니다.\n- **카드 클릭 상세창:** 담당자 배정, 답변 등록, 답변 등록 후 종결, 답변 이력 확인이 됩니다. 상단의 \"+ 민원 접수\" 버튼으로 새 민원도 접수할 수 있습니다.\n\n**처리 규칙 (서버에서 검증)**\n- 담당자를 배정해야 처리 단계로 넘어갈 수 있고, 배정 없이는 답변도 등록할 수 없습니다.\n- 접수 민원에 담당자를 배정하면 자동으로 \"배정\" 단계가 됩니다. 배정 단계에서 답변을 등록하면 \"처리\" 단계로 넘어갑니다.\n- 종결은 답변을 등록하면서만 할 수 있습니다. 종결된 민원은 되돌리거나 수정할 수 없습니다.\n- 가상 데이터의 날짜는 처음 만들 때의 오늘 날짜를 기준으로 잡혀서 기한 초과 건이 섞여 있습니다. 오늘 만든 DB에는 기한 초과 5건, 마감 임박 4건이 들어 있습니다.\n\n파일은 `main.py`(API·DB·가상 데이터), `static/index.html`(화면), `requirements.txt`, `run.bat`입니다.\n\n로그인이나 권한 구분은 넣지 않았습니다. 필요하면 담당자별 로그인이나 처리 이력 로그를 추가할 수 있습니다.",
+ "wall_s": 139.9
+}

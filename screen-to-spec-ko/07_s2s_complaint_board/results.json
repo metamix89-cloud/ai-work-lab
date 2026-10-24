@@ -1,0 +1,842 @@
+{
+ "A1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: (404, {'detail': 'Not Found'})\nassert 404 == 200",
+   "T3": "TypeError: list indices must be integers or slices, not str",
+   "T4": "AssertionError: (404, {'detail': 'Not Found'})\nassert 404 == 200",
+   "T5": "AssertionError: ('건너뛰기는 409', 404, {'detail': 'Not Found'})\nassert 404 == 409",
+   "T6": "AssertionError: ('담당자 없는 배정은 400', 404, {'detail': 'Not Found'})\nassert 404 == 400",
+   "T7": "AssertionError: ('없는 민원 + 잘못된 to 는 400 이 먼저', 404, {'detail': 'Not Found'})\nassert 404 == 400",
+   "T8": "AssertionError: (404, {'detail': 'Not Found'})\nassert 404 == 200",
+   "T9": "AssertionError: 열 0개\nassert 0 == 4\n +  where 0 = len([])"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "   assert st == 400, (\"없는 민원 + 잘못된 to 는 400 이 먼저\", st, body)\nE       AssertionError: ('없는 민원 + 잘못된 to 는 400 이 먼저', 404, {'detail': 'Not Found'})\nE       assert 404 == 400\n\n_grader\\test_dod.py:245: AssertionError\n___________________ test_T8_history_only_successes_in_order ___________________\n\nsrv = <test_dod.Server object at 0x000001B431C92A50>\n\n    def test_T8_history_only_successes_in_order(srv):\n        st, body = move(srv, \"C-01\", \"처리중\", by=\"이서준\")\n>       assert st == 200, (st, body)\nE       AssertionError: (404, {'detail': 'Not Found'})\nE       assert 404 == 200\n\n_grader\\test_dod.py:254: AssertionError\n____________________ test_T9_screen_columns_cards_overdue _____________________\n\nsrv = <test_dod.Server object at 0x000001B431C92A50>\npw = <Browser type=<BrowserType name=chromium executable_path=C:\\Users\\DESKTOP_KIM\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen_columns_cards_overdue(srv, pw):\n        page = open_page(pw, srv)\n        cols = page.query_selector_all('[data-testid=\"column\"]')\n>       assert len(cols) == 4, \"열 %d개\" % len(cols)\nE       AssertionError: 열 0개\nE       assert 0 == 4\nE        +  where 0 = len([])\n\n_grader\\test_dod.py:268: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_summary_counts_and_overdue - AssertionErr...\nFAILED _grader/test_dod.py::test_T3_overdue_rule - TypeError: list indices mu...\nFAILED _grader/test_dod.py::test_T4_forward_with_assignee - AssertionError: (...\nFAILED _grader/test_dod.py::test_T5_skip_back_and_closed_are_409 - AssertionE...\nFAILED _grader/test_dod.py::test_T6_required_inputs_are_400 - AssertionError:...\nFAILED _grader/test_dod.py::test_T7_reject_order - AssertionError: ('없는 민...\nFAILED _grader/test_dod.py::test_T8_history_only_successes_in_order - Asserti...\nFAILED _grader/test_dod.py::test_T9_screen_columns_cards_overdue - AssertionE...\n8 failed, 1 passed in 5.71s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/complaints",
+   "/api/complaints/{cid}",
+   "/api/complaints/{cid}/assign",
+   "/api/complaints/{cid}/reply",
+   "/api/complaints/{cid}/status",
+   "/api/meta",
+   "/api/stats",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/complaints/{cid}/assign",
+   "/api/complaints/{cid}/reply",
+   "/api/complaints/{cid}/status",
+   "/api/meta",
+   "/api/stats"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "run.bat",
+   "seed/complaints.csv",
+   "seed/staff.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 푸른구청 '민원 접수 · 처리 현황판' 웹앱을 만들어 줘. 민원이 접수 → 배정 → 처리 → 종결로 흘러가는 걸 칸반처럼 보여 주고, 기한 넘긴 건은 눈에 띄게, 담당자 배정과 답변 등록도 되면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 126767,
+   "num_turns": 10,
+   "total_cost_usd": 0.38316259999999996,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 37366,
+    "cache_read_input_tokens": 315366,
+    "output_tokens": 20213,
+    "output_tokens_details": {
+     "thinking_tokens": 537
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 37366,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1060,
+      "cache_read_input_tokens": 53359,
+      "cache_creation_input_tokens": 679,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 679
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "푸른구청 민원 현황판을 만들었습니다. 백엔드 API는 테스트로 확인했습니다. 브라우저 화면은 열어 보지 않았고, 서버를 띄워 둔 상태도 아닙니다.\n\n**실행:** 이 폴더에서 `run.bat`을 더블클릭하거나 `python -m uvicorn main:app` 을 실행한 뒤 http://127.0.0.1:8000 으로 접속하세요. 처음 실행하면 `complaints.db`가 생기고 가상 민원 20건과 담당자 7명이 들어갑니다. 데이터를 초기화하려면 이 파일을 지우면 됩니다.\n\n**화면 기능**\n- **칸반 보드:** 접수 → 배정 → 처리 → 종결 4개 열로 나뉩니다. 카드를 드래그해서 다음 단계로 옮길 수 있습니다.\n- **기한 표시:**\n  - 기한을 넘긴 건은 붉은 배경과 테두리로 깜빡이고 \"⚠ N일 초과\"가 붙습니다.\n  - 마감이 2일 이내인 건은 주황색, 종결된 건은 \"기한 내/후 종결\"로 표시됩니다.\n  - 각 열 안에서는 기한 초과 건이 맨 위에 옵니다.\n- **상단 요약:** 전체, 단계별 건수, 기한 초과, 마감 임박 건수가 보입니다. 담당자·분류별 필터와 \"기한 초과만\" 보기도 있습니다.\n- **카드 클릭 상세창:** 담당자 배정, 답변 등록, 답변 등록 후 종결, 답변 이력 확인이 됩니다. 상단의 \"+ 민원 접수\" 버튼으로 새 민원도 접수할 수 있습니다.\n\n**처리 규칙 (서버에서 검증)**\n- 담당자를 배정해야 처리 단계로 넘어갈 수 있고, 배정 없이는 답변도 등록할 수 없습니다.\n- 접수 민원에 담당자를 배정하면 자동으로 \"배정\" 단계가 됩니다. 배정 단계에서 답변을 등록하면 \"처리\" 단계로 넘어갑니다.\n- 종결은 답변을 등록하면서만 할 수 있습니다. 종결된 민원은 되돌리거나 수정할 수 없습니다.\n- 가상 데이터의 날짜는 처음 만들 때의 오늘 날짜를 기준으로 잡혀서 기한 초과 건이 섞여 있습니다. 오늘 만든 DB에는 기한 초과 5건, 마감 임박 4건이 들어 있습니다.\n\n파일은 `main.py`(API·DB·가상 데이터), `static/index.html`(화면), `requirements.txt`, `run.bat`입니다.\n\n로그인이나 권한 구분은 넣지 않았습니다. 필요하면 담당자별 로그인이나 처리 이력 로그를 추가할 수 있습니다.",
+   "wall_s": 139.9
+  }
+ },
+ "A2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: (404, {'detail': 'Not Found'})\nassert 404 == 200",
+   "T3": "TypeError: list indices must be integers or slices, not str",
+   "T4": "AssertionError: (404, {'detail': 'Not Found'})\nassert 404 == 200",
+   "T5": "AssertionError: ('건너뛰기는 409', 404, {'detail': 'Not Found'})\nassert 404 == 409",
+   "T6": "AssertionError: ('담당자 없는 배정은 400', 404, {'detail': 'Not Found'})\nassert 404 == 400",
+   "T7": "AssertionError: ('없는 민원 + 잘못된 to 는 400 이 먼저', 404, {'detail': 'Not Found'})\nassert 404 == 400",
+   "T8": "AssertionError: (404, {'detail': 'Not Found'})\nassert 404 == 200",
+   "T9": "AssertionError: 열 0개\nassert 0 == 4\n +  where 0 = len([])"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "   assert st == 400, (\"없는 민원 + 잘못된 to 는 400 이 먼저\", st, body)\nE       AssertionError: ('없는 민원 + 잘못된 to 는 400 이 먼저', 404, {'detail': 'Not Found'})\nE       assert 404 == 400\n\n_grader\\test_dod.py:245: AssertionError\n___________________ test_T8_history_only_successes_in_order ___________________\n\nsrv = <test_dod.Server object at 0x000001DB554F6A50>\n\n    def test_T8_history_only_successes_in_order(srv):\n        st, body = move(srv, \"C-01\", \"처리중\", by=\"이서준\")\n>       assert st == 200, (st, body)\nE       AssertionError: (404, {'detail': 'Not Found'})\nE       assert 404 == 200\n\n_grader\\test_dod.py:254: AssertionError\n____________________ test_T9_screen_columns_cards_overdue _____________________\n\nsrv = <test_dod.Server object at 0x000001DB554F6A50>\npw = <Browser type=<BrowserType name=chromium executable_path=C:\\Users\\DESKTOP_KIM\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen_columns_cards_overdue(srv, pw):\n        page = open_page(pw, srv)\n        cols = page.query_selector_all('[data-testid=\"column\"]')\n>       assert len(cols) == 4, \"열 %d개\" % len(cols)\nE       AssertionError: 열 0개\nE       assert 0 == 4\nE        +  where 0 = len([])\n\n_grader\\test_dod.py:268: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_summary_counts_and_overdue - AssertionErr...\nFAILED _grader/test_dod.py::test_T3_overdue_rule - TypeError: list indices mu...\nFAILED _grader/test_dod.py::test_T4_forward_with_assignee - AssertionError: (...\nFAILED _grader/test_dod.py::test_T5_skip_back_and_closed_are_409 - AssertionE...\nFAILED _grader/test_dod.py::test_T6_required_inputs_are_400 - AssertionError:...\nFAILED _grader/test_dod.py::test_T7_reject_order - AssertionError: ('없는 민...\nFAILED _grader/test_dod.py::test_T8_history_only_successes_in_order - Asserti...\nFAILED _grader/test_dod.py::test_T9_screen_columns_cards_overdue - AssertionE...\n8 failed, 1 passed in 5.72s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/complaints",
+   "/api/complaints/{cid}",
+   "/api/complaints/{cid}/answer",
+   "/api/complaints/{cid}/assign",
+   "/api/complaints/{cid}/status",
+   "/api/meta",
+   "/api/reset",
+   "/api/staff",
+   "/api/stats",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/complaints/{cid}/answer",
+   "/api/complaints/{cid}/assign",
+   "/api/complaints/{cid}/status",
+   "/api/meta",
+   "/api/reset",
+   "/api/stats"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/complaints.csv",
+   "seed/staff.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 푸른구청 '민원 접수 · 처리 현황판' 웹앱을 만들어 줘. 민원이 접수 → 배정 → 처리 → 종결로 흘러가는 걸 칸반처럼 보여 주고, 기한 넘긴 건은 눈에 띄게, 담당자 배정과 답변 등록도 되면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 160588,
+   "num_turns": 9,
+   "total_cost_usd": 0.467253,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 42831,
+    "cache_read_input_tokens": 345170,
+    "output_tokens": 26138,
+    "output_tokens_details": {
+     "thinking_tokens": 847
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 42831,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1270,
+      "cache_read_input_tokens": 59070,
+      "cache_creation_input_tokens": 433,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 433
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "푸른구청 민원 현황판을 만들었습니다. 백엔드 API는 테스트로 확인했습니다. 서버를 띄워 브라우저에서 화면을 열어 보지는 못했습니다. 드래그 이동과 상세 창 같은 화면 동작은 직접 눌러 보셔야 확인됩니다.\n\n## 실행\n```powershell\ncd C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\s2s_runs\\07_s2s_complaint_board\\A2\npip install -r requirements.txt   # 이미 fastapi와 uvicorn이 설치되어 있어 생략해도 됩니다\npython main.py                    # http://127.0.0.1:8000\n```\n처음 실행하면 `complaints.db`가 만들어지고 가상 민원 24건과 담당자 8명이 들어갑니다. 날짜는 실행 시점 기준이라 기한 초과 건이 항상 몇 개 섞여 있습니다.\n\n## 화면 기능\n- **칸반 4단계**: 접수 → 배정 → 처리 → 종결. 칸마다 건수와 기한 초과 건수가 표시됩니다.\n- **기한 초과 표시**: 카드가 붉은색으로 깜빡이고 \"기한 초과 N일\" 배지가 붙습니다. 48시간 안에 마감되는 건은 주황색으로 표시되고, 상세 창에는 경고 문구도 나옵니다.\n- **상단 지표**: 전체, 접수 대기, 진행 중, 기한 초과, 48시간 내 마감, 종결, 기한 내 종결률을 보여 줍니다.\n- **필터**: 검색, 분류, 담당자(미배정 포함), 기한 초과만, 긴급만 고를 수 있습니다.\n- **카드 클릭 시 상세 창**:\n  - 담당자를 배정하거나 재배정합니다. 담당자 목록에 각자 진행 중인 건수가 함께 나옵니다.\n  - 답변을 저장하거나, 답변을 등록하면서 바로 종결합니다. 처리 이력도 볼 수 있습니다.\n- **카드 끌어서 이동**: 한 단계씩 앞으로만 옮길 수 있습니다.\n- **민원 접수 신규 등록**: 분류별로 기한이 자동으로 정해집니다(도로·환경·공원은 7일, 나머지는 14일). 긴급으로 접수하면 기한이 절반으로 줄어듭니다.\n- **기타**: 1분마다 자동 갱신되고, \"데이터 초기화\" 버튼으로 가상 데이터를 되돌릴 수 있습니다.\n\n## 업무 규칙\n- 담당자가 없으면 배정 단계로 옮기거나 답변을 등록할 수 없습니다. 드래그로 배정 칸에 놓으면 상세 창이 열려 담당자를 고르게 됩니다.\n- 답변이 없으면 종결할 수 없습니다.\n- 종결된 건은 이동도 변경도 안 됩니다.\n- 이 규칙 위반은 서버가 거절하고, 화면에 안내 메시지가 뜹니다.\n\n파일은 `main.py`(API, DB, 가상 데이터)와 `static/index.html`(화면) 두 개가 핵심입니다. 처리 기한 일수와 담당자 목록은 `main.py`의 `CATEGORIES`와 `STAFF`에서 바꿀 수 있습니다.",
+   "wall_s": 175.0
+  }
+ },
+ "A3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: (404, {'detail': 'Not Found'})\nassert 404 == 200",
+   "T3": "TypeError: list indices must be integers or slices, not str",
+   "T4": "AssertionError: (404, {'detail': 'Not Found'})\nassert 404 == 200",
+   "T5": "AssertionError: ('건너뛰기는 409', 404, {'detail': 'Not Found'})\nassert 404 == 409",
+   "T6": "AssertionError: ('담당자 없는 배정은 400', 404, {'detail': 'Not Found'})\nassert 404 == 400",
+   "T7": "AssertionError: ('없는 민원 + 잘못된 to 는 400 이 먼저', 404, {'detail': 'Not Found'})\nassert 404 == 400",
+   "T8": "AssertionError: (404, {'detail': 'Not Found'})\nassert 404 == 200",
+   "T9": "AssertionError: 열 0개\nassert 0 == 4\n +  where 0 = len([])"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "   assert st == 400, (\"없는 민원 + 잘못된 to 는 400 이 먼저\", st, body)\nE       AssertionError: ('없는 민원 + 잘못된 to 는 400 이 먼저', 404, {'detail': 'Not Found'})\nE       assert 404 == 400\n\n_grader\\test_dod.py:245: AssertionError\n___________________ test_T8_history_only_successes_in_order ___________________\n\nsrv = <test_dod.Server object at 0x00000238D8056A50>\n\n    def test_T8_history_only_successes_in_order(srv):\n        st, body = move(srv, \"C-01\", \"처리중\", by=\"이서준\")\n>       assert st == 200, (st, body)\nE       AssertionError: (404, {'detail': 'Not Found'})\nE       assert 404 == 200\n\n_grader\\test_dod.py:254: AssertionError\n____________________ test_T9_screen_columns_cards_overdue _____________________\n\nsrv = <test_dod.Server object at 0x00000238D8056A50>\npw = <Browser type=<BrowserType name=chromium executable_path=C:\\Users\\DESKTOP_KIM\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen_columns_cards_overdue(srv, pw):\n        page = open_page(pw, srv)\n        cols = page.query_selector_all('[data-testid=\"column\"]')\n>       assert len(cols) == 4, \"열 %d개\" % len(cols)\nE       AssertionError: 열 0개\nE       assert 0 == 4\nE        +  where 0 = len([])\n\n_grader\\test_dod.py:268: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_summary_counts_and_overdue - AssertionErr...\nFAILED _grader/test_dod.py::test_T3_overdue_rule - TypeError: list indices mu...\nFAILED _grader/test_dod.py::test_T4_forward_with_assignee - AssertionError: (...\nFAILED _grader/test_dod.py::test_T5_skip_back_and_closed_are_409 - AssertionE...\nFAILED _grader/test_dod.py::test_T6_required_inputs_are_400 - AssertionError:...\nFAILED _grader/test_dod.py::test_T7_reject_order - AssertionError: ('없는 민...\nFAILED _grader/test_dod.py::test_T8_history_only_successes_in_order - Asserti...\nFAILED _grader/test_dod.py::test_T9_screen_columns_cards_overdue - AssertionE...\n8 failed, 1 passed in 5.69s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/complaints",
+   "/api/complaints/{cid}",
+   "/api/complaints/{cid}/assign",
+   "/api/complaints/{cid}/replies",
+   "/api/complaints/{cid}/status",
+   "/api/meta",
+   "/api/reset",
+   "/api/stats"
+  ],
+  "extra_routes": [
+   "/api/complaints/{cid}/assign",
+   "/api/complaints/{cid}/replies",
+   "/api/complaints/{cid}/status",
+   "/api/meta",
+   "/api/reset",
+   "/api/stats"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/complaints.csv",
+   "seed/staff.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 푸른구청 '민원 접수 · 처리 현황판' 웹앱을 만들어 줘. 민원이 접수 → 배정 → 처리 → 종결로 흘러가는 걸 칸반처럼 보여 주고, 기한 넘긴 건은 눈에 띄게, 담당자 배정과 답변 등록도 되면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 125423,
+   "num_turns": 8,
+   "total_cost_usd": 0.35317,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 35222,
+    "cache_read_input_tokens": 277140,
+    "output_tokens": 18454,
+    "output_tokens_details": {
+     "thinking_tokens": 870
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 35222,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1238,
+      "cache_read_input_tokens": 51522,
+      "cache_creation_input_tokens": 372,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 372
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "푸른구청 민원 현황판을 만들었고, API 흐름은 테스트로 확인했습니다. 서버를 띄워 브라우저로 화면을 보지는 못했습니다. 칸반 드래그와 모달 동작은 직접 열어서 확인해 보세요.\n\n**실행 방법**\n```\ncd C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\s2s_runs\\07_s2s_complaint_board\\A3\npip install -r requirements.txt\npython main.py\n```\n그다음 http://127.0.0.1:8000 으로 접속하면 됩니다. 처음 실행하면 `complaints.db`가 자동으로 만들어지고 가상 데이터 25건과 담당자 10명이 들어갑니다.\n\n**기능**\n- **칸반 보드**: 접수 → 배정 → 처리 → 종결 4열이고, 카드를 드래그해서 단계를 옮깁니다. 상단에는 단계별 건수 통계가 있습니다.\n- **기한 초과 표시**: 미종결 건 중 기한이 지난 카드는 빨간 배경에 \"기한 초과\" 배지와 초과 시간이 붙고 테두리가 깜빡입니다. 24시간 안에 기한이 오는 건은 노란색 \"기한 임박\"으로 표시됩니다. 각 열은 기한이 급한 순으로 정렬됩니다. 기한을 넘겨 종결한 건은 따로 표시되고, 우선순위별 기한은 보통 7일, 높음 5일, 긴급 2일입니다.\n- **담당자 배정**: 접수 카드를 \"배정\" 열로 끌어 놓거나 상세 창에서 담당자를 고르면 배정되고 단계도 함께 넘어갑니다. 민원 분류와 같은 부서의 담당자는 ★로 표시되고, 배정 후에도 변경할 수 있습니다.\n- **답변 등록**: 상세 창에서 답변을 쓰면 여러 건 등록되고, 처리 이력도 같이 남습니다.\n- **그 밖의 기능**: 새 민원 접수 폼, 검색, 분류·담당자 필터, \"기한 초과만\"과 \"종결 숨기기\" 체크, 1분마다 자동 새로고침이 있습니다. \"데모 데이터 초기화\" 버튼으로 시드 데이터로 되돌릴 수 있습니다.\n\n**업무 규칙**\n- 상태는 한 단계씩만 앞으로 갈 수 있고, 담당자가 없으면 배정 이후 단계로 못 갑니다.\n- 답변이 하나도 없으면 종결할 수 없습니다. 규칙에 걸리면 안내 메시지가 뜨고 해당 입력 창이 열립니다.\n\n가상 데이터는 접수 시각을 실행 시점 기준으로 잡기 때문에, 미종결 19건 중 11건이 기한 초과로 나옵니다. 화면 확인용으로 일부러 많이 잡은 값입니다. 줄이고 싶으면 `main.py`의 `seed()`에서 `age_h` 범위를 조정하세요.\n\n파일은 `main.py`(API와 DB), `static/index.html`(화면), `requirements.txt` 세 개입니다.",
+   "wall_s": 146.7
+  }
+ },
+ "B1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 6.43s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/complaints",
+   "/api/complaints/{cid}",
+   "/api/complaints/{cid}/history",
+   "/api/complaints/{cid}/transition",
+   "/api/staff",
+   "/api/summary"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/complaints.csv",
+   "seed/staff.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 73620,
+   "num_turns": 6,
+   "total_cost_usd": 0.2459946,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 31148,
+    "cache_read_input_tokens": 177726,
+    "output_tokens": 10361,
+    "output_tokens_details": {
+     "thinking_tokens": 1583
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 31148,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1083,
+      "cache_read_input_tokens": 46942,
+      "cache_creation_input_tokens": 878,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 878
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD.md에 따라 웹앱을 만들었습니다. API 6개는 `TestClient`로 일부 호출해 봤고 규칙대로 동작했습니다. 화면(`/`)은 브라우저로 열어 보지 못했고, `/`가 200으로 응답하는 것만 확인했습니다. PRD가 완료 기준으로 든 `tests/test_dod.py`는 이 폴더에 없어서 만들지도 돌리지도 못했습니다.\n\n실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`입니다.\n\n**만든 파일**\n- `main.py`는 FastAPI 앱입니다. 시작할 때마다 `seed/*.csv`로 `civil.db`를 새로 만들고, API 6개와 규칙 R1~R7을 구현했습니다. 거부는 400, 404, 409 순으로 하나만 돌려줍니다.\n- `static/index.html`은 순수 HTML/JS 한 페이지입니다. 현황 숫자, 칸반 4열, 카드 상세, 다음 단계 버튼, 이력, 메시지 줄, 오류 상태(`불러오지 못했습니다` + 다시 시도)를 담았습니다. `data-testid`와 `data-*` 속성은 PRD 4장 이름 그대로 붙였습니다.\n- `seed/staff.csv`(직원 4명)와 `seed/complaints.csv`(민원 8건)는 가상 데이터입니다. 단계별 건수는 3·1·2·2이고, 기한 넘김은 2건입니다. 접수일이 오늘로부터 7일 전인 건(기한 당일) 1건과 10일 전에 종결된 건도 넣었습니다.\n- `requirements.txt`에는 `fastapi`와 `uvicorn`만 적었습니다.\n\n**직접 호출해 본 것**\n- `summary`는 PRD 예시와 같은 값(3·1·2·2, 기한 넘김 2, `as_of` 오늘)이 나왔습니다.\n- 접수에서 배정으로 가는 이동은 200이었고 이력이 한 줄 남았습니다.\n- 건너뛰기, 담당자 없는 배정, 종결된 건 이동은 각각 409, 400, 409였습니다.\n- 없는 민원에 잘못된 본문을 보내면 400, 올바른 본문을 보내면 404였습니다.\n\n**알아둘 점**\n- 시드의 접수일은 2026-10-24 기준 고정 날짜입니다. 날짜가 지나면 기한 넘김 건수와 T2 기준 숫자가 달라지니, 그때는 CSV 날짜를 오늘 기준으로 다시 맞춰야 합니다.\n- `to`가 네 단계가 아닐 때 PRD에 문구가 없어서 `이동할 단계를 선택하세요`로 정했습니다.\n- 이미 있는 단계로 되돌리거나 같은 단계로 보내는 요청은 `상태를 되돌릴 수 없습니다`(409)로 처리했습니다.",
+   "wall_s": 79.0
+  }
+ },
+ "B2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 6.12s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/complaints",
+   "/api/complaints/{cid}",
+   "/api/complaints/{cid}/history",
+   "/api/complaints/{cid}/transition",
+   "/api/staff",
+   "/api/summary"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/complaints.csv",
+   "seed/staff.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 91411,
+   "num_turns": 10,
+   "total_cost_usd": 0.31467769999999995,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 35550,
+    "cache_read_input_tokens": 328157,
+    "output_tokens": 13963,
+    "output_tokens_details": {
+     "thinking_tokens": 1108
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 35550,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 830,
+      "cache_read_input_tokens": 52081,
+      "cache_creation_input_tokens": 141,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 141
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD대로 웹앱을 만들었습니다. API는 TestClient 스모크 테스트로 확인했고, 브라우저 화면은 열어보지 않았습니다. PRD가 완료 기준으로 지정한 `tests/test_dod.py`는 폴더에 없어서 T1~T9를 실제로 돌리지는 못했습니다.\n\n스모크 테스트에서 확인한 것:\n- `/` 가 200으로 열립니다.\n- `summary` 가 3·1·2·2, 기한 넘김 2, `as_of` 2026-10-24로 나옵니다.\n- 접수에서 배정으로 가는 이동이 성공하고, 이력에 한 줄이 남습니다.\n- 건너뛰기는 409입니다.\n- 없는 민원에 올바른 본문을 보내면 404, 잘못된 본문을 보내면 400입니다.\n\n**파일**\n- `main.py`: FastAPI 앱입니다. 시작할 때마다 `seed/*.csv` 로 `civil.db` 를 새로 만들고, API 6개와 규칙 R1~R7을 구현했습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. 현황 숫자, 칸반, 상세, 다음 단계 버튼, 이력, 메시지 줄, 오류 상태와 다시 시도 버튼이 들어 있고 PRD의 `data-testid` 이름을 그대로 썼습니다.\n- `seed/staff.csv`, `seed/complaints.csv`: 직원 4명과 민원 8건입니다. 기한 넘김 2건(C002, C005)과 기한 당일 1건(C003)이 들어 있습니다.\n- `requirements.txt`: `fastapi`, `uvicorn` 만 적었습니다.\n\n**실행**\n```\npython -m uvicorn main:app --port 8000\n```\n\n**주의할 점**\n- 시드 접수일은 오늘(2026-10-24) 기준 고정 날짜입니다. 날짜가 지나면 기한 넘김 건수가 달라지니, 다른 날 확인하려면 CSV의 접수일을 다시 맞춰야 합니다.\n- 스모크 테스트용 임시 파일과 생성된 `civil.db` 는 지웠습니다. 서버를 시작하면 `civil.db` 가 다시 만들어집니다.",
+   "wall_s": 101.3
+  }
+ },
+ "B3": {
+  "tests": {
+   "T1": "error",
+   "T2": "error",
+   "T3": "error",
+   "T4": "error",
+   "T5": "error",
+   "T6": "error",
+   "T7": "error",
+   "T8": "error",
+   "T9": "error"
+  },
+  "detail": {
+   "T1": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: main:app\"",
+   "T2": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: main:app\"",
+   "T3": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: main:app\"",
+   "T4": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: main:app\"",
+   "T5": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: main:app\"",
+   "T6": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: main:app\"",
+   "T7": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: main:app\"",
+   "T8": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: main:app\"",
+   "T9": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: main:app\""
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "ader\\test_dod.py:173: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <test_dod.Server object at 0x000001302BB16A50>\n\n    def start(self):\n        if not self.target:\n            pytest.fail(\"FastAPI 앱을 찾지 못함 (main.py 에 app = FastAPI() 가 없다)\")\n        write_seed()\n        for p in glob.glob(os.path.join(APP, \"**\", \"*.db\"), recursive=True):\n            try:\n                os.remove(p)\n            except OSError:\n                pass\n        env = dict(os.environ, PORT=str(self.port), PYTHONUTF8=\"1\")\n        self.proc = subprocess.Popen([sys.executable, \"-m\", \"uvicorn\", self.target, \"--port\", str(self.port)],\n                                     cwd=APP, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)\n        for _ in range(60):\n            if self.proc.poll() is not None:\n                break\n            try:\n                urllib.request.urlopen(self.base + \"/\", timeout=1)\n                return self\n            except Exception:\n                time.sleep(0.5)\n        self.stop()\n>       pytest.fail(\"서버가 20초 안에 뜨지 않음: %s\\n%s\" % (self.target, self.log[-1500:]))\nE       Failed: 서버가 20초 안에 뜨지 않음: main:app\n\n_grader\\test_dod.py:123: Failed\n=========================== short test summary info ===========================\nERROR _grader/test_dod.py::test_T1_page_loads - Failed: 서버가 20초 안에 뜨지...\nERROR _grader/test_dod.py::test_T2_summary_counts_and_overdue - Failed: 서버...\nERROR _grader/test_dod.py::test_T3_overdue_rule - Failed: 서버가 20초 안에 뜨...\nERROR _grader/test_dod.py::test_T4_forward_with_assignee - Failed: 서버가 20...\nERROR _grader/test_dod.py::test_T5_skip_back_and_closed_are_409 - Failed: 서...\nERROR _grader/test_dod.py::test_T6_required_inputs_are_400 - Failed: 서버가 2...\nERROR _grader/test_dod.py::test_T7_reject_order - Failed: 서버가 20초 안에 뜨...\nERROR _grader/test_dod.py::test_T8_history_only_successes_in_order - Failed: ...\nERROR _grader/test_dod.py::test_T9_screen_columns_cards_overdue - Failed: 서...\n9 errors in 1.78s\n",
+  "passed": 0,
+  "routes": [
+   "/",
+   "/api/complaints",
+   "/api/complaints/{cid}",
+   "/api/complaints/{cid}/history",
+   "/api/complaints/{cid}/transition",
+   "/api/staff",
+   "/api/summary"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/complaints.csv",
+   "seed/staff.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 90027,
+   "num_turns": 10,
+   "total_cost_usd": 0.31904180000000004,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 36339,
+    "cache_read_input_tokens": 231118,
+    "output_tokens": 15055,
+    "output_tokens_details": {
+     "thinking_tokens": 940
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 36339,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 778,
+      "cache_read_input_tokens": 52410,
+      "cache_creation_input_tokens": 601,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 601
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD.md대로 웹앱을 만들었습니다. 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`으로 실행하면 됩니다. 포트는 `PORT` 환경 변수가 있으면 그 값을 따릅니다.\n\nAPI 쪽만 TestClient로 확인했습니다. 브라우저 화면(칸반, 상세, 다음 단계 버튼)은 열어서 확인하지 못했습니다. 폴더에 `tests/test_dod.py`가 없어서 T1~T9도 돌리지 못했습니다. 대신 아래 항목을 직접 호출해 봤습니다.\n\n- `/`가 200으로 열립니다.\n- `summary`가 건수 3·1·2·2, 기한 넘김 2, `as_of` 2026-10-24로 나옵니다.\n- 접수 → 처리중 건너뛰기는 409입니다.\n- 접수 → 배정은 200이고 이력 한 줄이 남습니다.\n- 없는 민원에 잘못된 본문은 400, 올바른 본문은 404입니다.\n- 종결된 건 이동은 409입니다.\n\n만든 파일은 다음과 같습니다.\n- `main.py`: API 6개와 규칙 R1~R7. 서버를 시작할 때마다 `seed/`의 CSV로 `civil.db`를 새로 만듭니다.\n- `static/index.html`: 현황 숫자, 칸반, 상세, 이력, 메시지 줄, 오류 상태와 다시 시도 버튼. PRD의 `data-testid`를 모두 넣었습니다.\n- `seed/staff.csv`, `seed/complaints.csv`: 직원 4명, 민원 8건. 기한 넘김 2건(8일 전, 9일 전 접수)과 기한 당일 1건(7일 전 접수)이 들어 있습니다.\n\n**seed 날짜:** 접수일을 오늘(2026-10-24) 기준 고정 날짜로 적어 놨습니다. 날짜가 바뀌면 건수가 어긋나서 T2·T3이 깨지므로, 그때는 CSV의 `received`를 오늘 기준으로 다시 맞춰 주세요.",
+   "wall_s": 98.6
+  }
+ },
+ "C1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 6.15s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/complaints",
+   "/api/complaints/{cid}",
+   "/api/complaints/{cid}/history",
+   "/api/complaints/{cid}/transition",
+   "/api/staff",
+   "/api/summary"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/complaints.csv",
+   "seed/staff.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 88216,
+   "num_turns": 11,
+   "total_cost_usd": 0.3411241,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 42493,
+    "cache_read_input_tokens": 357101,
+    "output_tokens": 13541,
+    "output_tokens_details": {
+     "thinking_tokens": 610
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 42493,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 202,
+      "cache_read_input_tokens": 58913,
+      "cache_creation_input_tokens": 252,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 252
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/staff.csv, seed/complaints.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음. PRD 에 없는 API·칸·화면 요소는 추가하지 않았습니다. PRD 에 문구가 없던 거부 사유 두 개는 제가 정했습니다. 잘못된 `to` 는 400 \"이동할 단계를 선택하세요\", 없는 민원은 404 \"민원을 찾을 수 없습니다\" 입니다.",
+   "wall_s": 100.0
+  }
+ },
+ "C2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 6.50s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/complaints",
+   "/api/complaints/{cid}",
+   "/api/complaints/{cid}/history",
+   "/api/complaints/{cid}/transition",
+   "/api/staff",
+   "/api/summary",
+   "/static"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/complaints.csv",
+   "seed/staff.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 52570,
+   "num_turns": 9,
+   "total_cost_usd": 0.24994780000000003,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 36563,
+    "cache_read_input_tokens": 241918,
+    "output_tokens": 7948,
+    "output_tokens_details": {
+     "thinking_tokens": 582
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 36563,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 427,
+      "cache_read_input_tokens": 52998,
+      "cache_creation_input_tokens": 237,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 237
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/staff.csv, seed/complaints.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음. 추가한 API 경로는 없고, PRD 의 6개만 만들었습니다. 아래 두 가지는 PRD 가 정하지 않은 부분을 제가 채운 것입니다.\n- PRD 에 문구가 없는 거부 사유를 직접 정했습니다. `to` 가 네 단계가 아니면 400 `단계를 선택하세요`, 본문이 JSON 객체가 아니면 400 `요청 형식이 올바르지 않습니다`, 없는 민원이면 404 `민원을 찾을 수 없습니다` 를 돌려줍니다.\n- 현재 상태와 같은 단계로의 이동(예: 처리중 → 처리중)은 \"뒤로 가기\" 로 보고 409 `상태를 되돌릴 수 없습니다` 를 돌려줍니다.\n\n`seed/` 의 CSV 는 오늘(2026-10-24) 기준 날짜로 만든 가상 데이터(직원 4명, 민원 8건)입니다.",
+   "wall_s": 62.9
+  }
+ },
+ "C3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 6.74s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/complaints",
+   "/api/complaints/{cid}",
+   "/api/complaints/{cid}/history",
+   "/api/complaints/{cid}/transition",
+   "/api/staff",
+   "/api/summary"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/complaints.csv",
+   "seed/staff.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 46108,
+   "num_turns": 8,
+   "total_cost_usd": 0.23790670000000003,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 36253,
+    "cache_read_input_tokens": 188647,
+    "output_tokens": 7401,
+    "output_tokens_details": {
+     "thinking_tokens": 394
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 36253,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 219,
+      "cache_read_input_tokens": 52536,
+      "cache_creation_input_tokens": 389,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 389
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/staff.csv, seed/complaints.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음. PRD 6개 API 외에 추가한 경로는 `/`(화면 제공)뿐이다. `to` 가 네 단계가 아닐 때의 400 `detail` 문구(`단계를 선택하세요`)와, 없는 민원일 때의 404 `detail` 문구(`민원을 찾을 수 없습니다`)는 PRD 에 정해져 있지 않아 제가 정했다.",
+   "wall_s": 56.2
+  }
+ }
+}

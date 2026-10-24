@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>푸른구청 민원 현황판</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Malgun Gothic", sans-serif; background: #f3f6fb; color: #1d2733; }
+  header { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 14px 24px; background: #1f5fbf; color: #fff; }
+  header h1 { margin: 0; font-size: 20px; flex: 1; }
+  header label { font-size: 14px; }
+  header select { padding: 4px 8px; font-size: 14px; }
+  main { padding: 16px 24px; }
+  #stats { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+  .stat { background: #fff; border: 1px solid #d5dde8; border-radius: 8px; padding: 10px 18px; min-width: 110px; }
+  .stat b { display: block; font-size: 26px; }
+  .stat.overdue b { color: #d32f2f; }
+  #message { min-height: 24px; margin-bottom: 8px; font-weight: bold; color: #d32f2f; }
+  #message.ok { color: #2e7d32; }
+  #board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; align-items: start; }
+  .column { background: #e6ecf5; border-radius: 8px; padding: 10px; min-height: 120px; }
+  .column h2 { margin: 0 0 8px; font-size: 15px; }
+  .card { background: #fff; border: 2px solid #d5dde8; border-radius: 6px; padding: 8px 10px; margin-bottom: 8px; cursor: pointer; font-size: 13px; }
+  .card:hover { box-shadow: 0 1px 4px rgba(0,0,0,.2); }
+  .card.selected { outline: 2px solid #1f5fbf; }
+  .card[data-overdue="1"] { border-color: #d32f2f; }
+  .card .t { font-weight: bold; margin-bottom: 4px; }
+  .card .due { font-weight: bold; }
+  .card[data-overdue="1"] .due { color: #d32f2f; }
+  #detail { margin-top: 16px; background: #fff; border: 1px solid #d5dde8; border-radius: 8px; padding: 14px 18px; }
+  #detail h3 { margin: 0 0 8px; }
+  #detail dl { display: grid; grid-template-columns: 70px 1fr; gap: 4px 8px; margin: 0 0 10px; }
+  #detail dt { color: #5a6877; }
+  #detail dd { margin: 0; white-space: pre-wrap; }
+  #detail textarea { width: 100%; max-width: 420px; height: 70px; display: block; margin: 6px 0; }
+  #detail button, #error button { padding: 6px 14px; cursor: pointer; }
+  #history { padding-left: 20px; }
+  #error { background: #fdecea; border: 1px solid #d32f2f; padding: 16px; border-radius: 8px; }
+  .hidden { display: none; }
+  @media (max-width: 800px) { #board { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>푸른구청 민원 현황판</h1>
+  <label>처리자 <select data-testid="actor" id="actor"></select></label>
+  <span>기준일 <b data-testid="as-of" id="as-of"></b></span>
+</header>
+<main>
+  <div id="error" class="hidden">
+    <p>불러오지 못했습니다</p>
+    <button id="retry">다시 시도</button>
+  </div>
+  <div id="content">
+    <div id="stats"></div>
+    <div id="message" data-testid="message"></div>
+    <div id="board"></div>
+    <section id="detail" class="hidden"></section>
+  </div>
+</main>
+<script>
+const STAGES = ["접수", "배정", "처리중", "종결"];
+let staff = [], selectedId = null;
+
+const $ = (id) => document.getElementById(id);
+function el(tag, props, ...kids) {
+  const e = document.createElement(tag);
+  Object.entries(props || {}).forEach(([k, v]) => {
+    if (k === "text") e.textContent = v;
+    else if (k.startsWith("data-") || k === "class") e.setAttribute(k, v);
+    else e[k] = v;
+  });
+  kids.forEach((k) => e.append(k));
+  return e;
+}
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  let data = null;
+  try { data = await r.json(); } catch (e) {}
+  if (!r.ok) { const err = new Error((data && data.detail) || "오류"); err.status = r.status; throw err; }
+  return data;
+}
+function setMessage(text, ok) {
+  const m = $("message");
+  m.textContent = text || "";
+  m.className = ok ? "ok" : "";
+}
+function dueText(c) {
+  if (c.status === "종결") return "종결";
+  if (c.days_left < 0) return `${-c.days_left}일 지남`;
+  return `D-${c.days_left}`;
+}
+
+async function loadAll() {
+  try {
+    const [st, summary, list] = await Promise.all([
+      api("/api/staff"), api("/api/summary"), api("/api/complaints"),
+    ]);
+    $("error").classList.add("hidden");
+    $("content").classList.remove("hidden");
+    renderActor(st);
+    $("as-of").textContent = summary.as_of;
+    renderStats(summary);
+    renderBoard(list.items);
+    if (selectedId) await showDetail(selectedId);
+  } catch (e) {
+    $("content").classList.add("hidden");
+    $("error").classList.remove("hidden");
+  }
+}
+function renderActor(st) {
+  if (staff.length === st.length && $("actor").options.length) return;
+  staff = st;
+  const sel = $("actor");
+  const prev = sel.value;
+  sel.replaceChildren(...st.map((s) => el("option", { value: s.name, text: s.name })));
+  if (prev) sel.value = prev;
+}
+function renderStats(s) {
+  const box = $("stats");
+  box.replaceChildren(
+    ...STAGES.map((k) =>
+      el("div", { class: "stat" }, el("span", { text: k }),
+        el("b", { "data-testid": "count", "data-status": k, text: String(s.counts[k]) }))
+    ),
+    el("div", { class: "stat overdue" }, el("span", { text: "기한 넘김" }),
+      el("b", { "data-testid": "overdue-count", text: String(s.overdue) }))
+  );
+}
+function renderBoard(items) {
+  $("board").replaceChildren(
+    ...STAGES.map((k) => {
+      const col = el("div", { class: "column", "data-testid": "column", "data-status": k },
+        el("h2", { text: k }));
+      items.filter((c) => c.status === k).forEach((c) => {
+        const card = el("div", {
+          class: "card" + (c.complaint_id === selectedId ? " selected" : ""),
+          "data-testid": "complaint", "data-id": c.complaint_id,
+          "data-overdue": c.overdue ? "1" : "0",
+        },
+          el("div", { class: "t", text: c.title }),
+          el("div", { text: `${c.category} · 접수 ${c.received}` }),
+          el("div", { class: "due", text: `기한 ${c.due} (${dueText(c)})` }),
+          el("div", { text: `담당 ${c.assignee || "미배정"}` })
+        );
+        card.onclick = () => { selectedId = c.complaint_id; setMessage(""); loadAll(); };
+        col.append(card);
+      });
+      return col;
+    })
+  );
+}
+
+async function showDetail(id) {
+  const [c, hist] = await Promise.all([api(`/api/complaints/${id}`), api(`/api/complaints/${id}/history`)]);
+  const d = $("detail");
+  d.classList.remove("hidden");
+  const nodes = [
+    el("h3", { text: `${c.complaint_id} · ${c.title}` }),
+    el("dl", {},
+      el("dt", { text: "단계" }), el("dd", { text: c.status }),
+      el("dt", { text: "내용" }), el("dd", { text: `${c.category} · 접수 ${c.received} · 기한 ${c.due} (${dueText(c)})` }),
+      el("dt", { text: "담당자" }), el("dd", { text: c.assignee || "미배정" }),
+      el("dt", { text: "답변" }), el("dd", { text: c.answer || "-" })),
+  ];
+  const idx = STAGES.indexOf(c.status);
+  if (idx < STAGES.length - 1) {
+    const next = STAGES[idx + 1];
+    let assignee = null, answer = null;
+    if (next === "배정") {
+      assignee = el("select", { "data-testid": "assignee" },
+        el("option", { value: "", text: "담당자 선택" }),
+        ...staff.map((s) => el("option", { value: s.name, text: s.name })));
+      nodes.push(el("div", {}, assignee));
+    }
+    if (next === "종결") {
+      answer = el("textarea", { "data-testid": "answer", placeholder: "답변을 입력하세요" });
+      nodes.push(answer);
+    }
+    const btn = el("button", { "data-testid": "next-btn", text: `다음 단계: ${next}` });
+    btn.onclick = async () => {
+      try {
+        await api(`/api/complaints/${id}/transition`, {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            to: next, by: $("actor").value,
+            assignee: assignee ? assignee.value : "", answer: answer ? answer.value : "",
+          }),
+        });
+        await loadAll();
+        setMessage(`${next} 단계로 이동했습니다`, true);
+      } catch (e) {
+        setMessage(e.message);
+      }
+    };
+    nodes.push(btn);
+  }
+  nodes.push(el("h4", { text: "이력" }));
+  nodes.push(el("ul", { id: "history" },
+    ...(hist.length ? hist.map((h) => el("li", { "data-testid": "history-item",
+      text: `${h.at} · ${h.from_status} → ${h.to_status} · ${h.by}` }))
+      : [el("li", { text: "이력 없음" })])));
+  d.replaceChildren(...nodes);
+}
+
+$("retry").onclick = loadAll;
+loadAll();
+</script>
+</body>
+</html>

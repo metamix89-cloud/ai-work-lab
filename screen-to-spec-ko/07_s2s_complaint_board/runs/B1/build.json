@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 73620,
+ "num_turns": 6,
+ "total_cost_usd": 0.2459946,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 31148,
+  "cache_read_input_tokens": 177726,
+  "output_tokens": 10361,
+  "output_tokens_details": {
+   "thinking_tokens": 1583
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 31148,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1083,
+    "cache_read_input_tokens": 46942,
+    "cache_creation_input_tokens": 878,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 878
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD.md에 따라 웹앱을 만들었습니다. API 6개는 `TestClient`로 일부 호출해 봤고 규칙대로 동작했습니다. 화면(`/`)은 브라우저로 열어 보지 못했고, `/`가 200으로 응답하는 것만 확인했습니다. PRD가 완료 기준으로 든 `tests/test_dod.py`는 이 폴더에 없어서 만들지도 돌리지도 못했습니다.\n\n실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`입니다.\n\n**만든 파일**\n- `main.py`는 FastAPI 앱입니다. 시작할 때마다 `seed/*.csv`로 `civil.db`를 새로 만들고, API 6개와 규칙 R1~R7을 구현했습니다. 거부는 400, 404, 409 순으로 하나만 돌려줍니다.\n- `static/index.html`은 순수 HTML/JS 한 페이지입니다. 현황 숫자, 칸반 4열, 카드 상세, 다음 단계 버튼, 이력, 메시지 줄, 오류 상태(`불러오지 못했습니다` + 다시 시도)를 담았습니다. `data-testid`와 `data-*` 속성은 PRD 4장 이름 그대로 붙였습니다.\n- `seed/staff.csv`(직원 4명)와 `seed/complaints.csv`(민원 8건)는 가상 데이터입니다. 단계별 건수는 3·1·2·2이고, 기한 넘김은 2건입니다. 접수일이 오늘로부터 7일 전인 건(기한 당일) 1건과 10일 전에 종결된 건도 넣었습니다.\n- `requirements.txt`에는 `fastapi`와 `uvicorn`만 적었습니다.\n\n**직접 호출해 본 것**\n- `summary`는 PRD 예시와 같은 값(3·1·2·2, 기한 넘김 2, `as_of` 오늘)이 나왔습니다.\n- 접수에서 배정으로 가는 이동은 200이었고 이력이 한 줄 남았습니다.\n- 건너뛰기, 담당자 없는 배정, 종결된 건 이동은 각각 409, 400, 409였습니다.\n- 없는 민원에 잘못된 본문을 보내면 400, 올바른 본문을 보내면 404였습니다.\n\n**알아둘 점**\n- 시드의 접수일은 2026-10-24 기준 고정 날짜입니다. 날짜가 지나면 기한 넘김 건수와 T2 기준 숫자가 달라지니, 그때는 CSV 날짜를 오늘 기준으로 다시 맞춰야 합니다.\n- `to`가 네 단계가 아닐 때 PRD에 문구가 없어서 `이동할 단계를 선택하세요`로 정했습니다.\n- 이미 있는 단계로 되돌리거나 같은 단계로 보내는 요청은 `상태를 되돌릴 수 없습니다`(409)로 처리했습니다.",
+ "wall_s": 79.0
+}

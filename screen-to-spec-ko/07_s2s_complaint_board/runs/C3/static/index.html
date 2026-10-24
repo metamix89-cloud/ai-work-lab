@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>푸른구청 민원 현황판</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f4f6f9; color: #222; }
+  header { background: #1d4f91; color: #fff; padding: 12px 20px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+  header h1 { font-size: 20px; margin: 0; }
+  header select { padding: 4px; }
+  main { padding: 16px 20px; }
+  #stats { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  .stat { background: #fff; border: 1px solid #d0d7e2; border-radius: 6px; padding: 8px 16px; }
+  .stat.od { border-color: #d32f2f; color: #d32f2f; }
+  #message { min-height: 22px; margin-bottom: 8px; color: #b71c1c; font-weight: bold; }
+  #board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .col { background: #e8ecf3; border-radius: 6px; padding: 8px; min-height: 120px; }
+  .col h2 { font-size: 15px; margin: 0 0 8px; }
+  .card { background: #fff; border: 2px solid #c8cfda; border-radius: 6px; padding: 8px; margin-bottom: 8px; cursor: pointer; font-size: 13px; }
+  .card[data-overdue="1"] { border-color: #d32f2f; }
+  .card .late { color: #d32f2f; font-weight: bold; }
+  .card .t { font-weight: bold; margin-bottom: 4px; }
+  #detail { background: #fff; border: 1px solid #d0d7e2; border-radius: 6px; padding: 12px 16px; margin-top: 16px; }
+  #detail[hidden] { display: none; }
+  #detail textarea { width: 100%; box-sizing: border-box; }
+  #error { background: #fff3f3; border: 1px solid #d32f2f; padding: 12px; margin-bottom: 12px; }
+  #error[hidden] { display: none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>푸른구청 민원 현황판</h1>
+  <label>처리자 <select data-testid="actor" id="actor"></select></label>
+  <span>기준일 <span data-testid="as-of" id="asof"></span></span>
+</header>
+<main>
+  <div id="error" hidden>불러오지 못했습니다 <button id="retry">다시 시도</button></div>
+  <div id="stats"></div>
+  <div data-testid="message" id="message"></div>
+  <div id="board"></div>
+  <section id="detail" hidden></section>
+</main>
+<script>
+const STATUSES = ["접수", "배정", "처리중", "종결"];
+let staff = [], selected = null;
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  const body = await r.json().catch(() => null);
+  return { ok: r.ok, status: r.status, body };
+}
+const setMsg = (t) => { $("message").textContent = t || ""; };
+
+async function load() {
+  try {
+    const [st, sum, cs] = await Promise.all([api("/api/staff"), api("/api/summary"), api("/api/complaints")]);
+    if (!st.ok || !sum.ok || !cs.ok) throw new Error("fail");
+    $("error").hidden = true;
+    if (!staff.length) {
+      staff = st.body;
+      $("actor").innerHTML = staff.map((s) => `<option value="${esc(s.name)}">${esc(s.name)}</option>`).join("");
+    }
+    $("asof").textContent = sum.body.as_of;
+    $("stats").innerHTML = STATUSES.map((s) =>
+      `<div class="stat" data-testid="count" data-status="${s}">${s} <b>${sum.body.counts[s] ?? 0}</b></div>`).join("") +
+      `<div class="stat od" data-testid="overdue-count">기한 넘김 <b>${sum.body.overdue}</b></div>`;
+    $("board").innerHTML = STATUSES.map((s) => {
+      const cards = cs.body.items.filter((i) => i.status === s).map((i) => {
+        const due = i.overdue ? `<span class="late">${-i.days_left}일 지남</span>` : (i.days_left >= 0 ? `D-${i.days_left}` : "");
+        return `<div class="card" data-testid="complaint" data-id="${esc(i.complaint_id)}" data-overdue="${i.overdue ? 1 : 0}">
+          <div class="t">${esc(i.title)}</div>
+          <div>${esc(i.category)} · 접수 ${esc(i.received)}</div>
+          <div>기한 ${esc(i.due)} ${due}</div>
+          <div>담당 ${esc(i.assignee) || "-"}</div></div>`;
+      }).join("");
+      return `<div class="col" data-testid="column" data-status="${s}"><h2>${s}</h2>${cards}</div>`;
+    }).join("");
+    document.querySelectorAll(".card").forEach((el) => el.onclick = () => openDetail(el.dataset.id));
+    if (selected) await openDetail(selected);
+  } catch (e) {
+    $("error").hidden = false;
+  }
+}
+
+async function openDetail(id) {
+  selected = id;
+  const [d, h] = await Promise.all([api("/api/complaints/" + encodeURIComponent(id)), api("/api/complaints/" + encodeURIComponent(id) + "/history")]);
+  if (!d.ok) { setMsg(d.body && d.body.detail); return; }
+  const c = d.body;
+  const idx = STATUSES.indexOf(c.status);
+  const next = STATUSES[idx + 1];
+  let ctl = "";
+  if (next) {
+    if (next === "배정") ctl += `<label>담당자 <select data-testid="assignee" id="assignee">${staff.map((s) => `<option value="${esc(s.name)}">${esc(s.name)}</option>`).join("")}</select></label> `;
+    if (next === "종결") ctl += `<div><textarea data-testid="answer" id="answer" rows="3" placeholder="답변"></textarea></div>`;
+    ctl += `<button data-testid="next-btn" id="next">다음 단계 (${next})</button>`;
+  }
+  $("detail").hidden = false;
+  $("detail").innerHTML = `<h3>${esc(c.title)} (${esc(c.complaint_id)})</h3>
+    <p>${esc(c.category)} · 상태 ${esc(c.status)}</p>
+    <p>담당자: ${esc(c.assignee) || "-"}</p>
+    <p>답변: ${esc(c.answer) || "-"}</p>
+    ${ctl}
+    <h4>이력</h4><ul>${(h.body || []).map((x) =>
+      `<li data-testid="history-item">${esc(x.at)} · ${esc(x.from_status)} → ${esc(x.to_status)} · ${esc(x.by)}</li>`).join("")}</ul>`;
+  if (next) {
+    $("next").onclick = async () => {
+      const body = { to: next, by: $("actor").value, assignee: $("assignee") ? $("assignee").value : "", answer: $("answer") ? $("answer").value : "" };
+      const r = await api("/api/complaints/" + encodeURIComponent(id) + "/transition", {
+        method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      if (!r.ok) { setMsg(r.body && r.body.detail); return; }
+      setMsg("");
+      await load();
+    };
+  }
+}
+
+$("retry").onclick = load;
+load();
+</script>
+</body>
+</html>

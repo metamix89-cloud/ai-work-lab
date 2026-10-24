@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>푸른구청 민원 현황판</title>
+<style>
+body{font-family:"Malgun Gothic",sans-serif;margin:0;background:#f4f6f9;color:#222}
+header{background:#1d4e89;color:#fff;padding:12px 20px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+header h1{font-size:20px;margin:0;flex:1}
+main{padding:16px 20px}
+#counts{display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+#counts div{background:#fff;border-radius:6px;padding:8px 16px;box-shadow:0 1px 2px #0002}
+#counts .od{color:#c00;font-weight:bold}
+#board{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.col{background:#e6eaf0;border-radius:6px;padding:8px;min-height:200px}
+.col h2{font-size:15px;margin:0 0 8px}
+.card{background:#fff;border:2px solid #fff;border-radius:6px;padding:8px;margin-bottom:8px;cursor:pointer;font-size:13px}
+.card[data-overdue="1"]{border-color:#d00}
+.card .late{color:#d00;font-weight:bold}
+#message{min-height:22px;margin:10px 0;color:#b00020;font-weight:bold}
+#detail{background:#fff;border-radius:6px;padding:14px;margin-top:10px}
+#detail[hidden],#error[hidden]{display:none}
+#error{background:#fff0f0;border:1px solid #d00;padding:14px;margin-bottom:10px}
+</style>
+</head>
+<body>
+<header>
+  <h1>푸른구청 민원 현황판</h1>
+  <label>처리자 <select data-testid="actor"></select></label>
+  <span>기준일 <span data-testid="as-of"></span></span>
+</header>
+<main>
+  <div id="error" hidden><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+  <div id="counts"></div>
+  <div id="message" data-testid="message"></div>
+  <div id="board"></div>
+  <div id="detail" hidden></div>
+</main>
+<script>
+const STATUSES = ["접수","배정","처리중","종결"];
+let staff = [], openId = null;
+const $ = s => document.querySelector(s);
+const ESC = {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"};
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ESC[c]);
+
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  let body = null;
+  try { body = await r.json(); } catch (e) {}
+  if (!r.ok) { const e = new Error("api"); e.detail = body && body.detail; throw e; }
+  return body;
+}
+
+async function load() {
+  try {
+    if (!staff.length) {
+      staff = await api("/api/staff");
+      $('[data-testid="actor"]').innerHTML = staff.map(s => `<option value="${esc(s.name)}">${esc(s.name)}</option>`).join("");
+    }
+    const [sum, list] = await Promise.all([api("/api/summary"), api("/api/complaints")]);
+    $("#error").hidden = true;
+    $('[data-testid="as-of"]').textContent = sum.as_of;
+    $("#counts").innerHTML = STATUSES.map(s => `<div data-testid="count" data-status="${s}">${s} ${sum.counts[s]}</div>`).join("")
+      + `<div class="od">기한 넘김 <span data-testid="overdue-count">${sum.overdue}</span></div>`;
+    $("#board").innerHTML = STATUSES.map(s => {
+      const cards = list.items.filter(i => i.status === s).map(i => {
+        const due = i.overdue ? `<span class="late">${-i.days_left}일 지남</span>` : (i.status === "종결" ? "종결" : `D-${i.days_left}`);
+        return `<div class="card" data-testid="complaint" data-id="${esc(i.complaint_id)}" data-overdue="${i.overdue ? 1 : 0}">
+          <b>${esc(i.title)}</b><br>${esc(i.category)} · 접수 ${esc(i.received)}<br>기한 ${esc(i.due)} (${due})<br>담당 ${esc(i.assignee || "-")}</div>`;
+      }).join("");
+      return `<div class="col" data-testid="column" data-status="${s}"><h2>${s}</h2>${cards}</div>`;
+    }).join("");
+    document.querySelectorAll(".card").forEach(el => el.onclick = () => showDetail(el.dataset.id));
+    if (openId) await showDetail(openId);
+  } catch (e) {
+    $("#error").hidden = false;
+  }
+}
+
+async function showDetail(id) {
+  openId = id;
+  try {
+    const q = encodeURIComponent(id);
+    const [c, hist] = await Promise.all([api("/api/complaints/" + q), api("/api/complaints/" + q + "/history")]);
+    const next = STATUSES[STATUSES.indexOf(c.status) + 1];
+    let ctl = "";
+    if (next) {
+      if (next === "배정") ctl += `<select data-testid="assignee"><option value="">담당자 선택</option>${staff.map(s => `<option value="${esc(s.name)}">${esc(s.name)}</option>`).join("")}</select> `;
+      if (next === "종결") ctl += `<textarea data-testid="answer" rows="3" cols="40" placeholder="답변"></textarea> `;
+      ctl += `<button data-testid="next-btn">다음 단계 (${next})</button>`;
+    }
+    const d = $("#detail");
+    d.hidden = false;
+    d.innerHTML = `<h3>${esc(c.title)} (${esc(c.complaint_id)})</h3>
+      <p>내용: ${esc(c.category)} 분야 민원 · 상태 ${esc(c.status)}</p>
+      <p>담당자: ${esc(c.assignee || "-")}</p><p>답변: ${esc(c.answer || "-")}</p>
+      <div>${ctl}</div><h4>이력</h4><ul>${hist.map(h => `<li data-testid="history-item">${esc(h.at)} · ${esc(h.from_status)} → ${esc(h.to_status)} · ${esc(h.by)}</li>`).join("")}</ul>`;
+    const btn = d.querySelector('[data-testid="next-btn"]');
+    if (btn) btn.onclick = () => move(id, next);
+  } catch (e) {
+    $("#error").hidden = false;
+  }
+}
+
+async function move(id, to) {
+  const a = document.querySelector('[data-testid="assignee"]'), t = document.querySelector('[data-testid="answer"]');
+  try {
+    await api(`/api/complaints/${encodeURIComponent(id)}/transition`, {
+      method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({to, by: $('[data-testid="actor"]').value, assignee: a ? a.value : "", answer: t ? t.value : ""})
+    });
+    $("#message").textContent = "";
+    await load();
+  } catch (e) {
+    $("#message").textContent = e.detail || "불러오지 못했습니다";
+  }
+}
+
+$("#retry").onclick = load;
+load();
+</script>
+</body>
+</html>

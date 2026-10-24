@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 90027,
+ "num_turns": 10,
+ "total_cost_usd": 0.31904180000000004,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 36339,
+  "cache_read_input_tokens": 231118,
+  "output_tokens": 15055,
+  "output_tokens_details": {
+   "thinking_tokens": 940
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 36339,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 778,
+    "cache_read_input_tokens": 52410,
+    "cache_creation_input_tokens": 601,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 601
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD.md대로 웹앱을 만들었습니다. 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`으로 실행하면 됩니다. 포트는 `PORT` 환경 변수가 있으면 그 값을 따릅니다.\n\nAPI 쪽만 TestClient로 확인했습니다. 브라우저 화면(칸반, 상세, 다음 단계 버튼)은 열어서 확인하지 못했습니다. 폴더에 `tests/test_dod.py`가 없어서 T1~T9도 돌리지 못했습니다. 대신 아래 항목을 직접 호출해 봤습니다.\n\n- `/`가 200으로 열립니다.\n- `summary`가 건수 3·1·2·2, 기한 넘김 2, `as_of` 2026-10-24로 나옵니다.\n- 접수 → 처리중 건너뛰기는 409입니다.\n- 접수 → 배정은 200이고 이력 한 줄이 남습니다.\n- 없는 민원에 잘못된 본문은 400, 올바른 본문은 404입니다.\n- 종결된 건 이동은 409입니다.\n\n만든 파일은 다음과 같습니다.\n- `main.py`: API 6개와 규칙 R1~R7. 서버를 시작할 때마다 `seed/`의 CSV로 `civil.db`를 새로 만듭니다.\n- `static/index.html`: 현황 숫자, 칸반, 상세, 이력, 메시지 줄, 오류 상태와 다시 시도 버튼. PRD의 `data-testid`를 모두 넣었습니다.\n- `seed/staff.csv`, `seed/complaints.csv`: 직원 4명, 민원 8건. 기한 넘김 2건(8일 전, 9일 전 접수)과 기한 당일 1건(7일 전 접수)이 들어 있습니다.\n\n**seed 날짜:** 접수일을 오늘(2026-10-24) 기준 고정 날짜로 적어 놨습니다. 날짜가 바뀌면 건수가 어긋나서 T2·T3이 깨지므로, 그때는 CSV의 `received`를 오늘 기준으로 다시 맞춰 주세요.",
+ "wall_s": 98.6
+}

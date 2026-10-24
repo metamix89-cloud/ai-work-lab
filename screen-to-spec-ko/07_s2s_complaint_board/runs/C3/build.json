@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 46108,
+ "num_turns": 8,
+ "total_cost_usd": 0.23790670000000003,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 36253,
+  "cache_read_input_tokens": 188647,
+  "output_tokens": 7401,
+  "output_tokens_details": {
+   "thinking_tokens": 394
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 36253,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 219,
+    "cache_read_input_tokens": 52536,
+    "cache_creation_input_tokens": 389,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 389
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/staff.csv, seed/complaints.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음. PRD 6개 API 외에 추가한 경로는 `/`(화면 제공)뿐이다. `to` 가 네 단계가 아닐 때의 400 `detail` 문구(`단계를 선택하세요`)와, 없는 민원일 때의 404 `detail` 문구(`민원을 찾을 수 없습니다`)는 PRD 에 정해져 있지 않아 제가 정했다.",
+ "wall_s": 56.2
+}

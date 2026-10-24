@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>푸른구청 민원 접수 · 처리 현황판</title>
+<style>
+:root{--bg:#f3f6fa;--card:#fff;--ink:#1d2733;--sub:#667385;--line:#dde4ee;--brand:#1f6feb;
+--red:#d92d20;--redbg:#fef0ee;--amber:#b54708;--amberbg:#fff6e5;--green:#067647}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif;background:var(--bg);color:var(--ink)}
+header{background:#14365d;color:#fff;padding:14px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+header h1{font-size:18px;margin:0;flex:1}
+header h1 small{font-weight:400;opacity:.75;margin-left:8px}
+button,select,input,textarea{font:inherit}
+.btn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:6px 12px;cursor:pointer}
+.btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+.btn:disabled{opacity:.5;cursor:default}
+.stats{display:flex;gap:10px;padding:14px 24px 0;flex-wrap:wrap}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 16px;min-width:110px}
+.stat b{display:block;font-size:22px}.stat span{font-size:12px;color:var(--sub)}
+.stat.bad{border-color:var(--red);background:var(--redbg)}.stat.bad b{color:var(--red)}
+.stat.warn b{color:var(--amber)}
+.filters{display:flex;gap:8px;padding:12px 24px;flex-wrap:wrap;align-items:center}
+.filters input,.filters select{padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:#fff}
+.filters label{font-size:13px;color:var(--sub);display:flex;gap:4px;align-items:center}
+.board{display:grid;grid-template-columns:repeat(4,minmax(240px,1fr));gap:14px;padding:0 24px 24px;align-items:start}
+.col{background:#e8edf4;border-radius:10px;padding:10px;min-height:240px}
+.col.over{outline:2px dashed var(--brand);background:#dce8fb}
+.col h2{font-size:15px;margin:2px 4px 10px;display:flex;justify-content:space-between}
+.col h2 .n{background:#fff;border-radius:10px;padding:0 9px;font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-left:4px solid #9aa8bb;border-radius:8px;
+padding:10px;margin-bottom:8px;cursor:grab;font-size:13px}
+.card:hover{box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.card.overdue{border-left-color:var(--red);background:var(--redbg);border-color:#f4b5ae;animation:pulse 2s infinite}
+.card.soon{border-left-color:#f79009;background:var(--amberbg)}
+.card.dragging{opacity:.4}
+@keyframes pulse{50%{box-shadow:0 0 0 3px rgba(217,45,32,.25)}}
+.card .t{font-weight:600;font-size:14px;margin:4px 0}
+.card .meta{display:flex;justify-content:space-between;color:var(--sub);font-size:12px;gap:6px}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:9px;background:#eef2f7;color:var(--sub);margin-right:4px}
+.tag.긴급{background:var(--red);color:#fff}.tag.높음{background:#fedf89;color:#7a2e0e}
+.tag.od{background:var(--red);color:#fff;font-weight:700}
+.tag.sn{background:#fdb022;color:#4a2a00;font-weight:700}
+.tag.late{background:#f2f4f7;color:var(--red);border:1px solid var(--red)}
+.dl{font-weight:600}.dl.od{color:var(--red)}.dl.sn{color:var(--amber)}
+.empty{color:var(--sub);text-align:center;padding:20px 0;font-size:13px}
+.modal-bg{position:fixed;inset:0;background:rgba(10,20,35,.5);display:none;align-items:center;justify-content:center;z-index:10}
+.modal-bg.on{display:flex}
+.modal{background:#fff;border-radius:12px;width:min(680px,94vw);max-height:92vh;overflow:auto;padding:20px}
+.modal h3{margin:0 0 4px}
+.row{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap;align-items:center}
+.modal input,.modal select,.modal textarea{width:100%;padding:7px;border:1px solid var(--line);border-radius:6px}
+.modal .row input,.modal .row select{width:auto;flex:1}
+.modal label{font-size:12px;color:var(--sub);display:block;margin-top:8px}
+.box{background:#f6f8fb;border-radius:8px;padding:10px;margin:8px 0;font-size:14px;white-space:pre-wrap}
+.reply{border-left:3px solid var(--brand);background:#f0f6ff;padding:8px 10px;margin:6px 0;border-radius:4px;font-size:13px;white-space:pre-wrap}
+.reply small{color:var(--sub);display:block}
+.hist{font-size:12px;color:var(--sub);margin:0;padding-left:16px}
+.stepper{display:flex;gap:4px;margin:10px 0}
+.stepper div{flex:1;text-align:center;padding:5px;border-radius:5px;background:#eef2f7;font-size:12px;color:var(--sub)}
+.stepper .on{background:var(--brand);color:#fff;font-weight:700}
+.stepper .done{background:#cfe0fb;color:#14365d}
+.alert{background:var(--redbg);color:var(--red);border:1px solid #f4b5ae;border-radius:6px;padding:6px 10px;font-weight:600;font-size:13px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1d2733;color:#fff;padding:10px 18px;border-radius:8px;display:none;z-index:20}
+@media(max-width:900px){.board{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🏛 푸른구청 민원 접수 · 처리 현황판<small id="clock"></small></h1>
+  <button class="btn" id="resetBtn">데모 데이터 초기화</button>
+  <button class="btn primary" id="newBtn">+ 민원 접수</button>
+</header>
+<div class="stats" id="stats"></div>
+<div class="filters">
+  <input id="q" placeholder="제목·내용·접수번호·민원인 검색" size="28">
+  <select id="fCat"><option value="">전체 분류</option></select>
+  <select id="fStaff"><option value="">전체 담당자</option><option value="none">미배정</option></select>
+  <label><input type="checkbox" id="fOver"> 기한 초과만</label>
+  <label><input type="checkbox" id="fHideClosed"> 종결 숨기기</label>
+</div>
+<div class="board" id="board"></div>
+<div class="modal-bg" id="mbg"><div class="modal" id="modal"></div></div>
+<div id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let META, DATA = [];
+
+async function api(path, method = "GET", body) {
+  const r = await fetch("/api" + path, {method, headers: {"Content-Type": "application/json"},
+    body: body ? JSON.stringify(body) : undefined});
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    const d = j.detail;
+    throw new Error(typeof d === "string" ? d : "입력값을 확인해 주세요.");
+  }
+  return j;
+}
+function toast(msg) {
+  const t = $("#toast"); t.textContent = msg; t.style.display = "block";
+  clearTimeout(toast.h); toast.h = setTimeout(() => t.style.display = "none", 3000);
+}
+function fmtLeft(c) {
+  const h = c.hours_left;
+  if (c.status === "종결") return c.overdue ? "기한 초과 후 종결" : "기한 내 종결";
+  const a = Math.abs(h), d = Math.floor(a / 24), hh = Math.floor(a % 24);
+  const s = d ? `${d}일 ${hh}시간` : `${hh}시간`;
+  return h < 0 ? `${s} 초과` : `${s} 남음`;
+}
+
+async function load() {
+  const [list, st] = await Promise.all([api("/complaints"), api("/stats")]);
+  DATA = list; renderStats(st); render();
+}
+function renderStats(s) {
+  $("#stats").innerHTML =
+    `<div class="stat"><b>${s.total}</b><span>전체 민원</span></div>` +
+    META.statuses.map(k => `<div class="stat"><b>${s.by_status[k]}</b><span>${k}</span></div>`).join("") +
+    `<div class="stat bad"><b>${s.overdue}</b><span>⚠ 기한 초과(미종결)</span></div>` +
+    `<div class="stat warn"><b>${s.due_soon}</b><span>24시간 내 기한</span></div>`;
+}
+function visible(c) {
+  const q = $("#q").value.trim().toLowerCase();
+  if (q && !(c.title + c.content + c.ticket_no + c.citizen_name).toLowerCase().includes(q)) return false;
+  if ($("#fCat").value && c.category !== $("#fCat").value) return false;
+  const fs = $("#fStaff").value;
+  if (fs === "none" && c.assignee_id) return false;
+  if (fs && fs !== "none" && String(c.assignee_id) !== fs) return false;
+  if ($("#fOver").checked && !c.overdue_open) return false;
+  return true;
+}
+function render() {
+  const hideClosed = $("#fHideClosed").checked;
+  $("#board").innerHTML = META.statuses.map(s => {
+    if (s === "종결" && hideClosed) return "";
+    const items = DATA.filter(c => c.status === s && visible(c));
+    if (s !== "종결") items.sort((a, b) => a.hours_left - b.hours_left); // 급한 건 위로
+    return `<section class="col" data-status="${s}"><h2>${s}<span class="n">${items.length}</span></h2>` +
+      (items.map(card).join("") || `<div class="empty">해당 민원 없음</div>`) + `</section>`;
+  }).join("");
+  document.querySelectorAll(".card").forEach(el => {
+    el.onclick = () => openDetail(+el.dataset.id);
+    el.ondragstart = e => { e.dataTransfer.setData("text/plain", el.dataset.id); el.classList.add("dragging"); };
+    el.ondragend = () => el.classList.remove("dragging");
+  });
+  document.querySelectorAll(".col").forEach(col => {
+    col.ondragover = e => { e.preventDefault(); col.classList.add("over"); };
+    col.ondragleave = () => col.classList.remove("over");
+    col.ondrop = e => { e.preventDefault(); col.classList.remove("over"); drop(+e.dataTransfer.getData("text/plain"), col.dataset.status); };
+  });
+}
+function card(c) {
+  const cls = c.overdue_open ? "overdue" : c.due_soon ? "soon" : "";
+  const flag = c.overdue_open ? `<span class="tag od">기한 초과</span>` :
+    c.due_soon ? `<span class="tag sn">기한 임박</span>` :
+    (c.status === "종결" && c.overdue ? `<span class="tag late">기한 초과 종결</span>` : "");
+  const dl = c.overdue_open ? "od" : c.due_soon ? "sn" : "";
+  return `<div class="card ${cls}" draggable="true" data-id="${c.id}">
+    <div class="meta"><span>${esc(c.ticket_no)}</span><span>${flag}</span></div>
+    <div class="t">${esc(c.title)}</div>
+    <div><span class="tag ${esc(c.priority)}">${esc(c.priority)}</span><span class="tag">${esc(c.category)}</span></div>
+    <div class="meta" style="margin-top:6px">
+      <span>👤 ${c.assignee_name ? esc(c.assignee_name) : "<b style='color:var(--red)'>미배정</b>"}</span>
+      <span class="dl ${dl}">${fmtLeft(c)}</span></div>
+    <div class="meta"><span>💬 답변 ${c.reply_count}</span><span>~${esc(c.due_at.slice(5, 16))}</span></div></div>`;
+}
+
+async function drop(id, status) {
+  const c = DATA.find(x => x.id === id);
+  if (!c || c.status === status) return;
+  if (status === "배정" && c.status === "접수") return openDetail(id, "assign");
+  try {
+    await api(`/complaints/${id}/status`, "POST", {status});
+    toast(`'${status}' 단계로 이동했습니다.`); await load();
+  } catch (e) {
+    toast(e.message);
+    if (/답변|담당자/.test(e.message)) openDetail(id, /답변/.test(e.message) ? "reply" : "assign");
+  }
+}
+
+// ---------- 상세 ----------
+async function openDetail(id, focus) {
+  const c = await api("/complaints/" + id);
+  const idx = META.statuses.indexOf(c.status), next = META.statuses[idx + 1];
+  const staffOpts = META.staff.map(s => {
+    const pref = META.cat_dept[c.category] === s.dept ? "★ " : "";
+    return `<option value="${s.id}" ${s.id === c.assignee_id ? "selected" : ""}>${pref}${esc(s.name)} (${esc(s.dept)})</option>`;
+  }).join("");
+  $("#modal").innerHTML = `
+    <div style="display:flex;justify-content:space-between"><div><h3>${esc(c.title)}</h3>
+      <small style="color:var(--sub)">${esc(c.ticket_no)} · ${esc(c.category)} · 우선순위 ${esc(c.priority)}</small></div>
+      <button class="btn" id="xBtn">닫기</button></div>
+    <div class="stepper">${META.statuses.map((s, i) => `<div class="${i < idx ? "done" : i === idx ? "on" : ""}">${s}</div>`).join("")}</div>
+    ${c.overdue_open ? `<div class="alert">⚠ 처리 기한을 ${fmtLeft(c)}했습니다. 신속한 처리가 필요합니다.</div>` : ""}
+    <div class="row" style="font-size:13px;color:var(--sub)">
+      <span>민원인: ${esc(c.citizen_name)} ${esc(c.phone)}</span><span>접수: ${esc(c.received_at.slice(0, 16))}</span>
+      <span>기한: <b>${esc(c.due_at.slice(0, 16))}</b> (${fmtLeft(c)})</span></div>
+    <div class="box">${esc(c.content)}</div>
+    <label>담당자 ${c.status === "접수" ? "(배정하면 '배정' 단계로 이동)" : ""}</label>
+    <div class="row"><select id="staffSel" ${c.status === "종결" ? "disabled" : ""}><option value="">-- 선택 --</option>${staffOpts}</select>
+      <button class="btn primary" id="asgBtn" style="flex:0" ${c.status === "종결" ? "disabled" : ""}>${c.assignee_id ? "변경" : "배정"}</button></div>
+    <label>답변 (${c.replies.length}건)</label>
+    ${c.replies.map(r => `<div class="reply"><small>${esc(r.author)} · ${esc(r.created_at.slice(0, 16))}</small>${esc(r.content)}</div>`).join("") || `<div class="empty">등록된 답변이 없습니다.</div>`}
+    <textarea id="replyTx" rows="3" placeholder="${c.assignee_id ? "민원인에게 보낼 답변을 입력하세요" : "담당자를 먼저 배정하세요"}" ${c.assignee_id ? "" : "disabled"}></textarea>
+    <div class="row"><button class="btn" id="rpBtn" ${c.assignee_id ? "" : "disabled"}>답변 등록</button>
+      <span style="flex:1"></span>
+      ${next ? `<button class="btn primary" id="nxBtn">${c.status} → ${next}</button>` : ""}</div>
+    <label>처리 이력</label>
+    <ul class="hist">${c.history.map(h => `<li>${esc(h.created_at.slice(5, 16))} ${esc(h.message)}</li>`).join("")}</ul>`;
+  $("#mbg").classList.add("on");
+  $("#xBtn").onclick = closeModal;
+  const act = async (fn, okMsg) => {
+    try { await fn(); toast(okMsg); await load(); await openDetail(id); } catch (e) { toast(e.message); }
+  };
+  $("#asgBtn").onclick = () => {
+    const v = +$("#staffSel").value;
+    if (!v) return toast("담당자를 선택하세요.");
+    act(() => api(`/complaints/${id}/assign`, "POST", {staff_id: v}), "담당자를 지정했습니다.");
+  };
+  $("#rpBtn").onclick = () => {
+    const v = $("#replyTx").value.trim();
+    if (v.length < 2) return toast("답변 내용을 입력하세요.");
+    act(() => api(`/complaints/${id}/replies`, "POST", {content: v}), "답변을 등록했습니다.");
+  };
+  if (next) $("#nxBtn").onclick = () => act(() => api(`/complaints/${id}/status`, "POST", {status: next}), `'${next}' 단계로 이동했습니다.`);
+  if (focus === "assign") $("#staffSel").focus();
+  if (focus === "reply" && c.assignee_id) $("#replyTx").focus();
+}
+function closeModal() { $("#mbg").classList.remove("on"); }
+$("#mbg").onclick = e => { if (e.target.id === "mbg") closeModal(); };
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+// ---------- 신규 접수 ----------
+$("#newBtn").onclick = () => {
+  const opts = a => a.map(x => `<option>${esc(x)}</option>`).join("");
+  $("#modal").innerHTML = `<h3>새 민원 접수</h3>
+    <label>제목</label><input id="nTitle" maxlength="100">
+    <label>내용</label><textarea id="nContent" rows="4"></textarea>
+    <div class="row"><div style="flex:1"><label>분류</label><select id="nCat">${opts(META.categories)}</select></div>
+      <div style="flex:1"><label>우선순위 (처리기한: 보통 7일 / 높음 5일 / 긴급 2일)</label><select id="nPri">${opts(META.priorities)}</select></div></div>
+    <div class="row"><div style="flex:1"><label>민원인</label><input id="nName" maxlength="30"></div>
+      <div style="flex:1"><label>연락처</label><input id="nPhone" maxlength="30" placeholder="010-0000-0011"></div></div>
+    <div class="row" style="justify-content:flex-end"><button class="btn" id="cBtn">취소</button><button class="btn primary" id="sBtn">접수</button></div>`;
+  $("#mbg").classList.add("on");
+  $("#cBtn").onclick = closeModal;
+  $("#sBtn").onclick = async () => {
+    try {
+      await api("/complaints", "POST", {title: $("#nTitle").value, content: $("#nContent").value,
+        category: $("#nCat").value, priority: $("#nPri").value, citizen_name: $("#nName").value, phone: $("#nPhone").value});
+      closeModal(); toast("민원이 접수되었습니다."); load();
+    } catch (e) { toast(e.message); }
+  };
+};
+$("#resetBtn").onclick = async () => {
+  if (!confirm("모든 데이터를 삭제하고 데모 데이터로 되돌립니다. 계속할까요?")) return;
+  await api("/reset", "POST"); await load(); toast("데모 데이터로 초기화했습니다.");
+};
+["q", "fCat", "fStaff", "fOver", "fHideClosed"].forEach(id => $("#" + id).addEventListener("input", render));
+
+(async () => {
+  META = await api("/meta");
+  $("#fCat").innerHTML += META.categories.map(c => `<option>${esc(c)}</option>`).join("");
+  $("#fStaff").innerHTML += META.staff.map(s => `<option value="${s.id}">${esc(s.name)} (${esc(s.dept)})</option>`).join("");
+  await load();
+  const tick = () => $("#clock").textContent = new Date().toLocaleString("ko-KR");
+  tick(); setInterval(tick, 30000);
+  setInterval(load, 60000); // 기한 경과 반영을 위해 1분마다 새로고침 (모달이 열려 있지 않을 때)
+})();
+</script>
+</body>
+</html>

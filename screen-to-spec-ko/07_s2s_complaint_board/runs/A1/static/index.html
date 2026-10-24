@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>푸른구청 민원 처리 현황판</title>
+<style>
+:root{--bg:#f3f6fa;--card:#fff;--line:#dde4ec;--text:#1d2733;--sub:#6b7a8c;--brand:#1f6feb;--red:#d6293e;--redbg:#fdecee;--amber:#b86e00;--amberbg:#fff4e0;--green:#1a7f4b}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif;background:var(--bg);color:var(--text)}
+header{background:var(--brand);color:#fff;padding:14px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+header h1{font-size:20px;margin:0;flex:1}
+button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--line);background:#fff;padding:6px 12px}
+button.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+header button{border-color:#fff;color:var(--brand);font-weight:600}
+.stats{display:flex;gap:12px;padding:14px 24px 0;flex-wrap:wrap;align-items:center}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 16px;min-width:110px}
+.stat b{display:block;font-size:22px}.stat span{font-size:12px;color:var(--sub)}
+.stat.bad{border-color:var(--red);background:var(--redbg)}.stat.bad b{color:var(--red)}
+.stat.warn b{color:var(--amber)}
+.filters{margin-left:auto;display:flex;gap:8px;align-items:center;font-size:13px}
+select,input,textarea{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:6px;width:100%}
+.filters select{width:auto}
+.board{display:grid;grid-template-columns:repeat(4,minmax(240px,1fr));gap:14px;padding:14px 24px 24px;align-items:start}
+.col{background:#e8eef5;border-radius:10px;padding:10px;min-height:300px}
+.col.over{outline:2px dashed var(--brand)}
+.col h2{font-size:15px;margin:2px 4px 10px;display:flex;justify-content:space-between}
+.col h2 em{font-style:normal;background:#fff;border-radius:10px;padding:0 9px;font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-left:5px solid #9fb3c8;border-radius:8px;padding:10px;margin-bottom:9px;cursor:grab}
+.card:hover{box-shadow:0 2px 8px #0002}
+.card.overdue{border-left-color:var(--red);background:var(--redbg);border-color:var(--red);animation:pulse 2s infinite}
+.card.soon{border-left-color:#f0a020}
+.card.done{opacity:.85;border-left-color:var(--green)}
+@keyframes pulse{50%{box-shadow:0 0 0 3px #d6293e33}}
+.card .t{font-weight:600;font-size:14px;margin-bottom:6px}
+.meta{font-size:12px;color:var(--sub);display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.badge{display:inline-block;font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;margin-right:4px}
+.b-over{background:var(--red);color:#fff}.b-soon{background:var(--amberbg);color:var(--amber)}
+.b-ok{background:#e8f1ff;color:var(--brand)}.b-late{background:#eee;color:var(--sub)}.b-none{background:#eee;color:var(--red)}
+dialog{border:none;border-radius:12px;padding:0;width:min(640px,94vw);box-shadow:0 10px 40px #0005}
+dialog::backdrop{background:#0006}
+.dlg{padding:20px;max-height:86vh;overflow:auto}
+.dlg h3{margin:0 0 4px}
+.row{display:flex;gap:8px;margin:10px 0;align-items:center}
+.row label{width:70px;font-size:13px;color:var(--sub);flex:none}
+.content{background:#f6f8fb;border-radius:8px;padding:10px;white-space:pre-wrap;font-size:14px}
+.reply{border-left:3px solid var(--brand);padding:6px 10px;margin:8px 0;background:#f6f8fb;white-space:pre-wrap;font-size:14px}
+.reply small{display:block;color:var(--sub)}
+.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 18px;border-radius:8px;display:none;z-index:9}
+@media(max-width:900px){.board{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🏛️ 푸른구청 민원 접수 · 처리 현황판</h1>
+  <button onclick="openNew()">+ 민원 접수</button>
+</header>
+<div class="stats" id="stats"></div>
+<div class="board" id="board"></div>
+
+<dialog id="dlg"><div class="dlg" id="dlgBody"></div></dialog>
+<div id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let meta, items = [], filter = {staff:"", category:"", overdue:false};
+
+async function api(path, method="GET", body){
+  const r = await fetch("/api"+path, {method, headers:{"Content-Type":"application/json"}, body: body?JSON.stringify(body):undefined});
+  const data = await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(typeof data.detail === "string" ? data.detail : "요청이 올바르지 않습니다.");
+  return data;
+}
+function toast(msg){const t=$("#toast");t.textContent=msg;t.style.display="block";clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display="none",2800);}
+
+function dueBadge(c){
+  if(c.status==="종결") return c.late_closed?'<span class="badge b-late">기한 후 종결</span>':'<span class="badge b-ok">기한 내 종결</span>';
+  if(c.overdue) return `<span class="badge b-over">⚠ ${-c.days_left}일 초과</span>`;
+  if(c.days_left<=2) return `<span class="badge b-soon">${c.days_left===0?"오늘 마감":"D-"+c.days_left}</span>`;
+  return `<span class="badge b-ok">D-${c.days_left}</span>`;
+}
+
+async function load(){
+  [items] = await Promise.all([api("/complaints")]);
+  render();
+}
+function visible(){
+  return items.filter(c =>
+    (!filter.staff || String(c.assignee_id)===filter.staff || (filter.staff==="none" && !c.assignee_id)) &&
+    (!filter.category || c.category===filter.category) &&
+    (!filter.overdue || c.overdue));
+}
+function render(){
+  const all = items;
+  const cnt = s => all.filter(c=>c.status===s).length;
+  const over = all.filter(c=>c.overdue).length;
+  const soon = all.filter(c=>!c.overdue && c.days_left!==null && c.days_left<=2).length;
+  $("#stats").innerHTML =
+    `<div class="stat"><b>${all.length}</b><span>전체 민원</span></div>`+
+    meta.statuses.map(s=>`<div class="stat"><b>${cnt(s)}</b><span>${s}</span></div>`).join("")+
+    `<div class="stat bad"><b>${over}</b><span>기한 초과</span></div>`+
+    `<div class="stat warn"><b>${soon}</b><span>마감 임박(2일 이내)</span></div>`+
+    `<div class="filters">
+      <select id="fStaff"><option value="">담당자 전체</option><option value="none">미배정</option>${meta.staff.map(s=>`<option value="${s.id}">${esc(s.name)} (${esc(s.dept)})</option>`).join("")}</select>
+      <select id="fCat"><option value="">분류 전체</option>${meta.categories.map(c=>`<option>${esc(c)}</option>`).join("")}</select>
+      <label><input type="checkbox" id="fOver" style="width:auto"> 기한 초과만</label></div>`;
+  $("#fStaff").value=filter.staff;$("#fCat").value=filter.category;$("#fOver").checked=filter.overdue;
+  $("#fStaff").onchange=e=>{filter.staff=e.target.value;render()};
+  $("#fCat").onchange=e=>{filter.category=e.target.value;render()};
+  $("#fOver").onchange=e=>{filter.overdue=e.target.checked;render()};
+
+  const list = visible();
+  $("#board").innerHTML = meta.statuses.map(s=>{
+    const cs = list.filter(c=>c.status===s).sort((a,b)=>(b.overdue-a.overdue)||a.due_date.localeCompare(b.due_date));
+    return `<div class="col" data-status="${s}"><h2>${s}<em>${cs.length}</em></h2>${cs.map(card).join("")}</div>`;
+  }).join("");
+  document.querySelectorAll(".card").forEach(el=>{
+    el.onclick=()=>openDetail(+el.dataset.id);
+    el.ondragstart=e=>e.dataTransfer.setData("text/plain", el.dataset.id);
+  });
+  document.querySelectorAll(".col").forEach(col=>{
+    col.ondragover=e=>{e.preventDefault();col.classList.add("over")};
+    col.ondragleave=()=>col.classList.remove("over");
+    col.ondrop=e=>{e.preventDefault();col.classList.remove("over");drop(+e.dataTransfer.getData("text/plain"), col.dataset.status)};
+  });
+}
+function card(c){
+  const cls = c.status==="종결"?"done":c.overdue?"overdue":(c.days_left<=2?"soon":"");
+  return `<div class="card ${cls}" draggable="true" data-id="${c.id}">
+    <div class="t">${dueBadge(c)}${esc(c.title)}</div>
+    <div class="meta"><span>#${c.id} · ${esc(c.category)}</span><span>기한 ${esc(c.due_date)}</span></div>
+    <div class="meta" style="margin-top:4px"><span>${c.assignee_name?"👤 "+esc(c.assignee_name)+" ("+esc(c.assignee_dept)+")":'<span class="badge b-none">미배정</span>'}</span><span>${esc(c.applicant)}</span></div></div>`;
+}
+async function drop(id, status){
+  const c = items.find(x=>x.id===id);
+  if(!c || c.status===status) return;
+  if(status==="종결"){ toast("종결은 답변을 등록하면서 처리합니다."); return openDetail(id); }
+  if(status==="배정" && c.status==="접수" && !c.assignee_id){ toast("담당자를 선택해 배정해 주세요."); return openDetail(id); }
+  try{ await api(`/complaints/${id}/status`,"POST",{status}); await load(); }
+  catch(e){ toast(e.message); }
+}
+
+async function openDetail(id){
+  const c = await api("/complaints/"+id);
+  const closed = c.status==="종결";
+  $("#dlgBody").innerHTML = `
+    <h3>#${c.id} ${esc(c.title)}</h3>
+    <div>${dueBadge(c)}<span class="badge b-ok">${esc(c.status)}</span><span class="badge b-ok">${esc(c.category)}</span></div>
+    <div class="row"><label>신청인</label><span>${esc(c.applicant)}</span></div>
+    <div class="row"><label>접수 / 기한</label><span>${esc(c.received_at)} / ${esc(c.due_date)}${c.closed_at?" / 종결 "+esc(c.closed_at):""}</span></div>
+    <div class="content">${esc(c.content)}</div>
+    <div class="row"><label>담당자</label>
+      <select id="selStaff" ${closed?"disabled":""}><option value="">-- 선택 --</option>${meta.staff.map(s=>`<option value="${s.id}" ${s.id===c.assignee_id?"selected":""}>${esc(s.name)} (${esc(s.dept)})</option>`).join("")}</select>
+      ${closed?"":'<button class="primary" id="btnAssign">배정</button>'}</div>
+    <h4>답변 이력</h4>
+    ${c.replies.length?c.replies.map(r=>`<div class="reply"><small>${esc(r.author)} · ${esc(r.created_at)}</small>${esc(r.body)}</div>`).join(""):'<div style="color:var(--sub);font-size:13px">등록된 답변이 없습니다.</div>'}
+    ${closed?"":`<textarea id="replyBody" rows="3" placeholder="답변 내용을 입력하세요 (담당자 배정 후 등록 가능)"></textarea>
+      <div class="actions"><button id="btnReply">답변 등록</button><button class="primary" id="btnClose">답변 등록 후 종결</button></div>`}
+    <div class="actions"><button onclick="$('#dlg').close()">닫기</button></div>`;
+  $("#dlg").showModal();
+  if(closed) return;
+  $("#btnAssign").onclick=async()=>{
+    const v=$("#selStaff").value; if(!v) return toast("담당자를 선택하세요.");
+    try{await api(`/complaints/${id}/assign`,"POST",{staff_id:+v});toast("배정되었습니다.");await load();openDetail(id);}catch(e){toast(e.message)}
+  };
+  const send = close => async()=>{
+    const body=$("#replyBody").value.trim(); if(!body) return toast("답변 내용을 입력하세요.");
+    try{await api(`/complaints/${id}/reply`,"POST",{body,close});toast(close?"종결 처리되었습니다.":"답변이 등록되었습니다.");await load();openDetail(id);}catch(e){toast(e.message)}
+  };
+  $("#btnReply").onclick=send(false); $("#btnClose").onclick=send(true);
+}
+
+function openNew(){
+  $("#dlgBody").innerHTML = `<h3>새 민원 접수</h3>
+    <div class="row"><label>제목</label><input id="nTitle" maxlength="100"></div>
+    <div class="row"><label>분류</label><select id="nCat">${meta.categories.map(c=>`<option>${esc(c)}</option>`).join("")}</select></div>
+    <div class="row"><label>신청인</label><input id="nApp" maxlength="30"></div>
+    <div class="row"><label>처리기한</label><select id="nDue"><option value="3">3일</option><option value="7" selected>7일</option><option value="14">14일</option></select></div>
+    <textarea id="nContent" rows="4" placeholder="민원 내용"></textarea>
+    <div class="actions"><button onclick="$('#dlg').close()">취소</button><button class="primary" id="nSave">접수</button></div>`;
+  $("#dlg").showModal();
+  $("#nSave").onclick=async()=>{
+    const b={title:$("#nTitle").value.trim(),category:$("#nCat").value,applicant:$("#nApp").value.trim(),content:$("#nContent").value.trim(),due_days:+$("#nDue").value};
+    if(!b.title||!b.applicant||!b.content) return toast("제목, 신청인, 내용을 모두 입력하세요.");
+    try{await api("/complaints","POST",b);$("#dlg").close();toast("접수되었습니다.");await load();}catch(e){toast(e.message)}
+  };
+}
+(async()=>{ meta = await api("/meta"); await load(); setInterval(load, 60000); })();
+</script>
+</body>
+</html>
