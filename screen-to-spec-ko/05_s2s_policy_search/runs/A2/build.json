@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 다온소프트 '사내 규정 검색' 웹앱을 만들어 줘. 연차 · 출장 · 재택 규정 조항을 넣어 두고, 직원이 검색어로 조항을 찾아 읽을 수 있으면 돼. 가상 규정 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 83465,
+ "num_turns": 7,
+ "total_cost_usd": 0.24585550000000003,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 8,
+  "cache_creation_input_tokens": 28410,
+  "cache_read_input_tokens": 128395,
+  "output_tokens": 11936,
+  "output_tokens_details": {
+   "thinking_tokens": 259
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 28410,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1031,
+    "cache_read_input_tokens": 44620,
+    "cache_creation_input_tokens": 462,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 462
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "다온소프트 사내 규정 검색 앱을 만들었습니다. 연차·출장·재택 규정 20개 조항을 넣어 두었습니다. TestClient로 API를 확인했고, 브라우저 화면은 직접 열어 보지 않았습니다.\n\n확인한 결과는 이렇습니다.\n- 분류별 조항 수는 연차 7개, 출장 6개, 재택 7개로 나왔습니다.\n- \"반차\"를 검색하면 연차 제4조 1건이 나옵니다.\n- 출장 분류에서 \"정산 영수증\"을 검색하면 \"경비 정산\" 1건이 나옵니다.\n- 검색어 없이 조회하면 전체 20건이 나옵니다.\n- 없는 조항을 조회하면 404가 반환됩니다.\n\n**실행 방법** (`C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\s2s_runs\\05_s2s_policy_search\\A2`에서)\n```\npython -m uvicorn main:app --reload\n```\n그다음 http://127.0.0.1:8000 에 접속하면 됩니다. 첫 실행 때 `regulations.db`가 자동으로 만들어지고 규정 데이터가 들어갑니다. 의존성은 `requirements.txt`에 있고, 이 PC에는 이미 설치돼 있습니다.\n\n**기능**\n- **검색:** 입력하면 바로 결과가 나옵니다. 공백으로 나눈 단어가 모두 들어 있는 조항만 보여 주고, 제목, 키워드, 본문 순으로 순위를 매깁니다.\n- **필터와 하이라이트:** 연차·출장·재택 분류 칩으로 범위를 좁힐 수 있고, 검색어는 결과에 노란색으로 표시됩니다.\n- **조항 읽기:** 결과 카드를 누르면 조항 전문과 같은 분류의 목차가 나옵니다. 목차에서 다른 조항으로 이동할 수 있고, 브라우저 뒤로가기도 동작합니다.\n\n**참고**\n- 파일은 `main.py`(API), `seed_data.py`(규정 데이터), `static/index.html`(화면)로 나뉩니다.\n- 규정을 고치려면 `seed_data.py`를 수정하고 `regulations.db`를 지운 뒤 다시 실행하세요. DB가 비어 있을 때만 데이터를 넣기 때문입니다.\n- 검색은 SQLite `LIKE`로 부분 일치를 찾습니다. 한글은 \"반차\"로 \"반차를\" 같은 형태도 잡힙니다. 규정이 수천 건으로 늘면 FTS5 같은 전문 검색으로 바꾸는 편이 좋습니다.\n- 화면 하단에 \"가상 규정 데이터\"라는 안내 문구를 넣어 두었습니다. 실제 규정을 넣을 때는 지워 주세요.",
+ "wall_s": 96.6
+}

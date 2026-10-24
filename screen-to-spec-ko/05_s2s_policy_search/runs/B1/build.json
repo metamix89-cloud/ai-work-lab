@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 89822,
+ "num_turns": 9,
+ "total_cost_usd": 0.31243879999999996,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 36047,
+  "cache_read_input_tokens": 185308,
+  "output_tokens": 14970,
+  "output_tokens_details": {
+   "thinking_tokens": 1403
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 36047,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 765,
+    "cache_read_input_tokens": 52335,
+    "cache_creation_input_tokens": 384,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 384
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD대로 웹앱을 만들었습니다. API 테스트 8개(T1~T8)는 통과했습니다. 브라우저 화면 테스트(T3의 카드 표시, T4의 화면 문구, T9의 개정 이력 버튼)는 돌리지 못했고, 화면은 직접 열어 보지도 않았습니다.\n\n- **실행:** 프로젝트 폴더에서 `python -m uvicorn main:app --port 8000`을 실행하면 됩니다. 서버를 시작할 때마다 `seed/clauses.csv`로 `policy.db`를 새로 만듭니다.\n- **샘플 데이터:** 연차·출장·재택 규정 3개, 12행입니다. 개정 쌍은 L-07(연차 이월)과 T-05(해외 숙박비) 두 개입니다.\n- **API:** `GET /api/docs`, `/api/search`, `/api/clauses/{id}`, `/api/clauses/{id}/history`를 만들었고 규칙 R1~R7을 적용했습니다. 거부 응답은 모두 `{\"detail\": ...}` 형식입니다.\n- **화면:** `/` 한 페이지입니다. `data-testid` 이름은 PRD 그대로 썼고, 화면 흐름은 코드로만 확인했습니다.\n\nPRD에 없어서 제가 정한 부분이 두 가지 있습니다.\n- 화면 상단의 기준일을 보여 주려고 `GET /api/asof`를 하나 추가했습니다.\n- `history`에 없는 조항 id를 넣으면 `[]`가 아니라 404를 돌려줍니다. `[]`는 조항은 있는데 개정 전 버전이 없을 때만 나옵니다.\n\n`tests/test_dod.py`는 `tests/` 폴더에 직접 만든 API 테스트입니다. PRD가 말하는 화면 포함 9개 테스트와는 다릅니다. 화면 테스트까지 돌리려면 브라우저 테스트 도구가 별도로 필요합니다.\n\n파일은 `main.py`, `static/index.html`, `seed/clauses.csv`, `tests/test_dod.py`입니다.",
+ "wall_s": 97.9
+}

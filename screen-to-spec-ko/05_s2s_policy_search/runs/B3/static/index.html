@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 사내 규정 검색</title>
+<style>
+  body { font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+  h1 { font-size: 1.5rem; margin-bottom: 1rem; }
+  form { display: flex; gap: .5rem; }
+  input[type=text] { flex: 1; padding: .6rem .8rem; font-size: 1rem; border: 1px solid #bbb; border-radius: 6px; }
+  button { padding: .5rem 1rem; font-size: .95rem; border: 1px solid #2b5fd9; background: #2b5fd9; color: #fff; border-radius: 6px; cursor: pointer; }
+  button.sub { background: #fff; color: #2b5fd9; font-size: .85rem; padding: .3rem .7rem; }
+  .meta { font-size: .8rem; color: #666; margin: .5rem 0 1.2rem; }
+  #count { font-weight: bold; margin: 1rem 0 .5rem; }
+  .card { border: 1px solid #ddd; border-radius: 8px; padding: .9rem 1rem; margin-bottom: .8rem; cursor: pointer; }
+  .card:hover { border-color: #2b5fd9; }
+  .card-head { font-size: .85rem; color: #2b5fd9; font-weight: bold; }
+  .card-title { font-size: 1.05rem; font-weight: bold; margin: .3rem 0; }
+  .snippet { color: #444; font-size: .92rem; }
+  mark { background: #fff2a8; }
+  .full { margin-top: .7rem; padding: .7rem; background: #f6f7fa; border-radius: 6px; white-space: pre-wrap; }
+  .hist { margin-top: .6rem; padding: .6rem .8rem; border-left: 3px solid #c77; background: #fbf4f4; font-size: .9rem; }
+  .hist b { color: #a33; }
+  #no-result, #error { padding: 1rem; background: #f6f7fa; border-radius: 8px; }
+  #error { background: #fdeeee; }
+</style>
+</head>
+<body>
+<h1>다온소프트 사내 규정 검색</h1>
+<form id="form">
+  <input type="text" id="q" data-testid="q" placeholder="검색어 (예: 연차 이월)" autocomplete="off">
+  <button type="submit" data-testid="search-btn">검색</button>
+</form>
+<div class="meta" id="meta"></div>
+<div id="out"></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const out = $("out");
+let lastAction = null;
+
+function el(tag, attrs = {}, text) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+async function api(path) {
+  const r = await fetch(path);
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    const err = new Error(data.detail || "오류");
+    err.status = r.status;
+    throw err;
+  }
+  return data;
+}
+
+function showError(retry) {
+  out.replaceChildren();
+  const box = el("div", { id: "error", "data-testid": "error" });
+  box.append(el("span", {}, "불러오지 못했습니다 "));
+  const btn = el("button", { "data-testid": "retry-btn", type: "button" }, "다시 시도");
+  btn.onclick = retry;
+  box.append(btn);
+  out.append(box);
+}
+
+async function loadDocs() {
+  const today = new Date().toISOString().slice(0, 10);
+  try {
+    const docs = await api("/api/docs");
+    $("meta").textContent = "규정: " + docs.map((d) => `${d.doc} ${d.count}조`).join(" · ") + " · 기준일 " + today;
+  } catch (e) {
+    $("meta").textContent = "규정 · 기준일 " + today;
+  }
+}
+
+function renderCard(r) {
+  const card = el("div", { class: "card", "data-testid": "result", "data-clause": r.clause_id, "data-doc": r.doc, "data-article": r.article });
+  card.append(el("div", { class: "card-head" }, `${r.doc} · ${r.article} · 시행 ${r.effective_from}`));
+  card.append(el("div", { class: "card-title" }, r.title));
+  const sn = el("div", { class: "snippet" });
+  sn.innerHTML = r.snippet; // 서버가 <mark> 외 HTML 을 이스케이프함
+  card.append(sn);
+
+  const actions = el("div", { style: "margin-top:.5rem" });
+  const detail = el("div");
+  const histBox = el("div");
+  if (r.has_history) {
+    const hb = el("button", { class: "sub", type: "button", "data-testid": "history-btn" }, "개정 이력");
+    hb.onclick = async (ev) => {
+      ev.stopPropagation();
+      if (histBox.childNodes.length) { histBox.replaceChildren(); return; }
+      try {
+        const items = await api(`/api/clauses/${encodeURIComponent(r.clause_id)}/history`);
+        for (const h of items) {
+          const row = el("div", { class: "hist", "data-testid": "history-item" });
+          row.append(el("b", {}, `개정 전 · 시행 ${h.effective_from} ~ ${h.effective_to}`));
+          row.append(el("div", {}, h.body));
+          histBox.append(row);
+        }
+      } catch (e) { histBox.append(el("div", {}, "불러오지 못했습니다")); }
+    };
+    actions.append(hb);
+  }
+  card.append(actions, detail, histBox);
+
+  card.onclick = async () => {
+    if (detail.childNodes.length) { detail.replaceChildren(); return; }
+    try {
+      const c = await api(`/api/clauses/${encodeURIComponent(r.clause_id)}`);
+      detail.append(el("div", { class: "full", "data-testid": "full-text" }, c.body));
+    } catch (e) { detail.append(el("div", {}, "불러오지 못했습니다")); }
+  };
+  return card;
+}
+
+async function doSearch() {
+  const q = $("q").value.trim();
+  lastAction = doSearch;
+  if (!q) {
+    out.replaceChildren(el("div", { id: "no-input" }, "검색어를 입력하세요"));
+    return;
+  }
+  try {
+    const data = await api("/api/search?q=" + encodeURIComponent(q));
+    out.replaceChildren();
+    out.append(el("div", { id: "count", "data-testid": "count" }, `${data.count}건`));
+    if (data.count === 0) {
+      out.append(el("div", { id: "no-result", "data-testid": "no-result" }, "해당 규정 없음 — 인사팀(hr@daon.example)에 문의"));
+      return;
+    }
+    data.results.forEach((r) => out.append(renderCard(r)));
+  } catch (e) {
+    showError(doSearch);
+  }
+}
+
+$("form").addEventListener("submit", (ev) => { ev.preventDefault(); doSearch(); });
+loadDocs();
+</script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>다온소프트 사내 규정 검색</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:"Malgun Gothic",sans-serif;max-width:820px;margin:0 auto;padding:24px;color:#222}
+h1{font-size:24px;margin:0 0 16px}
+input{padding:8px;width:60%;font-size:16px}button{padding:8px 14px;font-size:15px;cursor:pointer}
+.meta{font-size:12px;color:#666;margin-top:8px}
+.card{border:1px solid #ccc;border-radius:6px;padding:12px;margin:12px 0}
+.head{font-weight:bold;color:#1a4b8c;cursor:pointer}
+.title{font-size:17px;margin:4px 0;cursor:pointer}
+.full{background:#f6f8fa;padding:8px;margin:8px 0;white-space:pre-wrap}
+.hist{background:#fff7e6;border-left:3px solid #e0a000;padding:6px 10px;margin-top:6px}
+mark{background:#ffe58f}
+#no-result,#error{margin:16px 0;color:#a00}
+</style>
+</head>
+<body>
+<h1>다온소프트 사내 규정 검색</h1>
+<div>
+  <input data-testid="q" id="q" placeholder="검색어 (예: 연차 이월)">
+  <button data-testid="search-btn" id="go">검색</button>
+</div>
+<div class="meta" id="docs"></div>
+<div id="count-wrap" style="margin-top:12px"></div>
+<div id="out"></div>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+async function api(url) {
+  const r = await fetch(url);
+  const j = await r.json().catch(() => null);
+  if (!r.ok) throw new Error((j && j.detail) || '오류');
+  return j;
+}
+function showError(retry) {
+  $('count-wrap').innerHTML = '';
+  $('out').innerHTML = '<div id="error">불러오지 못했습니다 <button id="retry">다시 시도</button></div>';
+  $('retry').onclick = retry;
+}
+async function loadDocs() {
+  try {
+    const [d, t] = await Promise.all([api('/api/docs'), api('/api/today')]);
+    $('docs').textContent = '규정: ' + d.map(x => x.doc + ' ' + x.count + '개 조항').join(' · ') + ' / 기준일 ' + t.today;
+  } catch (e) { showError(loadDocs); }
+}
+async function doSearch() {
+  const q = $('q').value;
+  if (!q.trim()) {
+    $('count-wrap').innerHTML = '';
+    $('out').innerHTML = '<div id="error">검색어를 입력하세요</div>';
+    return;
+  }
+  try {
+    const d = await api('/api/search?q=' + encodeURIComponent(q));
+    $('count-wrap').innerHTML = '검색 결과 <span data-testid="count">' + d.count + '</span>건';
+    if (!d.count) {
+      $('out').innerHTML = '<div id="no-result" data-testid="no-result">해당 규정 없음 — 인사팀(hr@daon.example)에 문의</div>';
+      return;
+    }
+    $('out').innerHTML = d.results.map(r => `
+      <div class="card" data-testid="result" data-clause="${esc(r.clause_id)}" data-doc="${esc(r.doc)}" data-article="${esc(r.article)}">
+        <div class="head">${esc(r.doc)} · ${esc(r.article)} · 시행 ${esc(r.effective_from)}</div>
+        <div class="title">${esc(r.title)}</div>
+        <div class="snip">${r.snippet}</div>
+        <div class="extra"></div>
+        ${r.has_history ? '<button data-testid="history-btn">개정 이력</button>' : ''}
+      </div>`).join('');
+    document.querySelectorAll('.card').forEach(c => {
+      const id = c.dataset.clause;
+      c.querySelector('.head').onclick = () => toggleFull(c, id);
+      c.querySelector('.title').onclick = () => toggleFull(c, id);
+      const hb = c.querySelector('[data-testid="history-btn"]');
+      if (hb) hb.onclick = () => toggleHist(c, id);
+    });
+  } catch (e) { showError(doSearch); }
+}
+async function toggleFull(card, id) {
+  const ex = card.querySelector('[data-testid="full-text"]');
+  if (ex) { ex.remove(); return; }
+  try {
+    const d = await api('/api/clauses/' + encodeURIComponent(id));
+    const el = document.createElement('div');
+    el.className = 'full';
+    el.setAttribute('data-testid', 'full-text');
+    el.textContent = d.body;
+    card.querySelector('.snip').after(el);
+  } catch (e) { showError(doSearch); }
+}
+async function toggleHist(card, id) {
+  const box = card.querySelector('.extra');
+  if (box.innerHTML) { box.innerHTML = ''; return; }
+  try {
+    const h = await api('/api/clauses/' + encodeURIComponent(id) + '/history');
+    box.innerHTML = h.map(x => `<div class="hist" data-testid="history-item">개정 전 · 시행 ${esc(x.effective_from)} ~ ${esc(x.effective_to)}<br>${esc(x.body)}</div>`).join('');
+  } catch (e) { showError(doSearch); }
+}
+$('go').onclick = doSearch;
+$('q').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+loadDocs();
+</script>
+</body>
+</html>

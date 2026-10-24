@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>다온소프트 사내 규정 검색 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 5편 목업. 가상 회사 · 가상 규정. ?state=ok|empty|error. Mock-IT 라이트 테마. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--card:#FFFFFF;--indigo:#6366F1;--indigo2:#E0E7FF;--indigo3:#3730A3;--amber:#F59E0B;--rose:#EF4444}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:var(--indigo);display:inline-block}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#EEF0FF;color:var(--indigo);font-weight:700}
+.main{padding:22px 30px 18px 30px;display:flex;flex-direction:column;gap:10px}
+h1{margin:0;font-size:22px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:12px;margin-top:3px}
+.bar{display:flex;gap:8px;margin-top:4px}.bar .q{flex:1;background:#fff;border:1.5px solid var(--indigo);border-radius:10px;padding:10px 14px;font-size:15px}
+.bar .q span{color:var(--mute)}.bar .btn{background:var(--indigo);color:#fff;border-radius:10px;padding:10px 18px;font-weight:700;font-size:14px}
+.meta{font-size:12px;color:var(--mute);display:flex;justify-content:space-between}
+.row{display:grid;grid-template-columns:1.4fr 1fr;gap:12px;flex:1;min-height:0}
+.list{display:flex;flex-direction:column;gap:8px;min-height:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.basis{font-size:12px;color:var(--indigo3);font-weight:700;display:flex;gap:8px;align-items:center}
+.basis .tag{background:var(--indigo2);border-radius:999px;padding:1px 8px}
+.title{font-size:15px;font-weight:700;margin:4px 0 3px}.snip{font-size:12.5px;color:var(--ink2);line-height:1.45}
+mark{background:#FEF3C7;padding:0 2px;border-radius:3px}
+.hbtn{display:inline-block;font-size:11px;margin-top:8px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:3px 9px;color:var(--ink2)}
+.hist{font-size:11.5px;color:var(--ink2);background:#F7F8FB;border-left:3px solid var(--amber);border-radius:6px;padding:8px 10px;margin-top:8px}
+.hist b{color:#92400E;font-size:11px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;min-height:0}
+.panel h3{margin:0 0 8px;font-size:13px;color:var(--ink2);font-weight:600;display:flex;justify-content:space-between}
+.full{font-size:13px;line-height:1.6;color:var(--ink)}
+.none{background:#fff;border:1.5px dashed #D1D5DB;border-radius:12px;padding:28px;text-align:center;color:var(--ink2)}
+.none b{display:block;font-size:16px;margin-bottom:6px;color:var(--ink)}.none small{color:var(--mute)}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:12px;padding:20px;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mute);gap:4px}.empty small{font-size:11px}
+</style></head><body>
+<div class="app">
+ <div class="side">
+  <div class="logo"><i></i>다온소프트</div>
+  <div class="nav"><div>회의실 예약</div><div>휴가 · 출장</div><div class="on">사내 규정 검색</div><div>온보딩</div></div>
+ </div>
+ <div class="main" id="main"></div>
+</div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const head=(q)=>`<div><h1>사내 규정 검색</h1><div class="sub">현재 유효한 조항만 · 결과마다 규정 · 조 · 시행일 근거 · 없으면 '없음'</div></div>
+<div class="bar"><div class="q">${q}</div><div class="btn">검색</div></div>
+<div class="meta"><span>규정: 연차 규정 5조 · 출장 규정 3조 · 재택 규정 2조</span><span>기준일 2026-10-24 · 개정 전 조항은 '개정 이력' 으로만</span></div>`;
+let html='';
+if(state==='ok'){
+  html=head('연차 이월')+`<div class="row"><div class="list">
+   <div class="meta"><span><b>1건</b></span></div>
+   <div class="card"><div class="basis"><span class="tag">연차 규정</span>제7조 · 시행 2026-01-01</div><div class="title">연차 이월</div>
+    <div class="snip">사용하지 않은 <mark>연차</mark>는 최대 5일까지 다음 해로 <mark>이월</mark>할 수 있다. 이월한 연차는 다음 해 6월 말까지 사용한다.</div>
+    <span class="hbtn">개정 이력 ▾</span>
+    <div class="hist"><b>개정 전 · 시행 2024-01-01 ~ 2025-12-31</b><br>사용하지 않은 연차는 다음 해로 이월하지 않는다.</div></div>
+   <div class="empty"><small>개정 전 조항은 검색 결과에 섞이지 않는다 — 이력으로만 본다</small></div></div>
+   <div class="panel"><h3>원문 <span>연차 규정 제7조</span></h3><div class="full">제7조(연차 이월) 사용하지 않은 연차는 최대 5일까지 다음 해로 이월할 수 있다. 이월한 연차는 다음 해 6월 말까지 사용한다.<br><br><span style="color:#8A94A6;font-size:12px">시행 2026-01-01 · 개정 1회 · 이 조항은 교육용 가상 규정입니다</span></div></div></div>`;
+}else if(state==='empty'){
+  html=head('헬스장 이용 시간')+`<div class="row"><div class="list"><div class="meta"><span><b>0건</b></span></div>
+   <div class="none"><b>해당 규정 없음</b>인사팀(hr@daon.example)에 문의하세요<br><small>비슷한 조항을 대신 보여 주지 않습니다 — '없음' 도 답입니다</small></div></div>
+   <div class="panel"><h3>원문</h3><div class="empty"><small>결과를 고르면 전문이 여기에 보입니다</small></div></div></div>`;
+}else{
+  html=head('연차 이월')+`<div class="err"><div><b>불러오지 못했습니다.</b> 검색 API(/api/search) 가 응답하지 않습니다 — 옛 결과를 그대로 두지 않습니다.</div><button>다시 시도</button></div>
+  <div class="panel" style="flex:1"><div class="empty"><small>서버가 응답하면 다시 검색합니다</small></div></div>`;
+}
+document.getElementById('main').innerHTML=html;
+</script></body></html>

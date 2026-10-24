@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 사내 규정 검색</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; max-width: 760px; margin: 32px auto; padding: 0 16px; color: #222; }
+  h1 { font-size: 22px; }
+  .bar { display: flex; gap: 8px; }
+  .bar input { flex: 1; padding: 10px; font-size: 16px; }
+  button { padding: 8px 14px; font-size: 14px; cursor: pointer; }
+  .meta { color: #777; font-size: 12px; margin: 8px 0 20px; }
+  .card { border: 1px solid #ddd; border-radius: 8px; padding: 12px 14px; margin: 10px 0; cursor: pointer; }
+  .card .head { font-size: 13px; color: #1a56a0; font-weight: bold; }
+  .card .title { font-size: 16px; margin: 4px 0; }
+  .card .snippet { color: #444; font-size: 14px; margin-bottom: 6px; }
+  mark { background: #fff2a8; }
+  .full { margin-top: 8px; padding: 8px; background: #f6f8fa; white-space: pre-wrap; }
+  .hist { margin-top: 8px; padding: 8px; background: #fbf3f3; border-left: 3px solid #c66; font-size: 13px; cursor: default; }
+  .hist b { color: #a33; }
+  .none, .error { padding: 16px; background: #f6f6f6; border-radius: 8px; }
+</style>
+</head>
+<body>
+<h1>다온소프트 사내 규정 검색</h1>
+<div class="bar">
+  <input data-testid="q" id="q" placeholder="검색어 (예: 연차 이월)" autofocus>
+  <button data-testid="search-btn" id="go">검색</button>
+</div>
+<div class="meta" id="meta"></div>
+<div id="count" data-testid="count"></div>
+<div id="out"></div>
+<script>
+const $ = id => document.getElementById(id);
+const el = (tag, cls, text) => {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+};
+
+async function api(url) {
+  const r = await fetch(url);
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.detail || "오류");
+  return j;
+}
+
+function showError(retry) {
+  $("count").textContent = "";
+  const box = el("div", "error", "불러오지 못했습니다 ");
+  const b = el("button", null, "다시 시도");
+  b.onclick = retry;
+  box.append(b);
+  $("out").replaceChildren(box);
+}
+
+async function loadDocs() {
+  try {
+    const docs = await api("/api/docs");
+    const today = new Date().toISOString().slice(0, 10);
+    $("meta").textContent = "규정: " + docs.map(d => `${d.doc} ${d.count}개 조항`).join(" · ") + " · 기준일 " + today;
+  } catch (e) { showError(loadDocs); }
+}
+
+async function search() {
+  const q = $("q").value.trim();
+  if (!q) {
+    $("count").textContent = "";
+    $("out").replaceChildren(el("div", "none", "검색어를 입력하세요"));
+    return;
+  }
+  let data;
+  try { data = await api("/api/search?q=" + encodeURIComponent(q)); }
+  catch (e) { return showError(search); }
+  $("count").textContent = `${data.count}건`;
+  if (!data.count) {
+    const n = el("div", "none", "해당 규정 없음 — 인사팀(hr@daon.example)에 문의");
+    n.dataset.testid = "no-result";
+    $("out").replaceChildren(n);
+    return;
+  }
+  $("out").replaceChildren(...data.results.map(card));
+}
+
+function card(r) {
+  const c = el("div", "card");
+  c.dataset.testid = "result";
+  c.dataset.clause = r.clause_id;
+  c.dataset.doc = r.doc;
+  c.dataset.article = r.article;
+  c.append(el("div", "head", `${r.doc} · ${r.article} · 시행 ${r.effective_from}`),
+           el("div", "title", r.title));
+  const sn = el("div", "snippet");
+  sn.innerHTML = r.snippet; // 서버가 <mark> 외 HTML 은 이스케이프한다
+  c.append(sn);
+
+  let full = null, hist = [];
+  c.onclick = async () => {
+    if (full) { full.remove(); full = null; return; }
+    try {
+      const d = await api("/api/clauses/" + encodeURIComponent(r.clause_id));
+      full = el("div", "full", d.body);
+      full.dataset.testid = "full-text";
+      c.append(full);
+    } catch (e) { showError(search); }
+  };
+
+  if (r.has_history) {
+    const b = el("button", null, "개정 이력");
+    b.dataset.testid = "history-btn";
+    b.onclick = async ev => {
+      ev.stopPropagation();
+      if (hist.length) { hist.forEach(h => h.remove()); hist = []; return; }
+      try {
+        const items = await api(`/api/clauses/${encodeURIComponent(r.clause_id)}/history`);
+        hist = items.map(h => {
+          const row = el("div", "hist");
+          row.dataset.testid = "history-item";
+          row.append(el("b", null, `개정 전 · 시행 ${h.effective_from} ~ ${h.effective_to}`),
+                     el("div", null, h.body));
+          row.onclick = e => e.stopPropagation();
+          c.append(row);
+          return row;
+        });
+      } catch (e) { showError(search); }
+    };
+    c.append(b);
+  }
+  return c;
+}
+
+$("go").onclick = search;
+$("q").addEventListener("keydown", e => { if (e.key === "Enter") search(); });
+loadDocs();
+</script>
+</body>
+</html>

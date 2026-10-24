@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>다온소프트 사내 규정 검색</title>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif;background:#F6F7FB;color:#111318;margin:0;padding:24px;max-width:960px}
+h1{font-size:20px;margin:0 0 10px}.bar{display:flex;gap:8px}.bar input{flex:1;padding:10px;border:1px solid #D1D5DB;border-radius:8px;font-size:15px}
+.bar button{padding:10px 16px;border-radius:8px;border:0;background:#6366F1;color:#fff;font-weight:700}
+.docs{font-size:12px;color:#6B7280;margin:8px 0}.count{font-size:13px;color:#4B5563;margin:14px 0 8px}
+.card{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer}
+.basis{font-size:12px;color:#3730A3;font-weight:700}.title{font-size:16px;font-weight:700;margin:4px 0}.snip{font-size:13px;color:#4B5563}
+mark{background:#FEF3C7}.full{font-size:13px;margin-top:8px;padding-top:8px;border-top:1px dashed #E5E7EB;display:none}
+.hbtn{font-size:12px;margin-top:8px;background:#fff;border:1px solid #E5E7EB;border-radius:6px;padding:3px 8px}
+.hist{font-size:12px;color:#6B7280;background:#F9FAFB;border-radius:8px;padding:8px;margin-top:6px}
+.none{background:#fff;border:1px dashed #D1D5DB;border-radius:12px;padding:24px;text-align:center;color:#6B7280}
+</style></head><body>
+<h1>다온소프트 사내 규정 검색</h1>
+<div class="bar"><input data-testid="q" id="q" placeholder="예: 연차 이월"><button data-testid="search-btn" id="go">검색</button></div>
+<div class="docs" id="docs"></div>
+<div class="count" data-testid="count" id="count"></div>
+<div id="list"></div>
+<script>
+const $=id=>document.getElementById(id);
+async function api(u){const r=await fetch(u);const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.detail||'오류');return j;}
+api('/api/docs').then(d=>{$('docs').textContent='규정: '+d.map(x=>x.doc+' '+x.count+'조').join(' · ')+' · 기준일 오늘';}).catch(()=>{$('docs').innerHTML='불러오지 못했습니다 <button onclick="location.reload()">다시 시도</button>';});
+async function go(){
+  const q=$('q').value;
+  try{
+    const d=await api('/api/search?q='+encodeURIComponent(q));
+    $('count').textContent=d.count+'건';
+    if(!d.count){$('list').innerHTML='<div class="none" data-testid="no-result">해당 규정 없음 — 인사팀(hr@daon.example)에 문의</div>';return;}
+    $('list').innerHTML=d.results.map(r=>`<div class="card" data-testid="result" data-clause="${r.clause_id}" data-doc="${r.doc}" data-article="${r.article}">
+      <div class="basis">${r.doc} · ${r.article} · 시행 ${r.effective_from}</div><div class="title">${r.title}</div><div class="snip">${r.snippet}</div>
+      <div class="full" data-testid="full-text" id="full-${r.clause_id}"></div>
+      ${r.has_history?`<button class="hbtn" data-testid="history-btn" data-id="${r.clause_id}">개정 이력</button><div id="hist-${r.clause_id}"></div>`:''}</div>`).join('');
+  }catch(e){$('count').textContent='';$('list').innerHTML='<div class="none">'+e.message+'</div>';}
+}
+$('go').onclick=go;$('q').onkeydown=e=>{if(e.key==='Enter')go();};
+$('list').onclick=async e=>{
+  const hb=e.target.closest('[data-testid=history-btn]');
+  if(hb){e.stopPropagation();const h=await api('/api/clauses/'+hb.dataset.id+'/history');
+    $('hist-'+hb.dataset.id).innerHTML=h.map(x=>`<div class="hist" data-testid="history-item">개정 전 · 시행 ${x.effective_from} ~ ${x.effective_to}<br>${x.body}</div>`).join('');return;}
+  const card=e.target.closest('.card');if(!card)return;
+  const full=$('full-'+card.dataset.clause);const c=await api('/api/clauses/'+card.dataset.clause);full.textContent=c.body;full.style.display=full.style.display==='block'?'none':'block';
+};
+</script></body></html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 사내 규정 검색</title>
+<style>
+  :root { --brand:#2b5fd9; --bg:#f4f6fa; --card:#fff; --line:#e1e5ee; --text:#1f2430; --sub:#6a7388; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Pretendard","Malgun Gothic",sans-serif; background:var(--bg); color:var(--text); }
+  header { background:var(--brand); color:#fff; padding:28px 16px 32px; text-align:center; }
+  header h1 { margin:0 0 4px; font-size:22px; }
+  header p { margin:0; opacity:.85; font-size:14px; }
+  main { max-width:900px; margin:-20px auto 40px; padding:0 16px; }
+  .searchbox { background:var(--card); border-radius:12px; padding:14px; box-shadow:0 2px 10px rgba(0,0,0,.08); }
+  .searchbox input { width:100%; font-size:17px; padding:12px 14px; border:1px solid var(--line); border-radius:8px; outline:none; }
+  .searchbox input:focus { border-color:var(--brand); }
+  .chips { margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; }
+  .chip { border:1px solid var(--line); background:#fff; border-radius:999px; padding:5px 14px; cursor:pointer; font-size:14px; color:var(--text); }
+  .chip.active { background:var(--brand); border-color:var(--brand); color:#fff; }
+  .hint { margin-top:10px; font-size:13px; color:var(--sub); }
+  .hint a { color:var(--brand); cursor:pointer; margin-right:8px; }
+  #status { margin:18px 4px 8px; color:var(--sub); font-size:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin-bottom:10px; cursor:pointer; }
+  .card:hover { border-color:var(--brand); }
+  .tag { display:inline-block; font-size:12px; background:#e8eefc; color:var(--brand); border-radius:4px; padding:1px 8px; margin-right:6px; }
+  .card h3 { margin:6px 0 4px; font-size:16px; }
+  .card .snip { color:var(--sub); font-size:14px; line-height:1.5; }
+  mark { background:#fff2a8; padding:0 1px; border-radius:2px; }
+  #detail { display:none; }
+  #detail .box { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:22px 24px; }
+  #detail h2 { margin:8px 0 14px; font-size:20px; }
+  #detail .body { white-space:pre-wrap; line-height:1.8; font-size:15.5px; }
+  .back { background:none; border:none; color:var(--brand); cursor:pointer; font-size:14px; padding:0; margin:6px 0 12px; }
+  .toc { margin-top:18px; padding-top:14px; border-top:1px solid var(--line); font-size:14px; }
+  .toc a { display:block; padding:3px 0; color:var(--text); cursor:pointer; }
+  .toc a:hover { color:var(--brand); }
+  .toc a.cur { color:var(--brand); font-weight:bold; }
+  footer { text-align:center; color:var(--sub); font-size:12px; padding-bottom:30px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>📘 다온소프트 사내 규정 검색</h1>
+  <p>연차 · 출장 · 재택 규정을 검색어로 빠르게 찾아보세요</p>
+</header>
+<main>
+  <div id="listView">
+    <div class="searchbox">
+      <input id="q" type="search" placeholder="검색어 입력 (예: 반차, 숙박비, VPN) — 공백으로 여러 단어 검색" autofocus>
+      <div class="chips" id="chips"></div>
+      <div class="hint">추천 검색어:
+        <a data-s="반차">반차</a><a data-s="숙박비">숙박비</a><a data-s="VPN">VPN</a><a data-s="이월">이월</a><a data-s="정산 영수증">정산 영수증</a>
+      </div>
+    </div>
+    <div id="status"></div>
+    <div id="results"></div>
+  </div>
+  <div id="detail"></div>
+</main>
+<footer>※ 본 데이터는 데모용 가상 규정입니다.</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+let category = "", timer = null, lastTerms = [];
+
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function highlight(text, terms) {
+  let html = esc(text);
+  for (const t of terms) {
+    const re = new RegExp("(" + esc(t).replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi");
+    html = html.replace(re, "<mark>$1</mark>");
+  }
+  return html;
+}
+function snippet(body, terms) {
+  const flat = body.replace(/\s+/g, " ");
+  let idx = -1;
+  for (const t of terms) { idx = flat.toLowerCase().indexOf(t.toLowerCase()); if (idx >= 0) break; }
+  const start = Math.max(0, idx - 30);
+  const part = flat.slice(start, start + 120);
+  return (start > 0 ? "…" : "") + part + (start + 120 < flat.length ? "…" : "");
+}
+
+async function loadCategories() {
+  const cats = await (await fetch("/api/categories")).json();
+  $("chips").innerHTML = [`<button class="chip active" data-c="">전체</button>`,
+    ...cats.map(c => `<button class="chip" data-c="${esc(c.category)}">${esc(c.category)} (${c.n})</button>`)].join("");
+}
+
+async function search() {
+  const q = $("q").value.trim();
+  lastTerms = q.split(/\s+/).filter(Boolean);
+  const res = await fetch(`/api/search?q=${encodeURIComponent(q)}&category=${encodeURIComponent(category)}`);
+  const data = await res.json();
+  $("status").textContent = q ? `"${q}" 검색 결과 ${data.count}건` : `전체 조항 ${data.count}건`;
+  $("results").innerHTML = data.results.length ? data.results.map(r => `
+    <div class="card" data-id="${r.id}">
+      <span class="tag">${esc(r.category)}</span><span class="tag">${esc(r.article_no)}</span>
+      <h3>${highlight(r.title, lastTerms)}</h3>
+      <div class="snip">${highlight(snippet(r.body, lastTerms), lastTerms)}</div>
+    </div>`).join("") : `<div class="card" style="cursor:default">검색 결과가 없습니다. 다른 검색어를 입력해 보세요.</div>`;
+}
+
+async function showArticle(id, push = true) {
+  const a = await (await fetch(`/api/articles/${id}`)).json();
+  $("detail").innerHTML = `
+    <button class="back" id="backBtn">← 검색 결과로 돌아가기</button>
+    <div class="box">
+      <span class="tag">${esc(a.category)}</span><span class="tag">${esc(a.article_no)}</span>
+      <h2>${esc(a.title)}</h2>
+      <div class="body">${highlight(a.body, lastTerms)}</div>
+      <div class="toc"><b>${esc(a.category)} 규정 목차</b>
+        ${a.siblings.map(s => `<a data-id="${s.id}" class="${s.id === a.id ? "cur" : ""}">${esc(s.article_no)} ${esc(s.title)}</a>`).join("")}
+      </div>
+    </div>`;
+  $("listView").style.display = "none";
+  $("detail").style.display = "block";
+  window.scrollTo(0, 0);
+  if (push) history.pushState({id}, "", `#${id}`);
+}
+function showList() {
+  $("detail").style.display = "none";
+  $("listView").style.display = "block";
+}
+
+$("q").addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(search, 200); });
+$("chips").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  category = b.dataset.c;
+  document.querySelectorAll(".chip").forEach(c => c.classList.toggle("active", c === b));
+  search();
+});
+document.querySelector(".hint").addEventListener("click", e => {
+  if (e.target.dataset.s) { $("q").value = e.target.dataset.s; search(); }
+});
+$("results").addEventListener("click", e => { const c = e.target.closest(".card[data-id]"); if (c) showArticle(c.dataset.id); });
+$("detail").addEventListener("click", e => {
+  if (e.target.id === "backBtn") history.back();
+  const a = e.target.closest(".toc a"); if (a) showArticle(a.dataset.id);
+});
+window.addEventListener("popstate", () => {
+  const id = location.hash.slice(1);
+  id ? showArticle(id, false) : showList();
+});
+
+loadCategories().then(search).then(() => { if (location.hash.length > 1) showArticle(location.hash.slice(1), false); });
+</script>
+</body>
+</html>

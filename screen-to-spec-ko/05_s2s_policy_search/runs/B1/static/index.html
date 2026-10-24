@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 사내 규정 검색</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; max-width: 760px; margin: 32px auto; padding: 0 16px; color: #222; }
+  h1 { font-size: 22px; margin-bottom: 12px; }
+  form { display: flex; gap: 8px; }
+  input { flex: 1; padding: 10px; font-size: 16px; border: 1px solid #aaa; border-radius: 6px; }
+  button { padding: 8px 14px; font-size: 14px; border: 1px solid #357; background: #357; color: #fff; border-radius: 6px; cursor: pointer; }
+  button.sub { background: #fff; color: #357; margin-top: 6px; }
+  .meta { font-size: 12px; color: #666; margin-top: 8px; }
+  #count { margin: 20px 0 8px; font-weight: bold; }
+  .card { border: 1px solid #ccd; border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; cursor: pointer; }
+  .head { font-size: 13px; color: #357; font-weight: bold; }
+  .title { font-size: 16px; font-weight: bold; margin: 4px 0; }
+  .snip { font-size: 14px; color: #444; }
+  mark { background: #ffe58a; }
+  .full { margin-top: 8px; padding: 8px; background: #f4f6fa; border-radius: 6px; font-size: 14px; }
+  .hist { margin-top: 8px; padding: 8px; border-left: 3px solid #bbb; background: #fafafa; font-size: 13px; }
+  .hist b { color: #a33; }
+  #no-result, #error { padding: 16px; background: #fff4f0; border-radius: 8px; }
+</style>
+</head>
+<body>
+<h1>다온소프트 사내 규정 검색</h1>
+<form id="form">
+  <input data-testid="q" id="q" placeholder="검색어 (예: 연차 이월)" autocomplete="off">
+  <button type="submit" data-testid="search-btn">검색</button>
+</form>
+<div class="meta" id="docs"></div>
+<div id="count" data-testid="count"></div>
+<div id="results"></div>
+<div id="state"></div>
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => s.replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+async function api(path) {
+  const r = await fetch(path);
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(data.detail || "error");
+  return data;
+}
+
+function showError(retry) {
+  $("count").textContent = "";
+  $("results").innerHTML = "";
+  $("state").innerHTML = '<div id="error" data-testid="error">불러오지 못했습니다 <button type="button" id="retry">다시 시도</button></div>';
+  $("retry").onclick = retry;
+}
+
+async function loadDocs() {
+  try {
+    const [docs, a] = await Promise.all([api("/api/docs"), api("/api/asof")]);
+    $("docs").textContent = "규정: " + docs.map((d) => d.doc + " " + d.count + "개 조항").join(" · ") + " · 기준일 " + a.asof;
+  } catch (e) { $("docs").textContent = ""; }
+}
+
+async function doSearch() {
+  const q = $("q").value.trim();
+  $("state").innerHTML = "";
+  $("results").innerHTML = "";
+  if (!q) { $("count").textContent = ""; $("state").innerHTML = '<div id="error">검색어를 입력하세요</div>'; return; }
+  let data;
+  try { data = await api("/api/search?q=" + encodeURIComponent(q)); }
+  catch (e) { return showError(doSearch); }
+  $("count").textContent = "검색 결과 " + data.count + "건";
+  if (data.count === 0) {
+    $("state").innerHTML = '<div id="no-result" data-testid="no-result">해당 규정 없음 — 인사팀(hr@daon.example)에 문의</div>';
+    return;
+  }
+  for (const r of data.results) {
+    const el = document.createElement("div");
+    el.className = "card";
+    el.setAttribute("data-testid", "result");
+    el.setAttribute("data-clause", r.clause_id);
+    el.setAttribute("data-doc", r.doc);
+    el.setAttribute("data-article", r.article);
+    el.innerHTML = '<div class="head">' + esc(r.doc) + ' · ' + esc(r.article) + ' · 시행 ' + r.effective_from + '</div>' +
+      '<div class="title">' + esc(r.title) + '</div>' +
+      '<div class="snip">' + r.snippet + '</div>' +
+      '<div class="extra"></div>' +
+      (r.has_history ? '<button type="button" class="sub" data-testid="history-btn">개정 이력</button>' : '') +
+      '<div class="histbox"></div>';
+    el.onclick = () => toggleFull(el, r.clause_id);
+    const hb = el.querySelector("[data-testid=history-btn]");
+    if (hb) hb.onclick = (ev) => { ev.stopPropagation(); toggleHistory(el, r.clause_id); };
+    $("results").appendChild(el);
+  }
+}
+
+async function toggleFull(el, id) {
+  const extra = el.querySelector(".extra");
+  if (extra.innerHTML) { extra.innerHTML = ""; return; }
+  try {
+    const c = await api("/api/clauses/" + encodeURIComponent(id));
+    extra.innerHTML = '<div class="full" data-testid="full-text">' + esc(c.body) + '</div>';
+  } catch (e) { extra.innerHTML = '<div class="full">불러오지 못했습니다</div>'; }
+}
+
+async function toggleHistory(el, id) {
+  const box = el.querySelector(".histbox");
+  if (box.innerHTML) { box.innerHTML = ""; return; }
+  try {
+    const items = await api("/api/clauses/" + encodeURIComponent(id) + "/history");
+    box.innerHTML = items.map((h) => '<div class="hist" data-testid="history-item"><b>개정 전</b> · 시행 ' +
+      h.effective_from + ' ~ ' + h.effective_to + '<br>' + esc(h.body) + '</div>').join("");
+  } catch (e) { box.innerHTML = '<div class="hist">불러오지 못했습니다</div>'; }
+}
+
+$("form").onsubmit = (e) => { e.preventDefault(); doSearch(); };
+loadDocs();
+</script>
+</body>
+</html>

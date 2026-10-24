@@ -1,0 +1,13 @@
+{
+ "allowed_routes": ["/", "/api/docs", "/api/search", "/api/clauses/{id}", "/api/clauses/{id}/history", "/api/clauses/{clause_id}", "/api/clauses/{clause_id}/history", "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "규정 편집 화면": "규정 등록|규정 추가|규정 수정|/api/clauses\\s*\\)\\s*\\n?\\s*def\\s+\\w*(create|add|update|delete)|method=\"post\"|@app\\.(post|put|delete)",
+  "유사어 · 오타 교정 · 동의어": "유사|synonym|동의어|오타|fuzzy|difflib|SequenceMatcher|levenshtein",
+  "자연어 답변 · LLM": "openai|anthropic|llm|embedding|임베딩|요약",
+  "인기 검색어 · 검색 로그": "인기 검색|search_log|recent_search|최근 검색",
+  "즐겨찾기": "즐겨찾기|bookmark|favorite",
+  "PDF": "pdf",
+  "로그인 · 권한": "login|password|로그인|auth",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}

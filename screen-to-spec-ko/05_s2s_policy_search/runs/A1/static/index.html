@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 사내 규정 검색</title>
+<style>
+  :root { --accent:#2f5bea; --bg:#f5f6fa; --line:#e1e4ee; --text:#1f2430; --muted:#6b7285; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif; background:var(--bg); color:var(--text); }
+  header { background:#fff; border-bottom:1px solid var(--line); padding:28px 16px 20px; text-align:center; }
+  h1 { margin:0 0 4px; font-size:22px; } h1 span { color:var(--accent); }
+  header p { margin:0 0 16px; color:var(--muted); font-size:14px; }
+  form { max-width:640px; margin:0 auto; display:flex; gap:8px; }
+  input[type=search] { flex:1; padding:12px 14px; font-size:16px; border:1px solid var(--line); border-radius:8px; }
+  input[type=search]:focus { outline:2px solid var(--accent); border-color:transparent; }
+  button { padding:0 20px; font-size:15px; border:0; border-radius:8px; background:var(--accent); color:#fff; cursor:pointer; }
+  .chips { max-width:640px; margin:12px auto 0; display:flex; gap:6px; flex-wrap:wrap; justify-content:center; }
+  .chip { padding:5px 14px; font-size:13px; border:1px solid var(--line); border-radius:999px; background:#fff; color:var(--text); cursor:pointer; }
+  .chip.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  main { max-width:760px; margin:20px auto; padding:0 16px 60px; }
+  .meta { color:var(--muted); font-size:13px; margin-bottom:10px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin-bottom:10px; }
+  .card.link { cursor:pointer; } .card.link:hover { border-color:var(--accent); }
+  .tag { display:inline-block; font-size:12px; padding:2px 8px; border-radius:4px; background:#e8edff; color:var(--accent); margin-right:6px; }
+  .card h3 { margin:8px 0 6px; font-size:16px; }
+  .card p { margin:0; line-height:1.7; font-size:15px; }
+  mark { background:#fff2a8; padding:0 1px; }
+  .back { background:none; color:var(--accent); padding:0; margin-bottom:12px; font-size:14px; }
+  .article { padding:14px 0; border-top:1px solid var(--line); }
+  .article:first-of-type { border-top:0; }
+  .article.hit { background:#fffbe6; margin:0 -18px; padding:14px 18px; }
+  .article b { margin-right:8px; }
+  .empty { text-align:center; color:var(--muted); padding:40px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1><span>다온소프트</span> 사내 규정 검색</h1>
+  <p>연차 · 출장 · 재택 규정을 검색어로 찾아 읽어보세요.</p>
+  <form id="f">
+    <input id="q" type="search" placeholder="예) 반차, 숙박비, VPN" autofocus autocomplete="off">
+    <button>검색</button>
+  </form>
+  <div class="chips" id="chips"></div>
+</header>
+<main id="main"></main>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let category = "", terms = [];
+
+function hl(text) {
+  let html = esc(text);
+  for (const t of terms) {
+    const re = new RegExp(esc(t).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+    html = html.replace(re, m => `<mark>${m}</mark>`);
+  }
+  return html;
+}
+
+async function api(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error((await r.json()).detail || r.statusText);
+  return r.json();
+}
+
+async function search() {
+  const q = $("#q").value.trim();
+  terms = q.split(/\s+/).filter(Boolean);
+  const data = await api(`/api/search?q=${encodeURIComponent(q)}&category=${encodeURIComponent(category)}`);
+  const main = $("#main");
+  const label = q ? `‘${esc(q)}’ 검색 결과` : "전체 조항";
+  main.innerHTML = `<div class="meta">${label} ${data.count}건</div>` +
+    (data.count ? data.results.map(r => `
+      <div class="card link" data-code="${r.code}" data-id="${r.id}">
+        <span class="tag">${r.category}</span><span class="meta">${esc(r.regulation)} · ${r.no}</span>
+        <h3>${hl(r.heading)}</h3><p>${hl(r.body)}</p>
+      </div>`).join("") : `<div class="empty">검색 결과가 없습니다. 다른 검색어를 입력해 보세요.</div>`);
+}
+
+async function openRegulation(code, hitId) {
+  const reg = await api(`/api/regulations/${encodeURIComponent(code)}`);
+  $("#main").innerHTML = `
+    <button class="back" id="back">← 검색 결과로</button>
+    <div class="card">
+      <span class="tag">${reg.category}</span><span class="meta">${reg.code}</span>
+      <h2 style="margin:8px 0 12px">${esc(reg.title)}</h2>
+      ${reg.articles.map(a => `
+        <div class="article${a.id == hitId ? " hit" : ""}" id="a${a.id}">
+          <b>${a.no}</b><b>(${hl(a.heading)})</b><p>${hl(a.body)}</p>
+        </div>`).join("")}
+    </div>`;
+  $("#back").onclick = search;
+  const hit = document.getElementById("a" + hitId);
+  if (hit) hit.scrollIntoView({ block: "center" });
+  else window.scrollTo(0, 0);
+}
+
+async function init() {
+  const regs = await api("/api/categories");
+  const cats = ["", ...new Set(regs.map(r => r.category))];
+  $("#chips").innerHTML = cats.map(c => `<button type="button" class="chip${c === category ? " on" : ""}" data-c="${c}">${c || "전체"}</button>`).join("");
+  $("#chips").onclick = e => {
+    if (!e.target.dataset.hasOwnProperty("c")) return;
+    category = e.target.dataset.c;
+    document.querySelectorAll(".chip").forEach(b => b.classList.toggle("on", b.dataset.c === category));
+    search();
+  };
+  $("#f").onsubmit = e => { e.preventDefault(); search(); };
+  $("#main").onclick = e => {
+    const card = e.target.closest(".card.link");
+    if (card) openRegulation(card.dataset.code, card.dataset.id);
+  };
+  search();
+}
+init();
+</script>
+</body>
+</html>
