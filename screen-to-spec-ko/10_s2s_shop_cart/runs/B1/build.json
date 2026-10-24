@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 98288,
+ "num_turns": 9,
+ "total_cost_usd": 0.34926409999999997,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 38587,
+  "cache_read_input_tokens": 188361,
+  "output_tokens": 17606,
+  "output_tokens_details": {
+   "thinking_tokens": 686
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 38587,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 926,
+    "cache_read_input_tokens": 54463,
+    "cache_creation_input_tokens": 796,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 796
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD대로 웹앱을 만들었습니다. API 규칙은 스모크 테스트로 확인했지만, 화면(T9)과 `tests/test_dod.py`는 확인하지 못했습니다. 폴더에 `tests/`가 없어서 DoD 테스트 파일을 돌려 보지 못했고, 브라우저에서 화면도 열어 보지 않았습니다.\n\n**만든 파일**\n- `main.py`: FastAPI 앱입니다. 시작할 때마다 `seed/` CSV로 `shop.db`(SQLite)를 새로 만들고, API 5개와 규칙 R1~R7을 구현했습니다. 금액은 정수로 계산합니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. 왼쪽에 상품, 오른쪽에 장바구니가 있고, PRD에 적힌 `data-testid`를 모두 넣었습니다. 오류 상태에는 `불러오지 못했습니다`와 다시 시도 버튼이 나옵니다.\n- `seed/products.csv`, `seed/options.csv`: PRD에 시드 파일이 없어서 직접 만든 가상 데이터입니다. 상품 5개 중 품절 1개, 할인 2개, 옵션이 있는 상품 1개(옵션 2개)입니다. 이 값에 맞춰 T5·T6·T9를 통과하도록 정했습니다.\n  - 재고 3개·1회 한도 5개인 참기름\n  - 한도 2개인 쌀(할인 + 옵션)\n  - 1,500원 김 (재고 100, 한도 30)\n\n**스모크 테스트에서 확인한 것**\n- `/`가 200으로 열립니다.\n- 품절 상품은 409입니다.\n- 옵션을 빠뜨리면 400이고, 할인가에 옵션 추가금을 더한 단가는 15,000원이 나옵니다.\n- 같은 상품의 다른 옵션을 합쳐서 한도를 세고, 재고 3개 상품은 4개 담기가 409·3개 담기가 201입니다.\n- 1,500원 상품 19개는 합계 28,500원에 배송비 3,000원입니다.\n- 없는 장바구니에 잘못된 수량은 400, 올바른 본문은 404입니다. 없는 상품과 없는 줄도 404입니다.\n\n**실행**\n```\npython -m uvicorn main:app --port 8000\n```\n`PORT` 환경 변수를 따르는 처리는 넣지 않았습니다. 포트가 바뀌는 환경이면 `--port $PORT`로 넘기세요.",
+ "wall_s": 103.7
+}

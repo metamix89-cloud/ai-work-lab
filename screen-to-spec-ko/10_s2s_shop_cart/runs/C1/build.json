@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 87369,
+ "num_turns": 10,
+ "total_cost_usd": 0.2891854,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 26928,
+  "cache_read_input_tokens": 268694,
+  "output_tokens": 15458,
+  "output_tokens_details": {
+   "thinking_tokens": 631
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 26928,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 406,
+    "cache_read_input_tokens": 61109,
+    "cache_creation_input_tokens": 179,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 179
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "테스트 9개가 모두 통과했고, 마지막 실행 결과는 `9 passed in 7.09s` 입니다.\n\n```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/products.csv, seed/options.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (PRD 의 API 5개 외에 추가한 경로는 없음. 화면과 `/static` 정적 파일 서빙은 `/` 를 열기 위한 것)\n```\n\nPRD 에서 정하지 않은 부분은 이렇게 처리했습니다.\n- **판정 순서:** 잘못된 수량(400) → 없는 장바구니·상품(404) → 옵션 불일치(400) → 품절·한도(409) 순입니다. 옵션이 맞는지 보려면 상품이 있어야 해서, 옵션 오류는 상품 확인 뒤에 판정합니다.\n- **품절 상품:** 품절 상품에 옵션 오류가 함께 있으면 400 이 먼저 나갑니다.",
+ "wall_s": 100.4
+}

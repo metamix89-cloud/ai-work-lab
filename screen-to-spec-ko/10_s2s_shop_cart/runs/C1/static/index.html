@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>가나다식품 - 상품 · 장바구니</title>
+<style>
+  body { font-family: sans-serif; margin: 0; color: #222; }
+  header { padding: 12px 20px; background: #2e7d32; color: #fff; }
+  main { display: flex; gap: 24px; padding: 20px; align-items: flex-start; }
+  #products { flex: 2; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  #cart { flex: 1; border: 1px solid #ccc; padding: 12px; border-radius: 6px; }
+  .card { border: 1px solid #ddd; border-radius: 6px; padding: 10px; }
+  .card[data-soldout="1"] { background: #f3f3f3; color: #888; }
+  .list-price { text-decoration: line-through; color: #888; margin-right: 6px; }
+  .sale-price { font-weight: bold; }
+  .badge { color: #c62828; font-weight: bold; }
+  .row { margin-top: 6px; }
+  .cart-item { border-bottom: 1px solid #eee; padding: 6px 0; }
+  .totals div { display: flex; justify-content: space-between; margin-top: 4px; }
+  #message { min-height: 1.4em; color: #c62828; margin: 8px 20px; }
+  #error { padding: 20px; }
+  input[type=number] { width: 4em; }
+</style>
+</head>
+<body>
+<header><h1 style="margin:0;font-size:20px">가나다식품 쇼핑몰</h1></header>
+<div data-testid="message" id="message"></div>
+<div id="error" hidden>
+  <span>불러오지 못했습니다</span>
+  <button id="retry" type="button">다시 시도</button>
+</div>
+<main id="main">
+  <section id="products"></section>
+  <aside id="cart">
+    <h2 style="margin-top:0">장바구니</h2>
+    <div id="items"></div>
+    <div class="totals">
+      <div><span>상품 합계</span><span data-testid="subtotal">0</span></div>
+      <div><span>배송비</span><span data-testid="shipping">0</span></div>
+      <div><strong>총액</strong><strong data-testid="total">0</strong></div>
+    </div>
+  </aside>
+</main>
+<script>
+var cartId = null;
+var won = function (n) { return Number(n).toLocaleString("ko-KR") + "원"; };
+var $ = function (id) { return document.getElementById(id); };
+
+function el(tag, attrs, text) {
+  var e = document.createElement(tag);
+  for (var k in (attrs || {})) e.setAttribute(k, attrs[k]);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+async function api(method, url, body) {
+  var res = await fetch(url, {
+    method: method,
+    headers: body ? { "Content-Type": "application/json" } : {},
+    body: body ? JSON.stringify(body) : undefined
+  });
+  var data = null;
+  try { data = await res.json(); } catch (e) {}
+  return { ok: res.ok, status: res.status, data: data };
+}
+
+function showMessage(t) { $("message").textContent = t || ""; }
+
+function renderProducts(list) {
+  var box = $("products");
+  box.innerHTML = "";
+  list.forEach(function (p) {
+    var card = el("div", { "class": "card", "data-testid": "product", "data-id": p.product_id,
+                           "data-soldout": p.sold_out ? "1" : "0" });
+    card.appendChild(el("div", { "class": "name" }, p.name));
+    var price = el("div", { "class": "row" });
+    if (p.sale_price !== null) {
+      price.appendChild(el("span", { "class": "list-price", "data-testid": "list-price" }, won(p.price)));
+      price.appendChild(el("span", { "class": "sale-price", "data-testid": "sale-price" }, won(p.sale_price)));
+    } else {
+      price.appendChild(el("span", { "class": "sale-price", "data-testid": "sale-price" }, won(p.price)));
+    }
+    card.appendChild(price);
+    var sel = null, qty = null;
+    if (p.options.length) {
+      sel = el("select", { "data-testid": "option" });
+      p.options.forEach(function (o) {
+        sel.appendChild(el("option", { value: o.option_id },
+          o.label + (o.extra ? " (+" + won(o.extra) + ")" : "")));
+      });
+      var r = el("div", { "class": "row" }); r.appendChild(sel); card.appendChild(r);
+    }
+    if (p.sold_out) {
+      card.appendChild(el("div", { "class": "row badge" }, "품절"));
+    } else {
+      qty = el("input", { type: "number", min: "1", value: "1", "data-testid": "qty" });
+      var btn = el("button", { type: "button", "data-testid": "add-btn" }, "담기");
+      btn.addEventListener("click", function () {
+        var body = { product_id: p.product_id, qty: Number(qty.value) };
+        if (sel) body.option_id = sel.value;
+        addToCart(body);
+      });
+      var r2 = el("div", { "class": "row" });
+      r2.appendChild(qty); r2.appendChild(btn); card.appendChild(r2);
+    }
+    box.appendChild(card);
+  });
+}
+
+function renderCart(c) {
+  var box = $("items");
+  box.innerHTML = "";
+  c.items.forEach(function (it) {
+    var row = el("div", { "class": "cart-item", "data-testid": "cart-item", "data-item": it.item_id });
+    row.appendChild(el("div", {}, it.name + (it.label ? " / " + it.label : "")));
+    row.appendChild(el("div", {}, "단가 " + won(it.unit_price) + " × " + it.qty + " = " + won(it.line_total)));
+    var q = el("input", { type: "number", min: "0", value: String(it.qty) });
+    var b = el("button", { type: "button" }, "수량 변경");
+    b.addEventListener("click", function () { changeQty(it.item_id, Number(q.value)); });
+    var d = el("button", { type: "button" }, "빼기");
+    d.addEventListener("click", function () { changeQty(it.item_id, 0); });
+    row.appendChild(q); row.appendChild(b); row.appendChild(d);
+    box.appendChild(row);
+  });
+  document.querySelector('[data-testid="subtotal"]').textContent = won(c.subtotal);
+  document.querySelector('[data-testid="shipping"]').textContent = c.shipping === 0 ? "무료" : won(c.shipping);
+  document.querySelector('[data-testid="total"]').textContent = won(c.total);
+}
+
+function handle(r) {
+  if (r.ok) { showMessage(""); renderCart(r.data); }
+  else showMessage((r.data && r.data.detail) || "요청을 처리하지 못했습니다");
+}
+
+async function addToCart(body) {
+  try { handle(await api("POST", "/api/carts/" + cartId + "/items", body)); }
+  catch (e) { showFail(); }
+}
+
+async function changeQty(itemId, qty) {
+  try { handle(await api("PUT", "/api/carts/" + cartId + "/items/" + itemId, { qty: qty })); }
+  catch (e) { showFail(); }
+}
+
+function showFail() { $("error").hidden = false; $("main").hidden = true; }
+
+async function load() {
+  $("error").hidden = true; $("main").hidden = false; showMessage("");
+  try {
+    var pr = await api("GET", "/api/products");
+    if (!pr.ok) throw new Error("products");
+    if (!cartId) {
+      var cr = await api("POST", "/api/carts");
+      if (!cr.ok) throw new Error("cart");
+      cartId = cr.data.cart_id;
+    }
+    var gr = await api("GET", "/api/carts/" + cartId);
+    if (!gr.ok) throw new Error("cart");
+    renderProducts(pr.data);
+    renderCart(gr.data);
+  } catch (e) { showFail(); }
+}
+
+$("retry").addEventListener("click", load);
+load();
+</script>
+</body>
+</html>

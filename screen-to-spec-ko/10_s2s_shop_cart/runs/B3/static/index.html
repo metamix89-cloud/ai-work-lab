@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 쇼핑몰</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; color: #222; background: #f6f6f4; }
+  header { background: #2f6b3a; color: #fff; padding: 14px 24px; font-size: 20px; font-weight: bold; }
+  main { display: flex; gap: 24px; padding: 24px; align-items: flex-start; }
+  section { background: #fff; border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+  #products-section { flex: 2; }
+  #cart-section { flex: 1; min-width: 300px; }
+  h2 { margin: 0 0 12px; font-size: 18px; }
+  #products { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .card { border: 1px solid #ddd; border-radius: 6px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .card[data-soldout="1"] { background: #f0f0f0; color: #888; }
+  .name { font-weight: bold; }
+  [data-testid="list-price"] { text-decoration: line-through; color: #999; margin-right: 6px; }
+  [data-testid="sale-price"] { font-weight: bold; color: #c0392b; }
+  .badge { display: inline-block; background: #555; color: #fff; border-radius: 4px; padding: 2px 8px; font-size: 12px; align-self: flex-start; }
+  button { cursor: pointer; border: 0; border-radius: 4px; padding: 6px 12px; background: #2f6b3a; color: #fff; }
+  button:disabled { background: #aaa; cursor: not-allowed; }
+  button.sub { background: #888; }
+  input[type=number] { width: 60px; }
+  .row { display: flex; gap: 6px; align-items: center; }
+  .cart-item { border-bottom: 1px solid #eee; padding: 8px 0; display: flex; flex-direction: column; gap: 4px; }
+  .sums > div { display: flex; justify-content: space-between; padding: 4px 0; }
+  .sums .grand { font-weight: bold; font-size: 18px; border-top: 2px solid #222; margin-top: 6px; padding-top: 8px; }
+  #message { min-height: 22px; color: #c0392b; margin-bottom: 8px; }
+  #error { text-align: center; padding: 40px; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<header>가나다식품</header>
+<div id="error" class="hidden">
+  <p>불러오지 못했습니다</p>
+  <button id="retry-btn" data-testid="retry-btn">다시 시도</button>
+</div>
+<main id="main">
+  <section id="products-section">
+    <h2>상품</h2>
+    <div id="products"></div>
+  </section>
+  <section id="cart-section">
+    <h2>장바구니</h2>
+    <div id="message" data-testid="message"></div>
+    <div id="cart-items"></div>
+    <div id="empty" class="hidden">장바구니가 비어 있습니다</div>
+    <div class="sums">
+      <div><span>상품 합계</span><span data-testid="subtotal">0</span></div>
+      <div><span>배송비</span><span data-testid="shipping">무료</span></div>
+      <div class="grand"><span>총액</span><span data-testid="total">0</span></div>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  var cartId = null;
+  var $ = function (id) { return document.getElementById(id); };
+  var won = function (n) { return Number(n).toLocaleString("ko-KR"); };
+
+  function el(tag, attrs, text) {
+    var e = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+
+  function api(method, url, body) {
+    var opt = { method: method, headers: {} };
+    if (body !== undefined) {
+      opt.headers["Content-Type"] = "application/json";
+      opt.body = JSON.stringify(body);
+    }
+    return fetch(url, opt).then(function (res) {
+      return res.json().then(function (data) { return { status: res.status, data: data }; });
+    });
+  }
+
+  function setMessage(text) { $("message").textContent = text || ""; }
+
+  function showError(on) {
+    $("error").classList.toggle("hidden", !on);
+    $("main").classList.toggle("hidden", on);
+  }
+
+  function renderProducts(list) {
+    var box = $("products");
+    box.textContent = "";
+    list.forEach(function (p) {
+      var card = el("div", { "class": "card", "data-testid": "product", "data-id": p.product_id,
+                             "data-soldout": p.sold_out ? "1" : "0" });
+      card.appendChild(el("div", { "class": "name" }, p.name));
+      var price = el("div");
+      if (p.sale_price !== null && p.sale_price !== undefined) {
+        price.appendChild(el("span", { "data-testid": "list-price" }, won(p.price) + "원"));
+        price.appendChild(el("span", { "data-testid": "sale-price" }, won(p.sale_price) + "원"));
+      } else {
+        price.appendChild(el("span", { "data-testid": "sale-price" }, won(p.price) + "원"));
+      }
+      card.appendChild(price);
+
+      if (p.sold_out) {
+        card.appendChild(el("span", { "class": "badge", "data-testid": "soldout" }, "품절"));
+        var dis = el("button", { "data-testid": "add-btn", disabled: "disabled" }, "담기");
+        card.appendChild(dis);
+        box.appendChild(card);
+        return;
+      }
+
+      var sel = null;
+      if (p.options.length) {
+        sel = el("select", { "data-testid": "option" });
+        p.options.forEach(function (o) {
+          var t = o.label + (o.extra ? " (+" + won(o.extra) + "원)" : "");
+          sel.appendChild(el("option", { value: o.option_id }, t));
+        });
+        card.appendChild(sel);
+      }
+      var row = el("div", { "class": "row" });
+      var qty = el("input", { type: "number", min: "1", value: "1", "data-testid": "qty" });
+      var btn = el("button", { "data-testid": "add-btn" }, "담기");
+      btn.addEventListener("click", function () {
+        var n = Number(qty.value);
+        add({ product_id: p.product_id, option_id: sel ? sel.value : null,
+              qty: qty.value.trim() !== "" && Number.isInteger(n) ? n : qty.value });
+      });
+      row.appendChild(qty);
+      row.appendChild(btn);
+      card.appendChild(row);
+      box.appendChild(card);
+    });
+  }
+
+  function renderCart(cart) {
+    var box = $("cart-items");
+    box.textContent = "";
+    $("empty").classList.toggle("hidden", cart.items.length > 0);
+    cart.items.forEach(function (it) {
+      var line = el("div", { "class": "cart-item", "data-testid": "cart-item", "data-item": it.item_id });
+      line.appendChild(el("div", { "class": "name" }, it.name + (it.label ? " / " + it.label : "")));
+      line.appendChild(el("div", {}, "단가 " + won(it.unit_price) + "원 × " + it.qty +
+                                      " = " + won(it.line_total) + "원"));
+      var row = el("div", { "class": "row" });
+      var q = el("input", { type: "number", min: "0", value: String(it.qty), "data-testid": "item-qty" });
+      var upd = el("button", { "data-testid": "update-btn" }, "수량 변경");
+      var del = el("button", { "class": "sub", "data-testid": "remove-btn" }, "빼기");
+      upd.addEventListener("click", function () {
+        var n = Number(q.value);
+        update(it.item_id, q.value.trim() !== "" && Number.isInteger(n) ? n : q.value);
+      });
+      del.addEventListener("click", function () { update(it.item_id, 0); });
+      row.appendChild(q); row.appendChild(upd); row.appendChild(del);
+      line.appendChild(row);
+      box.appendChild(line);
+    });
+    $("cart-section").querySelector('[data-testid="subtotal"]').textContent = won(cart.subtotal);
+    $("cart-section").querySelector('[data-testid="shipping"]').textContent =
+      cart.shipping === 0 ? "무료" : won(cart.shipping);
+    $("cart-section").querySelector('[data-testid="total"]').textContent = won(cart.total);
+  }
+
+  function handleCart(r, okStatus) {
+    if (r.status === okStatus) { setMessage(""); renderCart(r.data); }
+    else setMessage(r.data && r.data.detail ? r.data.detail : "요청에 실패했습니다");
+  }
+
+  function add(body) {
+    api("POST", "/api/carts/" + cartId + "/items", body)
+      .then(function (r) { handleCart(r, 201); })
+      .catch(function () { showError(true); });
+  }
+
+  function update(itemId, qty) {
+    api("PUT", "/api/carts/" + cartId + "/items/" + itemId, { qty: qty })
+      .then(function (r) { handleCart(r, 200); })
+      .catch(function () { showError(true); });
+  }
+
+  function ensureCart() {
+    var saved = null;
+    try { saved = localStorage.getItem("cart_id"); } catch (e) {}
+    function create() {
+      return api("POST", "/api/carts").then(function (r) {
+        if (r.status !== 201) throw new Error("cart");
+        cartId = r.data.cart_id;
+        try { localStorage.setItem("cart_id", cartId); } catch (e) {}
+        return { items: [], subtotal: 0, shipping: 0, total: 0 };
+      });
+    }
+    if (!saved) return create();
+    return api("GET", "/api/carts/" + saved).then(function (r) {
+      if (r.status === 200) { cartId = saved; return r.data; }
+      return create();
+    });
+  }
+
+  function load() {
+    showError(false);
+    Promise.all([api("GET", "/api/products"), ensureCart()]).then(function (res) {
+      if (res[0].status !== 200) throw new Error("products");
+      renderProducts(res[0].data);
+      renderCart(res[1]);
+    }).catch(function () { showError(true); });
+  }
+
+  $("retry-btn").addEventListener("click", load);
+  load();
+})();
+</script>
+</body>
+</html>

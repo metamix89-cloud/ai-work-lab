@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>가나다식품 쇼핑몰 · 장바구니</title>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif;background:#F6F7FB;color:#111318;margin:0;padding:20px}
+h1{font-size:20px;margin:0 0 10px}.wrap{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.card{background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:10px;font-size:13px}
+.card.so{opacity:.5}s{color:#9CA3AF}.sp{font-weight:800}.msg{color:#B91C1C;min-height:18px}
+.line{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F3F4F6}
+</style></head><body>
+<h1>가나다식품 쇼핑몰 · 장바구니</h1>
+<div class="wrap"><div class="grid" id="products"></div>
+ <div class="card"><b>장바구니</b><div id="items"></div>
+  <div>상품 합계 <b data-testid="subtotal" id="sub">0</b></div><div>배송비 <b data-testid="shipping" id="ship">0</b></div><div>총액 <b data-testid="total" id="tot">0</b></div>
+  <div class="msg" data-testid="message" id="msg"></div></div></div>
+<script>
+const $=id=>document.getElementById(id);const f=n=>Number(n).toLocaleString('ko-KR');let cid=null;
+async function api(u,o){const r=await fetch(u,o);const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.detail||'오류');return j;}
+const send=(m,u,b)=>api(u,{method:m,headers:{'Content-Type':'application/json'},body:JSON.stringify(b||{})});
+function drawCart(c){$('items').innerHTML=c.items.map(i=>`<div class="line" data-testid="cart-item" data-item="${i.item_id}">${i.name}${i.label?' · '+i.label:''} ${f(i.unit_price)}×<input type="number" value="${i.qty}" style="width:44px" onchange="setQty('${i.item_id}',this.value)"> = ${f(i.line_total)}</div>`).join('');
+  $('sub').textContent=f(c.subtotal);$('ship').textContent=c.shipping?f(c.shipping):'무료';$('tot').textContent=f(c.total);}
+async function init(){
+  try{const ps=await api('/api/products');cid=(await send('POST','/api/carts')).cart_id;
+    $('products').innerHTML=ps.map(p=>`<div class="card ${p.sold_out?'so':''}" data-testid="product" data-id="${p.product_id}" data-soldout="${p.sold_out?1:0}"><b>${p.name}</b><br>
+      ${p.sale_price!==null?`<s data-testid="list-price">${f(p.price)}</s> <span class="sp" data-testid="sale-price">${f(p.sale_price)}</span>`:`<span class="sp" data-testid="sale-price">${f(p.price)}</span>`}<br>
+      ${p.options.length?`<select data-testid="option">${p.options.map(o=>`<option value="${o.option_id}">${o.label}${o.extra?' +'+f(o.extra):''}</option>`).join('')}</select>`:''}
+      ${p.sold_out?'<b>품절</b>':`<input data-testid="qty" type="number" value="1" min="1" style="width:44px"> <button data-testid="add-btn" onclick="addP('${p.product_id}',this)">담기</button>`}</div>`).join('');
+    drawCart(await api('/api/carts/'+cid));
+  }catch(e){$('products').innerHTML='<div class="card">불러오지 못했습니다 <button onclick="location.reload()">다시 시도</button></div>';}
+}
+async function addP(pid,btn){$('msg').textContent='';const card=btn.closest('[data-testid=product]');const o=card.querySelector('[data-testid=option]');
+  try{drawCart(await send('POST','/api/carts/'+cid+'/items',{product_id:pid,option_id:o?o.value:null,qty:Number(card.querySelector('[data-testid=qty]').value)}));}catch(e){$('msg').textContent=e.message;}}
+async function setQty(iid,v){$('msg').textContent='';try{drawCart(await send('PUT','/api/carts/'+cid+'/items/'+iid,{qty:Number(v)}));}catch(e){$('msg').textContent=e.message;drawCart(await api('/api/carts/'+cid));}}
+init();
+</script></body></html>

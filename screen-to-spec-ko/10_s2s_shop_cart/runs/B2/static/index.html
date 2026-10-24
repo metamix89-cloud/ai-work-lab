@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 쇼핑몰</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; color: #222; background: #faf8f4; }
+  header { padding: 14px 24px; background: #2f6b3a; color: #fff; }
+  header h1 { margin: 0; font-size: 20px; }
+  main { display: flex; gap: 24px; padding: 20px 24px; align-items: flex-start; }
+  #products-pane { flex: 2; }
+  #cart-pane { flex: 1; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 16px; position: sticky; top: 12px; }
+  h2 { margin: 0 0 12px; font-size: 18px; }
+  #products { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; }
+  .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .card[data-soldout="1"] { opacity: .65; }
+  .name { font-weight: bold; }
+  .list-price { text-decoration: line-through; color: #888; margin-right: 6px; }
+  .sale-price { color: #c0392b; font-weight: bold; }
+  .badge { color: #fff; background: #777; border-radius: 4px; padding: 2px 8px; align-self: flex-start; font-size: 13px; }
+  .row { display: flex; gap: 6px; align-items: center; }
+  input[type=number] { width: 60px; }
+  button { cursor: pointer; padding: 5px 10px; }
+  button:disabled { cursor: not-allowed; }
+  .line { border-bottom: 1px solid #eee; padding: 8px 0; display: flex; flex-direction: column; gap: 4px; }
+  .totals div { display: flex; justify-content: space-between; padding: 3px 0; }
+  .totals .grand { font-weight: bold; font-size: 17px; border-top: 2px solid #333; margin-top: 4px; padding-top: 8px; }
+  #message { min-height: 22px; margin: 0 0 10px; color: #c0392b; font-size: 14px; }
+  #error { background: #fdecea; border: 1px solid #e0a39b; padding: 12px; border-radius: 8px; margin: 12px 24px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<header><h1>가나다식품 쇼핑몰</h1></header>
+<div id="error" hidden><span>불러오지 못했습니다</span> <button id="retry-btn" type="button">다시 시도</button></div>
+<main>
+  <section id="products-pane">
+    <h2>상품</h2>
+    <div id="products"></div>
+  </section>
+  <aside id="cart-pane">
+    <h2>장바구니</h2>
+    <p id="message" data-testid="message"></p>
+    <div id="cart-items"></div>
+    <p id="empty" style="color:#888">장바구니가 비어 있습니다.</p>
+    <div class="totals">
+      <div><span>상품 합계</span><span data-testid="subtotal">0</span></div>
+      <div><span>배송비</span><span data-testid="shipping">무료</span></div>
+      <div class="grand"><span>총액</span><span data-testid="total">0</span></div>
+    </div>
+  </aside>
+</main>
+<script>
+const won = n => n.toLocaleString("ko-KR");
+const $ = id => document.getElementById(id);
+let cartId = null;
+
+function el(tag, attrs, text) {
+  const e = document.createElement(tag);
+  for (const k in (attrs || {})) e.setAttribute(k, attrs[k]);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+function say(msg) { document.querySelector('[data-testid="message"]').textContent = msg || ""; }
+
+async function api(method, url, body) {
+  const res = await fetch(url, {
+    method, headers: { "Content-Type": "application/json" },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  return { ok: res.ok, status: res.status, data };
+}
+
+async function newCart() {
+  const r = await api("POST", "/api/carts");
+  if (!r.ok) throw new Error("cart");
+  cartId = r.data.cart_id;
+  localStorage.setItem("cart_id", cartId);
+}
+
+function renderProducts(list) {
+  const box = $("products");
+  box.replaceChildren();
+  for (const p of list) {
+    const soldOut = p.sold_out;
+    const card = el("div", { class: "card", "data-testid": "product", "data-id": p.product_id, "data-soldout": soldOut ? "1" : "0" });
+    card.appendChild(el("div", { class: "name" }, p.name));
+    const price = el("div");
+    if (p.sale_price !== null) {
+      price.appendChild(el("span", { class: "list-price", "data-testid": "list-price" }, won(p.price) + "원"));
+      price.appendChild(el("span", { class: "sale-price", "data-testid": "sale-price" }, won(p.sale_price) + "원"));
+    } else {
+      price.appendChild(el("span", { class: "sale-price", "data-testid": "sale-price" }, won(p.price) + "원"));
+    }
+    card.appendChild(price);
+    if (soldOut) card.appendChild(el("span", { class: "badge" }, "품절"));
+    let sel = null;
+    if (p.options.length) {
+      sel = el("select", { "data-testid": "option" });
+      for (const o of p.options) {
+        sel.appendChild(el("option", { value: o.option_id }, o.label + (o.extra ? " (+" + won(o.extra) + "원)" : "")));
+      }
+      card.appendChild(sel);
+    }
+    const row = el("div", { class: "row" });
+    const qty = el("input", { type: "number", min: "1", value: "1", "data-testid": "qty" });
+    const btn = el("button", { type: "button", "data-testid": "add-btn" }, "담기");
+    if (soldOut) { btn.disabled = true; qty.disabled = true; if (sel) sel.disabled = true; }
+    btn.addEventListener("click", () => addToCart(p.product_id, sel ? sel.value : null, qty.value));
+    row.append(qty, btn);
+    card.appendChild(row);
+    box.appendChild(card);
+  }
+}
+
+function renderCart(cart) {
+  const box = $("cart-items");
+  box.replaceChildren();
+  $("empty").hidden = cart.items.length > 0;
+  for (const it of cart.items) {
+    const line = el("div", { class: "line", "data-testid": "cart-item", "data-item": it.item_id });
+    line.appendChild(el("div", { class: "name" }, it.name + (it.label ? " / " + it.label : "")));
+    line.appendChild(el("div", {}, "단가 " + won(it.unit_price) + "원 × " + it.qty + " = " + won(it.line_total) + "원"));
+    const row = el("div", { class: "row" });
+    const q = el("input", { type: "number", min: "0", value: String(it.qty), "aria-label": "수량" });
+    const set = el("button", { type: "button" }, "수량 변경");
+    set.addEventListener("click", () => changeQty(it.item_id, q.value));
+    const del = el("button", { type: "button" }, "빼기");
+    del.addEventListener("click", () => changeQty(it.item_id, "0"));
+    row.append(q, set, del);
+    line.appendChild(row);
+    box.appendChild(line);
+  }
+  document.querySelector('[data-testid="subtotal"]').textContent = won(cart.subtotal);
+  document.querySelector('[data-testid="shipping"]').textContent = cart.shipping === 0 ? "무료" : won(cart.shipping);
+  document.querySelector('[data-testid="total"]').textContent = won(cart.total);
+}
+
+function parseQty(v) {
+  return /^-?\d+$/.test(String(v).trim()) ? parseInt(v, 10) : v;
+}
+
+async function send(method, url, body) {
+  say("");
+  try {
+    const r = await api(method, url, body);
+    if (r.ok) renderCart(r.data); else say((r.data && r.data.detail) || "요청에 실패했습니다");
+  } catch (e) { showError(); }
+}
+
+const addToCart = (productId, optionId, qty) =>
+  send("POST", `/api/carts/${cartId}/items`, { product_id: productId, option_id: optionId, qty: parseQty(qty) });
+const changeQty = (itemId, qty) =>
+  send("PUT", `/api/carts/${cartId}/items/${itemId}`, { qty: parseQty(qty) });
+
+function showError() { $("error").hidden = false; }
+
+async function load() {
+  $("error").hidden = true;
+  try {
+    const pr = await api("GET", "/api/products");
+    if (!pr.ok) throw new Error("products");
+    cartId = localStorage.getItem("cart_id");
+    let cr = cartId ? await api("GET", `/api/carts/${cartId}`) : null;
+    if (!cr || !cr.ok) {
+      await newCart();
+      cr = await api("GET", `/api/carts/${cartId}`);
+      if (!cr.ok) throw new Error("cart");
+    }
+    renderProducts(pr.data);
+    renderCart(cr.data);
+  } catch (e) { showError(); }
+}
+
+$("retry-btn").addEventListener("click", load);
+load();
+</script>
+</body>
+</html>

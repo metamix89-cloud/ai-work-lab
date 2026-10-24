@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 51299,
+ "num_turns": 8,
+ "total_cost_usd": 0.25398129999999997,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 37545,
+  "cache_read_input_tokens": 187113,
+  "output_tokens": 8507,
+  "output_tokens_details": {
+   "thinking_tokens": 597
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 37545,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 307,
+    "cache_read_input_tokens": 50651,
+    "cache_creation_input_tokens": 3566,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 3566
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/products.csv, seed/options.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (추가한 API 경로 없음. PRD 의 5개만 구현)\n```\n\n`python -m pytest tests -q` 를 돌려 9개가 모두 통과했습니다. `seed/` 의 가상 데이터는 테스트가 쓰는 고정 데이터와 같은 값으로 만들었습니다.\n\nPRD 에 정해지지 않은 거부 사유 문구는 제가 정했습니다. 장바구니·줄이 없을 때와 `product_id` 가 문자열이 아닐 때의 문구입니다.",
+ "wall_s": 62.5
+}

@@ -1,0 +1,14 @@
+{
+ "allowed_routes": ["/", "/api/products", "/api/carts", "/api/carts/{id}", "/api/carts/{cart_id}", "/api/carts/{id}/items", "/api/carts/{cart_id}/items",
+                    "/api/carts/{id}/items/{item_id}", "/api/carts/{cart_id}/items/{item_id}", "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "결제 · 주문": "결제하기|결제 화면|checkout|/api/orders|주문하기",
+  "쿠폰 · 적립금": "쿠폰|coupon|적립|\\bpoints?\\b",
+  "검색 · 정렬 · 카테고리": "검색|search|정렬|sort_by|카테고리|category",
+  "상세 페이지 · 리뷰 · 찜": "상세 페이지|/api/products/\\{|리뷰|review|찜|wishlist|favorite",
+  "재고 차감": "stock\\s*=\\s*stock\\s*-|stock\\s*-=|UPDATE\\s+\\w*products\\s+SET\\s+stock",
+  "편집 화면": "상품 등록|상품 추가|/api/admin|@app\\.(post|put|patch|delete)\\(\"/api/products",
+  "로그인 · 회원": "login|password|로그인|회원가입",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}

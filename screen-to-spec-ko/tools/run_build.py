@@ -7,7 +7,11 @@
   C PRD + CLAUDE.md     PRD.md · CLAUDE.md · tests/ 복사 (완료 기준이 코드로 들어감)
 사용: python _scratch/s2s/tools/run_build.py <lab_dir> [--conds=A,B,C] [--trials=3] [--model=sonnet] [--only=A1,C2] [--max-turns=80]
   → lab_dir/runs/<cond><n>/ 에 생성물 + build.json(비용 · 시간 · 턴 · 마지막 답)
-Claude Code 실행 파일: 환경 변수 CLAUDE_BIN, 없으면 PATH 의 claude, 없으면 데스크톱 앱이 번들한 것을 찾는다."""
+Claude Code 실행 파일: 환경 변수 CLAUDE_BIN, 없으면 PATH 의 claude, 없으면 데스크톱 앱이 번들한 것을 찾는다.
+
+윈도우에서는 pythonw.exe 로 돌린다(출력은 파일로 돌려받기): pythonw -u run_build.py ... > build_log.txt
+빌더가 자기가 띄운 서버를 치우려고 `taskkill /F /IM python.exe` 를 하는 일이 있다(10편 C1). 그러면 python.exe 로 돌던
+이 스크립트도 같이 죽어(rc=1, 트레이스백 없음) 빌더는 고아로 남고 결과(build.json)를 못 받는다. pythonw.exe 는 그 이름에 걸리지 않는다."""
 import glob
 import json
 import os
@@ -18,6 +22,7 @@ import tempfile
 import time
 
 sys.stdout.reconfigure(encoding="utf-8")
+NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)   # pythonw 에서 콘솔 프로그램을 띄울 때 창이 뜨지 않게
 
 
 def find_claude():
@@ -58,7 +63,7 @@ def kill_servers(work):
     if os.name != "nt":
         return
     try:
-        out = subprocess.run(["wmic", "process", "where", "name='python.exe'", "get", "ProcessId,CommandLine", "/format:list"],
+        out = subprocess.run(["wmic", "process", "where", "name='python.exe'", "get", "ProcessId,CommandLine", "/format:list"], creationflags=NO_WINDOW,
                              capture_output=True, text=True, encoding="utf-8", errors="ignore", timeout=20).stdout
     except Exception:
         return
@@ -68,7 +73,7 @@ def kill_servers(work):
             cmd = line[12:]
         elif line.startswith("ProcessId="):
             if pid and "uvicorn" in cmd and os.path.basename(work) in cmd + os.getcwd():
-                subprocess.run(["taskkill", "/PID", pid, "/F", "/T"], capture_output=True)
+                subprocess.run(["taskkill", "/PID", pid, "/F", "/T"], capture_output=True, creationflags=NO_WINDOW)
             pid, cmd = line[10:].strip(), ""
 
 
@@ -91,7 +96,8 @@ def build(claude, run_dir, prompt, model, max_turns, timeout):
     t0 = time.time()
     info = {"model": model, "prompt": prompt, "max_turns": max_turns}
     try:
-        pr = subprocess.run(cmd, cwd=run_dir, env=env, capture_output=True, text=True, encoding="utf-8", errors="ignore", timeout=timeout)
+        pr = subprocess.run(cmd, cwd=run_dir, env=env, capture_output=True, text=True, encoding="utf-8", errors="ignore", timeout=timeout,
+                            creationflags=NO_WINDOW)
         info["rc"] = pr.returncode
         info["stderr_tail"] = (pr.stderr or "")[-1500:]
         try:
@@ -133,7 +139,7 @@ def main():
                 continue
             work = os.path.join(work_root, name)
             # 앞 빌드(특히 B 의 자기 테스트)가 남긴 서버가 다음 빌드의 기본 포트를 막지 않게 — 포트 기준으로 정리 (ep074 C 셋이 PORT 를 바꿔 돌렸던 일)
-            subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "kill_servers.py")], capture_output=True)
+            subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "kill_servers.py")], capture_output=True, creationflags=NO_WINDOW)
             prepare(lab, cond, work)
             print(name, "빌드 중 ...", end=" ", flush=True)
             info = build(claude, work, prompts[cond], model, max_turns, timeout=1500)

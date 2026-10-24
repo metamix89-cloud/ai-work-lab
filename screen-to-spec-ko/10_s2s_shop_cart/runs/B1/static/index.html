@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 쇼핑몰</title>
+<style>
+body{font-family:"Malgun Gothic",sans-serif;margin:0;background:#f6f6f4;color:#222}
+header{background:#2f6b3a;color:#fff;padding:14px 24px;font-size:20px}
+main{display:flex;gap:24px;padding:24px;align-items:flex-start}
+#products{flex:2;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+#cart{flex:1;background:#fff;border:1px solid #ddd;border-radius:8px;padding:16px;min-width:280px}
+.card{background:#fff;border:1px solid #ddd;border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.card[data-soldout="1"]{opacity:.7}
+.name{font-weight:bold}
+.list-price{text-decoration:line-through;color:#888;margin-right:6px}
+.sale-price{color:#c0392b;font-weight:bold}
+.plain{color:#222}
+.soldout{color:#fff;background:#888;border-radius:4px;padding:2px 8px;align-self:flex-start;font-size:13px}
+button{cursor:pointer;padding:6px 12px;border:0;border-radius:4px;background:#2f6b3a;color:#fff}
+button:disabled{background:#aaa;cursor:not-allowed}
+input[type=number]{width:60px;padding:4px}
+.line{border-bottom:1px solid #eee;padding:8px 0;display:flex;flex-direction:column;gap:4px}
+.sums div{display:flex;justify-content:space-between;padding:3px 0}
+.sums .grand{font-weight:bold;font-size:18px;border-top:2px solid #333;margin-top:6px;padding-top:8px}
+#message{min-height:22px;color:#c0392b;margin:8px 0}
+#error{padding:24px}
+</style>
+</head>
+<body>
+<header>가나다식품 쇼핑몰</header>
+<div id="error" hidden><p>불러오지 못했습니다</p><button id="retry" type="button">다시 시도</button></div>
+<main id="main">
+  <section id="products" aria-label="상품 목록"></section>
+  <aside id="cart">
+    <h2>장바구니</h2>
+    <div data-testid="message" id="message"></div>
+    <div id="items"></div>
+    <div class="sums">
+      <div><span>상품 합계</span><span data-testid="subtotal" id="subtotal">0</span></div>
+      <div><span>배송비</span><span data-testid="shipping" id="shipping">0</span></div>
+      <div class="grand"><span>총액</span><span data-testid="total" id="total">0</span></div>
+    </div>
+  </aside>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+const won = n => Number(n).toLocaleString("ko-KR");
+let cartId = null;
+
+async function api(method, url, body) {
+  const r = await fetch(url, {method, headers: {"Content-Type": "application/json"},
+    body: body === undefined ? undefined : JSON.stringify(body)});
+  let data = null;
+  try { data = await r.json(); } catch (e) {}
+  return {ok: r.ok, status: r.status, data};
+}
+const setMsg = t => { $("#message").textContent = t || ""; };
+const toQty = v => (v !== "" && Number.isInteger(Number(v))) ? Number(v) : v;
+
+function renderCart(c) {
+  const box = $("#items");
+  box.innerHTML = "";
+  c.items.forEach(it => {
+    const d = document.createElement("div");
+    d.className = "line";
+    d.setAttribute("data-testid", "cart-item");
+    d.setAttribute("data-item", it.item_id);
+    const title = document.createElement("div");
+    title.textContent = it.name + (it.label ? " (" + it.label + ")" : "");
+    const info = document.createElement("div");
+    info.textContent = "단가 " + won(it.unit_price) + "원 · 줄 합계 " + won(it.line_total) + "원";
+    const ctl = document.createElement("div");
+    const q = document.createElement("input");
+    q.type = "number"; q.min = 0; q.value = it.qty; q.setAttribute("data-testid", "cart-qty");
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = "수량 변경"; b.setAttribute("data-testid", "cart-update");
+    b.onclick = () => changeQty(it.item_id, q.value);
+    const rm = document.createElement("button");
+    rm.type = "button"; rm.textContent = "빼기"; rm.setAttribute("data-testid", "cart-remove");
+    rm.onclick = () => changeQty(it.item_id, 0);
+    ctl.append(q, " ", b, " ", rm);
+    d.append(title, info, ctl);
+    box.appendChild(d);
+  });
+  if (!c.items.length) box.textContent = "장바구니가 비어 있습니다";
+  $("#subtotal").textContent = won(c.subtotal);
+  $("#shipping").textContent = c.shipping === 0 ? "무료" : won(c.shipping);
+  $("#total").textContent = won(c.total);
+}
+
+async function changeQty(itemId, v) {
+  const r = await api("PUT", `/api/carts/${cartId}/items/${itemId}`, {qty: toQty(v)});
+  if (r.ok) { setMsg(""); renderCart(r.data); } else setMsg((r.data && r.data.detail) || "오류");
+}
+
+async function addToCart(p, card) {
+  const sel = card.querySelector('[data-testid="option"]');
+  const body = {product_id: p.product_id, option_id: sel ? (sel.value || null) : null,
+                qty: toQty(card.querySelector('[data-testid="qty"]').value)};
+  const r = await api("POST", `/api/carts/${cartId}/items`, body);
+  if (r.ok) { setMsg(""); renderCart(r.data); } else setMsg((r.data && r.data.detail) || "오류");
+}
+
+function renderProducts(list) {
+  const box = $("#products");
+  box.innerHTML = "";
+  list.forEach(p => {
+    const c = document.createElement("div");
+    c.className = "card";
+    c.setAttribute("data-testid", "product");
+    c.setAttribute("data-id", p.product_id);
+    c.setAttribute("data-soldout", p.sold_out ? "1" : "0");
+    const name = document.createElement("div");
+    name.className = "name"; name.textContent = p.name;
+    c.appendChild(name);
+    const price = document.createElement("div");
+    const sp = document.createElement("span");
+    sp.setAttribute("data-testid", "sale-price");
+    if (p.sale_price !== null) {
+      const lp = document.createElement("span");
+      lp.className = "list-price"; lp.setAttribute("data-testid", "list-price");
+      lp.textContent = won(p.price) + "원";
+      sp.className = "sale-price";
+      sp.textContent = won(p.sale_price) + "원";
+      price.append(lp, sp);
+    } else {
+      sp.className = "sale-price plain";
+      sp.textContent = won(p.price) + "원";
+      price.appendChild(sp);
+    }
+    c.appendChild(price);
+    if (p.sold_out) {
+      const s = document.createElement("span");
+      s.className = "soldout"; s.textContent = "품절";
+      c.appendChild(s);
+    }
+    if (p.options.length) {
+      const sel = document.createElement("select");
+      sel.setAttribute("data-testid", "option");
+      p.options.forEach(o => {
+        const op = document.createElement("option");
+        op.value = o.option_id;
+        op.textContent = o.label + (o.extra ? " (+" + won(o.extra) + "원)" : "");
+        sel.appendChild(op);
+      });
+      c.appendChild(sel);
+    }
+    const qty = document.createElement("input");
+    qty.type = "number"; qty.min = 1; qty.value = 1; qty.setAttribute("data-testid", "qty");
+    c.appendChild(qty);
+    const btn = document.createElement("button");
+    btn.type = "button"; btn.textContent = "담기"; btn.setAttribute("data-testid", "add-btn");
+    if (p.sold_out) btn.disabled = true;
+    btn.onclick = () => addToCart(p, c);
+    c.appendChild(btn);
+    box.appendChild(c);
+  });
+}
+
+async function load() {
+  $("#error").hidden = true; $("#main").hidden = false;
+  try {
+    const pr = await api("GET", "/api/products");
+    if (!pr.ok) throw new Error();
+    if (!cartId) {
+      const cr = await api("POST", "/api/carts");
+      if (!cr.ok) throw new Error();
+      cartId = cr.data.cart_id;
+    }
+    const cc = await api("GET", "/api/carts/" + cartId);
+    if (!cc.ok) throw new Error();
+    renderProducts(pr.data);
+    renderCart(cc.data);
+  } catch (e) {
+    $("#main").hidden = true; $("#error").hidden = false;
+  }
+}
+$("#retry").onclick = load;
+load();
+</script>
+</body>
+</html>

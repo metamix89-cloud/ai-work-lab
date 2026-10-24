@@ -1,0 +1,804 @@
+{
+ "A1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: (200, [{'id': 1, 'name': '가나다 포기김치', 'category': '김치', 'emoji': '🥬', ...}, {'id': 2, 'name': '국산 볶음김치', 'category': '김...ml', 'category': '양념', 'emoji': '🫙', ...}, {'id': 6, 'name': '전통 고추장 1kg', 'category': '양념', 'emoji': '🌶️', ...}, ...])\nassert (200 == 200 and 10 == 5)\n +  where 10 = len([{'id': 1, 'name': '가나다 포기김치', 'category': '김치', 'emoji': '🥬', ...}, {'id': 2, 'name': '국산 볶음김치', 'category': '김치', 'e...0ml', 'category': '양념', 'emoji': '🫙', ...}, {'id': 6, 'name': '전통 고추장 1kg', 'category': '양념', 'emoji': '🌶️', ...}, ...])",
+   "T3": "AssertionError: ('장바구니를 못 만듦', 404, {'detail': 'Not Found'})\nassert (404 in (200, 201))",
+   "T4": "AssertionError: ('장바구니를 못 만듦', 404, {'detail': 'Not Found'})\nassert (404 in (200, 201))",
+   "T5": "AssertionError: ('장바구니를 못 만듦', 404, {'detail': 'Not Found'})\nassert (404 in (200, 201))",
+   "T6": "AssertionError: ('장바구니를 못 만듦', 404, {'detail': 'Not Found'})\nassert (404 in (200, 201))",
+   "T7": "AssertionError: ('장바구니를 못 만듦', 404, {'detail': 'Not Found'})\nassert (404 in (200, 201))",
+   "T8": "AssertionError: ('없는 장바구니 + 잘못된 수량은 400 이 먼저', 404, {'detail': 'Not Found'})\nassert 404 == 400",
+   "T9": "AssertionError: 품절 카드 표시가 없다\nassert (None is not None)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": " 만듦', 404, {'detail': 'Not Found'})\nE       assert (404 in (200, 201))\n\n_grader\\test_dod.py:151: AssertionError\n____________________________ test_T8_reject_order _____________________________\n\nsrv = <test_dod.Server object at 0x00000166B9A9AA50>\n\n    def test_T8_reject_order(srv):\n        st, body = http(\"POST\", srv.base + \"/api/carts/no-such-cart/items\", {\"product_id\": \"P01\", \"qty\": 0})\n>       assert st == 400, (\"없는 장바구니 + 잘못된 수량은 400 이 먼저\", st, body)\nE       AssertionError: ('없는 장바구니 + 잘못된 수량은 400 이 먼저', 404, {'detail': 'Not Found'})\nE       assert 404 == 400\n\n_grader\\test_dod.py:293: AssertionError\n_______________________________ test_T9_screen ________________________________\n\nsrv = <test_dod.Server object at 0x00000166B9A9AA50>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen(srv, pw):\n        page = open_page(pw, srv)\n        sold = page.query_selector('[data-testid=\"product\"][data-id=\"P03\"]')\n>       assert sold is not None and sold.get_attribute(\"data-soldout\") == \"1\", \"품절 카드 표시가 없다\"\nE       AssertionError: 품절 카드 표시가 없다\nE       assert (None is not None)\n\n_grader\\test_dod.py:304: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_products_contract - AssertionError: (200,...\nFAILED _grader/test_dod.py::test_T3_sold_out_rejected - AssertionError: ('장...\nFAILED _grader/test_dod.py::test_T4_options_and_unit_price - AssertionError: ...\nFAILED _grader/test_dod.py::test_T5_quantity_limit - AssertionError: ('장바구...\nFAILED _grader/test_dod.py::test_T6_shipping_boundary - AssertionError: ('장...\nFAILED _grader/test_dod.py::test_T7_update_qty - AssertionError: ('장바구니를...\nFAILED _grader/test_dod.py::test_T8_reject_order - AssertionError: ('없는 장...\nFAILED _grader/test_dod.py::test_T9_screen - AssertionError: 품절 카드 표시가...\n8 failed, 1 passed in 7.70s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/cart/{cart_id}",
+   "/api/cart/{cart_id}/items",
+   "/api/cart/{cart_id}/items/{option_id}",
+   "/api/products",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/cart/{cart_id}",
+   "/api/cart/{cart_id}/items",
+   "/api/cart/{cart_id}/items/{option_id}"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/options.csv",
+   "seed/products.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '소호 쇼핑몰' 상품 목록과 장바구니 웹앱을 만들어 줘. 손님이 상품을 보고 옵션과 수량을 골라 장바구니에 담고, 합계와 배송비가 보이면 돼. 품절 상품이나 할인 상품도 있어. 결제는 필요 없어. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 96072,
+   "num_turns": 7,
+   "total_cost_usd": 0.3002349,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 32055,
+    "cache_read_input_tokens": 170049,
+    "output_tokens": 15499,
+    "output_tokens_details": {
+     "thinking_tokens": 749
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 32055,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1100,
+      "cache_read_input_tokens": 47894,
+      "cache_creation_input_tokens": 833,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 833
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "가나다식품 소호 쇼핑몰 웹앱을 만들었습니다. 서버 API는 테스트로 확인했습니다. 브라우저 화면은 직접 열어 보지 못했습니다. 아래 순서로 실행해 주세요.\n\n```\ncd <작업 폴더>/A1\npip install -r requirements.txt\npython main.py\n```\n\n실행한 뒤 http://127.0.0.1:8000 을 열면 됩니다. 첫 실행 때 `shop.db`가 자동으로 만들어지고 가상 상품 10종이 들어갑니다.\n\n**확인한 것:**\n- 상품 10종이 정상 조회됩니다.\n- 할인 상품을 담으면 합계에 할인가가 반영됩니다.\n- 품절 옵션은 담기가 거부되고 409 오류가 납니다.\n- 합계가 3만원 미만이면 배송비 3,000원이 붙습니다. 예를 들어 상품 25,000원에 배송비 3,000원이라 합계는 28,000원이었습니다.\n\n**기능:**\n- **상품 목록:** 카테고리 탭으로 거를 수 있습니다. 상품마다 이모지, 설명, 가격이 보입니다.\n- **옵션과 수량:** 옵션마다 가격과 재고가 따로 있습니다. 옵션을 바꾸면 가격이 바로 바뀌고, 재고가 5개 이하면 \"남은 수량\"이 표시됩니다.\n- **품절:** 상품 전체가 품절이면(고추장) 회색 처리되고 담기 버튼이 막힙니다. 옵션 일부만 품절이면(김치만두, 대과 감귤, 4인분 막국수) 그 옵션만 선택할 수 없습니다.\n- **할인:** 할인율 배지와 원가 취소선이 보입니다. 10원 단위로 반올림해 계산합니다.\n- **장바구니:** 오른쪽 패널에서 수량을 조절하고 삭제할 수 있습니다. 상품금액, 할인, 배송비, 합계가 보이고 무료배송까지 남은 금액도 안내합니다.\n- **재고 한도:** 재고보다 많이 담으면 \"재고가 부족합니다\" 메시지가 뜹니다.\n- **장바구니 유지:** 브라우저마다 `localStorage`에 저장한 ID로 구분하고 서버(SQLite)에 보관합니다. 새로고침해도 담은 상품이 남습니다.\n\n**배송비 규칙:** 합계가 30,000원 이상이면 무료, 미만이면 3,000원입니다. 기준은 `main.py` 상단의 `FREE_SHIPPING_MIN`과 `SHIPPING_FEE`에서 바꿉니다.\n\n가격, 할인, 배송비는 모두 서버에서 계산합니다. 결제와 재고 차감은 없습니다. 파일은 `main.py`(서버, DB, 가상 데이터)와 `static/index.html`(화면) 두 개가 중심입니다.",
+   "wall_s": 106.9
+  }
+ },
+ "A2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: (200, [{'id': 1, 'name': '국산 참기름', 'category': '양념/오일', 'emoji': '🫒', ...}, {'id': 2, 'name': '전통 간장', 'category': '양념...고추장', 'category': '양념/오일', 'emoji': '🌶️', ...}, {'id': 6, 'name': '현미 누룽지', 'category': '곡물', 'emoji': '🍚', ...}, ...])\nassert (200 == 200 and 10 == 5)\n +  where 10 = len([{'id': 1, 'name': '국산 참기름', 'category': '양념/오일', 'emoji': '🫒', ...}, {'id': 2, 'name': '전통 간장', 'category': '양념/오일', ... 고추장', 'category': '양념/오일', 'emoji': '🌶️', ...}, {'id': 6, 'name': '현미 누룽지', 'category': '곡물', 'emoji': '🍚', ...}, ...])",
+   "T3": "AssertionError: ('장바구니를 못 만듦', 404, {'detail': 'Not Found'})\nassert (404 in (200, 201))",
+   "T4": "AssertionError: ('장바구니를 못 만듦', 404, {'detail': 'Not Found'})\nassert (404 in (200, 201))",
+   "T5": "AssertionError: ('장바구니를 못 만듦', 404, {'detail': 'Not Found'})\nassert (404 in (200, 201))",
+   "T6": "AssertionError: ('장바구니를 못 만듦', 404, {'detail': 'Not Found'})\nassert (404 in (200, 201))",
+   "T7": "AssertionError: ('장바구니를 못 만듦', 404, {'detail': 'Not Found'})\nassert (404 in (200, 201))",
+   "T8": "AssertionError: ('없는 장바구니 + 잘못된 수량은 400 이 먼저', 404, {'detail': 'Not Found'})\nassert 404 == 400",
+   "T9": "AssertionError: 품절 카드 표시가 없다\nassert (None is not None)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": " 만듦', 404, {'detail': 'Not Found'})\nE       assert (404 in (200, 201))\n\n_grader\\test_dod.py:151: AssertionError\n____________________________ test_T8_reject_order _____________________________\n\nsrv = <test_dod.Server object at 0x000001EE09B4AA50>\n\n    def test_T8_reject_order(srv):\n        st, body = http(\"POST\", srv.base + \"/api/carts/no-such-cart/items\", {\"product_id\": \"P01\", \"qty\": 0})\n>       assert st == 400, (\"없는 장바구니 + 잘못된 수량은 400 이 먼저\", st, body)\nE       AssertionError: ('없는 장바구니 + 잘못된 수량은 400 이 먼저', 404, {'detail': 'Not Found'})\nE       assert 404 == 400\n\n_grader\\test_dod.py:293: AssertionError\n_______________________________ test_T9_screen ________________________________\n\nsrv = <test_dod.Server object at 0x000001EE09B4AA50>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen(srv, pw):\n        page = open_page(pw, srv)\n        sold = page.query_selector('[data-testid=\"product\"][data-id=\"P03\"]')\n>       assert sold is not None and sold.get_attribute(\"data-soldout\") == \"1\", \"품절 카드 표시가 없다\"\nE       AssertionError: 품절 카드 표시가 없다\nE       assert (None is not None)\n\n_grader\\test_dod.py:304: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_products_contract - AssertionError: (200,...\nFAILED _grader/test_dod.py::test_T3_sold_out_rejected - AssertionError: ('장...\nFAILED _grader/test_dod.py::test_T4_options_and_unit_price - AssertionError: ...\nFAILED _grader/test_dod.py::test_T5_quantity_limit - AssertionError: ('장바구...\nFAILED _grader/test_dod.py::test_T6_shipping_boundary - AssertionError: ('장...\nFAILED _grader/test_dod.py::test_T7_update_qty - AssertionError: ('장바구니를...\nFAILED _grader/test_dod.py::test_T8_reject_order - AssertionError: ('없는 장...\nFAILED _grader/test_dod.py::test_T9_screen - AssertionError: 품절 카드 표시가...\n8 failed, 1 passed in 5.72s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/cart/{cart_id}",
+   "/api/cart/{cart_id}/items",
+   "/api/cart/{cart_id}/items/{item_id}",
+   "/api/products"
+  ],
+  "extra_routes": [
+   "/api/cart/{cart_id}",
+   "/api/cart/{cart_id}/items",
+   "/api/cart/{cart_id}/items/{item_id}"
+  ],
+  "tests_modified": null,
+  "files": [
+   "app.py",
+   "build.json",
+   "requirements.txt",
+   "seed/options.csv",
+   "seed/products.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '소호 쇼핑몰' 상품 목록과 장바구니 웹앱을 만들어 줘. 손님이 상품을 보고 옵션과 수량을 골라 장바구니에 담고, 합계와 배송비가 보이면 돼. 품절 상품이나 할인 상품도 있어. 결제는 필요 없어. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 74537,
+   "num_turns": 5,
+   "total_cost_usd": 0.2379943,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 27440,
+    "cache_read_input_tokens": 124483,
+    "output_tokens": 11577,
+    "output_tokens_details": {
+     "thinking_tokens": 333
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 27440,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1278,
+      "cache_read_input_tokens": 43546,
+      "cache_creation_input_tokens": 566,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 566
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "가나다식품 소호 쇼핑몰 웹앱을 만들었습니다. 서버를 실제로 띄워 브라우저로 화면을 확인하지는 못했습니다. 대신 FastAPI 테스트 클라이언트로 API만 확인했고, 결과는 정상이었습니다. 상품 10개가 들어갔고 품절 상품은 2개였으며 메인 페이지는 200으로 응답했습니다. 할인 가격으로 합계와 배송비를 계산했고, 품절 옵션을 담으려 하면 409 오류가 났습니다. 확인할 때 만든 `shop.db`는 지웠습니다. 다음 실행 때 가상 데이터와 함께 다시 만들어집니다.\n\n## 실행 방법\n```\ncd <작업 폴더>/A2\npip install -r requirements.txt\npython app.py\n```\n브라우저에서 http://127.0.0.1:8000 으로 접속하면 됩니다.\n\n## 구성\n- `app.py`는 API와 SQLite를 맡습니다. 처음 실행하면 `shop.db`를 만들고 가상 상품 10개를 넣습니다.\n- `static/index.html`은 화면입니다. 상품 목록, 분류 탭, 장바구니가 한 페이지에 있습니다.\n- `requirements.txt`에는 fastapi와 uvicorn이 들어 있습니다.\n\n## 동작\n- **옵션과 수량**: 상품마다 옵션(용량이나 구성)이 있고 옵션별로 가격과 재고가 다릅니다. 옵션을 바꾸면 가격이 바로 바뀝니다.\n- **할인**: 할인 상품에는 \"N% 할인\" 배지가 붙고, 정가는 취소선으로 함께 보입니다. 할인은 정가에 옵션 추가금을 더한 금액에 적용됩니다.\n- **품절**: 상품 전체가 품절이면 \"품절\" 배지가 붙고 담을 수 없습니다. 일부 옵션만 품절이면 그 옵션만 선택할 수 없습니다. 이미 담아 둔 상품이 나중에 품절되면 장바구니에 경고가 뜨고 합계에서 빠집니다.\n- **장바구니**: 수량을 늘리거나 줄이고 삭제할 수 있습니다. 재고보다 많이 담을 수는 없고, 한 항목당 최대 20개입니다.\n- **합계와 배송비**: 상품 금액, 할인액, 배송비, 합계를 보여 줍니다. 배송비 규칙은 아래 가정에 적었습니다. 무료배송까지 남은 금액도 안내합니다.\n- **장바구니 유지**: 장바구니는 SQLite에 저장되고, 브라우저에 저장된 임의의 ID로 구분합니다. 로그인 없이 새로고침해도 유지됩니다.\n\n## 제가 정한 가정\n- 배송비는 5만 원 이상 무료이고, 그보다 적으면 3,000원입니다. 이 값은 `app.py` 상단의 `FREE_SHIPPING_THRESHOLD`와 `SHIPPING_FEE`에서 바꿀 수 있습니다.\n- 할인 가격은 10원 단위로 반올림합니다.\n\n상품 데이터는 `app.py`의 `SEED`에서 고칠 수 있습니다. 이미 만들어진 `shop.db`에는 반영되지 않으니, 고친 뒤에는 `shop.db`를 지우고 다시 실행하세요.",
+   "wall_s": 79.2
+  }
+ },
+ "A3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: (200, [{'id': 1, 'name': '국내산 김치 (포기김치)', 'category': '김치/반찬', 'emoji': '🥬', ...}, {'id': 2, 'name': '수제 참기름', 'catego... '현미 누룽지', 'category': '간식', 'emoji': '🍘', ...}, {'id': 6, 'name': '한우 육포', 'category': '간식', 'emoji': '🥩', ...}, ...])\nassert (200 == 200 and 10 == 5)\n +  where 10 = len([{'id': 1, 'name': '국내산 김치 (포기김치)', 'category': '김치/반찬', 'emoji': '🥬', ...}, {'id': 2, 'name': '수제 참기름', 'category': '...: '현미 누룽지', 'category': '간식', 'emoji': '🍘', ...}, {'id': 6, 'name': '한우 육포', 'category': '간식', 'emoji': '🥩', ...}, ...])",
+   "T3": "AssertionError: ('장바구니를 못 만듦', 404, {'detail': 'Not Found'})\nassert (404 in (200, 201))",
+   "T4": "AssertionError: ('장바구니를 못 만듦', 404, {'detail': 'Not Found'})\nassert (404 in (200, 201))",
+   "T5": "AssertionError: ('장바구니를 못 만듦', 404, {'detail': 'Not Found'})\nassert (404 in (200, 201))",
+   "T6": "AssertionError: ('장바구니를 못 만듦', 404, {'detail': 'Not Found'})\nassert (404 in (200, 201))",
+   "T7": "AssertionError: ('장바구니를 못 만듦', 404, {'detail': 'Not Found'})\nassert (404 in (200, 201))",
+   "T8": "AssertionError: ('없는 장바구니 + 잘못된 수량은 400 이 먼저', 404, {'detail': 'Not Found'})\nassert 404 == 400",
+   "T9": "AssertionError: 품절 카드 표시가 없다\nassert (None is not None)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": " 만듦', 404, {'detail': 'Not Found'})\nE       assert (404 in (200, 201))\n\n_grader\\test_dod.py:151: AssertionError\n____________________________ test_T8_reject_order _____________________________\n\nsrv = <test_dod.Server object at 0x000001A2C58BAA50>\n\n    def test_T8_reject_order(srv):\n        st, body = http(\"POST\", srv.base + \"/api/carts/no-such-cart/items\", {\"product_id\": \"P01\", \"qty\": 0})\n>       assert st == 400, (\"없는 장바구니 + 잘못된 수량은 400 이 먼저\", st, body)\nE       AssertionError: ('없는 장바구니 + 잘못된 수량은 400 이 먼저', 404, {'detail': 'Not Found'})\nE       assert 404 == 400\n\n_grader\\test_dod.py:293: AssertionError\n_______________________________ test_T9_screen ________________________________\n\nsrv = <test_dod.Server object at 0x000001A2C58BAA50>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen(srv, pw):\n        page = open_page(pw, srv)\n        sold = page.query_selector('[data-testid=\"product\"][data-id=\"P03\"]')\n>       assert sold is not None and sold.get_attribute(\"data-soldout\") == \"1\", \"품절 카드 표시가 없다\"\nE       AssertionError: 품절 카드 표시가 없다\nE       assert (None is not None)\n\n_grader\\test_dod.py:304: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_products_contract - AssertionError: (200,...\nFAILED _grader/test_dod.py::test_T3_sold_out_rejected - AssertionError: ('장...\nFAILED _grader/test_dod.py::test_T4_options_and_unit_price - AssertionError: ...\nFAILED _grader/test_dod.py::test_T5_quantity_limit - AssertionError: ('장바구...\nFAILED _grader/test_dod.py::test_T6_shipping_boundary - AssertionError: ('장...\nFAILED _grader/test_dod.py::test_T7_update_qty - AssertionError: ('장바구니를...\nFAILED _grader/test_dod.py::test_T8_reject_order - AssertionError: ('없는 장...\nFAILED _grader/test_dod.py::test_T9_screen - AssertionError: 품절 카드 표시가...\n8 failed, 1 passed in 5.71s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/cart/{cart_id}",
+   "/api/cart/{cart_id}/items",
+   "/api/cart/{cart_id}/items/{option_id}",
+   "/api/products"
+  ],
+  "extra_routes": [
+   "/api/cart/{cart_id}",
+   "/api/cart/{cart_id}/items",
+   "/api/cart/{cart_id}/items/{option_id}"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/options.csv",
+   "seed/products.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '소호 쇼핑몰' 상품 목록과 장바구니 웹앱을 만들어 줘. 손님이 상품을 보고 옵션과 수량을 골라 장바구니에 담고, 합계와 배송비가 보이면 돼. 품절 상품이나 할인 상품도 있어. 결제는 필요 없어. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 82568,
+   "num_turns": 8,
+   "total_cost_usd": 0.2669063,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 29709,
+    "cache_read_input_tokens": 219963,
+    "output_tokens": 12605,
+    "output_tokens_details": {
+     "thinking_tokens": 516
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 29709,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1070,
+      "cache_read_input_tokens": 46126,
+      "cache_creation_input_tokens": 255,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 255
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "가나다식품 소호 쇼핑몰 앱을 만들어서 실행되게 해 뒀어요. 상품 목록, 옵션·수량 선택, 장바구니 담기, 합계와 배송비 표시까지 됩니다. API를 직접 호출하는 테스트는 돌렸고 통과했어요. 브라우저에서 화면을 열어 보지는 않았으니, 화면은 한 번 확인해 주세요.\n\n**실행 방법** (프로젝트 폴더에서):\n```\npip install -r requirements.txt\npython main.py\n```\n그다음 브라우저에서 http://127.0.0.1:8000 을 열면 됩니다. 처음 실행하면 `shop.db`가 만들어지고 가상 데이터 10개가 들어가요. DB를 초기화하려면 `shop.db`를 지우고 다시 실행하세요.\n\n**손님이 할 수 있는 것**\n- 분류 탭(김치/반찬, 양념/소스, 젓갈, 간식)으로 상품을 골라 볼 수 있어요.\n- 상품마다 옵션(용량 등)과 수량(1~10개)을 고르면, 옵션에 따라 가격이 바뀌어 보여요.\n- 장바구니 패널(오른쪽 위 버튼)에서 수량 조절, 삭제, 비우기가 됩니다.\n- 장바구니에는 상품 금액, 할인액, 배송비, 합계가 보여요. 배송비가 붙은 경우 \"○○원 더 담으면 무료배송\"도 안내합니다.\n- 장바구니는 브라우저마다 따로 저장돼서, 새로고침해도 그대로 남아 있어요.\n\n**품절과 할인**\n- 한우 육포는 모든 옵션이 품절이라 \"품절\" 표시가 뜨고 담을 수 없어요. 김치 5kg, 들기름 320ml처럼 일부 옵션만 품절인 경우는 그 옵션만 선택이 막힙니다.\n- 재고가 5개 이하면 \"N개 남음\"이 표시되고, 재고보다 많이 담으려 하면 서버가 거절해요.\n- 참기름 20%, 감귤 한과 30% 같은 할인 상품은 정가에 취소선이 그어지고 할인율이 같이 보여요.\n\n**제가 정한 규칙** (필요하면 `main.py` 위쪽 값만 바꾸면 돼요)\n- 배송비는 3,000원이고, 할인 적용 후 상품 합계가 30,000원 이상이면 무료예요.\n- 할인은 기본가에 옵션 추가금을 더한 금액에 적용하고, 10원 단위로 반올림해요.\n- 담아 둔 뒤에 품절되거나 재고가 모자라게 된 상품은 장바구니에 경고가 뜨고, 합계에서는 빠져요.\n\n결제 기능은 요청하신 대로 넣지 않았어요. 코드는 `main.py`(API와 DB)와 `static/index.html`(화면) 두 파일입니다.",
+   "wall_s": 90.4
+  }
+ },
+ "B1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 9.12s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/carts",
+   "/api/carts/{cart_id}",
+   "/api/carts/{cart_id}/items",
+   "/api/carts/{cart_id}/items/{item_id}",
+   "/api/products"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/options.csv",
+   "seed/products.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 98288,
+   "num_turns": 9,
+   "total_cost_usd": 0.34926409999999997,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 38587,
+    "cache_read_input_tokens": 188361,
+    "output_tokens": 17606,
+    "output_tokens_details": {
+     "thinking_tokens": 686
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 38587,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 926,
+      "cache_read_input_tokens": 54463,
+      "cache_creation_input_tokens": 796,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 796
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD대로 웹앱을 만들었습니다. API 규칙은 스모크 테스트로 확인했지만, 화면(T9)과 `tests/test_dod.py`는 확인하지 못했습니다. 폴더에 `tests/`가 없어서 DoD 테스트 파일을 돌려 보지 못했고, 브라우저에서 화면도 열어 보지 않았습니다.\n\n**만든 파일**\n- `main.py`: FastAPI 앱입니다. 시작할 때마다 `seed/` CSV로 `shop.db`(SQLite)를 새로 만들고, API 5개와 규칙 R1~R7을 구현했습니다. 금액은 정수로 계산합니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. 왼쪽에 상품, 오른쪽에 장바구니가 있고, PRD에 적힌 `data-testid`를 모두 넣었습니다. 오류 상태에는 `불러오지 못했습니다`와 다시 시도 버튼이 나옵니다.\n- `seed/products.csv`, `seed/options.csv`: PRD에 시드 파일이 없어서 직접 만든 가상 데이터입니다. 상품 5개 중 품절 1개, 할인 2개, 옵션이 있는 상품 1개(옵션 2개)입니다. 이 값에 맞춰 T5·T6·T9를 통과하도록 정했습니다.\n  - 재고 3개·1회 한도 5개인 참기름\n  - 한도 2개인 쌀(할인 + 옵션)\n  - 1,500원 김 (재고 100, 한도 30)\n\n**스모크 테스트에서 확인한 것**\n- `/`가 200으로 열립니다.\n- 품절 상품은 409입니다.\n- 옵션을 빠뜨리면 400이고, 할인가에 옵션 추가금을 더한 단가는 15,000원이 나옵니다.\n- 같은 상품의 다른 옵션을 합쳐서 한도를 세고, 재고 3개 상품은 4개 담기가 409·3개 담기가 201입니다.\n- 1,500원 상품 19개는 합계 28,500원에 배송비 3,000원입니다.\n- 없는 장바구니에 잘못된 수량은 400, 올바른 본문은 404입니다. 없는 상품과 없는 줄도 404입니다.\n\n**실행**\n```\npython -m uvicorn main:app --port 8000\n```\n`PORT` 환경 변수를 따르는 처리는 넣지 않았습니다. 포트가 바뀌는 환경이면 `--port $PORT`로 넘기세요.",
+   "wall_s": 103.7
+  }
+ },
+ "B2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 9.16s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/carts",
+   "/api/carts/{cart_id}",
+   "/api/carts/{cart_id}/items",
+   "/api/carts/{cart_id}/items/{item_id}",
+   "/api/products"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/options.csv",
+   "seed/products.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 116667,
+   "num_turns": 12,
+   "total_cost_usd": 0.39474609999999993,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 41035,
+    "cache_read_input_tokens": 295681,
+    "output_tokens": 20101,
+    "output_tokens_details": {
+     "thinking_tokens": 1615
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 41035,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1167,
+      "cache_read_input_tokens": 56906,
+      "cache_creation_input_tokens": 801,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 801
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD대로 웹앱을 만들었습니다. API는 TestClient로 직접 확인했고, 브라우저 화면(T9)과 `tests/test_dod.py`는 아직 실행하지 못했습니다.\n\nPRD 폴더에는 `seed/`도 `tests/`도 없었습니다. 그래서 시드 CSV는 PRD 조건에 맞춰 새로 만들었고, `tests/test_dod.py`는 만들지 않았습니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버로 API 5개와 `/` 화면을 제공합니다.\n  - 시작할 때마다 `seed/*.csv`를 읽어 `shop.db`를 새로 만듭니다.\n  - 테이블은 `sh_` 접두어이고, 금액은 정수로만 계산합니다.\n  - 규칙 R1~R7을 반영했습니다. 거부는 400 → 404 → 409 순서로 하나만 돌려줍니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다.\n  - 왼쪽에 상품, 오른쪽에 장바구니를 두었고, PRD의 `data-testid`를 모두 붙였습니다.\n  - 품절 카드는 담기가 비활성이고 `품절`이 표시됩니다.\n  - 서버가 거부하면 `detail`을 메시지 줄에 그대로 보여줍니다.\n  - API가 실패하면 `불러오지 못했습니다`와 다시 시도 버튼이 나옵니다.\n- `seed/products.csv`, `seed/options.csv`: 가상 데이터입니다. 상품은 5개이고 품절 1개, 할인 2개입니다. 옵션은 참깨(P02)에 2개 있습니다. 1,500원 상품(보리차)과 재고가 한도보다 적은 상품(대추칩, 재고 3·한도 5)도 있습니다.\n- `requirements.txt`: `fastapi`, `uvicorn`입니다.\n\n**API 확인 결과**\n- `/`는 200으로 열리고 '장바구니'가 보입니다.\n- 상품은 5개이고 품절은 1개입니다.\n- 품절 상품을 담으면 409입니다.\n- 옵션을 빼먹으면 400입니다.\n- 할인 상품에 옵션을 붙이면 단가가 21,000원입니다(할인가 13,000 + 추가금 8,000).\n- 재고 3인 상품은 4개를 담으면 409, 3개를 담으면 201입니다.\n- 수량 0으로 바꾸면 줄이 빠집니다.\n- 없는 줄은 404입니다.\n- 없는 장바구니에 잘못된 수량을 보내면 400, 올바른 본문을 보내면 404입니다.\n- 없는 상품은 404입니다.\n\n**실행:** 프로젝트 폴더에서 `python -m uvicorn main:app --port 8000`을 실행하고 http://localhost:8000 을 열면 됩니다. `PORT` 환경 변수를 주면 그 포트를 씁니다.\n\n한도 2인 상품을 2개 담은 뒤 1개 더 담는 경우와 배송비 경계(28,500원 → 3,000원, 30,000원 → 0원)는 직접 돌려보지 않았습니다.",
+   "wall_s": 122.9
+  }
+ },
+ "B3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 19.67s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/carts",
+   "/api/carts/{cart_id}",
+   "/api/carts/{cart_id}/items",
+   "/api/carts/{cart_id}/items/{item_id}",
+   "/api/products"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/options.csv",
+   "seed/products.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 96554,
+   "num_turns": 12,
+   "total_cost_usd": 0.3383189,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 37116,
+    "cache_read_input_tokens": 290569,
+    "output_tokens": 16077,
+    "output_tokens_details": {
+     "thinking_tokens": 1435
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 37116,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1173,
+      "cache_read_input_tokens": 53484,
+      "cache_creation_input_tokens": 304,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 304
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD대로 웹앱을 만들었습니다. API 규칙은 스모크 테스트로 확인했지만, 브라우저에서 화면을 열어 보지는 못했고 `tests/test_dod.py`도 폴더에 없어서 실행하지 못했습니다.\n\n**스모크 테스트에서 확인한 것**\n- `/`가 200으로 열립니다.\n- 품절 상품(P03)을 담으면 409입니다.\n- 옵션이 있는 상품(P02)에 옵션을 빼고 담으면 400입니다.\n- 옵션 상품(P02)을 옵션 2kg(+3,000원)으로 담으면 단가가 10,500원입니다. 할인가 7,500원에 추가금을 더한 값입니다.\n- 재고 3인 P04에 4개를 담으면 409(`최대 3개까지…`)입니다.\n- 한도 2인 P05에 3개를 담으면 409입니다.\n- 상품 합계가 30,000원 이상이면 배송비가 0입니다.\n- 없는 장바구니와 잘못된 수량은 400, 없는 장바구니와 올바른 본문은 404, 없는 상품은 404입니다.\n\n**아직 확인하지 못한 것**\n- 수량 0으로 줄 빼기와 한도 초과로 바꾸기(T7)는 실행하지 않았습니다.\n- 합계 28,500원이면 배송비 3,000원(T6)도 실행하지 않았습니다.\n- 화면 쪽 T9(품절 카드 담기 막힘, 정가·할인가 표시, 1,500원 상품 담기 후 총액 4,500)도 확인하지 못했습니다.\n\n**파일 구성**\n- `main.py`: FastAPI 서버 하나로 되어 있습니다. 시작할 때마다 `seed/` CSV로 `shop.db`(`sh_` 테이블)를 새로 만들고, API 5개와 규칙 R1~R7을 구현했습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. PRD에 정한 `data-testid`를 모두 넣었고, 서버가 거부하면 `detail`을 그대로 메시지 줄에 보여 줍니다. API가 실패하면 `불러오지 못했습니다`와 다시 시도 버튼이 나옵니다.\n- `seed/products.csv`, `seed/options.csv`: 가상 상품 5개입니다. 품절 1개, 할인 2개, 옵션 상품 1개(옵션 2개)이고, 1,500원 쿠키도 있습니다. CSV를 바꿔 끼워도 동작합니다.\n- `requirements.txt`: `fastapi`와 `uvicorn`만 넣었습니다.\n\n**실행**\n```\npython -m uvicorn main:app --port 8000\n```\n`PORT` 환경 변수가 있으면 그 포트를 씁니다.\n\n**알아 둘 점**\n- 화면은 `cart_id`를 브라우저 localStorage에 저장합니다. 서버를 다시 시작해 DB가 새로 만들어지면 옛 `cart_id`는 404가 되고, 그때는 새 장바구니를 발급받습니다.\n- 상품 장바구니 수량 합계는 옵션이 달라도 같은 상품이면 합쳐서 한도를 셉니다.",
+   "wall_s": 103.3
+  }
+ },
+ "C1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 9.07s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/carts",
+   "/api/carts/{cart_id}",
+   "/api/carts/{cart_id}/items",
+   "/api/carts/{cart_id}/items/{item_id}",
+   "/api/products",
+   "/static"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/options.csv",
+   "seed/products.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 87369,
+   "num_turns": 10,
+   "total_cost_usd": 0.2891854,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 26928,
+    "cache_read_input_tokens": 268694,
+    "output_tokens": 15458,
+    "output_tokens_details": {
+     "thinking_tokens": 631
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 26928,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 406,
+      "cache_read_input_tokens": 61109,
+      "cache_creation_input_tokens": 179,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 179
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "테스트 9개가 모두 통과했고, 마지막 실행 결과는 `9 passed in 7.09s` 입니다.\n\n```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/products.csv, seed/options.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (PRD 의 API 5개 외에 추가한 경로는 없음. 화면과 `/static` 정적 파일 서빙은 `/` 를 열기 위한 것)\n```\n\nPRD 에서 정하지 않은 부분은 이렇게 처리했습니다.\n- **판정 순서:** 잘못된 수량(400) → 없는 장바구니·상품(404) → 옵션 불일치(400) → 품절·한도(409) 순입니다. 옵션이 맞는지 보려면 상품이 있어야 해서, 옵션 오류는 상품 확인 뒤에 판정합니다.\n- **품절 상품:** 품절 상품에 옵션 오류가 함께 있으면 400 이 먼저 나갑니다.",
+   "wall_s": 100.4
+  }
+ },
+ "C2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 9.02s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/carts",
+   "/api/carts/{cart_id}",
+   "/api/carts/{cart_id}/items",
+   "/api/carts/{cart_id}/items/{item_id}",
+   "/api/products"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/options.csv",
+   "seed/products.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 51299,
+   "num_turns": 8,
+   "total_cost_usd": 0.25398129999999997,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 37545,
+    "cache_read_input_tokens": 187113,
+    "output_tokens": 8507,
+    "output_tokens_details": {
+     "thinking_tokens": 597
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 37545,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 307,
+      "cache_read_input_tokens": 50651,
+      "cache_creation_input_tokens": 3566,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 3566
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/products.csv, seed/options.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (추가한 API 경로 없음. PRD 의 5개만 구현)\n```\n\n`python -m pytest tests -q` 를 돌려 9개가 모두 통과했습니다. `seed/` 의 가상 데이터는 테스트가 쓰는 고정 데이터와 같은 값으로 만들었습니다.\n\nPRD 에 정해지지 않은 거부 사유 문구는 제가 정했습니다. 장바구니·줄이 없을 때와 `product_id` 가 문자열이 아닐 때의 문구입니다.",
+   "wall_s": 62.5
+  }
+ },
+ "C3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 19.56s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/carts",
+   "/api/carts/{cart_id}",
+   "/api/carts/{cart_id}/items",
+   "/api/carts/{cart_id}/items/{item_id}",
+   "/api/products"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/options.csv",
+   "seed/products.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 86223,
+   "num_turns": 10,
+   "total_cost_usd": 0.3623656,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 45246,
+    "cache_read_input_tokens": 249276,
+    "output_tokens": 15643,
+    "output_tokens_details": {
+     "thinking_tokens": 686
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 45246,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 293,
+      "cache_read_input_tokens": 61663,
+      "cache_creation_input_tokens": 255,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 255
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "`pytest` 9개가 모두 통과했습니다. 마무리 확인 중입니다.\n\n```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/products.csv, seed/options.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (PRD 의 API 5개 외에 추가한 API · 칸 · 화면 요소 없음)\n```\n\n- **`shop.db`:** 서버를 띄우면 시작할 때마다 새로 만들어지는 파일이라 폴더에 남아 있습니다.\n- **`data-testid` 요소:** 장바구니의 수량 입력칸과 '빼기' 버튼은 `data-testid` 없이 PRD 4 의 '수량 바꾸기(0 이면 빼기)' 만 구현했습니다.",
+   "wall_s": 96.9
+  }
+ }
+}

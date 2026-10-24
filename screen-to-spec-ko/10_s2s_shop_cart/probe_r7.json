@@ -1,0 +1,7 @@
+[
+ {"name": "없는 장바구니 + 옵션 빠짐(P02)", "method": "POST", "path": "api/carts/nope/items", "body": {"product_id": "P02", "qty": 1}},
+ {"name": "없는 장바구니 + 남의 옵션(P01에 P02-1K)", "method": "POST", "path": "api/carts/nope/items", "body": {"product_id": "P01", "option_id": "P02-1K", "qty": 1}},
+ {"name": "품절(P03) + 옵션 줌", "method": "POST", "path": "api/carts/{cart}/items", "body": {"product_id": "P03", "option_id": "P02-1K", "qty": 1}},
+ {"name": "없는 상품 + 옵션 줌", "method": "POST", "path": "api/carts/{cart}/items", "body": {"product_id": "P99", "option_id": "P02-1K", "qty": 1}},
+ {"name": "없는 옵션 이름(P02-9K)", "method": "POST", "path": "api/carts/{cart}/items", "body": {"product_id": "P02", "option_id": "P02-9K", "qty": 1}}
+]

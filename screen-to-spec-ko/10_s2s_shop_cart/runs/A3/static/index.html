@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 소호 쇼핑몰</title>
+<style>
+  :root { --green:#2f7d4f; --red:#d6403a; --bg:#f6f4ef; --line:#e3dfd6; --text:#222; --muted:#777; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif; background:var(--bg); color:var(--text); }
+  header { background:var(--green); color:#fff; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:5; }
+  header h1 { font-size:20px; margin:0; }
+  header button { background:#fff; color:var(--green); border:0; border-radius:20px; padding:8px 16px; font-weight:bold; cursor:pointer; font-size:14px; }
+  .badge { background:var(--red); color:#fff; border-radius:10px; padding:1px 7px; margin-left:4px; font-size:12px; }
+  main { max-width:1100px; margin:0 auto; padding:20px; }
+  .tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .tabs button { border:1px solid var(--line); background:#fff; border-radius:16px; padding:6px 14px; cursor:pointer; }
+  .tabs button.on { background:var(--green); color:#fff; border-color:var(--green); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:16px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px; display:flex; flex-direction:column; gap:8px; position:relative; }
+  .card.soldout .emoji, .card.soldout h3, .card.soldout .desc { opacity:.4; }
+  .emoji { font-size:56px; text-align:center; }
+  .tag { position:absolute; top:12px; left:12px; background:var(--red); color:#fff; font-size:12px; font-weight:bold; padding:3px 8px; border-radius:6px; }
+  .tag.so { background:#555; }
+  .cat { font-size:12px; color:var(--muted); }
+  h3 { margin:0; font-size:16px; }
+  .desc { font-size:13px; color:var(--muted); min-height:34px; }
+  .price { font-size:18px; font-weight:bold; }
+  .price s { color:var(--muted); font-size:13px; font-weight:normal; margin-right:4px; }
+  .price .rate { color:var(--red); margin-right:4px; }
+  select, input[type=number] { padding:7px; border:1px solid var(--line); border-radius:6px; font-size:14px; font-family:inherit; }
+  .row { display:flex; gap:8px; }
+  .row input { width:64px; }
+  .btn { flex:1; background:var(--green); color:#fff; border:0; border-radius:6px; padding:9px; cursor:pointer; font-weight:bold; font-family:inherit; }
+  .btn:disabled { background:#bbb; cursor:not-allowed; }
+  #overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:9; }
+  #overlay.open { display:block; }
+  #panel { position:fixed; top:0; right:-440px; width:420px; max-width:100%; height:100%; background:#fff; z-index:10; transition:right .25s; display:flex; flex-direction:column; }
+  #panel.open { right:0; }
+  #panel h2 { margin:0; padding:16px 20px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; }
+  #panel h2 button { border:0; background:none; font-size:22px; cursor:pointer; }
+  #items { flex:1; overflow:auto; padding:8px 20px; }
+  .item { display:grid; grid-template-columns:40px 1fr auto; gap:8px 10px; padding:12px 0; border-bottom:1px solid var(--line); align-items:center; }
+  .item .e { font-size:30px; }
+  .item .nm { font-size:14px; font-weight:bold; }
+  .item .op { font-size:12px; color:var(--muted); }
+  .item .warn { color:var(--red); font-size:12px; font-weight:bold; }
+  .item.bad .nm, .item.bad .lt { text-decoration:line-through; color:var(--muted); }
+  .qty { display:flex; align-items:center; gap:4px; margin-top:4px; }
+  .qty button { width:26px; height:26px; border:1px solid var(--line); background:#fff; border-radius:4px; cursor:pointer; }
+  .item .rm { border:0; background:none; color:var(--muted); cursor:pointer; font-size:12px; text-decoration:underline; }
+  .lt { font-weight:bold; text-align:right; }
+  #sum { border-top:1px solid var(--line); padding:14px 20px; font-size:14px; }
+  #sum div { display:flex; justify-content:space-between; margin:4px 0; }
+  #sum .total { font-size:18px; font-weight:bold; margin-top:8px; }
+  #sum .hint { font-size:12px; color:var(--green); justify-content:flex-start; }
+  .empty { text-align:center; color:var(--muted); padding:60px 0; }
+  #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#333; color:#fff; padding:10px 18px; border-radius:20px; opacity:0; transition:opacity .2s; z-index:20; pointer-events:none; }
+  #toast.show { opacity:1; }
+  .note { font-size:12px; color:var(--muted); margin-top:20px; text-align:center; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🍚 가나다식품 소호 쇼핑몰</h1>
+  <button id="openCart">🛒 장바구니 <span class="badge" id="badge">0</span></button>
+</header>
+<main>
+  <div class="tabs" id="tabs"></div>
+  <div class="grid" id="grid"></div>
+  <p class="note">데모 쇼핑몰입니다. 결제 기능은 없습니다.</p>
+</main>
+<div id="overlay"></div>
+<aside id="panel">
+  <h2>장바구니 <button id="closeCart" aria-label="닫기">×</button></h2>
+  <div id="items"></div>
+  <div id="sum"></div>
+</aside>
+<div id="toast"></div>
+
+<script>
+const won = n => n.toLocaleString("ko-KR") + "원";
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+let cartId = localStorage.getItem("cartId");
+if (!cartId) { cartId = crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2); localStorage.setItem("cartId", cartId); }
+
+let products = [], category = "전체", cart = null;
+
+function toast(msg) {
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+async function api(method, path, body) {
+  const r = await fetch("/api/cart/" + cartId + path, {
+    method, headers: body ? {"Content-Type": "application/json"} : {}, body: body ? JSON.stringify(body) : undefined });
+  const data = await r.json();
+  if (!r.ok) throw new Error(typeof data.detail === "string" ? data.detail : "요청을 처리할 수 없습니다.");
+  return data;
+}
+
+function renderTabs() {
+  const cats = ["전체", ...new Set(products.map(p => p.category))];
+  $("tabs").innerHTML = cats.map(c => `<button class="${c === category ? "on" : ""}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
+  $("tabs").querySelectorAll("button").forEach(b => b.onclick = () => { category = b.dataset.c; renderTabs(); renderGrid(); });
+}
+
+function priceHtml(p, o) {
+  if (p.discount_rate > 0)
+    return `<s>${won(o.original_price)}</s><span class="rate">${p.discount_rate}%</span>${won(o.price)}`;
+  return won(o.price);
+}
+
+function renderGrid() {
+  const list = products.filter(p => category === "전체" || p.category === category);
+  $("grid").innerHTML = list.map(p => {
+    const opts = p.options.map(o =>
+      `<option value="${o.id}" ${o.stock <= 0 ? "disabled" : ""}>${esc(o.name)}${o.stock <= 0 ? " (품절)" : o.stock <= 5 ? ` (${o.stock}개 남음)` : ""}</option>`).join("");
+    const first = p.options.find(o => o.stock > 0) || p.options[0];
+    return `<div class="card ${p.sold_out ? "soldout" : ""}" data-p="${p.id}">
+      ${p.sold_out ? '<span class="tag so">품절</span>' : p.discount_rate ? `<span class="tag">${p.discount_rate}% 할인</span>` : ""}
+      <div class="emoji">${p.emoji}</div>
+      <div class="cat">${esc(p.category)}</div>
+      <h3>${esc(p.name)}</h3>
+      <div class="desc">${esc(p.description)}</div>
+      <div class="price">${priceHtml(p, first)}</div>
+      <select ${p.sold_out ? "disabled" : ""}>${opts}</select>
+      <div class="row"><input type="number" min="1" max="10" value="1" ${p.sold_out ? "disabled" : ""}>
+        <button class="btn" ${p.sold_out ? "disabled" : ""}>${p.sold_out ? "품절" : "장바구니 담기"}</button></div>
+    </div>`;
+  }).join("");
+  document.querySelectorAll(".card").forEach(card => {
+    const p = products.find(x => x.id == card.dataset.p);
+    const sel = card.querySelector("select"), qty = card.querySelector("input");
+    sel.onchange = () => {
+      const o = p.options.find(x => x.id == sel.value);
+      card.querySelector(".price").innerHTML = priceHtml(p, o);
+      qty.max = Math.min(10, o.stock);
+      if (+qty.value > +qty.max) qty.value = qty.max;
+    };
+    sel.onchange();
+    card.querySelector(".btn").onclick = async () => {
+      const q = parseInt(qty.value, 10);
+      if (!q || q < 1) return toast("수량을 확인해 주세요.");
+      try { cart = await api("POST", "/items", {option_id: +sel.value, qty: q}); renderCart(); toast("장바구니에 담았습니다."); }
+      catch (e) { toast(e.message); }
+    };
+  });
+}
+
+function renderCart() {
+  $("badge").textContent = cart.items.reduce((s, i) => s + i.qty, 0);
+  if (!cart.items.length) {
+    $("items").innerHTML = '<div class="empty">장바구니가 비어 있습니다.</div>';
+  } else {
+    $("items").innerHTML = cart.items.map(i => `
+      <div class="item ${i.problem ? "bad" : ""}" data-o="${i.option_id}">
+        <div class="e">${i.emoji}</div>
+        <div><div class="nm">${esc(i.name)}</div><div class="op">${esc(i.option_name)} · ${won(i.unit_price)}${i.unit_price < i.original_unit_price ? ` <s>${won(i.original_unit_price)}</s>` : ""}</div>
+          ${i.problem ? `<div class="warn">${esc(i.problem)} - 합계에서 제외됨</div>` : ""}
+          <div class="qty"><button data-d="-1">−</button><span>${i.qty}</span><button data-d="1">＋</button>
+            <button class="rm" style="width:auto;border:0;margin-left:8px">삭제</button></div></div>
+        <div class="lt">${won(i.line_total)}</div>
+      </div>`).join("");
+    $("items").querySelectorAll(".item").forEach(el => {
+      const oid = el.dataset.o, item = cart.items.find(x => x.option_id == oid);
+      el.querySelectorAll("[data-d]").forEach(b => b.onclick = () => change(oid, item.qty + +b.dataset.d));
+      el.querySelector(".rm").onclick = async () => { cart = await api("DELETE", "/items/" + oid); renderCart(); };
+    });
+  }
+  const s = cart.subtotal;
+  $("sum").innerHTML = `
+    <div><span>상품 금액</span><span>${won(s + cart.discount)}</span></div>
+    <div><span>할인</span><span>${cart.discount ? "-" + won(cart.discount) : "0원"}</span></div>
+    <div><span>배송비</span><span>${!s ? "-" : cart.shipping ? won(cart.shipping) : "무료"}</span></div>
+    ${s && cart.shipping ? `<div class="hint">${won(cart.remaining_for_free)} 더 담으면 무료배송!</div>` : ""}
+    <div class="total"><span>합계</span><span>${won(cart.total)}</span></div>
+    ${cart.items.length ? '<div><button class="rm" id="clear" style="border:0;background:none;color:#777;text-decoration:underline;cursor:pointer">장바구니 비우기</button></div>' : ""}`;
+  const clr = $("clear"); if (clr) clr.onclick = async () => { cart = await api("DELETE", ""); renderCart(); };
+}
+
+async function change(oid, q) {
+  if (q < 1) return;
+  try { cart = await api("PUT", "/items/" + oid, {qty: q}); renderCart(); } catch (e) { toast(e.message); }
+}
+
+const open = v => { $("panel").classList.toggle("open", v); $("overlay").classList.toggle("open", v); };
+$("openCart").onclick = () => open(true);
+$("closeCart").onclick = $("overlay").onclick = () => open(false);
+
+(async () => {
+  [products, cart] = await Promise.all([fetch("/api/products").then(r => r.json()), api("GET", "")]);
+  renderTabs(); renderGrid(); renderCart();
+})();
+</script>
+</body>
+</html>

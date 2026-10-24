@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>가나다식품 쇼핑몰 장바구니 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 10편 목업. 가상 회사 · 가상 상품 · 가상 가격. ?state=ok|empty|error. Mock-IT 라이트 테마. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--card:#FFFFFF;--indigo:#6366F1;--indigo2:#E0E7FF;--indigo3:#3730A3;--emerald:#10B981;--amber:#F59E0B;--rose:#EF4444}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:var(--indigo);display:inline-block}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#EEF0FF;color:var(--indigo);font-weight:700}
+.main{padding:18px 26px 14px 26px;display:flex;flex-direction:column;gap:9px}
+h1{margin:0;font-size:21px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:12px;margin-top:3px}
+.row{display:grid;grid-template-columns:1.55fr 1fr;gap:12px;flex:1;min-height:0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;align-content:start}
+.p{background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 12px;display:flex;flex-direction:column;gap:5px;font-size:12px}
+.p .img{height:52px;border-radius:8px;background:linear-gradient(135deg,#EEF0FF,#F7F8FB);display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:11px}
+.p b{font-size:13px}.p s{color:var(--mute);font-size:11px}.p .sp{font-weight:800;font-size:14px}.p .off{color:var(--rose);font-weight:800;font-size:11px;margin-left:4px}
+.p .ctl{display:flex;gap:5px;align-items:center}.p .sel,.p .q{border:1px solid var(--line);border-radius:6px;padding:3px 6px;font-size:11px}
+.p .btn{margin-left:auto;background:var(--indigo);color:#fff;border-radius:6px;padding:4px 10px;font-weight:700;font-size:11px}
+.p.so{opacity:.55}.p.so .btn{background:#D1D5DB}.badge{display:inline-block;background:#F3F4F6;color:#6B7280;border-radius:999px;padding:1px 7px;font-size:10.5px;font-weight:700}
+.p .lim{font-size:10.5px;color:var(--amber)}
+.cart{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:7px;font-size:12.5px;min-height:0}
+.cart h3{margin:0;font-size:13px;color:var(--ink2);display:flex;justify-content:space-between}
+.ln{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line)}.ln .n{flex:1}.ln .n small{display:block;color:var(--mute);font-size:11px}
+.ln .q{border:1px solid var(--line);border-radius:6px;padding:2px 8px}.ln .t{width:70px;text-align:right;font-weight:700}
+.sum div{display:flex;justify-content:space-between;padding:3px 0}.sum .tot{font-size:16px;font-weight:800;border-top:1px solid var(--line);padding-top:7px;margin-top:3px}
+.free{color:var(--emerald);font-weight:800}
+.hint{font-size:11px;color:var(--ink2);background:#EEF0FF;border-radius:7px;padding:6px 9px}
+.msg{color:var(--rose);font-size:11.5px}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mute);gap:4px;font-size:11px;text-align:center}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:12px;padding:20px;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700}
+</style></head><body>
+<div class="app">
+ <div class="side">
+  <div class="logo"><i></i>가나다식품</div>
+  <div class="nav"><div>오늘의 현황판</div><div>세금계산서</div><div>주문 · 재고</div><div class="on">쇼핑몰</div></div>
+ </div>
+ <div class="main" id="main"></div>
+</div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const head=`<div><h1>소호 쇼핑몰 · 장바구니</h1><div class="sub">품절은 못 담는다 · 옵션 있는 상품은 옵션 필수 · 수량 한도 = min(재고, 1회 한도) · 할인가 + 옵션 추가금 · 3만 원 이상 배송비 무료(3만 원 포함)</div></div>`;
+const prods=`<div class="grid">
+ <div class="p"><div class="img">두부</div><b>두부 300g</b><span class="sp">1,500원</span><div class="ctl"><span class="q">2 ▾</span><span class="btn">담기</span></div></div>
+ <div class="p"><div class="img">고추장</div><b>고추장</b><span><s>9,000원</s> <span class="sp">7,500원</span><span class="off">17%</span></span><div class="ctl"><span class="sel">1kg +6,000 ▾</span><span class="q">2</span><span class="btn">담기</span></div></div>
+ <div class="p so"><div class="img">냉동만두</div><b>냉동만두 1kg <span class="badge">품절</span></b><span class="sp">8,900원</span><div class="ctl"><span class="btn">품절</span></div></div>
+ <div class="p"><div class="img">김 선물세트</div><b>김 선물세트</b><span><s>25,000원</s> <span class="sp">23,000원</span></span><span class="lim">남은 재고 3개 — 최대 3개</span><div class="ctl"><span class="q">1</span><span class="btn">담기</span></div></div>
+ <div class="p"><div class="img">참기름</div><b>참기름 320ml</b><span class="sp">12,000원</span><span class="lim">1회 최대 2개</span><div class="ctl"><span class="q">1</span><span class="btn">담기</span></div></div>
+</div>`;
+let html='';
+if(state==='ok'){
+  html=head+`<div class="row">${prods}<div class="cart"><h3>장바구니 <span>2줄</span></h3>
+   <div class="ln"><span class="n">고추장 · 1kg<small>7,500 + 6,000 = 13,500원</small></span><span class="q">2</span><span class="t">27,000</span></div>
+   <div class="ln"><span class="n">두부 300g<small>1,500원</small></span><span class="q">2</span><span class="t">3,000</span></div>
+   <div class="sum"><div><span>상품 합계</span><b>30,000원</b></div><div><span>배송비</span><span class="free">무료</span></div><div class="tot"><span>총액</span><span>30,000원</span></div></div>
+   <div class="hint">두부를 1개로 줄이면 28,500원 → 배송비 3,000원 · 총액 31,500원 (3만 원 '이상' 이 무료)</div>
+   <div class="msg">최대 2개까지 담을 수 있습니다 — 참기름 3개째 거부(409)</div></div></div>`;
+}else if(state==='empty'){
+  html=head+`<div class="row">${prods}<div class="cart"><h3>장바구니 <span>0줄</span></h3><div class="empty"><b style="color:#4B5563;font-size:15px">장바구니가 비었습니다</b>빈 장바구니의 배송비는 0 — 3,000원이 붙으면 안 된다</div>
+   <div class="sum"><div><span>상품 합계</span><b>0원</b></div><div><span>배송비</span><b>0원</b></div><div class="tot"><span>총액</span><span>0원</span></div></div></div></div>`;
+}else{
+  html=head+`<div class="err"><div><b>불러오지 못했습니다.</b> 상품 API(/api/products) 가 응답하지 않습니다 — 재고 · 품절을 모르면 담기 버튼을 열지 않습니다.</div><button>다시 시도</button></div>
+  <div class="cart" style="flex:1"><div class="empty">합계와 배송비는 서버가 센다 — 화면이 따로 세면 할인가 · 추가금에서 어긋난다</div></div>`;
+}
+document.getElementById('main').innerHTML=html;
+</script></body></html>

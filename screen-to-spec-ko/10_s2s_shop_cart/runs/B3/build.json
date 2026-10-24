@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 96554,
+ "num_turns": 12,
+ "total_cost_usd": 0.3383189,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 37116,
+  "cache_read_input_tokens": 290569,
+  "output_tokens": 16077,
+  "output_tokens_details": {
+   "thinking_tokens": 1435
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 37116,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1173,
+    "cache_read_input_tokens": 53484,
+    "cache_creation_input_tokens": 304,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 304
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD대로 웹앱을 만들었습니다. API 규칙은 스모크 테스트로 확인했지만, 브라우저에서 화면을 열어 보지는 못했고 `tests/test_dod.py`도 폴더에 없어서 실행하지 못했습니다.\n\n**스모크 테스트에서 확인한 것**\n- `/`가 200으로 열립니다.\n- 품절 상품(P03)을 담으면 409입니다.\n- 옵션이 있는 상품(P02)에 옵션을 빼고 담으면 400입니다.\n- 옵션 상품(P02)을 옵션 2kg(+3,000원)으로 담으면 단가가 10,500원입니다. 할인가 7,500원에 추가금을 더한 값입니다.\n- 재고 3인 P04에 4개를 담으면 409(`최대 3개까지…`)입니다.\n- 한도 2인 P05에 3개를 담으면 409입니다.\n- 상품 합계가 30,000원 이상이면 배송비가 0입니다.\n- 없는 장바구니와 잘못된 수량은 400, 없는 장바구니와 올바른 본문은 404, 없는 상품은 404입니다.\n\n**아직 확인하지 못한 것**\n- 수량 0으로 줄 빼기와 한도 초과로 바꾸기(T7)는 실행하지 않았습니다.\n- 합계 28,500원이면 배송비 3,000원(T6)도 실행하지 않았습니다.\n- 화면 쪽 T9(품절 카드 담기 막힘, 정가·할인가 표시, 1,500원 상품 담기 후 총액 4,500)도 확인하지 못했습니다.\n\n**파일 구성**\n- `main.py`: FastAPI 서버 하나로 되어 있습니다. 시작할 때마다 `seed/` CSV로 `shop.db`(`sh_` 테이블)를 새로 만들고, API 5개와 규칙 R1~R7을 구현했습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. PRD에 정한 `data-testid`를 모두 넣었고, 서버가 거부하면 `detail`을 그대로 메시지 줄에 보여 줍니다. API가 실패하면 `불러오지 못했습니다`와 다시 시도 버튼이 나옵니다.\n- `seed/products.csv`, `seed/options.csv`: 가상 상품 5개입니다. 품절 1개, 할인 2개, 옵션 상품 1개(옵션 2개)이고, 1,500원 쿠키도 있습니다. CSV를 바꿔 끼워도 동작합니다.\n- `requirements.txt`: `fastapi`와 `uvicorn`만 넣었습니다.\n\n**실행**\n```\npython -m uvicorn main:app --port 8000\n```\n`PORT` 환경 변수가 있으면 그 포트를 씁니다.\n\n**알아 둘 점**\n- 화면은 `cart_id`를 브라우저 localStorage에 저장합니다. 서버를 다시 시작해 DB가 새로 만들어지면 옛 `cart_id`는 404가 되고, 그때는 새 장바구니를 발급받습니다.\n- 상품 장바구니 수량 합계는 옵션이 달라도 같은 상품이면 합쳐서 한도를 셉니다.",
+ "wall_s": 103.3
+}

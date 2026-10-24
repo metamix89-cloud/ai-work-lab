@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 소호 쇼핑몰</title>
+<style>
+  :root { --green:#2f7d4f; --red:#d63b3b; --gray:#777; --line:#e5e5e5; --bg:#f7f7f4; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Malgun Gothic",system-ui,sans-serif; background:var(--bg); color:#222; }
+  header { background:var(--green); color:#fff; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:5; }
+  header h1 { margin:0; font-size:20px; }
+  #cartBtn { background:#fff; color:var(--green); border:0; border-radius:20px; padding:8px 16px; font-weight:bold; cursor:pointer; }
+  main { max-width:1100px; margin:0 auto; padding:16px; }
+  .tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .tabs button { border:1px solid var(--line); background:#fff; border-radius:16px; padding:6px 14px; cursor:pointer; }
+  .tabs button.on { background:var(--green); color:#fff; border-color:var(--green); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:16px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:8px; position:relative; }
+  .card.soldout .emoji { filter:grayscale(1); opacity:.4; }
+  .emoji { font-size:56px; text-align:center; }
+  .badge { position:absolute; top:10px; left:10px; background:var(--red); color:#fff; font-size:12px; font-weight:bold; padding:3px 8px; border-radius:10px; }
+  .badge.so { background:#444; }
+  .name { font-weight:bold; }
+  .desc { font-size:13px; color:var(--gray); min-height:34px; }
+  .price { font-size:18px; font-weight:bold; }
+  .price .pct { color:var(--red); margin-right:6px; }
+  .price del { color:#aaa; font-size:13px; font-weight:normal; margin-left:6px; }
+  select, .card input[type=number] { padding:6px; border:1px solid #ccc; border-radius:6px; font-size:14px; }
+  .row { display:flex; gap:8px; }
+  .row input { width:64px; }
+  .add { flex:1; background:var(--green); color:#fff; border:0; border-radius:6px; padding:8px; cursor:pointer; font-weight:bold; }
+  .add:disabled { background:#bbb; cursor:not-allowed; }
+  .stock { font-size:12px; color:var(--gray); }
+  .stock.low { color:var(--red); }
+  /* 장바구니 패널 */
+  #overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:9; }
+  #panel { position:fixed; top:0; right:-440px; width:420px; max-width:100%; height:100%; background:#fff; z-index:10; transition:right .25s; display:flex; flex-direction:column; }
+  body.open #panel { right:0; } body.open #overlay { display:block; }
+  #panel h2 { margin:0; padding:16px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; }
+  #panel h2 button { border:0; background:none; font-size:22px; cursor:pointer; }
+  #items { flex:1; overflow:auto; padding:8px 16px; }
+  .item { display:flex; gap:10px; padding:12px 0; border-bottom:1px solid var(--line); }
+  .item .e { font-size:30px; }
+  .item .info { flex:1; font-size:14px; }
+  .item .opt { color:var(--gray); font-size:12px; }
+  .item.bad { opacity:.6; }
+  .item .warn { color:var(--red); font-size:12px; }
+  .qty { display:inline-flex; align-items:center; border:1px solid #ccc; border-radius:6px; margin-top:6px; }
+  .qty button { border:0; background:#f2f2f2; width:28px; height:28px; cursor:pointer; }
+  .qty span { min-width:32px; text-align:center; }
+  .rm { border:0; background:none; color:var(--gray); cursor:pointer; align-self:flex-start; }
+  #summary { border-top:1px solid var(--line); padding:16px; font-size:14px; }
+  #summary div { display:flex; justify-content:space-between; margin-bottom:6px; }
+  #summary .total { font-size:18px; font-weight:bold; margin-top:8px; }
+  #freeHint { background:#eef7f1; color:var(--green); padding:8px; border-radius:6px; margin-bottom:10px; font-size:13px; text-align:center; }
+  #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#333; color:#fff; padding:10px 18px; border-radius:20px; display:none; z-index:20; }
+  .empty { text-align:center; color:var(--gray); padding:40px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🛒 가나다식품 소호 쇼핑몰</h1>
+  <button id="cartBtn">장바구니 <span id="cnt">0</span></button>
+</header>
+<main>
+  <div class="tabs" id="tabs"></div>
+  <div class="grid" id="grid"></div>
+</main>
+<div id="overlay"></div>
+<aside id="panel">
+  <h2>장바구니 <button id="closeBtn" aria-label="닫기">×</button></h2>
+  <div id="items"></div>
+  <div id="summary"></div>
+</aside>
+<div id="toast"></div>
+
+<script>
+const won = n => n.toLocaleString("ko-KR") + "원";
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let cartId = localStorage.getItem("cartId");
+if (!cartId) { cartId = crypto.randomUUID(); localStorage.setItem("cartId", cartId); }
+let products = [], category = "전체";
+
+async function api(path, method = "GET", body) {
+  const r = await fetch("/api" + path, { method, headers: {"Content-Type":"application/json"}, body: body ? JSON.stringify(body) : undefined });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(typeof data.detail === "string" ? data.detail : "요청을 처리하지 못했습니다.");
+  return data;
+}
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.style.display = "block";
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.style.display = "none", 2200);
+}
+
+function renderTabs() {
+  const cats = ["전체", ...new Set(products.map(p => p.category))];
+  tabs.innerHTML = cats.map(c => `<button class="${c===category?"on":""}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
+  tabs.querySelectorAll("button").forEach(b => b.onclick = () => { category = b.dataset.c; renderTabs(); renderGrid(); });
+}
+
+function optLabel(o) {
+  return o.stock <= 0 ? `${o.name} (품절)` : `${o.name} — ${won(o.price)}`;
+}
+
+function renderGrid() {
+  grid.innerHTML = products.filter(p => category === "전체" || p.category === category).map(p => {
+    const first = p.options.find(o => o.stock > 0) || p.options[0];
+    return `<div class="card ${p.sold_out ? "soldout" : ""}" data-id="${p.id}">
+      ${p.sold_out ? '<span class="badge so">품절</span>' : p.discount_pct ? `<span class="badge">${p.discount_pct}% 할인</span>` : ""}
+      <div class="emoji">${p.emoji}</div>
+      <div class="name">${esc(p.name)}</div>
+      <div class="desc">${esc(p.description)}</div>
+      <div class="price" data-price>${priceHtml(p, first)}</div>
+      <select ${p.sold_out ? "disabled" : ""}>
+        ${p.options.map(o => `<option value="${o.id}" ${o.stock<=0?"disabled":""} ${o.id===first.id?"selected":""}>${esc(optLabel(o))}</option>`).join("")}
+      </select>
+      <div class="stock" data-stock></div>
+      <div class="row">
+        <input type="number" min="1" max="99" value="1" ${p.sold_out ? "disabled" : ""}>
+        <button class="add" ${p.sold_out ? "disabled" : ""}>${p.sold_out ? "품절" : "장바구니 담기"}</button>
+      </div>
+    </div>`;
+  }).join("");
+  grid.querySelectorAll(".card").forEach(card => {
+    const p = products.find(x => x.id == card.dataset.id);
+    const sel = card.querySelector("select"), qty = card.querySelector("input");
+    const update = () => {
+      const o = p.options.find(x => x.id == sel.value);
+      card.querySelector("[data-price]").innerHTML = priceHtml(p, o);
+      const st = card.querySelector("[data-stock]");
+      if (p.sold_out) { st.textContent = ""; return; }
+      st.textContent = o.stock <= 5 ? `남은 수량 ${o.stock}개` : "";
+      st.className = "stock low";
+      qty.max = o.stock;
+    };
+    sel.onchange = update; update();
+    card.querySelector(".add").onclick = async () => {
+      try {
+        const n = Math.max(1, parseInt(qty.value) || 1);
+        renderCart(await api(`/cart/${cartId}/items`, "POST", {option_id: +sel.value, qty: n}));
+        toast(`${p.name} ${n}개를 담았습니다.`);
+      } catch (e) { toast(e.message); }
+    };
+  });
+}
+function priceHtml(p, o) {
+  return p.discount_pct
+    ? `<span class="pct">${p.discount_pct}%</span>${won(o.price)}<del>${won(o.original_price)}</del>`
+    : won(o.price);
+}
+
+function renderCart(c) {
+  cnt.textContent = c.count;
+  items.innerHTML = c.items.length ? c.items.map(i => `
+    <div class="item ${i.available ? "" : "bad"}">
+      <div class="e">${esc(i.emoji)}</div>
+      <div class="info">
+        <div>${esc(i.name)}</div>
+        <div class="opt">${esc(i.option_name)} · ${won(i.unit_price)}${i.unit_price < i.original_price ? ` <del>${won(i.original_price)}</del>` : ""}</div>
+        ${i.available ? "" : `<div class="warn">${i.stock <= 0 ? "품절되어 합계에서 제외됩니다." : `재고 부족 (남은 수량 ${i.stock}개) — 수량을 줄여주세요.`}</div>`}
+        <div class="qty">
+          <button data-o="${i.option_id}" data-q="${i.qty-1}" ${i.qty<=1?"disabled":""}>−</button>
+          <span>${i.qty}</span>
+          <button data-o="${i.option_id}" data-q="${i.qty+1}">+</button>
+        </div>
+      </div>
+      <div><b>${won(i.line_total)}</b><br><button class="rm" data-rm="${i.option_id}">삭제</button></div>
+    </div>`).join("") : '<div class="empty">장바구니가 비어 있습니다.</div>';
+  items.querySelectorAll("[data-q]").forEach(b => b.onclick = async () => {
+    try { renderCart(await api(`/cart/${cartId}/items/${b.dataset.o}`, "PUT", {qty: +b.dataset.q})); }
+    catch (e) { toast(e.message); }
+  });
+  items.querySelectorAll("[data-rm]").forEach(b => b.onclick = async () =>
+    renderCart(await api(`/cart/${cartId}/items/${b.dataset.rm}`, "DELETE")));
+  const hint = c.items.length === 0 ? "" : c.shipping === 0
+    ? '<div id="freeHint">🎉 무료배송입니다!</div>'
+    : `<div id="freeHint">${won(c.remaining_for_free)} 더 담으면 무료배송 (${won(c.free_shipping_min)} 이상)</div>`;
+  summary.innerHTML = `${hint}
+    <div><span>상품금액</span><span>${won(c.subtotal + c.discount_total)}</span></div>
+    <div><span>할인</span><span>${c.discount_total ? "-" + won(c.discount_total) : "0원"}</span></div>
+    <div><span>배송비</span><span>${c.items.length === 0 || c.shipping === 0 ? "무료" : won(c.shipping)}</span></div>
+    <div class="total"><span>합계</span><span>${won(c.total)}</span></div>`;
+}
+
+const setOpen = v => document.body.classList.toggle("open", v);
+cartBtn.onclick = () => setOpen(true);
+closeBtn.onclick = overlay.onclick = () => setOpen(false);
+
+(async () => {
+  products = await api("/products");
+  renderTabs(); renderGrid();
+  renderCart(await api(`/cart/${cartId}`));
+})();
+</script>
+</body>
+</html>

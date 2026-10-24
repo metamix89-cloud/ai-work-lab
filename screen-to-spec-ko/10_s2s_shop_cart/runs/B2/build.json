@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 116667,
+ "num_turns": 12,
+ "total_cost_usd": 0.39474609999999993,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 41035,
+  "cache_read_input_tokens": 295681,
+  "output_tokens": 20101,
+  "output_tokens_details": {
+   "thinking_tokens": 1615
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 41035,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1167,
+    "cache_read_input_tokens": 56906,
+    "cache_creation_input_tokens": 801,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 801
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD대로 웹앱을 만들었습니다. API는 TestClient로 직접 확인했고, 브라우저 화면(T9)과 `tests/test_dod.py`는 아직 실행하지 못했습니다.\n\nPRD 폴더에는 `seed/`도 `tests/`도 없었습니다. 그래서 시드 CSV는 PRD 조건에 맞춰 새로 만들었고, `tests/test_dod.py`는 만들지 않았습니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버로 API 5개와 `/` 화면을 제공합니다.\n  - 시작할 때마다 `seed/*.csv`를 읽어 `shop.db`를 새로 만듭니다.\n  - 테이블은 `sh_` 접두어이고, 금액은 정수로만 계산합니다.\n  - 규칙 R1~R7을 반영했습니다. 거부는 400 → 404 → 409 순서로 하나만 돌려줍니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다.\n  - 왼쪽에 상품, 오른쪽에 장바구니를 두었고, PRD의 `data-testid`를 모두 붙였습니다.\n  - 품절 카드는 담기가 비활성이고 `품절`이 표시됩니다.\n  - 서버가 거부하면 `detail`을 메시지 줄에 그대로 보여줍니다.\n  - API가 실패하면 `불러오지 못했습니다`와 다시 시도 버튼이 나옵니다.\n- `seed/products.csv`, `seed/options.csv`: 가상 데이터입니다. 상품은 5개이고 품절 1개, 할인 2개입니다. 옵션은 참깨(P02)에 2개 있습니다. 1,500원 상품(보리차)과 재고가 한도보다 적은 상품(대추칩, 재고 3·한도 5)도 있습니다.\n- `requirements.txt`: `fastapi`, `uvicorn`입니다.\n\n**API 확인 결과**\n- `/`는 200으로 열리고 '장바구니'가 보입니다.\n- 상품은 5개이고 품절은 1개입니다.\n- 품절 상품을 담으면 409입니다.\n- 옵션을 빼먹으면 400입니다.\n- 할인 상품에 옵션을 붙이면 단가가 21,000원입니다(할인가 13,000 + 추가금 8,000).\n- 재고 3인 상품은 4개를 담으면 409, 3개를 담으면 201입니다.\n- 수량 0으로 바꾸면 줄이 빠집니다.\n- 없는 줄은 404입니다.\n- 없는 장바구니에 잘못된 수량을 보내면 400, 올바른 본문을 보내면 404입니다.\n- 없는 상품은 404입니다.\n\n**실행:** 프로젝트 폴더에서 `python -m uvicorn main:app --port 8000`을 실행하고 http://localhost:8000 을 열면 됩니다. `PORT` 환경 변수를 주면 그 포트를 씁니다.\n\n한도 2인 상품을 2개 담은 뒤 1개 더 담는 경우와 배송비 경계(28,500원 → 3,000원, 30,000원 → 0원)는 직접 돌려보지 않았습니다.",
+ "wall_s": 122.9
+}

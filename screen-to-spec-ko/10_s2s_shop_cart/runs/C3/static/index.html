@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>가나다식품 - 상품 · 장바구니</title>
+<style>
+  body { font-family: sans-serif; margin: 0; color: #222; }
+  header { padding: 12px 20px; background: #2e7d32; color: #fff; }
+  header h1 { margin: 0; font-size: 20px; }
+  main { display: flex; gap: 24px; padding: 20px; align-items: flex-start; }
+  main[hidden], #error[hidden] { display: none; }
+  #products { flex: 2; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  #cart { flex: 1; border: 1px solid #ccc; padding: 12px; border-radius: 6px; }
+  .card { border: 1px solid #ddd; border-radius: 6px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .card.soldout { background: #f3f3f3; color: #888; }
+  .list-price { text-decoration: line-through; color: #888; margin-right: 6px; }
+  .sale-price { font-weight: bold; }
+  .soldout-mark { color: #c62828; font-weight: bold; }
+  .cart-item { border-bottom: 1px solid #eee; padding: 8px 0; }
+  .cart-item input { width: 56px; }
+  .sum-row { display: flex; justify-content: space-between; margin-top: 6px; }
+  #message { min-height: 1.4em; margin: 8px 0; color: #c62828; }
+  #error { padding: 20px; }
+</style>
+</head>
+<body>
+<header><h1>가나다식품 소호 쇼핑몰</h1></header>
+<div id="error" hidden><span>불러오지 못했습니다</span> <button id="retry" type="button">다시 시도</button></div>
+<main id="app">
+  <section id="products" aria-label="상품 목록"></section>
+  <aside id="cart">
+    <h2>장바구니</h2>
+    <div data-testid="message" id="message"></div>
+    <div id="items"></div>
+    <div class="sum-row"><span>상품 합계</span><span data-testid="subtotal" id="subtotal">0</span></div>
+    <div class="sum-row"><span>배송비</span><span data-testid="shipping" id="shipping">0</span></div>
+    <div class="sum-row"><strong>총액</strong><strong data-testid="total" id="total">0</strong></div>
+  </aside>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const won = (n) => n.toLocaleString("en-US");
+let cartId = null;
+
+async function api(method, url, body) {
+  const res = await fetch(url, {
+    method,
+    headers: body ? { "Content-Type": "application/json" } : {},
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok) {
+    const err = new Error((data && data.detail) || "오류");
+    err.status = res.status; err.api = true;
+    throw err;
+  }
+  return data;
+}
+
+function setMessage(text) { $("message").textContent = text || ""; }
+
+async function ensureCart() {
+  cartId = localStorage.getItem("cart_id");
+  if (cartId) {
+    try { return await api("GET", "/api/carts/" + cartId); }
+    catch (e) { if (e.status !== 404) throw e; }
+  }
+  cartId = (await api("POST", "/api/carts")).cart_id;
+  localStorage.setItem("cart_id", cartId);
+  return api("GET", "/api/carts/" + cartId);
+}
+
+function renderProducts(list) {
+  const box = $("products");
+  box.innerHTML = "";
+  for (const p of list) {
+    const card = document.createElement("div");
+    card.className = "card" + (p.sold_out ? " soldout" : "");
+    card.setAttribute("data-testid", "product");
+    card.setAttribute("data-id", p.product_id);
+    card.setAttribute("data-soldout", p.sold_out ? "1" : "0");
+    const name = document.createElement("strong");
+    name.textContent = p.name;
+    card.appendChild(name);
+    const price = document.createElement("div");
+    const mk = (cls, tid, val) => {
+      const s = document.createElement("span");
+      s.className = cls; s.setAttribute("data-testid", tid); s.textContent = won(val) + "원";
+      return s;
+    };
+    if (p.sale_price !== null) {
+      price.appendChild(mk("list-price", "list-price", p.price));
+      price.appendChild(mk("sale-price", "sale-price", p.sale_price));
+    } else {
+      price.appendChild(mk("sale-price", "sale-price", p.price));
+    }
+    card.appendChild(price);
+    let sel = null;
+    if (p.options.length) {
+      sel = document.createElement("select");
+      sel.setAttribute("data-testid", "option");
+      for (const o of p.options) {
+        const op = document.createElement("option");
+        op.value = o.option_id;
+        op.textContent = o.label + (o.extra ? " (+" + won(o.extra) + "원)" : "");
+        sel.appendChild(op);
+      }
+      card.appendChild(sel);
+    }
+    if (p.sold_out) {
+      const m = document.createElement("span");
+      m.className = "soldout-mark"; m.textContent = "품절";
+      card.appendChild(m);
+    }
+    const qty = document.createElement("input");
+    qty.type = "number"; qty.min = "1"; qty.value = "1";
+    qty.setAttribute("data-testid", "qty");
+    card.appendChild(qty);
+    const btn = document.createElement("button");
+    btn.type = "button"; btn.textContent = "담기";
+    btn.setAttribute("data-testid", "add-btn");
+    btn.disabled = p.sold_out;
+    btn.addEventListener("click", () => addToCart(p.product_id, sel ? sel.value : null, qty.value));
+    card.appendChild(btn);
+    box.appendChild(card);
+  }
+}
+
+function renderCart(c) {
+  const box = $("items");
+  box.innerHTML = "";
+  for (const it of c.items) {
+    const row = document.createElement("div");
+    row.className = "cart-item";
+    row.setAttribute("data-testid", "cart-item");
+    row.setAttribute("data-item", it.item_id);
+    const t = document.createElement("div");
+    t.textContent = it.name + (it.label ? " / " + it.label : "");
+    const u = document.createElement("div");
+    u.textContent = "단가 " + won(it.unit_price) + "원 · 줄 합계 " + won(it.line_total) + "원";
+    const q = document.createElement("input");
+    q.type = "number"; q.min = "0"; q.value = it.qty;
+    q.addEventListener("change", () => updateItem(it.item_id, q.value));
+    const rm = document.createElement("button");
+    rm.type = "button"; rm.textContent = "빼기";
+    rm.addEventListener("click", () => updateItem(it.item_id, 0));
+    row.append(t, u, q, rm);
+    box.appendChild(row);
+  }
+  $("subtotal").textContent = won(c.subtotal) + "원";
+  $("shipping").textContent = c.shipping === 0 ? "무료" : won(c.shipping) + "원";
+  $("total").textContent = won(c.total) + "원";
+}
+
+function parseQty(v) { return /^-?\d+$/.test(String(v).trim()) ? Number(v) : NaN; }
+
+async function act(fn) {
+  try { renderCart(await fn()); setMessage(""); }
+  catch (e) {
+    if (!e.api) { showError(); return; }
+    setMessage(e.message);
+    try { renderCart(await api("GET", "/api/carts/" + cartId)); } catch (_) {}
+  }
+}
+
+function addToCart(pid, oid, qty) {
+  const body = { product_id: pid, qty: parseQty(qty) };
+  if (oid) body.option_id = oid;
+  return act(() => api("POST", "/api/carts/" + cartId + "/items", body));
+}
+
+function updateItem(itemId, qty) {
+  return act(() => api("PUT", "/api/carts/" + cartId + "/items/" + itemId, { qty: parseQty(qty) }));
+}
+
+function showError() { $("error").hidden = false; $("app").hidden = true; }
+
+async function load() {
+  try {
+    const [products, c] = await Promise.all([api("GET", "/api/products"), ensureCart()]);
+    $("error").hidden = true; $("app").hidden = false;
+    renderProducts(products);
+    renderCart(c);
+  } catch (e) { showError(); }
+}
+
+$("retry").addEventListener("click", load);
+load();
+</script>
+</body>
+</html>

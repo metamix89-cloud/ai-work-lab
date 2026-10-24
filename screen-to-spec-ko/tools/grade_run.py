@@ -56,7 +56,8 @@ def grade_dir(app_dir, tests_src, port=8765, timeout=420, allowed=None):
     try:
         pr = subprocess.run([sys.executable, "-m", "pytest", grader, "-q", "-p", "no:cacheprovider",
                              "--junitxml=" + xml_path, "-o", "junit_family=xunit2"],
-                            cwd=app_dir, env=env, capture_output=True, text=True, encoding="utf-8", errors="ignore", timeout=timeout)
+                            cwd=app_dir, env=env, capture_output=True, text=True, encoding="utf-8", errors="ignore", timeout=timeout,
+                            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
         res["pytest_rc"] = pr.returncode
         res["stdout_tail"] = (pr.stdout or "")[-2000:]
     except subprocess.TimeoutExpired:
@@ -94,16 +95,18 @@ def grade_dir(app_dir, tests_src, port=8765, timeout=420, allowed=None):
 
 def main():
     lab = os.path.abspath(sys.argv[1])
-    only = None
+    only, port = None, 8765
     for a in sys.argv[2:]:
         if a.startswith("--only="):
             only = set(a.split("=", 1)[1].split(","))
+        elif a.startswith("--port="):
+            port = int(a.split("=", 1)[1])
     tests_src = os.path.join(lab, "tests")
     allowed = load_grading(lab).get("allowed_routes", [])
     out_path = os.path.join(lab, "results.json")
     results = json.load(open(out_path, encoding="utf-8")) if os.path.exists(out_path) else {}
     runs = sorted(d for d in glob.glob(os.path.join(lab, "runs", "*")) if os.path.isdir(d))
-    port = 8765
+    # 기본 8765. 빌드와 같이 돌릴 땐 --port=9100 처럼 8000~8999 밖으로 (빌드 전 서버 정리에 안 걸리게)
     for d in runs:
         name = os.path.basename(d)
         if only and name not in only:
