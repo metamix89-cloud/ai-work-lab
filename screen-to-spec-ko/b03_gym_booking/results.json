@@ -1,0 +1,866 @@
+{
+ "A1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: {'detail': 'Not Found'}\nassert (404 == 200)",
+   "T3": "AssertionError: ('잔여 2 · 예약 중 1 → 한 번 더 된다', 422, {'detail': [{'type': 'int_parsing', 'loc': ['body', 'member_id'], 'msg': 'Input shou...body', 'slot_id'], 'msg': 'Input should be a valid integer, unable to parse string as an integer', 'input': 'S-104'}]})\nassert (422 == 201)",
+   "T4": "AssertionError: ('만료 회원은 409', 422, {'detail': [{'type': 'int_parsing', 'loc': ['body', 'member_id'], 'msg': 'Input should be a valid ...body', 'slot_id'], 'msg': 'Input should be a valid integer, unable to parse string as an integer', 'input': 'S-104'}]})\nassert (422 == 409)",
+   "T5": "AssertionError: ('정원 2 가득 → 409', 422, {'detail': [{'type': 'int_parsing', 'loc': ['body', 'member_id'], 'msg': 'Input should be a val...body', 'slot_id'], 'msg': 'Input should be a valid integer, unable to parse string as an integer', 'input': 'S-103'}]})\nassert (422 == 409)",
+   "T6": "AssertionError: ('GET /api/passes', 'c1', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T7": "AssertionError: ('1시간 뒤 수업의 취소는 409', 422, {'detail': [{'type': 'int_parsing', 'loc': ['path', 'bid'], 'msg': 'Input should be a valid integer, unable to parse string as an integer', 'input': 'B-1003'}]})\nassert (422 == 409)",
+   "T8": "AssertionError: ('회원이 남의 예약을 만들면 403', 422, {'detail': [{'type': 'int_parsing', 'loc': ['body', 'member_id'], 'msg': 'Input should be ...body', 'slot_id'], 'msg': 'Input should be a valid integer, unable to parse string as an integer', 'input': 'S-104'}]})\nassert 422 == 403",
+   "T9": "AssertionError: 회원권 카드 숫자가 없다\nassert (None is not None)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "_______________________\n\nsrv = <test_dod.Server object at 0x000001AE96836BA0>\n\n    def test_T8_roles_and_reject_order(srv):\n        st, body = book(srv, \"c2\", \"c1\", \"S-104\")\n>       assert st == 403, (\"회원이 남의 예약을 만들면 403\", st, body)\nE       AssertionError: ('회원이 남의 예약을 만들면 403', 422, {'detail': [{'type': 'int_parsing', 'loc': ['body', 'member_id'], 'msg': 'Input should be ...body', 'slot_id'], 'msg': 'Input should be a valid integer, unable to parse string as an integer', 'input': 'S-104'}]})\nE       assert 422 == 403\n\n_grader\\test_dod.py:322: AssertionError\n_______________________________ test_T9_screen ________________________________\n\nsrv = <test_dod.Server object at 0x000001AE96836BA0>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen(srv, pw):\n        pg = open_page(pw, srv)\n        left = pg.query_selector('[data-testid=\"pass-left\"]')\n>       assert left is not None and digits(left.inner_text()) and pg.query_selector('[data-testid=\"pass-avail\"]') is not None, \"회원권 카드 숫자가 없다\"\nE       AssertionError: 회원권 카드 숫자가 없다\nE       assert (None is not None)\n\n_grader\\test_dod.py:338: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: {'detail': 'No...\nFAILED _grader/test_dod.py::test_T3_available_count - AssertionError: ('잔여 ...\nFAILED _grader/test_dod.py::test_T4_expiry_and_past - AssertionError: ('만료 ...\nFAILED _grader/test_dod.py::test_T5_capacity_and_duplicate - AssertionError: ...\nFAILED _grader/test_dod.py::test_T6_deduct_timing - AssertionError: ('GET /ap...\nFAILED _grader/test_dod.py::test_T7_cancel_deadline_and_state - AssertionErro...\nFAILED _grader/test_dod.py::test_T8_roles_and_reject_order - AssertionError: ...\nFAILED _grader/test_dod.py::test_T9_screen - AssertionError: 회원권 카드 숫자...\n8 failed, 1 passed in 5.71s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/bookings",
+   "/api/bookings/{bid}/attend",
+   "/api/bookings/{bid}/cancel",
+   "/api/bookings/{bid}/noshow",
+   "/api/bookings/{bid}/revert",
+   "/api/config",
+   "/api/desk",
+   "/api/members",
+   "/api/members/{mid}",
+   "/api/members/{mid}/memberships",
+   "/api/slots",
+   "/api/trainers"
+  ],
+  "extra_routes": [
+   "/api/bookings/{bid}/revert",
+   "/api/config",
+   "/api/desk",
+   "/api/members",
+   "/api/members/{mid}",
+   "/api/members/{mid}/memberships",
+   "/api/trainers"
+  ],
+  "tests_modified": null,
+  "files": [
+   "README.md",
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/bookings.csv",
+   "seed/passes.csv",
+   "seed/slots.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 으랏차차헬스 'PT 수업 예약 · 회원권 차감' 웹앱을 만들어 줘. 10회권 같은 회원권을 가진 회원이 수업 시간을 예약하고, 데스크가 출석과 노쇼를 처리하면 회원권 횟수가 맞게 줄어야 해. 수업마다 정원이 있고, 취소는 제때 해야 하고, 노쇼가 잦은 회원은 막아야 해. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 175284,
+   "num_turns": 15,
+   "total_cost_usd": 0.4982151,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 26,
+    "cache_creation_input_tokens": 43741,
+    "cache_read_input_tokens": 635091,
+    "output_tokens": 25969,
+    "output_tokens_details": {
+     "thinking_tokens": 3304
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 43741,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1615,
+      "cache_read_input_tokens": 60231,
+      "cache_creation_input_tokens": 182,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 182
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PT 예약·회원권 차감 웹앱을 만들었고, 가상 데이터가 들어 있어 바로 실행됩니다. 서버를 띄워 화면(200)과 API 응답을 확인했습니다. 자동 테스트는 FastAPI 테스트클라이언트로 돌렸고, 규칙별 시나리오는 모두 의도대로 동작했습니다. 브라우저 화면은 직접 열어보지 않았습니다.\n\n## 실행\n```\ncd <작업 폴더>/A1\npython main.py        # http://127.0.0.1:8000\n```\n첫 실행 때 `pt.db`가 만들어지고 가상 데이터가 들어갑니다. 데이터를 초기화하려면 `pt.db`를 지우면 됩니다.\n\n## 화면\n- **회원 탭**: 회원을 골라 체험합니다. 회원권 잔여, 7일 수업 예약과 취소, 예약 가능 여부, 노쇼 경고, 차감 내역을 볼 수 있습니다.\n- **데스크 탭**: 수업별 예약자 목록에서 출석, 노쇼, 데스크 취소, 되돌리기를 처리합니다.\n- **관리 탭**: 회원권 판매, 수업 개설, 회원별 노쇼 현황을 봅니다.\n\n## 규칙\n- **차감 시점**: 예약만으로는 차감되지 않고, 데스크가 출석이나 노쇼로 처리할 때 1회 차감됩니다. 예약 중인 수업은 잔여 횟수에서 미리 잡아 두기 때문에 횟수를 넘겨 예약할 수 없습니다.\n- **정원**: 정원이 찬 수업은 예약이 막힙니다. 5명이 동시에 예약해도 정원을 넘지 않는 것을 확인했습니다.\n- **취소**: 회원은 수업 24시간 전까지만 취소할 수 있습니다. 그 뒤는 데스크만 취소할 수 있고, 이때는 차감이 없습니다. 회원이 안 오면 데스크가 노쇼로 처리합니다.\n- **노쇼 제한**: 최근 30일 안에 노쇼가 3회면 예약이 막히고, 막힌 회원에게는 해제 일시를 안내합니다.\n- **정정**: 출석이나 노쇼를 잘못 눌렀으면 되돌리기로 차감분을 복구합니다. 같은 처리를 두 번 눌러도 이중 차감되지 않습니다. 모든 증감은 원장에 남고, 회원권 잔여는 원장 합계와 일치합니다.\n- **그 밖의 예약 거부**: 이미 시작한 수업, 같은 시간대 중복 예약, 회원권이 만료된 경우도 거부합니다.\n- **처리 가능 시간**: 출석은 시작 30분 전부터, 노쇼는 시작 10분 후부터 처리할 수 있습니다.\n\n규칙 값(24시간, 3회, 30일 등)은 `main.py` 상단 상수에서 바꿀 수 있습니다.\n\n## 가상 데이터\n- 회원 6명과 트레이너 3명이 있습니다.\n- **강나래**: 노쇼 3회라 예약이 제한된 상태입니다.\n- **오세훈**: 노쇼 1회입니다.\n- **한지민**: 회원권이 5일 뒤 만료됩니다.\n- **윤도현**: 5회권에 잔여 1회입니다.\n- 데스크 시연용 수업이 있습니다. 20분 전과 15분 전에 시작한 수업은 방금 시작해 노쇼 처리까지 해볼 수 있고, 2시간 뒤 수업은 예약 목록만 보입니다.\n- 앞으로 7일 수업이 열려 있고, 그중 일부는 이미 만석입니다.\n\n## 알아둘 점\n- 로그인이 없습니다. 회원 선택과 데스크 탭 구분은 체험용이고, 실제로 쓰려면 인증이 필요합니다.\n- 시각은 서버 PC의 현재 시각 기준입니다. 가상 데이터의 수업은 첫 실행 시각을 기준으로 만들어지므로, 며칠 뒤에는 `pt.db`를 지우고 다시 만들면 시연 시나리오가 다시 맞습니다.\n\n주요 파일은 `main.py`(API, 규칙, 가상 데이터)와 `static/index.html`(화면)입니다.",
+   "wall_s": 191.9
+  }
+ },
+ "A2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: {'detail': 'Not Found'}\nassert (404 == 200)",
+   "T3": "AssertionError: ('잔여 2 · 예약 중 1 → 한 번 더 된다', 404, {'detail': 'Not Found'})\nassert (404 == 201)",
+   "T4": "AssertionError: ('만료 회원은 409', 404, {'detail': 'Not Found'})\nassert (404 == 409)",
+   "T5": "AssertionError: ('정원 2 가득 → 409', 404, {'detail': 'Not Found'})\nassert (404 == 409)",
+   "T6": "AssertionError: ('GET /api/passes', 'c1', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T7": "AssertionError: ('1시간 뒤 수업의 취소는 409', 404, {'detail': 'Not Found'})\nassert (404 == 409)",
+   "T8": "AssertionError: ('회원이 남의 예약을 만들면 403', 404, {'detail': 'Not Found'})\nassert 404 == 403",
+   "T9": "AssertionError: 회원권 카드 숫자가 없다\nassert (None is not None)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "tionError: ('1시간 뒤 수업의 취소는 409', 404, {'detail': 'Not Found'})\nE       assert (404 == 409)\n\n_grader\\test_dod.py:313: AssertionError\n_______________________ test_T8_roles_and_reject_order ________________________\n\nsrv = <test_dod.Server object at 0x000001D9E41EABA0>\n\n    def test_T8_roles_and_reject_order(srv):\n        st, body = book(srv, \"c2\", \"c1\", \"S-104\")\n>       assert st == 403, (\"회원이 남의 예약을 만들면 403\", st, body)\nE       AssertionError: ('회원이 남의 예약을 만들면 403', 404, {'detail': 'Not Found'})\nE       assert 404 == 403\n\n_grader\\test_dod.py:322: AssertionError\n_______________________________ test_T9_screen ________________________________\n\nsrv = <test_dod.Server object at 0x000001D9E41EABA0>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen(srv, pw):\n        pg = open_page(pw, srv)\n        left = pg.query_selector('[data-testid=\"pass-left\"]')\n>       assert left is not None and digits(left.inner_text()) and pg.query_selector('[data-testid=\"pass-avail\"]') is not None, \"회원권 카드 숫자가 없다\"\nE       AssertionError: 회원권 카드 숫자가 없다\nE       assert (None is not None)\n\n_grader\\test_dod.py:338: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: {'detail': 'No...\nFAILED _grader/test_dod.py::test_T3_available_count - AssertionError: ('잔여 ...\nFAILED _grader/test_dod.py::test_T4_expiry_and_past - AssertionError: ('만료 ...\nFAILED _grader/test_dod.py::test_T5_capacity_and_duplicate - AssertionError: ...\nFAILED _grader/test_dod.py::test_T6_deduct_timing - AssertionError: ('GET /ap...\nFAILED _grader/test_dod.py::test_T7_cancel_deadline_and_state - AssertionErro...\nFAILED _grader/test_dod.py::test_T8_roles_and_reject_order - AssertionError: ...\nFAILED _grader/test_dod.py::test_T9_screen - AssertionError: 회원권 카드 숫자...\n8 failed, 1 passed in 5.75s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/classes",
+   "/api/config",
+   "/api/desk/blocked",
+   "/api/desk/reservations/{rid}/attend",
+   "/api/desk/reservations/{rid}/noshow",
+   "/api/desk/today",
+   "/api/members",
+   "/api/members/{mid}",
+   "/api/members/{mid}/memberships",
+   "/api/reservations",
+   "/api/reservations/{rid}/cancel"
+  ],
+  "extra_routes": [
+   "/api/classes",
+   "/api/config",
+   "/api/desk/blocked",
+   "/api/desk/reservations/{rid}/attend",
+   "/api/desk/reservations/{rid}/noshow",
+   "/api/desk/today",
+   "/api/members",
+   "/api/members/{mid}",
+   "/api/members/{mid}/memberships",
+   "/api/reservations",
+   "/api/reservations/{rid}/cancel"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/bookings.csv",
+   "seed/passes.csv",
+   "seed/slots.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 으랏차차헬스 'PT 수업 예약 · 회원권 차감' 웹앱을 만들어 줘. 10회권 같은 회원권을 가진 회원이 수업 시간을 예약하고, 데스크가 출석과 노쇼를 처리하면 회원권 횟수가 맞게 줄어야 해. 수업마다 정원이 있고, 취소는 제때 해야 하고, 노쇼가 잦은 회원은 막아야 해. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 141392,
+   "num_turns": 7,
+   "total_cost_usd": 0.384266,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 37510,
+    "cache_read_input_tokens": 282580,
+    "output_tokens": 20594,
+    "output_tokens_details": {
+     "thinking_tokens": 2704
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 37510,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1384,
+      "cache_read_input_tokens": 53891,
+      "cache_creation_input_tokens": 291,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 291
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PT 예약·회원권 차감 웹앱을 만들었습니다. API 테스트는 돌려 봤고, 브라우저 화면은 직접 열어 보지 못했습니다.\n\n## 실행\n```\npip install -r requirements.txt\npython main.py\n```\nhttp://127.0.0.1:8000 에 접속하면 됩니다. 첫 실행 때 `gym.db`가 자동 생성되고 가상 데이터가 들어갑니다. 데이터를 초기화하려면 `gym.db`를 지우고 다시 실행하세요.\n\n## 규칙 구현\n- **차감 시점**: 예약만으로는 횟수가 줄지 않습니다. 데스크가 출석이나 노쇼를 처리할 때 각각 1회 차감됩니다. 한 예약은 한 번만 처리되고, 처리 내역은 `usage_log` 테이블에 남습니다.\n- **초과 예약 방지**: 예약 중인 건수는 보류로 잡힙니다. 잔여가 10회여도 예약이 10건이면 더 예약할 수 없습니다.\n- **정원**: 수업마다 정원이 있고(1:1은 1명, 소그룹은 3명), 마감되면 예약이 막힙니다. 쓰기 요청은 SQLite의 `BEGIN IMMEDIATE`로 직렬화해서 동시에 눌러도 정원을 넘지 않습니다.\n- **취소**: 수업 2시간 전까지만 가능하고, 취소하면 차감이 없습니다. 마감 후에는 취소가 거절되고, 불참하면 노쇼로 처리됩니다.\n- **노쇼 차단**: 최근 30일 안에 노쇼가 3회 이상이면 새 예약이 막히고, 풀리는 날짜가 화면에 표시됩니다.\n- **데스크 처리 시간**: 출석은 수업 30분 전부터, 노쇼는 수업 시작 후부터 처리할 수 있습니다.\n- **회원권 선택**: 수업일에 유효하고 잔여가 있는 회원권 중 만료가 가장 빠른 것이 자동으로 쓰입니다. 만료된 회원권은 쓸 수 없습니다.\n- **회원권 등록**: 데스크 화면에서 회원권을 새로 등록할 수 있습니다.\n\n## 가상 데이터\n- **회원 8명**\n  - 박지훈은 노쇼 3회라 예약이 제한된 상태입니다.\n  - 정하늘은 노쇼 2회라 경고 상태입니다.\n  - 강도윤은 회원권이 만료됐습니다.\n  - 윤서아는 회원권 2개를 갖고 있습니다.\n- **시간표**: 앞으로 7일간 수업이 있습니다.\n- **데스크 시연용 예약**\n  - 이미 시작한 수업이 있어 노쇼 처리를 해볼 수 있습니다.\n  - 곧 시작하는 수업은 취소가 이미 마감된 상태입니다.\n  - 소그룹 수업에는 예약이 들어가 있습니다.\n  - 내일 10시 1:1 수업은 정원이 꽉 찼습니다.\n\n## 테스트로 확인한 것\n- 차단된 회원의 예약 거절\n- 중복 예약 거절\n- 정원 마감 거절\n- 만료된 회원권 거절\n- 노쇼 처리 후 잔여 횟수 감소\n- 같은 예약의 이중 처리 거절\n- 마감 후 취소 거절\n\n## 제한 사항\n- 로그인이 없어서 화면에서 회원을 고르는 방식입니다. 실제로 쓰려면 회원 인증과 데스크 권한 구분이 필요합니다.\n- 노쇼 차단을 데스크가 수동으로 푸는 기능은 넣지 않았습니다. 필요하면 추가하겠습니다.\n- 대기자 명단도 없습니다.",
+   "wall_s": 148.3
+  }
+ },
+ "A3": {
+  "tests": {
+   "T1": "error",
+   "T2": "error",
+   "T3": "error",
+   "T4": "error",
+   "T5": "error",
+   "T6": "error",
+   "T7": "error",
+   "T8": "error",
+   "T9": "error"
+  },
+  "detail": {
+   "T1": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [15056]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\routing.py\", line 273, in __aenter__\r\n    await self._router._startup()\r\n  File \"<사용자 폴더>",
+   "T2": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [15056]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\routing.py\", line 273, in __aenter__\r\n    await self._router._startup()\r\n  File \"<사용자 폴더>",
+   "T3": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [15056]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\routing.py\", line 273, in __aenter__\r\n    await self._router._startup()\r\n  File \"<사용자 폴더>",
+   "T4": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [15056]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\routing.py\", line 273, in __aenter__\r\n    await self._router._startup()\r\n  File \"<사용자 폴더>",
+   "T5": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [15056]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\routing.py\", line 273, in __aenter__\r\n    await self._router._startup()\r\n  File \"<사용자 폴더>",
+   "T6": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [15056]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\routing.py\", line 273, in __aenter__\r\n    await self._router._startup()\r\n  File \"<사용자 폴더>",
+   "T7": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [15056]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\routing.py\", line 273, in __aenter__\r\n    await self._router._startup()\r\n  File \"<사용자 폴더>",
+   "T8": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [15056]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\routing.py\", line 273, in __aenter__\r\n    await self._router._startup()\r\n  File \"<사용자 폴더>",
+   "T9": "failed on setup with \"Failed: 서버가 20초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [15056]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\routing.py\", line 273, in __aenter__\r\n    await self._router._startup()\r\n  File \"<사용자 폴더>"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": ".sleep(0.5)\n        self.stop()\n>       pytest.fail(\"서버가 20초 안에 뜨지 않음: %s\\n%s\" % (self.target, self.log[-1500:]))\nE       Failed: 서버가 20초 안에 뜨지 않음: app.main:app\nE       INFO:     Started server process [15056]\n\nE       INFO:     Waiting for application startup.\n\nE       ERROR:    Traceback (most recent call last):\n\nE         File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\n\nE           async with self.lifespan_context(app) as maybe_state:\n\nE                      ~~~~~~~~~~~~~~~~~~~~~^^^^^\n\nE         File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\routing.py\", line 273, in __aenter__\n\nE           await self._router._startup()\n\nE         File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\fastapi\\routing.py\", line 6482, in _startup\n\nE           handler()\n\nE           ~~~~~~~^^\n\nE         File \"runs\\A3\\app\\main.py\", line 365, in startup\n\nE           from seed import ensure_db\n\nE       ImportError: cannot import name 'ensure_db' from 'seed' (unknown location)\n\nE       \n\nE       ERROR:    Application startup failed. Exiting.\n\n_grader\\test_dod.py:155: Failed\n=========================== short test summary info ===========================\nERROR _grader/test_dod.py::test_T1_page_loads - Failed: 서버가 20초 안에 뜨지...\nERROR _grader/test_dod.py::test_T2_contract - Failed: 서버가 20초 안에 뜨지 ...\nERROR _grader/test_dod.py::test_T3_available_count - Failed: 서버가 20초 안에...\nERROR _grader/test_dod.py::test_T4_expiry_and_past - Failed: 서버가 20초 안에...\nERROR _grader/test_dod.py::test_T5_capacity_and_duplicate - Failed: 서버가 20...\nERROR _grader/test_dod.py::test_T6_deduct_timing - Failed: 서버가 20초 안에 ...\nERROR _grader/test_dod.py::test_T7_cancel_deadline_and_state - Failed: 서버가...\nERROR _grader/test_dod.py::test_T8_roles_and_reject_order - Failed: 서버가 20...\nERROR _grader/test_dod.py::test_T9_screen - Failed: 서버가 20초 안에 뜨지 않...\n9 errors in 1.84s\n",
+  "passed": 0,
+  "routes": [
+   "/",
+   "/api/bookings",
+   "/api/bookings/{bid}/cancel",
+   "/api/classes",
+   "/api/config",
+   "/api/desk/bookings/{bid}/attend",
+   "/api/desk/bookings/{bid}/noshow",
+   "/api/desk/bookings/{bid}/revert",
+   "/api/desk/classes",
+   "/api/desk/ledger",
+   "/api/desk/members/{mid}/memberships",
+   "/api/desk/members/{mid}/unblock",
+   "/api/members",
+   "/api/members/{mid}"
+  ],
+  "extra_routes": [
+   "/api/classes",
+   "/api/config",
+   "/api/desk/bookings/{bid}/attend",
+   "/api/desk/bookings/{bid}/noshow",
+   "/api/desk/bookings/{bid}/revert",
+   "/api/desk/classes",
+   "/api/desk/ledger",
+   "/api/desk/members/{mid}/memberships",
+   "/api/desk/members/{mid}/unblock",
+   "/api/members",
+   "/api/members/{mid}"
+  ],
+  "tests_modified": null,
+  "files": [
+   "app/main.py",
+   "app/seed.py",
+   "app/static/index.html",
+   "build.json",
+   "requirements.txt",
+   "run.bat",
+   "seed/bookings.csv",
+   "seed/passes.csv",
+   "seed/slots.csv",
+   "seed/users.csv"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 으랏차차헬스 'PT 수업 예약 · 회원권 차감' 웹앱을 만들어 줘. 10회권 같은 회원권을 가진 회원이 수업 시간을 예약하고, 데스크가 출석과 노쇼를 처리하면 회원권 횟수가 맞게 줄어야 해. 수업마다 정원이 있고, 취소는 제때 해야 하고, 노쇼가 잦은 회원은 막아야 해. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 186507,
+   "num_turns": 9,
+   "total_cost_usd": 0.4676349,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 18,
+    "cache_creation_input_tokens": 43361,
+    "cache_read_input_tokens": 406849,
+    "output_tokens": 25347,
+    "output_tokens_details": {
+     "thinking_tokens": 4123
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 43361,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1615,
+      "cache_read_input_tokens": 59516,
+      "cache_creation_input_tokens": 517,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 517
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PT 수업 예약과 회원권 차감 웹앱을 `A3` 폴더에 만들었고, `run.bat`을 실행하면 바로 뜹니다. 가상 데이터는 첫 실행 때 자동으로 만들어집니다.\n\nAPI로 시나리오를 돌려 봤고 아래 규칙이 모두 의도대로 동작했습니다. 브라우저 화면은 직접 열어 보지 못했습니다. 그래서 `index.html`의 화면 동작은 확인하지 못했습니다.\n\n## 실행\n`run.bat`을 더블클릭하거나 `app` 폴더에서 `python -m uvicorn main:app --port 8000`을 실행한 뒤 http://localhost:8000 을 여세요. 데이터를 처음 상태로 되돌리려면 `app/gym.db`를 지우고 다시 실행하면 됩니다.\n\n## 규칙 구현\n- **예약**\n  - 정원이 차면 막고, 여러 명이 동시에 눌러도 정원을 넘지 않습니다.\n  - 같은 수업 중복 예약, 한 시간 안에 겹치는 예약, 이미 지난 수업은 막습니다.\n  - 만료·소진된 회원권이거나, 이미 잡아 둔 예약을 빼면 남는 횟수가 없는 회원도 막습니다.\n- **차감 시점**\n  - 횟수는 예약할 때가 아니라 데스크가 출석 또는 노쇼로 처리할 때 1회 줄어듭니다.\n  - 취소하면 차감하지 않습니다.\n  - 출석 처리는 시작 30분 전부터, 노쇼 처리는 시작 후부터 가능합니다.\n  - 모든 차감과 복구는 차감 내역 화면에 남습니다.\n- **취소**\n  - 수업 시작 2시간 전까지만 회원이 직접 취소할 수 있습니다.\n  - 그 뒤에는 취소가 막히고, 안 오면 노쇼로 처리됩니다.\n- **노쇼 차단**\n  - 최근 30일 안에 노쇼가 3회가 되는 순간 14일간 새 예약이 막힙니다.\n  - 데스크가 차단을 해제할 수 있습니다.\n- **정정**\n  - 데스크가 잘못 누른 출석이나 노쇼는 되돌릴 수 있고, 차감된 횟수가 복구됩니다.\n  - 노쇼를 되돌려 3회 미만이 되면 차단도 풀립니다.\n\n## 화면\n- **회원 예약 탭**\n  - 회원을 고르면 회원권 잔여, 내 예약(취소 버튼), 지난 내역, 7일치 수업 목록과 예약 버튼이 보입니다.\n  - 회원 선택은 로그인 없이 드롭다운으로 합니다.\n- **데스크 탭**\n  - PIN은 `1234`입니다.\n  - 수업별 출석, 노쇼, 정정 버튼이 있습니다.\n  - 회원별 회원권 등록과 차단 해제, 차감 내역도 여기서 합니다.\n  - 정책 값과 PIN은 `main.py` 맨 위 상수에서 바꿉니다.\n\n## 데모 데이터\n회원 8명이고, 수업은 오늘 기준으로 상대 시각에 맞춰 만들어집니다.\n- **김민수:** 3시간 전 수업이 예약돼 있어 출석 처리를 해 볼 수 있습니다.\n- **윤서아:** 노쇼가 이미 2회입니다. 1시간 전 수업을 노쇼 처리하면 3회가 되어 차단되는 것을 볼 수 있습니다.\n- **한지우:** 1시간 뒤 수업이 예약돼 있어 취소 마감이 걸린 상태입니다.\n- **이서연:** 회원권이 1회 남았고 예약이 하나 있습니다. 4시간 뒤 수업이라 취소할 수 있고, 취소하지 않으면 추가 예약이 막힙니다.\n- **박지훈:** 노쇼 3회로 이미 차단돼 있습니다.\n- **최유진·강도윤:** 각각 회원권이 만료됐거나 소진돼 예약할 수 없습니다.\n- **정원 마감:** 5시간 뒤 수업은 정원이 다 찬 상태입니다.\n\n## 한계\n회원 쪽은 로그인 없이 이름 선택만 되고, 데스크는 고정 PIN 하나입니다. 실제로 운영하려면 인증을 붙여야 합니다.",
+   "wall_s": 205.9
+  }
+ },
+ "B1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 11.35s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/bookings",
+   "/api/bookings/{booking_id}/{action}",
+   "/api/passes/{member_id}",
+   "/api/slots",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/bookings.csv",
+   "seed/passes.csv",
+   "seed/slots.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 96342,
+   "num_turns": 10,
+   "total_cost_usd": 0.3257783999999999,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 37167,
+    "cache_read_input_tokens": 334984,
+    "output_tokens": 14358,
+    "output_tokens_details": {
+     "thinking_tokens": 2707
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 37167,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1162,
+      "cache_read_input_tokens": 52444,
+      "cache_creation_input_tokens": 1395,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 1395
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD대로 웹앱을 만들었습니다. API는 TestClient로 확인했고, 화면은 브라우저에서 열어 보지 못했습니다. PRD가 완료 기준으로 말하는 `tests/test_dod.py`는 폴더에 없어서 T1~T9를 돌리지 못했습니다. `tests/`는 빈 폴더입니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/` CSV 4개로 `gym.db`(SQLite, `gy_` 테이블)를 새로 만듭니다. API 6개와 규칙 R1~R9를 구현했고, 거부는 `{\"detail\": …}`로 응답합니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. 사용자·회원 선택, 회원권 카드, 수업 목록, 예약 목록, 메시지 줄, `불러오지 못했습니다`와 다시 시도 버튼이 있고, `data-testid`는 PRD대로 붙였습니다.\n- `seed/*.csv`: 가상 데이터입니다. 회원 5명(잔여 넉넉·잔여 2·0회·만료·노쇼 3회), 데스크 1명, 수업 6개, 예약 9개(네 상태 모두 포함)입니다.\n\n**확인한 것** (직접 요청을 보내 봤습니다)\n- 회원권 숫자: `left`·`held`·`available`이 맞게 나옵니다.\n- 예약 가능 횟수: 잔여 2 회원의 첫 예약은 201, 그다음은 409, 0회 회원은 409입니다.\n- 만료·노쇼 3회·남의 예약은 각각 409, 409, 403입니다.\n- 지난 수업은 409, 회원의 출석 처리는 403입니다.\n- 데스크의 출석 처리는 `used`를 1 늘리고, 같은 예약을 다시 취소하면 409입니다.\n- 본문 없이 없는 예약을 부르면 400, 본문이 있으면 404입니다.\n\n**PRD 안에서 판단한 부분**\n- **예약 버튼:** PRD는 예약 가능 횟수가 1 이상일 때만 보이라고 합니다. 그런데 T9는 잔여 0 회원이 예약을 눌러 서버 메시지를 받아야 합니다. 그래서 자리가 있으면 항상 버튼을 두고, 예약 가능 횟수가 0이면 흐리게만 표시했습니다. 누르면 서버의 거부 사유가 메시지 줄에 뜹니다.\n- **시드 날짜:** 시드 날짜는 2026-10-25 기준으로 고정했습니다. 날짜가 지나면 수업이 모두 지난 수업이 됩니다. \"곧 시작\" 수업은 시드에 없습니다.\n\n**실행:** `pip install fastapi uvicorn` 후 `python -m uvicorn main:app --port 8000`, 그리고 `http://localhost:8000/`로 접속하면 됩니다.",
+   "wall_s": 105.5
+  }
+ },
+ "B2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 8.50s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/bookings",
+   "/api/bookings/{booking_id}/{action}",
+   "/api/passes/{member_id}",
+   "/api/slots",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/bookings.csv",
+   "seed/passes.csv",
+   "seed/slots.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 92355,
+   "num_turns": 7,
+   "total_cost_usd": 0.29280140000000004,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 35309,
+    "cache_read_input_tokens": 229614,
+    "output_tokens": 12858,
+    "output_tokens_details": {
+     "thinking_tokens": 2128
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 35309,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 937,
+      "cache_read_input_tokens": 51099,
+      "cache_creation_input_tokens": 882,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 882
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD대로 웹앱을 만들었고, 백엔드는 TestClient로 직접 호출해 확인했습니다. 화면은 브라우저로 열어 보지 않았습니다. 폴더에 `tests/test_dod.py`가 없어서 T1~T9는 돌리지 못했습니다.\n\n**확인한 것** (예약 가능 횟수, 노쇼 누적, 권한, 400 순서)\n- `/`가 200으로 열립니다.\n- 잔여 2회에 예약 1개인 회원은 한 번 더 예약이 되고, 그다음은 `예약 가능 횟수가 없습니다`(409)로 막힙니다.\n- 최근 30일 노쇼가 3회인 회원은 데스크가 대신 예약해도 `노쇼 3회 — 데스크에 문의하세요`(409)입니다.\n- 데스크의 출석 처리는 되고, 회원이 남의 예약을 취소하면 403입니다.\n- 본문 없이 없는 예약을 부르면 400입니다.\n\n**확인하지 못한 것**\n- 정원 초과와 중복 예약, 유효기간, 취소 마감(2시간), 지난 수업의 출석·노쇼 처리, 노쇼 시 `used` +1.\n- 화면의 버튼 표시와 메시지 줄.\n\n**만든 파일**\n- `main.py`: FastAPI 앱입니다. 시작할 때마다 `seed/` CSV로 SQLite(`gym.db`)를 새로 만들고, API 6개와 규칙 R1~R9를 구현했습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. PRD의 `data-testid`를 모두 넣었습니다. 데스크로 바꾸면 회원 선택 상자가 나옵니다. API가 실패하면 `불러오지 못했습니다`와 다시 시도 버튼이 뜹니다.\n- `seed/*.csv`: 가상 데이터입니다. 회원 5명, 데스크 1명, 수업 6개, 예약 9개이고 네 상태가 다 있습니다.\n\n**알아 둘 점**\n- 시드의 수업 시각은 지금 PC 시계를 기준으로 만들어 둔 값입니다. 며칠 지나면 \"곧 시작\"인 수업이 지난 수업이 되니, 그때는 `slots.csv`의 날짜를 다시 맞춰야 합니다.\n- 실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`입니다.\n\n테스트 파일을 주시면 T1~T9를 돌려서 결과를 알려 드리겠습니다.",
+   "wall_s": 98.4
+  }
+ },
+ "B3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 8.27s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/bookings",
+   "/api/bookings/{booking_id}/{action}",
+   "/api/passes/{member_id}",
+   "/api/slots",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/bookings.csv",
+   "seed/passes.csv",
+   "seed/slots.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 129197,
+   "num_turns": 11,
+   "total_cost_usd": 0.4107590000000001,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 43158,
+    "cache_read_input_tokens": 330850,
+    "output_tokens": 20501,
+    "output_tokens_details": {
+     "thinking_tokens": 2611
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 43158,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 938,
+      "cache_read_input_tokens": 58548,
+      "cache_creation_input_tokens": 1282,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 1282
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD.md대로 웹앱을 만들었습니다. API는 직접 호출해서 확인했고, 화면은 브라우저에서 열어 보지 못했습니다. `tests/test_dod.py`는 폴더에 없어서(`tests/`는 비어 있습니다) DoD 9개 항목은 돌려보지 못했습니다.\n\n**확인한 것** (FastAPI 테스트 클라이언트로 호출)\n- `/`가 200으로 열립니다.\n- 잔여 2에 예약 1개인 회원이 한 번 더 예약되고(201), 그다음은 409입니다.\n- 잔여 0 회원은 409 `예약 가능 횟수가 없습니다`입니다.\n- 노쇼 3회 회원은 데스크가 대신 예약해도 409입니다.\n- 회원이 남의 예약을 만들면 403입니다.\n- 데스크의 출석 처리는 200이고 `used`가 올라갑니다.\n- 본문 없이 호출하면 400입니다.\n\n**만든 것**\n- `main.py`: API 6개와 규칙 R1~R9입니다. 시작할 때마다 `seed/*.csv`로 `gym.db`를 새로 만듭니다. 테이블은 `gy_` 접두어이고 `gy_log`도 있습니다.\n- `static/index.html`: 한 페이지 화면입니다. 사용자 선택, 데스크일 때 보이는 회원 선택, 회원권 카드, 수업 목록, 예약 목록, 메시지 줄, `불러오지 못했습니다`와 다시 시도 버튼이 들어 있습니다. PRD의 `data-testid`를 모두 달았습니다.\n- `seed/`: 회원 5명, 데스크 1명, 수업 6개, 예약 10개입니다. 네 가지 상태가 다 들어 있습니다.\n\n**알아둘 점**\n- 시드의 수업 시각은 오늘(2026-10-25 00:25) 기준으로 적었습니다. 날짜가 지나면 지난 수업·곧 시작·내일 구성이 어긋나니 CSV 날짜를 새로 맞춰야 합니다.\n- 예약 버튼은 PRD 4절 그대로, 자리가 있고 예약 가능 횟수가 1 이상일 때만 보입니다. 그런데 T9는 잔여 0 회원으로 예약해서 메시지를 확인하라고 합니다. 두 문장이 충돌하는 듯해서, 이 부분은 테스트를 돌려 봐야 알 수 있습니다.\n\n실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`입니다.",
+   "wall_s": 139.3
+  }
+ },
+ "C1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 8.64s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/bookings",
+   "/api/bookings/{booking_id}/{action}",
+   "/api/passes/{member_id}",
+   "/api/slots",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/bookings.csv",
+   "seed/passes.csv",
+   "seed/slots.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 111968,
+   "num_turns": 13,
+   "total_cost_usd": 0.4327441,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 51181,
+    "cache_read_input_tokens": 393081,
+    "output_tokens": 18868,
+    "output_tokens_details": {
+     "thinking_tokens": 1593
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 51181,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 875,
+      "cache_read_input_tokens": 67668,
+      "cache_creation_input_tokens": 185,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 185
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (users · passes · slots · bookings)\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (PRD 의 API 6개 외에 추가한 경로 · 칸 · 화면 요소 없음)\nPRD 가 정하지 않아 직접 정한 것:\n- 거부 사유 문구: PRD 에 문구가 없는 거부는 제가 정했습니다. 400 `회원과 수업을 확인하세요`, 404 `사용자를 찾을 수 없습니다` · `회원을 찾을 수 없습니다` · `수업을 찾을 수 없습니다` · `예약을 찾을 수 없습니다` · `회원권을 찾을 수 없습니다`, 403 `본인 예약만 취소할 수 있습니다`.\n- 예약 요청의 `member_id` 나 `slot_id` 가 빠졌을 때: 400 입니다.\n- `member_id` 가 회원이 아닐 때: 404 입니다.\n- `GET /api/bookings` 에 `viewer` 가 없으면 400, 모르는 `viewer` 면 404 입니다.\n- 회원권 줄이 없는 회원이 예약하면 409 `회원권 유효기간이 지났습니다` 입니다.\n- 최근 30일 노쇼: 수업 날짜가 (오늘 − 29일) 이후인 노쇼 예약을 셉니다.\n- 새 `booking_id`: `B-` 뒤에 기존 최대 번호 + 1 로 정합니다.\n- 화면: 취소 버튼은 시작 2시간 전까지만, 출석 · 노쇼 버튼은 데스크가 수업 시작 후에만 보입니다. 예약 버튼은 자리가 있고 예약 가능 횟수가 1 이상일 때만 보입니다. 그래서 잔여 0 회원은 예약 버튼 대신 예약 가능 0 이 보입니다(T9 의 두 번째 갈래). 회원권 카드는 회원이면 본인 것, 데스크면 회원 선택 상자에서 고른 회원 것입니다.\n- 기본 `seed/` 데이터: 2026-10-25 기준 날짜로 고정해 두었습니다. 시간이 지나면 지난 수업이 늘어나지만, 테스트는 자기 데이터로 바꿔 끼우므로 영향이 없습니다.\n```",
+   "wall_s": 127.2
+  }
+ },
+ "C2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 8.48s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/bookings",
+   "/api/bookings/{booking_id}/{action}",
+   "/api/passes/{member_id}",
+   "/api/slots",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/bookings.csv",
+   "seed/passes.csv",
+   "seed/slots.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 79645,
+   "num_turns": 9,
+   "total_cost_usd": 0.30353540000000007,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 42516,
+    "cache_read_input_tokens": 316534,
+    "output_tokens": 10179,
+    "output_tokens_details": {
+     "thinking_tokens": 1093
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 42516,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 691,
+      "cache_read_input_tokens": 58855,
+      "cache_creation_input_tokens": 333,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 333
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "DoD: 9/9 (`python -m pytest tests -q`, 9 passed)\n만든 파일: main.py, static/index.html, seed/users.csv, passes.csv, slots.csv, bookings.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (API 6개와 `GET /` 만 있음. PRD 에 없는 API·칸·화면 요소는 추가하지 않았음)\nPRD 가 정하지 않아 직접 정한 것:\n- **없는 `action`:** `cancel`·`attend`·`noshow` 가 아닌 값은 404 `없는 동작입니다`.\n- **없는 viewer:** `GET /api/bookings` 에서 viewer 가 없는 사용자면 404.\n- **회원권 없는 회원:** 예약하면 409 `회원권 유효기간이 지났습니다`. `GET /api/passes` 는 404.\n- **누락된 `member_id`·`slot_id`:** 예약 본문에 없으면 400 `회원과 수업을 확인하세요`.\n- **노쇼 누적 범위:** 오늘 포함 30일은 오늘 −29일부터로 센다. 기준은 수업 날짜.\n- **화면의 출석·노쇼 버튼:** 수업 시작 시각이 지난 `booked` 예약에만 보인다. 취소 버튼은 모든 `booked` 예약에 보인다.\n- **기본 seed 의 시각:** 고정 날짜(2026-10-24~27)라서 날짜가 지나면 지난 수업·만료 상태가 달라진다. 테스트는 seed 를 자기 데이터로 바꿔 쓰므로 영향 없다.\n\n테스트가 끝난 뒤 `seed/` 가 비어 있었다(`restore_seed` 의 윈도우 재시도 문제로 보인다). 백업에서 직접 복구했고, 지금 `seed/` 는 원래 내 CSV 4개다.",
+   "wall_s": 98.1
+  }
+ },
+ "C3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 8.33s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/bookings",
+   "/api/bookings/{booking_id}/{action}",
+   "/api/passes/{member_id}",
+   "/api/slots",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/bookings.csv",
+   "seed/passes.csv",
+   "seed/slots.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 79613,
+   "num_turns": 8,
+   "total_cost_usd": 0.3031587,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 43105,
+    "cache_read_input_tokens": 200987,
+    "output_tokens": 11062,
+    "output_tokens_details": {
+     "thinking_tokens": 1402
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 43105,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 785,
+      "cache_read_input_tokens": 59464,
+      "cache_creation_input_tokens": 313,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 313
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (users · passes · slots · bookings)\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (추가한 API 경로도 없음. PRD 의 6개만 구현함)\nPRD 가 정하지 않아 직접 정한 것:\n- `POST /api/bookings` 에서 `member_id`·`slot_id` 가 문자열로 없으면 400 (`회원을 확인하세요` / `수업을 확인하세요`). `GET /api/bookings` 에서 `viewer` 가 없으면 400, 없는 사용자면 404.\n- `GET /api/passes/{member_id}` 에서 회원권이 없는 id 는 404. 회원의 회원권 줄이 없을 때 예약하면 404.\n- `cancel`·`attend`·`noshow` 이외의 action 은 404. 회원이 남의 예약을 취소하면 403 `본인 예약만 취소할 수 있습니다`.\n- 노쇼 누적은 수업 날짜가 오늘 포함 최근 30일(오늘 − 29일 이후)인 노쇼를 센다.\n- 새 `booking_id` 는 기존 `B-숫자` 중 최댓값 + 1. 최댓값이 1000 보다 작으면 `B-1001` 부터 시작.\n- 화면: 예약 줄의 취소 버튼은 `booked` 상태면 항상 보이고(마감은 서버가 판단), 출석·노쇼 버튼은 데스크이면서 시작 시각이 지난 수업에만 보인다(브라우저 시각 기준). 데스크가 처음 고르는 회원은 목록의 첫 회원.\n- `seed/*.csv` 는 만든 시각(2026-10-25) 기준으로 생성했다. 정적 파일이라 시간이 지나면 \"곧 시작\"·\"어제\" 같은 의미가 옅어진다. 다른 내용으로 바꿔 끼워도 서버는 시작 때마다 다시 읽는다.\n- 서버 시작 시 `gym.db` 를 지우고 새로 만든다. 요청마다 락으로 직렬 처리한다.\n```",
+   "wall_s": 92.0
+  }
+ }
+}

@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>으랏차차헬스 PT 예약</title>
+<style>
+  :root { --bg:#f5f6f8; --card:#fff; --ink:#1d2330; --mute:#6b7385; --line:#e3e6ec; --brand:#e8590c; --ok:#2b8a3e; --bad:#c92a2a; --warn:#e67700; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Malgun Gothic",system-ui,sans-serif; background:var(--bg); color:var(--ink); }
+  header { background:var(--ink); color:#fff; padding:14px 24px; display:flex; align-items:center; gap:24px; }
+  header h1 { font-size:18px; margin:0; } header h1 span { color:var(--brand); }
+  nav button { background:none; border:0; color:#aab; font-size:15px; padding:8px 14px; cursor:pointer; border-bottom:3px solid transparent; }
+  nav button.on { color:#fff; border-color:var(--brand); }
+  main { max-width:1100px; margin:20px auto; padding:0 16px; }
+  .grid { display:grid; grid-template-columns:340px 1fr; gap:16px; align-items:start; }
+  @media (max-width:800px){ .grid{grid-template-columns:1fr;} }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:16px; }
+  h2 { font-size:15px; margin:0 0 12px; } h3 { font-size:13px; color:var(--mute); margin:14px 0 6px; }
+  select, input { padding:7px 9px; border:1px solid var(--line); border-radius:6px; font-size:14px; }
+  select { width:100%; }
+  button.b { background:var(--brand); color:#fff; border:0; border-radius:6px; padding:6px 12px; font-size:13px; cursor:pointer; }
+  button.b.ok { background:var(--ok); } button.b.bad { background:var(--bad); } button.b.ghost { background:#fff; color:var(--ink); border:1px solid var(--line); }
+  button:disabled { opacity:.4; cursor:not-allowed; }
+  table { width:100%; border-collapse:collapse; font-size:14px; } th,td { text-align:left; padding:8px 6px; border-bottom:1px solid var(--line); }
+  th { color:var(--mute); font-weight:600; font-size:12px; }
+  .tag { display:inline-block; padding:2px 8px; border-radius:10px; font-size:12px; background:#eef0f4; color:var(--mute); }
+  .tag.booked{background:#e7f1ff;color:#1c62c4}.tag.attended{background:#e3f6e8;color:var(--ok)}.tag.noshow{background:#fde8e8;color:var(--bad)}.tag.cancelled{background:#eee;color:#888}
+  .ms { border:1px solid var(--line); border-radius:8px; padding:10px; margin-bottom:8px; }
+  .bar { height:8px; background:#eceef3; border-radius:4px; overflow:hidden; margin:6px 0; } .bar i { display:block; height:100%; background:var(--brand); }
+  .alert { padding:10px 12px; border-radius:8px; font-size:13px; margin-bottom:10px; }
+  .alert.bad { background:#fde8e8; color:var(--bad); } .alert.warn { background:#fff3d9; color:var(--warn); }
+  .mute { color:var(--mute); font-size:12px; }
+  .day { font-weight:700; margin:14px 0 4px; font-size:13px; }
+  #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--ink); color:#fff; padding:10px 18px; border-radius:8px; display:none; max-width:90vw; z-index:9; }
+  #toast.err { background:var(--bad); }
+</style>
+</head>
+<body>
+<header>
+  <h1>으랏차차<span>헬스</span> PT 예약</h1>
+  <nav><button id="tab-member" class="on">회원 예약</button><button id="tab-desk">데스크</button></nav>
+  <span class="mute" id="clock" style="margin-left:auto;color:#aab"></span>
+</header>
+<main>
+  <section id="view-member">
+    <div class="grid">
+      <div>
+        <div class="card"><h2>회원 선택 <span class="mute">(데모: 로그인 대신 선택)</span></h2><select id="memberSel"></select></div>
+        <div class="card" id="memberInfo"></div>
+      </div>
+      <div>
+        <div class="card"><h2>수업 시간표</h2><div id="classes"></div></div>
+        <div class="card"><h2>내 예약 내역</h2><div id="myRes"></div></div>
+      </div>
+    </div>
+  </section>
+  <section id="view-desk" style="display:none">
+    <div class="card"><h2>오늘 수업 출석 / 노쇼 처리</h2><div id="deskToday"></div></div>
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <div class="card"><h2>노쇼 현황 (최근 <span id="winDays"></span>일)</h2><div id="blocked"></div></div>
+      <div class="card"><h2>회원권 등록</h2>
+        <select id="saleMember" style="margin-bottom:8px"></select>
+        <input id="saleName" value="PT 10회권" style="width:100%;margin-bottom:8px">
+        <div style="display:flex;gap:8px;margin-bottom:8px"><input id="saleTotal" type="number" value="10" min="1" style="width:50%" placeholder="횟수"><input id="saleDays" type="number" value="90" min="1" style="width:50%" placeholder="유효일수"></div>
+        <button class="b" id="saleBtn">등록</button>
+      </div>
+    </div>
+  </section>
+</main>
+<div id="toast"></div>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const STATUS = {booked:'예약중', attended:'출석', noshow:'노쇼', cancelled:'취소'};
+let CFG = {}, memberId = null;
+
+async function api(path, method='GET', body) {
+  const r = await fetch('/api' + path, {method, headers: body ? {'Content-Type':'application/json'} : {}, body: body ? JSON.stringify(body) : undefined});
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) { const d = data.detail; throw new Error(typeof d === 'string' ? d : '요청을 처리할 수 없습니다.'); }
+  return data;
+}
+function toast(msg, err) { const t = $('#toast'); t.textContent = msg; t.className = err ? 'err' : ''; t.style.display = 'block'; clearTimeout(toast.t); toast.t = setTimeout(() => t.style.display = 'none', 4000); }
+async function act(fn, okMsg) { try { await fn(); if (okMsg) toast(okMsg); } catch (e) { toast(e.message, true); } await refresh(); }
+const fmtT = s => s.slice(5, 16).replace('-', '/');
+const hm = s => s.slice(11, 16);
+
+function showTab(t) {
+  $('#view-member').style.display = t === 'member' ? '' : 'none';
+  $('#view-desk').style.display = t === 'desk' ? '' : 'none';
+  $('#tab-member').className = t === 'member' ? 'on' : ''; $('#tab-desk').className = t === 'desk' ? 'on' : '';
+  refresh();
+}
+$('#tab-member').onclick = () => showTab('member'); $('#tab-desk').onclick = () => showTab('desk');
+$('#memberSel').onchange = e => { memberId = +e.target.value; refresh(); };
+
+async function loadMembers() {
+  const ms = await api('/members');
+  const opts = ms.map(m => `<option value="${m.id}">${esc(m.name)} · 사용가능 ${m.available}회${m.noshow.blocked ? ' · 예약제한' : ''}</option>`).join('');
+  if (!memberId) memberId = ms[0].id;
+  $('#memberSel').innerHTML = opts; $('#memberSel').value = memberId;
+  const sv = $('#saleMember').value; $('#saleMember').innerHTML = ms.map(m => `<option value="${m.id}">${esc(m.name)} (${esc(m.phone)})</option>`).join(''); if (sv) $('#saleMember').value = sv;
+}
+
+async function renderMember() {
+  const [m, classes] = await Promise.all([api('/members/' + memberId), api('/classes?member_id=' + memberId)]);
+  let h = `<h2>${esc(m.name)} <span class="mute">${esc(m.phone)}</span></h2>`;
+  if (m.noshow.blocked) h += `<div class="alert bad">최근 ${CFG.noshow_window_days}일 내 노쇼 ${m.noshow.count}회 — <b>${m.noshow.blocked_until}</b> 까지 예약이 제한됩니다.</div>`;
+  else if (m.noshow.count > 0) h += `<div class="alert warn">최근 ${CFG.noshow_window_days}일 노쇼 ${m.noshow.count}/${m.noshow.limit}회. ${m.noshow.limit}회가 되면 예약이 제한됩니다.</div>`;
+  h += '<h3>보유 회원권</h3>';
+  h += m.memberships.map(x => `<div class="ms" style="${x.expired ? 'opacity:.5' : ''}"><b>${esc(x.name)}</b> ${x.expired ? '<span class="tag">만료</span>' : ''}
+    <div class="bar"><i style="width:${x.remaining / x.total * 100}%"></i></div>
+    잔여 <b>${x.remaining}</b> / ${x.total}회 <span class="mute">(예약중 ${x.held}회 → 신규 예약 가능 ${x.available}회)</span>
+    <div class="mute">${x.starts_on} ~ ${x.expires_on}</div></div>`).join('') || '<div class="mute">회원권이 없습니다.</div>';
+  $('#memberInfo').innerHTML = h;
+
+  let ch = '', lastDay = '';
+  for (const c of classes) {
+    const day = c.starts_at.slice(0, 10);
+    if (day !== lastDay) { ch += `<div class="day">${day}</div>`; lastDay = day; }
+    let btn;
+    if (c.my_reservation_id) btn = '<span class="tag booked">예약함</span>';
+    else if (c.past) btn = '<span class="tag">진행/종료</span>';
+    else if (c.full) btn = '<span class="tag noshow">마감</span>';
+    else btn = `<button class="b" onclick="book(${c.id})">예약</button>`;
+    ch += `<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--line)">
+      <div><b>${hm(c.starts_at)}</b> ${esc(c.title)} <span class="mute">${esc(c.trainer)} 트레이너 · ${c.minutes}분</span></div>
+      <div><span class="mute">${c.booked}/${c.capacity}명</span> &nbsp; ${btn}</div></div>`;
+  }
+  $('#classes').innerHTML = ch || '<div class="mute">수업이 없습니다.</div>';
+
+  $('#myRes').innerHTML = `<table><tr><th>수업</th><th>트레이너</th><th>상태</th><th></th></tr>` + m.reservations.map(r =>
+    `<tr><td>${fmtT(r.starts_at)} ${esc(r.title)}</td><td>${esc(r.trainer)}</td><td><span class="tag ${r.status}">${STATUS[r.status]}</span></td>
+     <td>${r.status === 'booked' ? `<button class="b ghost" onclick="cancelRes(${r.id})">취소</button>` : ''}</td></tr>`).join('') + '</table>' +
+    `<div class="mute" style="margin-top:8px">취소는 수업 ${CFG.cancel_deadline_hours}시간 전까지 가능 · 마감 후 불참은 노쇼(1회 차감)</div>`;
+}
+window.book = id => act(() => api('/reservations', 'POST', {member_id: memberId, class_id: id}), '예약되었습니다.');
+window.cancelRes = id => { if (confirm('예약을 취소할까요?')) act(() => api(`/reservations/${id}/cancel?member_id=${memberId}`, 'POST'), '예약이 취소되었습니다. (차감 없음)'); };
+
+async function renderDesk() {
+  const rows = await api('/desk/today');
+  $('#deskToday').innerHTML = `<table><tr><th>시간</th><th>회원</th><th>수업</th><th>회원권 잔여</th><th>상태</th><th></th></tr>` + rows.map(r =>
+    `<tr><td>${hm(r.starts_at)}</td><td>${esc(r.member)}</td><td>${esc(r.title)} <span class="mute">${esc(r.trainer)}</span></td>
+     <td>${esc(r.membership)} · ${r.remaining}회</td><td><span class="tag ${r.status}">${STATUS[r.status]}</span></td>
+     <td>${r.status === 'booked' ? `<button class="b ok" ${r.can_attend ? '' : 'disabled'} onclick="desk(${r.id},'attend')">출석</button>
+       <button class="b bad" ${r.can_noshow ? '' : 'disabled'} onclick="desk(${r.id},'noshow')">노쇼</button>` : ''}</td></tr>`).join('') +
+    '</table>' + (rows.length ? '' : '<div class="mute">오늘 예약이 없습니다.</div>') +
+    `<div class="mute" style="margin-top:8px">출석은 수업 ${CFG.checkin_open_minutes}분 전부터, 노쇼는 수업 시작 후부터 처리할 수 있습니다. 둘 다 회원권 1회 차감.</div>`;
+  const bl = await api('/desk/blocked');
+  $('#blocked').innerHTML = bl.length ? `<table><tr><th>회원</th><th>노쇼</th><th>상태</th></tr>` + bl.map(b =>
+    `<tr><td>${esc(b.name)}</td><td>${b.count}/${b.limit}</td><td>${b.blocked ? `<span class="tag noshow">예약제한 ~${b.blocked_until}</span>` : '<span class="tag">주의</span>'}</td></tr>`).join('') + '</table>' : '<div class="mute">노쇼 이력이 없습니다.</div>';
+}
+window.desk = (id, kind) => act(async () => {
+  const r = await api(`/desk/reservations/${id}/${kind}`, 'POST');
+  toast(`${kind === 'attend' ? '출석' : '노쇼'} 처리 · 회원권 잔여 ${r.remaining}회` + (r.noshow.blocked ? ' · 노쇼 누적으로 예약 제한' : ''));
+}, '');
+$('#saleBtn').onclick = () => act(() => api(`/members/${$('#saleMember').value}/memberships`, 'POST',
+  {name: $('#saleName').value, total: +$('#saleTotal').value, valid_days: +$('#saleDays').value}), '회원권이 등록되었습니다.');
+
+async function refresh() {
+  CFG = await api('/config'); $('#clock').textContent = '현재 ' + CFG.now.slice(0, 16); $('#winDays').textContent = CFG.noshow_window_days;
+  await loadMembers();
+  if ($('#view-member').style.display !== 'none') await renderMember(); else await renderDesk();
+}
+refresh().catch(e => toast(e.message, true));
+</script>
+</body>
+</html>

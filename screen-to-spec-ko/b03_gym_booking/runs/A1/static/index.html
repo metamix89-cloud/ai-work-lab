@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>으랏차차헬스 PT 예약</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--ink:#1d2330;--mute:#6b7385;--line:#e2e5ec;--pri:#e4572e;--ok:#1f9d63;--bad:#d93a3a;--warn:#c98a00}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+header{background:#1d2330;color:#fff;padding:12px 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+header h1{font-size:18px;margin:0}header h1 b{color:var(--pri)}
+nav button{background:none;border:0;color:#aab;padding:8px 14px;font-size:14px;cursor:pointer;border-radius:6px}
+nav button.on{background:var(--pri);color:#fff}
+#clock{margin-left:auto;color:#aab;font-size:12px}
+main{max-width:1000px;margin:18px auto;padding:0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.card h2{font-size:15px;margin:0 0 10px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+select,input{padding:7px 9px;border:1px solid var(--line);border-radius:6px;font-size:14px;background:#fff}
+button.b{padding:6px 12px;border:0;border-radius:6px;background:var(--pri);color:#fff;cursor:pointer;font-size:13px}
+button.b.g{background:#e9ebf0;color:var(--ink)}button.b.ok{background:var(--ok)}button.b.bad{background:var(--bad)}
+button:disabled{opacity:.4;cursor:not-allowed}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--mute);font-weight:600;font-size:12px}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;background:#e9ebf0}
+.tag.booked{background:#e3efff;color:#1b5fc4}.tag.attended{background:#dcf3e8;color:var(--ok)}
+.tag.noshow{background:#fde4e4;color:var(--bad)}.tag.cancelled{background:#eee;color:#888}
+.meter{display:flex;gap:3px;margin:6px 0}.meter i{width:18px;height:8px;border-radius:2px;background:#e2e5ec}
+.meter i.u{background:var(--ok)}.meter i.r{background:#6aa7ff}.meter i.f{background:#cfd4de}
+.alert{padding:10px 12px;border-radius:8px;background:#fde4e4;color:var(--bad);margin-bottom:12px}
+.warn{background:#fff4d6;color:var(--warn)}
+.mute{color:var(--mute);font-size:12px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1d2330;color:#fff;padding:10px 18px;border-radius:8px;opacity:0;transition:.25s;pointer-events:none;max-width:90%}
+#toast.show{opacity:1}#toast.err{background:var(--bad)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.neg{color:var(--bad)}.pos{color:var(--ok)}
+</style>
+</head>
+<body>
+<header>
+  <h1>으랏차차<b>헬스</b> · PT 예약</h1>
+  <nav>
+    <button data-t="member" class="on">회원</button>
+    <button data-t="desk">데스크</button>
+    <button data-t="admin">관리</button>
+  </nav>
+  <span id="clock"></span>
+</header>
+<main id="app"></main>
+<div id="toast"></div>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const DOW = ['일','월','화','수','목','금','토'];
+const STATUS = {booked:'예약',attended:'출석',noshow:'노쇼',cancelled:'취소'};
+let tab = 'member', memberId = Number(localStorage.mid) || null, cfg = {};
+
+function fmt(s){ const d = new Date(s); return `${d.getMonth()+1}/${d.getDate()}(${DOW[d.getDay()]}) ${s.slice(11,16)}`; }
+function toast(m, bad){ const t = $('#toast'); t.textContent = m; t.className = 'show' + (bad ? ' err' : ''); clearTimeout(toast.h); toast.h = setTimeout(()=>t.className='', 3200); }
+async function api(path, method='GET', body){
+  const r = await fetch('/api'+path, {method, headers:{'Content-Type':'application/json'}, body: body ? JSON.stringify(body) : undefined});
+  const j = await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(typeof j.detail === 'string' ? j.detail : '요청을 처리할 수 없습니다.');
+  return j;
+}
+async function act(fn, ok){ try{ await fn(); if(ok) toast(ok); }catch(e){ toast(e.message, true); } render(); }
+
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
+  tab = b.dataset.t; document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x===b)); render();
+});
+
+async function render(){
+  cfg = await api('/config');
+  $('#clock').textContent = '현재 ' + cfg.now.replace('T',' ');
+  $('#app').innerHTML = await ({member: viewMember, desk: viewDesk, admin: viewAdmin}[tab])();
+}
+
+// ------------------------------------------------ 회원
+async function viewMember(){
+  const members = await api('/members');
+  if(!memberId || !members.some(m => m.id === memberId)) memberId = members[0].id;
+  localStorage.mid = memberId;
+  const [d, slots] = await Promise.all([api('/members/'+memberId), api('/slots?days=7&member_id='+memberId)]);
+  const ns = d.noshow;
+  let h = `<div class="card row"><b>회원 선택</b>
+    <select onchange="memberId=Number(this.value);render()">${members.map(m=>`<option value="${m.id}" ${m.id===memberId?'selected':''}>${esc(m.name)}${m.noshow.blocked?' (예약제한)':''}</option>`).join('')}</select>
+    <span class="mute">로그인 대신 회원을 골라 체험합니다.</span></div>`;
+  if(ns.blocked) h += `<div class="alert">⛔ 최근 ${cfg.noshow_window_days}일 내 노쇼 ${ns.count}회 — 예약이 제한되었습니다. <b>${esc(ns.blocked_until.replace('T',' '))}</b> 이후 다시 예약할 수 있어요.</div>`;
+  else if(ns.count) h += `<div class="alert warn">⚠ 최근 ${cfg.noshow_window_days}일 노쇼 ${ns.count}/${ns.limit}회 — ${ns.limit}회가 되면 예약이 제한됩니다.</div>`;
+
+  h += `<div class="grid"><div class="card"><h2>내 회원권</h2>` + (d.memberships.map(m => {
+    const used = m.total - m.remaining;
+    const cells = Array.from({length:m.total}, (_,i) => i < used ? 'u' : i < used + m.reserved ? 'r' : 'f');
+    return `<div><b>${esc(m.name)}</b> ${m.expired?'<span class="tag cancelled">만료</span>':''}
+      <div class="meter">${cells.map(c=>`<i class="${c}"></i>`).join('')}</div>
+      <div class="mute">사용 ${used} · 예약 중 ${m.reserved} · <b>예약 가능 ${m.expired?0:m.available}</b> / 총 ${m.total}회 · 만료 ${m.expires_on}</div></div>`;
+  }).join('<hr>') || '<span class="mute">등록된 회원권이 없습니다.</span>') + `</div>`;
+
+  h += `<div class="card"><h2>내 예약</h2><table><tr><th>수업</th><th>트레이너</th><th>상태</th><th></th></tr>` +
+    d.bookings.slice(0,12).map(b => `<tr><td>${fmt(b.start_at)}</td><td>${esc(b.trainer)}</td><td><span class="tag ${b.status}">${STATUS[b.status]}</span></td>
+      <td>${b.status==='booked' ? `<button class="b g" ${b.can_cancel?'':'disabled title="수업 '+cfg.cancel_deadline_hours+'시간 전까지만 취소 가능"'} onclick="act(()=>api('/bookings/${b.id}/cancel','POST',{by:'member'}),'예약을 취소했어요.')">취소</button>`:''}</td></tr>`).join('') +
+    `</table><div class="mute" style="margin-top:6px">취소는 수업 ${cfg.cancel_deadline_hours}시간 전까지. 이후 불참은 노쇼로 처리되어 1회 차감됩니다.</div></div></div>`;
+
+  h += `<div class="card"><h2>수업 예약 (7일)</h2><table><tr><th>일시</th><th>트레이너</th><th>정원</th><th></th></tr>` +
+    slots.map(s => {
+      const dis = !!s.reason;
+      return `<tr><td>${fmt(s.start_at)}</td><td>${esc(s.trainer)}</td><td>${s.taken}/${s.capacity}</td><td>${
+        s.my_booking_id ? '<span class="tag booked">예약됨</span>' :
+        `<button class="b" ${dis?'disabled':''} onclick="act(()=>api('/bookings','POST',{member_id:${memberId},slot_id:${s.id}}),'예약되었어요.')">${esc(s.reason||'예약')}</button>`}</td></tr>`;
+    }).join('') + `</table></div>`;
+
+  h += `<div class="card"><h2>횟수 차감 내역</h2><table><tr><th>시각</th><th>회원권</th><th>내용</th><th>증감</th></tr>` +
+    d.ledger.map(l => `<tr><td>${fmt(l.created_at)}</td><td>${esc(l.membership)}</td><td>${esc(l.reason)}</td><td class="${l.delta<0?'neg':'pos'}">${l.delta>0?'+':''}${l.delta}</td></tr>`).join('') + `</table></div>`;
+  return h;
+}
+
+// ------------------------------------------------ 데스크
+let deskDate = null;
+async function viewDesk(){
+  const list = await api('/desk' + (deskDate ? '?date='+deskDate : ''));
+  let h = `<div class="card row"><b>날짜</b><input type="date" value="${deskDate||cfg.now.slice(0,10)}" onchange="deskDate=this.value;render()">
+    <button class="b g" onclick="deskDate=null;render()">오늘</button>
+    <span class="mute">출석은 시작 ${cfg.attend_open_min}분 전부터, 노쇼는 시작 ${cfg.noshow_after_min}분 후부터 처리 · 처리 시 회원권 1회 차감</span></div>`;
+  if(!list.length) h += `<div class="card mute">이 날짜에 수업이 없습니다.</div>`;
+  for(const s of list){
+    h += `<div class="card"><h2>${fmt(s.start_at)}~${s.end_at.slice(11)} · ${esc(s.trainer)} <span class="mute">정원 ${s.taken}/${s.capacity}</span></h2>` +
+      (s.bookings.length ? `<table><tr><th>회원</th><th>연락처</th><th>회원권(잔여)</th><th>상태</th><th></th></tr>` + s.bookings.map(b => `
+        <tr><td><b>${esc(b.name)}</b></td><td>${esc(b.phone)}</td><td>${esc(b.membership)} (${b.remaining}회)</td><td><span class="tag ${b.status}">${STATUS[b.status]}</span></td><td class="row">
+        ${b.status==='booked' ? `
+          <button class="b ok" ${s.attend_open?'':'disabled'} onclick="act(()=>api('/bookings/${b.id}/attend','POST'),'출석 처리 · 1회 차감')">출석</button>
+          <button class="b bad" ${s.noshow_open?'':'disabled'} onclick="act(()=>api('/bookings/${b.id}/noshow','POST'),'노쇼 처리 · 1회 차감')">노쇼</button>
+          <button class="b g" onclick="if(confirm('데스크 취소(차감 없음)할까요?'))act(()=>api('/bookings/${b.id}/cancel','POST',{by:'desk'}),'취소했어요.')">취소</button>`
+        : `<button class="b g" onclick="if(confirm('처리를 되돌리고 차감분을 복구할까요?'))act(()=>api('/bookings/${b.id}/revert','POST'),'되돌렸어요.')">되돌리기</button>`}
+        </td></tr>`).join('') + `</table>` : `<span class="mute">예약 없음</span>`) + `</div>`;
+  }
+  return h;
+}
+
+// ------------------------------------------------ 관리
+async function viewAdmin(){
+  const [members, trainers] = await Promise.all([api('/members'), api('/trainers')]);
+  const dt = cfg.now.slice(0,10) + 'T10:00';
+  return `<div class="grid">
+  <div class="card"><h2>회원권 판매</h2><div class="row" style="flex-direction:column;align-items:stretch">
+    <select id="sm">${members.map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join('')}</select>
+    <input id="sn" value="PT 10회권"><input id="st" type="number" value="10" min="1"><input id="sv" type="number" value="90" min="1" title="유효일수">
+    <span class="mute">횟수 / 유효일수</span>
+    <button class="b" onclick="act(()=>api('/members/'+$('#sm').value+'/memberships','POST',{name:$('#sn').value,total:+$('#st').value,valid_days:+$('#sv').value}),'회원권을 등록했어요.')">등록</button></div></div>
+  <div class="card"><h2>수업 개설</h2><div class="row" style="flex-direction:column;align-items:stretch">
+    <select id="tr">${trainers.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('')}</select>
+    <input id="ss" type="datetime-local" value="${dt}"><input id="sc" type="number" value="1" min="1">
+    <span class="mute">정원</span>
+    <button class="b" onclick="act(()=>api('/slots','POST',{trainer_id:+$('#tr').value,start_at:$('#ss').value,capacity:+$('#sc').value}),'수업을 열었어요.')">개설</button></div></div>
+  </div>
+  <div class="card"><h2>회원 현황</h2><table><tr><th>이름</th><th>연락처</th><th>유효 잔여</th><th>최근 ${cfg.noshow_window_days}일 노쇼</th><th>상태</th></tr>` +
+    members.map(m=>`<tr><td>${esc(m.name)}</td><td>${esc(m.phone)}</td><td>${m.remaining}회</td><td>${m.noshow.count}/${m.noshow.limit}</td>
+    <td>${m.noshow.blocked?`<span class="tag noshow">예약제한 ~${esc(m.noshow.blocked_until.slice(0,10))}</span>`:'<span class="tag attended">정상</span>'}</td></tr>`).join('') + `</table></div>`;
+}
+render();
+</script>
+</body>
+</html>

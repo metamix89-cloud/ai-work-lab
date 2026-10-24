@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>으랏차차헬스 수업 예약</title>
+<style>
+body{font-family:sans-serif;margin:0;background:#f4f5f7;color:#222}
+header{background:#1f3a5f;color:#fff;padding:12px 20px;display:flex;gap:16px;align-items:center}
+header select{padding:4px}
+main{display:flex;gap:20px;padding:20px}
+.col{flex:1;min-width:0}
+.card,.row{background:#fff;border:1px solid #d8dbe0;border-radius:6px;padding:10px 14px;margin-bottom:8px}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between}
+.row .info{flex:1}
+button{padding:4px 10px;cursor:pointer}
+#message{min-height:1.4em;padding:8px 20px;color:#b00020}
+#error{display:none;padding:20px;color:#b00020}
+h2{font-size:16px;margin:8px 0}
+.st{font-size:12px;color:#555}
+</style>
+</head>
+<body>
+<header>
+  <b>으랏차차헬스 수업 예약</b>
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+  <label id="memberWrap" style="display:none">회원 <select data-testid="member" id="member"></select></label>
+</header>
+<div id="message" data-testid="message"></div>
+<div id="error">불러오지 못했습니다 <button id="retry">다시 시도</button></div>
+<main id="main">
+  <div class="col">
+    <h2>회원권</h2>
+    <div class="card" id="pass"></div>
+    <h2>수업 목록</h2>
+    <div id="slots"></div>
+  </div>
+  <div class="col">
+    <h2>예약 목록</h2>
+    <div id="bookings"></div>
+  </div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const STATUS = {booked: "예약", attended: "출석", noshow: "노쇼", cancelled: "취소"};
+let users = [];
+
+function esc(s){return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function parse(s){return new Date(s.replace(" ", "T"));}
+function setMsg(t){$("message").textContent = t || "";}
+
+async function api(method, url, body){
+  const r = await fetch(url, {method, headers: {"Content-Type": "application/json"}, body: body ? JSON.stringify(body) : undefined});
+  let data = null;
+  try { data = await r.json(); } catch (e) {}
+  if (!r.ok) { const e = new Error((data && data.detail) || "오류"); e.api = true; throw e; }
+  return data;
+}
+
+function me(){return users.find(u => u.user_id === $("user").value);}
+function target(){
+  const u = me();
+  if (!u) return null;
+  return u.role === "desk" ? $("member").value : u.user_id;
+}
+
+async function loadUsers(){
+  users = await api("GET", "/api/users");
+  $("user").innerHTML = users.map(u => `<option value="${esc(u.user_id)}">${esc(u.name)} (${u.role === "desk" ? "데스크" : "회원"})</option>`).join("");
+  $("member").innerHTML = users.filter(u => u.role === "member").map(u => `<option value="${esc(u.user_id)}">${esc(u.name)}</option>`).join("");
+}
+
+async function refresh(){
+  const u = me();
+  if (!u) return;
+  $("memberWrap").style.display = u.role === "desk" ? "" : "none";
+  const t = target();
+  try {
+    const [slots, bookings] = await Promise.all([api("GET", "/api/slots"), api("GET", "/api/bookings?viewer=" + encodeURIComponent(u.user_id))]);
+    let p = null;
+    try { p = await api("GET", "/api/passes/" + encodeURIComponent(t)); } catch (e) { if (!e.api) throw e; }
+    $("error").style.display = "none";
+    $("main").style.display = "";
+    renderPass(p);
+    renderSlots(slots, p);
+    renderBookings(bookings, u);
+  } catch (e) {
+    $("main").style.display = "none";
+    $("error").style.display = "block";
+  }
+}
+
+function renderPass(p){
+  if (!p) { $("pass").textContent = "회원권이 없습니다"; return; }
+  $("pass").innerHTML = `<div>${esc(p.kind)}${p.expired ? " (만료)" : ""}</div>
+    <div>잔여 <b data-testid="pass-left">${p.left}</b>회 · 예약 중 <b data-testid="pass-held">${p.held}</b>회 · 예약 가능 <b data-testid="pass-avail">${p.available}</b>회</div>
+    <div>유효기간 <span data-testid="pass-expires">${esc(p.expires_on)}</span></div>`;
+}
+
+function renderSlots(slots, p){
+  const canBook = p && p.available >= 1;
+  $("slots").innerHTML = slots.map(s => `<div class="row" data-testid="slot" data-id="${esc(s.slot_id)}">
+    <div class="info">${esc(s.starts_at)} · ${esc(s.trainer)} · 정원 ${s.capacity} · <span>남은 자리 ${s.left}</span></div>
+    ${s.left > 0 && canBook ? `<button data-testid="book" data-slot="${esc(s.slot_id)}">예약</button>` : ""}</div>`).join("");
+}
+
+function renderBookings(list, u){
+  const now = new Date();
+  $("bookings").innerHTML = list.map(b => {
+    let btns = "";
+    if (b.status === "booked") {
+      const start = parse(b.starts_at);
+      if (now <= new Date(start.getTime() - 2 * 3600 * 1000)) btns += `<button data-testid="act-cancel" data-act="cancel">취소</button>`;
+      if (u.role === "desk" && now >= start) btns += `<button data-testid="act-attend" data-act="attend">출석</button><button data-testid="act-noshow" data-act="noshow">노쇼</button>`;
+    }
+    return `<div class="row" data-testid="booking" data-id="${esc(b.booking_id)}" data-status="${esc(b.status)}">
+      <div class="info">${esc(b.starts_at)} · ${esc(b.trainer)} · ${esc(b.member_name)}<br><span class="st">${STATUS[b.status] || esc(b.status)}</span></div>
+      <div>${btns}</div></div>`;
+  }).join("");
+}
+
+async function post(url, body){
+  setMsg("");
+  try { await api("POST", url, body); }
+  catch (e) { setMsg(e.api ? e.message : "불러오지 못했습니다"); }
+  await refresh();
+}
+
+$("slots").addEventListener("click", ev => {
+  const b = ev.target.closest("[data-testid=book]");
+  if (b) post("/api/bookings", {user: $("user").value, member_id: target(), slot_id: b.dataset.slot});
+});
+$("bookings").addEventListener("click", ev => {
+  const b = ev.target.closest("[data-act]");
+  if (b) post("/api/bookings/" + encodeURIComponent(b.closest("[data-testid=booking]").dataset.id) + "/" + b.dataset.act, {user: $("user").value});
+});
+$("user").addEventListener("change", () => { setMsg(""); refresh(); });
+$("member").addEventListener("change", () => { setMsg(""); refresh(); });
+$("retry").addEventListener("click", init);
+
+async function init(){
+  try { await loadUsers(); await refresh(); }
+  catch (e) { $("main").style.display = "none"; $("error").style.display = "block"; }
+}
+init();
+</script>
+</body>
+</html>

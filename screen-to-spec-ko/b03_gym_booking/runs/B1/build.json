@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 96342,
+ "num_turns": 10,
+ "total_cost_usd": 0.3257783999999999,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 16,
+  "cache_creation_input_tokens": 37167,
+  "cache_read_input_tokens": 334984,
+  "output_tokens": 14358,
+  "output_tokens_details": {
+   "thinking_tokens": 2707
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 37167,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1162,
+    "cache_read_input_tokens": 52444,
+    "cache_creation_input_tokens": 1395,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1395
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD대로 웹앱을 만들었습니다. API는 TestClient로 확인했고, 화면은 브라우저에서 열어 보지 못했습니다. PRD가 완료 기준으로 말하는 `tests/test_dod.py`는 폴더에 없어서 T1~T9를 돌리지 못했습니다. `tests/`는 빈 폴더입니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/` CSV 4개로 `gym.db`(SQLite, `gy_` 테이블)를 새로 만듭니다. API 6개와 규칙 R1~R9를 구현했고, 거부는 `{\"detail\": …}`로 응답합니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. 사용자·회원 선택, 회원권 카드, 수업 목록, 예약 목록, 메시지 줄, `불러오지 못했습니다`와 다시 시도 버튼이 있고, `data-testid`는 PRD대로 붙였습니다.\n- `seed/*.csv`: 가상 데이터입니다. 회원 5명(잔여 넉넉·잔여 2·0회·만료·노쇼 3회), 데스크 1명, 수업 6개, 예약 9개(네 상태 모두 포함)입니다.\n\n**확인한 것** (직접 요청을 보내 봤습니다)\n- 회원권 숫자: `left`·`held`·`available`이 맞게 나옵니다.\n- 예약 가능 횟수: 잔여 2 회원의 첫 예약은 201, 그다음은 409, 0회 회원은 409입니다.\n- 만료·노쇼 3회·남의 예약은 각각 409, 409, 403입니다.\n- 지난 수업은 409, 회원의 출석 처리는 403입니다.\n- 데스크의 출석 처리는 `used`를 1 늘리고, 같은 예약을 다시 취소하면 409입니다.\n- 본문 없이 없는 예약을 부르면 400, 본문이 있으면 404입니다.\n\n**PRD 안에서 판단한 부분**\n- **예약 버튼:** PRD는 예약 가능 횟수가 1 이상일 때만 보이라고 합니다. 그런데 T9는 잔여 0 회원이 예약을 눌러 서버 메시지를 받아야 합니다. 그래서 자리가 있으면 항상 버튼을 두고, 예약 가능 횟수가 0이면 흐리게만 표시했습니다. 누르면 서버의 거부 사유가 메시지 줄에 뜹니다.\n- **시드 날짜:** 시드 날짜는 2026-10-25 기준으로 고정했습니다. 날짜가 지나면 수업이 모두 지난 수업이 됩니다. \"곧 시작\" 수업은 시드에 없습니다.\n\n**실행:** `pip install fastapi uvicorn` 후 `python -m uvicorn main:app --port 8000`, 그리고 `http://localhost:8000/`로 접속하면 됩니다.",
+ "wall_s": 105.5
+}

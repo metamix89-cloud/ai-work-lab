@@ -1,0 +1,17 @@
+{
+ "allowed_routes": ["/", "/api/users", "/api/slots", "/api/passes/{member_id}", "/api/passes/{id}", "/api/bookings",
+                    "/api/bookings/{booking_id}/{action}", "/api/bookings/{id}/{action}",
+                    "/api/bookings/{id}/cancel", "/api/bookings/{id}/attend", "/api/bookings/{id}/noshow",
+                    "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "로그인 · 회원가입": "login|password|로그인|회원가입",
+  "결제 · 회원권 구매": "결제|payment|purchase|회원권 구매|연장|환불",
+  "수업 개설 · 트레이너 배정": "@app\\.(post|put|patch|delete)\\(\"/api/slots|수업 개설|수업 추가",
+  "대기 순번": "waitlist|대기 순번|대기자",
+  "문자 · 알림": "sms|문자 발송|notify|notification|알림",
+  "출석 QR": "qr|QR",
+  "통계": "/api/stats|통계|출석률",
+  "편집 화면": "/api/admin|회원 등록|@app\\.(post|put|patch|delete)\\(\"/api/(users|passes)\"",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>으랏차차헬스 수업 예약</title>
+<style>
+body{font-family:sans-serif;margin:16px;color:#222}
+.top{margin-bottom:12px}
+.cols{display:flex;gap:24px;align-items:flex-start}
+.left{flex:1}.right{flex:1}
+.card,.row{border:1px solid #ccc;border-radius:6px;padding:8px;margin:6px 0}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+#message{min-height:1.4em;color:#b00020;margin:8px 0}
+button{cursor:pointer}
+</style>
+</head>
+<body>
+<h1>으랏차차헬스 수업 예약</h1>
+<div class="top">
+  사용자 <select data-testid="user" id="user"></select>
+  <span id="memberBox" style="display:none">회원 <select data-testid="member" id="member"></select></span>
+</div>
+<div data-testid="message" id="message"></div>
+<div id="error" style="display:none">불러오지 못했습니다 <button id="retry">다시 시도</button></div>
+<div class="cols" id="main">
+  <div class="left">
+    <h2>내 회원권</h2>
+    <div class="card" id="pass"></div>
+    <h2>수업 목록</h2>
+    <div id="slots"></div>
+  </div>
+  <div class="right">
+    <h2>예약 목록</h2>
+    <div id="bookings"></div>
+  </div>
+</div>
+<script>
+const STATUS = {booked: "예약", attended: "출석", noshow: "노쇼", cancelled: "취소"};
+let users = [], viewer = null, target = null;
+
+const $ = id => document.getElementById(id);
+function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+function pad(n) { return String(n).padStart(2, "0"); }
+function nowStr() {
+  const d = new Date();
+  return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + " " + pad(d.getHours()) + ":" + pad(d.getMinutes());
+}
+async function api(method, url, body) {
+  const r = await fetch(url, {method, headers: {"Content-Type": "application/json"}, body: body ? JSON.stringify(body) : undefined});
+  const data = await r.json().catch(() => null);
+  if (!r.ok) { const e = new Error((data && data.detail) || "오류"); e.rejected = true; throw e; }
+  return data;
+}
+function isDesk() { return viewer && viewer.role === "desk"; }
+
+async function load() {
+  try {
+    const [sl, bk, ps] = await Promise.all([
+      api("GET", "/api/slots"),
+      api("GET", "/api/bookings?viewer=" + encodeURIComponent(viewer.user_id)),
+      api("GET", "/api/passes/" + encodeURIComponent(target)).catch(e => null)
+    ]);
+    $("error").style.display = "none"; $("main").style.display = "";
+    renderPass(ps); renderSlots(sl, ps); renderBookings(bk);
+  } catch (e) {
+    $("error").style.display = ""; $("main").style.display = "none";
+  }
+}
+function renderPass(p) {
+  $("pass").innerHTML = p
+    ? esc(p.kind) + "<br>잔여 <b data-testid=\"pass-left\">" + p.left + "</b>회 · 예약 중 <b data-testid=\"pass-held\">" + p.held +
+      "</b>회 · 예약 가능 <b data-testid=\"pass-avail\">" + p.available + "</b>회<br>유효기간 <span data-testid=\"pass-expires\">" +
+      esc(p.expires_on) + "</span>" + (p.expired ? " (만료)" : "")
+    : "회원권이 없습니다";
+}
+function renderSlots(list, p) {
+  const canBook = p && p.available >= 1;
+  $("slots").innerHTML = list.map(s =>
+    "<div class=\"row\" data-testid=\"slot\" data-id=\"" + esc(s.slot_id) + "\"><span>" + esc(s.starts_at) + " · " + esc(s.trainer) +
+    " · 남은 자리 " + s.left + "</span>" +
+    (s.left > 0 && canBook ? "<button data-testid=\"book\">예약</button>" : "") + "</div>").join("");
+}
+function renderBookings(list) {
+  const n = nowStr();
+  $("bookings").innerHTML = list.map(b => {
+    let btns = "";
+    if (b.status === "booked") {
+      btns += "<button data-testid=\"act-cancel\" data-action=\"cancel\">취소</button>";
+      if (isDesk() && b.starts_at <= n) {
+        btns += "<button data-testid=\"act-attend\" data-action=\"attend\">출석</button>" +
+                "<button data-testid=\"act-noshow\" data-action=\"noshow\">노쇼</button>";
+      }
+    }
+    return "<div class=\"row\" data-testid=\"booking\" data-id=\"" + esc(b.booking_id) + "\" data-status=\"" + b.status + "\"><span>" +
+      esc(b.starts_at) + " · " + esc(b.trainer) + (isDesk() ? " · " + esc(b.member_name) : "") + " · " + STATUS[b.status] +
+      "</span><span>" + btns + "</span></div>";
+  }).join("");
+}
+function setMsg(t) { $("message").textContent = t || ""; }
+
+async function doPost(url, body) {
+  try { await api("POST", url, body); setMsg(""); }
+  catch (e) { if (e.rejected) setMsg(e.message); else setMsg("불러오지 못했습니다"); }
+  await load();
+}
+$("slots").addEventListener("click", e => {
+  const b = e.target.closest("[data-testid=book]"); if (!b) return;
+  const slot = b.closest("[data-testid=slot]").dataset.id;
+  doPost("/api/bookings", {user: viewer.user_id, member_id: target, slot_id: slot});
+});
+$("bookings").addEventListener("click", e => {
+  const b = e.target.closest("button[data-action]"); if (!b) return;
+  const id = b.closest("[data-testid=booking]").dataset.id;
+  doPost("/api/bookings/" + encodeURIComponent(id) + "/" + b.dataset.action, {user: viewer.user_id});
+});
+function onUser() {
+  viewer = users.find(u => u.user_id === $("user").value);
+  const members = users.filter(u => u.role === "member");
+  if (isDesk()) {
+    $("member").innerHTML = members.map(u => "<option value=\"" + esc(u.user_id) + "\">" + esc(u.name) + "</option>").join("");
+    target = members.length ? members[0].user_id : "";
+    $("memberBox").style.display = "";
+  } else {
+    target = viewer.user_id; $("memberBox").style.display = "none";
+  }
+  setMsg(""); load();
+}
+$("user").addEventListener("change", onUser);
+$("member").addEventListener("change", () => { target = $("member").value; setMsg(""); load(); });
+$("retry").addEventListener("click", init);
+async function init() {
+  try {
+    users = await api("GET", "/api/users");
+    $("user").innerHTML = users.map(u => "<option value=\"" + esc(u.user_id) + "\">" + esc(u.name) + "</option>").join("");
+    onUser();
+  } catch (e) { $("error").style.display = ""; $("main").style.display = "none"; }
+}
+init();
+</script>
+</body>
+</html>

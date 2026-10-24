@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>으랏차차헬스 수업 예약</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f4f5f7; color: #222; }
+  header { background: #1f3a5f; color: #fff; padding: 12px 20px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  header h1 { font-size: 18px; margin: 0; }
+  select, button { font: inherit; padding: 4px 8px; }
+  button { cursor: pointer; }
+  main { display: flex; gap: 16px; padding: 16px 20px; align-items: flex-start; flex-wrap: wrap; }
+  section { background: #fff; border-radius: 8px; padding: 14px 16px; box-shadow: 0 1px 3px #0002; }
+  .left { flex: 1 1 420px; display: flex; flex-direction: column; gap: 16px; }
+  .right { flex: 1 1 420px; }
+  h2 { font-size: 15px; margin: 0 0 10px; }
+  .card { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; text-align: center; }
+  .card div { background: #eef2f7; border-radius: 6px; padding: 8px 4px; font-size: 12px; }
+  .card b { display: block; font-size: 20px; margin-top: 4px; }
+  .row { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0; border-top: 1px solid #e5e7eb; flex-wrap: wrap; }
+  .row:first-of-type { border-top: 0; }
+  .sub { color: #666; font-size: 12px; }
+  .st { font-size: 12px; padding: 2px 8px; border-radius: 10px; background: #e5e7eb; }
+  .st-booked { background: #dbeafe; } .st-attended { background: #dcfce7; }
+  .st-noshow { background: #fee2e2; } .st-cancelled { background: #e5e7eb; color: #666; }
+  #message { min-height: 22px; padding: 8px 20px; color: #b42318; font-weight: bold; }
+  #error { margin: 16px 20px; padding: 16px; background: #fff; border-radius: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>으랏차차헬스 수업 예약</h1>
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+  <label id="memberWrap" hidden>회원 <select data-testid="member" id="member"></select></label>
+</header>
+<div id="message" data-testid="message"></div>
+<div id="error" hidden><span>불러오지 못했습니다</span> <button id="retry" type="button">다시 시도</button></div>
+<main id="main">
+  <div class="left">
+    <section>
+      <h2>내 회원권 <span id="passKind" class="sub"></span></h2>
+      <div class="card">
+        <div>잔여 횟수<b data-testid="pass-left">-</b></div>
+        <div>예약 중<b data-testid="pass-held">-</b></div>
+        <div>예약 가능<b data-testid="pass-avail">-</b></div>
+        <div>유효기간<b data-testid="pass-expires" style="font-size:14px;line-height:28px">-</b></div>
+      </div>
+    </section>
+    <section>
+      <h2>수업 목록</h2>
+      <div id="slots"></div>
+    </section>
+  </div>
+  <section class="right">
+    <h2>예약 목록</h2>
+    <div id="bookings"></div>
+  </section>
+</main>
+<script>
+const $ = (s) => document.querySelector(s);
+const STATUS = { booked: "예약", attended: "출석", noshow: "노쇼", cancelled: "취소" };
+let users = [];
+let state = { pass: null, slots: [], bookings: [] };
+
+function esc(s) {
+  return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+}
+function say(t) { $("#message").textContent = t || ""; }
+function me() { return users.find((u) => u.user_id === $("#user").value); }
+function target() {
+  const u = me();
+  if (!u) return null;
+  return u.role === "desk" ? $("#member").value : u.user_id;
+}
+
+async function api(url, opts) {
+  const r = await fetch(url, opts);
+  let data = null;
+  try { data = await r.json(); } catch (e) {}
+  if (!r.ok) {
+    const err = new Error((data && data.detail) || "요청에 실패했습니다");
+    err.server = true;
+    throw err;
+  }
+  return data;
+}
+
+async function loadAll() {
+  try {
+    const u = me();
+    const t = target();
+    const [slots, bookings, pass] = await Promise.all([
+      api("/api/slots"),
+      api("/api/bookings?viewer=" + encodeURIComponent(u.user_id)),
+      t ? api("/api/passes/" + encodeURIComponent(t)).catch(() => null) : null,
+    ]);
+    state = { slots, bookings, pass };
+    $("#error").hidden = true;
+    $("#main").hidden = false;
+    render();
+  } catch (e) {
+    $("#main").hidden = true;
+    $("#error").hidden = false;
+  }
+}
+
+function render() {
+  const p = state.pass;
+  $("[data-testid=pass-left]").textContent = p ? p.left : "-";
+  $("[data-testid=pass-held]").textContent = p ? p.held : "-";
+  $("[data-testid=pass-avail]").textContent = p ? p.available : "-";
+  $("[data-testid=pass-expires]").textContent = p ? p.expires_on + (p.expired ? " (만료)" : "") : "-";
+  $("#passKind").textContent = p ? p.kind : "";
+  const canBook = p && p.available >= 1;
+  $("#slots").innerHTML = state.slots.map((s) => `
+    <div class="row" data-testid="slot" data-id="${esc(s.slot_id)}">
+      <div><b>${esc(s.starts_at)}</b> · ${esc(s.trainer)}
+        <div class="sub">정원 ${s.capacity} · <span>남은 자리 ${s.left}</span></div></div>
+      ${s.left > 0 && canBook ? '<button type="button" data-testid="book">예약</button>' : ""}
+    </div>`).join("") || '<div class="sub">수업이 없습니다</div>';
+  const u = me();
+  $("#bookings").innerHTML = state.bookings.map((b) => {
+    const mine = u.role === "desk" || b.member_id === u.user_id;
+    const acts = [];
+    if (b.status === "booked") {
+      if (mine) acts.push('<button type="button" data-testid="act-cancel" data-act="cancel">취소</button>');
+      if (u.role === "desk") {
+        acts.push('<button type="button" data-testid="act-attend" data-act="attend">출석</button>');
+        acts.push('<button type="button" data-testid="act-noshow" data-act="noshow">노쇼</button>');
+      }
+    }
+    return `<div class="row" data-testid="booking" data-id="${esc(b.booking_id)}" data-status="${esc(b.status)}">
+      <div><b>${esc(b.starts_at)}</b> · ${esc(b.trainer)}
+        <div class="sub">${esc(b.member_name)} · <span class="st st-${esc(b.status)}">${STATUS[b.status] || esc(b.status)}</span></div></div>
+      <div>${acts.join(" ")}</div></div>`;
+  }).join("") || '<div class="sub">예약이 없습니다</div>';
+}
+
+async function send(url, body) {
+  say("");
+  try {
+    await api(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  } catch (e) {
+    say(e.message);
+  }
+  await loadAll();
+}
+
+function syncMember() {
+  const u = me();
+  const desk = u && u.role === "desk";
+  $("#memberWrap").hidden = !desk;
+}
+
+$("#user").addEventListener("change", () => { say(""); syncMember(); loadAll(); });
+$("#member").addEventListener("change", () => { say(""); loadAll(); });
+$("#retry").addEventListener("click", init);
+$("#slots").addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-testid=book]");
+  if (!btn) return;
+  const slot = btn.closest("[data-testid=slot]").dataset.id;
+  send("/api/bookings", { user: $("#user").value, member_id: target(), slot_id: slot });
+});
+$("#bookings").addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-act]");
+  if (!btn) return;
+  const id = btn.closest("[data-testid=booking]").dataset.id;
+  send("/api/bookings/" + encodeURIComponent(id) + "/" + btn.dataset.act, { user: $("#user").value });
+});
+
+async function init() {
+  try {
+    users = await api("/api/users");
+  } catch (e) {
+    $("#main").hidden = true;
+    $("#error").hidden = false;
+    return;
+  }
+  const keep = $("#user").value;
+  $("#user").innerHTML = users.map((u) => `<option value="${esc(u.user_id)}">${esc(u.name)}${u.role === "desk" ? " (데스크)" : ""}</option>`).join("");
+  if (keep && users.some((u) => u.user_id === keep)) $("#user").value = keep;
+  $("#member").innerHTML = users.filter((u) => u.role === "member")
+    .map((u) => `<option value="${esc(u.user_id)}">${esc(u.name)}</option>`).join("");
+  syncMember();
+  loadAll();
+}
+init();
+</script>
+</body>
+</html>

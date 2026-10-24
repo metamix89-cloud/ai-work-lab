@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>으랏차차헬스 · 수업 예약</title>
+<style>
+body{font-family:system-ui,"Malgun Gothic",sans-serif;margin:0;background:#f4f5f7;color:#222}
+header{background:#1d3557;color:#fff;padding:12px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+header h1{font-size:18px;margin:0 auto 0 0}
+select,button{font:inherit;padding:4px 8px}
+main{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px;max-width:1100px;margin:auto}
+@media(max-width:800px){main{grid-template-columns:1fr}}
+section{background:#fff;border-radius:8px;padding:12px 16px;box-shadow:0 1px 3px #0002}
+h2{font-size:16px;margin:0 0 8px}
+dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0}
+dd{margin:0;font-weight:600}
+.row{display:flex;gap:8px;align-items:center;padding:6px 0;border-top:1px solid #eee;flex-wrap:wrap}
+.row .info{flex:1}
+.st{font-size:12px;padding:1px 8px;border-radius:10px;background:#ddd}
+.st-booked{background:#cde4ff}.st-attended{background:#cdf0d3}.st-noshow{background:#ffd3d3}.st-cancelled{background:#e5e5e5}
+#message{min-height:24px;padding:8px 20px;color:#b00020;font-weight:600}
+#error{padding:20px;text-align:center}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <h1>으랏차차헬스 수업 예약</h1>
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+  <label id="memberWrap" hidden>회원 <select data-testid="member" id="member"></select></label>
+</header>
+<div id="message" data-testid="message"></div>
+<div id="error" hidden><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+<main id="main">
+  <div>
+    <section><h2>내 회원권</h2><div id="pass"></div></section>
+    <section style="margin-top:16px"><h2>수업 목록</h2><div id="slots"></div></section>
+  </div>
+  <section><h2>예약 목록</h2><div id="bookings"></div></section>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const STATUS = {booked:"예약", attended:"출석", noshow:"노쇼", cancelled:"취소"};
+let users = [], me = null;
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  let data = null;
+  try { data = await r.json(); } catch (e) {}
+  if (!r.ok) { const err = new Error((data && data.detail) || "오류"); err.api = true; throw err; }
+  return data;
+}
+const post = (path, body) => api(path, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)});
+const setMsg = t => { $("message").textContent = t || ""; };
+const target = () => me.role === "desk" ? $("member").value : me.user_id;
+const fail = () => { $("error").hidden = false; $("main").hidden = true; };
+
+async function loadUsers() {
+  users = await api("/api/users");
+  $("user").innerHTML = users.map(u => `<option value="${esc(u.user_id)}">${esc(u.name)} (${u.role === "desk" ? "데스크" : "회원"})</option>`).join("");
+  $("member").innerHTML = users.filter(u => u.role === "member").map(u => `<option value="${esc(u.user_id)}">${esc(u.name)}</option>`).join("");
+  me = users[0];
+}
+
+async function refresh() {
+  try {
+    me = users.find(u => u.user_id === $("user").value) || users[0];
+    $("memberWrap").hidden = me.role !== "desk";
+    const mid = target();
+    const [p, slots, bks] = await Promise.all([
+      mid ? api("/api/passes/" + encodeURIComponent(mid)).catch(() => null) : null,
+      api("/api/slots"),
+      api("/api/bookings?viewer=" + encodeURIComponent(me.user_id)),
+    ]);
+    $("error").hidden = true; $("main").hidden = false;
+    $("pass").innerHTML = p ? `<dl><dt>종류</dt><dd>${esc(p.kind)}</dd>
+      <dt>잔여 횟수</dt><dd data-testid="pass-left">${p.left}</dd>
+      <dt>예약 중</dt><dd data-testid="pass-held">${p.held}</dd>
+      <dt>예약 가능</dt><dd data-testid="pass-avail">${p.available}</dd>
+      <dt>유효기간</dt><dd data-testid="pass-expires">${esc(p.expires_on)}</dd></dl>${p.expired ? "<p>유효기간이 지난 회원권입니다.</p>" : ""}` : "<p>회원권 정보가 없습니다.</p>";
+    const canBook = !!p && p.available >= 1;
+    $("slots").innerHTML = slots.map(s => `<div class="row" data-testid="slot" data-id="${esc(s.slot_id)}">
+      <div class="info">${esc(s.starts_at)} · ${esc(s.trainer)} · 정원 ${s.capacity} · <span>남은 자리 ${s.left}</span></div>
+      ${s.left > 0 && canBook ? `<button data-testid="book" data-slot="${esc(s.slot_id)}">예약</button>` : ""}</div>`).join("");
+    $("bookings").innerHTML = bks.length ? bks.map(b => {
+      const btns = [];
+      if (b.status === "booked") {
+        btns.push(`<button data-testid="act-cancel" data-act="cancel" data-bid="${esc(b.booking_id)}">취소</button>`);
+        if (me.role === "desk") {
+          btns.push(`<button data-testid="act-attend" data-act="attend" data-bid="${esc(b.booking_id)}">출석</button>`);
+          btns.push(`<button data-testid="act-noshow" data-act="noshow" data-bid="${esc(b.booking_id)}">노쇼</button>`);
+        }
+      }
+      return `<div class="row" data-testid="booking" data-id="${esc(b.booking_id)}" data-status="${esc(b.status)}">
+        <div class="info">${esc(b.starts_at)} · ${esc(b.trainer)}${me.role === "desk" ? " · " + esc(b.member_name) : ""}
+        <span class="st st-${esc(b.status)}">${STATUS[b.status] || esc(b.status)}</span></div>${btns.join("")}</div>`;
+    }).join("") : "<p>예약이 없습니다.</p>";
+  } catch (e) {
+    fail();
+  }
+}
+
+document.addEventListener("click", async ev => {
+  const t = ev.target.closest("button");
+  if (!t) return;
+  try {
+    if (t.dataset.slot) {
+      await post("/api/bookings", {user:me.user_id, member_id:target(), slot_id:t.dataset.slot});
+    } else if (t.dataset.act) {
+      await post(`/api/bookings/${encodeURIComponent(t.dataset.bid)}/${t.dataset.act}`, {user:me.user_id});
+    } else return;
+    setMsg("");
+  } catch (e) {
+    if (!e.api) { fail(); return; }
+    setMsg(e.message);
+  }
+  refresh();
+});
+$("user").addEventListener("change", () => { setMsg(""); refresh(); });
+$("member").addEventListener("change", () => { setMsg(""); refresh(); });
+$("retry").addEventListener("click", init);
+
+async function init() {
+  try { await loadUsers(); } catch (e) { fail(); return; }
+  refresh();
+}
+init();
+</script>
+</body>
+</html>

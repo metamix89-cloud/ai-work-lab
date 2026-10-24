@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 129197,
+ "num_turns": 11,
+ "total_cost_usd": 0.4107590000000001,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 16,
+  "cache_creation_input_tokens": 43158,
+  "cache_read_input_tokens": 330850,
+  "output_tokens": 20501,
+  "output_tokens_details": {
+   "thinking_tokens": 2611
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 43158,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 938,
+    "cache_read_input_tokens": 58548,
+    "cache_creation_input_tokens": 1282,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1282
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD.md대로 웹앱을 만들었습니다. API는 직접 호출해서 확인했고, 화면은 브라우저에서 열어 보지 못했습니다. `tests/test_dod.py`는 폴더에 없어서(`tests/`는 비어 있습니다) DoD 9개 항목은 돌려보지 못했습니다.\n\n**확인한 것** (FastAPI 테스트 클라이언트로 호출)\n- `/`가 200으로 열립니다.\n- 잔여 2에 예약 1개인 회원이 한 번 더 예약되고(201), 그다음은 409입니다.\n- 잔여 0 회원은 409 `예약 가능 횟수가 없습니다`입니다.\n- 노쇼 3회 회원은 데스크가 대신 예약해도 409입니다.\n- 회원이 남의 예약을 만들면 403입니다.\n- 데스크의 출석 처리는 200이고 `used`가 올라갑니다.\n- 본문 없이 호출하면 400입니다.\n\n**만든 것**\n- `main.py`: API 6개와 규칙 R1~R9입니다. 시작할 때마다 `seed/*.csv`로 `gym.db`를 새로 만듭니다. 테이블은 `gy_` 접두어이고 `gy_log`도 있습니다.\n- `static/index.html`: 한 페이지 화면입니다. 사용자 선택, 데스크일 때 보이는 회원 선택, 회원권 카드, 수업 목록, 예약 목록, 메시지 줄, `불러오지 못했습니다`와 다시 시도 버튼이 들어 있습니다. PRD의 `data-testid`를 모두 달았습니다.\n- `seed/`: 회원 5명, 데스크 1명, 수업 6개, 예약 10개입니다. 네 가지 상태가 다 들어 있습니다.\n\n**알아둘 점**\n- 시드의 수업 시각은 오늘(2026-10-25 00:25) 기준으로 적었습니다. 날짜가 지나면 지난 수업·곧 시작·내일 구성이 어긋나니 CSV 날짜를 새로 맞춰야 합니다.\n- 예약 버튼은 PRD 4절 그대로, 자리가 있고 예약 가능 횟수가 1 이상일 때만 보입니다. 그런데 T9는 잔여 0 회원으로 예약해서 메시지를 확인하라고 합니다. 두 문장이 충돌하는 듯해서, 이 부분은 테스트를 돌려 봐야 알 수 있습니다.\n\n실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`입니다.",
+ "wall_s": 139.3
+}

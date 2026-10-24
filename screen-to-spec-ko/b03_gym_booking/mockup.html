@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>으랏차차헬스 수업 예약 · 회원권 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 2부 3편 목업. 가상 회사(으랏차차헬스) · 가상 회원 · 가상 수업. ?state=ok|empty|error. Mock-IT 라이트 테마. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--indigo:#6366F1;--emerald:#10B981;--amber:#F59E0B;--rose:#EF4444}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:#10B981;display:inline-block}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#EEF0FF;color:var(--indigo);font-weight:700}
+.main{padding:16px 26px 14px 26px;display:flex;flex-direction:column;gap:9px}
+.top{display:flex;justify-content:space-between;align-items:flex-end}
+h1{margin:0;font-size:21px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:12px;margin-top:3px}
+.who{font-size:12.5px;color:var(--ink2);background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.pass{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr 1.2fr;gap:10px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 14px}.card .l{font-size:12px;color:var(--ink2)}.card .n{font-size:22px;font-weight:800}
+.card.hi .n{color:var(--indigo)}.card.bad .n{color:var(--rose)}
+.row{display:grid;grid-template-columns:1fr 1.15fr;gap:12px;flex:1;min-height:0}
+.box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 14px;min-height:0;overflow:hidden}
+.box h3{margin:0 0 6px;font-size:13px;color:var(--ink2)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}th{color:var(--mute);font-weight:600;text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);font-size:11.5px}
+td{padding:6px 6px;border-bottom:1px solid var(--line)}tr.past td{color:#6B7280}
+.chip{display:inline-block;border-radius:999px;padding:1px 9px;font-size:11px;font-weight:700}
+.booked{background:#EEF0FF;color:#3730A3}.attended{background:#ECFDF5;color:#047857}.noshow{background:#FEF2F2;color:#B91C1C}.cancelled{background:#F3F4F6;color:#374151}
+.b{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;margin-right:3px}.b.p{background:var(--indigo);color:#fff;border-color:var(--indigo)}.b.off{color:#C0C4CE;border-style:dashed}
+.msg{color:var(--rose);font-size:12px}
+.empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mute);gap:4px;font-size:12px;text-align:center}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:12px;padding:20px;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700}
+</style></head><body>
+<div class="app">
+ <div class="side">
+  <div class="logo"><i></i>으랏차차헬스</div>
+  <div class="nav"><div class="on">수업 예약</div><div>회원권</div><div>출석</div><div>상담 기록</div><div>문자 알림</div></div>
+ </div>
+ <div class="main" id="main"></div>
+</div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const head=(who)=>`<div class="top"><div><h1>PT 수업 예약 · 회원권 차감</h1><div class="sub">예약 가능 = 잔여 − 예약 중 · 차감은 출석 · 노쇼 때(예약 때 아님) · 취소는 시작 2시간 전까지 · 정원 · 유효기간 당일 OK · 최근 30일 노쇼 3회면 예약 불가</div></div><span class="who">사용자: ${who} ▾</span></div>`;
+let html='';
+if(state==='ok'){
+  html=head('이회원 (회원)')+`<div class="pass"><div class="card"><div class="l">회원권</div><div class="n" style="font-size:16px">PT 10회권</div></div><div class="card"><div class="l">잔여</div><div class="n">2</div></div><div class="card"><div class="l">예약 중</div><div class="n">1</div></div><div class="card hi"><div class="l">예약 가능</div><div class="n">1</div></div><div class="card"><div class="l">유효기간</div><div class="n" style="font-size:16px">12-24 까지</div></div></div>
+  <div class="msg">예약 가능 횟수가 없습니다 — 잔여 2 · 예약 중 2 였던 세 번째 예약(409). 잔여만 보면 되는 것 같지만 예약 중을 빼야 한다</div>
+  <div class="row"><div class="box"><h3>수업</h3><table><tr><th>수업</th><th>시간</th><th>트레이너</th><th>남은 자리</th><th></th></tr>
+   <tr class="past"><td>S-101</td><td>어제 22:00</td><td>강코치</td><td>1</td><td><span class="b off">지난 수업</span></td></tr>
+   <tr><td>S-102</td><td>오늘 01:00 (1시간 뒤)</td><td>강코치</td><td>2</td><td><span class="b p">예약</span></td></tr>
+   <tr><td>S-103</td><td>오늘 05:00</td><td>오코치</td><td><b style="color:#B91C1C">0</b></td><td><span class="b off">정원 2 찼음</span></td></tr>
+   <tr><td>S-104</td><td>내일 03:00</td><td>오코치</td><td>3</td><td><span class="b p">예약</span></td></tr>
+   <tr><td>S-105</td><td>12-24 18:00</td><td>강코치</td><td>4</td><td><span class="b p">예약</span> <span style="font-size:10.5px;color:#8A94A6">유효기간 당일 OK</span></td></tr>
+   <tr><td>S-106</td><td>12-25 18:00</td><td>강코치</td><td>4</td><td><span class="b off">유효기간 지남</span></td></tr></table></div>
+  <div class="box"><h3>내 예약</h3><table><tr><th>예약</th><th>수업</th><th>상태</th><th>동작</th></tr>
+   <tr><td>B-1002</td><td>S-101 어제 22:00</td><td><span class="chip booked">예약</span></td><td><span class="b off">데스크가 출석 · 노쇼 처리</span></td></tr>
+   <tr><td>B-1013</td><td>S-104 내일 03:00</td><td><span class="chip booked">예약</span></td><td><span class="b">취소</span> <span style="font-size:10.5px;color:#8A94A6">2시간 전까지</span></td></tr>
+   <tr><td>B-0998</td><td>S-095 지난주</td><td><span class="chip attended">출석</span></td><td><span style="font-size:10.5px;color:#8A94A6">−1</span></td></tr>
+   <tr><td>B-0991</td><td>S-090 지난주</td><td><span class="chip noshow">노쇼</span></td><td><span style="font-size:10.5px;color:#8A94A6">−1 (노쇼도 차감)</span></td></tr>
+   <tr><td>B-0985</td><td>S-088 지난달</td><td><span class="chip cancelled">취소</span></td><td><span style="font-size:10.5px;color:#8A94A6">차감 없음</span></td></tr></table></div></div>`;
+}else if(state==='empty'){
+  html=head('박회원 (회원)')+`<div class="pass"><div class="card"><div class="l">회원권</div><div class="n" style="font-size:16px">PT 10회권</div></div><div class="card bad"><div class="l">잔여</div><div class="n">0</div></div><div class="card"><div class="l">예약 중</div><div class="n">0</div></div><div class="card bad"><div class="l">예약 가능</div><div class="n">0</div></div><div class="card"><div class="l">유효기간</div><div class="n" style="font-size:16px">12-24 까지</div></div></div>
+  <div class="row"><div class="box"><div class="empty"><b style="color:#4B5563;font-size:15px">예약할 수 있는 횟수가 없습니다</b>수업 목록은 보이지만 예약 버튼이 없다 — 막는 건 서버(409)</div></div><div class="box"><div class="empty">예약 없음</div></div></div>`;
+}else{
+  html=head('김회원 (회원)')+`<div class="err"><div><b>불러오지 못했습니다.</b> 회원권 API(/api/passes) 가 응답하지 않습니다 — 잔여와 예약 중을 모르면 예약 버튼을 열지 않습니다.</div><button>다시 시도</button></div>
+  <div class="box" style="flex:1"><div class="empty">잔여 · 예약 중 · 예약 가능은 서버가 센다 — 화면이 잔여만 보고 버튼을 열면 잔여 2 에 예약 5 가 생긴다</div></div>`;
+}
+document.getElementById('main').innerHTML=html;
+</script></body></html>

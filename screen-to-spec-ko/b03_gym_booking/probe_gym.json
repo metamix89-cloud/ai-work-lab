@@ -1,0 +1,15 @@
+{
+ "add": {
+  "USERS": [["c6", "오회원", "member"]],
+  "PASSES": [["c6", "PT 10회권", 10, 3, "2026-12-31"]],
+  "SLOTS": [["S-201", "2026-09-20 18:00", "강코치", 4], ["S-202", "2026-10-10 18:00", "강코치", 4], ["S-203", "2026-10-20 18:00", "강코치", 4]],
+  "BOOKINGS": [["B-2001", "S-201", "c6", "noshow"], ["B-2002", "S-202", "c6", "noshow"], ["B-2003", "S-203", "c6", "noshow"]]
+ },
+ "cases": [
+  {"name": "노쇼 3회지만 하나는 31일 전(S-201) — c6 예약", "method": "POST", "path": "api/bookings", "body": {"user": "c6", "member_id": "c6", "slot_id": "S-104"}},
+  {"name": "데스크가 남의 예약을 대신(c1 → S-104)", "method": "POST", "path": "api/bookings", "body": {"user": "d1", "member_id": "c1", "slot_id": "S-104"}},
+  {"name": "잔여 0 회원(c3)을 데스크가 대신 예약", "method": "POST", "path": "api/bookings", "body": {"user": "d1", "member_id": "c3", "slot_id": "S-104"}},
+  {"name": "취소된 예약(B-1008)에 데스크가 출석 처리", "method": "POST", "path": "api/bookings/B-1008/attend", "body": {"user": "d1"}},
+  {"name": "회원이 지난 수업의 자기 예약(B-1002)을 취소", "method": "POST", "path": "api/bookings/B-1002/cancel", "body": {"user": "c2"}}
+ ]
+}

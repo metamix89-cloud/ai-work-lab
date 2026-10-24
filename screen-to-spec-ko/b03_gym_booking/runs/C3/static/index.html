@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>으랏차차헬스 수업 예약</title>
+<style>
+body{font-family:sans-serif;margin:0;background:#f5f6f8;color:#222}
+header{background:#1f3a5f;color:#fff;padding:12px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+header h1{font-size:18px;margin:0}
+main{display:flex;gap:20px;padding:20px;flex-wrap:wrap}
+section{background:#fff;border-radius:8px;padding:14px;box-shadow:0 1px 3px #0002}
+.left{flex:1 1 480px}.right{flex:1 1 420px}
+h2{font-size:16px;margin:0 0 10px}
+.card span.n{font-weight:bold;font-size:18px}
+.card div{margin:4px 0}
+.row{display:flex;gap:10px;align-items:center;border-bottom:1px solid #eee;padding:8px 0;flex-wrap:wrap}
+.row .info{flex:1}
+button{cursor:pointer;padding:4px 10px}
+#message{min-height:20px;margin:0 20px;padding:8px 12px;background:#fff3cd;border-radius:6px}
+#message:empty{background:none}
+.st{font-size:12px;padding:2px 6px;border-radius:4px;background:#e4e8ee}
+</style>
+</head>
+<body>
+<header>
+  <h1>으랏차차헬스 수업 예약</h1>
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+  <label id="memberWrap" hidden>회원 <select data-testid="member" id="member"></select></label>
+</header>
+<div id="message" data-testid="message"></div>
+<div id="error" hidden style="margin:20px">불러오지 못했습니다 <button id="retry">다시 시도</button></div>
+<main id="main">
+  <div class="left">
+    <section class="card" id="card"></section>
+    <section style="margin-top:20px"><h2>수업 목록</h2><div id="slots"></div></section>
+  </div>
+  <section class="right"><h2>예약 목록</h2><div id="bookings"></div></section>
+</main>
+<script>
+var users = [], me = null, memberId = null;
+var STATUS = {booked: '예약', attended: '출석', noshow: '노쇼', cancelled: '취소'};
+var $ = function (id) { return document.getElementById(id); };
+
+function api(method, url, body) {
+  return fetch(url, {method: method, headers: {'Content-Type': 'application/json'},
+    body: body ? JSON.stringify(body) : undefined}).then(function (r) {
+    return r.json().catch(function () { return null; }).then(function (j) {
+      if (!r.ok) { var e = new Error((j && j.detail) || '오류'); e.rejected = true; throw e; }
+      return j;
+    });
+  });
+}
+function say(t) { $('message').textContent = t || ''; }
+function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function init() {
+  $('error').hidden = true;
+  api('GET', '/api/users').then(function (u) {
+    users = u;
+    $('user').innerHTML = u.map(function (x) {
+      return '<option value="' + esc(x.user_id) + '">' + esc(x.name) + (x.role === 'desk' ? ' (데스크)' : '') + '</option>';
+    }).join('');
+    $('member').innerHTML = u.filter(function (x) { return x.role === 'member'; }).map(function (x) {
+      return '<option value="' + esc(x.user_id) + '">' + esc(x.name) + '</option>';
+    }).join('');
+    onUser();
+  }).catch(fail);
+}
+function fail() { $('error').hidden = false; $('main').hidden = true; }
+
+function onUser() {
+  me = users.filter(function (x) { return x.user_id === $('user').value; })[0];
+  $('memberWrap').hidden = me.role !== 'desk';
+  refresh();
+}
+function target() { return me.role === 'desk' ? $('member').value : me.user_id; }
+
+function refresh() {
+  if (!me) return;
+  memberId = target();
+  Promise.all([api('GET', '/api/passes/' + encodeURIComponent(memberId)).catch(function (e) {
+      if (e.rejected) return null; throw e; }),
+    api('GET', '/api/slots'),
+    api('GET', '/api/bookings?viewer=' + encodeURIComponent(me.user_id))
+  ]).then(function (r) {
+    $('error').hidden = true; $('main').hidden = false;
+    draw(r[0], r[1], r[2]);
+  }).catch(fail);
+}
+
+function draw(p, slots, bks) {
+  if (p) {
+    $('card').innerHTML = '<h2>내 회원권 · ' + esc(p.kind) + '</h2>' +
+      '<div>잔여 <span class="n" data-testid="pass-left">' + p.left + '</span> 회 (총 ' + p.total + ' · 사용 ' + p.used + ')</div>' +
+      '<div>예약 중 <span class="n" data-testid="pass-held">' + p.held + '</span> 회</div>' +
+      '<div>예약 가능 <span class="n" data-testid="pass-avail">' + p.available + '</span> 회</div>' +
+      '<div>유효기간 <span data-testid="pass-expires">' + esc(p.expires_on) + '</span>' + (p.expired ? ' (만료)' : '') + '</div>';
+  } else {
+    $('card').innerHTML = '<h2>회원권</h2><div>회원권이 없습니다</div>';
+  }
+  var avail = p ? p.available : 0;
+  $('slots').innerHTML = slots.map(function (s) {
+    return '<div class="row" data-testid="slot" data-id="' + esc(s.slot_id) + '"><div class="info">' +
+      esc(s.starts_at) + ' · ' + esc(s.trainer) + ' · 정원 ' + s.capacity + ' · <b>남은 자리 ' + s.left + '</b></div>' +
+      (s.left > 0 && avail >= 1 ? '<button data-testid="book" data-slot="' + esc(s.slot_id) + '">예약</button>' : '') + '</div>';
+  }).join('');
+  var now = new Date();
+  $('bookings').innerHTML = bks.length ? bks.map(function (b) {
+    var started = new Date(b.starts_at.replace(' ', 'T')) <= now;
+    var btns = '';
+    if (b.status === 'booked') {
+      btns += '<button data-testid="act-cancel" data-act="cancel">취소</button>';
+      if (me.role === 'desk' && started) {
+        btns += '<button data-testid="act-attend" data-act="attend">출석</button>' +
+                '<button data-testid="act-noshow" data-act="noshow">노쇼</button>';
+      }
+    }
+    return '<div class="row" data-testid="booking" data-id="' + esc(b.booking_id) + '" data-status="' + b.status + '">' +
+      '<div class="info">' + esc(b.starts_at) + ' · ' + esc(b.trainer) + ' · ' + esc(b.member_name) +
+      ' <span class="st">' + STATUS[b.status] + '</span></div>' + btns + '</div>';
+  }).join('') : '<div>예약이 없습니다</div>';
+}
+
+document.addEventListener('click', function (e) {
+  var t = e.target;
+  if (t.id === 'retry') { init(); return; }
+  var row;
+  if (t.dataset && t.dataset.testid === 'book') {
+    api('POST', '/api/bookings', {user: me.user_id, member_id: target(), slot_id: t.dataset.slot})
+      .then(function () { say(''); refresh(); })
+      .catch(function (er) { if (er.rejected) { say(er.message); refresh(); } else fail(); });
+  } else if (t.dataset && t.dataset.act) {
+    row = t.closest('[data-testid="booking"]');
+    api('POST', '/api/bookings/' + encodeURIComponent(row.dataset.id) + '/' + t.dataset.act, {user: me.user_id})
+      .then(function () { say(''); refresh(); })
+      .catch(function (er) { if (er.rejected) { say(er.message); refresh(); } else fail(); });
+  }
+});
+$('user').addEventListener('change', function () { say(''); onUser(); });
+$('member').addEventListener('change', function () { say(''); refresh(); });
+init();
+</script>
+</body>
+</html>

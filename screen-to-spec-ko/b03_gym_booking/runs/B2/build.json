@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 92355,
+ "num_turns": 7,
+ "total_cost_usd": 0.29280140000000004,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 35309,
+  "cache_read_input_tokens": 229614,
+  "output_tokens": 12858,
+  "output_tokens_details": {
+   "thinking_tokens": 2128
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 35309,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 937,
+    "cache_read_input_tokens": 51099,
+    "cache_creation_input_tokens": 882,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 882
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD대로 웹앱을 만들었고, 백엔드는 TestClient로 직접 호출해 확인했습니다. 화면은 브라우저로 열어 보지 않았습니다. 폴더에 `tests/test_dod.py`가 없어서 T1~T9는 돌리지 못했습니다.\n\n**확인한 것** (예약 가능 횟수, 노쇼 누적, 권한, 400 순서)\n- `/`가 200으로 열립니다.\n- 잔여 2회에 예약 1개인 회원은 한 번 더 예약이 되고, 그다음은 `예약 가능 횟수가 없습니다`(409)로 막힙니다.\n- 최근 30일 노쇼가 3회인 회원은 데스크가 대신 예약해도 `노쇼 3회 — 데스크에 문의하세요`(409)입니다.\n- 데스크의 출석 처리는 되고, 회원이 남의 예약을 취소하면 403입니다.\n- 본문 없이 없는 예약을 부르면 400입니다.\n\n**확인하지 못한 것**\n- 정원 초과와 중복 예약, 유효기간, 취소 마감(2시간), 지난 수업의 출석·노쇼 처리, 노쇼 시 `used` +1.\n- 화면의 버튼 표시와 메시지 줄.\n\n**만든 파일**\n- `main.py`: FastAPI 앱입니다. 시작할 때마다 `seed/` CSV로 SQLite(`gym.db`)를 새로 만들고, API 6개와 규칙 R1~R9를 구현했습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. PRD의 `data-testid`를 모두 넣었습니다. 데스크로 바꾸면 회원 선택 상자가 나옵니다. API가 실패하면 `불러오지 못했습니다`와 다시 시도 버튼이 뜹니다.\n- `seed/*.csv`: 가상 데이터입니다. 회원 5명, 데스크 1명, 수업 6개, 예약 9개이고 네 상태가 다 있습니다.\n\n**알아 둘 점**\n- 시드의 수업 시각은 지금 PC 시계를 기준으로 만들어 둔 값입니다. 며칠 지나면 \"곧 시작\"인 수업이 지난 수업이 되니, 그때는 `slots.csv`의 날짜를 다시 맞춰야 합니다.\n- 실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`입니다.\n\n테스트 파일을 주시면 T1~T9를 돌려서 결과를 알려 드리겠습니다.",
+ "wall_s": 98.4
+}

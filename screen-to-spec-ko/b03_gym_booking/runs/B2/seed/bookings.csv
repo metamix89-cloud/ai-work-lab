@@ -1,0 +1,10 @@
+booking_id,slot_id,member_id,status
+B-1001,S-101,c5,noshow
+B-1002,S-102,c5,noshow
+B-1003,S-103,c5,noshow
+B-1004,S-103,c1,booked
+B-1005,S-101,c1,attended
+B-1006,S-104,c2,booked
+B-1007,S-105,c1,cancelled
+B-1008,S-106,c1,booked
+B-1009,S-104,c3,cancelled

@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 79645,
+ "num_turns": 9,
+ "total_cost_usd": 0.30353540000000007,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 42516,
+  "cache_read_input_tokens": 316534,
+  "output_tokens": 10179,
+  "output_tokens_details": {
+   "thinking_tokens": 1093
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 42516,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 691,
+    "cache_read_input_tokens": 58855,
+    "cache_creation_input_tokens": 333,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 333
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "DoD: 9/9 (`python -m pytest tests -q`, 9 passed)\n만든 파일: main.py, static/index.html, seed/users.csv, passes.csv, slots.csv, bookings.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (API 6개와 `GET /` 만 있음. PRD 에 없는 API·칸·화면 요소는 추가하지 않았음)\nPRD 가 정하지 않아 직접 정한 것:\n- **없는 `action`:** `cancel`·`attend`·`noshow` 가 아닌 값은 404 `없는 동작입니다`.\n- **없는 viewer:** `GET /api/bookings` 에서 viewer 가 없는 사용자면 404.\n- **회원권 없는 회원:** 예약하면 409 `회원권 유효기간이 지났습니다`. `GET /api/passes` 는 404.\n- **누락된 `member_id`·`slot_id`:** 예약 본문에 없으면 400 `회원과 수업을 확인하세요`.\n- **노쇼 누적 범위:** 오늘 포함 30일은 오늘 −29일부터로 센다. 기준은 수업 날짜.\n- **화면의 출석·노쇼 버튼:** 수업 시작 시각이 지난 `booked` 예약에만 보인다. 취소 버튼은 모든 `booked` 예약에 보인다.\n- **기본 seed 의 시각:** 고정 날짜(2026-10-24~27)라서 날짜가 지나면 지난 수업·만료 상태가 달라진다. 테스트는 seed 를 자기 데이터로 바꿔 쓰므로 영향 없다.\n\n테스트가 끝난 뒤 `seed/` 가 비어 있었다(`restore_seed` 의 윈도우 재시도 문제로 보인다). 백업에서 직접 복구했고, 지금 `seed/` 는 원래 내 CSV 4개다.",
+ "wall_s": 98.1
+}

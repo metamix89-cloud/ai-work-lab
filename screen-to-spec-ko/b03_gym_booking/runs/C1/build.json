@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 111968,
+ "num_turns": 13,
+ "total_cost_usd": 0.4327441,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 16,
+  "cache_creation_input_tokens": 51181,
+  "cache_read_input_tokens": 393081,
+  "output_tokens": 18868,
+  "output_tokens_details": {
+   "thinking_tokens": 1593
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 51181,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 875,
+    "cache_read_input_tokens": 67668,
+    "cache_creation_input_tokens": 185,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 185
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (users · passes · slots · bookings)\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (PRD 의 API 6개 외에 추가한 경로 · 칸 · 화면 요소 없음)\nPRD 가 정하지 않아 직접 정한 것:\n- 거부 사유 문구: PRD 에 문구가 없는 거부는 제가 정했습니다. 400 `회원과 수업을 확인하세요`, 404 `사용자를 찾을 수 없습니다` · `회원을 찾을 수 없습니다` · `수업을 찾을 수 없습니다` · `예약을 찾을 수 없습니다` · `회원권을 찾을 수 없습니다`, 403 `본인 예약만 취소할 수 있습니다`.\n- 예약 요청의 `member_id` 나 `slot_id` 가 빠졌을 때: 400 입니다.\n- `member_id` 가 회원이 아닐 때: 404 입니다.\n- `GET /api/bookings` 에 `viewer` 가 없으면 400, 모르는 `viewer` 면 404 입니다.\n- 회원권 줄이 없는 회원이 예약하면 409 `회원권 유효기간이 지났습니다` 입니다.\n- 최근 30일 노쇼: 수업 날짜가 (오늘 − 29일) 이후인 노쇼 예약을 셉니다.\n- 새 `booking_id`: `B-` 뒤에 기존 최대 번호 + 1 로 정합니다.\n- 화면: 취소 버튼은 시작 2시간 전까지만, 출석 · 노쇼 버튼은 데스크가 수업 시작 후에만 보입니다. 예약 버튼은 자리가 있고 예약 가능 횟수가 1 이상일 때만 보입니다. 그래서 잔여 0 회원은 예약 버튼 대신 예약 가능 0 이 보입니다(T9 의 두 번째 갈래). 회원권 카드는 회원이면 본인 것, 데스크면 회원 선택 상자에서 고른 회원 것입니다.\n- 기본 `seed/` 데이터: 2026-10-25 기준 날짜로 고정해 두었습니다. 시간이 지나면 지난 수업이 늘어나지만, 테스트는 자기 데이터로 바꿔 끼우므로 영향이 없습니다.\n```",
+ "wall_s": 127.2
+}

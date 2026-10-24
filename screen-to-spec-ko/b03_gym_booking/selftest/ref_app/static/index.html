@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>수업 예약 · 회원권</title>
+<style>
+body{font-family:"Malgun Gothic",system-ui,sans-serif;margin:20px;color:#111318}
+.row{display:flex;gap:20px;align-items:flex-start}.card{border:1px solid #e6e8ef;border-radius:10px;padding:10px 14px;margin:10px 0}
+table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid #e6e8ef;padding:6px;text-align:left;font-size:13px}
+#message{color:#b91c1c;min-height:20px}.err{background:#fff5f5;border:1px solid #fecaca;padding:12px}
+</style></head><body>
+<h1>수업 예약 · 회원권 차감</h1>
+<label>사용자 <select data-testid="user" id="user"></select></label>
+<label id="memberWrap" style="display:none"> 회원 <select data-testid="member" id="member"></select></label>
+<div data-testid="message" id="message"></div>
+<div class="row"><div style="flex:1"><div class="card" id="pass"></div><div id="slots"></div></div><div style="flex:1" id="bookings"></div></div>
+<script>
+const KO={booked:"예약",attended:"출석",noshow:"노쇼",cancelled:"취소"};let users=[],me=null;
+const $=id=>document.getElementById(id);
+async function j(u,o){const r=await fetch(u,o);const b=await r.json().catch(()=>null);if(!r.ok)throw {detail:(b&&b.detail)||r.status};return b}
+function opt(sel,v,t){const o=document.createElement("option");o.value=v;o.textContent=t;$(sel).append(o)}
+function btn(t,label,f){const b=document.createElement("button");b.setAttribute("data-testid",t);b.textContent=label;b.onclick=f;return b}
+const target=()=>me.role==="desk"?$("member").value:me.user_id;
+async function post(u,body){$("message").textContent="";try{await j(u,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign({user:$("user").value},body))});await load()}catch(e){$("message").textContent=e.detail}}
+async function load(){
+  try{
+    if(!users.length){users=await j("/api/users");users.forEach(u=>{opt("user",u.user_id,u.name+(u.role==="desk"?" (데스크)":""));if(u.role==="member")opt("member",u.user_id,u.name)})}
+    me=users.find(u=>u.user_id===$("user").value);$("memberWrap").style.display=me.role==="desk"?"":"none";
+    const p=await j("/api/passes/"+target());
+    $("pass").innerHTML="";["kind"].forEach(()=>{});
+    const pc=$("pass");pc.append(Object.assign(document.createElement("b"),{textContent:p.kind+" · "}));
+    [["pass-left","잔여",p.left],["pass-held","예약 중",p.held],["pass-avail","예약 가능",p.available],["pass-expires","유효기간",p.expires_on+(p.expired?" (만료)":"")]].forEach(([t,l,v])=>{const s=document.createElement("span");s.textContent=l+" ";const b=document.createElement("b");b.setAttribute("data-testid",t);b.textContent=v;s.append(b);s.append(document.createTextNode("  "));pc.append(s)});
+    const now=new Date();
+    const st=document.createElement("table");st.innerHTML="<tr><th>수업</th><th>시간</th><th>트레이너</th><th>남은 자리</th><th></th></tr>";
+    (await j("/api/slots")).forEach(s=>{const tr=document.createElement("tr");tr.setAttribute("data-testid","slot");tr.dataset.id=s.slot_id;
+      [s.slot_id,s.starts_at,s.trainer,"남은 자리 "+s.left].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td)});
+      const td=document.createElement("td");if(s.left>0&&p.available>=1&&new Date(s.starts_at.replace(" ","T"))>now)td.append(btn("book","예약",()=>post("/api/bookings",{member_id:target(),slot_id:s.slot_id})));tr.append(td);st.append(tr)});
+    $("slots").innerHTML="";$("slots").append(st);
+    const bt=document.createElement("table");bt.innerHTML="<tr><th>예약</th><th>수업</th><th>회원</th><th>상태</th><th></th></tr>";
+    (await j("/api/bookings?viewer="+encodeURIComponent(me.user_id))).forEach(b=>{const tr=document.createElement("tr");tr.setAttribute("data-testid","booking");tr.dataset.id=b.booking_id;tr.dataset.status=b.status;
+      [b.booking_id,b.starts_at+" "+b.trainer,b.member_name,KO[b.status]].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td)});
+      const td=document.createElement("td");const start=new Date(b.starts_at.replace(" ","T"));
+      if(b.status==="booked"){
+        if(now<=new Date(start.getTime()-2*3600*1000))td.append(btn("act-cancel","취소",()=>post(`/api/bookings/${b.booking_id}/cancel`,{})));
+        if(me.role==="desk"&&now>=start){td.append(btn("act-attend","출석",()=>post(`/api/bookings/${b.booking_id}/attend`,{})));td.append(btn("act-noshow","노쇼",()=>post(`/api/bookings/${b.booking_id}/noshow`,{})))}
+      }
+      tr.append(td);bt.append(tr)});
+    $("bookings").innerHTML="";$("bookings").append(bt);
+  }catch(e){$("slots").innerHTML='<div class="err">불러오지 못했습니다 <button onclick="load()">다시 시도</button></div>'}
+}
+$("user").onchange=load;$("member").onchange=load;
+load();
+</script></body></html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>으랏차차헬스 수업 예약</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f4f5f7; color: #222; }
+  header { background: #1f3a5f; color: #fff; padding: 12px 20px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  header h1 { font-size: 18px; margin: 0; }
+  select, button { font: inherit; padding: 4px 8px; }
+  main { display: flex; gap: 16px; padding: 16px; align-items: flex-start; }
+  section { background: #fff; border-radius: 8px; padding: 14px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+  .left { flex: 1; } .right { flex: 1; }
+  h2 { font-size: 16px; margin: 0 0 10px; }
+  .row { display: flex; gap: 10px; align-items: center; justify-content: space-between; border-top: 1px solid #eee; padding: 8px 0; }
+  .card dl { display: grid; grid-template-columns: auto auto; gap: 4px 16px; margin: 0; }
+  .card dd { margin: 0; font-weight: bold; }
+  .soft { opacity: .6; }
+  #message { min-height: 22px; padding: 6px 20px; color: #b00020; font-weight: bold; }
+  #error { padding: 20px; text-align: center; }
+  .st { padding: 2px 8px; border-radius: 10px; background: #e8eef7; font-size: 12px; }
+  [data-status=attended] .st { background: #dff3e0; } [data-status=noshow] .st { background: #fde0e0; } [data-status=cancelled] .st { background: #eee; }
+</style>
+</head>
+<body>
+<header>
+  <h1>으랏차차헬스 수업 예약</h1>
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+  <label id="memberWrap" hidden>회원 <select data-testid="member" id="member"></select></label>
+</header>
+<div id="message" data-testid="message"></div>
+<div id="error" hidden><p>불러오지 못했습니다</p><button id="retry">다시 시도</button></div>
+<main id="main">
+  <div class="left">
+    <section class="card" style="margin-bottom:16px">
+      <h2>내 회원권 <span id="kind"></span></h2>
+      <dl>
+        <dt>잔여 횟수</dt><dd data-testid="pass-left">-</dd>
+        <dt>예약 중</dt><dd data-testid="pass-held">-</dd>
+        <dt>예약 가능</dt><dd data-testid="pass-avail">-</dd>
+        <dt>유효기간</dt><dd data-testid="pass-expires">-</dd>
+      </dl>
+    </section>
+    <section><h2>수업 목록</h2><div id="slots"></div></section>
+  </div>
+  <div class="right"><section><h2>예약 목록</h2><div id="bookings"></div></section></div>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const STATUS = { booked: "예약", attended: "출석", noshow: "노쇼", cancelled: "취소" };
+let users = [];
+
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  let data = null;
+  try { data = await r.json(); } catch (e) {}
+  if (!r.ok) { const err = new Error((data && data.detail) || "오류"); err.api = true; throw err; }
+  return data;
+}
+function post(path, body) {
+  return api(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+}
+function setMsg(t) { $("message").textContent = t || ""; }
+function me() { return users.find((u) => u.user_id === $("user").value); }
+function target() { return me().role === "desk" ? $("member").value : me().user_id; }
+function el(tag, attrs, text) {
+  const e = document.createElement(tag);
+  for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+  if (text != null) e.textContent = text;
+  return e;
+}
+
+async function refresh() {
+  const u = me();
+  $("memberWrap").hidden = u.role !== "desk";
+  const memberId = target();
+  try {
+    const [slots, pass, bookings] = await Promise.all([
+      api("/api/slots"), api("/api/passes/" + encodeURIComponent(memberId)),
+      api("/api/bookings?viewer=" + encodeURIComponent(u.user_id)),
+    ]);
+    $("error").hidden = true; $("main").hidden = false;
+    renderPass(pass); renderSlots(slots, pass); renderBookings(bookings, u);
+  } catch (e) {
+    $("main").hidden = true; $("error").hidden = false;
+  }
+}
+function renderPass(p) {
+  $("kind").textContent = p.kind + (p.expired ? " (만료)" : "");
+  document.querySelector('[data-testid="pass-left"]').textContent = p.left;
+  document.querySelector('[data-testid="pass-held"]').textContent = p.held;
+  document.querySelector('[data-testid="pass-avail"]').textContent = p.available;
+  document.querySelector('[data-testid="pass-expires"]').textContent = p.expires_on;
+}
+function renderSlots(slots, pass) {
+  const box = $("slots"); box.replaceChildren();
+  for (const s of slots) {
+    const row = el("div", { class: "row", "data-testid": "slot", "data-id": s.slot_id });
+    const info = el("span");
+    info.append(el("b", {}, s.starts_at), " · " + s.trainer + " · ");
+    info.append(el("span", {}, "남은 자리 " + s.left));
+    row.append(info);
+    if (s.left > 0) {
+      // 안내일 뿐 — 막는 건 서버. 예약 가능 횟수가 없으면 흐리게만 표시하고 누르면 서버 사유가 메시지에 뜬다.
+      const b = el("button", { "data-testid": "book", class: pass.available >= 1 ? "" : "soft" }, "예약");
+      b.onclick = () => book(s.slot_id);
+      row.append(b);
+    }
+    box.append(row);
+  }
+}
+function renderBookings(list, u) {
+  const box = $("bookings"); box.replaceChildren();
+  if (!list.length) box.append(el("p", {}, "예약이 없습니다"));
+  for (const b of list) {
+    const row = el("div", { class: "row", "data-testid": "booking", "data-id": b.booking_id, "data-status": b.status });
+    const info = el("span", {}, b.starts_at + " · " + b.trainer + " · " + b.member_name + " ");
+    info.append(el("span", { class: "st" }, STATUS[b.status]));
+    row.append(info);
+    if (b.status === "booked") {
+      const acts = el("span");
+      const add = (tid, label, action) => {
+        const btn = el("button", { "data-testid": tid }, label);
+        btn.onclick = () => act(b.booking_id, action);
+        acts.append(btn, " ");
+      };
+      add("act-cancel", "취소", "cancel");
+      if (u.role === "desk") { add("act-attend", "출석", "attend"); add("act-noshow", "노쇼", "noshow"); }
+      row.append(acts);
+    }
+    box.append(row);
+  }
+}
+async function book(slotId) {
+  setMsg("");
+  try { await post("/api/bookings", { user: me().user_id, member_id: target(), slot_id: slotId }); }
+  catch (e) { if (e.api) setMsg(e.message); else { $("main").hidden = true; $("error").hidden = false; return; } }
+  await refreshKeepMsg();
+}
+async function act(id, action) {
+  setMsg("");
+  try { await post("/api/bookings/" + encodeURIComponent(id) + "/" + action, { user: me().user_id }); }
+  catch (e) { if (e.api) setMsg(e.message); else { $("main").hidden = true; $("error").hidden = false; return; } }
+  await refreshKeepMsg();
+}
+async function refreshKeepMsg() { const m = $("message").textContent; await refresh(); setMsg(m); }
+
+function fillMembers() {
+  $("member").replaceChildren(...users.filter((x) => x.role === "member").map((x) => {
+    const o = el("option", { value: x.user_id }, x.name); return o;
+  }));
+}
+async function init() {
+  try {
+    users = await api("/api/users");
+    $("user").replaceChildren(...users.map((x) => el("option", { value: x.user_id }, x.name + (x.role === "desk" ? " (데스크)" : ""))));
+    fillMembers();
+  } catch (e) { $("main").hidden = true; $("error").hidden = false; return; }
+  await refresh();
+}
+$("user").onchange = () => { setMsg(""); refresh(); };
+$("member").onchange = () => { setMsg(""); refresh(); };
+$("retry").onclick = () => { setMsg(""); users.length ? refresh() : init(); };
+init();
+</script>
+</body>
+</html>

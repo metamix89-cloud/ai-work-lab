@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>으랏차차헬스 PT 예약</title>
+<style>
+  :root{--bg:#f5f6f8;--card:#fff;--ink:#1d2330;--mute:#6b7385;--line:#e3e6ec;--pri:#e8590c;--ok:#2b8a3e;--bad:#c92a2a;--warn:#e67700}
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.5 "Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  header{background:var(--ink);color:#fff;padding:12px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  header h1{font-size:18px;margin:0}
+  nav button{background:transparent;color:#cbd2e0;border:0;padding:8px 14px;font-size:14px;cursor:pointer;border-radius:6px}
+  nav button.on{background:var(--pri);color:#fff}
+  main{max-width:1100px;margin:16px auto;padding:0 16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+  .card h2{font-size:15px;margin:0 0 10px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px}
+  .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .sp{flex:1}
+  select,input{padding:7px 9px;border:1px solid var(--line);border-radius:6px;font:inherit}
+  button.b{padding:6px 12px;border:0;border-radius:6px;background:var(--pri);color:#fff;cursor:pointer;font:inherit}
+  button.b.ok{background:var(--ok)} button.b.bad{background:var(--bad)} button.b.gray{background:#8a93a6}
+  button:disabled{opacity:.4;cursor:not-allowed}
+  .tag{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;background:#eceff4;color:var(--mute)}
+  .tag.ok{background:#d3f9d8;color:var(--ok)} .tag.bad{background:#ffe3e3;color:var(--bad)} .tag.warn{background:#fff3bf;color:var(--warn)}
+  .mute{color:var(--mute)} .small{font-size:12px}
+  table{width:100%;border-collapse:collapse} th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+  th{font-size:12px;color:var(--mute);font-weight:600}
+  .bar{height:8px;background:#eceff4;border-radius:4px;overflow:hidden;margin:4px 0}
+  .bar i{display:block;height:100%;background:var(--pri)}
+  .alert{background:#ffe3e3;color:var(--bad);padding:8px 12px;border-radius:6px;margin-bottom:10px}
+  #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:8px;display:none;max-width:90%;z-index:9}
+  #toast.err{background:var(--bad)}
+  .day{margin:14px 0 6px;font-weight:700}
+</style>
+</head>
+<body>
+<header>
+  <h1>🏋️ 으랏차차헬스 PT</h1>
+  <nav><button id="t-member" class="on">회원 예약</button><button id="t-desk">데스크</button></nav>
+  <span class="sp"></span><span id="clock" class="small"></span>
+</header>
+<main id="app"></main>
+<div id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const W = ['일','월','화','수','목','금','토'];
+let cfg = {}, tab = 'member', memberId = Number(localStorage.mid) || 1, deskPin = sessionStorage.pin || '', deskDate = '', deskView = 'classes';
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const hm = s => s.slice(11, 16);
+const dkey = s => s.slice(0, 10);
+const dlabel = s => { const d = new Date(s); return `${d.getMonth()+1}/${d.getDate()} (${W[d.getDay()]})`; };
+
+function toast(msg, err) {
+  const t = $('#toast'); t.textContent = msg; t.className = err ? 'err' : ''; t.style.display = 'block';
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.style.display = 'none', 4000);
+}
+async function api(path, method = 'GET', body) {
+  const r = await fetch('/api' + path, { method, headers: { 'Content-Type': 'application/json', 'X-Desk-Pin': deskPin }, body: body ? JSON.stringify(body) : undefined });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    const d = j.detail;
+    throw new Error(typeof d === 'string' ? d : Array.isArray(d) ? d.map(x => x.msg).join(', ') : '요청 실패');
+  }
+  return j;
+}
+async function act(path, method, body) {
+  try { const j = await api(path, method, body); toast(j.message || '완료'); }
+  catch (e) { toast(e.message, true); }
+  render();
+}
+
+// ---------- 회원 화면 ----------
+async function memberView() {
+  const [members, m, classes] = await Promise.all([api('/members'), api('/members/' + memberId), api(`/classes?member_id=${memberId}`)]);
+  let h = `<div class="card"><div class="row"><b>회원 선택(데모)</b>
+    <select id="msel">${members.map(x => `<option value="${x.id}" ${x.id === memberId ? 'selected' : ''}>${esc(x.name)}</option>`).join('')}</select>
+    <span class="sp"></span><span class="small mute">취소는 수업 ${cfg.cancel_deadline_hours}시간 전까지 · 최근 ${cfg.noshow_window_days}일 노쇼 ${cfg.noshow_limit}회면 ${cfg.block_days}일간 예약 제한</span></div></div>`;
+  if (m.blocked) h += `<div class="alert">⛔ 노쇼 누적으로 <b>${m.blocked_until.slice(0, 10)}</b>까지 예약할 수 없습니다. 데스크에 문의하세요.</div>`;
+  else if (m.noshows > 0) h += `<div class="card"><span class="tag warn">노쇼 ${m.noshows}/${cfg.noshow_limit}회</span> <span class="small mute">최근 ${cfg.noshow_window_days}일 기준. ${cfg.noshow_limit}회가 되면 예약이 제한됩니다.</span></div>`;
+
+  h += `<div class="card"><h2>내 회원권</h2>` + (m.memberships.length ? m.memberships.map(s => `
+    <div style="margin-bottom:8px"><div class="row"><b>${esc(s.name)}</b>
+      <span class="tag ${s.state === '사용중' ? 'ok' : 'bad'}">${s.state}</span><span class="sp"></span>
+      <span>잔여 <b>${s.remaining}</b>/${s.total}회${s.reserved ? ` · 예약중 ${s.reserved} → 추가 예약 가능 <b>${s.available}</b>` : ''}</span></div>
+      <div class="bar"><i style="width:${s.remaining / s.total * 100}%"></i></div>
+      <div class="small mute">유효기간 ~ ${s.expires_at.slice(0, 10)}</div></div>`).join('') : '<span class="mute">회원권이 없습니다.</span>') + `</div>`;
+
+  const upcoming = m.bookings.filter(b => b.status === 'booked');
+  h += `<div class="card"><h2>내 예약</h2>` + (upcoming.length ? `<table><tr><th>일시</th><th>수업</th><th></th></tr>` + upcoming.map(b => `
+    <tr><td>${dlabel(b.start_at)} ${hm(b.start_at)}</td><td>${esc(b.trainer)} · ${esc(b.title)}</td>
+    <td style="text-align:right">${b.can_cancel ? `<button class="b gray" data-cancel="${b.id}">예약 취소</button>` : `<span class="tag warn">취소 마감</span>`}</td></tr>`).join('') + `</table>` : '<span class="mute">예약이 없습니다.</span>') +
+    `<details style="margin-top:8px"><summary class="small mute">지난 내역</summary><table>` + m.bookings.filter(b => b.status !== 'booked').map(b => `
+    <tr><td>${dlabel(b.start_at)} ${hm(b.start_at)}</td><td>${esc(b.trainer)}</td><td><span class="tag ${{attended:'ok',noshow:'bad'}[b.status] || ''}">${{attended:'출석',noshow:'노쇼',cancelled:'취소'}[b.status]}</span></td></tr>`).join('') + `</table></details></div>`;
+
+  h += `<div class="card"><h2>수업 예약</h2>`;
+  let last = '';
+  const items = classes.filter(c => !c.started);
+  h += items.map(c => {
+    let out = '';
+    if (dkey(c.start_at) !== last) { last = dkey(c.start_at); out += `<div class="day">${dlabel(c.start_at)}</div>`; }
+    const left = c.capacity - c.booked;
+    const btn = c.mine ? `<span class="tag ok">예약됨</span>` : c.full ? `<span class="tag bad">마감</span>` :
+      `<button class="b" data-book="${c.id}">예약</button>`;
+    return out + `<div class="row" style="padding:6px 0;border-bottom:1px solid var(--line)"><b style="width:50px">${hm(c.start_at)}</b>
+      <span>${esc(c.trainer)} · ${esc(c.title)}</span><span class="sp"></span>
+      <span class="small mute">${c.booked}/${c.capacity}명${left > 0 && left <= 1 ? ' · 마지막 자리' : ''}</span>${btn}</div>`;
+  }).join('') + `</div>`;
+  $('#app').innerHTML = h;
+  $('#msel').onchange = e => { memberId = Number(e.target.value); localStorage.mid = memberId; render(); };
+  document.querySelectorAll('[data-book]').forEach(b => b.onclick = () => act('/bookings', 'POST', { member_id: memberId, class_id: Number(b.dataset.book) }));
+  document.querySelectorAll('[data-cancel]').forEach(b => b.onclick = () => confirm('예약을 취소할까요?') && act(`/bookings/${b.dataset.cancel}/cancel`, 'POST', { member_id: memberId }));
+}
+
+// ---------- 데스크 화면 ----------
+async function deskView_() {
+  if (!deskPin) {
+    $('#app').innerHTML = `<div class="card"><h2>데스크 로그인</h2><div class="row"><input id="pin" type="password" placeholder="PIN (데모: 1234)"><button class="b" id="login">확인</button></div></div>`;
+    const go = async () => { deskPin = $('#pin').value; try { await api('/desk/ledger?limit=1'); sessionStorage.pin = deskPin; render(); } catch (e) { deskPin = ''; toast(e.message, true); } };
+    $('#login').onclick = go; $('#pin').onkeydown = e => e.key === 'Enter' && go();
+    return;
+  }
+  const sub = `<div class="card row"><button class="b ${deskView === 'classes' ? '' : 'gray'}" data-v="classes">오늘 수업 출석</button>
+    <button class="b ${deskView === 'members' ? '' : 'gray'}" data-v="members">회원·회원권</button>
+    <button class="b ${deskView === 'ledger' ? '' : 'gray'}" data-v="ledger">차감 내역</button></div>`;
+  let h = sub;
+  try {
+    if (deskView === 'classes') {
+      const cl = await api('/desk/classes' + (deskDate ? '?date=' + deskDate : ''));
+      h += `<div class="card row"><b>날짜</b><input type="date" id="dd" value="${deskDate}"><button class="b gray" id="dnow">최근·오늘</button><span class="small mute">수업 시작 30분 전부터 출석, 시작 후 노쇼 처리 가능</span></div>`;
+      h += cl.length ? `<div class="grid">` + cl.map(c => `<div class="card"><div class="row"><b>${dlabel(c.start_at)} ${hm(c.start_at)}</b> ${esc(c.trainer)} · ${esc(c.title)}<span class="sp"></span><span class="tag">${c.roster.length}/${c.capacity}</span></div>
+        ${c.roster.length ? `<table>` + c.roster.map(r => `<tr><td>${esc(r.name)}<div class="small mute">${esc(r.membership)} 잔여 ${r.remaining}</div></td><td style="text-align:right">
+          ${r.status === 'booked' ? `<button class="b ok" data-a="attend" data-id="${r.id}" ${c.checkin_open ? '' : 'disabled'}>출석</button> <button class="b bad" data-a="noshow" data-id="${r.id}" ${new Date(c.start_at) <= new Date(cfg.now) ? '' : 'disabled'}>노쇼</button>`
+          : `<span class="tag ${r.status === 'attended' ? 'ok' : 'bad'}">${r.status === 'attended' ? '출석' : '노쇼'}</span> <button class="b gray" data-a="revert" data-id="${r.id}">정정</button>`}</td></tr>`).join('') + `</table>` : '<div class="mute small">예약 없음</div>'}</div>`).join('') + `</div>` : '<div class="card mute">수업이 없습니다.</div>';
+    } else if (deskView === 'members') {
+      const ms = await api('/members');
+      h += `<div class="card"><table><tr><th>회원</th><th>회원권</th><th>노쇼</th><th>상태</th><th></th></tr>` + ms.map(m => `<tr><td><b>${esc(m.name)}</b><div class="small mute">${esc(m.phone)}</div></td>
+        <td>${m.memberships.map(s => `<div class="small">${esc(s.name)} <b>${s.remaining}</b>/${s.total} <span class="tag ${s.state === '사용중' ? 'ok' : 'bad'}">${s.state}</span> ~${s.expires_at.slice(0, 10)}</div>`).join('') || '-'}</td>
+        <td>${m.noshows}/${cfg.noshow_limit}</td>
+        <td>${m.blocked ? `<span class="tag bad">제한 ~${m.blocked_until.slice(0, 10)}</span>` : '<span class="tag ok">정상</span>'}</td>
+        <td style="text-align:right">${m.blocked ? `<button class="b gray" data-unblock="${m.id}">제한 해제</button> ` : ''}<button class="b" data-add="${m.id}">회원권 등록</button></td></tr>`).join('') + `</table></div>`;
+    } else {
+      const l = await api('/desk/ledger?limit=80');
+      h += `<div class="card"><table><tr><th>시각</th><th>회원</th><th>회원권</th><th>사유</th><th>증감</th></tr>` + l.map(x => `<tr><td>${x.at.replace('T', ' ').slice(0, 16)}</td><td>${esc(x.member)}</td><td>${esc(x.membership)}</td><td>${esc(x.reason)}</td><td><b style="color:var(${x.delta < 0 ? '--bad' : '--ok'})">${x.delta > 0 ? '+' : ''}${x.delta}</b></td></tr>`).join('') + `</table></div>`;
+    }
+  } catch (e) { if (/PIN/.test(e.message)) { deskPin = ''; sessionStorage.pin = ''; } toast(e.message, true); }
+  $('#app').innerHTML = h;
+  document.querySelectorAll('[data-v]').forEach(b => b.onclick = () => { deskView = b.dataset.v; render(); });
+  const dn = $('#dnow'); if (dn) dn.onclick = () => { deskDate = ''; render(); };
+  const dd = $('#dd'); if (dd) dd.onchange = () => { deskDate = dd.value; render(); };
+  document.querySelectorAll('[data-a]').forEach(b => b.onclick = () => act(`/desk/bookings/${b.dataset.id}/${b.dataset.a}`, 'POST'));
+  document.querySelectorAll('[data-unblock]').forEach(b => b.onclick = () => act(`/desk/members/${b.dataset.unblock}/unblock`, 'POST'));
+  document.querySelectorAll('[data-add]').forEach(b => b.onclick = () => {
+    const total = Number(prompt('등록할 횟수', '10')); if (!total) return;
+    const days = Number(prompt('유효일수', '90')); if (!days) return;
+    act(`/desk/members/${b.dataset.add}/memberships`, 'POST', { name: `PT ${total}회권`, total, days });
+  });
+}
+
+async function render() {
+  cfg = await api('/config');
+  $('#clock').textContent = '현재 ' + cfg.now.replace('T', ' ').slice(0, 16);
+  $('#t-member').className = tab === 'member' ? 'on' : ''; $('#t-desk').className = tab === 'desk' ? 'on' : '';
+  try { await (tab === 'member' ? memberView() : deskView_()); } catch (e) { toast(e.message, true); }
+}
+$('#t-member').onclick = () => { tab = 'member'; render(); };
+$('#t-desk').onclick = () => { tab = 'desk'; render(); };
+render();
+</script>
+</body>
+</html>
