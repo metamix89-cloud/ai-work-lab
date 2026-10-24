@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 사내 소식 피드</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; background: #f4f5f7; margin: 0; color: #222; }
+  main { max-width: 720px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 20px; }
+  .box, .post { background: #fff; border: 1px solid #dde; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+  .post[data-pinned="1"] { border-color: #e0a800; background: #fffbe8; }
+  .badge { background: #e0a800; color: #fff; border-radius: 4px; padding: 0 6px; font-size: 12px; margin-right: 6px; }
+  .badge.hid { background: #888; }
+  .meta { color: #666; font-size: 13px; }
+  .body { white-space: pre-wrap; word-break: break-word; margin: 6px 0; }
+  textarea { width: 100%; box-sizing: border-box; height: 64px; }
+  button { cursor: pointer; margin-right: 4px; }
+  .comment-row { margin-top: 6px; }
+  .comment-row input { width: 60%; }
+  [data-testid="message"] { min-height: 20px; color: #b00020; margin: 6px 0; }
+  .center { text-align: center; }
+</style>
+</head>
+<body>
+<main>
+  <h1>다온소프트 사내 소식</h1>
+  <div class="box">
+    <label>사용자
+      <select data-testid="user"></select>
+    </label>
+  </div>
+  <div class="box">
+    <textarea data-testid="compose" placeholder="소식을 적어 주세요 (1~500자)"></textarea>
+    <button data-testid="submit" type="button">올리기</button>
+  </div>
+  <div data-testid="message" role="status"></div>
+  <div id="error" hidden>
+    <span>불러오지 못했습니다</span>
+    <button id="retry" type="button">다시 시도</button>
+  </div>
+  <div id="pinned"></div>
+  <div id="feed"></div>
+  <div class="center"><button data-testid="more" type="button" hidden>더 보기</button></div>
+</main>
+<script>
+(function () {
+  var users = [];
+  var cursor = null;
+  var $ = function (sel) { return document.querySelector(sel); };
+  var userSel = $('[data-testid="user"]');
+  var msg = $('[data-testid="message"]');
+  var moreBtn = $('[data-testid="more"]');
+
+  function current() { return users.find(function (u) { return u.user_id === userSel.value; }); }
+
+  function api(method, url, body) {
+    var opt = { method: method, headers: {} };
+    if (body !== undefined) {
+      opt.headers['Content-Type'] = 'application/json';
+      opt.body = JSON.stringify(body);
+    }
+    return fetch(url, opt).then(function (r) {
+      return r.json().catch(function () { return null; }).then(function (data) {
+        if (!r.ok) {
+          var e = new Error((data && data.detail) || '요청에 실패했습니다');
+          e.reject = true;
+          throw e;
+        }
+        return data;
+      });
+    });
+  }
+
+  function el(tag, text, cls) {
+    var e = document.createElement(tag);
+    if (text !== undefined) e.textContent = text;
+    if (cls) e.className = cls;
+    return e;
+  }
+
+  function button(label, testid, handler) {
+    var b = el('button', label);
+    b.type = 'button';
+    b.setAttribute('data-testid', testid);
+    b.addEventListener('click', handler);
+    return b;
+  }
+
+  function act(promise, okMessage) {
+    return promise.then(function () {
+      msg.textContent = okMessage || '';
+      return loadFirst();
+    }).catch(function (e) {
+      msg.textContent = e.message;
+    });
+  }
+
+  function renderPost(p) {
+    var me = current();
+    var box = el('div', undefined, 'post');
+    box.setAttribute('data-testid', 'post');
+    box.setAttribute('data-id', p.post_id);
+    box.setAttribute('data-pinned', p.pinned ? '1' : '0');
+
+    var head = el('div', undefined, 'meta');
+    if (p.pinned) head.appendChild(el('span', '공지', 'badge'));
+    if (p.hidden) head.appendChild(el('span', '신고로 숨김', 'badge hid'));
+    head.appendChild(el('span', p.author_name + ' · ' + p.created_at));
+    box.appendChild(head);
+    box.appendChild(el('div', p.body, 'body'));
+    box.appendChild(el('div', '댓글 ' + p.comment_count, 'meta'));
+
+    var actions = el('div');
+    if (me && (me.role === 'admin' || me.user_id === p.author_id)) {
+      actions.appendChild(button('삭제', 'delete', function () {
+        act(api('DELETE', '/api/posts/' + p.post_id, { user: me.user_id }), '삭제했습니다');
+      }));
+    }
+    if (me && me.role === 'admin') {
+      actions.appendChild(button(p.pinned ? '고정 해제' : '고정', 'pin', function () {
+        act(api('POST', '/api/posts/' + p.post_id + '/pin', { user: me.user_id, pinned: !p.pinned }));
+      }));
+    }
+    if (me && me.user_id !== p.author_id) {
+      actions.appendChild(button('신고', 'report', function () {
+        act(api('POST', '/api/posts/' + p.post_id + '/reports', { user: me.user_id }), '신고했습니다');
+      }));
+    }
+    box.appendChild(actions);
+
+    var row = el('div', undefined, 'comment-row');
+    var input = el('input');
+    input.type = 'text';
+    input.placeholder = '댓글 쓰기';
+    input.setAttribute('data-testid', 'comment');
+    var send = button('댓글 달기', 'comment-submit', function () {
+      act(api('POST', '/api/posts/' + p.post_id + '/comments', { user: me.user_id, body: input.value }));
+    });
+    row.appendChild(input);
+    row.appendChild(send);
+    box.appendChild(row);
+    return box;
+  }
+
+  function showError(on) { $('#error').hidden = !on; }
+
+  function loadFirst() {
+    return api('GET', '/api/posts?viewer=' + encodeURIComponent(userSel.value)).then(function (data) {
+      showError(false);
+      $('#pinned').textContent = '';
+      $('#feed').textContent = '';
+      data.pinned.forEach(function (p) { $('#pinned').appendChild(renderPost(p)); });
+      data.posts.forEach(function (p) { $('#feed').appendChild(renderPost(p)); });
+      cursor = data.next_cursor;
+      moreBtn.hidden = !cursor;
+    }).catch(function () {
+      showError(true);
+      moreBtn.hidden = true;
+    });
+  }
+
+  function loadMore() {
+    if (!cursor) return;
+    api('GET', '/api/posts?viewer=' + encodeURIComponent(userSel.value) + '&before=' + encodeURIComponent(cursor))
+      .then(function (data) {
+        data.posts.forEach(function (p) { $('#feed').appendChild(renderPost(p)); });
+        cursor = data.next_cursor;
+        moreBtn.hidden = !cursor;
+      }).catch(function () { showError(true); });
+  }
+
+  function start() {
+    return api('GET', '/api/users').then(function (list) {
+      users = list;
+      userSel.textContent = '';
+      list.forEach(function (u) {
+        var o = el('option', u.name + (u.role === 'admin' ? ' (운영자)' : ''));
+        o.value = u.user_id;
+        userSel.appendChild(o);
+      });
+      return loadFirst();
+    }).catch(function () { showError(true); });
+  }
+
+  userSel.addEventListener('change', function () { msg.textContent = ''; loadFirst(); });
+  moreBtn.addEventListener('click', loadMore);
+  $('#retry').addEventListener('click', function () { users.length ? loadFirst() : start(); });
+  $('[data-testid="submit"]').addEventListener('click', function () {
+    var box = $('[data-testid="compose"]');
+    api('POST', '/api/posts', { user: userSel.value, body: box.value }).then(function () {
+      box.value = '';
+      msg.textContent = '';
+      return loadFirst();
+    }).catch(function (e) { msg.textContent = e.message; });
+  });
+
+  start();
+})();
+</script>
+</body>
+</html>

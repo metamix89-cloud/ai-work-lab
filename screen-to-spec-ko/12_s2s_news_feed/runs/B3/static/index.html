@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 사내 소식</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; background: #f4f5f7; margin: 0; color: #222; }
+  main { max-width: 680px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 20px; }
+  .box, .post { background: #fff; border: 1px solid #dde; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+  .post.pinned { border-color: #2f6fed; background: #f3f7ff; }
+  .badge { background: #2f6fed; color: #fff; border-radius: 4px; padding: 1px 6px; font-size: 12px; margin-right: 6px; }
+  .badge.warn { background: #c0392b; }
+  .meta { color: #667; font-size: 12px; margin-bottom: 4px; }
+  .body { white-space: pre-wrap; word-break: break-word; margin: 6px 0; }
+  .actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  textarea, input[type=text] { width: 100%; box-sizing: border-box; padding: 6px; font: inherit; }
+  button { padding: 4px 10px; cursor: pointer; }
+  #message { min-height: 20px; color: #c0392b; margin: 6px 0; }
+  .comment-row { display: flex; gap: 6px; margin-top: 6px; }
+  #error { text-align: center; padding: 20px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>다온소프트 사내 소식</h1>
+  <div class="box">
+    <label>사용자 <select data-testid="user" id="user"></select></label>
+    <textarea data-testid="compose" id="compose" rows="3" placeholder="소식을 남겨 보세요 (1~500자)"></textarea>
+    <button data-testid="submit" id="submit">올리기</button>
+  </div>
+  <div data-testid="message" id="message"></div>
+  <div id="error" hidden><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+  <div id="feed"></div>
+  <button data-testid="more" id="more" hidden>더 보기</button>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+let users = [], cursor = null;
+
+function setMessage(text) { $("message").textContent = text || ""; }
+function me() { return users.find((u) => u.user_id === $("user").value); }
+
+async function api(method, url, body) {
+  const opt = { method, headers: { "Content-Type": "application/json" } };
+  if (body !== undefined) opt.body = JSON.stringify(body);
+  const res = await fetch(url, opt);
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok) {
+    const err = new Error((data && data.detail) || "요청에 실패했습니다");
+    err.api = true;
+    throw err;
+  }
+  return data;
+}
+
+function btn(testid, label, handler) {
+  const b = document.createElement("button");
+  b.dataset.testid = testid;
+  b.textContent = label;
+  b.addEventListener("click", () => act(handler));
+  return b;
+}
+
+async function act(fn) {
+  setMessage("");
+  try { await fn(); } catch (e) { setMessage(e.message); }
+}
+
+function postEl(p) {
+  const u = me();
+  const el = document.createElement("div");
+  el.className = "post" + (p.pinned ? " pinned" : "");
+  el.dataset.testid = "post";
+  el.dataset.id = p.post_id;
+  el.dataset.pinned = p.pinned ? "1" : "0";
+
+  const meta = document.createElement("div");
+  meta.className = "meta";
+  if (p.pinned) { const s = document.createElement("span"); s.className = "badge"; s.textContent = "공지"; meta.append(s); }
+  if (p.hidden) { const s = document.createElement("span"); s.className = "badge warn"; s.textContent = "신고 누적 숨김"; meta.append(s); }
+  meta.append(`${p.author_name} · ${p.created_at} · 댓글 ${p.comment_count}`);
+  const body = document.createElement("div");
+  body.className = "body";
+  body.textContent = p.body;
+  el.append(meta, body);
+
+  const actions = document.createElement("div");
+  actions.className = "actions";
+  if (u && (u.role === "admin" || u.user_id === p.author_id))
+    actions.append(btn("delete", "삭제", async () => { await api("DELETE", `/api/posts/${p.post_id}`, { user: u.user_id }); await reload(); }));
+  if (u && u.role === "admin")
+    actions.append(btn("pin", p.pinned ? "고정 해제" : "고정", async () => { await api("POST", `/api/posts/${p.post_id}/pin`, { user: u.user_id, pinned: !p.pinned }); await reload(); }));
+  if (u && u.user_id !== p.author_id)
+    actions.append(btn("report", "신고", async () => { await api("POST", `/api/posts/${p.post_id}/reports`, { user: u.user_id }); setMessage("신고했습니다"); await reload(); }));
+  el.append(actions);
+
+  const row = document.createElement("div");
+  row.className = "comment-row";
+  const input = document.createElement("input");
+  input.type = "text";
+  input.dataset.testid = "comment-input";
+  input.placeholder = "댓글";
+  const send = btn("comment-submit", "댓글 달기", async () => {
+    await api("POST", `/api/posts/${p.post_id}/comments`, { user: u.user_id, body: input.value });
+    await reload();
+  });
+  row.append(input, send);
+  el.append(row);
+  return el;
+}
+
+async function fetchPage(before) {
+  const q = `viewer=${encodeURIComponent($("user").value)}` + (before ? `&before=${encodeURIComponent(before)}` : "");
+  return api("GET", `/api/posts?${q}`);
+}
+
+function showError(on) { $("error").hidden = !on; }
+
+async function reload() {
+  try {
+    const data = await fetchPage(null);
+    showError(false);
+    const feed = $("feed");
+    feed.replaceChildren();
+    data.pinned.concat(data.posts).forEach((p) => feed.append(postEl(p)));
+    cursor = data.next_cursor;
+    $("more").hidden = !cursor;
+  } catch (e) {
+    $("feed").replaceChildren();
+    $("more").hidden = true;
+    showError(true);
+  }
+}
+
+$("more").addEventListener("click", async () => {
+  setMessage("");
+  try {
+    const data = await fetchPage(cursor);
+    data.posts.forEach((p) => $("feed").append(postEl(p)));
+    cursor = data.next_cursor;
+    $("more").hidden = !cursor;
+  } catch (e) { showError(true); }
+});
+
+$("submit").addEventListener("click", () => act(async () => {
+  await api("POST", "/api/posts", { user: $("user").value, body: $("compose").value });
+  $("compose").value = "";
+  await reload();
+}));
+
+$("user").addEventListener("change", () => { setMessage(""); reload(); });
+$("retry").addEventListener("click", () => init());
+
+async function init() {
+  try {
+    users = await api("GET", "/api/users");
+    const sel = $("user");
+    if (!sel.options.length) {
+      users.forEach((u) => {
+        const o = document.createElement("option");
+        o.value = u.user_id;
+        o.textContent = `${u.name}${u.role === "admin" ? " (운영자)" : ""}`;
+        sel.append(o);
+      });
+    }
+    await reload();
+  } catch (e) {
+    showError(true);
+  }
+}
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 사내 소식</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; max-width: 680px; margin: 0 auto; padding: 16px; background: #f5f6f8; color: #222; }
+  h1 { font-size: 20px; }
+  .bar, .compose, .post { background: #fff; border: 1px solid #dde; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+  textarea { width: 100%; box-sizing: border-box; height: 64px; }
+  .meta { font-size: 12px; color: #667; }
+  .body { margin: 6px 0; white-space: pre-wrap; word-break: break-word; }
+  .badge { background: #d33; color: #fff; font-size: 11px; padding: 1px 6px; border-radius: 4px; margin-right: 4px; }
+  .badge.hid { background: #888; }
+  .post[data-pinned="1"] { border-color: #d33; }
+  button { cursor: pointer; margin-right: 4px; }
+  #message { min-height: 20px; color: #b00; margin: 6px 0; }
+  .cmt { margin-top: 6px; display: flex; gap: 4px; }
+  .cmt input { flex: 1; }
+</style>
+</head>
+<body>
+<h1>다온소프트 소식</h1>
+<div class="bar">사용자: <select data-testid="user"></select></div>
+<div class="compose">
+  <textarea data-testid="compose" placeholder="짧은 소식을 남겨 보세요 (최대 500자)"></textarea>
+  <button data-testid="submit">올리기</button>
+</div>
+<div id="message" data-testid="message"></div>
+<div id="error" hidden><span>불러오지 못했습니다</span> <button data-testid="retry">다시 시도</button></div>
+<div id="feed"></div>
+<button data-testid="more" hidden>더 보기</button>
+<script>
+const $ = (s) => document.querySelector(s);
+const sel = $('[data-testid="user"]'), feed = $('#feed'), moreBtn = $('[data-testid="more"]');
+const msg = $('#message'), errBox = $('#error');
+let users = [], cursor = null, loadSeq = 0;
+
+const me = () => users.find((u) => u.user_id === sel.value);
+const say = (t) => { msg.textContent = t || ''; };
+
+async function api(method, url, body) {
+  const res = await fetch(url, {
+    method, headers: { 'Content-Type': 'application/json' },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok) throw new Error((data && data.detail) || '요청에 실패했습니다');
+  return data;
+}
+
+function btn(label, testid, fn) {
+  const b = document.createElement('button');
+  b.textContent = label; b.dataset.testid = testid;
+  b.addEventListener('click', fn);
+  return b;
+}
+
+async function act(fn) {
+  say('');
+  try { await fn(); await loadFirst(); } catch (e) { say(e.message); }
+}
+
+function renderPost(p) {
+  const u = me();
+  const el = document.createElement('div');
+  el.className = 'post';
+  el.dataset.testid = 'post'; el.dataset.id = p.post_id; el.dataset.pinned = p.pinned ? '1' : '0';
+
+  const meta = document.createElement('div'); meta.className = 'meta';
+  if (p.pinned) { const b = document.createElement('span'); b.className = 'badge'; b.textContent = '공지'; meta.append(b); }
+  if (p.hidden) { const b = document.createElement('span'); b.className = 'badge hid'; b.textContent = '신고로 숨김'; meta.append(b); }
+  meta.append(`${p.author_name} · ${p.created_at} · 댓글 ${p.comment_count}`);
+  const body = document.createElement('div'); body.className = 'body'; body.textContent = p.body;
+  el.append(meta, body);
+
+  const acts = document.createElement('div');
+  if (u.role === 'admin' || u.user_id === p.author_id)
+    acts.append(btn('삭제', 'delete', () => act(() => api('DELETE', `/api/posts/${p.post_id}`, { user: u.user_id }))));
+  if (u.role === 'admin')
+    acts.append(btn(p.pinned ? '고정 해제' : '고정', 'pin', () =>
+      act(() => api('POST', `/api/posts/${p.post_id}/pin`, { user: u.user_id, pinned: !p.pinned }))));
+  if (u.user_id !== p.author_id)
+    acts.append(btn('신고', 'report', async () => {
+      say('');
+      try { await api('POST', `/api/posts/${p.post_id}/reports`, { user: u.user_id }); await loadFirst(); say('신고했습니다'); }
+      catch (e) { say(e.message); }
+    }));
+  el.append(acts);
+
+  const c = document.createElement('div'); c.className = 'cmt';
+  const input = document.createElement('input'); input.dataset.testid = 'comment-input'; input.placeholder = '댓글';
+  c.append(input, btn('댓글 달기', 'comment-submit', () =>
+    act(() => api('POST', `/api/posts/${p.post_id}/comments`, { user: u.user_id, body: input.value }))));
+  el.append(c);
+  return el;
+}
+
+function fetchPage(before) {
+  const q = new URLSearchParams({ viewer: sel.value });
+  if (before) q.set('before', before);
+  return api('GET', '/api/posts?' + q);
+}
+
+function showError(on) { errBox.hidden = !on; }
+
+async function loadFirst() {
+  const seq = ++loadSeq;
+  try {
+    const d = await fetchPage(null);
+    if (seq !== loadSeq) return;
+    showError(false);
+    feed.replaceChildren(...d.pinned.map(renderPost), ...d.posts.map(renderPost));
+    cursor = d.next_cursor; moreBtn.hidden = !cursor;
+  } catch (e) {
+    if (seq !== loadSeq) return;
+    feed.replaceChildren(); moreBtn.hidden = true; showError(true);
+  }
+}
+
+moreBtn.addEventListener('click', async () => {
+  if (!cursor) return;
+  say('');
+  try {
+    const d = await fetchPage(cursor);
+    showError(false);
+    d.posts.forEach((p) => feed.append(renderPost(p)));
+    cursor = d.next_cursor; moreBtn.hidden = !cursor;
+  } catch (e) { showError(true); }
+});
+
+$('[data-testid="retry"]').addEventListener('click', init);
+sel.addEventListener('change', () => { say(''); loadFirst(); });
+
+$('[data-testid="submit"]').addEventListener('click', async () => {
+  const box = $('[data-testid="compose"]');
+  say('');
+  try {
+    await api('POST', '/api/posts', { user: sel.value, body: box.value });
+    box.value = ''; await loadFirst();
+  } catch (e) { say(e.message); }
+});
+
+async function init() {
+  try {
+    users = await api('GET', '/api/users');
+    const prev = sel.value;
+    sel.replaceChildren(...users.map((u) => {
+      const o = document.createElement('option');
+      o.value = u.user_id; o.textContent = `${u.name} (${u.role === 'admin' ? '운영자' : '직원'})`;
+      return o;
+    }));
+    if (prev && users.some((u) => u.user_id === prev)) sel.value = prev;
+    await loadFirst();
+  } catch (e) { showError(true); }
+}
+init();
+</script>
+</body>
+</html>

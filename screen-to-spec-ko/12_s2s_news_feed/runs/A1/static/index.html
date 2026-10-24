@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>다온소프트 사내 소식</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>다온소프트 <span>사내 소식</span></h1>
+    <div id="who" hidden>
+      <span id="who-text"></span>
+      <button id="btn-reports" class="link" hidden>신고 목록</button>
+      <button id="btn-logout" class="link">로그아웃</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="login" class="card" hidden>
+      <h2>로그인</h2>
+      <form id="login-form">
+        <input name="username" placeholder="아이디" autocomplete="username" required>
+        <input name="password" type="password" placeholder="비밀번호" autocomplete="current-password" required>
+        <button class="primary">로그인</button>
+      </form>
+      <p class="hint">데모 계정 (비밀번호 모두 <code>daon1234</code>)<br>
+        운영자: <a href="#" data-u="admin">admin</a> ·
+        직원: <a href="#" data-u="minjun">minjun</a>, <a href="#" data-u="seoyeon">seoyeon</a>,
+        <a href="#" data-u="jiwoo">jiwoo</a> …</p>
+    </section>
+
+    <section id="feed" hidden>
+      <form id="post-form" class="card">
+        <textarea name="content" maxlength="500" rows="3" placeholder="사내 소식을 짧게 남겨 보세요 (최대 500자)"></textarea>
+        <div class="row"><span id="post-count">0 / 500</span><button class="primary">올리기</button></div>
+      </form>
+      <div id="reports-panel" class="card" hidden></div>
+      <div id="list"></div>
+      <button id="more" class="more" hidden>더 보기</button>
+      <p id="empty" class="hint" hidden>아직 글이 없습니다.</p>
+    </section>
+  </main>
+  <div id="toast" role="status"></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

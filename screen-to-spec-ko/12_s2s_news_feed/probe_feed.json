@@ -1,0 +1,11 @@
+{
+ "cases": [
+  {"name": "셋째 신고(u4 → P030) — 숨김", "method": "POST", "path": "api/posts/P030/reports", "body": {"user": "u4"}},
+  {"name": "숨긴 글에 다른 직원(u3)이 댓글", "method": "POST", "path": "api/posts/P030/comments", "body": {"user": "u3", "body": "숨긴 글에 댓글"}},
+  {"name": "숨긴 글을 다른 직원(u3)이 넷째 신고", "method": "POST", "path": "api/posts/P030/reports", "body": {"user": "u3"}},
+  {"name": "이미 고정된 P003 을 다시 고정", "method": "POST", "path": "api/posts/P003/pin", "body": {"user": "a1", "pinned": true}},
+  {"name": "P040 고정(셋째)", "method": "POST", "path": "api/posts/P040/pin", "body": {"user": "a1", "pinned": true}},
+  {"name": "고정 글 P007 을 운영자가 삭제", "method": "DELETE", "path": "api/posts/P007", "body": {"user": "a1"}},
+  {"name": "P039 고정 — P007 삭제 뒤 자리가 비었나", "method": "POST", "path": "api/posts/P039/pin", "body": {"user": "a1", "pinned": true}}
+ ]
+}

@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 76259,
+ "num_turns": 8,
+ "total_cost_usd": 0.29543559999999996,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 40894,
+  "cache_read_input_tokens": 195996,
+  "output_tokens": 11224,
+  "output_tokens_details": {
+   "thinking_tokens": 1653
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 40894,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1149,
+    "cache_read_input_tokens": 57341,
+    "cache_creation_input_tokens": 225,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 225
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/users.csv · posts.csv · comments.csv · reports.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것:\n- API 경로는 PRD 의 7개뿐이고 추가한 것은 없습니다.\n- 화면에 PRD 에 없는 요소를 넣었습니다. 글마다 댓글 입력칸(`data-testid=\"comment\"`)과 댓글 달기 버튼(`data-testid=\"comment-submit\"`)이 있습니다. 기능 F2 의 댓글 쓰기를 화면에서 하려고 넣었습니다.\n- 글에는 숨겨진 글 표시인 `신고로 숨김` 도 붙습니다. 글 안에 `고정 해제` 버튼도 있는데, 고정 버튼(`data-testid=\"pin\"`)의 글자가 고정이면 `고정 해제` 로 바뀝니다.\n- 댓글 내용을 보여 주는 화면은 PRD 의 API 로는 불가능해서 만들지 않았고, 댓글 수만 보입니다.\n\nPRD 가 정하지 않아 직접 정한 것:\n- **커서 형식:** `next_cursor` 는 `\"created_at|post_id\"` 문자열입니다. 다음 쪽은 그 `(created_at, post_id)` 보다 작은 글부터 가져옵니다. 형식이 틀리면 400 `내용을 확인하세요` 입니다.\n- **새 글 시각:** 서버의 지금 시각을 쓰되, DB 에 이미 더 새로운 시각이 있으면 그 시각을 씁니다. 서버 시계가 시드 글보다 과거여도 새 글이 항상 맨 앞에 오게 하려는 것입니다.\n- **id 부여:** 새 글은 `P` + 현재 최대 번호 + 1(3자리), 댓글은 `C` + 최대 번호 + 1 입니다.\n- **고정 요청:** `pinned` 가 불리언이 아니면 400 `내용을 확인하세요` 입니다. 없는 사용자나 글에 요청하면 404 이고, 문구는 각각 `사용자를 찾을 수 없습니다` · `글을 찾을 수 없습니다` 입니다.\n- **삭제:** 글을 지울 때 그 글의 댓글과 신고 행도 DB 에서 같이 지웁니다.\n- **고정 글과 숨김:** 숨김 규칙은 고정 글에도 똑같이 적용합니다.\n- **신고와 댓글:** 숨겨진 글에도 댓글과 추가 신고는 받습니다.\n- **본문 저장:** 본문은 앞뒤 공백을 뺀 값으로 저장합니다.\n- **시드 데이터:** 사용자 5명(운영자 `a1`), 글 50개(고정 2개 `P005` · `P012`), 댓글 3개, `P030` 에 신고 2건입니다.\n- **테스트 부산물:** 테스트를 돌리면 프로젝트 루트에 `feed.db` 가 남는데, 서버가 시작할 때마다 새로 만듭니다.",
+ "wall_s": 90.2
+}

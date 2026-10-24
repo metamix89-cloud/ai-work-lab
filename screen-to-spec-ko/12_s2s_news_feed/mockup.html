@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>다온소프트 사내 소식 피드 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 12편 목업. 가상 회사 · 가상 직원 · 가상 글. ?state=ok|empty|error. Mock-IT 라이트 테마. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--indigo:#6366F1;--emerald:#10B981;--amber:#F59E0B;--rose:#EF4444}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:var(--emerald);display:inline-block}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#EEF0FF;color:var(--indigo);font-weight:700}
+.main{padding:18px 26px 14px 26px;display:flex;flex-direction:column;gap:9px}
+.top{display:flex;justify-content:space-between;align-items:flex-end}
+h1{margin:0;font-size:21px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:12px;margin-top:3px}
+.who{font-size:12.5px;color:var(--ink2);background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.row{display:grid;grid-template-columns:1fr 300px;gap:12px;flex:1;min-height:0}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-height:0;overflow:hidden}
+.compose{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--mute);border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:4px}
+.compose span.in{flex:1;border:1px solid var(--line);border-radius:8px;padding:6px 10px}.compose b{background:var(--indigo);color:#fff;border-radius:7px;padding:5px 12px;font-size:12px}
+.post{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:12.5px;align-items:flex-start}
+.post .av{width:26px;height:26px;border-radius:50%;background:#E0E7FF;flex:none}
+.post .bd{flex:1}.post .meta{color:var(--mute);font-size:11px}.post .acts{display:flex;gap:4px}
+.pinned{background:#F7F8FF}.tag{display:inline-block;background:var(--indigo);color:#fff;border-radius:999px;padding:0 7px;font-size:10.5px;font-weight:700;margin-right:4px}
+.hid{background:#FFF7ED}.tagh{display:inline-block;background:#FED7AA;color:#9A3412;border-radius:999px;padding:0 7px;font-size:10.5px;font-weight:700;margin-right:4px}
+.b{border:1px solid var(--line);border-radius:6px;padding:1px 7px;font-size:10.5px;color:var(--ink2)}
+.more{text-align:center;color:var(--indigo);font-weight:700;font-size:12.5px;padding:7px;border:1px dashed #C7D2FE;border-radius:8px;margin-top:6px}
+.note h3{margin:0 0 6px;font-size:13px;color:var(--ink2)}.note div{font-size:12px;padding:6px 0;border-bottom:1px solid var(--line);color:var(--ink2)}
+.note div b{color:var(--ink)}
+.msg{color:var(--rose);font-size:12px}
+.empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mute);gap:4px;font-size:12px;text-align:center}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:12px;padding:20px;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700}
+</style></head><body>
+<div class="app">
+ <div class="side">
+  <div class="logo"><i></i>다온소프트</div>
+  <div class="nav"><div>회의실 예약</div><div>휴가 결재</div><div>온보딩 교육</div><div class="on">사내 소식</div></div>
+ </div>
+ <div class="main" id="main"></div>
+</div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const head=`<div class="top"><div><h1>사내 소식</h1><div class="sub">공지 고정은 운영자만 · 최대 3개 · 본인 글만 삭제 · 서로 다른 3명이 신고하면 숨김 · 20개씩 더 보기(새 글이 올라와도 겹치지 않게)</div></div><span class="who">사용자: 김하나 (직원) ▾</span></div>`;
+const note=`<div class="card note"><h3>'더 보기' 가 겹치는 이유</h3>
+ <div>첫 쪽: 최신 20개(<b>45번 ~ 26번</b>)를 본다</div><div>그 사이 새 글 1개가 올라온다</div>
+ <div>쪽 번호로 '21번째부터 20개' → <b>26번이 또 나온다</b></div><div>커서로 '26번보다 오래된 것부터' → <b>25번부터</b></div>
+ <div style="border:0;color:#10B981;font-weight:700">PRD R2: 더 보기는 커서로</div></div>`;
+let html='';
+if(state==='ok'){
+  html=head+`<div class="msg">본인 글만 지울 수 있습니다 — 이두리의 글 삭제 거부(403)</div><div class="row"><div class="card">
+   <div class="compose"><span class="in">팀에 알릴 소식을 써 주세요 (1~500자)</span><b>올리기</b></div>
+   <div class="post pinned"><span class="av"></span><div class="bd"><span class="tag">공지</span><b>정운영</b> <span class="meta">10/20 10:10 · 댓글 4</span><div>11월 정기 점검은 첫째 주 토요일입니다.</div></div></div>
+   <div class="post pinned"><span class="av"></span><div class="bd"><span class="tag">공지</span><b>정운영</b> <span class="meta">10/20 09:30 · 댓글 2</span><div>사내 소식 피드 이용 규칙을 확인해 주세요.</div></div></div>
+   <div class="post"><span class="av"></span><div class="bd"><b>김하나</b> <span class="meta">10/24 09:20 · 댓글 2</span><div>디자인팀 새 시안 공유합니다 — &lt;b&gt;굵게&lt;/b&gt; 는 글자 그대로 보인다</div></div><div class="acts"><span class="b">삭제</span></div></div>
+   <div class="post"><span class="av"></span><div class="bd"><b>이두리</b> <span class="meta">10/24 09:20 · 댓글 0</span><div>점심 같이 드실 분 — 같은 시각이면 번호 큰 글이 먼저</div></div><div class="acts"><span class="b">신고</span></div></div>
+   <div class="post hid"><span class="av"></span><div class="bd"><span class="tagh">신고로 숨김</span><b>김하나</b> <span class="meta">10/22 14:00</span><div>내 글이라 보인다 — 다른 직원의 피드에선 빠진다 (서로 다른 3명 신고)</div></div><div class="acts"><span class="b">삭제</span></div></div>
+   <div class="more">더 보기 (다음 20개)</div>
+  </div>${note}</div>`;
+}else if(state==='empty'){
+  html=head+`<div class="row"><div class="card"><div class="compose"><span class="in">팀에 알릴 소식을 써 주세요 (1~500자)</span><b>올리기</b></div><div class="empty"><b style="color:#4B5563;font-size:15px">아직 소식이 없습니다</b>첫 글을 올려 보세요 — 더 보기 버튼도 없다(next_cursor 가 null)</div></div>${note}</div>`;
+}else{
+  html=head+`<div class="err"><div><b>불러오지 못했습니다.</b> 피드 API(/api/posts) 가 응답하지 않습니다 — 누가 무엇을 지울 수 있는지 모르면 버튼을 열지 않습니다.</div><button>다시 시도</button></div>
+  <div class="card" style="flex:1"><div class="empty">삭제 · 고정 · 신고는 서버가 막는다 — 화면에서 버튼을 숨기는 건 안내일 뿐</div></div>`;
+}
+document.getElementById('main').innerHTML=html;
+</script></body></html>

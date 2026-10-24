@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>사내 소식 피드</title>
+<style>
+body{font-family:"Malgun Gothic",system-ui,sans-serif;margin:20px;color:#111318;max-width:760px}
+.post{border-bottom:1px solid #e6e8ef;padding:8px 0}.pin{color:#6366f1;font-weight:700}#message{color:#b91c1c;min-height:20px}
+.err{background:#fff5f5;border:1px solid #fecaca;padding:12px}.meta{color:#8a94a6;font-size:12px}
+</style></head><body>
+<h1>사내 소식</h1>
+<label>사용자 <select data-testid="user" id="user"></select></label>
+<div><textarea data-testid="compose" id="compose" rows="2" cols="60"></textarea> <button data-testid="submit" id="submit">올리기</button></div>
+<div data-testid="message" id="message"></div>
+<div id="feed"></div>
+<button data-testid="more" id="more" style="display:none">더 보기</button>
+<script>
+let users=[],cursor=null;
+const $=id=>document.getElementById(id);
+const me=()=>users.find(u=>u.user_id===$("user").value)||{};
+async function j(u,o){const r=await fetch(u,o);const b=await r.json().catch(()=>null);if(!r.ok)throw {detail:(b&&b.detail)||r.status};return b}
+function card(p){
+  const d=document.createElement("div");d.className="post";d.dataset.testid="post";d.setAttribute("data-testid","post");d.dataset.id=p.post_id;d.dataset.pinned=p.pinned?"1":"0";
+  const m=document.createElement("div");m.className="meta";m.textContent=(p.pinned?"공지 · ":"")+p.author_name+" · "+p.created_at+" · 댓글 "+p.comment_count+(p.hidden?" · 신고로 숨김":"");
+  const b=document.createElement("div");b.textContent=p.body;d.append(m,b);
+  const u=me();
+  if(u.role==="admin"||u.user_id===p.author_id)d.append(btn("delete","삭제",()=>act("DELETE",`/api/posts/${p.post_id}`,{})));
+  if(u.role==="admin")d.append(btn("pin",p.pinned?"고정 해제":"고정",()=>act("POST",`/api/posts/${p.post_id}/pin`,{pinned:!p.pinned})));
+  if(u.user_id!==p.author_id)d.append(btn("report","신고",()=>act("POST",`/api/posts/${p.post_id}/reports`,{})));
+  return d;
+}
+function btn(t,label,f){const b=document.createElement("button");b.setAttribute("data-testid",t);b.textContent=label;b.onclick=f;return b}
+async function load(){
+  try{
+    if(!users.length){users=await j("/api/users");$("user").innerHTML="";users.forEach(u=>{const o=document.createElement("option");o.value=u.user_id;o.textContent=u.name+(u.role==="admin"?" (운영자)":"");$("user").append(o)})}
+    const r=await j(`/api/posts?viewer=${encodeURIComponent($("user").value)}`);
+    $("feed").innerHTML="";r.pinned.concat(r.posts).forEach(p=>$("feed").append(card(p)));
+    cursor=r.next_cursor;$("more").style.display=cursor?"":"none";
+  }catch(e){$("feed").innerHTML='<div class="err">불러오지 못했습니다 <button onclick="load()">다시 시도</button></div>'}
+}
+$("more").onclick=async()=>{const r=await j(`/api/posts?viewer=${encodeURIComponent($("user").value)}&before=${encodeURIComponent(cursor)}`);r.posts.forEach(p=>$("feed").append(card(p)));cursor=r.next_cursor;$("more").style.display=cursor?"":"none"};
+async function act(m,u,b){$("message").textContent="";try{await j(u,{method:m,headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign({user:$("user").value},b))});await load()}catch(e){$("message").textContent=e.detail}}
+$("submit").onclick=async()=>{await act("POST","/api/posts",{body:$("compose").value});if(!$("message").textContent)$("compose").value=""};
+$("user").onchange=load;
+load();
+</script></body></html>

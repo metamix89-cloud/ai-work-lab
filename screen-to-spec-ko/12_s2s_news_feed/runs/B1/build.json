@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 132424,
+ "num_turns": 10,
+ "total_cost_usd": 0.4094936,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 42714,
+  "cache_read_input_tokens": 299296,
+  "output_tokens": 20868,
+  "output_tokens_details": {
+   "thinking_tokens": 2997
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 42714,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 750,
+    "cache_read_input_tokens": 59170,
+    "cache_creation_input_tokens": 216,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 216
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD.md대로 웹앱을 만들었습니다. API는 임시 스모크 스크립트로 확인했습니다. 브라우저에서 화면을 열어 보거나 `tests/test_dod.py`를 돌리지는 못했습니다. 이 폴더에는 그 파일이 없었습니다.\n\n스모크로 확인한 내용:\n- 첫 쪽에 고정 글 2개와 일반 글 20개가 나오고, `next_cursor`가 있습니다.\n- 첫 쪽을 받은 뒤 새 글을 올려도 다음 쪽은 20개, 마지막 쪽은 5개이고 `next_cursor`는 null입니다.\n- 새 글은 첫 쪽 맨 앞에 옵니다.\n- 직원의 고정 시도는 403, 같은 사람의 두 번째 신고는 409, 공백만 있는 글은 400을 돌려줍니다.\n- `user` 없음 + 없는 글은 400입니다.\n\n화면 쪽(`data-testid`, 더 보기 이어 붙이기, 본문 글자 그대로 표시 등)은 PRD 4절대로 작성했지만 실행해 보지 않았습니다.\n\n실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`입니다. 서버가 시작할 때마다 `seed/` CSV로 `feed.db`를 새로 만듭니다.\n\n- **만든 파일:** `main.py`(API 7개와 규칙 R1~R8), `static/index.html`(화면), `seed/` CSV 4개입니다.\n- **가상 데이터:** 사용자 5명(운영자 `a1`), 글 47개(고정 2개), 댓글 4개, 신고 2건이 있는 글 `P020`입니다.\n- **댓글 입력창:** PRD에 댓글 쓰기 화면의 손잡이가 정해져 있지 않아, 글마다 `comment-input`, `comment-submit`을 임의로 붙였습니다.\n- **댓글 목록:** 댓글 내용을 보여 주는 조회 API가 없어 댓글 수만 표시합니다.",
+ "wall_s": 142.7
+}

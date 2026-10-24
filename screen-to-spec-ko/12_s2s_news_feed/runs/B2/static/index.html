@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 사내 소식 피드</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; background: #f4f5f7; margin: 0; color: #222; }
+  main { max-width: 640px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 20px; }
+  .bar, .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+  textarea, input[type=text] { width: 100%; box-sizing: border-box; font: inherit; padding: 6px; }
+  button { font: inherit; padding: 4px 10px; cursor: pointer; }
+  .meta { color: #666; font-size: 13px; margin-bottom: 6px; }
+  .body { white-space: pre-wrap; word-break: break-word; margin: 6px 0; }
+  .badge { background: #d33; color: #fff; border-radius: 4px; padding: 0 6px; font-size: 12px; margin-right: 6px; }
+  .badge.hid { background: #888; }
+  .pinned { border-color: #d33; }
+  .actions { display: flex; gap: 6px; align-items: center; margin-top: 6px; }
+  .cwrite { display: flex; gap: 6px; margin-top: 8px; }
+  #message { min-height: 20px; color: #b00; margin-bottom: 8px; }
+  #error { text-align: center; }
+</style>
+</head>
+<body>
+<main>
+  <h1>다온소프트 사내 소식</h1>
+  <div class="bar">
+    <label>사용자 <select data-testid="user" id="user"></select></label>
+  </div>
+  <div class="bar">
+    <textarea data-testid="compose" id="compose" rows="3" placeholder="소식을 남겨 보세요 (1~500자)"></textarea>
+    <div class="actions"><button data-testid="submit" id="submit">올리기</button></div>
+  </div>
+  <div data-testid="message" id="message"></div>
+  <div id="error" class="card" hidden>
+    <span>불러오지 못했습니다</span>
+    <button data-testid="retry" id="retry">다시 시도</button>
+  </div>
+  <div id="feed"></div>
+  <button data-testid="more" id="more" hidden>더 보기</button>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+let users = [];
+let cursor = null;
+let loading = false;
+
+const viewer = () => $('user').value;
+const meUser = () => users.find((u) => u.user_id === viewer());
+const say = (text) => { $('message').textContent = text || ''; };
+
+async function api(method, url, body) {
+  const res = await fetch(url, {
+    method,
+    headers: body ? { 'Content-Type': 'application/json' } : undefined,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok) {
+    const err = new Error((data && data.detail) || '요청에 실패했습니다');
+    err.status = res.status;
+    throw err;
+  }
+  return data;
+}
+
+function el(tag, props, ...kids) {
+  const e = document.createElement(tag);
+  Object.assign(e, props || {});
+  kids.forEach((k) => e.append(k));
+  return e;
+}
+
+function button(testid, label, onclick) {
+  const b = el('button', { textContent: label, onclick });
+  b.dataset.testid = testid;
+  return b;
+}
+
+async function act(fn, reload) {
+  try {
+    await fn();
+    say('');
+    if (reload) await loadFeed(true);
+  } catch (e) {
+    say(e.message);
+  }
+}
+
+function renderPost(p) {
+  const me = meUser();
+  const isAdmin = me && me.role === 'admin';
+  const card = el('div', { className: 'card' + (p.pinned ? ' pinned' : '') });
+  card.dataset.testid = 'post';
+  card.dataset.id = p.post_id;
+  card.dataset.pinned = p.pinned ? '1' : '0';
+
+  const meta = el('div', { className: 'meta' });
+  if (p.pinned) meta.append(el('span', { className: 'badge', textContent: '공지' }));
+  if (p.hidden) meta.append(el('span', { className: 'badge hid', textContent: '숨김' }));
+  meta.append(el('span', { textContent: p.author_name }), ' · ', el('span', { textContent: p.created_at }));
+  const body = el('div', { className: 'body', textContent: p.body });
+  const count = el('span', { textContent: '댓글 ' + p.comment_count });
+  count.dataset.testid = 'comment-count';
+
+  const actions = el('div', { className: 'actions' }, count);
+  if (isAdmin || (me && me.user_id === p.author_id)) {
+    actions.append(button('delete', '삭제', () => {
+      act(async () => { await api('DELETE', '/api/posts/' + p.post_id, { user: viewer() }); card.remove(); }, false);
+    }));
+  }
+  if (isAdmin) {
+    actions.append(button('pin', p.pinned ? '고정 해제' : '고정', () =>
+      act(() => api('POST', '/api/posts/' + p.post_id + '/pin', { user: viewer(), pinned: !p.pinned }), true)));
+  }
+  if (me && me.user_id !== p.author_id) {
+    actions.append(button('report', '신고', () =>
+      act(() => api('POST', '/api/posts/' + p.post_id + '/reports', { user: viewer() }), true)));
+  }
+
+  const input = el('input', { type: 'text', placeholder: '댓글 쓰기' });
+  input.dataset.testid = 'comment';
+  const send = button('comment-submit', '댓글', () =>
+    act(async () => {
+      await api('POST', '/api/posts/' + p.post_id + '/comments', { user: viewer(), body: input.value });
+      input.value = '';
+      p.comment_count += 1;
+      count.textContent = '댓글 ' + p.comment_count;
+    }, false));
+  card.append(meta, body, actions, el('div', { className: 'cwrite' }, input, send));
+  return card;
+}
+
+async function loadFeed(reset) {
+  if (loading) return;
+  loading = true;
+  try {
+    const q = '/api/posts?viewer=' + encodeURIComponent(viewer()) +
+      (!reset && cursor ? '&before=' + encodeURIComponent(cursor) : '');
+    const data = await api('GET', q);
+    if (reset) $('feed').replaceChildren();
+    const seen = new Set([...$('feed').children].map((c) => c.dataset.id));
+    [...data.pinned, ...data.posts].forEach((p) => {
+      if (!seen.has(p.post_id)) $('feed').append(renderPost(p));
+    });
+    cursor = data.next_cursor;
+    $('more').hidden = !cursor;
+    $('error').hidden = true;
+  } catch (e) {
+    $('error').hidden = false;
+    $('more').hidden = true;
+  } finally {
+    loading = false;
+  }
+}
+
+async function boot() {
+  try {
+    users = await api('GET', '/api/users');
+    $('user').replaceChildren(...users.map((u) =>
+      el('option', { value: u.user_id, textContent: u.name + (u.role === 'admin' ? ' (운영자)' : '') })));
+    $('error').hidden = true;
+    await loadFeed(true);
+  } catch (e) {
+    $('error').hidden = false;
+  }
+}
+
+$('user').onchange = () => { say(''); loadFeed(true); };
+$('more').onclick = () => loadFeed(false);
+$('retry').onclick = () => (users.length ? loadFeed(true) : boot());
+$('submit').onclick = () => act(async () => {
+  await api('POST', '/api/posts', { user: viewer(), body: $('compose').value });
+  $('compose').value = '';
+}, true);
+boot();
+</script>
+</body>
+</html>

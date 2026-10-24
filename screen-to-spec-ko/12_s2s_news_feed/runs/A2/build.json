@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 다온소프트 '사내 소식 피드' 웹앱을 만들어 줘. 직원이 짧은 글과 댓글을 쓰고, 운영자는 공지를 맨 위에 고정할 수 있어. 자기 글만 지울 수 있고, 이상한 글은 신고할 수 있어. 글이 많으니 20개씩 '더 보기' 로 보여 줘. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 126650,
+ "num_turns": 6,
+ "total_cost_usd": 0.33513740000000003,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 34143,
+  "cache_read_input_tokens": 178254,
+  "output_tokens": 18072,
+  "output_tokens_details": {
+   "thinking_tokens": 839
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 34143,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1333,
+    "cache_read_input_tokens": 49949,
+    "cache_creation_input_tokens": 866,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 866
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "'사내 소식 피드' 앱을 만들었습니다. 백엔드 API는 FastAPI 테스트 클라이언트로 확인했습니다. 브라우저 화면(`static/index.html`)은 열어 보지 않았습니다. 확인한 것은 로그인 없이 접근하면 401이 나오는지, 20개씩 페이징이 되는지, 남의 글 삭제가 막히는지, 일반 직원의 고정 시도가 막히는지, 같은 글 중복 신고가 막히는지, 운영자만 신고 건수를 보는지입니다.\n\n**실행 방법** (프로젝트 폴더에서)\n```\npip install -r requirements.txt\npython -m uvicorn main:app\n```\n`http://127.0.0.1:8000`을 열면 됩니다. 첫 실행 때 `feed.db`가 자동으로 만들어지고 가상 데이터가 들어갑니다. DB를 초기화하려면 `feed.db`를 지우고 다시 실행하세요.\n\n**데모 계정**\n- 직원: `minjun`, `seoyeon`, `jihoon`, `haeun`, `doyun`, `yuna`, `sungmin`, `jiwoo` (비밀번호 모두 `1234`)\n- 운영자: `admin` (비밀번호 `admin1234`)\n\n**가상 데이터**\n- 직원 8명과 운영자 1명이 있습니다.\n- 일반 글 64개와 댓글이 최근 30일에 걸쳐 들어 있습니다.\n- 고정된 공지 2개와 신고 1건이 들어 있습니다.\n\n**기능**\n- **글·댓글:** 직원이 글(500자)과 댓글(200자)을 쓸 수 있습니다. 댓글은 \"댓글 N\"을 눌러 펼칩니다.\n- **공지 고정:** 운영자만 아무 글이나 📌 상단 고정하거나 해제할 수 있습니다. 고정글은 항상 맨 위에 보이고, 일반 글 목록에는 섞이지 않습니다.\n- **삭제:** 자기 글과 자기 댓글만 지울 수 있습니다. 서버에서도 막기 때문에 운영자도 남의 글은 못 지웁니다.\n- **신고:** 남의 글에 사유를 적어 신고합니다. 한 글에 한 사람이 한 번만 신고할 수 있고, 자기 글은 신고할 수 없습니다. 신고 건수는 운영자에게만 보이고, 운영자는 \"신고 관리\" 탭에서 신고된 글과 사유를 보고 기각할 수 있습니다.\n- **더 보기:** 20개씩 불러오고, 더 있을 때만 \"더 보기\" 버튼이 나옵니다.\n\n**보안**\n- 글과 댓글은 `textContent`로 출력해서, `<script>` 같은 입력이 그대로 실행되지 않습니다.\n- 비밀번호는 PBKDF2로 해시해 저장하고, 로그인 세션은 HttpOnly 쿠키로 유지합니다.\n\n**남은 한계**\n- 신고된 글이 자동으로 숨겨지지는 않습니다. 운영자가 신고 관리 탭에서 직접 확인합니다. 신고 3건 이상이면 자동으로 숨기는 식으로 바꿀 수 있으니, 필요하면 말씀해 주세요.\n- 운영자가 부적절한 글을 직접 삭제하는 기능은 없습니다. \"자기 글만 삭제\" 요구에 맞춘 것입니다.\n\n파일은 `main.py`(서버·DB·가상 데이터), `static/index.html`(화면), `requirements.txt`입니다.",
+ "wall_s": 134.7
+}

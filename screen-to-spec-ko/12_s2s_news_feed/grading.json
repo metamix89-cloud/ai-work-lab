@@ -1,0 +1,16 @@
+{
+ "allowed_routes": ["/", "/api/users", "/api/posts", "/api/posts/{id}", "/api/posts/{id}/pin", "/api/posts/{id}/reports", "/api/posts/{id}/comments",
+                    "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "로그인 · 회원": "login|password|로그인|회원가입",
+  "글 고치기": "@app\\.(put|patch)\\(\"/api/posts/\\{[^}]*\\}\"\\)|글 수정|수정하기",
+  "좋아요 · 반응": "/like|likes|like_count|좋아요 버튼|reaction",
+  "첨부": "upload|첨부|UploadFile",
+  "알림 · 멘션": "notify|notification|/api/notif|mention|멘션",
+  "검색 · 해시태그": "검색창|/api/search|type=\"search\"|hashtag|해시태그",
+  "대댓글": "parent_id|대댓글|reply_to",
+  "신고 처리 화면": "/api/admin|/api/reports\"|신고 처리|복구|restore",
+  "실시간": "websocket|WebSocket|EventSource|setInterval",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}

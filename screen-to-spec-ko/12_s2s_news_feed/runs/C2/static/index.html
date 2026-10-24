@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 사내 소식 피드</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; max-width: 720px; margin: 0 auto; padding: 16px; color: #222; }
+  h1 { font-size: 20px; }
+  .bar { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  textarea { width: 100%; box-sizing: border-box; height: 60px; }
+  .post { border: 1px solid #ccc; border-radius: 6px; padding: 8px 12px; margin: 8px 0; }
+  .post[data-pinned="1"] { background: #fff8e1; border-color: #e0b000; }
+  .meta { font-size: 12px; color: #666; }
+  .badge { font-size: 12px; font-weight: bold; color: #b00; margin-right: 6px; }
+  .body { white-space: pre-wrap; word-break: break-word; margin: 6px 0; }
+  .actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  #message { min-height: 1.4em; color: #b00; margin: 6px 0; }
+  .center { text-align: center; margin: 12px 0; }
+</style>
+</head>
+<body>
+<h1>다온소프트 사내 소식</h1>
+<div class="bar">
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+</div>
+<textarea data-testid="compose" id="compose" placeholder="소식을 적어 주세요 (1~500자)"></textarea>
+<div class="bar"><button data-testid="submit" id="submit">올리기</button></div>
+<div data-testid="message" id="message"></div>
+<div id="error" class="center" hidden>
+  <span>불러오지 못했습니다</span> <button id="retry">다시 시도</button>
+</div>
+<div id="feed"></div>
+<div class="center"><button data-testid="more" id="more" hidden>더 보기</button></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let users = [];
+let cursor = null;
+
+function viewer() { return $("user").value; }
+function me() { return users.find((u) => u.user_id === viewer()); }
+function say(text) { $("message").textContent = text || ""; }
+
+async function api(method, url, body) {
+  const res = await fetch(url, {
+    method,
+    headers: body ? { "Content-Type": "application/json" } : {},
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok) {
+    const err = new Error((data && data.detail) || "오류");
+    err.status = res.status;
+    err.detail = data && typeof data.detail === "string" ? data.detail : null;
+    throw err;
+  }
+  return data;
+}
+
+function el(tag, text, attrs) {
+  const e = document.createElement(tag);
+  if (text != null) e.textContent = text;
+  for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+  return e;
+}
+
+async function act(fn) {
+  say("");
+  try {
+    await fn();
+    await loadFirst();
+  } catch (e) {
+    if (e.detail) say(e.detail); else showError(true);
+  }
+}
+
+function renderPost(p) {
+  const u = me();
+  const box = el("div", null, { class: "post", "data-testid": "post", "data-id": p.post_id, "data-pinned": p.pinned ? "1" : "0" });
+  const head = el("div", null, { class: "meta" });
+  if (p.pinned) head.appendChild(el("span", "공지", { class: "badge" }));
+  if (p.hidden) head.appendChild(el("span", "숨김", { class: "badge" }));
+  head.appendChild(el("span", p.author_name + " · " + p.created_at));
+  box.appendChild(head);
+  box.appendChild(el("div", p.body, { class: "body" }));
+  const foot = el("div", null, { class: "actions" });
+  foot.appendChild(el("span", "댓글 " + p.comment_count, { class: "meta" }));
+  if (u && (u.role === "admin" || u.user_id === p.author_id)) {
+    const b = el("button", "삭제", { "data-testid": "delete" });
+    b.onclick = () => act(() => api("DELETE", "/api/posts/" + p.post_id, { user: viewer() }));
+    foot.appendChild(b);
+  }
+  if (u && u.role === "admin") {
+    const b = el("button", p.pinned ? "고정 해제" : "고정", { "data-testid": "pin" });
+    b.onclick = () => act(() => api("POST", "/api/posts/" + p.post_id + "/pin", { user: viewer(), pinned: !p.pinned }));
+    foot.appendChild(b);
+  }
+  if (u && u.user_id !== p.author_id) {
+    const b = el("button", "신고", { "data-testid": "report" });
+    b.onclick = async () => {
+      say("");
+      try { await api("POST", "/api/posts/" + p.post_id + "/reports", { user: viewer() }); await loadFirst(); say("신고했습니다"); }
+      catch (e) { if (e.detail) say(e.detail); else showError(true); }
+    };
+    foot.appendChild(b);
+  }
+  const ci = el("input", null, { type: "text", "data-testid": "comment-input", placeholder: "댓글" });
+  const cb = el("button", "댓글 달기", { "data-testid": "comment-submit" });
+  cb.onclick = () => act(() => api("POST", "/api/posts/" + p.post_id + "/comments", { user: viewer(), body: ci.value }));
+  foot.appendChild(ci);
+  foot.appendChild(cb);
+  box.appendChild(foot);
+  return box;
+}
+
+function showError(on) { $("error").hidden = !on; }
+
+function setCursor(c) {
+  cursor = c;
+  $("more").hidden = !c;
+}
+
+async function loadFirst() {
+  try {
+    const d = await api("GET", "/api/posts?viewer=" + encodeURIComponent(viewer()));
+    showError(false);
+    $("feed").replaceChildren();
+    d.pinned.concat(d.posts).forEach((p) => $("feed").appendChild(renderPost(p)));
+    setCursor(d.next_cursor);
+  } catch (e) {
+    showError(true);
+  }
+}
+
+async function loadMore() {
+  if (!cursor) return;
+  say("");
+  try {
+    const d = await api("GET", "/api/posts?viewer=" + encodeURIComponent(viewer()) + "&before=" + encodeURIComponent(cursor));
+    showError(false);
+    d.posts.forEach((p) => $("feed").appendChild(renderPost(p)));
+    setCursor(d.next_cursor);
+  } catch (e) {
+    showError(true);
+  }
+}
+
+async function init() {
+  try {
+    users = await api("GET", "/api/users");
+    const sel = $("user");
+    sel.replaceChildren();
+    users.forEach((u) => sel.appendChild(el("option", u.name + (u.role === "admin" ? " (운영자)" : ""), { value: u.user_id })));
+    showError(false);
+  } catch (e) {
+    showError(true);
+    return;
+  }
+  await loadFirst();
+}
+
+$("user").onchange = () => { say(""); loadFirst(); };
+$("more").onclick = loadMore;
+$("retry").onclick = () => (users.length ? loadFirst() : init());
+$("submit").onclick = async () => {
+  say("");
+  try {
+    await api("POST", "/api/posts", { user: viewer(), body: $("compose").value });
+    $("compose").value = "";
+    await loadFirst();
+  } catch (e) {
+    if (e.detail) say(e.detail); else showError(true);
+  }
+};
+init();
+</script>
+</body>
+</html>

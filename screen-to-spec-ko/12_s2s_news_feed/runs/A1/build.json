@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 다온소프트 '사내 소식 피드' 웹앱을 만들어 줘. 직원이 짧은 글과 댓글을 쓰고, 운영자는 공지를 맨 위에 고정할 수 있어. 자기 글만 지울 수 있고, 이상한 글은 신고할 수 있어. 글이 많으니 20개씩 '더 보기' 로 보여 줘. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 141789,
+ "num_turns": 10,
+ "total_cost_usd": 0.3731989,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 36605,
+  "cache_read_input_tokens": 234149,
+  "output_tokens": 20334,
+  "output_tokens_details": {
+   "thinking_tokens": 1501
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 36605,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1588,
+    "cache_read_input_tokens": 53043,
+    "cache_creation_input_tokens": 234,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 234
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "다온소프트 사내 소식 피드가 완성됐고, API 전체를 자동 테스트로 확인했습니다. 브라우저 화면(HTML/JS)은 열어서 눈으로 확인하지 못했습니다.\n\n## 실행\n\n```\ncd <작업 폴더>/A1\npip install -r requirements.txt\nuvicorn main:app --reload\n```\n\nhttp://127.0.0.1:8000 에 접속하세요. 처음 실행하면 `feed.db`가 만들어지고 가상 데이터가 자동으로 들어갑니다. 데이터를 처음 상태로 되돌리려면 `feed.db`를 지우고 다시 실행하면 됩니다.\n\n## 데모 계정\n\n비밀번호는 모두 `daon1234`입니다. 로그인 화면의 아이디 링크를 누르면 자동으로 채워집니다.\n\n- **운영자:** `admin`(박운영)\n- **직원:** `minjun`, `seoyeon`, `jiwoo`, `hyunwoo`, `yuna`, `doyun`, `sua`, `taeho`, `hana`\n\n## 가상 데이터\n\n- 직원 9명과 운영자 1명이 있습니다.\n- 글은 일반 글 68개와 고정된 공지 2개입니다.\n- 댓글과 신고 몇 건이 들어 있습니다.\n\n## 기능별 동작\n\n- **글과 댓글:** 글은 500자, 댓글은 200자까지 쓸 수 있고, 댓글은 글에서 펼쳐서 봅니다.\n- **공지 고정:** 운영자만 \"상단 고정\"과 \"고정 해제\"를 쓸 수 있습니다. 고정 글은 항상 맨 위에 있고, 더 보기를 눌러도 다시 나오지 않습니다.\n- **삭제:** 내가 쓴 글과 댓글만 지울 수 있고, 운영자도 남의 글은 지울 수 없습니다. 글을 지우면 그 글의 댓글도 함께 지워집니다.\n- **신고:** 글당 사유를 적어 1인 1회 신고할 수 있습니다. 내 글은 신고할 수 없습니다. 운영자에게만 글마다 신고 건수와 상단의 \"신고 목록\"이 보입니다.\n- **더 보기:** 20개씩 불러옵니다. 그 사이 새 글이 올라와도 목록이 중복되거나 빠지지 않습니다.\n\n## 테스트로 확인한 것\n\n- 로그인 실패는 401이 됩니다.\n- 로그인하지 않은 접근은 401이 됩니다.\n- 빈 글과 501자 글은 422로 거절됩니다.\n- 남의 글이나 댓글을 지우려 하면 403이 됩니다.\n- 직원이 고정을 시도하면 403이 됩니다.\n- 같은 글을 두 번 신고하면 409가 됩니다.\n- 자기 글을 신고하면 400이 됩니다.\n- 처음 로드와 더 보기를 끝까지 이어 불러도 글이 중복되지 않았습니다.\n\n## 만들 때 정한 것\n\n- **신고 후 처리:** 신고가 쌓여도 글이 자동으로 숨겨지지는 않고, 운영자가 목록으로 확인하기만 합니다. 운영자가 남의 글을 지울 수 없다는 요청에 맞춘 것입니다. 자동 숨김이나 운영자 삭제가 필요하면 말씀해 주세요.\n- **신고 대상:** 신고는 글만 대상이고 댓글은 신고할 수 없습니다.\n- **로그인 방식:** 데모용 아이디·비밀번호 로그인입니다. 비밀번호는 해시로 저장하고, 로그인 상태는 7일 동안 유지됩니다. 실제로 쓰려면 사내 SSO 연동으로 바꾸고, 데모 계정 안내문은 지워야 합니다.\n\n소스는 `main.py`(API), `seed.py`(가상 데이터), `static/`(화면)에 있습니다.",
+ "wall_s": 150.5
+}

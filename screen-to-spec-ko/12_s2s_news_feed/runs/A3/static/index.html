@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>다온소프트 사내 소식</title>
+<style>
+  :root{--bg:#f4f6fa;--card:#fff;--line:#e3e7ee;--txt:#1d2433;--sub:#6b7487;--pri:#2f6bff;--warn:#d64545;--pin:#fff8e1}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.5 "Malgun Gothic",system-ui,sans-serif}
+  header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+  .bar{max-width:720px;margin:auto;padding:10px 16px;display:flex;align-items:center;gap:12px;justify-content:space-between}
+  h1{font-size:18px;margin:0} main{max-width:720px;margin:16px auto;padding:0 16px}
+  select,textarea,input,button{font:inherit} select{padding:5px 8px;border:1px solid var(--line);border-radius:6px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
+  .card.pinned{background:var(--pin);border-color:#f0d98a}
+  textarea,input[type=text]{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px;resize:vertical}
+  button{border:1px solid var(--line);background:#fff;border-radius:6px;padding:4px 10px;cursor:pointer;color:var(--sub)}
+  button:hover{background:#f0f3f8} button.primary{background:var(--pri);border-color:var(--pri);color:#fff}
+  button.primary:hover{background:#1f58e0} button.danger:hover{color:var(--warn);border-color:var(--warn)}
+  button:disabled{opacity:.5;cursor:default}
+  .row{display:flex;gap:8px;align-items:center} .grow{flex:1} .right{justify-content:flex-end}
+  .meta{color:var(--sub);font-size:13px} .name{font-weight:600}
+  .body{white-space:pre-wrap;word-break:break-word;margin:8px 0}
+  .badge{font-size:12px;border-radius:4px;padding:1px 6px;background:#ffe9a8;color:#7a5800;margin-left:6px}
+  .badge.adm{background:#dce7ff;color:#1b4bc0} .badge.rep{background:#fde0e0;color:var(--warn)}
+  .actions{display:flex;gap:6px;flex-wrap:wrap}
+  .comments{border-top:1px dashed var(--line);margin-top:10px;padding-top:8px}
+  .cmt{padding:4px 0;font-size:14px} .cmt .x{margin-left:6px;padding:0 6px;font-size:12px}
+  #more{display:block;margin:8px auto 40px;padding:8px 24px}
+  #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:8px 16px;border-radius:20px;opacity:0;transition:.2s;pointer-events:none}
+  #toast.on{opacity:.95}
+</style>
+</head>
+<body>
+<header><div class="bar">
+  <h1>📣 다온소프트 사내 소식</h1>
+  <label class="meta">접속 사용자(데모) <select id="who"></select></label>
+</div></header>
+<main>
+  <section class="card">
+    <textarea id="newBody" rows="3" maxlength="500" placeholder="동료들에게 짧은 소식을 남겨 보세요 (최대 500자)"></textarea>
+    <div class="row right" style="margin-top:8px"><span class="meta" id="len">0/500</span>
+      <button class="primary" id="post">올리기</button></div>
+  </section>
+  <div id="feed"></div>
+  <div class="meta" id="empty" hidden style="text-align:center">아직 글이 없습니다.</div>
+  <button id="more" hidden>더 보기</button>
+</main>
+<div id="toast"></div>
+<script>
+let me = null, cursor = null;
+const $ = s => document.querySelector(s);
+// 사용자 입력은 항상 textContent로만 넣는다(XSS 방지).
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),2200); }
+
+async function api(path, opts = {}) {
+  const res = await fetch('/api' + path, {
+    ...opts,
+    headers: { 'Content-Type': 'application/json', 'X-User-Id': localStorage.uid || '', ...(opts.headers || {}) },
+  });
+  if (!res.ok) {
+    let msg = '요청에 실패했습니다.';
+    try { const d = await res.json(); msg = typeof d.detail === 'string' ? d.detail : '입력값을 확인해 주세요.'; } catch {}
+    throw new Error(msg);
+  }
+  return res.status === 204 ? null : res.json();
+}
+const act = async fn => { try { await fn(); } catch (e) { toast(e.message); } };
+
+function fmt(s){
+  const d = new Date(s.replace(' ', 'T')), m = Math.floor((Date.now() - d) / 60000);
+  if (m < 1) return '방금 전'; if (m < 60) return m + '분 전';
+  if (m < 1440) return Math.floor(m / 60) + '시간 전'; if (m < 10080) return Math.floor(m / 1440) + '일 전';
+  return s.slice(0, 10);
+}
+
+function renderPost(p) {
+  const c = el('article', 'card' + (p.pinned ? ' pinned' : ''));
+  const who = el('div');
+  who.append(el('span', 'name', p.author.name), el('span', 'meta', ' · ' + p.author.dept + ' · ' + fmt(p.created_at)));
+  if (p.pinned) who.append(el('span', 'badge', '📌 공지'));
+  if (p.author.is_admin) who.append(el('span', 'badge adm', '운영자'));
+  if (me.is_admin && p.report_count) who.append(el('span', 'badge rep', '신고 ' + p.report_count));
+  c.append(who, el('div', 'body', p.body));
+
+  const bar = el('div', 'actions');
+  const cbtn = el('button', '', '💬 댓글 ' + p.comment_count);
+  bar.append(cbtn);
+  if (me.is_admin) {
+    const b = el('button', '', p.pinned ? '고정 해제' : '📌 상단 고정');
+    b.onclick = () => act(async () => { await api(`/posts/${p.id}/pin?pinned=${!p.pinned}`, { method: 'PUT' }); toast(p.pinned ? '고정을 해제했어요' : '상단에 고정했어요'); await loadPage(true); });
+    bar.append(b);
+  }
+  if (p.mine) {
+    const b = el('button', 'danger', '삭제');
+    b.onclick = () => confirm('이 글을 삭제할까요? 댓글도 함께 삭제됩니다.') && act(async () => { await api('/posts/' + p.id, { method: 'DELETE' }); toast('삭제했어요'); await loadPage(true); });
+    bar.append(b);
+  } else {
+    const b = el('button', 'danger', p.reported_by_me ? '신고함' : '🚩 신고');
+    b.disabled = p.reported_by_me;
+    b.onclick = () => {
+      const reason = prompt('신고 사유를 간단히 적어 주세요 (선택)', '');
+      if (reason === null) return;
+      act(async () => { await api(`/posts/${p.id}/report`, { method: 'POST', body: JSON.stringify({ reason }) }); toast('신고가 접수되었어요'); b.textContent = '신고함'; b.disabled = true; });
+    };
+    bar.append(b);
+  }
+  c.append(bar);
+
+  const box = el('div', 'comments'); box.hidden = true;
+  const list = el('div');
+  const form = el('div', 'row');
+  const inp = el('input', 'grow'); inp.type = 'text'; inp.maxLength = 200; inp.placeholder = '댓글 달기 (최대 200자)';
+  inp.style.cssText = 'padding:6px 8px;border:1px solid var(--line);border-radius:6px';
+  const send = el('button', 'primary', '등록');
+  form.append(inp, send); box.append(list, form); c.append(box);
+
+  async function loadComments() {
+    const cs = await api(`/posts/${p.id}/comments`);
+    list.replaceChildren(...cs.map(x => {
+      const r = el('div', 'cmt');
+      r.append(el('span', 'name', x.name), el('span', 'meta', ` ${x.dept} · ${fmt(x.created_at)}  `), el('span', '', x.body));
+      if (x.mine) { const d = el('button', 'x danger', '삭제'); d.onclick = () => act(async () => { await api('/comments/' + x.id, { method: 'DELETE' }); await loadComments(); }); r.append(d); }
+      return r;
+    }));
+    cbtn.textContent = '💬 댓글 ' + cs.length;
+  }
+  cbtn.onclick = () => act(async () => { if (box.hidden) await loadComments(); box.hidden = !box.hidden; if (!box.hidden) inp.focus(); });
+  const submit = () => act(async () => {
+    if (!inp.value.trim()) return;
+    await api(`/posts/${p.id}/comments`, { method: 'POST', body: JSON.stringify({ body: inp.value }) });
+    inp.value = ''; await loadComments();
+  });
+  send.onclick = submit; inp.onkeydown = e => { if (e.key === 'Enter' && !e.isComposing) submit(); };
+  return c;
+}
+
+async function loadPage(reset) {
+  const d = await api('/posts' + (!reset && cursor ? '?cursor=' + cursor : ''));
+  if (reset) $('#feed').replaceChildren();
+  $('#feed').append(...d.items.map(renderPost));
+  cursor = d.next_cursor;
+  $('#more').hidden = !cursor;
+  $('#empty').hidden = !!$('#feed').children.length;
+}
+
+async function init() {
+  const users = await fetch('/api/users').then(r => r.json());
+  const sel = $('#who');
+  sel.replaceChildren(...users.map(u => { const o = el('option', '', `${u.name} (${u.dept})${u.is_admin ? ' ★운영자' : ''}`); o.value = u.id; return o; }));
+  if (!users.some(u => String(u.id) === localStorage.uid)) localStorage.uid = users[2] ? users[2].id : users[0].id;
+  sel.value = localStorage.uid;
+  sel.onchange = () => act(async () => { localStorage.uid = sel.value; me = await api('/me'); await loadPage(true); });
+  me = await api('/me');
+  await loadPage(true);
+}
+
+$('#more').onclick = () => act(() => loadPage(false));
+$('#newBody').oninput = e => $('#len').textContent = e.target.value.length + '/500';
+$('#post').onclick = () => act(async () => {
+  const ta = $('#newBody');
+  if (!ta.value.trim()) return toast('내용을 입력해 주세요');
+  await api('/posts', { method: 'POST', body: JSON.stringify({ body: ta.value }) });
+  ta.value = ''; $('#len').textContent = '0/500'; toast('올렸어요'); await loadPage(true);
+});
+act(init);
+</script>
+</body>
+</html>

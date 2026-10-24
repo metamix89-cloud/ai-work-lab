@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 사내 소식</title>
+<style>
+  :root { --bg:#f4f6fa; --card:#fff; --line:#e3e7ee; --text:#1c2333; --sub:#6b7487; --main:#2f6fed; --warn:#d6453d; --notice:#fff8e1; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.55 "Malgun Gothic","Apple SD Gothic Neo",sans-serif; }
+  header { background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; }
+  .bar { max-width:680px; margin:0 auto; padding:10px 16px; display:flex; align-items:center; gap:10px; }
+  .bar h1 { font-size:18px; margin:0; flex:1; }
+  .bar .who { color:var(--sub); font-size:13px; }
+  main { max-width:680px; margin:16px auto; padding:0 16px 60px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-bottom:12px; }
+  .card.pinned { background:var(--notice); border-color:#f1dd9a; }
+  button { font:inherit; cursor:pointer; border:1px solid var(--line); background:#fff; border-radius:8px; padding:5px 12px; color:var(--text); }
+  button:hover { background:#f0f3f9; }
+  button.primary { background:var(--main); border-color:var(--main); color:#fff; }
+  button.primary:hover { background:#2459c4; }
+  button.link { border:0; background:none; padding:2px 6px; color:var(--sub); font-size:13px; }
+  button.link:hover { color:var(--main); background:none; }
+  button.link.danger:hover { color:var(--warn); }
+  button:disabled { opacity:.5; cursor:default; }
+  textarea, input { width:100%; font:inherit; border:1px solid var(--line); border-radius:8px; padding:8px 10px; }
+  textarea { resize:vertical; min-height:70px; }
+  .row { display:flex; align-items:center; gap:8px; }
+  .row.end { justify-content:flex-end; }
+  .meta { font-size:13px; color:var(--sub); }
+  .meta b { color:var(--text); }
+  .badge { font-size:11px; padding:1px 7px; border-radius:99px; background:#e8efff; color:var(--main); margin-left:4px; }
+  .badge.pin { background:#ffe7a3; color:#8a6100; }
+  .badge.rep { background:#fde4e2; color:var(--warn); }
+  .content { margin:8px 0; white-space:pre-wrap; word-break:break-word; }
+  .actions { display:flex; flex-wrap:wrap; gap:2px; margin-left:-6px; }
+  .comments { border-top:1px solid var(--line); margin-top:8px; padding-top:8px; }
+  .comment { padding:5px 0; font-size:14px; display:flex; gap:6px; align-items:baseline; }
+  .comment .txt { flex:1; word-break:break-word; white-space:pre-wrap; }
+  .counter { font-size:12px; color:var(--sub); }
+  .center { text-align:center; }
+  #login { max-width:340px; margin:80px auto; }
+  #login input { margin-bottom:8px; }
+  .hint { font-size:12px; color:var(--sub); margin-top:10px; }
+  .err { color:var(--warn); font-size:13px; min-height:18px; }
+  .tabs { display:flex; gap:6px; margin-bottom:12px; }
+  .tabs button.on { background:var(--main); color:#fff; border-color:var(--main); }
+  #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#1c2333; color:#fff; padding:8px 16px; border-radius:8px; opacity:0; transition:.2s; pointer-events:none; }
+  #toast.show { opacity:.95; }
+</style>
+</head>
+<body>
+<div id="toast"></div>
+
+<section id="login" class="card" hidden>
+  <h2 style="margin-top:0">다온소프트 사내 소식</h2>
+  <input id="lu" placeholder="아이디" autocomplete="username">
+  <input id="lp" type="password" placeholder="비밀번호" autocomplete="current-password">
+  <div class="err" id="lerr"></div>
+  <button class="primary" id="lbtn" style="width:100%">로그인</button>
+  <p class="hint">데모 계정<br>직원: minjun, seoyeon, jihoon, haeun, doyun, yuna, sungmin, jiwoo / 비밀번호 1234<br>운영자: admin / admin1234</p>
+</section>
+
+<div id="app" hidden>
+  <header><div class="bar">
+    <h1>📰 다온소프트 사내 소식</h1>
+    <span class="who" id="who"></span>
+    <button class="link" id="logout">로그아웃</button>
+  </div></header>
+  <main>
+    <div class="tabs" id="tabs" hidden>
+      <button class="on" data-tab="feed">피드</button>
+      <button data-tab="reports">신고 관리</button>
+    </div>
+    <div id="feedView">
+      <div class="card">
+        <textarea id="newPost" maxlength="500" placeholder="사내 소식을 짧게 남겨 보세요 (최대 500자)"></textarea>
+        <div class="row end" style="margin-top:8px">
+          <span class="counter" id="cnt">0 / 500</span>
+          <button class="primary" id="postBtn">올리기</button>
+        </div>
+      </div>
+      <div id="feed"></div>
+      <div class="center"><button id="more" hidden>더 보기</button></div>
+    </div>
+    <div id="reportsView" hidden></div>
+  </main>
+</div>
+
+<script>
+let me = null, nextBefore = null;
+
+const $ = id => document.getElementById(id);
+function el(tag, props = {}, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(props)) {
+    if (k === 'class') e.className = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else e[k] = v;
+  }
+  kids.flat().forEach(c => e.append(c));
+  return e;
+}
+function toast(msg) {
+  const t = $('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('show'), 2200);
+}
+async function api(path, method = 'GET', body) {
+  const r = await fetch('/api' + path, {
+    method, headers: body ? {'Content-Type': 'application/json'} : {},
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    if (r.status === 401 && path !== '/login') showLogin();
+    throw new Error(typeof data.detail === 'string' ? data.detail : '요청을 처리하지 못했습니다.');
+  }
+  return data;
+}
+function ago(s) {
+  const d = new Date(s.replace(' ', 'T')), sec = (Date.now() - d) / 1000;
+  if (sec < 60) return '방금 전';
+  if (sec < 3600) return Math.floor(sec / 60) + '분 전';
+  if (sec < 86400) return Math.floor(sec / 3600) + '시간 전';
+  if (sec < 86400 * 7) return Math.floor(sec / 86400) + '일 전';
+  return s.slice(0, 10);
+}
+
+// ---------- 로그인
+function showLogin() { me = null; $('app').hidden = true; $('login').hidden = false; $('lp').value = ''; }
+async function doLogin() {
+  try {
+    me = await api('/login', 'POST', {username: $('lu').value, password: $('lp').value});
+    $('lerr').textContent = '';
+    start();
+  } catch (e) { $('lerr').textContent = e.message; }
+}
+$('lbtn').onclick = doLogin;
+$('lp').onkeydown = e => { if (e.key === 'Enter') doLogin(); };
+$('logout').onclick = async () => { await api('/logout', 'POST'); showLogin(); };
+
+function start() {
+  $('login').hidden = true; $('app').hidden = false;
+  $('who').textContent = `${me.name} · ${me.dept}` + (me.is_admin ? ' (운영자)' : '');
+  $('tabs').hidden = !me.is_admin;
+  setTab('feed');
+}
+function setTab(tab) {
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
+  $('feedView').hidden = tab !== 'feed'; $('reportsView').hidden = tab !== 'reports';
+  if (tab === 'feed') loadFeed(true); else loadReports();
+}
+document.querySelectorAll('#tabs button').forEach(b => b.onclick = () => setTab(b.dataset.tab));
+
+// ---------- 피드
+async function loadFeed(reset) {
+  if (reset) { $('feed').replaceChildren(); nextBefore = null; }
+  const q = !reset && nextBefore ? '?before=' + nextBefore : '';
+  try {
+    const d = await api('/posts' + q);
+    d.pinned.forEach(p => $('feed').append(postCard(p)));
+    d.posts.forEach(p => $('feed').append(postCard(p)));
+    nextBefore = d.next_before;
+    $('more').hidden = !d.has_more;
+  } catch (e) { toast(e.message); }
+}
+$('more').onclick = () => loadFeed(false);
+
+$('newPost').oninput = () => $('cnt').textContent = `${$('newPost').value.length} / 500`;
+$('postBtn').onclick = async () => {
+  const text = $('newPost').value.trim();
+  if (!text) return toast('내용을 입력해 주세요.');
+  try {
+    await api('/posts', 'POST', {content: text});
+    $('newPost').value = ''; $('cnt').textContent = '0 / 500';
+    loadFeed(true);
+  } catch (e) { toast(e.message); }
+};
+
+function postCard(p) {
+  const card = el('div', {class: 'card' + (p.pinned ? ' pinned' : '')});
+  const head = el('div', {class: 'meta'},
+    el('b', {textContent: p.author}), ` · ${p.dept} · ${ago(p.created_at)}`);
+  if (p.author_admin) head.append(el('span', {class: 'badge', textContent: '운영자'}));
+  if (p.pinned) head.append(el('span', {class: 'badge pin', textContent: '📌 고정'}));
+  if (me.is_admin && p.report_count > 0) head.append(el('span', {class: 'badge rep', textContent: `신고 ${p.report_count}`}));
+
+  const commentsBox = el('div', {class: 'comments', hidden: true});
+  const cBtn = el('button', {class: 'link', textContent: `💬 댓글 ${p.comment_count}`});
+  cBtn.onclick = async () => {
+    commentsBox.hidden = !commentsBox.hidden;
+    if (!commentsBox.hidden) renderComments(p, commentsBox, cBtn);
+  };
+
+  const actions = el('div', {class: 'actions'}, cBtn);
+  if (p.mine) {
+    actions.append(el('button', {class: 'link danger', textContent: '삭제', onclick: async () => {
+      if (!confirm('이 글을 삭제할까요?')) return;
+      try { await api('/posts/' + p.id, 'DELETE'); card.remove(); toast('삭제했습니다.'); }
+      catch (e) { toast(e.message); }
+    }}));
+  } else {
+    const rb = el('button', {class: 'link danger', textContent: p.reported_by_me ? '신고함' : '🚩 신고', disabled: p.reported_by_me});
+    rb.onclick = async () => {
+      const reason = prompt('신고 사유를 입력해 주세요.');
+      if (reason === null) return;
+      try { await api(`/posts/${p.id}/report`, 'POST', {reason}); rb.textContent = '신고함'; rb.disabled = true; toast('신고가 접수되었습니다.'); }
+      catch (e) { toast(e.message); }
+    };
+    actions.append(rb);
+  }
+  if (me.is_admin) {
+    actions.append(el('button', {class: 'link', textContent: p.pinned ? '고정 해제' : '📌 상단 고정', onclick: async () => {
+      try { await api(`/posts/${p.id}/pin`, 'POST'); loadFeed(true); } catch (e) { toast(e.message); }
+    }}));
+  }
+  card.append(head, el('div', {class: 'content', textContent: p.content}), actions, commentsBox);
+  return card;
+}
+
+async function renderComments(p, box, cBtn) {
+  try {
+    const list = await api(`/posts/${p.id}/comments`);
+    cBtn.textContent = `💬 댓글 ${list.length}`;
+    box.replaceChildren();
+    list.forEach(c => {
+      const row = el('div', {class: 'comment'},
+        el('span', {class: 'meta'}, el('b', {textContent: c.author}), ` ${ago(c.created_at)}`),
+        el('span', {class: 'txt', textContent: c.content}));
+      if (c.mine) row.append(el('button', {class: 'link danger', textContent: '삭제', onclick: async () => {
+        try { await api('/comments/' + c.id, 'DELETE'); renderComments(p, box, cBtn); } catch (e) { toast(e.message); }
+      }}));
+      box.append(row);
+    });
+    const input = el('input', {placeholder: '댓글 달기 (최대 200자)', maxLength: 200});
+    const send = async () => {
+      if (!input.value.trim()) return;
+      try { await api(`/posts/${p.id}/comments`, 'POST', {content: input.value}); renderComments(p, box, cBtn); }
+      catch (e) { toast(e.message); }
+    };
+    input.onkeydown = e => { if (e.key === 'Enter' && !e.isComposing) send(); };
+    box.append(el('div', {class: 'row', style: 'margin-top:6px'}, input, el('button', {textContent: '등록', onclick: send})));
+    input.focus();
+  } catch (e) { toast(e.message); }
+}
+
+// ---------- 신고 관리(운영자)
+async function loadReports() {
+  const box = $('reportsView'); box.replaceChildren();
+  try {
+    const list = await api('/reports');
+    if (!list.length) return box.append(el('div', {class: 'card center meta', textContent: '접수된 신고가 없습니다.'}));
+    list.forEach(r => box.append(el('div', {class: 'card'},
+      el('div', {class: 'meta'}, el('b', {textContent: r.author}), el('span', {class: 'badge rep', textContent: `신고 ${r.count}건`})),
+      el('div', {class: 'content', textContent: r.content}),
+      el('div', {class: 'meta', textContent: '사유: ' + r.reasons}),
+      el('div', {class: 'actions'}, el('button', {class: 'link', textContent: '신고 기각(문제 없음)', onclick: async () => {
+        await api(`/posts/${r.post_id}/reports`, 'DELETE'); loadReports();
+      }})))));
+  } catch (e) { toast(e.message); }
+}
+
+(async () => {
+  try { me = await api('/me'); start(); } catch { showLogin(); }
+})();
+</script>
+</body>
+</html>

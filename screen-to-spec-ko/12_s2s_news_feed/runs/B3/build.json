@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 104604,
+ "num_turns": 10,
+ "total_cost_usd": 0.3173947,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 16,
+  "cache_creation_input_tokens": 35679,
+  "cache_read_input_tokens": 334167,
+  "output_tokens": 14123,
+  "output_tokens_details": {
+   "thinking_tokens": 2801
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 35679,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1120,
+    "cache_read_input_tokens": 51716,
+    "cache_creation_input_tokens": 635,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 635
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "`PRD.md`대로 웹앱을 만들었습니다. API는 `TestClient`로 직접 확인했습니다. `/` 화면은 브라우저에서 열어 보지 못했고, `tests/test_dod.py`는 폴더에 없어서 DoD 9개는 돌리지 못했습니다.\n\n**실행:** 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`을 실행하면 됩니다. `PORT` 환경 변수가 있으면 그 포트를 씁니다. 이 PC에는 `fastapi`가 없어서 `fastapi`, `uvicorn`, `httpx`를 pip로 설치했습니다. `httpx`는 테스트용이라 앱 실행에는 필요 없습니다.\n\n**만든 파일**\n- `main.py`: API 7개와 규칙 R1~R8입니다. 서버가 시작될 때마다 `seed/`의 CSV로 `feed.db`를 새로 만듭니다.\n- `static/index.html`: 사용자 선택, 글 쓰기, 피드, 더 보기, 메시지 줄, 오류 상태와 PRD의 `data-testid`가 들어 있습니다. 본문은 `textContent`로 넣어서 `<b>굵게</b>`도 글자 그대로 보입니다.\n- `seed/*.csv`: 가상 데이터입니다. 사용자 5명(운영자 1), 글 47개(고정 2), 댓글 4개, 신고 2건이 있는 글 하나입니다.\n\n**직접 확인한 것**\n- 첫 쪽: 고정 글 2개와 일반 글 20개가 나오고 `next_cursor`가 있습니다.\n- 새 글을 올린 뒤 커서로 끝까지 넘겨도 45개가 겹치지 않았습니다.\n- 공백만 있는 글은 400, 500자 글은 201입니다.\n- 직원이 남의 글을 지우면 403, 운영자가 지우면 200이고 지운 글에 댓글을 달면 404입니다.\n- 신고는 자기 글 403이었습니다. 서로 다른 2명이 신고했을 때는 아직 숨겨지지 않았습니다.\n- 직원이 고정하면 403입니다. 운영자의 고정은 200이었습니다.\n\n3명 신고로 숨겨지는 동작, 넷째 고정의 409, 두 번째 신고의 409는 시험하지 않았습니다.\n\n**PRD에 없어서 임의로 정한 것**\n- 새 글 시각은 초 단위까지 저장하고, 서버 시계가 시드 데이터보다 이르더라도 새 글이 항상 맨 앞에 오게 했습니다.\n- 글마다 댓글 입력칸과 버튼(`comment-input`, `comment-submit`)을 넣었습니다. PRD의 `data-testid` 목록에는 없습니다.\n- `user`와 본문이 둘 다 잘못된 경우에는 `user` 검사를 먼저 합니다.",
+ "wall_s": 112.9
+}

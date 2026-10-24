@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 다온소프트 '사내 소식 피드' 웹앱을 만들어 줘. 직원이 짧은 글과 댓글을 쓰고, 운영자는 공지를 맨 위에 고정할 수 있어. 자기 글만 지울 수 있고, 이상한 글은 신고할 수 있어. 글이 많으니 20개씩 '더 보기' 로 보여 줘. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 159506,
+ "num_turns": 9,
+ "total_cost_usd": 0.45384220000000003,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 42410,
+  "cache_read_input_tokens": 231182,
+  "output_tokens": 26106,
+  "output_tokens_details": {
+   "thinking_tokens": 836
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 42410,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1278,
+    "cache_read_input_tokens": 58025,
+    "cache_creation_input_tokens": 1057,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1057
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "사내 소식 피드 앱을 만들었고, 서버 API는 테스트 클라이언트로 확인했어요. 브라우저에서 화면을 직접 열어 보지는 못했어요.\n\n## 실행\n```\ncd <작업 폴더>/A3\npip install -r requirements.txt\npython -m uvicorn main:app --reload\n```\nhttp://127.0.0.1:8000 으로 접속하세요. 첫 실행 때 `feed.db`가 만들어지고 가상 데이터가 들어갑니다.\n- **가상 데이터:** 직원 12명(운영자 2명), 글 70여 개, 댓글, 고정 공지 2개가 들어 있어요. 초기화하려면 `feed.db`를 지우면 됩니다.\n- **사용자 전환:** 화면 우상단 드롭다운으로 접속 사용자를 바꿔 가며 써 볼 수 있어요. ★ 표시가 운영자입니다.\n\n## 기능\n- **글·댓글:** 글은 500자, 댓글은 200자까지 쓸 수 있어요.\n- **공지 고정:** 운영자만 상단 고정과 해제를 할 수 있고, 고정 글은 항상 맨 위에 나옵니다.\n- **삭제:** 본인이 쓴 글과 댓글만 지울 수 있어요. 운영자도 남의 글은 못 지웁니다.\n- **신고:** 글 하나당 한 사람이 한 번만 신고할 수 있고, 내 글은 신고할 수 없어요. 신고가 3건 이상 쌓이면 일반 직원 화면에서는 숨겨지고, 운영자는 신고 수와 함께 계속 볼 수 있어요. 시연용으로 이미 숨겨진 글 하나와 신고 1건짜리 글이 들어 있습니다.\n- **더 보기:** 20개씩 불러옵니다. 더 보기를 누르는 사이에 새 글이 올라와도 글이 겹치거나 빠지지 않아요.\n\n## 검증한 것\n- 직원이 고정을 시도하면 403, 남의 글 삭제는 403, 로그인 없이 접속하면 401이 나와요.\n- 같은 글을 두 번 신고하면 409, 빈 글은 422가 나와요.\n- 72개 글이 4페이지에 걸쳐 중복 없이 나오고, 신고로 숨겨진 글은 일반 직원에게 안 보여요.\n\n## 알아둘 점\n- **인증은 데모용입니다.** 서버가 요청 헤더의 사용자 번호만 믿기 때문에, 실제로 쓰려면 사내 SSO나 세션 로그인으로 바꿔야 해요. 권한 검사는 전부 서버에서 하니, 그 부분만 교체하면 됩니다.\n- **신고 숨김 기준(3건)은 임의로 정했어요.** 바꾸려면 `main.py`의 `HIDE_AT_REPORTS` 값을 고치세요.\n- **신고 후 처리 화면은 없어요.** 운영자가 신고된 글을 따로 모아 보거나 처리하는 기능은 요청에 없어서 넣지 않았어요.\n\n모든 코드는 `main.py`(서버)와 `static/index.html`(화면) 두 파일에 있어요.",
+ "wall_s": 164.4
+}

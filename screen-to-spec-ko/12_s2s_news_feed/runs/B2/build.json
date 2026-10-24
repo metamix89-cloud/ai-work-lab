@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 105413,
+ "num_turns": 9,
+ "total_cost_usd": 0.3230117,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 36696,
+  "cache_read_input_tokens": 282497,
+  "output_tokens": 14795,
+  "output_tokens_details": {
+   "thinking_tokens": 3147
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 36696,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 944,
+    "cache_read_input_tokens": 52425,
+    "cache_creation_input_tokens": 943,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 943
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD.md대로 웹앱을 만들었습니다. API는 FastAPI 테스트 클라이언트로 확인했지만, 브라우저 화면(T9)은 열어 보지 못했고 `tests/test_dod.py`도 폴더에 없어 돌리지 못했습니다.\n\n**실행:** 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`을 실행하면 됩니다. `PORT` 환경 변수를 지원하고, 서버가 시작될 때마다 `seed/`의 CSV로 `feed.db`를 새로 만듭니다.\n\n**만든 파일**\n- `main.py`: API 7개와 업무 규칙 R1~R8.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. PRD에 적힌 `data-testid`를 모두 넣었고, 본문은 `textContent`로 넣어서 `<b>굵게</b>`를 올려도 글자 그대로 보입니다. 댓글 입력칸도 글마다 넣었습니다.\n- `seed/*.csv`: 사용자 5명(운영자 `a1`), 글 48개(고정 2개), 댓글 4개, 신고 2건이 있는 글 `P008`.\n\n**테스트 결과**\n- `/`가 200으로 열렸습니다.\n- 첫 쪽에 고정 2개와 일반 글 20개가 나왔습니다.\n- 첫 쪽을 받은 뒤 새 글을 올려도 3쪽에 걸쳐 46개를 받는 동안 겹침이 없었습니다.\n- 501자는 400, 500자는 201이고 새 글이 맨 앞에 왔습니다.\n- 사용자 없음은 400, 직원의 넷째 고정은 403, 운영자의 넷째 고정은 409, 중복 신고는 409였습니다.\n- 삭제, 숨김 처리, 자기 글 신고는 코드에는 있지만 이 확인에서는 돌려 보지 않았습니다.\n\n**제 판단으로 정한 부분**\n- 더 보기는 쪽 번호 대신 (시각, id)를 담은 커서로 넘깁니다.\n- 새 글의 시각은 지금 시각과 DB에서 가장 늦은 글의 시각 중 큰 쪽입니다. 서버 시계가 시드 데이터보다 이르더라도 새 글이 맨 앞에 옵니다.\n- 글 응답의 `pinned`와 `hidden`은 `true/false`입니다.",
+ "wall_s": 111.0
+}

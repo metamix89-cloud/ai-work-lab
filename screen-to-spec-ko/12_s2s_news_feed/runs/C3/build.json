@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 75911,
+ "num_turns": 8,
+ "total_cost_usd": 0.2919625,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 40921,
+  "cache_read_input_tokens": 195885,
+  "output_tokens": 10867,
+  "output_tokens_details": {
+   "thinking_tokens": 2217
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 40921,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 765,
+    "cache_read_input_tokens": 57230,
+    "cache_creation_input_tokens": 363,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 363
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (users · posts · comments · reports)\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음. 추가한 API 경로도 없다. 화면에 오류 상태의 다시 시도 버튼(`data-testid=\"retry\"`)을 하나 넣었다. PRD 4 는 버튼이 있어야 한다고만 하고 testid 를 정하지 않았다.\nPRD 가 정하지 않아 직접 정한 것:\n- 커서는 `\"created_at|post_id\"` 문자열이다. 다음 쪽은 그 글보다 오래된 글부터 20개이고, 쪽 번호는 쓰지 않는다. 형식이 틀린 커서는 400 `내용을 확인하세요`.\n- 새 글 id 는 `P` + 기존 최댓값 + 1 (세 자리), 댓글 id 는 `C` 로 같은 방식이다. 새 글의 시각은 서버의 지금이다. 다만 기존 글의 최신 시각보다 이르면 그 시각으로 맞춘다.\n- 삭제한 글은 DB 에서 지우고, 그 글의 댓글·신고도 함께 지운다.\n- 고정 요청에서 `pinned` 가 true/false 가 아니면 400 `내용을 확인하세요`.\n- 신고가 3건 이상이면 `hidden` 이다. 작성자와 운영자 말고는 숨겨진 글을 피드에서 볼 수 없다.\n- `viewer` 가 없으면 400, 없는 사용자면 404 이다.\n- 화면은 사용자 이름 옆에 운영자 표시를 붙이고, 고정된 글의 고정 버튼은 \"고정 해제\" 로 바뀐다. 동작이 성공하면 피드를 처음부터 다시 불러온다.\n- `seed/` 의 가상 데이터는 사용자 5명(운영자 1), 글 47개(고정 2), 댓글 3개, P030 에 신고 2건으로 만들었다.\n```",
+ "wall_s": 89.6
+}
