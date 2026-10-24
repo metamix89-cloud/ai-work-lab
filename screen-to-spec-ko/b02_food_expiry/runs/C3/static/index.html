@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>유통기한 임박 재고 알림판</title>
+<style>
+body{font-family:sans-serif;margin:20px;color:#222}
+.bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.sum{display:flex;gap:12px;margin:14px 0}
+.sum div{border:1px solid #ccc;border-radius:6px;padding:10px 18px}
+.sum b{display:block;font-size:22px}
+table{border-collapse:collapse;width:100%}
+th,td{border-bottom:1px solid #ddd;padding:6px 8px;text-align:left}
+tr[data-state=near]{background:#fff4d6}
+tr[data-state=expired]{background:#fde0e0}
+#message{min-height:1.4em;margin:8px 0;font-weight:bold}
+#error{display:none;color:#b00020}
+</style>
+</head>
+<body>
+<h1>유통기한 임박 재고 알림판</h1>
+<div class="bar">
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+  <label>품목 <select data-testid="item" id="item"></select></label>
+  <label>수량 <input data-testid="qty" id="qty" type="number" min="1" value="1"></label>
+  <button data-testid="ship" id="ship">출고</button>
+</div>
+<div id="message" data-testid="message"></div>
+<div id="error"><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+<div class="sum">
+  <div>임박 로트 <b data-testid="sum-near">0</b></div>
+  <div>만료 로트 <b data-testid="sum-expired">0</b></div>
+  <div>임박 재고 금액(원) <b data-testid="sum-near-value">0</b></div>
+</div>
+<table>
+  <thead><tr><th>품목</th><th>로트</th><th>유통기한</th><th>남은 일수</th><th>수량</th><th>상태</th><th></th></tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+<script>
+const $ = id => document.getElementById(id);
+const LABEL = {ok: '정상', near: '임박', expired: '만료'};
+let users = [];
+
+async function api(path, body) {
+  const r = await fetch(path, body ? {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)} : undefined);
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) { const e = new Error(data.detail || '요청 실패'); e.detail = data.detail; throw e; }
+  return data;
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function render(lots, summary) {
+  $('error').style.display = 'none';
+  document.querySelector('[data-testid=sum-near]').textContent = summary.near;
+  document.querySelector('[data-testid=sum-expired]').textContent = summary.expired;
+  document.querySelector('[data-testid=sum-near-value]').textContent = summary.near_value.toLocaleString('ko-KR');
+  const u = users.find(x => x.user_id === $('user').value);
+  const manager = u && u.role === 'manager';
+  $('rows').innerHTML = lots.map(l => `<tr data-testid="lot" data-id="${esc(l.lot_id)}" data-state="${l.state}">
+    <td>${esc(l.item_name)}</td><td>${esc(l.lot_id)}</td><td>${l.expires_on}</td><td>${l.days_left}일</td><td>${l.qty}</td>
+    <td>${LABEL[l.state]}</td>
+    <td>${manager && l.state === 'expired' ? `<input data-testid="reason" placeholder="폐기 사유"> <button data-testid="dispose">폐기</button>` : ''}</td></tr>`).join('');
+}
+
+async function load() {
+  try {
+    const d = await api('/api/lots');
+    render(d.lots, d.summary);
+  } catch (e) {
+    $('error').style.display = 'block';
+  }
+}
+
+async function init() {
+  try {
+    users = await api('/api/users');
+    const items = await api('/api/items');
+    $('user').innerHTML = users.map(u => `<option value="${esc(u.user_id)}">${esc(u.name)} (${u.role === 'manager' ? '관리자' : '창고 담당'})</option>`).join('');
+    $('item').innerHTML = items.map(i => `<option value="${esc(i.item_id)}">${esc(i.name)}</option>`).join('');
+  } catch (e) {
+    $('error').style.display = 'block';
+    return;
+  }
+  await load();
+}
+
+$('user').addEventListener('change', load);
+$('retry').addEventListener('click', init);
+
+$('ship').addEventListener('click', async () => {
+  const qty = $('qty').value.trim();
+  try {
+    const d = await api('/api/ship', {user: $('user').value, item_id: $('item').value, qty: /^-?\d+$/.test(qty) ? parseInt(qty, 10) : qty});
+    $('message').textContent = '배분: ' + d.allocations.map(a => `${a.lot_id} ${a.qty}개`).join(', ');
+    render(d.lots, d.summary);
+  } catch (e) {
+    $('message').textContent = e.detail || '불러오지 못했습니다';
+  }
+});
+
+$('rows').addEventListener('click', async ev => {
+  if (ev.target.getAttribute('data-testid') !== 'dispose') return;
+  const tr = ev.target.closest('tr');
+  const reason = tr.querySelector('[data-testid=reason]').value;
+  try {
+    const d = await api(`/api/lots/${encodeURIComponent(tr.dataset.id)}/dispose`, {user: $('user').value, reason});
+    $('message').textContent = `폐기: ${d.lot.lot_id}`;
+    await load();
+  } catch (e) {
+    $('message').textContent = e.detail || '불러오지 못했습니다';
+  }
+});
+
+init();
+</script>
+</body>
+</html>

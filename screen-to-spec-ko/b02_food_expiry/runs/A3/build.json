@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 꼬르륵식품 '유통기한 임박 재고 알림판' 웹앱을 만들어 줘. 창고에 로트마다 유통기한이 다른 재고가 있는데, 임박한 것과 만료된 것이 한눈에 보여야 하고, 출고하면 유통기한이 가까운 것부터 나가야 해. 만료된 건 관리자가 폐기할 수 있어. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 79131,
+ "num_turns": 7,
+ "total_cost_usd": 0.2332837,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 27347,
+  "cache_read_input_tokens": 169657,
+  "output_tokens": 10691,
+  "output_tokens_details": {
+   "thinking_tokens": 474
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 27347,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1177,
+    "cache_read_input_tokens": 43140,
+    "cache_creation_input_tokens": 879,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 879
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "웹앱을 만들었고 바로 실행됩니다. 테스트용 임시 DB로 한 번 돌려 봤고, 브라우저 화면은 열어 보지 못했습니다.\n\n**실행 방법**\n```\ncd <작업 폴더>/A3\npip install -r requirements.txt\npython main.py\n```\n그다음 http://127.0.0.1:8000 으로 접속하면 됩니다. 처음 실행할 때 `inventory.db`가 만들어지고 가상 데이터가 들어갑니다. 가상 데이터는 제품 6종, 로트 20개이고, 유통기한은 오늘 날짜를 기준으로 만들어서 언제 실행해도 만료·임박 재고가 보입니다.\n\n**기능**\n- **알림판:** 만료(빨강), 임박(주황, 7일 이내), 주의(노랑, 30일 이내), 정상(초록)으로 나눠 카드에 로트 수와 수량을 보여 줍니다. 카드를 누르면 그 상태만 필터링됩니다. 로트 표는 유통기한이 빠른 순이고, 만료·임박 행은 색이 칠해지며 D-day 또는 경과일이 표시됩니다.\n- **FEFO 출고:** 제품과 수량을 넣으면 만료되지 않은 로트 중 유통기한이 가까운 것부터 차감합니다. 어느 로트에서 몇 개 나갔는지 화면에 보여 줍니다. 만료된 재고는 출고되지 않고, 출고 가능한 재고가 모자라면 409 오류로 막습니다. 동시에 출고가 들어가도 꼬이지 않도록 트랜잭션으로 처리했습니다.\n- **폐기(관리자 전용):** 헤더의 \"관리자 로그인\"에서 토큰을 입력하면 만료 로트 옆에 폐기 버튼이 나타납니다. 서버도 토큰을 확인하고, 만료되지 않은 로트는 폐기를 거부합니다.\n- **이력:** 출고와 폐기 내역이 `movements` 테이블에 쌓이고 화면에도 표시됩니다.\n\n**테스트 결과**\n- 요청을 보내 확인한 결과, 50개 출고 시 D-3 로트에서 40개, 그다음 로트에서 10개가 나갔습니다.\n- 재고를 초과한 출고는 409로 거부됐습니다.\n- 토큰 없는 폐기는 401, 만료되지 않은 로트 폐기는 409로 거부됐습니다.\n- 만료 로트 폐기는 성공했습니다.\n\n**알아둘 점**\n- 기본 관리자 토큰은 `admin1234`입니다. 실제로 쓰기 전에 `ADMIN_TOKEN` 환경변수로 바꾸세요. 토큰 한 개로 구분하는 간단한 방식이라 사용자별 계정은 없습니다.\n- 임박(7일)과 주의(30일) 기준은 `main.py` 상단의 `IMMINENT_DAYS`, `WARNING_DAYS`에서 바꿀 수 있습니다.\n- 신규 입고 화면은 넣지 않았습니다. 필요하면 추가해 드릴 수 있습니다.",
+ "wall_s": 86.7
+}

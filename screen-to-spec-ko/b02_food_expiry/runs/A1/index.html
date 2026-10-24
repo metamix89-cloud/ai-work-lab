@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>꼬르륵식품 유통기한 알림판</title>
+<style>
+  :root{--bg:#f6f4ef;--card:#fff;--ink:#222;--mute:#777;--line:#e6e2d8;
+        --exp:#c62828;--expbg:#fdecea;--urg:#e65100;--urgbg:#fff0e0;--warn:#a67c00;--warnbg:#fff8d6;--ok:#2e7d32;--okbg:#e8f5e9}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:#fff;border-bottom:1px solid var(--line);flex-wrap:wrap;gap:8px}
+  h1{margin:0;font-size:20px} h1 small{color:var(--mute);font-weight:400;font-size:13px;margin-left:8px}
+  main{max-width:1100px;margin:0 auto;padding:20px}
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+  .card{border-radius:10px;padding:14px 16px;border:2px solid transparent;cursor:pointer;background:var(--card)}
+  .card.sel{border-color:var(--ink)}
+  .card b{display:block;font-size:30px;margin-top:4px} .card span{font-size:13px;color:var(--mute)}
+  .card.expired{background:var(--expbg);color:var(--exp)} .card.urgent{background:var(--urgbg);color:var(--urg)}
+  .card.warn{background:var(--warnbg);color:var(--warn)} .card.ok{background:var(--okbg);color:var(--ok)}
+  section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:20px}
+  h2{margin:0 0 12px;font-size:16px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line)} th{color:var(--mute);font-weight:600;font-size:12px}
+  td.n,th.n{text-align:right}
+  tr.expired{background:var(--expbg)} tr.urgent{background:var(--urgbg)} tr.warn{background:var(--warnbg)}
+  .badge{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:700;color:#fff}
+  .badge.expired{background:var(--exp)} .badge.urgent{background:var(--urg)} .badge.warn{background:var(--warn)} .badge.ok{background:var(--ok)}
+  button{font:inherit;padding:6px 12px;border-radius:6px;border:1px solid #bbb;background:#fff;cursor:pointer}
+  button.pri{background:#222;color:#fff;border-color:#222} button.danger{background:var(--exp);color:#fff;border-color:var(--exp)}
+  select,input{font:inherit;padding:6px 8px;border:1px solid #bbb;border-radius:6px}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  #msg{margin-top:12px;padding:10px 12px;border-radius:6px;display:none;font-size:14px;white-space:pre-line}
+  #msg.ok{display:block;background:var(--okbg);color:var(--ok)} #msg.err{display:block;background:var(--expbg);color:var(--exp)}
+  .mute{color:var(--mute);font-size:13px}
+  @media(max-width:700px){.cards{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🍜 꼬르륵식품 <small>유통기한 임박 재고 알림판 · <span id="today"></span></small></h1>
+  <div class="row"><span class="mute">관리자 PIN</span><input id="pin" type="password" size="6" placeholder="PIN"></div>
+</header>
+<main>
+  <div class="cards" id="cards"></div>
+
+  <section>
+    <h2>📦 출고 (선입선출: 유통기한 가까운 로트부터 자동 배정)</h2>
+    <div class="row">
+      <select id="sku"></select>
+      <input id="qty" type="number" min="1" value="10" style="width:90px">
+      <button class="pri" onclick="ship()">출고</button>
+      <span class="mute" id="avail"></span>
+    </div>
+    <div id="msg"></div>
+  </section>
+
+  <section>
+    <h2>📋 로트별 재고 <span class="mute" id="filterNote"></span></h2>
+    <table>
+      <thead><tr><th>상태</th><th>상품</th><th>로트</th><th>위치</th><th class="n">수량</th><th>유통기한</th><th class="n">남은 일수</th><th></th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>🕘 최근 이력</h2>
+    <table><tbody id="log"></tbody></table>
+  </section>
+</main>
+<script>
+const LABEL={expired:'만료',urgent:'임박',warn:'주의',ok:'정상'};
+let lots=[],products=[],filter=null,info={};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+async function api(url,opt){
+  const r=await fetch(url,opt); const j=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(j.detail||'요청 실패'); return j;
+}
+function note(text,ok){const m=$('msg');m.className=ok?'ok':'err';m.textContent=text;}
+
+async function load(){
+  [lots,products,info]=await Promise.all([api('/api/lots'),api('/api/products'),api('/api/summary')]);
+  const logs=await api('/api/log');
+  $('today').textContent=info.today;
+  $('cards').innerHTML=['expired','urgent','warn','ok'].map(k=>{
+    const s=info.summary[k], d={expired:'기한 경과',urgent:`D-${info.urgent_days} 이내`,warn:`D-${info.warn_days} 이내`,ok:'여유'}[k];
+    return `<div class="card ${k} ${filter===k?'sel':''}" onclick="setFilter('${k}')"><span>${LABEL[k]} · ${d}</span><b>${s.lots}<small style="font-size:14px"> 로트</small></b><span>${s.qty.toLocaleString()}개</span></div>`}).join('');
+  const cur=$('sku').value;
+  $('sku').innerHTML=products.map(p=>`<option value="${esc(p.sku)}">${esc(p.name)} (${esc(p.sku)})</option>`).join('');
+  if(cur) $('sku').value=cur;
+  showAvail(); render();
+  $('log').innerHTML=logs.map(l=>`<tr><td class="mute">${l.at}</td><td>${l.kind==='ship'?'출고':'<b style="color:var(--exp)">폐기</b>'}</td><td>${esc(l.name)}</td><td>${esc(l.lot_no)}</td><td class="n">${l.qty}개</td></tr>`).join('')||'<tr><td class="mute">이력 없음</td></tr>';
+}
+function showAvail(){const p=products.find(p=>p.sku===$('sku').value);$('avail').textContent=p?`출고 가능 ${p.available.toLocaleString()}개 (만료분 제외)`:'';}
+$('sku').onchange=showAvail;
+function setFilter(k){filter=filter===k?null:k;load();}
+function render(){
+  const rows=lots.filter(l=>!filter||l.status===filter);
+  $('filterNote').textContent=filter?`— ${LABEL[filter]}만 보는 중 (카드를 다시 누르면 해제)`:'— 유통기한 빠른 순';
+  $('tbody').innerHTML=rows.map(l=>{
+    const dl=l.days_left<0?`D+${-l.days_left}`:l.days_left===0?'D-Day':`D-${l.days_left}`;
+    const btn=l.status==='expired'?`<button class="danger" onclick="dispose(${l.id},'${esc(l.lot_no)}',${l.qty})">폐기</button>`:'';
+    return `<tr class="${l.status}"><td><span class="badge ${l.status}">${LABEL[l.status]}</span></td><td>${esc(l.name)}</td><td>${esc(l.lot_no)}</td><td>${esc(l.location)}</td><td class="n">${l.qty.toLocaleString()}</td><td>${l.expiry}</td><td class="n"><b>${dl}</b></td><td>${btn}</td></tr>`}).join('')
+    ||'<tr><td colspan="8" class="mute">해당하는 재고가 없습니다.</td></tr>';
+}
+async function ship(){
+  try{
+    const r=await api('/api/ship',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sku:$('sku').value,qty:+$('qty').value})});
+    note(`출고 완료 (${r.qty}개)\n`+r.picks.map(p=>`· ${p.lot_no} (${p.expiry}, ${p.location}) ${p.qty}개`).join('\n'),true);
+  }catch(e){note(e.message,false);}
+  load();
+}
+async function dispose(id,lot,qty){
+  if(!confirm(`로트 ${lot} (${qty}개)를 폐기 처리할까요?`))return;
+  try{
+    await api(`/api/lots/${id}/dispose`,{method:'POST',headers:{'X-Admin-Pin':$('pin').value}});
+    note(`로트 ${lot} 폐기 완료`,true);
+  }catch(e){note(e.message,false);}
+  load();
+}
+load();
+</script>
+</body>
+</html>

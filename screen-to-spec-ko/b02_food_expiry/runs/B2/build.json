@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 100938,
+ "num_turns": 10,
+ "total_cost_usd": 0.34667090000000006,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 16,
+  "cache_creation_input_tokens": 38232,
+  "cache_read_input_tokens": 334309,
+  "output_tokens": 16028,
+  "output_tokens_details": {
+   "thinking_tokens": 1646
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 38232,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 901,
+    "cache_read_input_tokens": 54667,
+    "cache_creation_input_tokens": 237,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 237
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD.md대로 웹앱을 만들었고, `python -m uvicorn main:app --port 8000`으로 실행합니다. 브라우저 화면은 열어 보지 못했습니다. API는 임시 스크립트로 확인했습니다. `tests/test_dod.py`는 폴더에 없어서 DoD 9개 테스트는 돌리지 못했습니다.\n\n**확인한 결과**\n- `/`가 200으로 열립니다.\n- 요약은 임박 5 · 만료 2 · 임박 재고 금액 117,000이 나옵니다.\n- 만두 12개 출고는 L-2401 10개, L-2404 2개로 유통기한 이른 순으로 배분됩니다.\n- 재고를 넘는 출고는 409 `재고가 부족합니다`입니다.\n- 창고 담당이 폐기하면 403입니다.\n- 관리자가 만료 로트를 폐기하면 만료 로트 수가 2에서 1로 줄어듭니다.\n- 본문 없이 없는 로트를 폐기하면 400입니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/` CSV로 `expiry.db`(SQLite)를 새로 만듭니다. API 5개와 규칙 R1~R8(남은 일수와 상태, 유통기한 이른 순 출고, 폐기, 요약, 거부 순서)을 구현했습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. 사용자 선택, 출고 폼, 요약 3칸, 알림판, 메시지 줄, 오류 상태와 다시 시도 버튼이 있고, `data-testid`는 PRD 그대로입니다.\n- `seed/*.csv`: 사용자 3명, 품목 5개, 로트 13개입니다. 정상, 임박, 만료, 유통기한 당일, 수량 0이 모두 들어 있습니다.\n\n**알아둘 점**\n- 시드 CSV의 날짜는 만든 날(오늘)을 기준으로 계산해서 고정 값으로 적었습니다. 며칠 지나면 임박·만료 건수가 달라지니, 데모 때는 날짜를 다시 만들어야 합니다.\n- 포트는 PRD의 실행 명령대로 `--port`로 지정합니다. `PORT` 환경 변수는 반영하지 않았습니다.",
+ "wall_s": 107.2
+}

@@ -1,0 +1,820 @@
+{
+ "A1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: {'detail': 'Not Found'}\nassert (404 == 200)",
+   "T3": "AssertionError: ('GET /api/lots', 200, [{'id': 1, 'sku': 'RMN-001', 'name': '꼬르륵 매운라면 5입', 'lot_no': 'L2601-A', ...}, {'id': 4, 'sku':...운라면 5입', 'lot_no': 'L2607-B', ...}, {'id': 5, 'sku': 'DMP-002', 'name': '꼬르륵 왕만두 1kg', 'lot_no': 'L2609-B', ...}, ...])\nassert (200 == 200 and False)\n +  where False = isinstance([{'id': 1, 'sku': 'RMN-001', 'name': '꼬르륵 매운라면 5입', 'lot_no': 'L2601-A', ...}, {'id': 4, 'sku': 'DMP-002', 'name': '꼬르...매운라면 5입', 'lot_no': 'L2607-B', ...}, {'id': 5, 'sku': 'DMP-002', 'name': '꼬르륵 왕만두 1kg', 'lot_no': 'L2609-B', ...}, ...], dict)",
+   "T4": "AssertionError: ('출고', 422, {'detail': [{'type': 'missing', 'loc': ['body', 'sku'], 'msg': 'Field required', 'input': {'user': 's1', 'item_id': 'I02', 'qty': 5}}]})\nassert 422 == 200",
+   "T5": "AssertionError: ('GET /api/lots', 200, [{'id': 1, 'sku': 'RMN-001', 'name': '꼬르륵 매운라면 5입', 'lot_no': 'L2601-A', ...}, {'id': 4, 'sku':...운라면 5입', 'lot_no': 'L2607-B', ...}, {'id': 5, 'sku': 'DMP-002', 'name': '꼬르륵 왕만두 1kg', 'lot_no': 'L2609-B', ...}, ...])\nassert (200 == 200 and False)\n +  where False = isinstance([{'id': 1, 'sku': 'RMN-001', 'name': '꼬르륵 매운라면 5입', 'lot_no': 'L2601-A', ...}, {'id': 4, 'sku': 'DMP-002', 'name': '꼬르...매운라면 5입', 'lot_no': 'L2607-B', ...}, {'id': 5, 'sku': 'DMP-002', 'name': '꼬르륵 왕만두 1kg', 'lot_no': 'L2609-B', ...}, ...], dict)",
+   "T6": "AssertionError: ('창고 담당의 폐기는 403', 422, {'detail': [{'type': 'int_parsing', 'loc': ['path', 'lot_id'], 'msg': 'Input should be a valid integer, unable to parse string as an integer', 'input': 'L-2407'}]})\nassert 422 == 403",
+   "T7": "AssertionError: ('GET /api/lots', 200, [{'id': 1, 'sku': 'RMN-001', 'name': '꼬르륵 매운라면 5입', 'lot_no': 'L2601-A', ...}, {'id': 4, 'sku':...운라면 5입', 'lot_no': 'L2607-B', ...}, {'id': 5, 'sku': 'DMP-002', 'name': '꼬르륵 왕만두 1kg', 'lot_no': 'L2609-B', ...}, ...])\nassert (200 == 200 and False)\n +  where False = isinstance([{'id': 1, 'sku': 'RMN-001', 'name': '꼬르륵 매운라면 5입', 'lot_no': 'L2601-A', ...}, {'id': 4, 'sku': 'DMP-002', 'name': '꼬르...매운라면 5입', 'lot_no': 'L2607-B', ...}, {'id': 5, 'sku': 'DMP-002', 'name': '꼬르륵 왕만두 1kg', 'lot_no': 'L2609-B', ...}, ...], dict)",
+   "T8": "AssertionError: ('본문에 user 없음 + 없는 로트는 400 이 먼저', 422, {'detail': [{'type': 'int_parsing', 'loc': ['path', 'lot_id'], 'msg': 'Input should be a valid integer, unable to parse string as an integer', 'input': 'L-9999'}]})\nassert 422 == 400",
+   "T9": "AssertionError: L-2402 줄(data-state=expired)이 없다\nassert (None is not None)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "__________ test_T8_reject_order _____________________________\n\nsrv = <test_dod.Server object at 0x0000027EAFC62A50>\n\n    def test_T8_reject_order(srv):\n        st, body = dispose(srv, \"L-9999\", {})\n>       assert st == 400, (\"본문에 user 없음 + 없는 로트는 400 이 먼저\", st, body)\nE       AssertionError: ('본문에 user 없음 + 없는 로트는 400 이 먼저', 422, {'detail': [{'type': 'int_parsing', 'loc': ['path', 'lot_id'], 'msg': 'Input should be a valid integer, unable to parse string as an integer', 'input': 'L-9999'}]})\nE       assert 422 == 400\n\n_grader\\test_dod.py:293: AssertionError\n_______________________________ test_T9_screen ________________________________\n\nsrv = <test_dod.Server object at 0x0000027EAFC62A50>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen(srv, pw):\n        pg = open_page(pw, srv)\n        row = pg.query_selector('[data-testid=\"lot\"][data-id=\"L-2402\"]')\n>       assert row is not None and row.get_attribute(\"data-state\") == \"expired\", \"L-2402 줄(data-state=expired)이 없다\"\nE       AssertionError: L-2402 줄(data-state=expired)이 없다\nE       assert (None is not None)\n\n_grader\\test_dod.py:309: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: {'detail': 'No...\nFAILED _grader/test_dod.py::test_T3_state_boundaries - AssertionError: ('GET ...\nFAILED _grader/test_dod.py::test_T4_fefo_allocation - AssertionError: ('출고'...\nFAILED _grader/test_dod.py::test_T5_expired_excluded_all_or_nothing - Asserti...\nFAILED _grader/test_dod.py::test_T6_dispose - AssertionError: ('창고 담당의 ...\nFAILED _grader/test_dod.py::test_T7_near_value - AssertionError: ('GET /api/l...\nFAILED _grader/test_dod.py::test_T8_reject_order - AssertionError: ('본문에 u...\nFAILED _grader/test_dod.py::test_T9_screen - AssertionError: L-2402 줄(data-s...\n8 failed, 1 passed in 7.75s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/log",
+   "/api/lots",
+   "/api/lots/{lot_id}/dispose",
+   "/api/products",
+   "/api/ship",
+   "/api/summary"
+  ],
+  "extra_routes": [
+   "/api/log",
+   "/api/products",
+   "/api/summary"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "index.html",
+   "main.py",
+   "requirements.txt",
+   "seed/items.csv",
+   "seed/lots.csv",
+   "seed/users.csv"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 꼬르륵식품 '유통기한 임박 재고 알림판' 웹앱을 만들어 줘. 창고에 로트마다 유통기한이 다른 재고가 있는데, 임박한 것과 만료된 것이 한눈에 보여야 하고, 출고하면 유통기한이 가까운 것부터 나가야 해. 만료된 건 관리자가 폐기할 수 있어. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 71616,
+   "num_turns": 6,
+   "total_cost_usd": 0.21368020000000001,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 26129,
+    "cache_read_input_tokens": 126082,
+    "output_tokens": 9654,
+    "output_tokens_details": {
+     "thinking_tokens": 532
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 26129,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1128,
+      "cache_read_input_tokens": 42017,
+      "cache_creation_input_tokens": 784,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 784
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "웹앱을 만들었고, 만든 폴더에서 바로 실행됩니다. 임시 DB로 API를 시험했고 아래 항목은 모두 기대대로 동작했습니다. 브라우저 화면은 직접 열어 보지 못했습니다.\n\n**실행 방법**\n```\ncd <작업 폴더>/A1\npip install -r requirements.txt\nuvicorn main:app --reload\n```\nhttp://127.0.0.1:8000 으로 접속하세요. 처음 실행하면 `inventory.db`가 생기고 가상 데이터 16개 로트가 들어갑니다. 유통기한은 오늘 날짜를 기준으로 잡아서, 언제 실행해도 만료·임박 재고가 보입니다.\n\n**화면과 동작**\n- **상태 카드:** 만료, 임박(D-7 이내), 주의(D-30 이내), 정상별로 로트 수와 수량을 보여 줍니다. 카드를 누르면 그 상태만 걸러서 봅니다.\n- **로트 목록:** 유통기한이 빠른 순으로 정렬하고, 상태별로 행 색을 다르게 칠했습니다. 남은 일수는 D-3, D-Day, D+5 식으로 표시합니다.\n- **출고:** 상품과 수량만 입력하면 유통기한이 가까운 로트부터 자동으로 빠집니다. 어느 로트에서 몇 개가 나갔는지도 보여 줍니다. 만료된 로트는 출고되지 않으며, 재고가 모자라면 오류를 냅니다. 시험에서도 만료분이 빠진 채 유통기한이 가까운 로트부터 차감됐습니다.\n- **폐기:** 만료된 로트에만 폐기 버튼이 뜨고, 관리자 PIN을 입력해야 합니다. 기본 PIN은 `1234`이고 `ADMIN_PIN` 환경변수로 바꿀 수 있습니다. PIN이 없으면 403, 만료 전 로트를 폐기하려 하면 409로 거절됩니다.\n- **이력:** 출고와 폐기 내역이 하단에 최근 50건까지 쌓입니다.\n\n**참고**\n- 임박(7일)과 주의(30일) 기준은 `main.py` 상단의 `URGENT_DAYS`, `WARN_DAYS`에서 바꿀 수 있습니다.\n- 화면에서 입고(재고 추가)하는 기능은 없습니다. 요청에 없어서 뺐고, 필요하면 추가하겠습니다.\n- 관리자 인증은 PIN 하나뿐인 간이 방식입니다. 실제로 운영하려면 로그인 체계가 따로 필요합니다.\n\n파일은 `main.py`(API와 DB), `index.html`(화면), `requirements.txt`입니다.",
+   "wall_s": 77.5
+  }
+ },
+ "A2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: {'detail': 'Not Found'}\nassert (404 == 200)",
+   "T3": "AssertionError: ('GET /api/lots', 200, [{'id': 11, 'lot_no': 'L261015-004-11', 'expiry_date': '2026-10-15', 'qty': 18, ...}, {'id': 1,...2026-10-26', 'qty': 60, ...}, {'id': 6, 'lot_no': 'L261027-002-06', 'expiry_date': '2026-10-27', 'qty': 80, ...}, ...])\nassert (200 == 200 and False)\n +  where False = isinstance([{'id': 11, 'lot_no': 'L261015-004-11', 'expiry_date': '2026-10-15', 'qty': 18, ...}, {'id': 1, 'lot_no': 'L261022-001...'2026-10-26', 'qty': 60, ...}, {'id': 6, 'lot_no': 'L261027-002-06', 'expiry_date': '2026-10-27', 'qty': 80, ...}, ...], dict)",
+   "T4": "AssertionError: ('출고', 422, {'detail': [{'type': 'missing', 'loc': ['body', 'product_id'], 'msg': 'Field required', 'input': {'user': 's1', 'item_id': 'I02', 'qty': 5}}]})\nassert 422 == 200",
+   "T5": "AssertionError: ('GET /api/lots', 200, [{'id': 11, 'lot_no': 'L261015-004-11', 'expiry_date': '2026-10-15', 'qty': 18, ...}, {'id': 1,...2026-10-26', 'qty': 60, ...}, {'id': 6, 'lot_no': 'L261027-002-06', 'expiry_date': '2026-10-27', 'qty': 80, ...}, ...])\nassert (200 == 200 and False)\n +  where False = isinstance([{'id': 11, 'lot_no': 'L261015-004-11', 'expiry_date': '2026-10-15', 'qty': 18, ...}, {'id': 1, 'lot_no': 'L261022-001...'2026-10-26', 'qty': 60, ...}, {'id': 6, 'lot_no': 'L261027-002-06', 'expiry_date': '2026-10-27', 'qty': 80, ...}, ...], dict)",
+   "T6": "AssertionError: ('임박 로트는 폐기할 수 없다(409)', 403, {'detail': '관리자 PIN이 올바르지 않습니다.'})\nassert 403 == 409",
+   "T7": "AssertionError: ('GET /api/lots', 200, [{'id': 11, 'lot_no': 'L261015-004-11', 'expiry_date': '2026-10-15', 'qty': 18, ...}, {'id': 1,...2026-10-26', 'qty': 60, ...}, {'id': 6, 'lot_no': 'L261027-002-06', 'expiry_date': '2026-10-27', 'qty': 80, ...}, ...])\nassert (200 == 200 and False)\n +  where False = isinstance([{'id': 11, 'lot_no': 'L261015-004-11', 'expiry_date': '2026-10-15', 'qty': 18, ...}, {'id': 1, 'lot_no': 'L261022-001...'2026-10-26', 'qty': 60, ...}, {'id': 6, 'lot_no': 'L261027-002-06', 'expiry_date': '2026-10-27', 'qty': 80, ...}, ...], dict)",
+   "T8": "AssertionError: ('본문에 user 없음 + 없는 로트는 400 이 먼저', 403, {'detail': '관리자 PIN이 올바르지 않습니다.'})\nassert 403 == 400",
+   "T9": "AssertionError: L-2402 줄(data-state=expired)이 없다\nassert (None is not None)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "027-002-06', 'expiry_date': '2026-10-27', 'qty': 80, ...}, ...], dict)\n\n_grader\\test_dod.py:173: AssertionError\n____________________________ test_T8_reject_order _____________________________\n\nsrv = <test_dod.Server object at 0x00000262A6A92A50>\n\n    def test_T8_reject_order(srv):\n        st, body = dispose(srv, \"L-9999\", {})\n>       assert st == 400, (\"본문에 user 없음 + 없는 로트는 400 이 먼저\", st, body)\nE       AssertionError: ('본문에 user 없음 + 없는 로트는 400 이 먼저', 403, {'detail': '관리자 PIN이 올바르지 않습니다.'})\nE       assert 403 == 400\n\n_grader\\test_dod.py:293: AssertionError\n_______________________________ test_T9_screen ________________________________\n\nsrv = <test_dod.Server object at 0x00000262A6A92A50>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen(srv, pw):\n        pg = open_page(pw, srv)\n        row = pg.query_selector('[data-testid=\"lot\"][data-id=\"L-2402\"]')\n>       assert row is not None and row.get_attribute(\"data-state\") == \"expired\", \"L-2402 줄(data-state=expired)이 없다\"\nE       AssertionError: L-2402 줄(data-state=expired)이 없다\nE       assert (None is not None)\n\n_grader\\test_dod.py:309: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: {'detail': 'No...\nFAILED _grader/test_dod.py::test_T3_state_boundaries - AssertionError: ('GET ...\nFAILED _grader/test_dod.py::test_T4_fefo_allocation - AssertionError: ('출고'...\nFAILED _grader/test_dod.py::test_T5_expired_excluded_all_or_nothing - Asserti...\nFAILED _grader/test_dod.py::test_T6_dispose - AssertionError: ('임박 로트는 ...\nFAILED _grader/test_dod.py::test_T7_near_value - AssertionError: ('GET /api/l...\nFAILED _grader/test_dod.py::test_T8_reject_order - AssertionError: ('본문에 u...\nFAILED _grader/test_dod.py::test_T9_screen - AssertionError: L-2402 줄(data-s...\n8 failed, 1 passed in 5.78s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/admin/check",
+   "/api/lots",
+   "/api/lots/{lot_id}/dispose",
+   "/api/movements",
+   "/api/products",
+   "/api/ship",
+   "/api/summary"
+  ],
+  "extra_routes": [
+   "/api/admin/check",
+   "/api/movements",
+   "/api/products",
+   "/api/summary"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/items.csv",
+   "seed/lots.csv",
+   "seed/users.csv",
+   "smoke_test.py",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 꼬르륵식품 '유통기한 임박 재고 알림판' 웹앱을 만들어 줘. 창고에 로트마다 유통기한이 다른 재고가 있는데, 임박한 것과 만료된 것이 한눈에 보여야 하고, 출고하면 유통기한이 가까운 것부터 나가야 해. 만료된 건 관리자가 폐기할 수 있어. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 88691,
+   "num_turns": 8,
+   "total_cost_usd": 0.2748465,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 30364,
+    "cache_read_input_tokens": 214265,
+    "output_tokens": 13194,
+    "output_tokens_details": {
+     "thinking_tokens": 546
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 30364,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1065,
+      "cache_read_input_tokens": 45714,
+      "cache_creation_input_tokens": 1322,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 1322
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "꼬르륵식품 유통기한 알림판을 만들었습니다. API는 스모크 테스트(`smoke_test.py`)로 확인했고, 브라우저 화면은 열어 보지 않았습니다.\n\n**실행 방법** (작업 폴더에서)\n```\npip install -r requirements.txt\npython main.py\n```\n`http://127.0.0.1:8000`에 접속하면 됩니다. 처음 실행할 때 `korreuk.db`가 자동으로 만들어지고, 8개 제품·25개 로트의 가상 데이터가 들어갑니다. 유통기한은 오늘 날짜 기준으로 잡혀서, 실행하는 날마다 만료·임박 로트가 섞여 보입니다.\n\n**화면 구성**\n- **상단 타일 4개:** 만료, 긴급(D-7 이내), 임박(D-30 이내), 정상별 로트 수와 수량을 보여 줍니다. 타일을 누르면 그 상태만 필터링됩니다.\n- **로트 표:** 유통기한이 빠른 순으로 정렬하고, 상태를 색 배지와 D-day로 표시합니다. 만료 행은 붉게 강조됩니다.\n- **출고:** 제품과 수량을 넣으면 유통기한이 가까운 로트부터 자동으로 차감하고, 어느 로트에서 몇 개 나갔는지 알려 줍니다. 만료된 재고는 출고 대상에서 빠지며, 가능 수량이 부족하면 거절합니다.\n- **입고:** 새 로트를 등록합니다.\n- **이력:** 출고와 폐기 내역을 보여 줍니다.\n- **폐기:** 만료 로트에만 폐기 버튼이 나타나고, 관리자 로그인 후에만 눌러집니다. 서버도 PIN을 확인하며, 만료되지 않은 로트는 폐기를 거절합니다.\n\n**테스트 결과**\n- 왕김밥 150개를 출고하니 유통기한이 빠른 로트부터 차감됐고, 만료 로트는 건너뛰었습니다.\n- PIN 없이 폐기하면 403, 만료 전 로트를 폐기하면 400이 나왔습니다.\n\n**참고**\n- 관리자 PIN은 기본값이 `1234`입니다. 바꾸려면 환경변수 `KORREUK_ADMIN_PIN`을 설정하세요. 이 PIN은 간단한 보호 장치라서, 실제로 운영하려면 제대로 된 로그인으로 바꿔야 합니다.\n- 긴급/임박 기준일은 `main.py` 맨 위의 `DANGER_DAYS`, `WARN_DAYS`에서 바꿀 수 있습니다.\n- 가상 데이터를 다시 만들고 싶으면 `korreuk.db`를 지우고 다시 실행하세요.",
+   "wall_s": 96.0
+  }
+ },
+ "A3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: {'detail': 'Not Found'}\nassert (404 == 200)",
+   "T3": "AssertionError: ('GET /api/lots', 200, [{'id': 1, 'product_id': 1, 'product': '꼬르륵 왕만두', 'unit': 'BOX', ...}, {'id': 11, 'product_id':... 'product': '꼬르륵 우유식빵', 'unit': 'EA', ...}, {'id': 12, 'product_id': 4, 'product': '꼬르륵 순두부', 'unit': 'EA', ...}, ...])\nassert (200 == 200 and False)\n +  where False = isinstance([{'id': 1, 'product_id': 1, 'product': '꼬르륵 왕만두', 'unit': 'BOX', ...}, {'id': 11, 'product_id': 4, 'product': '꼬르륵 순두부..., 'product': '꼬르륵 우유식빵', 'unit': 'EA', ...}, {'id': 12, 'product_id': 4, 'product': '꼬르륵 순두부', 'unit': 'EA', ...}, ...], dict)",
+   "T4": "AssertionError: ('출고', 422, {'detail': [{'type': 'missing', 'loc': ['body', 'product_id'], 'msg': 'Field required', 'input': {'user': 's1', 'item_id': 'I02', 'qty': 5}}]})\nassert 422 == 200",
+   "T5": "AssertionError: ('GET /api/lots', 200, [{'id': 1, 'product_id': 1, 'product': '꼬르륵 왕만두', 'unit': 'BOX', ...}, {'id': 11, 'product_id':... 'product': '꼬르륵 우유식빵', 'unit': 'EA', ...}, {'id': 12, 'product_id': 4, 'product': '꼬르륵 순두부', 'unit': 'EA', ...}, ...])\nassert (200 == 200 and False)\n +  where False = isinstance([{'id': 1, 'product_id': 1, 'product': '꼬르륵 왕만두', 'unit': 'BOX', ...}, {'id': 11, 'product_id': 4, 'product': '꼬르륵 순두부..., 'product': '꼬르륵 우유식빵', 'unit': 'EA', ...}, {'id': 12, 'product_id': 4, 'product': '꼬르륵 순두부', 'unit': 'EA', ...}, ...], dict)",
+   "T6": "AssertionError: ('창고 담당의 폐기는 403', 401, {'detail': '관리자 권한이 필요합니다.'})\nassert 401 == 403",
+   "T7": "AssertionError: ('GET /api/lots', 200, [{'id': 1, 'product_id': 1, 'product': '꼬르륵 왕만두', 'unit': 'BOX', ...}, {'id': 11, 'product_id':... 'product': '꼬르륵 우유식빵', 'unit': 'EA', ...}, {'id': 12, 'product_id': 4, 'product': '꼬르륵 순두부', 'unit': 'EA', ...}, ...])\nassert (200 == 200 and False)\n +  where False = isinstance([{'id': 1, 'product_id': 1, 'product': '꼬르륵 왕만두', 'unit': 'BOX', ...}, {'id': 11, 'product_id': 4, 'product': '꼬르륵 순두부..., 'product': '꼬르륵 우유식빵', 'unit': 'EA', ...}, {'id': 12, 'product_id': 4, 'product': '꼬르륵 순두부', 'unit': 'EA', ...}, ...], dict)",
+   "T8": "AssertionError: ('본문에 user 없음 + 없는 로트는 400 이 먼저', 401, {'detail': '관리자 권한이 필요합니다.'})\nassert 401 == 400",
+   "T9": "AssertionError: L-2402 줄(data-state=expired)이 없다\nassert (None is not None)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": " 12, 'product_id': 4, 'product': '꼬르륵 순두부', 'unit': 'EA', ...}, ...], dict)\n\n_grader\\test_dod.py:173: AssertionError\n____________________________ test_T8_reject_order _____________________________\n\nsrv = <test_dod.Server object at 0x0000027C2EBCEA50>\n\n    def test_T8_reject_order(srv):\n        st, body = dispose(srv, \"L-9999\", {})\n>       assert st == 400, (\"본문에 user 없음 + 없는 로트는 400 이 먼저\", st, body)\nE       AssertionError: ('본문에 user 없음 + 없는 로트는 400 이 먼저', 401, {'detail': '관리자 권한이 필요합니다.'})\nE       assert 401 == 400\n\n_grader\\test_dod.py:293: AssertionError\n_______________________________ test_T9_screen ________________________________\n\nsrv = <test_dod.Server object at 0x0000027C2EBCEA50>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen(srv, pw):\n        pg = open_page(pw, srv)\n        row = pg.query_selector('[data-testid=\"lot\"][data-id=\"L-2402\"]')\n>       assert row is not None and row.get_attribute(\"data-state\") == \"expired\", \"L-2402 줄(data-state=expired)이 없다\"\nE       AssertionError: L-2402 줄(data-state=expired)이 없다\nE       assert (None is not None)\n\n_grader\\test_dod.py:309: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: {'detail': 'No...\nFAILED _grader/test_dod.py::test_T3_state_boundaries - AssertionError: ('GET ...\nFAILED _grader/test_dod.py::test_T4_fefo_allocation - AssertionError: ('출고'...\nFAILED _grader/test_dod.py::test_T5_expired_excluded_all_or_nothing - Asserti...\nFAILED _grader/test_dod.py::test_T6_dispose - AssertionError: ('창고 담당의 ...\nFAILED _grader/test_dod.py::test_T7_near_value - AssertionError: ('GET /api/l...\nFAILED _grader/test_dod.py::test_T8_reject_order - AssertionError: ('본문에 u...\nFAILED _grader/test_dod.py::test_T9_screen - AssertionError: L-2402 줄(data-s...\n8 failed, 1 passed in 8.74s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/admin/check",
+   "/api/lots",
+   "/api/lots/{lot_id}/dispose",
+   "/api/movements",
+   "/api/products",
+   "/api/ship",
+   "/api/summary"
+  ],
+  "extra_routes": [
+   "/api/admin/check",
+   "/api/movements",
+   "/api/products",
+   "/api/summary"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/items.csv",
+   "seed/lots.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 꼬르륵식품 '유통기한 임박 재고 알림판' 웹앱을 만들어 줘. 창고에 로트마다 유통기한이 다른 재고가 있는데, 임박한 것과 만료된 것이 한눈에 보여야 하고, 출고하면 유통기한이 가까운 것부터 나가야 해. 만료된 건 관리자가 폐기할 수 있어. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 79131,
+   "num_turns": 7,
+   "total_cost_usd": 0.2332837,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 27347,
+    "cache_read_input_tokens": 169657,
+    "output_tokens": 10691,
+    "output_tokens_details": {
+     "thinking_tokens": 474
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 27347,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1177,
+      "cache_read_input_tokens": 43140,
+      "cache_creation_input_tokens": 879,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 879
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "웹앱을 만들었고 바로 실행됩니다. 테스트용 임시 DB로 한 번 돌려 봤고, 브라우저 화면은 열어 보지 못했습니다.\n\n**실행 방법**\n```\ncd <작업 폴더>/A3\npip install -r requirements.txt\npython main.py\n```\n그다음 http://127.0.0.1:8000 으로 접속하면 됩니다. 처음 실행할 때 `inventory.db`가 만들어지고 가상 데이터가 들어갑니다. 가상 데이터는 제품 6종, 로트 20개이고, 유통기한은 오늘 날짜를 기준으로 만들어서 언제 실행해도 만료·임박 재고가 보입니다.\n\n**기능**\n- **알림판:** 만료(빨강), 임박(주황, 7일 이내), 주의(노랑, 30일 이내), 정상(초록)으로 나눠 카드에 로트 수와 수량을 보여 줍니다. 카드를 누르면 그 상태만 필터링됩니다. 로트 표는 유통기한이 빠른 순이고, 만료·임박 행은 색이 칠해지며 D-day 또는 경과일이 표시됩니다.\n- **FEFO 출고:** 제품과 수량을 넣으면 만료되지 않은 로트 중 유통기한이 가까운 것부터 차감합니다. 어느 로트에서 몇 개 나갔는지 화면에 보여 줍니다. 만료된 재고는 출고되지 않고, 출고 가능한 재고가 모자라면 409 오류로 막습니다. 동시에 출고가 들어가도 꼬이지 않도록 트랜잭션으로 처리했습니다.\n- **폐기(관리자 전용):** 헤더의 \"관리자 로그인\"에서 토큰을 입력하면 만료 로트 옆에 폐기 버튼이 나타납니다. 서버도 토큰을 확인하고, 만료되지 않은 로트는 폐기를 거부합니다.\n- **이력:** 출고와 폐기 내역이 `movements` 테이블에 쌓이고 화면에도 표시됩니다.\n\n**테스트 결과**\n- 요청을 보내 확인한 결과, 50개 출고 시 D-3 로트에서 40개, 그다음 로트에서 10개가 나갔습니다.\n- 재고를 초과한 출고는 409로 거부됐습니다.\n- 토큰 없는 폐기는 401, 만료되지 않은 로트 폐기는 409로 거부됐습니다.\n- 만료 로트 폐기는 성공했습니다.\n\n**알아둘 점**\n- 기본 관리자 토큰은 `admin1234`입니다. 실제로 쓰기 전에 `ADMIN_TOKEN` 환경변수로 바꾸세요. 토큰 한 개로 구분하는 간단한 방식이라 사용자별 계정은 없습니다.\n- 임박(7일)과 주의(30일) 기준은 `main.py` 상단의 `IMMINENT_DAYS`, `WARNING_DAYS`에서 바꿀 수 있습니다.\n- 신규 입고 화면은 넣지 않았습니다. 필요하면 추가해 드릴 수 있습니다.",
+   "wall_s": 86.7
+  }
+ },
+ "B1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 8.28s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/items",
+   "/api/lots",
+   "/api/lots/{lot_id}/dispose",
+   "/api/ship",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/items.csv",
+   "seed/lots.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 69103,
+   "num_turns": 7,
+   "total_cost_usd": 0.2540177,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 32922,
+    "cache_read_input_tokens": 175697,
+    "output_tokens": 10474,
+    "output_tokens_details": {
+     "thinking_tokens": 1280
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 32922,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 968,
+      "cache_read_input_tokens": 48494,
+      "cache_creation_input_tokens": 1100,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 1100
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD.md대로 웹앱을 만들었습니다. API는 TestClient로 직접 호출해 확인했습니다. 브라우저 화면과 `tests/test_dod.py`는 실행하지 못했습니다. 폴더에 `tests/test_dod.py`가 없어서 DoD 9개 항목은 하나도 돌려 보지 못했습니다.\n\n**실행:** 프로젝트 폴더에서 `python -m uvicorn main:app --port 8000`을 실행합니다. `PORT` 환경 변수가 있으면 그 포트를 씁니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/` CSV로 `expiry.db`(테이블 `ex_*`)를 새로 만들고, API 5개와 규칙 R1~R8을 구현했습니다.\n- `static/index.html`: `/` 화면입니다. 사용자 선택, 출고 폼, 요약 3칸, 알림판, 메시지 줄, 오류와 다시 시도 버튼이 있고 `data-testid`는 PRD 그대로입니다.\n- `seed/users.csv`, `items.csv`, `lots.csv`: 가상 데이터입니다. 사용자 3명, 품목 5개(임박 기준 3·7·30일), 로트 12개이고 정상·임박·만료·당일·수량 0이 모두 들어 있습니다.\n\n**확인한 내용**\n- `/`가 200으로 열립니다.\n- 요약이 near 5 · expired 2 · near_value 117,000으로 나옵니다. 수량 0인 로트는 목록에서 빠집니다.\n- 우유 12개를 출고하면 `L-2401`에서 10개, `L-2402`에서 2개가 나갑니다. 만료 로트는 배분에서 빠지고, 재고를 넘는 요청은 409입니다.\n- 폐기는 창고 담당이면 403, 임박 로트면 409입니다. 관리자가 만료 로트를 폐기하면 요약의 expired가 줄어듭니다.\n- 본문 없이 없는 로트로 폐기를 요청하면 400이 나옵니다.\n\n**알아둘 점**\n- 시드 날짜는 오늘(2026-10-25) 기준으로 계산해 CSV에 고정했습니다. 날짜가 지나면 임박·만료 숫자가 달라집니다. 같은 구성으로 다시 맞추려면 CSV를 다시 만들어야 합니다.\n- 로트 목록은 사용자를 바꿔도 다시 불러오지 않고 폐기 버튼만 다시 그립니다. 그래서 관리자로 바꾸면 만료 줄에만 폐기 버튼이 생깁니다.",
+   "wall_s": 73.9
+  }
+ },
+ "B2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 8.39s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/items",
+   "/api/lots",
+   "/api/lots/{lot_id}/dispose",
+   "/api/ship",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/items.csv",
+   "seed/lots.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 100938,
+   "num_turns": 10,
+   "total_cost_usd": 0.34667090000000006,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 38232,
+    "cache_read_input_tokens": 334309,
+    "output_tokens": 16028,
+    "output_tokens_details": {
+     "thinking_tokens": 1646
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 38232,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 901,
+      "cache_read_input_tokens": 54667,
+      "cache_creation_input_tokens": 237,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 237
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD.md대로 웹앱을 만들었고, `python -m uvicorn main:app --port 8000`으로 실행합니다. 브라우저 화면은 열어 보지 못했습니다. API는 임시 스크립트로 확인했습니다. `tests/test_dod.py`는 폴더에 없어서 DoD 9개 테스트는 돌리지 못했습니다.\n\n**확인한 결과**\n- `/`가 200으로 열립니다.\n- 요약은 임박 5 · 만료 2 · 임박 재고 금액 117,000이 나옵니다.\n- 만두 12개 출고는 L-2401 10개, L-2404 2개로 유통기한 이른 순으로 배분됩니다.\n- 재고를 넘는 출고는 409 `재고가 부족합니다`입니다.\n- 창고 담당이 폐기하면 403입니다.\n- 관리자가 만료 로트를 폐기하면 만료 로트 수가 2에서 1로 줄어듭니다.\n- 본문 없이 없는 로트를 폐기하면 400입니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/` CSV로 `expiry.db`(SQLite)를 새로 만듭니다. API 5개와 규칙 R1~R8(남은 일수와 상태, 유통기한 이른 순 출고, 폐기, 요약, 거부 순서)을 구현했습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. 사용자 선택, 출고 폼, 요약 3칸, 알림판, 메시지 줄, 오류 상태와 다시 시도 버튼이 있고, `data-testid`는 PRD 그대로입니다.\n- `seed/*.csv`: 사용자 3명, 품목 5개, 로트 13개입니다. 정상, 임박, 만료, 유통기한 당일, 수량 0이 모두 들어 있습니다.\n\n**알아둘 점**\n- 시드 CSV의 날짜는 만든 날(오늘)을 기준으로 계산해서 고정 값으로 적었습니다. 며칠 지나면 임박·만료 건수가 달라지니, 데모 때는 날짜를 다시 만들어야 합니다.\n- 포트는 PRD의 실행 명령대로 `--port`로 지정합니다. `PORT` 환경 변수는 반영하지 않았습니다.",
+   "wall_s": 107.2
+  }
+ },
+ "B3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 8.82s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/items",
+   "/api/lots",
+   "/api/lots/{lot_id}/dispose",
+   "/api/ship",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/items.csv",
+   "seed/lots.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 66441,
+   "num_turns": 7,
+   "total_cost_usd": 0.23755760000000004,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 31737,
+    "cache_read_input_tokens": 136336,
+    "output_tokens": 9696,
+    "output_tokens_details": {
+     "thinking_tokens": 1323
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 31737,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 859,
+      "cache_read_input_tokens": 47733,
+      "cache_creation_input_tokens": 676,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 676
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD.md대로 웹앱을 만들었습니다. API와 업무 규칙은 스모크 테스트로 확인했고, 화면(`/`)은 열리는 것만 확인했습니다. 브라우저에서 클릭해 본 적은 없습니다.\n\n폴더에 `PRD.md`만 있었고 `tests/test_dod.py`는 없어서, DoD 9개 항목은 돌려 보지 못했습니다. 대신 TestClient로 아래를 확인했습니다.\n- `/` 가 200으로 열립니다.\n- 요약이 near 5 · expired 2 · near_value 117,000으로 나옵니다.\n- 출고가 유통기한 이른 로트부터 배분되고, 재고를 넘으면 409로 거부됩니다.\n- 폐기는 창고 담당이 403, 임박 로트가 409, 관리자의 만료 로트가 성공합니다.\n- 본문 없는 폐기 요청이 400으로 거부됩니다.\n\n화면의 `data-testid` 손잡이와 오류 상태(`불러오지 못했습니다` + 다시 시도)는 PRD대로 넣었습니다.\n\n만든 것:\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/` CSV로 `expiry.db`를 새로 만듭니다. API 5개와 규칙 R1~R8(거부 순서 포함)을 구현했습니다.\n- `static/index.html`: 순수 HTML/JS 단일 페이지입니다.\n- `seed/`: 사용자 3명, 품목 5개, 로트 12개입니다. 정상·임박·만료·당일·수량 0이 모두 들어 있습니다.\n\n주의할 점:\n- 시드 CSV의 날짜는 오늘(2026-10-25) 기준으로 계산해 넣은 고정값입니다. 시간이 지나면 임박·만료 상태가 달라집니다. 다른 날 같은 요약 숫자가 필요하면 날짜를 다시 만들어야 합니다.\n- PRD에 없는 부분은 제가 정했습니다. `item_id` 가 없으면 400 `품목을 확인하세요` 입니다. 수량 0인 로트를 폐기하면, 만료 여부보다 먼저 409 `이미 비어 있는 로트입니다` 로 거부합니다.\n\n실행: 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`",
+   "wall_s": 71.0
+  }
+ },
+ "C1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 9.11s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/items",
+   "/api/lots",
+   "/api/lots/{lot_id}/dispose",
+   "/api/ship",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/items.csv",
+   "seed/lots.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 54556,
+   "num_turns": 9,
+   "total_cost_usd": 0.259506,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 39068,
+    "cache_read_input_tokens": 250500,
+    "output_tokens": 7816,
+    "output_tokens_details": {
+     "thinking_tokens": 496
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 39068,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 496,
+      "cache_read_input_tokens": 55448,
+      "cache_creation_input_tokens": 292,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 292
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/users.csv, seed/items.csv, seed/lots.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (추가한 API 경로도 없음)\nPRD 가 정하지 않아 직접 정한 것:\n- 본문 검증은 `user`, 그다음 `qty`(출고) 또는 `reason`(폐기) 순으로 하고, 각각 400을 냅니다.\n- `item_id` 가 없거나 문자열이 아니면 없는 품목으로 보고 404를 냅니다.\n- JSON 이 아니거나 객체가 아닌 본문은 `user` 가 없는 것으로 보고 400 `사용자를 확인하세요` 를 냅니다.\n- 시드 CSV 의 날짜는 오늘(2026-10-25) 기준으로 만들었습니다. 날짜가 지나면 상태가 바뀌므로 CSV 를 새로 써야 합니다.\n- 폐기 성공 시 메시지 줄에 `폐기했습니다: L-…` 를 보여줍니다.\n- 수량 입력이 정수가 아니면 서버로 그대로 보내서 서버가 400 `수량을 확인하세요` 를 내게 했습니다.\n- 서버가 `expiry.db` 를 프로젝트 루트에 만듭니다.",
+   "wall_s": 67.2
+  }
+ },
+ "C2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 9.30s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/items",
+   "/api/lots",
+   "/api/lots/{lot_id}/dispose",
+   "/api/ship",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/items.csv",
+   "seed/lots.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 48038,
+   "num_turns": 9,
+   "total_cost_usd": 0.25665140000000003,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 38813,
+    "cache_read_input_tokens": 249954,
+    "output_tokens": 7638,
+    "output_tokens_details": {
+     "thinking_tokens": 384
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 38813,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 573,
+      "cache_read_input_tokens": 55229,
+      "cache_creation_input_tokens": 256,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 256
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/users.csv, seed/items.csv, seed/lots.csv (실행 시 만들어지는 `expiry.db` 도 있음)\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (추가한 API 경로 없음)\nPRD 가 정하지 않아 직접 정한 것:\n- 출고 본문에 `item_id` 가 문자열이 아니면 400 `품목을 확인하세요` 로 거부한다.\n- 본문이 JSON 이 아니거나 객체가 아니면 빈 본문으로 보고 `user` 검사에서 400 `사용자를 확인하세요` 로 거부한다.\n- `qty` 가 `true` 나 소수처럼 정수가 아니면 400 `수량을 확인하세요` 로 거부한다.\n- 없는 사용자는 404 `없는 사용자입니다`, 없는 품목은 404 `없는 품목입니다`, 없는 로트는 404 `없는 로트입니다` 로 한다.\n- 폐기가 성공하면 메시지 줄에 `폐기: L-…` 를 보여 준다.\n- 사용자 선택 상자의 항목은 `이름 (관리자/창고 담당)` 으로 표시한다.\n- `seed/` 의 날짜는 2026-10-25(오늘) 기준으로 만들었다. 정상, 임박, 만료, 유통기한 당일, 수량 0 이 모두 들어 있다.\n- 테스트가 끝나면 `seed/` 를 원래 내용으로 되돌린다.",
+   "wall_s": 60.5
+  }
+ },
+ "C3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 8.40s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/items",
+   "/api/lots",
+   "/api/lots/{lot_id}/dispose",
+   "/api/ship",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/items.csv",
+   "seed/lots.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 49733,
+   "num_turns": 8,
+   "total_cost_usd": 0.24778380000000003,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 38359,
+    "cache_read_input_tokens": 194578,
+    "output_tokens": 7487,
+    "output_tokens_details": {
+     "thinking_tokens": 394
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 38359,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 715,
+      "cache_read_input_tokens": 54784,
+      "cache_creation_input_tokens": 247,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 247
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (users · items · lots)\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (추가한 API 경로·칸·화면 요소 없음. `GET /` 는 화면 제공용이고 `expiry.db` 는 서버가 시작할 때 만드는 파일)\nPRD 가 정하지 않아 직접 정한 것:\n- 거부 메시지: PRD 에 문구가 없는 404 는 `없는 사용자입니다` · `없는 품목입니다` · `없는 로트입니다` 로 정했다.\n- 폐기 검사 순서: 수량 0 이면서 만료가 아닌 로트는 `이미 비어 있는 로트입니다` 를 `만료된 로트만 폐기할 수 있습니다` 보다 먼저 낸다.\n- 404 순서: 사용자 → 로트 순으로 확인한다.\n- 입력 검사: 본문이 JSON 이 아니면 빈 본문으로 보고 400 을 낸다. `qty` 가 bool 이나 소수면 `수량을 확인하세요`(400) 이다.\n- 출고 시 `item_id` 가 없거나 문자열이 아니면 404 `없는 품목입니다` 이다.\n- 화면 문구:\n  - 폐기 성공 메시지는 `폐기: L-…` 로 했다.\n  - 남은 일수는 `N일` 로 표시한다.\n  - 사용자 옵션은 `이름 (관리자/창고 담당)` 으로 표시한다.\n- 시드 CSV 날짜: 오늘 기준으로 만든 샘플이다. 서버는 시작할 때 CSV 를 그대로 읽을 뿐 날짜를 바꾸지 않는다. 날짜를 새로 맞추려면 CSV 를 다시 만들어야 한다.\n```",
+   "wall_s": 62.4
+  }
+ }
+}

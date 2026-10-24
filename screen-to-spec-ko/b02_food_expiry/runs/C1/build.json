@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 54556,
+ "num_turns": 9,
+ "total_cost_usd": 0.259506,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 39068,
+  "cache_read_input_tokens": 250500,
+  "output_tokens": 7816,
+  "output_tokens_details": {
+   "thinking_tokens": 496
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 39068,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 496,
+    "cache_read_input_tokens": 55448,
+    "cache_creation_input_tokens": 292,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 292
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/users.csv, seed/items.csv, seed/lots.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (추가한 API 경로도 없음)\nPRD 가 정하지 않아 직접 정한 것:\n- 본문 검증은 `user`, 그다음 `qty`(출고) 또는 `reason`(폐기) 순으로 하고, 각각 400을 냅니다.\n- `item_id` 가 없거나 문자열이 아니면 없는 품목으로 보고 404를 냅니다.\n- JSON 이 아니거나 객체가 아닌 본문은 `user` 가 없는 것으로 보고 400 `사용자를 확인하세요` 를 냅니다.\n- 시드 CSV 의 날짜는 오늘(2026-10-25) 기준으로 만들었습니다. 날짜가 지나면 상태가 바뀌므로 CSV 를 새로 써야 합니다.\n- 폐기 성공 시 메시지 줄에 `폐기했습니다: L-…` 를 보여줍니다.\n- 수량 입력이 정수가 아니면 서버로 그대로 보내서 서버가 400 `수량을 확인하세요` 를 내게 했습니다.\n- 서버가 `expiry.db` 를 프로젝트 루트에 만듭니다.",
+ "wall_s": 67.2
+}

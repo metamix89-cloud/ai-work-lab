@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>유통기한 임박 재고 알림판</title>
+<style>
+  body { font-family: sans-serif; margin: 20px auto; max-width: 960px; color: #222; }
+  h1 { font-size: 20px; }
+  .row { display: flex; gap: 8px; align-items: center; margin: 10px 0; flex-wrap: wrap; }
+  .sum { display: flex; gap: 12px; margin: 14px 0; }
+  .sum div { flex: 1; border: 1px solid #ccc; border-radius: 6px; padding: 10px; text-align: center; }
+  .sum b { display: block; font-size: 22px; margin-top: 4px; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border-bottom: 1px solid #ddd; padding: 6px 8px; text-align: left; }
+  tr[data-state="near"] { background: #fff4d6; }
+  tr[data-state="expired"] { background: #fde0e0; }
+  #message { min-height: 1.4em; margin: 8px 0; font-weight: bold; }
+  #error { display: none; color: #b00020; margin: 10px 0; }
+</style>
+</head>
+<body>
+<h1>유통기한 임박 재고 알림판</h1>
+<div class="row">
+  <label>사용자 <select data-testid="user"></select></label>
+  <label>품목 <select data-testid="item"></select></label>
+  <label>수량 <input data-testid="qty" type="number" min="1" value="1" style="width:80px"></label>
+  <button data-testid="ship">출고</button>
+</div>
+<div class="sum">
+  <div>임박 로트 수<b data-testid="sum-near">0</b></div>
+  <div>만료 로트 수<b data-testid="sum-expired">0</b></div>
+  <div>임박 재고 금액(원)<b data-testid="sum-near-value">0</b></div>
+</div>
+<div id="message" data-testid="message"></div>
+<div id="error"><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+<table>
+  <thead><tr><th>품목</th><th>로트</th><th>유통기한</th><th>남은 일수</th><th>수량</th><th>상태</th><th></th></tr></thead>
+  <tbody id="body"></tbody>
+</table>
+<script>
+const $ = s => document.querySelector(s);
+const T = id => document.querySelector('[data-testid="' + id + '"]');
+const LABEL = { ok: '정상', near: '임박', expired: '만료' };
+let users = [], lots = [];
+
+async function api(method, url, body) {
+  const r = await fetch(url, {
+    method, headers: body ? { 'Content-Type': 'application/json' } : {},
+    body: body ? JSON.stringify(body) : undefined
+  });
+  const data = await r.json().catch(() => null);
+  if (!r.ok) { const e = new Error((data && data.detail) || '요청 실패'); e.server = true; throw e; }
+  return data;
+}
+
+function isManager() {
+  const u = users.find(x => x.user_id === T('user').value);
+  return !!u && u.role === 'manager';
+}
+
+function setSummary(s) {
+  T('sum-near').textContent = s.near;
+  T('sum-expired').textContent = s.expired;
+  T('sum-near-value').textContent = s.near_value.toLocaleString('ko-KR');
+}
+
+function render() {
+  const mgr = isManager();
+  const body = $('#body');
+  body.innerHTML = '';
+  for (const l of lots) {
+    const tr = document.createElement('tr');
+    tr.setAttribute('data-testid', 'lot');
+    tr.setAttribute('data-id', l.lot_id);
+    tr.setAttribute('data-state', l.state);
+    const cells = [l.item_name, l.lot_id, l.expires_on, l.days_left + '일', l.qty, LABEL[l.state]];
+    for (const c of cells) { const td = document.createElement('td'); td.textContent = c; tr.appendChild(td); }
+    const act = document.createElement('td');
+    if (mgr && l.state === 'expired') {
+      const reason = document.createElement('input');
+      reason.setAttribute('data-testid', 'reason');
+      reason.placeholder = '폐기 사유';
+      const btn = document.createElement('button');
+      btn.setAttribute('data-testid', 'dispose');
+      btn.textContent = '폐기';
+      btn.onclick = () => dispose(l.lot_id, reason.value);
+      act.append(reason, ' ', btn);
+    }
+    tr.appendChild(act);
+    body.appendChild(tr);
+  }
+}
+
+function showMsg(t) { T('message').textContent = t; }
+
+async function loadBoard() {
+  const b = await api('GET', '/api/lots');
+  lots = b.lots;
+  setSummary(b.summary);
+  render();
+}
+
+async function init() {
+  try {
+    $('#error').style.display = 'none';
+    users = await api('GET', '/api/users');
+    const items = await api('GET', '/api/items');
+    T('user').innerHTML = users.map(u => `<option value="${u.user_id}">${u.name}</option>`).join('');
+    T('item').innerHTML = items.map(i => `<option value="${i.item_id}">${i.name}</option>`).join('');
+    await loadBoard();
+  } catch (e) {
+    $('#error').style.display = 'block';
+  }
+}
+
+async function ship() {
+  const qty = T('qty').value.trim();
+  try {
+    const r = await api('POST', '/api/ship', {
+      user: T('user').value, item_id: T('item').value,
+      qty: /^-?\d+$/.test(qty) ? parseInt(qty, 10) : qty
+    });
+    lots = r.lots; setSummary(r.summary); render();
+    showMsg('배분: ' + r.allocations.map(a => a.lot_id + ' ' + a.qty + '개').join(', '));
+  } catch (e) { showMsg(e.server ? e.message : '불러오지 못했습니다'); }
+}
+
+async function dispose(id, reason) {
+  try {
+    await api('POST', '/api/lots/' + encodeURIComponent(id) + '/dispose', { user: T('user').value, reason });
+    await loadBoard();
+    showMsg('폐기했습니다: ' + id);
+  } catch (e) { showMsg(e.server ? e.message : '불러오지 못했습니다'); }
+}
+
+T('ship').onclick = ship;
+T('user').onchange = render;
+$('#retry').onclick = init;
+init();
+</script>
+</body>
+</html>

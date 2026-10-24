@@ -1,0 +1,10 @@
+{
+ "cases": [
+  {"name": "유통기한 당일 로트(L-2401)를 관리자가 폐기", "method": "POST", "path": "api/lots/L-2401/dispose", "body": {"user": "m1", "reason": "당일이라 버림"}},
+  {"name": "만료 아닌 수량 합(36)과 똑같이 출고 — 다 비워진다", "method": "POST", "path": "api/ship", "body": {"user": "s1", "item_id": "I01", "qty": 36}},
+  {"name": "  그 뒤 I01 로트 목록(만료 L-2402 만 남나)", "method": "GET", "path": "api/lots", "pick": "summary"},
+  {"name": "수량 0 인 로트(L-2409)를 관리자가 폐기", "method": "POST", "path": "api/lots/L-2409/dispose", "body": {"user": "m1", "reason": "빈 로트"}},
+  {"name": "출고 수량이 정수가 아닌 문자열 '3'", "method": "POST", "path": "api/ship", "body": {"user": "s1", "item_id": "I05", "qty": "3"}},
+  {"name": "없는 품목 + 수량 0 (400 이 먼저인가)", "method": "POST", "path": "api/ship", "body": {"user": "s1", "item_id": "I99", "qty": 0}}
+ ]
+}

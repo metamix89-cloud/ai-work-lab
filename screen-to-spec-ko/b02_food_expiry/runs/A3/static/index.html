@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>꼬르륵식품 · 유통기한 알림판</title>
+<style>
+  :root{--bg:#f6f5f2;--card:#fff;--ink:#222;--mute:#777;--line:#e5e2db;
+        --exp:#c62828;--expbg:#fdecea;--imm:#e65100;--immbg:#fff1e3;--warn:#8a6d00;--warnbg:#fff8d6;--ok:#2e7d32;--okbg:#eaf6ea}
+  *{box-sizing:border-box} body{margin:0;font-family:"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  header{display:flex;justify-content:space-between;align-items:center;padding:14px 24px;background:#fff;border-bottom:1px solid var(--line)}
+  h1{font-size:20px;margin:0} header small{color:var(--mute)}
+  main{max-width:1100px;margin:0 auto;padding:20px}
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+  .card{border-radius:10px;padding:14px 16px;border:1px solid var(--line);cursor:pointer}
+  .card b{font-size:28px;display:block} .card span{font-size:13px}
+  .card.on{outline:3px solid #222}
+  .expired{background:var(--expbg);color:var(--exp)} .imminent{background:var(--immbg);color:var(--imm)}
+  .warning{background:var(--warnbg);color:var(--warn)} .ok{background:var(--okbg);color:var(--ok)}
+  section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:20px}
+  h2{font-size:16px;margin:0 0 12px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)} th{color:var(--mute);font-weight:600}
+  td.n,th.n{text-align:right}
+  .badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:700}
+  tr.r-expired td{background:var(--expbg)} tr.r-imminent td{background:var(--immbg)}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  select,input,button{font:inherit;padding:7px 10px;border:1px solid #ccc;border-radius:6px}
+  button{background:#222;color:#fff;border-color:#222;cursor:pointer} button.sec{background:#fff;color:#222}
+  button.danger{background:var(--exp);border-color:var(--exp)} button:disabled{opacity:.5}
+  #msg{margin-top:10px;font-size:14px;white-space:pre-line} .err{color:var(--exp)} .good{color:var(--ok)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:20px} @media(max-width:800px){.cards{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}}
+  .tag{font-size:11px;color:var(--mute)}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>🍙 꼬르륵식품 유통기한 알림판</h1><small id="today"></small></div>
+  <div class="row"><span id="who" class="tag">일반 모드</span><button class="sec" id="loginBtn">관리자 로그인</button></div>
+</header>
+<main>
+  <div class="cards" id="cards"></div>
+
+  <div class="two">
+    <section>
+      <h2>FEFO 출고 (유통기한 빠른 순)</h2>
+      <div class="row">
+        <select id="prod"></select>
+        <input id="qty" type="number" min="1" value="10" style="width:90px">
+        <button id="shipBtn">출고</button>
+      </div>
+      <div id="msg"></div>
+      <p class="tag">만료된 재고는 출고되지 않으며, 만료 전 로트 중 유통기한이 가까운 것부터 자동 차감됩니다.</p>
+    </section>
+    <section>
+      <h2>최근 이력</h2>
+      <table><tbody id="hist"></tbody></table>
+    </section>
+  </div>
+
+  <section>
+    <h2>로트별 재고 <span class="tag" id="filterTag"></span></h2>
+    <table>
+      <thead><tr><th>상태</th><th>제품</th><th>로트</th><th>유통기한</th><th class="n">잔여일</th><th class="n">수량</th><th></th></tr></thead>
+      <tbody id="lots"></tbody>
+    </table>
+  </section>
+</main>
+
+<script>
+const LABEL={expired:'만료',imminent:'임박',warning:'주의',ok:'정상'};
+let lots=[],filter=null,token=sessionStorage.getItem('adm')||'';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+async function api(path,opt={}){
+  const r=await fetch(path,{...opt,headers:{'Content-Type':'application/json','X-Admin-Token':token,...(opt.headers||{})}});
+  const body=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(typeof body.detail==='string'?body.detail:'요청 실패 ('+r.status+')');
+  return body;
+}
+function say(t,ok){const m=$('msg');m.textContent=t;m.className=ok?'good':'err'}
+
+async function load(){
+  const [sum,ls,hist]=await Promise.all([api('/api/summary'),api('/api/lots'),api('/api/movements')]);
+  lots=ls;
+  $('today').textContent=`기준일 ${sum.today} · 임박 ${sum.imminent_days}일 이내 / 주의 ${sum.warning_days}일 이내`;
+  $('cards').innerHTML=['expired','imminent','warning','ok'].map(k=>
+    `<div class="card ${k} ${filter===k?'on':''}" data-k="${k}"><span>${LABEL[k]}</span><b>${sum[k].lots}로트</b><span>총 ${sum[k].qty.toLocaleString()}개</span></div>`).join('');
+  document.querySelectorAll('.card').forEach(c=>c.onclick=()=>{filter=filter===c.dataset.k?null:c.dataset.k;load()});
+  $('hist').innerHTML=hist.map(h=>`<tr><td class="tag">${esc(h.at.slice(5,16).replace('T',' '))}</td><td>${h.kind==='SHIP'?'출고':h.kind==='DISPOSE'?'폐기':'입고'}</td><td>${esc(h.name)}</td><td class="n">${h.qty}</td></tr>`).join('')||'<tr><td class="tag">이력 없음</td></tr>';
+  render();
+}
+function render(){
+  const admin=!!token;
+  $('filterTag').textContent=filter?`· ${LABEL[filter]}만 보기 (카드 다시 클릭하면 해제)`:'· 유통기한 빠른 순';
+  $('lots').innerHTML=lots.filter(l=>!filter||l.status===filter).map(l=>{
+    const d=l.days_left<0?`${-l.days_left}일 경과`:l.days_left===0?'오늘까지':`D-${l.days_left}`;
+    const btn=l.status==='expired'&&admin?`<button class="danger" data-id="${l.id}" data-no="${esc(l.lot_no)}">폐기</button>`:'';
+    return `<tr class="r-${l.status}"><td><span class="badge ${l.status}">${LABEL[l.status]}</span></td><td>${esc(l.product)}</td><td>${esc(l.lot_no)}</td><td>${esc(l.expiry_date)}</td><td class="n">${d}</td><td class="n">${l.qty.toLocaleString()} ${esc(l.unit)}</td><td>${btn}</td></tr>`}).join('');
+  document.querySelectorAll('button.danger').forEach(b=>b.onclick=async()=>{
+    if(!confirm(`로트 ${b.dataset.no} 을(를) 폐기할까요? 되돌릴 수 없습니다.`))return;
+    try{const r=await api(`/api/lots/${b.dataset.id}/dispose`,{method:'POST'});say(`폐기 완료: ${r.disposed} (${r.qty}개)`,true)}catch(e){say(e.message)}
+    load();
+  });
+  $('who').textContent=admin?'관리자 모드':'일반 모드';
+  $('loginBtn').textContent=admin?'로그아웃':'관리자 로그인';
+}
+$('shipBtn').onclick=async()=>{
+  try{
+    const r=await api('/api/ship',{method:'POST',body:JSON.stringify({product_id:+$('prod').value,qty:+$('qty').value})});
+    say(`출고 ${r.shipped}개 완료\n`+r.picks.map(p=>`· ${p.lot_no} (유통기한 ${p.expiry_date}) ${p.qty}개`).join('\n'),true);
+  }catch(e){say(e.message)}
+  load();
+};
+$('loginBtn').onclick=async()=>{
+  if(token){token='';sessionStorage.removeItem('adm');render();return}
+  const t=prompt('관리자 토큰을 입력하세요');if(!t)return;
+  token=t;
+  try{await api('/api/admin/check');sessionStorage.setItem('adm',t)}catch(e){token='';alert(e.message)}
+  render();
+};
+(async()=>{
+  const ps=await api('/api/products');
+  $('prod').innerHTML=ps.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');
+  if(token){try{await api('/api/admin/check')}catch{token='';sessionStorage.removeItem('adm')}}
+  load();setInterval(load,60000);
+})();
+</script>
+</body>
+</html>

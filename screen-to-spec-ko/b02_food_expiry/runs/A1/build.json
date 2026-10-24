@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 꼬르륵식품 '유통기한 임박 재고 알림판' 웹앱을 만들어 줘. 창고에 로트마다 유통기한이 다른 재고가 있는데, 임박한 것과 만료된 것이 한눈에 보여야 하고, 출고하면 유통기한이 가까운 것부터 나가야 해. 만료된 건 관리자가 폐기할 수 있어. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 71616,
+ "num_turns": 6,
+ "total_cost_usd": 0.21368020000000001,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 8,
+  "cache_creation_input_tokens": 26129,
+  "cache_read_input_tokens": 126082,
+  "output_tokens": 9654,
+  "output_tokens_details": {
+   "thinking_tokens": 532
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 26129,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1128,
+    "cache_read_input_tokens": 42017,
+    "cache_creation_input_tokens": 784,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 784
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "웹앱을 만들었고, 만든 폴더에서 바로 실행됩니다. 임시 DB로 API를 시험했고 아래 항목은 모두 기대대로 동작했습니다. 브라우저 화면은 직접 열어 보지 못했습니다.\n\n**실행 방법**\n```\ncd <작업 폴더>/A1\npip install -r requirements.txt\nuvicorn main:app --reload\n```\nhttp://127.0.0.1:8000 으로 접속하세요. 처음 실행하면 `inventory.db`가 생기고 가상 데이터 16개 로트가 들어갑니다. 유통기한은 오늘 날짜를 기준으로 잡아서, 언제 실행해도 만료·임박 재고가 보입니다.\n\n**화면과 동작**\n- **상태 카드:** 만료, 임박(D-7 이내), 주의(D-30 이내), 정상별로 로트 수와 수량을 보여 줍니다. 카드를 누르면 그 상태만 걸러서 봅니다.\n- **로트 목록:** 유통기한이 빠른 순으로 정렬하고, 상태별로 행 색을 다르게 칠했습니다. 남은 일수는 D-3, D-Day, D+5 식으로 표시합니다.\n- **출고:** 상품과 수량만 입력하면 유통기한이 가까운 로트부터 자동으로 빠집니다. 어느 로트에서 몇 개가 나갔는지도 보여 줍니다. 만료된 로트는 출고되지 않으며, 재고가 모자라면 오류를 냅니다. 시험에서도 만료분이 빠진 채 유통기한이 가까운 로트부터 차감됐습니다.\n- **폐기:** 만료된 로트에만 폐기 버튼이 뜨고, 관리자 PIN을 입력해야 합니다. 기본 PIN은 `1234`이고 `ADMIN_PIN` 환경변수로 바꿀 수 있습니다. PIN이 없으면 403, 만료 전 로트를 폐기하려 하면 409로 거절됩니다.\n- **이력:** 출고와 폐기 내역이 하단에 최근 50건까지 쌓입니다.\n\n**참고**\n- 임박(7일)과 주의(30일) 기준은 `main.py` 상단의 `URGENT_DAYS`, `WARN_DAYS`에서 바꿀 수 있습니다.\n- 화면에서 입고(재고 추가)하는 기능은 없습니다. 요청에 없어서 뺐고, 필요하면 추가하겠습니다.\n- 관리자 인증은 PIN 하나뿐인 간이 방식입니다. 실제로 운영하려면 로그인 체계가 따로 필요합니다.\n\n파일은 `main.py`(API와 DB), `index.html`(화면), `requirements.txt`입니다.",
+ "wall_s": 77.5
+}

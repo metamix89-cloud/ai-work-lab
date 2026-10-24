@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>꼬르륵식품 유통기한 임박 재고 알림판 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 2부 2편 목업. 가상 회사(꼬르륵식품) · 가상 품목 · 가상 로트. ?state=ok|empty|error. Mock-IT 라이트 테마. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--indigo:#6366F1;--emerald:#10B981;--amber:#F59E0B;--rose:#EF4444}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:#EF4444;display:inline-block}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#EEF0FF;color:var(--indigo);font-weight:700}
+.main{padding:16px 26px 14px 26px;display:flex;flex-direction:column;gap:9px}
+.top{display:flex;justify-content:space-between;align-items:flex-end}
+h1{margin:0;font-size:21px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:12px;margin-top:3px}
+.who{font-size:12.5px;color:var(--ink2);background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.form{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--ink2);background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.form span{border:1px solid var(--line);border-radius:7px;padding:4px 9px}.form b{background:var(--indigo);color:#fff;border-radius:7px;padding:5px 12px}
+.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 14px}.card .l{font-size:12px;color:var(--ink2)}.card .n{font-size:22px;font-weight:800}
+.card.near .n{color:var(--amber)}.card.exp .n{color:var(--rose)}
+.box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 14px;flex:1;min-height:0;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:12.5px}th{color:var(--mute);font-weight:600;text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);font-size:11.5px}
+td{padding:6px 6px;border-bottom:1px solid var(--line)}tr.exp td{color:#6B7280;background:#F9FAFB}tr.near td{background:#FFFBEB}
+.chip{display:inline-block;border-radius:999px;padding:1px 9px;font-size:11px;font-weight:700}
+.ok{background:#ECFDF5;color:#047857}.nr{background:#FEF3C7;color:#92400E}.ex{background:#F3F4F6;color:#374151}
+.b{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700}.b.p{background:var(--rose);color:#fff;border-color:var(--rose)}.b.off{color:#C0C4CE;border-style:dashed}
+.msg{color:#047857;font-size:12px}.msg.bad{color:var(--rose)}
+.empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mute);gap:4px;font-size:12px;text-align:center}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:12px;padding:20px;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700}
+</style></head><body>
+<div class="app">
+ <div class="side">
+  <div class="logo"><i></i>꼬르륵식품</div>
+  <div class="nav"><div>생산 일지</div><div>위생 점검</div><div class="on">유통기한 알림판</div><div>거래처 주문</div><div>반품</div></div>
+ </div>
+ <div class="main" id="main"></div>
+</div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const head=(who)=>`<div class="top"><div><h1>유통기한 임박 재고 알림판</h1><div class="sub">남은 일수 = 유통기한 − 오늘(날짜) · 당일은 임박, 만료 아님 · 출고는 유통기한 이른 로트부터(선기한선출) · 만료는 출고 안 됨 · 폐기는 만료만, 관리자만</div></div><span class="who">사용자: ${who} ▾</span></div>`;
+const form=`<div class="form">출고 <span>김치 1kg ▾</span><span>수량 5</span><b>출고</b><span style="margin-left:auto">폐기 사유: 곰팡이 발생</span></div>`;
+let html='';
+if(state==='ok'){
+  html=head('박관리 (관리자)')+form+`<div class="msg">배분: L-2406 3개, L-2405 2개 — 생산은 L-2405 가 빨랐지만 유통기한이 이른 L-2406 부터</div>
+  <div class="sum"><div class="card near"><div class="l">임박 로트</div><div class="n">5</div></div><div class="card exp"><div class="l">만료 로트</div><div class="n">2</div></div><div class="card near"><div class="l">임박 재고 금액</div><div class="n">117,000원</div></div></div>
+  <div class="box"><table><tr><th>로트</th><th>품목</th><th>생산일</th><th>유통기한</th><th>남은 일수</th><th>수량</th><th>상태</th><th>동작 (관리자)</th></tr>
+  <tr class="exp"><td>L-2407</td><td>냉동만두 1kg</td><td>09-14</td><td>10-14</td><td>-10</td><td>8</td><td><span class="chip ex">만료</span></td><td><span class="b p">폐기</span></td></tr>
+  <tr class="exp"><td>L-2402</td><td>두부 300g</td><td>10-18</td><td>10-23</td><td>-1</td><td>4</td><td><span class="chip ex">만료</span></td><td><span class="b p">폐기</span></td></tr>
+  <tr class="near"><td>L-2401</td><td>두부 300g</td><td>10-19</td><td>10-24 <b>(오늘)</b></td><td>0</td><td>10</td><td><span class="chip nr">임박</span></td><td><span class="b off">당일은 만료 아님</span></td></tr>
+  <tr class="near"><td>L-2410</td><td>떡볶이 떡 500g</td><td>10-21</td><td>10-25</td><td>1</td><td>12</td><td><span class="chip nr">임박</span></td><td><span class="b off">임박은 폐기 불가</span></td></tr>
+  <tr class="near"><td>L-2403</td><td>두부 300g</td><td>10-22</td><td>10-27</td><td>3 (= 기준 3)</td><td>6</td><td><span class="chip nr">임박</span></td><td></td></tr>
+  <tr><td>L-2404</td><td>두부 300g</td><td>10-23</td><td>10-28</td><td>4</td><td>20</td><td><span class="chip ok">정상</span></td><td></td></tr>
+  <tr><td>L-2406</td><td>김치 1kg</td><td>10-14</td><td>10-29</td><td>5</td><td>3 → 0</td><td><span class="chip nr">임박</span></td><td></td></tr>
+  </table></div>`;
+}else if(state==='empty'){
+  html=head('김창고 (창고 담당)')+form+`<div class="sum"><div class="card"><div class="l">임박 로트</div><div class="n">0</div></div><div class="card"><div class="l">만료 로트</div><div class="n">0</div></div><div class="card"><div class="l">임박 재고 금액</div><div class="n">0원</div></div></div>
+  <div class="box"><div class="empty"><b style="color:#4B5563;font-size:15px">재고 로트가 없습니다</b>수량 0 인 로트(다 나간 로트)는 표에서 뺀다 — 창고 담당에게는 폐기 버튼이 없다</div></div>`;
+}else{
+  html=head('김창고 (창고 담당)')+`<div class="err"><div><b>불러오지 못했습니다.</b> 재고 API(/api/lots) 가 응답하지 않습니다 — 상태와 수량을 모르면 출고 버튼을 열지 않습니다.</div><button>다시 시도</button></div>
+  <div class="box"><div class="empty">배분은 서버가 정한다 — 화면이 '가까운 선반' 을 고르면 유통기한 긴 로트가 먼저 나간다</div></div>`;
+}
+document.getElementById('main').innerHTML=html;
+</script></body></html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>유통기한 임박 재고 알림판 — 꼬르륵식품</title>
+<style>
+body{font-family:sans-serif;margin:24px;max-width:1000px}
+.bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.sum{display:flex;gap:12px;margin:16px 0}
+.sum div{flex:1;border:1px solid #ccc;border-radius:6px;padding:10px;text-align:center}
+.sum b{display:block;font-size:24px}
+table{border-collapse:collapse;width:100%}
+th,td{border-bottom:1px solid #ddd;padding:6px 8px;text-align:left}
+tr[data-state=near]{background:#fff4d6}
+tr[data-state=expired]{background:#fde0e0}
+#message{min-height:1.4em;margin:8px 0;font-weight:bold}
+</style>
+</head>
+<body>
+<h1>유통기한 임박 재고 알림판</h1>
+<div class="bar">
+  <label>사용자 <select data-testid="user"></select></label>
+  <label>품목 <select data-testid="item"></select></label>
+  <label>수량 <input data-testid="qty" type="number" min="1" value="1"></label>
+  <button data-testid="ship">출고</button>
+</div>
+<div class="sum">
+  <div>임박 로트 <b data-testid="sum-near">-</b></div>
+  <div>만료 로트 <b data-testid="sum-expired">-</b></div>
+  <div>임박 재고 금액(원) <b data-testid="sum-near-value">-</b></div>
+</div>
+<div id="message" data-testid="message"></div>
+<div id="error" hidden>불러오지 못했습니다 <button id="retry">다시 시도</button></div>
+<table>
+  <thead><tr><th>품목</th><th>로트</th><th>유통기한</th><th>남은 일수</th><th>수량</th><th>상태</th><th></th></tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+<script>
+const $ = s => document.querySelector(s);
+const T = id => document.querySelector('[data-testid="' + id + '"]');
+const LABEL = {ok: '정상', near: '임박', expired: '만료'};
+let users = [], data = null;
+
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  const j = await r.json().catch(() => null);
+  if (!r.ok) { const e = new Error((j && j.detail) || '오류'); e.rejected = true; throw e; }
+  return j;
+}
+const post = (path, body) => api(path, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
+const me = () => users.find(u => u.user_id === T('user').value);
+const msg = t => { T('message').textContent = t; };
+
+function render() {
+  const s = data.summary;
+  T('sum-near').textContent = s.near;
+  T('sum-expired').textContent = s.expired;
+  T('sum-near-value').textContent = s.near_value.toLocaleString('en-US');
+  const mgr = me() && me().role === 'manager';
+  const tb = $('#rows');
+  tb.innerHTML = '';
+  for (const l of data.lots) {
+    const tr = document.createElement('tr');
+    tr.setAttribute('data-testid', 'lot');
+    tr.setAttribute('data-id', l.lot_id);
+    tr.setAttribute('data-state', l.state);
+    const cells = [l.item_name, l.lot_id, l.expires_on, l.days_left + '일', l.qty, LABEL[l.state]];
+    for (const c of cells) { const td = document.createElement('td'); td.textContent = c; tr.appendChild(td); }
+    const td = document.createElement('td');
+    if (mgr && l.state === 'expired') {
+      const inp = document.createElement('input');
+      inp.setAttribute('data-testid', 'reason');
+      inp.placeholder = '폐기 사유';
+      const btn = document.createElement('button');
+      btn.setAttribute('data-testid', 'dispose');
+      btn.textContent = '폐기';
+      btn.onclick = async () => {
+        try {
+          const r = await post('/api/lots/' + encodeURIComponent(l.lot_id) + '/dispose', {user: T('user').value, reason: inp.value});
+          msg('폐기: ' + l.lot_id);
+          await load();
+        } catch (e) { e.rejected ? msg(e.message) : fail(); }
+      };
+      td.append(inp, btn);
+    }
+    tr.appendChild(td);
+    tb.appendChild(tr);
+  }
+}
+
+function fail() { $('#error').hidden = false; }
+
+async function load() {
+  try {
+    data = await api('/api/lots');
+    $('#error').hidden = true;
+    render();
+  } catch (e) { fail(); }
+}
+
+async function init() {
+  try {
+    users = await api('/api/users');
+    const items = await api('/api/items');
+    T('user').innerHTML = users.map(u => `<option value="${u.user_id}">${u.name} (${u.role === 'manager' ? '관리자' : '창고 담당'})</option>`).join('');
+    T('item').innerHTML = items.map(i => `<option value="${i.item_id}">${i.name}</option>`).join('');
+    $('#error').hidden = true;
+    await load();
+  } catch (e) { fail(); }
+}
+
+T('user').onchange = () => data && render();
+$('#retry').onclick = init;
+T('ship').onclick = async () => {
+  try {
+    const r = await post('/api/ship', {user: T('user').value, item_id: T('item').value, qty: Number(T('qty').value)});
+    msg('배분: ' + r.allocations.map(a => a.lot_id + ' ' + a.qty + '개').join(', '));
+    data = {lots: r.lots, summary: r.summary};
+    render();
+  } catch (e) { e.rejected ? msg(e.message) : fail(); }
+};
+init();
+</script>
+</body>
+</html>

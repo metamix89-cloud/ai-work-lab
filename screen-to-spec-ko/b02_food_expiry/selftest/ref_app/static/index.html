@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>유통기한 임박 재고 알림판</title>
+<style>
+body{font-family:"Malgun Gothic",system-ui,sans-serif;margin:20px;color:#111318}
+.sum{display:flex;gap:10px;margin:10px 0}.card{border:1px solid #e6e8ef;border-radius:10px;padding:8px 14px}
+table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid #e6e8ef;padding:6px;text-align:left;font-size:13px}
+tr[data-state="expired"] td{color:#6b7280}tr[data-state="near"] td{color:#b45309}#message{color:#b91c1c;min-height:20px}.err{background:#fff5f5;border:1px solid #fecaca;padding:12px}
+</style></head><body>
+<h1>유통기한 임박 재고 알림판</h1>
+<label>사용자 <select data-testid="user" id="user"></select></label>
+<div>출고 품목 <select data-testid="item" id="item"></select> 수량 <input data-testid="qty" id="qty" type="number" value="1" style="width:60px"> <button data-testid="ship" id="ship">출고</button>
+ 폐기 사유 <input data-testid="reason" id="reason" style="width:220px"></div>
+<div data-testid="message" id="message"></div>
+<div class="sum"><div class="card">임박 <b data-testid="sum-near" id="sn"></b></div><div class="card">만료 <b data-testid="sum-expired" id="se"></b></div><div class="card">임박 재고 금액 <b data-testid="sum-near-value" id="sv"></b>원</div></div>
+<div id="main"></div>
+<script>
+const KO={ok:"정상",near:"임박",expired:"만료"};let users=[],me=null;
+const $=id=>document.getElementById(id);
+async function j(u,o){const r=await fetch(u,o);const b=await r.json().catch(()=>null);if(!r.ok)throw {detail:(b&&b.detail)||r.status};return b}
+function opt(sel,v,t){const o=document.createElement("option");o.value=v;o.textContent=t;$(sel).append(o)}
+function draw(b){
+  $("sn").textContent=b.summary.near;$("se").textContent=b.summary.expired;$("sv").textContent=b.summary.near_value.toLocaleString("ko-KR");
+  const t=document.createElement("table");t.innerHTML="<tr><th>로트</th><th>품목</th><th>생산일</th><th>유통기한</th><th>남은 일수</th><th>수량</th><th>상태</th><th></th></tr>";
+  b.lots.forEach(l=>{const tr=document.createElement("tr");tr.setAttribute("data-testid","lot");tr.dataset.id=l.lot_id;tr.dataset.state=l.state;
+    [l.lot_id,l.item_name,l.produced_on,l.expires_on,l.days_left,l.qty,KO[l.state]].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td)});
+    const td=document.createElement("td");
+    if(me&&me.role==="manager"&&l.state==="expired"){const bt=document.createElement("button");bt.setAttribute("data-testid","dispose");bt.textContent="폐기";
+      bt.onclick=async()=>{$("message").textContent="";try{const r=await j(`/api/lots/${l.lot_id}/dispose`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user:$("user").value,reason:$("reason").value})});await load()}catch(e){$("message").textContent=e.detail}};td.append(bt)}
+    tr.append(td);t.append(tr)});
+  $("main").innerHTML="";$("main").append(t);
+}
+async function load(){
+  try{
+    if(!users.length){users=await j("/api/users");users.forEach(u=>opt("user",u.user_id,u.name+(u.role==="manager"?" (관리자)":" (창고)")));(await j("/api/items")).forEach(i=>opt("item",i.item_id,i.name))}
+    me=users.find(u=>u.user_id===$("user").value);
+    draw(await j("/api/lots"));
+  }catch(e){$("main").innerHTML='<div class="err">불러오지 못했습니다 <button onclick="load()">다시 시도</button></div>'}
+}
+$("ship").onclick=async()=>{$("message").textContent="";try{const r=await j("/api/ship",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user:$("user").value,item_id:$("item").value,qty:Number($("qty").value)})});
+  $("message").textContent="배분: "+r.allocations.map(a=>a.lot_id+" "+a.qty+"개").join(", ");draw(r)}catch(e){$("message").textContent=e.detail}};
+$("user").onchange=load;
+load();
+</script></body></html>

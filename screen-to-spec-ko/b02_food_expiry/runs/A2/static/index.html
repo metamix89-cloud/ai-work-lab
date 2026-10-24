@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>꼬르륵식품 · 유통기한 알림판</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --ink:#1f2937; --mute:#6b7280; --line:#e5e7eb;
+          --expired:#7f1d1d; --expired-bg:#fee2e2; --danger:#b45309; --danger-bg:#ffedd5;
+          --warn:#854d0e; --warn-bg:#fef9c3; --ok:#166534; --ok-bg:#dcfce7; --brand:#e8590c; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Malgun Gothic",system-ui,sans-serif; background:var(--bg); color:var(--ink); }
+  header { background:var(--brand); color:#fff; padding:14px 24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  header h1 { margin:0; font-size:20px; }
+  header .sp { flex:1; }
+  header button { background:#fff; color:var(--brand); border:0; border-radius:6px; padding:6px 12px; font-weight:700; cursor:pointer; }
+  main { padding:20px 24px; max-width:1200px; margin:0 auto; }
+  .tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-bottom:20px; }
+  .tile { border-radius:10px; padding:14px 16px; cursor:pointer; border:2px solid transparent; }
+  .tile.active { border-color:var(--ink); }
+  .tile b { font-size:28px; display:block; }
+  .tile small { opacity:.85; }
+  .expired { background:var(--expired-bg); color:var(--expired); }
+  .danger { background:var(--danger-bg); color:var(--danger); }
+  .warn { background:var(--warn-bg); color:var(--warn); }
+  .ok { background:var(--ok-bg); color:var(--ok); }
+  section { background:var(--card); border-radius:10px; padding:16px; margin-bottom:20px; box-shadow:0 1px 2px rgba(0,0,0,.06); }
+  h2 { margin:0 0 12px; font-size:16px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { padding:8px 10px; text-align:left; border-bottom:1px solid var(--line); }
+  th { color:var(--mute); font-weight:600; font-size:12px; }
+  td.n, th.n { text-align:right; font-variant-numeric:tabular-nums; }
+  .badge { display:inline-block; padding:2px 10px; border-radius:999px; font-weight:700; font-size:12px; min-width:72px; text-align:center; }
+  tr.row-expired td { background:#fff5f5; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  @media (max-width:800px) { .grid { grid-template-columns:1fr; } }
+  label { display:block; font-size:12px; color:var(--mute); margin:8px 0 3px; }
+  select, input { width:100%; padding:7px 9px; border:1px solid var(--line); border-radius:6px; font:inherit; }
+  .btn { background:var(--brand); color:#fff; border:0; border-radius:6px; padding:8px 16px; font-weight:700; cursor:pointer; margin-top:12px; }
+  .btn.red { background:#b91c1c; padding:4px 10px; margin:0; font-size:12px; }
+  .btn:disabled { opacity:.4; cursor:not-allowed; }
+  .hint { color:var(--mute); font-size:12px; margin-top:6px; }
+  #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#111827; color:#fff; padding:10px 18px; border-radius:8px; display:none; max-width:90%; white-space:pre-line; }
+  #toast.err { background:#b91c1c; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🍙 꼬르륵식품 유통기한 알림판</h1>
+  <span id="today"></span>
+  <span class="sp"></span>
+  <span id="adminState">일반 모드</span>
+  <button id="adminBtn">관리자 로그인</button>
+</header>
+<main>
+  <div class="tiles" id="tiles"></div>
+
+  <section>
+    <h2>로트별 재고 <small id="filterLabel" style="color:var(--mute);font-weight:400"></small></h2>
+    <table>
+      <thead><tr><th>상태</th><th>제품</th><th>로트</th><th>유통기한</th><th class="n">남은일</th><th class="n">수량</th><th>위치</th><th></th></tr></thead>
+      <tbody id="lots"></tbody>
+    </table>
+  </section>
+
+  <div class="grid">
+    <section>
+      <h2>출고 (유통기한 빠른 로트부터 자동 차감)</h2>
+      <label>제품</label><select id="shipProduct"></select>
+      <div class="hint" id="shipInfo"></div>
+      <label>수량</label><input id="shipQty" type="number" min="1" value="1">
+      <button class="btn" id="shipBtn">출고하기</button>
+    </section>
+    <section>
+      <h2>입고</h2>
+      <label>제품</label><select id="inProduct"></select>
+      <label>로트번호</label><input id="inLot">
+      <label>유통기한</label><input id="inExp" type="date">
+      <label>수량</label><input id="inQty" type="number" min="1" value="10">
+      <label>위치</label><input id="inLoc" placeholder="예: A-01">
+      <button class="btn" id="inBtn">입고 등록</button>
+    </section>
+  </div>
+
+  <section>
+    <h2>최근 출고·폐기 이력</h2>
+    <table>
+      <thead><tr><th>일시</th><th>구분</th><th>제품</th><th>로트</th><th class="n">수량</th><th>비고</th></tr></thead>
+      <tbody id="moves"></tbody>
+    </table>
+  </section>
+</main>
+<div id="toast"></div>
+
+<script>
+const LABEL = {expired:"만료", danger:"긴급", warn:"임박", ok:"정상"};
+const KIND = {IN:"입고", OUT:"출고", DISPOSE:"폐기"};
+let lots = [], filter = null, pin = sessionStorage.getItem("pin") || "", isAdmin = false;
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function toast(msg, err) {
+  const t = $("toast"); t.textContent = msg; t.className = err ? "err" : "";
+  t.style.display = "block"; clearTimeout(t._h); t._h = setTimeout(() => t.style.display = "none", 4500);
+}
+async function api(path, opts = {}) {
+  const r = await fetch(path, {...opts, headers: {"Content-Type":"application/json", "X-Admin-Pin": pin, ...(opts.headers||{})}});
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(typeof body.detail === "string" ? body.detail : "요청 실패");
+  return body;
+}
+const dday = d => d < 0 ? `D+${-d}` : d === 0 ? "D-Day" : `D-${d}`;
+
+async function load() {
+  const [sum, ls, prods, mv] = await Promise.all([api("/api/summary"), api("/api/lots"), api("/api/products"), api("/api/movements")]);
+  lots = ls;
+  $("today").textContent = `기준일 ${sum.today}`;
+  $("tiles").innerHTML = ["expired","danger","warn","ok"].map(s => {
+    const c = sum.counts[s];
+    const rule = {expired:"유통기한 경과", danger:`D-${sum.danger_days} 이내`, warn:`D-${sum.warn_days} 이내`, ok:"여유"}[s];
+    return `<div class="tile ${s} ${filter===s?"active":""}" data-s="${s}"><small>${LABEL[s]} · ${rule}</small><b>${c.lots}로트</b><small>총 ${c.qty.toLocaleString()}개</small></div>`;
+  }).join("");
+  document.querySelectorAll(".tile").forEach(t => t.onclick = () => { filter = filter === t.dataset.s ? null : t.dataset.s; load(); });
+  renderLots();
+
+  const opts = prods.map(p => `<option value="${p.id}">${esc(p.name)} (${esc(p.sku)})</option>`).join("");
+  const keepS = $("shipProduct").value, keepI = $("inProduct").value;
+  $("shipProduct").innerHTML = opts; $("inProduct").innerHTML = opts;
+  if (keepS) $("shipProduct").value = keepS; if (keepI) $("inProduct").value = keepI;
+  window._prods = prods; showShipInfo();
+
+  $("moves").innerHTML = mv.filter(m => m.kind !== "IN").map(m =>
+    `<tr><td>${esc(m.at)}</td><td>${KIND[m.kind]}</td><td>${esc(m.name)}</td><td>${esc(m.lot_no)}</td><td class="n">${m.qty}</td><td>${esc(m.note)}</td></tr>`).join("")
+    || `<tr><td colspan="6" style="color:var(--mute)">이력 없음</td></tr>`;
+}
+function renderLots() {
+  $("filterLabel").textContent = filter ? `— ${LABEL[filter]}만 보기 (다시 누르면 해제)` : "— 유통기한 빠른 순";
+  const rows = lots.filter(l => !filter || l.status === filter);
+  $("lots").innerHTML = rows.map(l => `
+    <tr class="${l.status==="expired"?"row-expired":""}">
+      <td><span class="badge ${l.status}">${LABEL[l.status]}</span></td>
+      <td>${esc(l.name)}</td><td>${esc(l.lot_no)}</td><td>${esc(l.expiry_date)}</td>
+      <td class="n"><b>${dday(l.days_left)}</b></td><td class="n">${l.qty.toLocaleString()} ${esc(l.unit)}</td><td>${esc(l.location)}</td>
+      <td>${l.status==="expired" ? `<button class="btn red" data-id="${l.id}" ${isAdmin?"":"disabled title='관리자 로그인 필요'"}>폐기</button>` : ""}</td>
+    </tr>`).join("") || `<tr><td colspan="8" style="color:var(--mute)">해당 로트 없음</td></tr>`;
+  document.querySelectorAll("button[data-id]").forEach(b => b.onclick = () => dispose(b.dataset.id));
+}
+function showShipInfo() {
+  const p = (window._prods || []).find(p => p.id == $("shipProduct").value);
+  $("shipInfo").textContent = !p ? "" : p.next_lot
+    ? `출고 가능 ${p.available.toLocaleString()} ${p.unit} (만료 재고 제외) · 다음 출고 로트: ${p.next_lot.lot_no} (${p.next_lot.expiry_date})`
+    : "출고 가능한 재고가 없습니다.";
+}
+$("shipProduct").onchange = showShipInfo;
+
+$("shipBtn").onclick = async () => {
+  try {
+    const r = await api("/api/ship", {method:"POST", body: JSON.stringify({product_id:+$("shipProduct").value, qty:+$("shipQty").value})});
+    toast("출고 완료\n" + r.picks.map(p => `${p.lot_no} (${p.expiry_date}) × ${p.qty}`).join("\n"));
+    load();
+  } catch (e) { toast(e.message, true); }
+};
+$("inBtn").onclick = async () => {
+  try {
+    await api("/api/lots", {method:"POST", body: JSON.stringify({product_id:+$("inProduct").value, lot_no:$("inLot").value.trim(),
+      expiry_date:$("inExp").value, qty:+$("inQty").value, location:$("inLoc").value.trim()})});
+    toast("입고 등록 완료"); $("inLot").value = ""; load();
+  } catch (e) { toast(e.message, true); }
+};
+async function dispose(id) {
+  const l = lots.find(x => x.id == id);
+  if (!confirm(`${l.name} / ${l.lot_no} (${l.qty}${l.unit}) 을(를) 폐기합니다. 계속할까요?`)) return;
+  try { const r = await api(`/api/lots/${id}/dispose`, {method:"POST"}); toast(`폐기 완료: ${r.disposed} (${r.qty}개)`); load(); }
+  catch (e) { toast(e.message, true); }
+}
+async function setAdmin() {
+  try { await api("/api/admin/check", {method:"POST"}); isAdmin = true; } catch { isAdmin = false; pin = ""; sessionStorage.removeItem("pin"); }
+  $("adminState").textContent = isAdmin ? "관리자 모드" : "일반 모드";
+  $("adminBtn").textContent = isAdmin ? "로그아웃" : "관리자 로그인";
+  renderLots();
+}
+$("adminBtn").onclick = async () => {
+  if (isAdmin) { pin = ""; sessionStorage.removeItem("pin"); return setAdmin(); }
+  const v = prompt("관리자 PIN (기본 1234)");
+  if (v === null) return;
+  pin = v; sessionStorage.setItem("pin", v); await setAdmin();
+  if (!isAdmin) toast("PIN이 올바르지 않습니다.", true);
+};
+
+load().then(setAdmin);
+setInterval(load, 60000);
+</script>
+</body>
+</html>

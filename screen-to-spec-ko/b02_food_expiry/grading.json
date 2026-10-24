@@ -1,0 +1,14 @@
+{
+ "allowed_routes": ["/", "/api/users", "/api/items", "/api/lots", "/api/ship", "/api/lots/{lot_id}/dispose", "/api/lots/{id}/dispose",
+                    "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "로그인 · 회원": "login|password|로그인|회원가입",
+  "입고 · 로트 등록 · 수정": "입고|receive|@app\\.(post|put|patch)\\(\"/api/lots\"\\)|로트 등록",
+  "할인 판매 · 가격": "할인|discount|markdown|가격 변경",
+  "바코드 · 사진": "barcode|바코드|upload|UploadFile|사진",
+  "알림 · 메일": "notify|notification|알림 발송|메일 발송|smtp",
+  "편집 화면": "/api/admin|품목 등록|@app\\.(post|put|patch|delete)\\(\"/api/(items|users)\"",
+  "엑셀 내려받기": "download|내려받기|다운로드|text/csv",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}

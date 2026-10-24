@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 꼬르륵식품 '유통기한 임박 재고 알림판' 웹앱을 만들어 줘. 창고에 로트마다 유통기한이 다른 재고가 있는데, 임박한 것과 만료된 것이 한눈에 보여야 하고, 출고하면 유통기한이 가까운 것부터 나가야 해. 만료된 건 관리자가 폐기할 수 있어. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 88691,
+ "num_turns": 8,
+ "total_cost_usd": 0.2748465,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 30364,
+  "cache_read_input_tokens": 214265,
+  "output_tokens": 13194,
+  "output_tokens_details": {
+   "thinking_tokens": 546
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 30364,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1065,
+    "cache_read_input_tokens": 45714,
+    "cache_creation_input_tokens": 1322,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1322
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "꼬르륵식품 유통기한 알림판을 만들었습니다. API는 스모크 테스트(`smoke_test.py`)로 확인했고, 브라우저 화면은 열어 보지 않았습니다.\n\n**실행 방법** (작업 폴더에서)\n```\npip install -r requirements.txt\npython main.py\n```\n`http://127.0.0.1:8000`에 접속하면 됩니다. 처음 실행할 때 `korreuk.db`가 자동으로 만들어지고, 8개 제품·25개 로트의 가상 데이터가 들어갑니다. 유통기한은 오늘 날짜 기준으로 잡혀서, 실행하는 날마다 만료·임박 로트가 섞여 보입니다.\n\n**화면 구성**\n- **상단 타일 4개:** 만료, 긴급(D-7 이내), 임박(D-30 이내), 정상별 로트 수와 수량을 보여 줍니다. 타일을 누르면 그 상태만 필터링됩니다.\n- **로트 표:** 유통기한이 빠른 순으로 정렬하고, 상태를 색 배지와 D-day로 표시합니다. 만료 행은 붉게 강조됩니다.\n- **출고:** 제품과 수량을 넣으면 유통기한이 가까운 로트부터 자동으로 차감하고, 어느 로트에서 몇 개 나갔는지 알려 줍니다. 만료된 재고는 출고 대상에서 빠지며, 가능 수량이 부족하면 거절합니다.\n- **입고:** 새 로트를 등록합니다.\n- **이력:** 출고와 폐기 내역을 보여 줍니다.\n- **폐기:** 만료 로트에만 폐기 버튼이 나타나고, 관리자 로그인 후에만 눌러집니다. 서버도 PIN을 확인하며, 만료되지 않은 로트는 폐기를 거절합니다.\n\n**테스트 결과**\n- 왕김밥 150개를 출고하니 유통기한이 빠른 로트부터 차감됐고, 만료 로트는 건너뛰었습니다.\n- PIN 없이 폐기하면 403, 만료 전 로트를 폐기하면 400이 나왔습니다.\n\n**참고**\n- 관리자 PIN은 기본값이 `1234`입니다. 바꾸려면 환경변수 `KORREUK_ADMIN_PIN`을 설정하세요. 이 PIN은 간단한 보호 장치라서, 실제로 운영하려면 제대로 된 로그인으로 바꿔야 합니다.\n- 긴급/임박 기준일은 `main.py` 맨 위의 `DANGER_DAYS`, `WARN_DAYS`에서 바꿀 수 있습니다.\n- 가상 데이터를 다시 만들고 싶으면 `korreuk.db`를 지우고 다시 실행하세요.",
+ "wall_s": 96.0
+}
