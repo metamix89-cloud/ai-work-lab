@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>가나다식품 세금계산서 발행</title>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif;background:#F6F7FB;color:#111318;margin:0;padding:20px}
+h1{font-size:20px;margin:0 0 10px}.wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:14px}
+.card{background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:12px;font-size:13px}
+table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid #E5E7EB;padding:5px 6px;text-align:left}
+.num{text-align:right}.msg{color:#B91C1C;min-height:18px}input{width:90px}
+</style></head><body>
+<h1>가나다식품 세금계산서 발행</h1>
+<div class="wrap">
+ <div class="card">
+  <div><select data-testid="customer" id="cust"></select> <input data-testid="issued" id="issued" type="date"></div>
+  <div id="lines"></div><button data-testid="add-line" id="add">줄 추가</button>
+  <div>공급가 <b data-testid="pv-supply" id="pvs">0</b> · 세액 <b data-testid="pv-tax" id="pvt">0</b> · 합계 <b data-testid="pv-total" id="pvo">0</b></div>
+  <button data-testid="issue-btn" id="issue">발행</button>
+  <div class="msg" data-testid="message" id="msg"></div>
+  <div id="detail"></div>
+ </div>
+ <div class="card"><table id="ledger"></table>
+  <div>월 합계 — 공급가 <b data-testid="month-supply" id="ms"></b> · 세액 <b data-testid="month-tax" id="mt"></b> · 합계 <b data-testid="month-total" id="mo"></b></div></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);const f=n=>Number(n).toLocaleString('ko-KR');
+async function api(u,o){const r=await fetch(u,o);const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.detail||'오류');return j;}
+const post=(u,b)=>api(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+function addLine(){const d=document.createElement('div');d.dataset.testid='line';d.setAttribute('data-testid','line');
+  d.innerHTML='<input data-testid="item" placeholder="품목"> <input data-testid="qty" type="number" value="1"> <input data-testid="price" type="number" value="0">';$('lines').appendChild(d);d.oninput=pv;}
+function body(){return{biz_no:$('cust').value,issued:$('issued').value,lines:[...document.querySelectorAll('[data-testid=line]')].map(l=>({item:l.querySelector('[data-testid=item]').value,qty:Number(l.querySelector('[data-testid=qty]').value),unit_price:Number(l.querySelector('[data-testid=price]').value)}))};}
+async function pv(){try{const p=await post('/api/invoices/preview',body());$('pvs').textContent=f(p.supply);$('pvt').textContent=f(p.tax);$('pvo').textContent=f(p.total);}catch(e){}}
+async function load(){
+  try{const l=await api('/api/invoices');
+    $('ledger').innerHTML='<tr><th>번호</th><th>거래처</th><th class="num">합계</th><th>상태</th></tr>'+l.items.map(i=>`<tr data-testid="invoice-row" data-no="${i.invoice_no}" data-status="${i.status}"><td>${i.invoice_no}</td><td>${i.customer||''}</td><td class="num">${f(i.total)}</td><td>${i.status}</td></tr>`).join('');
+    $('ms').textContent=f(l.totals.supply);$('mt').textContent=f(l.totals.tax);$('mo').textContent=f(l.totals.total);
+  }catch(e){$('ledger').innerHTML='<tr><td>불러오지 못했습니다 <button onclick="load()">다시 시도</button></td></tr>';}
+}
+$('ledger').onclick=async e=>{const r=e.target.closest('[data-testid=invoice-row]');if(!r)return;const d=await api('/api/invoices/'+r.dataset.no);
+  $('detail').innerHTML=`<b>${d.invoice_no}</b> ${d.status} · ${f(d.total)}원<br>${d.lines.map(l=>l.item+' '+l.qty+'×'+f(l.unit_price)).join('<br>')}
+  ${d.amends?'<br>이 계산서를 고친 것: '+d.amends:''}${d.amended_by?'<br>고쳐진 계산서: '+d.amended_by:''}
+  ${d.status==='발행'?`<br><button data-testid="amend-btn" onclick="amend('${d.invoice_no}')">수정 발행</button> <button data-testid="cancel-btn" onclick="cancelInv('${d.invoice_no}')">취소</button>`:''}`;};
+async function amend(no){try{const b=body();await post('/api/invoices/'+no+'/amend',{issued:b.issued,lines:b.lines});load();}catch(e){$('msg').textContent=e.message;}}
+async function cancelInv(no){try{await post('/api/invoices/'+no+'/cancel',{});load();}catch(e){$('msg').textContent=e.message;}}
+$('issue').onclick=async()=>{$('msg').textContent='';try{await post('/api/invoices',body());load();}catch(e){$('msg').textContent=e.message;}};
+$('add').onclick=addLine;
+api('/api/customers').then(c=>{$('cust').innerHTML=c.map(x=>`<option value="${x.biz_no}">${x.name}</option>`).join('');});
+$('issued').value=new Date().toISOString().slice(0,10);addLine();load();
+</script></body></html>

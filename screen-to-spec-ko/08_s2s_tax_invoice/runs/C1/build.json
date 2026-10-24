@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 91389,
+ "num_turns": 11,
+ "total_cost_usd": 0.3719203,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 16,
+  "cache_creation_input_tokens": 45514,
+  "cache_read_input_tokens": 356723,
+  "output_tokens": 15416,
+  "output_tokens_details": {
+   "thinking_tokens": 784
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 45514,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 610,
+    "cache_read_input_tokens": 61892,
+    "cache_creation_input_tokens": 294,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 294
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "세금계산서 발행 웹앱을 만들었고, `python -m pytest tests -q` 로 9개가 모두 통과했습니다. 화면은 테스트가 여는 것만 확인했고, 수정 발행 폼과 오류 상태(다시 시도)는 직접 눌러 보지 않았습니다.\n\n```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 아래 3가지. 추가한 API 경로는 없음\n```\n\n- **수정 발행 화면:** 상세의 수정 발행 버튼을 누르면 왼쪽 작성 폼에 원본 품목이 채워집니다. 거래처는 잠기고 발행 버튼이 \"수정 발행\"으로 바뀝니다. 이때 PRD 에 없는 \"수정 취소\" 버튼이 하나 생깁니다.\n- **품목 줄 삭제 버튼:** 작성 폼의 줄마다 \"삭제\" 버튼을 넣었습니다. 계산서 삭제가 아니라 입력 중인 줄을 지우는 버튼입니다.\n- **seed 날짜:** `seed/*.csv` 의 계산서 날짜는 오늘(2026-10-24)로 적어 두었습니다. 다른 날에 서버를 띄우면 대장의 \"이번 달\" 목록에 이 3건이 안 보일 수 있고, 그때는 CSV 날짜를 바꿔 주세요. 테스트는 자기 데이터로 바꿔 끼우므로 영향이 없습니다.",
+ "wall_s": 107.0
+}

@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 세금계산서</title>
+<style>
+  :root { --pri:#1f6feb; --bd:#d8dee4; --bg:#f6f8fa; --mut:#656d76; --err:#cf222e; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:"Malgun Gothic",system-ui,sans-serif; background:var(--bg); color:#1f2328; font-size:14px; }
+  header { background:#fff; border-bottom:1px solid var(--bd); padding:12px 24px; display:flex; align-items:center; gap:24px; }
+  header h1 { font-size:18px; margin:0; }
+  nav button { border:0; background:none; padding:8px 14px; cursor:pointer; font-size:14px; border-radius:6px; }
+  nav button.on { background:#ddf4ff; color:var(--pri); font-weight:bold; }
+  main { max-width:1000px; margin:20px auto; padding:0 16px; }
+  .card { background:#fff; border:1px solid var(--bd); border-radius:8px; padding:18px; margin-bottom:16px; }
+  h2 { font-size:16px; margin:0 0 14px; }
+  table { width:100%; border-collapse:collapse; }
+  th, td { padding:8px; border-bottom:1px solid var(--bd); text-align:left; }
+  th { background:var(--bg); font-weight:600; white-space:nowrap; }
+  .num { text-align:right; font-variant-numeric:tabular-nums; }
+  input, select, textarea { font:inherit; padding:6px 8px; border:1px solid var(--bd); border-radius:6px; width:100%; }
+  td input.num { text-align:right; }
+  button.btn { font:inherit; padding:7px 14px; border:1px solid var(--bd); background:#fff; border-radius:6px; cursor:pointer; }
+  button.btn.pri { background:var(--pri); border-color:var(--pri); color:#fff; }
+  button.btn.del { color:var(--err); }
+  .row { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; }
+  .row > label { flex:1; min-width:180px; display:flex; flex-direction:column; gap:4px; color:var(--mut); }
+  .totals { margin-left:auto; width:300px; margin-top:12px; }
+  .totals div { display:flex; justify-content:space-between; padding:4px 0; }
+  .totals .grand { border-top:2px solid #1f2328; font-weight:bold; font-size:16px; margin-top:4px; padding-top:8px; }
+  tr.click { cursor:pointer; } tr.click:hover { background:#f0f6ff; }
+  .msg { color:var(--err); margin:8px 0; min-height:1em; }
+  .tag { font-size:12px; padding:2px 6px; border-radius:10px; background:#eaeef2; }
+  .tag.free { background:#dafbe1; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .mut { color:var(--mut); }
+  dialog { border:1px solid var(--bd); border-radius:8px; width:420px; }
+  dialog label { display:block; margin-bottom:10px; color:var(--mut); }
+  @media print { header, .noprint { display:none; } body { background:#fff; } .card { border:0; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>🧾 가나다식품 세금계산서</h1>
+  <nav class="noprint">
+    <button id="nav-list" class="on">발행 목록</button>
+    <button id="nav-new">새 계산서 발행</button>
+  </nav>
+</header>
+<main>
+  <section id="view-list">
+    <div class="card">
+      <div class="row" style="margin-bottom:12px">
+        <label style="max-width:260px">거래처 필터
+          <select id="filter"></select>
+        </label>
+        <span class="mut" id="sum"></span>
+      </div>
+      <table>
+        <thead><tr><th>번호</th><th>발행일</th><th>거래처</th><th class="num">공급가액</th><th class="num">세액</th><th class="num">합계</th></tr></thead>
+        <tbody id="list"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="view-detail" hidden>
+    <div class="card" id="detail"></div>
+  </section>
+
+  <section id="view-form" hidden>
+    <div class="card">
+      <h2 id="form-title">새 계산서 발행</h2>
+      <div class="row">
+        <label>거래처
+          <select id="customer"></select>
+        </label>
+        <label style="flex:0 0 160px;min-width:160px">발행일
+          <input type="date" id="issue_date">
+        </label>
+        <button class="btn" id="add-customer" type="button">+ 거래처 추가</button>
+      </div>
+      <div id="cust-info" class="mut" style="margin-top:8px"></div>
+    </div>
+    <div class="card">
+      <h2>품목</h2>
+      <table>
+        <thead><tr>
+          <th style="width:30%">품목명</th><th style="width:10%">규격</th><th style="width:10%">수량</th>
+          <th style="width:15%">단가</th><th style="width:9%">과세</th>
+          <th class="num">공급가액</th><th class="num">세액</th><th></th>
+        </tr></thead>
+        <tbody id="items"></tbody>
+      </table>
+      <div style="margin-top:10px" class="row">
+        <button class="btn" id="add-item" type="button">+ 품목 추가</button>
+        <select id="preset" style="width:220px"><option value="">자주 쓰는 품목 불러오기…</option></select>
+      </div>
+      <div class="totals">
+        <div><span>공급가액</span><span id="t-supply">0</span></div>
+        <div><span>세액 (10%)</span><span id="t-tax">0</span></div>
+        <div class="grand"><span>합계</span><span id="t-grand">0</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <label class="mut">비고<textarea id="memo" rows="2" maxlength="200"></textarea></label>
+      <div class="msg" id="msg"></div>
+      <button class="btn pri" id="save">발행</button>
+      <button class="btn" id="cancel">취소</button>
+    </div>
+  </section>
+</main>
+
+<dialog id="cust-dlg">
+  <form method="dialog" id="cust-form">
+    <h2>거래처 추가</h2>
+    <label>상호<input name="name" required></label>
+    <label>사업자등록번호<input name="biz_no" placeholder="000-00-00000" pattern="\d{3}-\d{2}-\d{5}" required></label>
+    <label>대표자<input name="ceo" required></label>
+    <label>주소<input name="address" required></label>
+    <label>이메일<input name="email" type="email"></label>
+    <div class="msg" id="cust-msg"></div>
+    <button class="btn pri" value="ok">저장</button>
+    <button class="btn" value="cancel" formnovalidate>취소</button>
+  </form>
+</dialog>
+
+<script>
+const $ = s => document.querySelector(s);
+const won = n => Number(n).toLocaleString('ko-KR');
+const el = (tag, props = {}, ...kids) => {
+  const e = Object.assign(document.createElement(tag), props);
+  kids.forEach(k => e.append(k));
+  return e;
+};
+let customers = [], config = null, editingId = null;
+
+async function api(path, opts = {}) {
+  const r = await fetch('/api' + path, {
+    headers: { 'Content-Type': 'application/json' }, ...opts,
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  if (r.status === 204) return null;
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    const d = data.detail;
+    throw new Error(typeof d === 'string' ? d : Array.isArray(d) ? d.map(x => x.loc.slice(1).join('.') + ': ' + x.msg).join('\n') : '요청 실패');
+  }
+  return data;
+}
+
+function show(name) {
+  for (const v of ['list', 'detail', 'form']) $('#view-' + v).hidden = v !== name;
+  $('#nav-list').classList.toggle('on', name !== 'form');
+  $('#nav-new').classList.toggle('on', name === 'form' && editingId === null);
+}
+
+/* ---------- 목록 ---------- */
+async function loadList() {
+  const cid = $('#filter').value;
+  const rows = await api('/invoices' + (cid ? '?customer_id=' + cid : ''));
+  const tb = $('#list'); tb.replaceChildren();
+  let sum = 0;
+  for (const r of rows) {
+    sum += r.grand_total;
+    const tr = el('tr', { className: 'click' },
+      el('td', { textContent: r.invoice_no }), el('td', { textContent: r.issue_date }),
+      el('td', { textContent: r.customer_name }),
+      el('td', { className: 'num', textContent: won(r.supply_total) }),
+      el('td', { className: 'num', textContent: won(r.tax_total) }),
+      el('td', { className: 'num', textContent: won(r.grand_total) }));
+    tr.onclick = () => openDetail(r.id);
+    tb.append(tr);
+  }
+  if (!rows.length) tb.append(el('tr', {}, el('td', { colSpan: 6, className: 'mut', textContent: '발행된 계산서가 없습니다.' })));
+  $('#sum').textContent = `${rows.length}건 · 합계 ${won(sum)}원`;
+  show('list');
+}
+
+/* ---------- 상세 ---------- */
+async function openDetail(id) {
+  const inv = await api('/invoices/' + id);
+  const box = $('#detail'); box.replaceChildren();
+  const party = (title, p) => el('div', {}, el('h2', { textContent: title }),
+    el('div', { textContent: p.name || p.customer_name }),
+    el('div', { className: 'mut', textContent: '사업자번호 ' + (p.biz_no || p.customer_biz_no) }),
+    el('div', { className: 'mut', textContent: '대표 ' + (p.ceo || p.customer_ceo) }),
+    el('div', { className: 'mut', textContent: p.address || p.customer_address }));
+  const tbody = el('tbody');
+  for (const it of inv.items) tbody.append(el('tr', {},
+    el('td', { textContent: it.name }), el('td', { textContent: it.spec }),
+    el('td', { className: 'num', textContent: won(it.qty) }), el('td', { className: 'num', textContent: won(it.unit_price) }),
+    el('td', {}, el('span', { className: 'tag' + (it.taxable ? '' : ' free'), textContent: it.taxable ? '과세' : '면세' })),
+    el('td', { className: 'num', textContent: won(it.supply) }), el('td', { className: 'num', textContent: won(it.tax) })));
+  const thead = el('thead', {}, el('tr', {}, ...['품목명', '규격', '수량', '단가', '구분', '공급가액', '세액'].map((h, i) =>
+    el('th', { textContent: h, className: i === 2 || i === 3 || i > 4 ? 'num' : '' }))));
+  const totals = el('div', { className: 'totals' },
+    el('div', {}, el('span', { textContent: '공급가액' }), el('span', { textContent: won(inv.supply_total) })),
+    el('div', {}, el('span', { textContent: '세액' }), el('span', { textContent: won(inv.tax_total) })),
+    el('div', { className: 'grand' }, el('span', { textContent: '합계' }), el('span', { textContent: won(inv.grand_total) })));
+  const btns = el('div', { className: 'noprint', style: 'margin-top:16px;display:flex;gap:8px' },
+    el('button', { className: 'btn pri', textContent: '수정', onclick: () => openForm(inv) }),
+    el('button', { className: 'btn', textContent: '인쇄', onclick: () => print() }),
+    el('button', { className: 'btn del', textContent: '삭제', onclick: async () => {
+      if (!confirm(`${inv.invoice_no} 계산서를 삭제할까요?`)) return;
+      await api('/invoices/' + inv.id, { method: 'DELETE' }); loadList();
+    } }),
+    el('button', { className: 'btn', textContent: '목록으로', onclick: loadList }));
+  box.append(
+    el('h2', { textContent: `세금계산서 ${inv.invoice_no}` }),
+    el('div', { className: 'mut', textContent: '발행일 ' + inv.issue_date + (inv.updated_at ? ` (수정 ${inv.updated_at})` : '') }),
+    el('div', { className: 'two', style: 'margin:14px 0' }, party('공급자', inv.supplier), party('공급받는자', inv)),
+    el('table', {}, thead, tbody), totals);
+  if (inv.memo) box.append(el('p', { className: 'mut', textContent: '비고: ' + inv.memo }));
+  box.append(btns);
+  show('detail');
+}
+
+/* ---------- 작성/수정 폼 ---------- */
+function addRow(it = { name: '', spec: '', qty: 1, unit_price: 0, taxable: true }) {
+  const mk = (type, val, cls, extra = {}) => el('input', { type, value: val, className: cls || '', ...extra, oninput: recalc });
+  const chk = el('input', { type: 'checkbox', checked: it.taxable, onchange: recalc, style: 'width:auto' });
+  const tr = el('tr', {},
+    el('td', {}, mk('text', it.name, 'f-name', { maxLength: 100 })),
+    el('td', {}, mk('text', it.spec, 'f-spec', { maxLength: 30 })),
+    el('td', {}, mk('number', it.qty, 'num f-qty', { min: 1, step: 1 })),
+    el('td', {}, mk('number', it.unit_price, 'num f-price', { min: 0, step: 1 })),
+    el('td', {}, chk),
+    el('td', { className: 'num s-supply' }), el('td', { className: 'num s-tax' }),
+    el('td', {}, el('button', { className: 'btn del', type: 'button', textContent: '✕', onclick: () => { tr.remove(); recalc(); } })));
+  $('#items').append(tr); recalc();
+}
+
+// 서버(main.py calc)와 동일 규칙: 과세 품목 공급가 × 10%, 원 단위 절사
+function readRows() {
+  return [...$('#items').children].map(tr => ({
+    name: tr.querySelector('.f-name').value.trim(),
+    spec: tr.querySelector('.f-spec').value.trim(),
+    qty: parseInt(tr.querySelector('.f-qty').value, 10) || 0,
+    unit_price: parseInt(tr.querySelector('.f-price').value, 10) || 0,
+    taxable: tr.querySelector('input[type=checkbox]').checked,
+    _tr: tr,
+  }));
+}
+function recalc() {
+  let s = 0, t = 0;
+  for (const r of readRows()) {
+    const supply = r.qty * r.unit_price, tax = r.taxable ? Math.floor(supply * config.tax_rate / 100) : 0;
+    r._tr.querySelector('.s-supply').textContent = won(supply);
+    r._tr.querySelector('.s-tax').textContent = won(tax);
+    s += supply; t += tax;
+  }
+  $('#t-supply').textContent = won(s); $('#t-tax').textContent = won(t); $('#t-grand').textContent = won(s + t);
+}
+
+function showCustInfo() {
+  const c = customers.find(c => c.id == $('#customer').value);
+  $('#cust-info').textContent = c ? `사업자번호 ${c.biz_no} · 대표 ${c.ceo} · ${c.address}` : '';
+}
+
+function openForm(inv = null) {
+  editingId = inv ? inv.id : null;
+  $('#form-title').textContent = inv ? `계산서 수정 (${inv.invoice_no})` : '새 계산서 발행';
+  $('#save').textContent = inv ? '수정 저장' : '발행';
+  $('#issue_date').value = inv ? inv.issue_date : new Date().toLocaleDateString('sv-SE');
+  $('#customer').value = inv ? inv.customer_id : customers[0]?.id;
+  $('#memo').value = inv ? inv.memo : '';
+  $('#msg').textContent = '';
+  $('#items').replaceChildren();
+  (inv ? inv.items.map(i => ({ ...i, taxable: !!i.taxable })) : [undefined]).forEach(i => addRow(i));
+  showCustInfo(); show('form');
+}
+
+async function save() {
+  const rows = readRows().map(({ _tr, ...r }) => r);
+  const body = { issue_date: $('#issue_date').value, customer_id: +$('#customer').value, memo: $('#memo').value, items: rows };
+  if (rows.some(r => !r.name)) { $('#msg').textContent = '품목명을 입력하세요.'; return; }
+  if (rows.some(r => r.qty < 1)) { $('#msg').textContent = '수량은 1 이상이어야 합니다.'; return; }
+  try {
+    const inv = editingId ? await api('/invoices/' + editingId, { method: 'PUT', body })
+                          : await api('/invoices', { method: 'POST', body });
+    editingId = null; openDetail(inv.id);
+  } catch (e) { $('#msg').textContent = e.message; }
+}
+
+/* ---------- 거래처 ---------- */
+function fillCustomers(keepVal) {
+  for (const sel of [$('#customer'), $('#filter')]) {
+    const prev = sel.value; sel.replaceChildren();
+    if (sel.id === 'filter') sel.append(el('option', { value: '', textContent: '전체' }));
+    customers.forEach(c => sel.append(el('option', { value: c.id, textContent: `${c.name} (${c.biz_no})` })));
+    sel.value = keepVal && sel.id === 'customer' ? keepVal : prev;
+  }
+}
+
+$('#cust-form').addEventListener('submit', async e => {
+  if (e.submitter?.value !== 'ok') return;
+  e.preventDefault();
+  const body = Object.fromEntries(new FormData(e.target));
+  try {
+    const c = await api('/customers', { method: 'POST', body });
+    customers = await api('/customers'); fillCustomers(c.id); showCustInfo();
+    e.target.reset(); $('#cust-dlg').close();
+  } catch (err) { $('#cust-msg').textContent = err.message; }
+});
+
+/* ---------- 초기화 ---------- */
+$('#nav-list').onclick = loadList;
+$('#nav-new').onclick = () => openForm();
+$('#cancel').onclick = loadList;
+$('#save').onclick = save;
+$('#add-item').onclick = () => addRow();
+$('#filter').onchange = loadList;
+$('#customer').onchange = showCustInfo;
+$('#add-customer').onclick = () => { $('#cust-msg').textContent = ''; $('#cust-dlg').showModal(); };
+$('#preset').onchange = e => {
+  const p = config.products[e.target.value];
+  if (p) {
+    const last = $('#items').lastElementChild;
+    if (last && !last.querySelector('.f-name').value.trim()) last.remove();
+    addRow({ name: p.name, spec: p.spec, qty: 1, unit_price: p.unit_price, taxable: p.taxable });
+  }
+  e.target.value = '';
+};
+
+(async () => {
+  [config, customers] = await Promise.all([api('/config'), api('/customers')]);
+  config.products.forEach((p, i) => $('#preset').append(el('option', { value: i, textContent: `${p.name} (${won(p.unit_price)}원${p.taxable ? '' : ', 면세'})` })));
+  fillCustomers(); loadList();
+})();
+</script>
+</body>
+</html>

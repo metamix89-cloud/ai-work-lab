@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 106310,
+ "num_turns": 12,
+ "total_cost_usd": 0.37041240000000003,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 39929,
+  "cache_read_input_tokens": 299584,
+  "output_tokens": 18071,
+  "output_tokens_details": {
+   "thinking_tokens": 1465
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 39929,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 998,
+    "cache_read_input_tokens": 55889,
+    "cache_creation_input_tokens": 712,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 712
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD대로 웹앱을 만들었습니다. API는 스모크 테스트를 통과했지만, 화면은 브라우저로 열어 보지 못했습니다. `tests/test_dod.py`도 이 폴더에 없어서 T1~T9는 돌려 보지 못했습니다.\n\n**스모크 테스트에서 확인한 것**\n- 1,005원 3줄은 세액 301원, 합계 3,316원이 나옵니다.\n- 요청에 `tax` 같은 엉터리 금액을 넣어도 서버가 다시 계산합니다.\n- 발행 번호는 seed 다음인 `INV-20261024-004`로 이어집니다.\n- 수정 발행은 새 번호를 만들고, 같은 원본을 또 고치면 409입니다.\n- 없는 번호에 잘못된 본문을 보내면 400, 올바른 본문이면 404입니다.\n- 월 합계는 `발행` 상태만 더합니다.\n- `/`는 200으로 열립니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/`의 CSV로 `invoice.db`를 새로 만들고, API 7개와 규칙 R1~R7을 구현했습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. 왼쪽이 작성·미리보기, 오른쪽이 대장·월 합계·상세입니다. 수정 발행, 취소, 메시지, \"불러오지 못했습니다\" 오류 상태와 다시 시도 버튼이 있고, PRD의 `data-testid`와 `data-no`·`data-status` 속성을 그대로 붙였습니다.\n- `seed/*.csv`: 거래처 3곳과 오늘(2026-10-24) 날짜 계산서 3건(발행 2·취소 1)입니다.\n\n**알아 둘 점**\n- 화면의 수정 발행 버튼은 바로 발행하지 않습니다. 원본 내용을 왼쪽 폼에 채워 주면 고친 뒤 \"수정 발행\"을 누르는 방식입니다. 이 버튼을 눌러 바로 수정되길 기대하는 테스트가 있으면 알려 주세요.\n- seed 날짜는 2026-10-24로 고정되어 있습니다. 다른 날 서버를 띄우면 \"오늘 004\" 번호가 맞지 않고, 대장도 그 달 기준으로 나옵니다. 그런 날에는 seed 날짜를 바꿔야 합니다.\n\n**실행**\n```\npython -m uvicorn main:app --port 8000\n```\n`fastapi`, `uvicorn`을 설치해 두었습니다. 위 스모크 테스트에 쓴 `httpx`도 설치했지만 서버 실행에는 필요 없습니다.",
+ "wall_s": 119.3
+}

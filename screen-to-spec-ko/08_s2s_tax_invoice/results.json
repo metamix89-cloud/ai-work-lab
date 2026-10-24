@@ -1,0 +1,811 @@
+{
+ "A1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: (422, {'detail': [{'type': 'missing', 'loc': ['body', 'issue_date'], 'msg': 'Field required', 'input': {'biz_no': '101...msg': 'Field required', 'input': {'biz_no': '101-81-11111', 'issued': '2026-10-24', 'lines': [{...}, {...}, {...}]}}]})\nassert 422 == 201",
+   "T3": "AssertionError: (405, {'detail': 'Method Not Allowed'})\nassert 405 == 200",
+   "T4": "AssertionError: (422, {'detail': [{'type': 'missing', 'loc': ['body', 'issue_date'], 'msg': 'Field required', 'input': {'biz_no': '202...', 'items'], 'msg': 'Field required', 'input': {'biz_no': '202-81-22222', 'issued': '2026-10-24', 'lines': [{...}]}}]})\nassert 422 == 201",
+   "T5": "AssertionError: 400 이어야 하는데: [('모르는 거래처', 422), ('품목 없음', 422), ('수량 0', 422), ('수량 1.5', 422), ('음수 단가', 422)]\nassert not [('모르는 거래처', 422), ('품목 없음', 422), ('수량 0', 422), ('수량 1.5', 422), ('음수 단가', 422)]",
+   "T6": "AssertionError: ('없는 번호 + 잘못된 본문은 400 이 먼저', 404, {'detail': 'Not Found'})\nassert 404 == 400",
+   "T7": "AssertionError: (404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T8": "TypeError: list indices must be integers or slices, not str",
+   "T9": "AssertionError: 대장 행 0개\nassert 0 == 7\n +  where 0 = len([])"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": " + \"/api/invoices/%s/cancel\" % NO(2))\n>       assert st == 200 and body.get(\"status\") == \"취소\", (st, body)\nE       AssertionError: (404, {'detail': 'Not Found'})\nE       assert (404 == 200)\n\n_grader\\test_dod.py:264: AssertionError\n______________________ test_T8_month_totals_only_issued _______________________\n\nsrv = <test_dod.Server object at 0x0000019E33BE6900>\n\n    def test_T8_month_totals_only_issued(srv):\n        body = ledger(srv)\n>       assert body[\"count\"] == 7, body[\"count\"]\n               ^^^^^^^^^^^^^\nE       TypeError: list indices must be integers or slices, not str\n\n_grader\\test_dod.py:275: TypeError\n____________________________ test_T9_screen_ledger ____________________________\n\nsrv = <test_dod.Server object at 0x0000019E33BE6900>\npw = <Browser type=<BrowserType name=chromium executable_path=C:\\Users\\DESKTOP_KIM\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen_ledger(srv, pw):\n        page = open_page(pw, srv)\n        rows = page.query_selector_all('[data-testid=\"invoice-row\"]')\n>       assert len(rows) == 7, \"대장 행 %d개\" % len(rows)\nE       AssertionError: 대장 행 0개\nE       assert 0 == 7\nE        +  where 0 = len([])\n\n_grader\\test_dod.py:283: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_tax_on_total_floor - AssertionError: (422...\nFAILED _grader/test_dod.py::test_T3_server_recomputes_and_preview_matches - A...\nFAILED _grader/test_dod.py::test_T4_numbering_continues - AssertionError: (42...\nFAILED _grader/test_dod.py::test_T5_required_fields - AssertionError: 400 이...\nFAILED _grader/test_dod.py::test_T6_amend_creates_new_and_keeps_original - As...\nFAILED _grader/test_dod.py::test_T7_cancel - AssertionError: (404, {'detail':...\nFAILED _grader/test_dod.py::test_T8_month_totals_only_issued - TypeError: lis...\nFAILED _grader/test_dod.py::test_T9_screen_ledger - AssertionError: 대장 행 0개\n8 failed, 1 passed in 5.77s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/config",
+   "/api/customers",
+   "/api/invoices",
+   "/api/invoices/{inv_id}"
+  ],
+  "extra_routes": [
+   "/api/config"
+  ],
+  "tests_modified": null,
+  "files": [
+   "README.md",
+   "build.json",
+   "main.py",
+   "seed/customers.csv",
+   "seed/invoice_lines.csv",
+   "seed/invoices.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '세금계산서 발행' 웹앱을 만들어 줘. 거래처를 고르고 품목 여러 줄을 넣으면 공급가 · 세액 · 합계가 계산되고, 발행한 계산서는 목록으로 보이고, 틀린 건 수정할 수 있으면 돼. 국세청 전송은 필요 없어. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 98908,
+   "num_turns": 10,
+   "total_cost_usd": 0.31882840000000007,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 18,
+    "cache_creation_input_tokens": 32324,
+    "cache_read_input_tokens": 359664,
+    "output_tokens": 15353,
+    "output_tokens_details": {
+     "thinking_tokens": 579
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 32324,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 939,
+      "cache_read_input_tokens": 48745,
+      "cache_creation_input_tokens": 251,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 251
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "세금계산서 발행 웹앱을 만들었습니다. API 스모크 테스트(생성·수정·합계 계산·잘못된 거래처 거절)는 통과했습니다. 브라우저 화면은 직접 열어 보지 못했으니 처음 띄울 때 한 번 확인해 주세요.\n\n**실행**\n```\ncd C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\s2s_runs\\08_s2s_tax_invoice\\A1\npython main.py\n```\nhttp://127.0.0.1:8000 에서 열립니다. fastapi와 uvicorn은 이미 설치돼 있었습니다.\n\n**기능**\n- **발행**: 거래처를 고르고 품목 여러 줄(품목명·규격·수량·단가·과세/면세)을 넣으면 줄별 공급가·세액과 전체 공급가·세액·합계가 바로 계산됩니다. 자주 쓰는 품목은 드롭다운에서 불러올 수 있고, \"거래처 추가\" 버튼으로 새 거래처도 등록됩니다.\n- **목록**: 발행번호(`20261024-0001` 형식), 발행일, 거래처, 금액이 보이고 거래처별로 거를 수 있습니다. 필터를 걸면 건수와 합계도 같이 바뀝니다.\n- **상세**: 행을 누르면 공급자와 공급받는자, 품목 내역이 나옵니다. 여기서 수정·삭제·인쇄를 할 수 있고, 수정하면 수정 시각이 기록됩니다.\n- **가상 데이터**: 첫 실행 때 거래처 6곳과 최근 계산서 12건이 자동으로 들어갑니다. 초기화하려면 `invoices.db`를 지우고 다시 실행하세요.\n\n**세액 계산 방식**\n- 과세 품목은 줄별 공급가에 10%를 곱해 원 단위를 버립니다. 면세 품목(두부, 계란, 배추 등)은 세액이 0원입니다.\n- 화면 계산은 미리보기이고, 저장 금액은 서버가 다시 계산합니다.\n\n**임의로 정한 값**\n- 공급자 정보(사업자번호 `123-45-67890`, 대표 `김가나`, 주소)는 가짜 값입니다. 실제 정보는 `main.py` 상단의 `SUPPLIER`에서 바꾸세요.\n- 세액을 줄별로 버리지 않고 합계에서 한 번만 버리는 방식이 필요하면 `calc()`만 고치면 됩니다.\n\n파일은 `main.py`(API·DB), `static/index.html`(화면), `README.md`입니다.",
+   "wall_s": 122.5
+  }
+ },
+ "A2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: (422, {'detail': [{'type': 'missing', 'loc': ['body', 'customer_id'], 'msg': 'Field required', 'input': {'biz_no': '10...msg': 'Field required', 'input': {'biz_no': '101-81-11111', 'issued': '2026-10-24', 'lines': [{...}, {...}, {...}]}}]})\nassert 422 == 201",
+   "T3": "AssertionError: (405, {'detail': 'Method Not Allowed'})\nassert 405 == 200",
+   "T4": "AssertionError: (422, {'detail': [{'type': 'missing', 'loc': ['body', 'customer_id'], 'msg': 'Field required', 'input': {'biz_no': '20...', 'items'], 'msg': 'Field required', 'input': {'biz_no': '202-81-22222', 'issued': '2026-10-24', 'lines': [{...}]}}]})\nassert 422 == 201",
+   "T5": "AssertionError: 400 이어야 하는데: [('모르는 거래처', 422), ('품목 없음', 422), ('수량 0', 422), ('수량 1.5', 422), ('음수 단가', 422)]\nassert not [('모르는 거래처', 422), ('품목 없음', 422), ('수량 0', 422), ('수량 1.5', 422), ('음수 단가', 422)]",
+   "T6": "AssertionError: ('없는 번호 + 잘못된 본문은 400 이 먼저', 404, {'detail': 'Not Found'})\nassert 404 == 400",
+   "T7": "AssertionError: (422, {'detail': [{'type': 'int_parsing', 'loc': ['path', 'inv_id'], 'msg': 'Input should be a valid integer, unable to parse string as an integer', 'input': 'INV-20261024-002'}]})\nassert (422 == 200)",
+   "T8": "TypeError: list indices must be integers or slices, not str",
+   "T9": "AssertionError: 대장 행 0개\nassert 0 == 7\n +  where 0 = len([])"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "type': 'int_parsing', 'loc': ['path', 'inv_id'], 'msg': 'Input should be a valid integer, unable to parse string as an integer', 'input': 'INV-20261024-002'}]})\nE       assert (422 == 200)\n\n_grader\\test_dod.py:264: AssertionError\n______________________ test_T8_month_totals_only_issued _______________________\n\nsrv = <test_dod.Server object at 0x00000216B6216900>\n\n    def test_T8_month_totals_only_issued(srv):\n        body = ledger(srv)\n>       assert body[\"count\"] == 7, body[\"count\"]\n               ^^^^^^^^^^^^^\nE       TypeError: list indices must be integers or slices, not str\n\n_grader\\test_dod.py:275: TypeError\n____________________________ test_T9_screen_ledger ____________________________\n\nsrv = <test_dod.Server object at 0x00000216B6216900>\npw = <Browser type=<BrowserType name=chromium executable_path=C:\\Users\\DESKTOP_KIM\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen_ledger(srv, pw):\n        page = open_page(pw, srv)\n        rows = page.query_selector_all('[data-testid=\"invoice-row\"]')\n>       assert len(rows) == 7, \"대장 행 %d개\" % len(rows)\nE       AssertionError: 대장 행 0개\nE       assert 0 == 7\nE        +  where 0 = len([])\n\n_grader\\test_dod.py:283: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_tax_on_total_floor - AssertionError: (422...\nFAILED _grader/test_dod.py::test_T3_server_recomputes_and_preview_matches - A...\nFAILED _grader/test_dod.py::test_T4_numbering_continues - AssertionError: (42...\nFAILED _grader/test_dod.py::test_T5_required_fields - AssertionError: 400 이...\nFAILED _grader/test_dod.py::test_T6_amend_creates_new_and_keeps_original - As...\nFAILED _grader/test_dod.py::test_T7_cancel - AssertionError: (422, {'detail':...\nFAILED _grader/test_dod.py::test_T8_month_totals_only_issued - TypeError: lis...\nFAILED _grader/test_dod.py::test_T9_screen_ledger - AssertionError: 대장 행 0개\n8 failed, 1 passed in 5.73s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/customers",
+   "/api/invoices",
+   "/api/invoices/{inv_id}",
+   "/api/invoices/{inv_id}/cancel",
+   "/static"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "run.bat",
+   "seed/customers.csv",
+   "seed/invoice_lines.csv",
+   "seed/invoices.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '세금계산서 발행' 웹앱을 만들어 줘. 거래처를 고르고 품목 여러 줄을 넣으면 공급가 · 세액 · 합계가 계산되고, 발행한 계산서는 목록으로 보이고, 틀린 건 수정할 수 있으면 돼. 국세청 전송은 필요 없어. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 117414,
+   "num_turns": 11,
+   "total_cost_usd": 0.3626269000000001,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 35825,
+    "cache_read_input_tokens": 321849,
+    "output_tokens": 18711,
+    "output_tokens_details": {
+     "thinking_tokens": 638
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 35825,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 932,
+      "cache_read_input_tokens": 51814,
+      "cache_creation_input_tokens": 683,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 683
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "가나다식품 세금계산서 발행 웹앱을 만들었습니다. API는 TestClient로 확인했습니다. 발행, 수정, 취소, 잘못된 입력 거부, 취소 건 수정 차단이 정상 동작했습니다. 브라우저 화면은 직접 열어 보지 못했습니다.\n\n**실행**\n- `run.bat`을 더블클릭하거나 `python -m uvicorn main:app --port 8000`을 실행한 뒤 http://localhost:8000 에 접속합니다.\n- 처음 실행하면 `invoices.db`가 만들어지면서 거래처 6곳과 계산서 14건의 가상 데이터가 들어갑니다.\n- 이 PC에서는 fastapi와 uvicorn이 이미 설치되어 있습니다. 다른 PC에서는 `pip install -r requirements.txt`가 필요합니다.\n\n**기능**\n- **발행**: `+ 새 계산서`에서 거래처를 고르고 품목 행을 원하는 만큼 추가합니다. 수량·단가를 바꾸면 공급가액, 세액, 합계가 바로 계산됩니다.\n- **목록**: 작성일 역순으로 보이고, 거래처명이나 번호로 검색할 수 있습니다. 번호는 `YYYYMMDD-001` 형식으로 자동 부여됩니다.\n- **수정**: 목록의 `수정` 버튼으로 거래처, 일자, 품목을 고칠 수 있고, 수정하면 상태가 `수정`으로 바뀝니다.\n- **취소**: `취소` 버튼으로 취소 처리하면 목록에 취소선으로 남고 이후 수정은 막힙니다. 요청하지 않은 기능인데 추가했습니다.\n\n**계산 규칙**\n- 공급가액은 수량 × 단가의 합계입니다.\n- 세액은 과세 품목 공급가액 합계의 10%이고, 원 미만은 절사합니다.\n- 품목마다 `과세` 체크 해제로 면세 처리할 수 있습니다. 식품이라 쌀이나 배추 같은 면세 품목이 섞일 것 같아 넣었습니다.\n- 세액은 서버에서 다시 계산해 저장하므로 화면 계산값과 저장값이 어긋나지 않습니다.\n- 계산서에는 발행 시점의 거래처명과 사업자번호를 함께 저장합니다.\n\n국세청 전송은 요청하신 대로 넣지 않았습니다.\n\n파일은 `main.py`(API·DB·시드 데이터)와 `static/index.html`(화면)이 핵심입니다.",
+   "wall_s": 141.9
+  }
+ },
+ "A3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: (422, {'detail': [{'type': 'missing', 'loc': ['body', 'partner_id'], 'msg': 'Field required', 'input': {'biz_no': '101... ['body', 'lines', 2, 'name'], 'msg': 'Field required', 'input': {'item': '참기름 320ml', 'qty': 3, 'unit_price': 335}}]})\nassert 422 == 201",
+   "T3": "AssertionError: (405, {'detail': 'Method Not Allowed'})\nassert 405 == 200",
+   "T4": "AssertionError: (422, {'detail': [{'type': 'missing', 'loc': ['body', 'partner_id'], 'msg': 'Field required', 'input': {'biz_no': '202...c': ['body', 'lines', 0, 'name'], 'msg': 'Field required', 'input': {'item': '김 선물세트', 'qty': 1, 'unit_price': 100}}]})\nassert 422 == 201",
+   "T5": "AssertionError: 400 이어야 하는데: [('모르는 거래처', 422), ('품목 없음', 422), ('수량 0', 422), ('수량 1.5', 422), ('음수 단가', 422)]\nassert not [('모르는 거래처', 422), ('품목 없음', 422), ('수량 0', 422), ('수량 1.5', 422), ('음수 단가', 422)]",
+   "T6": "AssertionError: ('없는 번호 + 잘못된 본문은 400 이 먼저', 404, {'detail': 'Not Found'})\nassert 404 == 400",
+   "T7": "AssertionError: (404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T8": "TypeError: list indices must be integers or slices, not str",
+   "T9": "AssertionError: 대장 행 0개\nassert 0 == 7\n +  where 0 = len([])"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": " + \"/api/invoices/%s/cancel\" % NO(2))\n>       assert st == 200 and body.get(\"status\") == \"취소\", (st, body)\nE       AssertionError: (404, {'detail': 'Not Found'})\nE       assert (404 == 200)\n\n_grader\\test_dod.py:264: AssertionError\n______________________ test_T8_month_totals_only_issued _______________________\n\nsrv = <test_dod.Server object at 0x000001BA33E3E900>\n\n    def test_T8_month_totals_only_issued(srv):\n        body = ledger(srv)\n>       assert body[\"count\"] == 7, body[\"count\"]\n               ^^^^^^^^^^^^^\nE       TypeError: list indices must be integers or slices, not str\n\n_grader\\test_dod.py:275: TypeError\n____________________________ test_T9_screen_ledger ____________________________\n\nsrv = <test_dod.Server object at 0x000001BA33E3E900>\npw = <Browser type=<BrowserType name=chromium executable_path=C:\\Users\\DESKTOP_KIM\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen_ledger(srv, pw):\n        page = open_page(pw, srv)\n        rows = page.query_selector_all('[data-testid=\"invoice-row\"]')\n>       assert len(rows) == 7, \"대장 행 %d개\" % len(rows)\nE       AssertionError: 대장 행 0개\nE       assert 0 == 7\nE        +  where 0 = len([])\n\n_grader\\test_dod.py:283: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_tax_on_total_floor - AssertionError: (422...\nFAILED _grader/test_dod.py::test_T3_server_recomputes_and_preview_matches - A...\nFAILED _grader/test_dod.py::test_T4_numbering_continues - AssertionError: (42...\nFAILED _grader/test_dod.py::test_T5_required_fields - AssertionError: 400 이...\nFAILED _grader/test_dod.py::test_T6_amend_creates_new_and_keeps_original - As...\nFAILED _grader/test_dod.py::test_T7_cancel - AssertionError: (404, {'detail':...\nFAILED _grader/test_dod.py::test_T8_month_totals_only_issued - TypeError: lis...\nFAILED _grader/test_dod.py::test_T9_screen_ledger - AssertionError: 대장 행 0개\n8 failed, 1 passed in 5.77s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/invoices",
+   "/api/invoices/{iid}",
+   "/api/partners",
+   "/api/products",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/partners",
+   "/api/products"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "run.bat",
+   "seed/customers.csv",
+   "seed/invoice_lines.csv",
+   "seed/invoices.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '세금계산서 발행' 웹앱을 만들어 줘. 거래처를 고르고 품목 여러 줄을 넣으면 공급가 · 세액 · 합계가 계산되고, 발행한 계산서는 목록으로 보이고, 틀린 건 수정할 수 있으면 돼. 국세청 전송은 필요 없어. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 98344,
+   "num_turns": 8,
+   "total_cost_usd": 0.3179536,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 33064,
+    "cache_read_input_tokens": 219536,
+    "output_tokens": 16372,
+    "output_tokens_details": {
+     "thinking_tokens": 474
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 33064,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 947,
+      "cache_read_input_tokens": 49017,
+      "cache_creation_input_tokens": 719,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 719
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "가나다식품 세금계산서 웹앱을 만들었고, 바로 실행됩니다. 서버 API는 테스트로 확인했습니다. 발행, 수정, 삭제, 빈 품목 거부, 합계 계산이 모두 정상이었습니다. 브라우저 화면(HTML/JS)은 열어서 확인하지 못했습니다.\n\n**실행 방법**\n`run.bat`을 더블클릭한 다음 http://127.0.0.1:8000 으로 접속하면 됩니다. 처음 실행할 때 `tax.db`가 생기면서 가상 데이터가 들어갑니다. 가상 데이터는 거래처 5곳, 등록 품목 8개, 9~10월 계산서 6건입니다. 가상 데이터를 처음 상태로 되돌리려면 `tax.db`를 지우고 다시 실행하세요.\n\n**기능**\n- **발행**: 거래처를 고르고 작성일과 비고를 넣은 뒤 품목 줄을 여러 개 추가합니다. 수량이나 단가를 바꾸면 줄별 공급가액·세액과 전체 공급가액·세액·합계가 바로 계산됩니다. 등록 품목은 드롭다운에서 골라 추가할 수 있고, 직접 입력해도 됩니다.\n- **목록**: 계산서 번호(`YYYYMMDD-0001` 형식), 작성일, 거래처, 금액이 보이고, 거래처명이나 번호로 검색할 수 있습니다. 아래에 건수와 금액 합계도 나옵니다.\n- **수정·삭제**: 목록의 \"수정\"을 누르면 같은 화면에서 거래처, 날짜, 품목을 고치고 저장할 수 있습니다. 계산서 번호는 그대로 유지됩니다. \"삭제\"도 있습니다.\n- 국세청 전송은 넣지 않았습니다.\n\n**제가 정한 계산 규칙** (다르면 알려 주세요)\n- 과세 품목의 세액은 줄마다 공급가액의 10%를 원 단위에서 반올림해 구하고, 합계 세액은 그 줄별 세액을 더한 값입니다.\n- 쌀, 마늘, 두부 같은 면세 품목은 줄마다 \"면세\"로 지정할 수 있고, 면세 줄의 세액은 0입니다.\n- 금액은 서버에서 다시 계산해서 저장합니다. 화면에 보이는 값과 저장되는 값이 같도록 계산식을 맞춰 두었습니다.\n\n파일은 `main.py`(API와 DB), `static/index.html`(화면), `run.bat`, `requirements.txt`입니다.",
+   "wall_s": 106.7
+  }
+ },
+ "B1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 6.47s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/customers",
+   "/api/invoices",
+   "/api/invoices/preview",
+   "/api/invoices/{no}",
+   "/api/invoices/{no}/amend",
+   "/api/invoices/{no}/cancel"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/customers.csv",
+   "seed/invoice_lines.csv",
+   "seed/invoices.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 106310,
+   "num_turns": 12,
+   "total_cost_usd": 0.37041240000000003,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 39929,
+    "cache_read_input_tokens": 299584,
+    "output_tokens": 18071,
+    "output_tokens_details": {
+     "thinking_tokens": 1465
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 39929,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 998,
+      "cache_read_input_tokens": 55889,
+      "cache_creation_input_tokens": 712,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 712
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD대로 웹앱을 만들었습니다. API는 스모크 테스트를 통과했지만, 화면은 브라우저로 열어 보지 못했습니다. `tests/test_dod.py`도 이 폴더에 없어서 T1~T9는 돌려 보지 못했습니다.\n\n**스모크 테스트에서 확인한 것**\n- 1,005원 3줄은 세액 301원, 합계 3,316원이 나옵니다.\n- 요청에 `tax` 같은 엉터리 금액을 넣어도 서버가 다시 계산합니다.\n- 발행 번호는 seed 다음인 `INV-20261024-004`로 이어집니다.\n- 수정 발행은 새 번호를 만들고, 같은 원본을 또 고치면 409입니다.\n- 없는 번호에 잘못된 본문을 보내면 400, 올바른 본문이면 404입니다.\n- 월 합계는 `발행` 상태만 더합니다.\n- `/`는 200으로 열립니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/`의 CSV로 `invoice.db`를 새로 만들고, API 7개와 규칙 R1~R7을 구현했습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. 왼쪽이 작성·미리보기, 오른쪽이 대장·월 합계·상세입니다. 수정 발행, 취소, 메시지, \"불러오지 못했습니다\" 오류 상태와 다시 시도 버튼이 있고, PRD의 `data-testid`와 `data-no`·`data-status` 속성을 그대로 붙였습니다.\n- `seed/*.csv`: 거래처 3곳과 오늘(2026-10-24) 날짜 계산서 3건(발행 2·취소 1)입니다.\n\n**알아 둘 점**\n- 화면의 수정 발행 버튼은 바로 발행하지 않습니다. 원본 내용을 왼쪽 폼에 채워 주면 고친 뒤 \"수정 발행\"을 누르는 방식입니다. 이 버튼을 눌러 바로 수정되길 기대하는 테스트가 있으면 알려 주세요.\n- seed 날짜는 2026-10-24로 고정되어 있습니다. 다른 날 서버를 띄우면 \"오늘 004\" 번호가 맞지 않고, 대장도 그 달 기준으로 나옵니다. 그런 날에는 seed 날짜를 바꿔야 합니다.\n\n**실행**\n```\npython -m uvicorn main:app --port 8000\n```\n`fastapi`, `uvicorn`을 설치해 두었습니다. 위 스모크 테스트에 쓴 `httpx`도 설치했지만 서버 실행에는 필요 없습니다.",
+   "wall_s": 119.3
+  }
+ },
+ "B2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 6.54s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/customers",
+   "/api/invoices",
+   "/api/invoices/preview",
+   "/api/invoices/{no}",
+   "/api/invoices/{no}/amend",
+   "/api/invoices/{no}/cancel"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/customers.csv",
+   "seed/invoice_lines.csv",
+   "seed/invoices.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 883357,
+   "num_turns": 11,
+   "total_cost_usd": 0.3777763,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 40374,
+    "cache_read_input_tokens": 283323,
+    "output_tokens": 18792,
+    "output_tokens_details": {
+     "thinking_tokens": 1748
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 40374,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1025,
+      "cache_read_input_tokens": 56079,
+      "cache_creation_input_tokens": 967,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 967
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD의 웹앱을 만들었고, 서버(API)는 직접 돌려서 확인했습니다. 화면은 브라우저에서 열어 보지 못했습니다.\n\n폴더에는 `PRD.md`만 있었고 `tests/test_dod.py`는 없었습니다. 그래서 완료 기준 T1~T9 전체를 돌리지는 못하고, 아래 항목만 TestClient로 확인했습니다.\n- `/`가 200으로 열립니다.\n- 1,005원 3줄은 세액 301, 합계 3,316이 나옵니다.\n- 요청에 엉터리 금액을 넣어도 서버가 다시 계산합니다.\n- 발행 번호가 004부터 이어집니다.\n- 수량 1.5는 400입니다.\n- 수정 발행은 새 번호가 생기고, 같은 원본을 또 고치면 409입니다.\n- 없는 번호는 본문이 잘못되면 400, 올바르면 404입니다.\n- 이미 취소된 계산서를 취소하면 409입니다.\n- 월 합계는 `발행` 상태만 더합니다.\n\n만든 파일은 다음과 같습니다.\n- **`main.py`:** API 7개와 업무 규칙 R1~R7입니다. 서버를 시작할 때마다 `seed/` CSV로 `invoice.db`를 새로 만듭니다.\n- **`static/index.html`:** `/`에 나오는 한 페이지로, 왼쪽이 작성이고 오른쪽이 대장과 상세입니다. 서버가 거부하면 메시지 줄에 `detail`을 그대로 보여 주고, 불러오기에 실패하면 \"불러오지 못했습니다\"와 다시 시도 버튼이 나옵니다.\n- **`seed/`:** 가상 거래처 3곳과 오늘 날짜(2026-10-24) 계산서 3건(발행 2, 취소 1)입니다.\n\n실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`입니다.\n\n알아둘 점이 두 가지 있습니다.\n- **시드 날짜:** 시드 계산서는 2026-10-24로 고정했습니다. 다른 날짜에 실행하면 \"이번 달\" 목록에 보이지 않고, 오늘 번호도 001부터 시작합니다. 날짜가 바뀌면 `seed/invoices.csv`와 `seed/invoice_lines.csv`의 날짜를 같이 바꿔야 합니다.\n- **수정 발행 입력:** 수정 발행은 왼쪽 작성란의 작성일과 품목 줄로 새 계산서를 만듭니다. 상세에서 \"내용을 작성란에 불러오기\"를 누른 뒤 고치고 `수정 발행`을 누르면 됩니다. 이 불러오기 버튼은 PRD에 없는 제가 추가한 것입니다.",
+   "wall_s": 889.6
+  }
+ },
+ "B3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 6.23s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/customers",
+   "/api/invoices",
+   "/api/invoices/preview",
+   "/api/invoices/{no}",
+   "/api/invoices/{no}/amend",
+   "/api/invoices/{no}/cancel"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/customers.csv",
+   "seed/invoice_lines.csv",
+   "seed/invoices.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 85794,
+   "num_turns": 7,
+   "total_cost_usd": 0.294405,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 35087,
+    "cache_read_input_tokens": 183170,
+    "output_tokens": 13572,
+    "output_tokens_details": {
+     "thinking_tokens": 1498
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 35087,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1008,
+      "cache_read_input_tokens": 50711,
+      "cache_creation_input_tokens": 1048,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 1048
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD.md대로 웹앱을 만들었습니다. API는 `TestClient`로 스모크 테스트를 했고 정상 동작했습니다. `tests/test_dod.py`는 폴더에 없어서 돌리지 못했습니다. 브라우저 화면도 열어 보지 못했습니다.\n\n**실행:** 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`을 실행하고 `/`를 엽니다. `PORT` 환경 변수가 있으면 그 포트를 씁니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/` CSV를 읽어 `invoice.db`를 새로 만듭니다. API 7개와 규칙 R1~R7이 들어 있습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. 왼쪽이 작성·미리보기, 오른쪽이 대장·월 합계·상세입니다. PRD의 `data-testid`와 `data-no`/`data-status` 속성을 모두 붙였습니다.\n- `seed/customers.csv`, `invoices.csv`, `invoice_lines.csv`: 가상 데이터입니다. 거래처 3곳, 오늘(2026-10-24) 날짜 계산서 3건(발행 2 · 취소 1)입니다.\n\n**스모크 테스트 결과**\n- **세액:** 1,005원짜리 3줄이 공급가 3,015, 세액 301, 합계 3,316으로 나왔습니다.\n- **번호:** 발행 번호는 004부터 이어졌습니다.\n- **입력 검증:** 수량 1.5는 400이었습니다.\n- **수정 발행:** 수정 발행은 201, 같은 원본을 또 고치면 409였습니다.\n- **없는 번호:** 본문이 잘못되면 400, 올바르면 404였습니다.\n- **화면:** `/`는 200으로 열렸습니다.\n\n**알아 둘 점**\n- 시드 날짜가 2026-10-24로 고정돼 있습니다. 다른 날 실행하면 \"이번 달 목록\"의 기준 달과 안 맞을 수 있고, 오늘 날짜 번호 004·005·006 기준 테스트도 달라질 수 있습니다.\n- 화면의 수정 발행은 상세에서 버튼을 누르면 원본 내용이 왼쪽 폼에 채워지는 방식입니다. 이때 거래처는 잠기고, 폼 아래 버튼이 \"수정 발행\"으로 바뀝니다.\n- 금액 계산은 정수 연산만 씁니다(세액 = 공급가 × 10 // 100).",
+   "wall_s": 90.5
+  }
+ },
+ "C1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 6.33s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/customers",
+   "/api/invoices",
+   "/api/invoices/preview",
+   "/api/invoices/{no}",
+   "/api/invoices/{no}/amend",
+   "/api/invoices/{no}/cancel"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/customers.csv",
+   "seed/invoice_lines.csv",
+   "seed/invoices.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 91389,
+   "num_turns": 11,
+   "total_cost_usd": 0.3719203,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 45514,
+    "cache_read_input_tokens": 356723,
+    "output_tokens": 15416,
+    "output_tokens_details": {
+     "thinking_tokens": 784
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 45514,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 610,
+      "cache_read_input_tokens": 61892,
+      "cache_creation_input_tokens": 294,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 294
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "세금계산서 발행 웹앱을 만들었고, `python -m pytest tests -q` 로 9개가 모두 통과했습니다. 화면은 테스트가 여는 것만 확인했고, 수정 발행 폼과 오류 상태(다시 시도)는 직접 눌러 보지 않았습니다.\n\n```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 아래 3가지. 추가한 API 경로는 없음\n```\n\n- **수정 발행 화면:** 상세의 수정 발행 버튼을 누르면 왼쪽 작성 폼에 원본 품목이 채워집니다. 거래처는 잠기고 발행 버튼이 \"수정 발행\"으로 바뀝니다. 이때 PRD 에 없는 \"수정 취소\" 버튼이 하나 생깁니다.\n- **품목 줄 삭제 버튼:** 작성 폼의 줄마다 \"삭제\" 버튼을 넣었습니다. 계산서 삭제가 아니라 입력 중인 줄을 지우는 버튼입니다.\n- **seed 날짜:** `seed/*.csv` 의 계산서 날짜는 오늘(2026-10-24)로 적어 두었습니다. 다른 날에 서버를 띄우면 대장의 \"이번 달\" 목록에 이 3건이 안 보일 수 있고, 그때는 CSV 날짜를 바꿔 주세요. 테스트는 자기 데이터로 바꿔 끼우므로 영향이 없습니다.",
+   "wall_s": 107.0
+  }
+ },
+ "C2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 6.43s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/customers",
+   "/api/invoices",
+   "/api/invoices/preview",
+   "/api/invoices/{no}",
+   "/api/invoices/{no}/amend",
+   "/api/invoices/{no}/cancel"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/customers.csv",
+   "seed/invoice_lines.csv",
+   "seed/invoices.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 90637,
+   "num_turns": 10,
+   "total_cost_usd": 0.365088,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 45414,
+    "cache_read_input_tokens": 312940,
+    "output_tokens": 15211,
+    "output_tokens_details": {
+     "thinking_tokens": 619
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 45414,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 324,
+      "cache_read_input_tokens": 61782,
+      "cache_creation_input_tokens": 304,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 304
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (customers.csv, invoices.csv, invoice_lines.csv)\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음. PRD 의 API 7개만 만들었고, 계산서를 고치는 PUT·PATCH 는 없습니다.\n\n- **seed 날짜:** `seed/` 의 날짜는 오늘(2026-10-24) 기준입니다. 테스트는 이 파일들을 자기 데이터로 바꿨다가 끝나면 되돌립니다.\n- **`month` 파라미터:** `GET /api/invoices` 에 `month` 를 `YYYY-MM` 형식이 아닌 값으로 주면 400 `month 형식은 YYYY-MM 입니다` 로 거부합니다. PRD 는 이 경우를 정하지 않았습니다.",
+   "wall_s": 102.4
+  }
+ },
+ "C3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 6.98s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/customers",
+   "/api/invoices",
+   "/api/invoices/preview",
+   "/api/invoices/{no}",
+   "/api/invoices/{no}/amend",
+   "/api/invoices/{no}/cancel"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/customers.csv",
+   "seed/invoice_lines.csv",
+   "seed/invoices.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 88392,
+   "num_turns": 10,
+   "total_cost_usd": 0.37187029999999993,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 45629,
+    "cache_read_input_tokens": 362523,
+    "output_tokens": 15307,
+    "output_tokens_details": {
+     "thinking_tokens": 525
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 45629,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 199,
+      "cache_read_input_tokens": 62133,
+      "cache_creation_input_tokens": 168,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 168
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (PRD 의 API 7개와 `/` 외에 추가한 API 경로 없음)\n```\n\n작성 화면의 \"수정 발행\" 버튼은 상세에서 고르면 작성란에 있는 작성일과 품목으로 새 계산서를 만듭니다. PRD 에 이 동작이 따로 적혀 있지 않아 이렇게 정했습니다.",
+   "wall_s": 99.7
+  }
+ }
+}

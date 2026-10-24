@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>가나다식품 세금계산서 발행 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 8편 목업. 가상 회사 · 가상 거래처 · 가상 사업자번호. 국세청 전송 없는 사내 대장. ?state=ok|empty|error. Mock-IT 라이트 테마. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--card:#FFFFFF;--indigo:#6366F1;--indigo2:#E0E7FF;--indigo3:#3730A3;--amber:#F59E0B;--rose:#EF4444;--emerald:#10B981}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:var(--indigo);display:inline-block}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#EEF0FF;color:var(--indigo);font-weight:700}
+.main{padding:18px 26px 14px 26px;display:flex;flex-direction:column;gap:9px}
+.top{display:flex;justify-content:space-between;align-items:center}
+h1{margin:0;font-size:21px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:12px;margin-top:3px}
+.row{display:grid;grid-template-columns:1fr 1.15fr;gap:12px;flex:1;min-height:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:7px;min-height:0;font-size:12.5px}
+.card h3{margin:0;font-size:13px;color:var(--ink2);font-weight:600;display:flex;justify-content:space-between}
+.f{display:flex;gap:6px}.f .in{flex:1;border:1px solid var(--line);border-radius:7px;padding:6px 9px;background:#fff}
+table{border-collapse:collapse;width:100%;font-size:12px}th{text-align:left;color:var(--mute);font-weight:600;padding:5px 6px;border-bottom:1px solid var(--line)}
+td{padding:6px;border-bottom:1px solid var(--line)}.r{text-align:right;font-variant-numeric:tabular-nums}
+.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.sum div{background:#F7F8FB;border:1px solid var(--line);border-radius:9px;padding:7px 10px}.sum small{display:block;color:var(--mute);font-size:10.5px}.sum b{font-size:17px}
+.sum .tax b{color:var(--indigo)}
+.note{font-size:11px;color:var(--ink2);background:#EEF0FF;border-radius:7px;padding:6px 9px}
+.note s{color:var(--rose)}
+.btn{background:var(--indigo);color:#fff;border-radius:8px;padding:8px;text-align:center;font-weight:700}
+.st{display:inline-block;border-radius:999px;padding:1px 8px;font-size:10.5px;font-weight:700}
+.st.i{background:#D1FAE5;color:#065F46}.st.a{background:#FEF3C7;color:#92400E}.st.c{background:#F3F4F6;color:#6B7280}
+.link{font-size:10.5px;color:var(--mute)}
+.tot{display:flex;justify-content:flex-end;gap:14px;font-size:12px;color:var(--ink2);border-top:1px solid var(--line);padding-top:6px}.tot b{color:var(--ink)}
+.msg{color:var(--rose);font-size:11.5px}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mute);gap:4px;font-size:11px;text-align:center}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:12px;padding:20px;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700}
+</style></head><body>
+<div class="app">
+ <div class="side">
+  <div class="logo"><i></i>가나다식품</div>
+  <div class="nav"><div>오늘의 현황판</div><div class="on">세금계산서</div><div>주문 · 재고</div><div>쇼핑몰</div></div>
+ </div>
+ <div class="main" id="main"></div>
+</div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const head=`<div class="top"><div><h1>세금계산서 발행</h1><div class="sub">금액은 서버가 센다 · 세액 = 공급가 합계 × 10% 원 미만 버림 · 발행한 계산서는 고치지 않고 새 번호로 수정 발행 · 사내 대장(국세청 전송 없음)</div></div></div>`;
+const form=`<div class="card"><h3>작성 <span>작성일 2026-10-24</span></h3>
+ <div class="f"><span class="in">행복마트 · 101-81-11111 ▾</span></div>
+ <table><tr><th>품목</th><th class="r">수량</th><th class="r">단가</th><th class="r">공급가</th></tr>
+  <tr><td>간장 1.8L</td><td class="r">1</td><td class="r">1,005</td><td class="r">1,005</td></tr>
+  <tr><td>김자반 50g</td><td class="r">5</td><td class="r">201</td><td class="r">1,005</td></tr>
+  <tr><td>참기름 320ml</td><td class="r">3</td><td class="r">335</td><td class="r">1,005</td></tr></table>
+ <div class="sum"><div><small>공급가</small><b>3,015</b></div><div class="tax"><small>세액</small><b>301</b></div><div><small>합계</small><b>3,316</b></div></div>
+ <div class="note">세액은 합계 3,015 × 10% = 301.5 → <b>301</b> (원 미만 버림) · 줄마다 매기면 <s>300</s> · 줄마다 사사오입 <s>303</s> · 합계 반올림 <s>302</s></div>
+ <div class="btn">발행 — INV-20261024-004</div></div>`;
+let html='';
+if(state==='ok'){
+  html=head+`<div class="row">${form}
+  <div class="card"><h3>발행 대장 <span>2026-10 · 7건</span></h3>
+   <table><tr><th>번호</th><th>거래처</th><th class="r">합계</th><th>상태</th></tr>
+    <tr><td>INV-20261024-001<div class="link">→ 고쳐진 계산서 007</div></td><td>행복마트</td><td class="r">11,000</td><td><span class="st a">수정됨</span></td></tr>
+    <tr><td>INV-20261024-002</td><td>두리상회</td><td class="r">10,164</td><td><span class="st c">취소</span></td></tr>
+    <tr><td>INV-20261024-003</td><td>미소급식</td><td class="r">5,500</td><td><span class="st c">취소</span></td></tr>
+    <tr><td>INV-20261024-004</td><td>행복마트</td><td class="r">3,316</td><td><span class="st i">발행</span></td></tr>
+    <tr><td>INV-20261024-005</td><td>두리상회</td><td class="r">11,902</td><td><span class="st i">발행</span></td></tr>
+    <tr><td>INV-20261024-006</td><td>두리상회</td><td class="r">110</td><td><span class="st i">발행</span></td></tr>
+    <tr><td>INV-20261024-007<div class="link">← 001 을 고친 것</div></td><td>행복마트</td><td class="r">13,200</td><td><span class="st i">발행</span></td></tr></table>
+   <div class="tot">월 합계(발행만) 공급가 <b>25,935</b> · 세액 <b>2,593</b> · 합계 <b>28,528</b></div>
+   <div class="msg">발행 상태가 아닙니다 — 001 을 다시 수정 발행 시도 거부(409)</div></div></div>`;
+}else if(state==='empty'){
+  html=head+`<div class="row">${form}
+  <div class="card"><h3>발행 대장 <span>2026-11 · 0건</span></h3><div class="empty"><b style="font-size:15px;color:#4B5563">이번 달 발행한 계산서가 없습니다</b>월 합계 0 — 수정됨 · 취소는 목록엔 보이고 합계엔 안 들어간다</div>
+   <div class="tot">월 합계 공급가 <b>0</b> · 세액 <b>0</b> · 합계 <b>0</b></div></div></div>`;
+}else{
+  html=head+`<div class="err"><div><b>불러오지 못했습니다.</b> 미리보기 API(/api/invoices/preview) 가 응답하지 않습니다 — 화면이 세액을 따로 계산하지 않으므로 발행 버튼을 잠급니다.</div><button>다시 시도</button></div>
+  <div class="card" style="flex:1"><div class="empty">금액은 서버 한 곳에서만 센다 — 화면과 서버가 따로 세면 1원이 어긋난다</div></div>`;
+}
+document.getElementById('main').innerHTML=html;
+</script></body></html>

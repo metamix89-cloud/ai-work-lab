@@ -1,0 +1,15 @@
+{
+ "allowed_routes": ["/", "/api/customers", "/api/invoices/preview", "/api/invoices", "/api/invoices/{no}", "/api/invoices/{no}/amend", "/api/invoices/{no}/cancel",
+                    "/api/invoices/{invoice_no}", "/api/invoices/{invoice_no}/amend", "/api/invoices/{invoice_no}/cancel", "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "제자리 수정(PUT · PATCH)": "@app\\.(put|patch)",
+  "삭제": "@app\\.delete",
+  "마스터 편집 화면": "거래처 등록|거래처 추가|품목 등록|@app\\.post\\(\\s*['\"]/api/(customers|items)['\"]",
+  "다른 세율 · 면세": "영세율|면세|tax_rate|세율 선택",
+  "PDF · 인쇄 · 메일": "pdf|window\\.print|인쇄|메일 발송|smtp",
+  "국세청 전송": "국세청|hometax|전송",
+  "엑셀": "xlsx|엑셀|csv 내보내기|export",
+  "로그인 · 권한": "login|password|로그인|auth",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}

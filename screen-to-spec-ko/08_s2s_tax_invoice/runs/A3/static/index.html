@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>가나다식품 세금계산서</title>
+<style>
+  :root { --bg:#f5f6f8; --card:#fff; --line:#dde1e7; --text:#1f2937; --muted:#6b7280; --accent:#2563eb; --danger:#dc2626; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif; background:var(--bg); color:var(--text); }
+  header { background:#fff; border-bottom:1px solid var(--line); padding:14px 24px; display:flex; align-items:center; gap:16px; }
+  header h1 { font-size:18px; margin:0; flex:1; }
+  main { max-width:1000px; margin:20px auto; padding:0 16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:18px; margin-bottom:16px; }
+  button { font:inherit; padding:7px 14px; border-radius:6px; border:1px solid var(--line); background:#fff; cursor:pointer; }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.danger { color:var(--danger); }
+  button.sm { padding:3px 9px; font-size:13px; }
+  input, select { font:inherit; padding:6px 8px; border:1px solid var(--line); border-radius:6px; width:100%; }
+  label { font-size:13px; color:var(--muted); display:block; margin-bottom:4px; }
+  table { width:100%; border-collapse:collapse; }
+  th, td { padding:8px 6px; border-bottom:1px solid var(--line); text-align:left; font-size:14px; }
+  th { color:var(--muted); font-weight:600; font-size:13px; }
+  .num { text-align:right; font-variant-numeric:tabular-nums; }
+  .grid { display:grid; grid-template-columns:2fr 1fr 2fr; gap:12px; }
+  .toolbar { display:flex; gap:8px; margin-bottom:12px; }
+  .toolbar input { max-width:280px; }
+  .totals { margin-left:auto; width:300px; margin-top:14px; }
+  .totals div { display:flex; justify-content:space-between; padding:4px 0; }
+  .totals .grand { border-top:2px solid var(--text); font-weight:700; font-size:17px; margin-top:4px; padding-top:8px; }
+  .partner-info { font-size:13px; color:var(--muted); margin-top:6px; min-height:18px; }
+  .hidden { display:none; }
+  .err { color:var(--danger); margin-top:8px; }
+  .actions { display:flex; gap:6px; justify-content:flex-end; }
+  .tag { font-size:11px; padding:1px 6px; border-radius:10px; background:#e5e7eb; color:#374151; }
+</style>
+</head>
+<body>
+<header>
+  <h1>가나다식품 · 세금계산서 발행</h1>
+  <button class="primary" id="btnNew">+ 새 계산서</button>
+</header>
+<main>
+  <section id="listView">
+    <div class="card">
+      <div class="toolbar">
+        <input id="search" placeholder="거래처명 또는 계산서번호 검색">
+      </div>
+      <table>
+        <thead><tr><th>번호</th><th>작성일</th><th>거래처</th><th class="num">공급가액</th><th class="num">세액</th><th class="num">합계</th><th></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div id="summary" class="partner-info"></div>
+    </div>
+  </section>
+
+  <section id="formView" class="hidden">
+    <div class="card">
+      <h3 id="formTitle" style="margin-top:0">새 계산서</h3>
+      <div class="grid">
+        <div><label>거래처</label><select id="partner"></select></div>
+        <div><label>작성일자</label><input type="date" id="issueDate"></div>
+        <div><label>비고</label><input id="memo"></div>
+      </div>
+      <div class="partner-info" id="partnerInfo"></div>
+    </div>
+    <div class="card">
+      <table>
+        <thead><tr>
+          <th style="width:22%">품목</th><th>규격</th><th style="width:80px">수량</th><th style="width:110px">단가</th>
+          <th style="width:80px">과세</th><th class="num">공급가액</th><th class="num">세액</th><th></th>
+        </tr></thead>
+        <tbody id="lineRows"></tbody>
+      </table>
+      <div class="toolbar" style="margin-top:12px">
+        <button id="addLine">+ 품목 추가</button>
+        <select id="quickProduct" style="max-width:260px"></select>
+        <button id="addProduct">등록 품목 추가</button>
+      </div>
+      <div class="totals">
+        <div><span>공급가액</span><span id="tSupply">0</span></div>
+        <div><span>세액 (10%)</span><span id="tTax">0</span></div>
+        <div class="grand"><span>합계</span><span id="tTotal">0</span></div>
+      </div>
+    </div>
+    <div class="actions">
+      <span class="err" id="err"></span>
+      <button id="btnCancel">취소</button>
+      <button class="primary" id="btnSave">발행</button>
+    </div>
+  </section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const won = n => Number(n).toLocaleString('ko-KR');
+let partners = [], products = [], editingId = null;
+
+async function api(path, opts = {}) {
+  const res = await fetch('/api' + path, { headers: {'Content-Type': 'application/json'}, ...opts });
+  if (!res.ok) {
+    let msg = res.statusText;
+    try {
+      const j = await res.json();
+      msg = typeof j.detail === 'string' ? j.detail
+        : (j.detail || []).map(e => e.loc.slice(1).join('.') + ': ' + e.msg).join(', ');
+    } catch {}
+    throw new Error(msg);
+  }
+  return res.status === 204 ? null : res.json();
+}
+
+// 서버(main.py calc_line)와 같은 규칙: 세액 = 공급가액 × 10% 원 단위 반올림, 면세는 0
+const calc = (qty, price, taxable) => {
+  const supply = qty * price;
+  return { supply, tax: taxable ? Math.floor((supply * 10 + 50) / 100) : 0 };
+};
+
+function esc(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+async function loadList() {
+  const q = $('search').value.trim();
+  const list = await api('/invoices' + (q ? '?q=' + encodeURIComponent(q) : ''));
+  $('rows').innerHTML = list.map(i => `
+    <tr>
+      <td>${esc(i.invoice_no)}</td><td>${esc(i.issue_date)}</td>
+      <td>${esc(i.partner_name)}${i.memo ? ` <span class="tag">${esc(i.memo)}</span>` : ''}</td>
+      <td class="num">${won(i.supply_amount)}</td><td class="num">${won(i.tax_amount)}</td>
+      <td class="num"><b>${won(i.total_amount)}</b></td>
+      <td><div class="actions">
+        <button class="sm" data-edit="${i.id}">수정</button>
+        <button class="sm danger" data-del="${i.id}">삭제</button>
+      </div></td>
+    </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:#6b7280">계산서가 없습니다</td></tr>';
+  const sum = k => list.reduce((a, i) => a + i[k], 0);
+  $('summary').textContent = `${list.length}건 · 공급가액 ${won(sum('supply_amount'))} · 세액 ${won(sum('tax_amount'))} · 합계 ${won(sum('total_amount'))}`;
+}
+
+function show(view) {
+  $('listView').classList.toggle('hidden', view !== 'list');
+  $('formView').classList.toggle('hidden', view !== 'form');
+}
+
+function lineRow(l = {}) {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input class="f-name" value="${esc(l.name)}"></td>
+    <td><input class="f-spec" value="${esc(l.spec)}"></td>
+    <td><input class="f-qty" type="number" min="1" step="1" value="${l.qty ?? 1}"></td>
+    <td><input class="f-price" type="number" min="0" step="1" value="${l.unit_price ?? 0}"></td>
+    <td><select class="f-tax"><option value="1">과세</option><option value="0" ${l.taxable === false ? 'selected' : ''}>면세</option></select></td>
+    <td class="num f-supply">0</td><td class="num f-taxamt">0</td>
+    <td><button class="sm danger f-del" type="button">✕</button></td>`;
+  $('lineRows').appendChild(tr);
+  recalc();
+}
+
+function readLines() {
+  return [...$('lineRows').children].map(tr => ({
+    name: tr.querySelector('.f-name').value.trim(),
+    spec: tr.querySelector('.f-spec').value.trim() || null,
+    qty: parseInt(tr.querySelector('.f-qty').value) || 0,
+    unit_price: parseInt(tr.querySelector('.f-price').value) || 0,
+    taxable: tr.querySelector('.f-tax').value === '1',
+  }));
+}
+
+function recalc() {
+  let S = 0, T = 0;
+  [...$('lineRows').children].forEach((tr, i) => {
+    const l = readLines()[i];
+    const c = calc(l.qty, l.unit_price, l.taxable);
+    tr.querySelector('.f-supply').textContent = won(c.supply);
+    tr.querySelector('.f-taxamt').textContent = won(c.tax);
+    S += c.supply; T += c.tax;
+  });
+  $('tSupply').textContent = won(S); $('tTax').textContent = won(T); $('tTotal').textContent = won(S + T);
+}
+
+function showPartner() {
+  const p = partners.find(p => p.id == $('partner').value);
+  $('partnerInfo').textContent = p ? `사업자번호 ${p.biz_no} · 대표 ${p.ceo} · ${p.address} · ${p.email}` : '';
+}
+
+function openForm(inv) {
+  editingId = inv ? inv.id : null;
+  $('formTitle').textContent = inv ? `계산서 수정 (${inv.invoice_no})` : '새 계산서';
+  $('btnSave').textContent = inv ? '수정 저장' : '발행';
+  $('err').textContent = '';
+  $('partner').value = inv ? inv.partner_id : partners[0].id;
+  $('issueDate').value = inv ? inv.issue_date : new Date().toISOString().slice(0, 10);
+  $('memo').value = inv ? inv.memo || '' : '';
+  $('lineRows').innerHTML = '';
+  (inv ? inv.lines : [{}]).forEach(lineRow);
+  showPartner(); show('form');
+}
+
+$('btnNew').onclick = () => openForm(null);
+$('btnCancel').onclick = () => show('list');
+$('partner').onchange = showPartner;
+$('search').oninput = loadList;
+$('addLine').onclick = () => lineRow();
+$('addProduct').onclick = () => {
+  const p = products.find(p => p.id == $('quickProduct').value);
+  if (p) lineRow({ name: p.name, spec: p.spec, qty: 1, unit_price: p.unit_price, taxable: p.taxable });
+};
+$('lineRows').addEventListener('input', recalc);
+$('lineRows').addEventListener('change', recalc);
+$('lineRows').addEventListener('click', e => {
+  if (e.target.classList.contains('f-del')) {
+    if ($('lineRows').children.length > 1) { e.target.closest('tr').remove(); recalc(); }
+  }
+});
+
+$('btnSave').onclick = async () => {
+  $('err').textContent = '';
+  const lines = readLines();
+  if (lines.some(l => !l.name || l.qty < 1)) { $('err').textContent = '품목명과 수량(1 이상)을 확인하세요'; return; }
+  const body = JSON.stringify({ partner_id: +$('partner').value, issue_date: $('issueDate').value, memo: $('memo').value, lines });
+  try {
+    await api(editingId ? '/invoices/' + editingId : '/invoices', { method: editingId ? 'PUT' : 'POST', body });
+    show('list'); loadList();
+  } catch (e) { $('err').textContent = e.message; }
+};
+
+$('rows').addEventListener('click', async e => {
+  const ed = e.target.dataset.edit, del = e.target.dataset.del;
+  if (ed) openForm(await api('/invoices/' + ed));
+  if (del && confirm('이 계산서를 삭제할까요?')) { await api('/invoices/' + del, { method: 'DELETE' }); loadList(); }
+});
+
+(async () => {
+  [partners, products] = await Promise.all([api('/partners'), api('/products')]);
+  $('partner').innerHTML = partners.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join('');
+  $('quickProduct').innerHTML = products.map(p => `<option value="${p.id}">${esc(p.name)} (${won(p.unit_price)}원${p.taxable ? '' : ', 면세'})</option>`).join('');
+  show('list'); loadList();
+})();
+</script>
+</body>
+</html>

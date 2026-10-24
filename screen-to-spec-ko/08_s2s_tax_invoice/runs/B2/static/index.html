@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 세금계산서 발행</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; color: #222; background: #f4f5f7; }
+  header { padding: 14px 24px; background: #1f3a5f; color: #fff; }
+  header h1 { margin: 0; font-size: 20px; }
+  header p { margin: 4px 0 0; font-size: 12px; opacity: .8; }
+  main { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px 24px; }
+  section { background: #fff; border: 1px solid #d8dce2; border-radius: 6px; padding: 16px; }
+  h2 { margin: 0 0 12px; font-size: 16px; }
+  label { display: block; font-size: 13px; margin-bottom: 10px; }
+  input, select, button { font: inherit; padding: 6px 8px; }
+  input, select { border: 1px solid #b9bfc9; border-radius: 4px; }
+  label input, label select { display: block; width: 100%; margin-top: 3px; }
+  button { border: 1px solid #1f3a5f; background: #fff; color: #1f3a5f; border-radius: 4px; cursor: pointer; }
+  button.primary { background: #1f3a5f; color: #fff; }
+  button.danger { border-color: #b3261e; color: #b3261e; }
+  .line { display: grid; grid-template-columns: 2fr 1fr 1.2fr auto; gap: 6px; margin-bottom: 6px; }
+  .line input { width: 100%; }
+  .sum { margin: 12px 0; padding: 10px; background: #f0f3f8; border-radius: 4px; font-size: 14px; }
+  .sum div { display: flex; justify-content: space-between; padding: 2px 0; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  #message { min-height: 22px; margin: 10px 0 0; font-size: 13px; color: #b3261e; }
+  #message.ok { color: #1b6e3c; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 6px; border-bottom: 1px solid #e3e6eb; text-align: right; }
+  th:nth-child(-n+3), td:nth-child(-n+3) { text-align: left; }
+  tr.invoice-row { cursor: pointer; }
+  tr.invoice-row:hover, tr.selected { background: #eef3fb; }
+  tr[data-status="수정됨"], tr[data-status="취소"] { color: #7a8190; }
+  tr[data-status="취소"] td:nth-child(2) { text-decoration: line-through; }
+  .totals { display: flex; gap: 16px; margin: 0 0 10px; font-size: 14px; flex-wrap: wrap; }
+  #detail { margin-top: 16px; padding-top: 12px; border-top: 2px solid #e3e6eb; font-size: 13px; }
+  #detail h3 { margin: 0 0 8px; font-size: 15px; }
+  #detail p { margin: 4px 0; }
+  #error { padding: 16px; background: #fdecea; border-radius: 4px; color: #b3261e; display: none; }
+  .hint { font-size: 12px; color: #6a7280; }
+</style>
+</head>
+<body>
+<header>
+  <h1>가나다식품 세금계산서 발행</h1>
+  <p>사내 발행 대장 (국세청 전송 없음 · 교육용 가상 데이터)</p>
+</header>
+<main>
+  <section id="compose">
+    <h2>작성</h2>
+    <label>거래처
+      <select data-testid="customer" id="customer"></select>
+    </label>
+    <label>작성일
+      <input type="date" data-testid="issued" id="issued">
+    </label>
+    <div id="lines"></div>
+    <div class="actions"><button type="button" data-testid="add-line" id="add-line">줄 추가</button></div>
+    <div class="sum">
+      <div><span>공급가</span><b data-testid="pv-supply" id="pv-supply">0</b></div>
+      <div><span>세액</span><b data-testid="pv-tax" id="pv-tax">0</b></div>
+      <div><span>합계</span><b data-testid="pv-total" id="pv-total">0</b></div>
+    </div>
+    <div class="actions">
+      <button type="button" data-testid="preview-btn" id="preview-btn">미리보기</button>
+      <button type="button" class="primary" data-testid="issue-btn" id="issue-btn">발행</button>
+    </div>
+    <div id="message" data-testid="message" role="status"></div>
+  </section>
+
+  <section id="ledger">
+    <h2>발행 대장 <span id="month" class="hint"></span></h2>
+    <div id="error" data-testid="error"><span>불러오지 못했습니다</span> <button type="button" id="retry">다시 시도</button></div>
+    <div id="ledger-body">
+      <div class="totals">
+        <span>공급가 <b data-testid="month-supply" id="month-supply">0</b></span>
+        <span>세액 <b data-testid="month-tax" id="month-tax">0</b></span>
+        <span>합계 <b data-testid="month-total" id="month-total">0</b></span>
+      </div>
+      <p class="hint">월 합계는 '발행' 상태만 더합니다.</p>
+      <table>
+        <thead><tr><th>번호</th><th>거래처</th><th>상태</th><th>공급가</th><th>세액</th><th>합계</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div id="detail" data-testid="detail" hidden></div>
+  </section>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const won = (n) => Number(n).toLocaleString("ko-KR");
+let selected = null;
+let previewTimer = null;
+let previewSeq = 0;
+
+function showMessage(text, ok) {
+  const m = $("message");
+  m.textContent = text || "";
+  m.className = ok ? "ok" : "";
+}
+
+async function api(path, opts) {
+  const res = await fetch(path, opts);
+  let data = null;
+  try { data = await res.json(); } catch (e) { /* 본문 없음 */ }
+  if (!res.ok) {
+    const err = new Error((data && data.detail) || "요청에 실패했습니다");
+    err.status = res.status;
+    throw err;
+  }
+  return data;
+}
+
+const post = (path, body) => api(path, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(body || {}),
+});
+
+function today() {
+  const d = new Date();
+  const p = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+
+/* ---------- 작성 ---------- */
+function addLine(v) {
+  v = v || {};
+  const div = document.createElement("div");
+  div.className = "line";
+  div.dataset.testid = "line";
+  div.setAttribute("data-testid", "line");
+  div.innerHTML =
+    '<input data-testid="item" placeholder="품목명">' +
+    '<input data-testid="qty" type="number" step="any" placeholder="수량">' +
+    '<input data-testid="price" type="number" step="any" placeholder="단가">' +
+    '<button type="button" class="danger" title="줄 삭제">삭제</button>';
+  const [item, qty, price] = div.querySelectorAll("input");
+  item.value = v.item ?? "";
+  qty.value = v.qty ?? "";
+  price.value = v.unit_price ?? "";
+  div.querySelector("button").onclick = () => {
+    if ($("lines").children.length > 1) { div.remove(); schedulePreview(); }
+  };
+  $("lines").appendChild(div);
+}
+
+// 숫자 칸은 문자열 그대로 읽어 정수만 숫자로 바꾼다(1.5 같은 값은 그대로 보내 서버가 거부).
+function num(s) {
+  s = String(s).trim();
+  if (s === "") return null;
+  const n = Number(s);
+  return Number.isFinite(n) ? n : s;
+}
+
+function readLines() {
+  return [...$("lines").querySelectorAll('[data-testid="line"]')].map((l) => ({
+    item: l.querySelector('[data-testid="item"]').value,
+    qty: num(l.querySelector('[data-testid="qty"]').value),
+    unit_price: num(l.querySelector('[data-testid="price"]').value),
+  }));
+}
+
+function readForm() {
+  return { biz_no: $("customer").value, issued: $("issued").value, lines: readLines() };
+}
+
+function setPreview(p) {
+  $("pv-supply").textContent = won(p ? p.supply : 0);
+  $("pv-tax").textContent = won(p ? p.tax : 0);
+  $("pv-total").textContent = won(p ? p.total : 0);
+}
+
+async function doPreview(announce) {
+  const seq = ++previewSeq;
+  try {
+    const p = await post("/api/invoices/preview", readForm());
+    if (seq !== previewSeq) return null;
+    setPreview(p);
+    if (announce) showMessage("");
+    return p;
+  } catch (e) {
+    if (seq === previewSeq) { setPreview(null); if (announce) showMessage(e.message); }
+    return null;
+  }
+}
+
+function schedulePreview() {
+  clearTimeout(previewTimer);
+  previewTimer = setTimeout(() => doPreview(false), 250);
+}
+
+async function issue() {
+  try {
+    const inv = await post("/api/invoices", readForm());
+    showMessage(`발행했습니다: ${inv.invoice_no}`, true);
+    setPreview(inv);
+    await loadLedger();
+  } catch (e) {
+    showMessage(e.message);
+  }
+}
+
+/* ---------- 대장 ---------- */
+async function loadLedger() {
+  try {
+    const data = await api("/api/invoices");
+    $("error").style.display = "none";
+    $("ledger-body").style.display = "";
+    $("month").textContent = data.month;
+    $("month-supply").textContent = won(data.totals.supply);
+    $("month-tax").textContent = won(data.totals.tax);
+    $("month-total").textContent = won(data.totals.total);
+    const tbody = $("rows");
+    tbody.innerHTML = "";
+    for (const it of data.items) {
+      const tr = document.createElement("tr");
+      tr.className = "invoice-row" + (it.invoice_no === selected ? " selected" : "");
+      tr.setAttribute("data-testid", "invoice-row");
+      tr.dataset.no = it.invoice_no;
+      tr.dataset.status = it.status;
+      for (const [txt] of [[it.invoice_no], [it.customer], [it.status], [won(it.supply)], [won(it.tax)], [won(it.total)]]) {
+        const td = document.createElement("td");
+        td.textContent = txt;
+        tr.appendChild(td);
+      }
+      tr.onclick = () => showDetail(it.invoice_no);
+      tbody.appendChild(tr);
+    }
+    if (selected) await showDetail(selected, true);
+  } catch (e) {
+    $("ledger-body").style.display = "none";
+    $("error").style.display = "block";
+  }
+}
+
+/* ---------- 상세 ---------- */
+function el(tag, text, testid) {
+  const e = document.createElement(tag);
+  if (text != null) e.textContent = text;
+  if (testid) e.setAttribute("data-testid", testid);
+  return e;
+}
+
+async function showDetail(no, quiet) {
+  selected = no;
+  document.querySelectorAll('[data-testid="invoice-row"]').forEach((r) =>
+    r.classList.toggle("selected", r.dataset.no === no));
+  let inv;
+  try {
+    inv = await api("/api/invoices/" + encodeURIComponent(no));
+  } catch (e) {
+    if (!quiet) showMessage(e.message);
+    return;
+  }
+  const d = $("detail");
+  d.hidden = false;
+  d.replaceChildren();
+  d.appendChild(el("h3", `${inv.invoice_no} · ${inv.customer} (${inv.biz_no})`));
+  d.appendChild(el("p", `작성일 ${inv.issued}`));
+  d.appendChild(el("p", inv.status, "detail-status"));
+  const tbl = el("table");
+  tbl.innerHTML = "<thead><tr><th>품목</th><th>수량</th><th>단가</th><th>공급가</th></tr></thead>";
+  const tb = el("tbody");
+  for (const l of inv.lines) {
+    const tr = el("tr");
+    for (const t of [l.item, won(l.qty), won(l.unit_price), won(l.line_supply)]) tr.appendChild(el("td", t));
+    tb.appendChild(tr);
+  }
+  tbl.appendChild(tb);
+  d.appendChild(tbl);
+  d.appendChild(el("p", `공급가 ${won(inv.supply)} · 세액 ${won(inv.tax)} · 합계 ${won(inv.total)}`, "detail-amount"));
+  if (inv.amends) d.appendChild(el("p", `이 계산서를 고친 것: ${inv.amends}`, "detail-amends"));
+  if (inv.amended_by) d.appendChild(el("p", `고쳐진 계산서: ${inv.amended_by}`, "detail-amended-by"));
+  if (inv.status === "발행") {
+    const box = el("div"); box.className = "actions";
+    const load = el("button", "내용을 작성란에 불러오기"); load.type = "button";
+    load.onclick = () => loadIntoForm(inv);
+    const am = el("button", "수정 발행", "amend-btn"); am.type = "button"; am.className = "primary";
+    am.onclick = () => amend(inv.invoice_no);
+    const ca = el("button", "취소", "cancel-btn"); ca.type = "button"; ca.className = "danger";
+    ca.onclick = () => cancel(inv.invoice_no);
+    box.append(load, am, ca);
+    d.appendChild(box);
+    d.appendChild(el("p", "수정 발행은 왼쪽 작성란의 작성일 · 품목 줄로 새 계산서를 만듭니다(거래처는 원본과 같음).")).className = "hint";
+  }
+}
+
+function loadIntoForm(inv) {
+  $("customer").value = inv.biz_no;
+  $("issued").value = inv.issued;
+  $("lines").replaceChildren();
+  inv.lines.forEach(addLine);
+  doPreview(false);
+  showMessage("원본 내용을 불러왔습니다. 고친 뒤 '수정 발행'을 누르세요.", true);
+}
+
+async function amend(no) {
+  const f = readForm();
+  try {
+    const inv = await post(`/api/invoices/${encodeURIComponent(no)}/amend`, { issued: f.issued, lines: f.lines });
+    showMessage(`수정 발행했습니다: ${inv.invoice_no}`, true);
+    selected = inv.invoice_no;
+    await loadLedger();
+  } catch (e) {
+    showMessage(e.message);
+  }
+}
+
+async function cancel(no) {
+  try {
+    await post(`/api/invoices/${encodeURIComponent(no)}/cancel`);
+    showMessage(`취소했습니다: ${no}`, true);
+    await loadLedger();
+  } catch (e) {
+    showMessage(e.message);
+  }
+}
+
+/* ---------- 시작 ---------- */
+async function init() {
+  $("issued").value = today();
+  addLine();
+  try {
+    const cs = await api("/api/customers");
+    $("customer").innerHTML = "";
+    for (const c of cs) {
+      const o = document.createElement("option");
+      o.value = c.biz_no;
+      o.textContent = `${c.name} (${c.ceo}) ${c.biz_no}`;
+      $("customer").appendChild(o);
+    }
+  } catch (e) { /* 대장 오류 상태에서 다시 시도 */ }
+  await loadLedger();
+}
+
+$("add-line").onclick = () => { addLine(); schedulePreview(); };
+$("preview-btn").onclick = () => doPreview(true);
+$("issue-btn").onclick = issue;
+$("lines").addEventListener("input", schedulePreview);
+$("retry").onclick = async () => {
+  if (!$("customer").options.length) {
+    try {
+      const cs = await api("/api/customers");
+      for (const c of cs) {
+        const o = document.createElement("option");
+        o.value = c.biz_no;
+        o.textContent = `${c.name} (${c.ceo}) ${c.biz_no}`;
+        $("customer").appendChild(o);
+      }
+    } catch (e) { /* 아래에서 다시 표시 */ }
+  }
+  loadLedger();
+};
+init();
+</script>
+</body>
+</html>

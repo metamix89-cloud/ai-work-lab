@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>세금계산서 발행 — 가나다식품</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; color: #222; background: #f5f6f8; }
+  h1 { margin: 0; padding: 14px 20px; font-size: 20px; background: #1f3a5f; color: #fff; }
+  .wrap { display: flex; gap: 16px; padding: 16px; align-items: flex-start; }
+  .col { background: #fff; border: 1px solid #d5d9e0; border-radius: 6px; padding: 14px; }
+  #compose { flex: 0 0 520px; }
+  #ledger { flex: 1; }
+  h2 { margin: 0 0 10px; font-size: 16px; }
+  label { display: block; margin: 6px 0 2px; font-size: 13px; color: #555; }
+  input, select, button { font: inherit; padding: 4px 6px; }
+  .line { display: flex; gap: 6px; margin: 4px 0; }
+  .line [data-testid=item] { flex: 1; }
+  .line [data-testid=qty], .line [data-testid=price] { width: 90px; }
+  button { cursor: pointer; }
+  .pv { margin: 10px 0; padding: 8px; background: #eef2f8; border-radius: 4px; }
+  .pv div { display: flex; justify-content: space-between; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { border-bottom: 1px solid #e3e6ec; padding: 5px 6px; text-align: left; }
+  td.n, th.n { text-align: right; }
+  tr[data-testid=invoice-row] { cursor: pointer; }
+  tr[data-testid=invoice-row]:hover { background: #f0f4fa; }
+  tr[data-status="수정됨"], tr[data-status="취소"] { color: #888; }
+  .sum { margin: 10px 0; display: flex; gap: 20px; font-weight: bold; }
+  #message { min-height: 20px; margin: 8px 0; color: #b00020; }
+  #message.ok { color: #1b6e2d; }
+  #detail { margin-top: 14px; padding-top: 10px; border-top: 2px solid #d5d9e0; }
+  #error { display: none; padding: 10px; background: #fdecea; border-radius: 4px; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<h1>세금계산서 발행 (사내 발행 대장)</h1>
+<div class="wrap">
+  <section class="col" id="compose">
+    <h2>작성</h2>
+    <label>거래처</label>
+    <select data-testid="customer" id="customer"></select>
+    <label>작성일</label>
+    <input type="date" data-testid="issued" id="issued">
+    <label>품목</label>
+    <div id="lines"></div>
+    <button type="button" data-testid="add-line" id="add-line">줄 추가</button>
+    <div class="pv">
+      <div><span>공급가</span><b data-testid="pv-supply">0</b></div>
+      <div><span>세액</span><b data-testid="pv-tax">0</b></div>
+      <div><span>합계</span><b data-testid="pv-total">0</b></div>
+    </div>
+    <button type="button" data-testid="issue-btn" id="issue-btn">발행</button>
+  </section>
+  <section class="col" id="ledger">
+    <h2>발행 대장 <span id="month"></span></h2>
+    <div id="error">불러오지 못했습니다 <button type="button" id="retry">다시 시도</button></div>
+    <div id="message" data-testid="message"></div>
+    <div class="sum">
+      <span>공급가 <span data-testid="month-supply">0</span></span>
+      <span>세액 <span data-testid="month-tax">0</span></span>
+      <span>합계 <span data-testid="month-total">0</span></span>
+    </div>
+    <table>
+      <thead><tr><th>발행 번호</th><th>작성일</th><th>거래처</th><th class="n">공급가</th><th class="n">세액</th><th class="n">합계</th><th>상태</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <div id="detail"></div>
+  </section>
+</div>
+<script>
+const $ = (s) => document.querySelector(s);
+const fmt = (n) => Number(n).toLocaleString("ko-KR");
+const today = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
+let selected = null;
+
+async function api(method, url, body) {
+  const r = await fetch(url, { method, headers: body ? { "Content-Type": "application/json" } : {}, body: body ? JSON.stringify(body) : undefined });
+  let data = null;
+  try { data = await r.json(); } catch (e) {}
+  return { ok: r.ok, status: r.status, data };
+}
+function say(text, ok) { const m = $("#message"); m.textContent = text || ""; m.className = ok ? "ok" : ""; }
+
+function addLine(item = "", qty = "1", price = "0") {
+  const d = document.createElement("div");
+  d.className = "line";
+  d.setAttribute("data-testid", "line");
+  d.innerHTML = '<input data-testid="item" placeholder="품목명"><input data-testid="qty" type="number" min="1" step="1"><input data-testid="price" type="number" min="0" step="1">';
+  d.querySelector('[data-testid=item]').value = item;
+  d.querySelector('[data-testid=qty]').value = qty;
+  d.querySelector('[data-testid=price]').value = price;
+  d.addEventListener("input", preview);
+  $("#lines").appendChild(d);
+}
+
+function readLines() {
+  return [...document.querySelectorAll('[data-testid=line]')].map((d) => {
+    const num = (sel) => { const v = d.querySelector(sel).value.trim(); return v === "" ? null : Number(v); };
+    return { item: d.querySelector('[data-testid=item]').value, qty: num('[data-testid=qty]'), unit_price: num('[data-testid=price]') };
+  });
+}
+function payload() { return { biz_no: $("#customer").value, issued: $("#issued").value, lines: readLines() }; }
+
+function showPreview(p) {
+  $('[data-testid=pv-supply]').textContent = p ? fmt(p.supply) : "-";
+  $('[data-testid=pv-tax]').textContent = p ? fmt(p.tax) : "-";
+  $('[data-testid=pv-total]').textContent = p ? fmt(p.total) : "-";
+}
+async function preview() {
+  try {
+    const r = await api("POST", "/api/invoices/preview", payload());
+    showPreview(r.ok ? r.data : null);
+  } catch (e) { showPreview(null); }
+}
+
+async function loadLedger() {
+  try {
+    const r = await api("GET", "/api/invoices");
+    if (!r.ok) throw new Error();
+    $("#error").style.display = "none";
+    const d = r.data;
+    $("#month").textContent = d.month;
+    $('[data-testid=month-supply]').textContent = fmt(d.totals.supply);
+    $('[data-testid=month-tax]').textContent = fmt(d.totals.tax);
+    $('[data-testid=month-total]').textContent = fmt(d.totals.total);
+    const tb = $("#rows");
+    tb.innerHTML = "";
+    for (const i of d.items) {
+      const tr = document.createElement("tr");
+      tr.setAttribute("data-testid", "invoice-row");
+      tr.setAttribute("data-no", i.invoice_no);
+      tr.setAttribute("data-status", i.status);
+      for (const [v, cls] of [[i.invoice_no], [i.issued], [i.customer], [fmt(i.supply), "n"], [fmt(i.tax), "n"], [fmt(i.total), "n"], [i.status]]) {
+        const td = document.createElement("td");
+        td.textContent = v;
+        if (cls) td.className = cls;
+        tr.appendChild(td);
+      }
+      tr.addEventListener("click", () => showDetail(i.invoice_no));
+      tb.appendChild(tr);
+    }
+  } catch (e) { $("#error").style.display = "block"; }
+}
+
+async function showDetail(no) {
+  selected = no;
+  const box = $("#detail");
+  const r = await api("GET", "/api/invoices/" + encodeURIComponent(no));
+  if (!r.ok) { box.textContent = ""; say(r.data && r.data.detail || "불러오지 못했습니다"); return; }
+  const v = r.data;
+  box.innerHTML = "";
+  const h = document.createElement("h2");
+  h.textContent = v.invoice_no + " · " + v.customer;
+  box.appendChild(h);
+  const info = document.createElement("div");
+  info.setAttribute("data-testid", "detail-status");
+  info.textContent = "상태: " + v.status + " · 작성일 " + v.issued + " · 공급가 " + fmt(v.supply) + " · 세액 " + fmt(v.tax) + " · 합계 " + fmt(v.total);
+  box.appendChild(info);
+  if (v.amends) { const p = document.createElement("div"); p.setAttribute("data-testid", "amends"); p.textContent = "이 계산서를 고친 것: " + v.amends; box.appendChild(p); }
+  if (v.amended_by) { const p = document.createElement("div"); p.setAttribute("data-testid", "amended-by"); p.textContent = "고쳐진 계산서: " + v.amended_by; box.appendChild(p); }
+  const t = document.createElement("table");
+  t.innerHTML = "<thead><tr><th>품목</th><th class='n'>수량</th><th class='n'>단가</th><th class='n'>공급가</th></tr></thead>";
+  const tb = document.createElement("tbody");
+  for (const l of v.lines) {
+    const tr = document.createElement("tr");
+    for (const [x, cls] of [[l.item], [fmt(l.qty), "n"], [fmt(l.unit_price), "n"], [fmt(l.line_supply), "n"]]) {
+      const td = document.createElement("td"); td.textContent = x; if (cls) td.className = cls; tr.appendChild(td);
+    }
+    tb.appendChild(tr);
+  }
+  t.appendChild(tb);
+  box.appendChild(t);
+  if (v.status === "발행") {
+    const a = document.createElement("button");
+    a.type = "button"; a.setAttribute("data-testid", "amend-btn"); a.textContent = "수정 발행 (작성란 내용으로)";
+    a.addEventListener("click", () => amend(v.invoice_no));
+    const c = document.createElement("button");
+    c.type = "button"; c.setAttribute("data-testid", "cancel-btn"); c.textContent = "취소";
+    c.addEventListener("click", () => cancel(v.invoice_no));
+    box.appendChild(a); box.appendChild(document.createTextNode(" ")); box.appendChild(c);
+  }
+}
+
+async function issue() {
+  const r = await api("POST", "/api/invoices", payload());
+  if (!r.ok) { say(r.data && r.data.detail || "발행하지 못했습니다"); return; }
+  say(r.data.invoice_no + " 발행했습니다", true);
+  await loadLedger();
+  showDetail(r.data.invoice_no);
+}
+async function amend(no) {
+  const p = payload();
+  const r = await api("POST", "/api/invoices/" + encodeURIComponent(no) + "/amend", { issued: p.issued, lines: p.lines });
+  if (!r.ok) { say(r.data && r.data.detail || "수정 발행하지 못했습니다"); return; }
+  say(r.data.invoice_no + " 로 수정 발행했습니다", true);
+  await loadLedger();
+  showDetail(r.data.invoice_no);
+}
+async function cancel(no) {
+  const r = await api("POST", "/api/invoices/" + encodeURIComponent(no) + "/cancel");
+  if (!r.ok) { say(r.data && r.data.detail || "취소하지 못했습니다"); return; }
+  say(no + " 취소했습니다", true);
+  await loadLedger();
+  showDetail(no);
+}
+
+async function init() {
+  $("#issued").value = today();
+  addLine();
+  $("#add-line").addEventListener("click", () => { addLine(); preview(); });
+  $("#issue-btn").addEventListener("click", issue);
+  $("#customer").addEventListener("change", preview);
+  $("#issued").addEventListener("change", preview);
+  $("#retry").addEventListener("click", () => { init2(); });
+  await init2();
+}
+async function init2() {
+  try {
+    const r = await api("GET", "/api/customers");
+    if (!r.ok) throw new Error();
+    const sel = $("#customer");
+    sel.innerHTML = "";
+    for (const c of r.data) {
+      const o = document.createElement("option");
+      o.value = c.biz_no;
+      o.textContent = c.name + " (" + c.biz_no + ")";
+      sel.appendChild(o);
+    }
+    $("#error").style.display = "none";
+  } catch (e) { $("#error").style.display = "block"; }
+  await loadLedger();
+  preview();
+}
+init();
+</script>
+</body>
+</html>

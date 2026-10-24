@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 883357,
+ "num_turns": 11,
+ "total_cost_usd": 0.3777763,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 40374,
+  "cache_read_input_tokens": 283323,
+  "output_tokens": 18792,
+  "output_tokens_details": {
+   "thinking_tokens": 1748
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 40374,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1025,
+    "cache_read_input_tokens": 56079,
+    "cache_creation_input_tokens": 967,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 967
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD의 웹앱을 만들었고, 서버(API)는 직접 돌려서 확인했습니다. 화면은 브라우저에서 열어 보지 못했습니다.\n\n폴더에는 `PRD.md`만 있었고 `tests/test_dod.py`는 없었습니다. 그래서 완료 기준 T1~T9 전체를 돌리지는 못하고, 아래 항목만 TestClient로 확인했습니다.\n- `/`가 200으로 열립니다.\n- 1,005원 3줄은 세액 301, 합계 3,316이 나옵니다.\n- 요청에 엉터리 금액을 넣어도 서버가 다시 계산합니다.\n- 발행 번호가 004부터 이어집니다.\n- 수량 1.5는 400입니다.\n- 수정 발행은 새 번호가 생기고, 같은 원본을 또 고치면 409입니다.\n- 없는 번호는 본문이 잘못되면 400, 올바르면 404입니다.\n- 이미 취소된 계산서를 취소하면 409입니다.\n- 월 합계는 `발행` 상태만 더합니다.\n\n만든 파일은 다음과 같습니다.\n- **`main.py`:** API 7개와 업무 규칙 R1~R7입니다. 서버를 시작할 때마다 `seed/` CSV로 `invoice.db`를 새로 만듭니다.\n- **`static/index.html`:** `/`에 나오는 한 페이지로, 왼쪽이 작성이고 오른쪽이 대장과 상세입니다. 서버가 거부하면 메시지 줄에 `detail`을 그대로 보여 주고, 불러오기에 실패하면 \"불러오지 못했습니다\"와 다시 시도 버튼이 나옵니다.\n- **`seed/`:** 가상 거래처 3곳과 오늘 날짜(2026-10-24) 계산서 3건(발행 2, 취소 1)입니다.\n\n실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`입니다.\n\n알아둘 점이 두 가지 있습니다.\n- **시드 날짜:** 시드 계산서는 2026-10-24로 고정했습니다. 다른 날짜에 실행하면 \"이번 달\" 목록에 보이지 않고, 오늘 번호도 001부터 시작합니다. 날짜가 바뀌면 `seed/invoices.csv`와 `seed/invoice_lines.csv`의 날짜를 같이 바꿔야 합니다.\n- **수정 발행 입력:** 수정 발행은 왼쪽 작성란의 작성일과 품목 줄로 새 계산서를 만듭니다. 상세에서 \"내용을 작성란에 불러오기\"를 누른 뒤 고치고 `수정 발행`을 누르면 됩니다. 이 불러오기 버튼은 PRD에 없는 제가 추가한 것입니다.",
+ "wall_s": 889.6
+}

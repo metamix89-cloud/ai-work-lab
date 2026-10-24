@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 90637,
+ "num_turns": 10,
+ "total_cost_usd": 0.365088,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 45414,
+  "cache_read_input_tokens": 312940,
+  "output_tokens": 15211,
+  "output_tokens_details": {
+   "thinking_tokens": 619
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 45414,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 324,
+    "cache_read_input_tokens": 61782,
+    "cache_creation_input_tokens": 304,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 304
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (customers.csv, invoices.csv, invoice_lines.csv)\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음. PRD 의 API 7개만 만들었고, 계산서를 고치는 PUT·PATCH 는 없습니다.\n\n- **seed 날짜:** `seed/` 의 날짜는 오늘(2026-10-24) 기준입니다. 테스트는 이 파일들을 자기 데이터로 바꿨다가 끝나면 되돌립니다.\n- **`month` 파라미터:** `GET /api/invoices` 에 `month` 를 `YYYY-MM` 형식이 아닌 값으로 주면 400 `month 형식은 YYYY-MM 입니다` 로 거부합니다. PRD 는 이 경우를 정하지 않았습니다.",
+ "wall_s": 102.4
+}
