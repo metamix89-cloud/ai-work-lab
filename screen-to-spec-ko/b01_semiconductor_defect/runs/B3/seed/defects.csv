@@ -1,0 +1,7 @@
+defect_id,lot_id,symptom,severity,qty,status,reporter,assignee,cause,reported_at,rework
+F001,L-1001,S01,중,5,closed,w1,q2,C01,2026-10-18 09:10,0
+F002,L-1002,S02,경,3,reported,w2,,,2026-10-24 08:30,0
+F003,L-1003,S03,치명,2,fixing,w1,q2,C02,2026-10-24 07:50,1
+F004,L-1001,S02,중,4,verifying,w2,q2,C03,2026-10-23 14:00,0
+F005,L-1004,S01,경,6,fixing,w1,q3,C04,2026-10-22 10:00,0
+F006,L-1002,S04,중,2,reported,w2,,,2026-10-20 11:20,0

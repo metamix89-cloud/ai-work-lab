@@ -1,0 +1,14 @@
+{
+ "add": {
+  "DEFECTS": [["F010", "L-1004", "S02", "중", 1, "verifying", "q2", "q2", "C03", "2026-10-24 09:00", 0],
+              ["F011", "L-1003", "S04", "경", 1, "reported", "w1", "", "", "2026-10-24 09:05", 0]]
+ },
+ "cases": [
+  {"name": "신고자 = 담당자인 건(F010)을 본인이 검증", "method": "POST", "path": "api/defects/F010/verify", "body": {"user": "q2", "result": "pass"}},
+  {"name": "원인 분석에서 신고자를 담당자로(F011 신고자 w1 → q1 이 자기에게)", "method": "POST", "path": "api/defects/F011/analyze", "body": {"user": "q1", "cause": "C01", "assignee": "q1"}},
+  {"name": "  그 건을 분석한 사람이 조치 등록", "method": "POST", "path": "api/defects/F011/fix", "body": {"user": "q1", "note": "세척"}},
+  {"name": "  그 건을 '신고자' w1(작업자)이 검증", "method": "POST", "path": "api/defects/F011/verify", "body": {"user": "w1", "result": "pass"}},
+  {"name": "같은 로트 다른 증상(L-1002 S04) 신고", "method": "POST", "path": "api/defects", "body": {"user": "w1", "lot_id": "L-1002", "symptom": "S04", "severity": "경", "qty": 1}},
+  {"name": "신고 수량이 로트 수량과 같음(L-1004 qty 50)", "method": "POST", "path": "api/defects", "body": {"user": "w1", "lot_id": "L-1004", "symptom": "S03", "severity": "경", "qty": 50}}
+ ]
+}

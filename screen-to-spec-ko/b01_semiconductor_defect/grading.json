@@ -1,0 +1,15 @@
+{
+ "allowed_routes": ["/", "/api/users", "/api/lots", "/api/symptoms", "/api/causes", "/api/defects", "/api/defects/{defect_id}/{action}", "/api/defects/{id}/{action}",
+                    "/api/defects/{id}/analyze", "/api/defects/{id}/fix", "/api/defects/{id}/verify",
+                    "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "로그인 · 회원": "login|password|로그인|회원가입",
+  "사진 첨부": "upload|UploadFile|첨부|photo|사진",
+  "통계 · 차트": "불량률|defect_rate|/api/stats|차트|chart",
+  "알림": "notify|notification|알림|메일 발송",
+  "신고 수정 · 삭제": "@app\\.(put|patch|delete)\\(\"/api/defects",
+  "편집 화면": "/api/admin|로트 등록|사용자 등록|@app\\.(post|put|patch|delete)\\(\"/api/(lots|users|causes|symptoms)\"",
+  "엑셀 내려받기": "download|내려받기|다운로드|text/csv",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}

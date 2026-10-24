@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 92703,
+ "num_turns": 11,
+ "total_cost_usd": 0.3311542999999999,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 16,
+  "cache_creation_input_tokens": 37413,
+  "cache_read_input_tokens": 349603,
+  "output_tokens": 14651,
+  "output_tokens_details": {
+   "thinking_tokens": 1951
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 37413,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1058,
+    "cache_read_input_tokens": 53029,
+    "cache_creation_input_tokens": 1056,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1056
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD대로 웹앱을 만들었습니다. API는 스모크 테스트로 확인했고, 브라우저 화면은 아직 열어 보지 않았습니다. PRD가 완료 기준으로 든 `tests/test_dod.py`는 폴더에 없어서 T1~T9 전체는 돌리지 못했습니다.\n\n**확인한 것**\n- `/`가 200으로 열리고 '불량'이 보입니다.\n- 요약이 open 5 · overdue 1 · rework 1로 나옵니다.\n- 수량 0은 400, 같은 로트·증상의 미종결 건은 409입니다.\n- 종결 건과 같은 로트·증상으로 치명 신고하면 201이고 기한이 내일입니다.\n- 작업자의 원인 분석은 403, 품질팀의 원인 분석은 200입니다.\n- 담당자 본인과 신고자의 검증은 403입니다.\n- 제3자가 실패 처리하면 조치 중으로 돌아가고 rework가 1 늡니다.\n- 작업자가 종결 건을 검증하면 403이고, 품질팀이 하면 409입니다.\n- 본문 없음 + 없는 건은 400, 없는 건은 404입니다.\n\n**아직 확인하지 못한 것**\n- 화면의 버튼 노출과 `data-testid` 동작\n- 기한 당일은 넘김이 아니라는 규칙(R4)\n- 요약 overdue 1은 시드의 신고 날짜(2026-10-20)와 서버 날짜(오늘 2026-10-24)를 전제로 합니다. 날짜가 달라지면 값이 달라지므로, 테스트용 고정 데이터를 따로 쓴다면 그쪽이 기준입니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/`의 CSV로 `qc.db`를 새로 만들고, API 5개와 규칙 R1~R9를 구현했습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. PRD 4장의 `data-testid`를 따랐습니다. API가 실패하면 `불러오지 못했습니다`와 다시 시도 버튼이 나옵니다.\n- `seed/*.csv` 5개: 사용자 5명, 로트 4개, 증상 4개, 원인 5개(`미상` 포함), 불량 6건입니다. 불량은 네 상태가 모두 있고 기한 넘김 1건, 재작업 1건을 넣었습니다.\n\n**실행**\n- 이 PC에서는 `pip install fastapi uvicorn httpx`로 설치했습니다(`httpx`는 제 스모크 테스트용이고 앱은 `fastapi`·`uvicorn`만 씁니다).\n- 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`을 실행하면 됩니다. `PORT` 환경 변수가 있으면 그 포트를 씁니다.",
+ "wall_s": 99.7
+}

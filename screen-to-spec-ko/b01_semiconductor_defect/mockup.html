@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>콩알반도체 불량 신고 · 조치 추적판 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 2부 1편 목업. 가상 회사(콩알반도체) · 가상 직원 · 가상 로트. ?state=ok|empty|error. Mock-IT 라이트 테마. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--indigo:#6366F1;--emerald:#10B981;--amber:#F59E0B;--rose:#EF4444}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:#F59E0B;display:inline-block}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#EEF0FF;color:var(--indigo);font-weight:700}
+.main{padding:16px 26px 14px 26px;display:flex;flex-direction:column;gap:9px}
+.top{display:flex;justify-content:space-between;align-items:flex-end}
+h1{margin:0;font-size:21px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:12px;margin-top:3px}
+.who{font-size:12.5px;color:var(--ink2);background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.form{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--ink2);background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.form span{border:1px solid var(--line);border-radius:7px;padding:4px 9px}.form b{margin-left:auto;background:var(--indigo);color:#fff;border-radius:7px;padding:5px 12px}
+.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 14px}.card .l{font-size:12px;color:var(--ink2)}.card .n{font-size:22px;font-weight:800}
+.card.bad .n{color:var(--rose)}
+.box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 14px;flex:1;min-height:0;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:12.5px}th{color:var(--mute);font-weight:600;text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);font-size:11.5px}
+td{padding:6px 6px;border-bottom:1px solid var(--line)}tr.od td{background:#FFF5F5}
+.chip{display:inline-block;border-radius:999px;padding:1px 9px;font-size:11px;font-weight:700}
+.reported{background:#EEF0FF;color:#3730A3}.fixing{background:#FFF7ED;color:#C2410C}.verifying{background:#FEF9C3;color:#854D0E}.closed{background:#F3F4F6;color:#374151}
+.sev{font-weight:700}.sev.c{color:var(--rose)}
+.b{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;margin-right:3px}
+.b.p{background:var(--indigo);color:#fff;border-color:var(--indigo)}.b.off{color:#C0C4CE;border-style:dashed}
+.msg{color:var(--rose);font-size:12px}
+.empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mute);gap:4px;font-size:12px;text-align:center}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:12px;padding:20px;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700}
+</style></head><body>
+<div class="app">
+ <div class="side">
+  <div class="logo"><i></i>콩알반도체</div>
+  <div class="nav"><div>설비 점검 일지</div><div class="on">불량 추적판</div><div>자재 입출고</div><div>교대 인수인계</div><div>작업 표준</div></div>
+ </div>
+ <div class="main" id="main"></div>
+</div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const head=(who)=>`<div class="top"><div><h1>불량 신고 · 조치 추적판</h1><div class="sub">신고 → 원인 분석(담당) → 조치 → 제3자 검증 → 종결 · 실패면 조치 중으로(재작업 +1) · 기한 = 치명 1일 · 중 3일 · 경 7일 · 당일은 넘김 아님</div></div><span class="who">사용자: ${who} ▾</span></div>`;
+const form=`<div class="form">신고 <span>L-1001 콩알칩 A · 1라인 ▾</span><span>외관 스크래치 ▾</span><span>중 ▾</span><span>수량 5</span><b>신고</b></div>`;
+let html='';
+if(state==='ok'){
+  html=head('최품질 (품질팀)')+form+`<div class="msg">본인 조치는 검증할 수 없습니다 — F005 의 담당자가 검증 통과를 눌렀다(403). 검증은 신고자도 담당자도 아닌 제3자</div>
+  <div class="sum"><div class="card"><div class="l">미종결</div><div class="n">5</div></div><div class="card bad"><div class="l">기한 넘김</div><div class="n">1</div></div><div class="card"><div class="l">재작업</div><div class="n">1</div></div></div>
+  <div class="box"><table><tr><th>번호</th><th>로트 · 제품 · 라인</th><th>증상</th><th>심각도</th><th>수량</th><th>상태</th><th>담당</th><th>기한</th><th>재작업</th><th>동작 (최품질)</th></tr>
+  <tr><td>F003</td><td>L-1003 콩알칩 B · 1라인</td><td>전기 특성 불량</td><td class="sev c">치명</td><td>1</td><td><span class="chip closed">종결</span></td><td>최품질</td><td>10-15</td><td>0</td><td><span class="b off">잠금</span></td></tr>
+  <tr><td>F004</td><td>L-1001 콩알칩 A · 1라인</td><td>이물</td><td class="sev">경</td><td>2</td><td><span class="chip fixing">조치 중</span></td><td>박품질</td><td>10-24 (오늘)</td><td>0</td><td><span class="b off">담당자만 조치</span></td></tr>
+  <tr class="od"><td>F002</td><td>L-1002 콩알칩 A · 2라인</td><td>치수 불량</td><td class="sev">중</td><td>3</td><td><span class="chip reported">신고</span></td><td>—</td><td>10-23 <b style="color:#B91C1C">넘김</b></td><td>0</td><td><span class="b p">원인 분석</span></td></tr>
+  <tr><td>F006</td><td>L-1002 콩알칩 A · 2라인</td><td>전기 특성 불량</td><td class="sev">경</td><td>1</td><td><span class="chip fixing">조치 중</span></td><td>최품질</td><td>10-29</td><td>1</td><td><span class="b p">조치 등록</span></td></tr>
+  <tr><td>F005</td><td>L-1004 콩알센서 · 3라인</td><td>외관 스크래치</td><td class="sev c">치명</td><td>10</td><td><span class="chip verifying">검증 대기</span></td><td>정품질</td><td>10-24 (오늘)</td><td>0</td><td><span class="b">검증 통과</span><span class="b">검증 실패</span></td></tr>
+  <tr><td>F001</td><td>L-1001 콩알칩 A · 1라인</td><td>외관 스크래치</td><td class="sev">중</td><td>5</td><td><span class="chip reported">신고</span></td><td>—</td><td>10-27</td><td>0</td><td><span class="b p">원인 분석</span></td></tr>
+  </table></div>`;
+}else if(state==='empty'){
+  html=head('김작업 (작업자)')+form+`<div class="sum"><div class="card"><div class="l">미종결</div><div class="n">0</div></div><div class="card"><div class="l">기한 넘김</div><div class="n">0</div></div><div class="card"><div class="l">재작업</div><div class="n">0</div></div></div>
+  <div class="box"><div class="empty"><b style="color:#4B5563;font-size:15px">신고된 불량이 없습니다</b>작업자는 신고만 — 원인 분석 · 조치 · 검증 버튼은 품질팀에게만 보인다(막는 건 서버)</div></div>`;
+}else{
+  html=head('김작업 (작업자)')+`<div class="err"><div><b>불러오지 못했습니다.</b> 추적판 API(/api/defects) 가 응답하지 않습니다 — 상태와 담당을 모르면 동작 버튼을 열지 않습니다.</div><button>다시 시도</button></div>
+  <div class="box"><div class="empty">기한 넘김은 서버가 날짜로 센다 — 화면이 시각으로 세면 '기한 당일 오후' 가 넘김이 된다</div></div>`;
+}
+document.getElementById('main').innerHTML=html;
+</script></body></html>

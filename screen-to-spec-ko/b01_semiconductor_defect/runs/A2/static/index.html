@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>콩알반도체 불량 신고 · 조치 추적판</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="logo">●</span> 콩알반도체 <b>불량 신고 · 조치 추적판</b></div>
+  <div class="who">
+    <span id="clock" class="muted"></span>
+    <label>사용자 <select id="userSel"></select></label>
+    <button id="newBtn" class="primary">+ 불량 신고</button>
+  </div>
+</header>
+
+<main>
+  <section id="cards" class="cards"></section>
+
+  <section class="panel">
+    <h2>진행 단계 <small class="muted">클릭하면 해당 단계만 보기</small></h2>
+    <div id="pipeline" class="pipeline"></div>
+  </section>
+
+  <div class="grid2">
+    <section class="panel">
+      <h2>담당자별 조치 현황 <small class="muted">조치중 · 검증대기 건 기준</small></h2>
+      <div id="workload"></div>
+    </section>
+    <section class="panel">
+      <h2>심각도별 미종결 <small class="muted">기한: 치명 24h · 높음 3일 · 보통 7일 · 낮음 14일</small></h2>
+      <div id="sev"></div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <div class="filters">
+      <h2 style="margin:0">신고 목록</h2>
+      <input id="q" type="search" placeholder="코드 · 로트 · 제품 · 유형 검색">
+      <select id="fStatus"></select>
+      <select id="fSev"></select>
+      <select id="fAsg"></select>
+      <label class="chk"><input type="checkbox" id="fOverdue"> 기한 초과만</label>
+      <label class="chk"><input type="checkbox" id="fOpen" checked> 종결 숨김</label>
+    </div>
+    <div class="tablewrap"><table id="tbl"></table></div>
+    <div id="empty" class="muted center" hidden>조건에 맞는 신고가 없습니다.</div>
+  </section>
+</main>
+
+<aside id="drawer" class="drawer" hidden>
+  <div class="drawer-bg"></div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+
+<dialog id="newDlg">
+  <form id="newForm" method="dialog">
+    <h3>불량 신고</h3>
+    <div class="form2">
+      <label>로트 번호<input name="lot_no" required placeholder="KB2610-A0900"></label>
+      <label>제품<input name="product" required placeholder="KB-DRAM 8Gb"></label>
+      <label>라인<input name="line" required placeholder="FAB1-L2"></label>
+      <label>공정<select name="process"></select></label>
+      <label>불량 유형<select name="defect_type"></select></label>
+      <label>불량 수량<input name="qty" type="number" min="1" required value="1"></label>
+    </div>
+    <label>심각도<select name="severity"></select></label>
+    <div id="dueHint" class="hint"></div>
+    <label>증상 설명<textarea name="description" required rows="3" placeholder="언제, 어디서, 어떤 불량이 보였는지"></textarea></label>
+    <div class="err" id="newErr"></div>
+    <div class="actions"><button type="button" id="newCancel">취소</button><button class="primary" type="submit">신고</button></div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" hidden></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

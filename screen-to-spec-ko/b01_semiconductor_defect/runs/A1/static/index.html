@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>콩알반도체 불량 신고 · 조치 추적판</title>
+<style>
+:root{--bg:#f4f6f9;--card:#fff;--ink:#1d2433;--mute:#667085;--line:#e3e8ef;--pri:#2f5fd0;
+--red:#d92d20;--redbg:#fef3f2;--amb:#b54708;--ambbg:#fffaeb;--grn:#067647;--grnbg:#ecfdf3}
+*{box-sizing:border-box}
+body{margin:0;font:14px/1.5 "Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+header{display:flex;align-items:center;gap:12px;padding:12px 24px;background:#16213e;color:#fff;position:sticky;top:0;z-index:5}
+header h1{font-size:17px;margin:0;flex:1}
+header label{font-size:12px;opacity:.8}
+header input{width:110px}
+main{max-width:1400px;margin:0 auto;padding:20px 24px}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:#fff;border-radius:6px;padding:6px 12px}
+button.pri{background:var(--pri);border-color:var(--pri);color:#fff}
+button.danger{background:var(--red);border-color:var(--red);color:#fff}
+button:hover{filter:brightness(.96)}
+input,select,textarea{font:inherit;border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:#fff;color:var(--ink)}
+textarea{width:100%;min-height:64px;resize:vertical}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;cursor:pointer}
+.kpi .n{font-size:30px;font-weight:700;line-height:1.1}
+.kpi .l{color:var(--mute);font-size:12px}
+.kpi.bad{background:var(--redbg);border-color:#fda29b}.kpi.bad .n{color:var(--red)}
+.kpi.warn .n{color:var(--amb)}
+.kpi.on{outline:2px solid var(--pri)}
+.row{display:grid;grid-template-columns:1fr 320px;gap:16px;margin-top:16px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.card h2{font-size:14px;margin:0 0 10px}
+.pipe{display:flex;gap:6px;margin-bottom:12px}
+.pipe div{flex:1;text-align:center;padding:8px 4px;border-radius:8px;background:#eef1f6;cursor:pointer;border:2px solid transparent}
+.pipe div b{display:block;font-size:20px}
+.pipe div span{font-size:12px;color:var(--mute)}
+.pipe div.on{border-color:var(--pri);background:#e8efff}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+table{width:100%;border-collapse:collapse}
+th{font-size:12px;color:var(--mute);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:8px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr.item{cursor:pointer}tr.item:hover{background:#f8faff}
+tr.over{background:var(--redbg)}tr.over:hover{background:#fee4e2}
+.tag{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}
+.sev-치명{background:#d92d20;color:#fff}.sev-중대{background:#fedf89;color:#7a2e0e}.sev-경미{background:#e3e8ef;color:#475467}
+.st{background:#eef1f6;color:#344054}
+.st-종결{background:var(--grnbg);color:var(--grn)}
+.due{white-space:nowrap;font-weight:600}
+.due.over{color:var(--red)}.due.soon{color:var(--amb)}.due.ok{color:var(--mute);font-weight:400}.due.done{color:var(--grn);font-weight:400}
+.mute{color:var(--mute);font-size:12px}
+.ppl{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:8px;cursor:pointer}
+.ppl:hover,.ppl.on{background:#e8efff}
+.ppl .nm{flex:1}
+.bar{height:6px;background:#eef1f6;border-radius:3px;overflow:hidden;margin-top:3px}
+.bar i{display:block;height:100%;background:var(--pri)}
+.badge{min-width:22px;text-align:center;border-radius:99px;padding:0 7px;font-size:12px;font-weight:700}
+.badge.o{background:var(--red);color:#fff}.badge.n{background:#eef1f6}
+.modal{position:fixed;inset:0;background:rgba(16,24,40,.5);display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow:auto;z-index:10}
+.modal.show{display:flex}
+.panel{background:#fff;border-radius:12px;width:min(760px,100%);padding:20px 24px}
+.panel h3{margin:0 0 4px;font-size:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
+.grid2 .full{grid-column:1/-1}
+.grid2 label{display:block;font-size:12px;color:var(--mute);margin-bottom:2px}
+.grid2 input,.grid2 select{width:100%}
+dl{display:grid;grid-template-columns:90px 1fr;gap:4px 10px;margin:12px 0}dt{color:var(--mute)}dd{margin:0}
+.tl{border-left:2px solid var(--line);margin:8px 0 0 6px;padding-left:14px}
+.tl div{position:relative;margin-bottom:10px}
+.tl div:before{content:"";position:absolute;left:-20px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--pri)}
+.actbox{background:#f8faff;border:1px solid #d6e0fb;border-radius:8px;padding:12px;margin-top:14px}
+.actbox .btns{margin-top:8px;display:flex;gap:8px;justify-content:flex-end}
+.err{color:var(--red);font-size:13px;margin-top:6px;min-height:18px}
+.step{display:flex;gap:4px;margin:10px 0}
+.step span{flex:1;text-align:center;font-size:12px;padding:3px;border-radius:4px;background:#eef1f6;color:var(--mute)}
+.step span.done{background:#d6e0fb;color:#1d3a8a}.step span.cur{background:var(--pri);color:#fff;font-weight:700}
+@media(max-width:980px){.row{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🫘 콩알반도체 불량 신고 · 조치 추적판</h1>
+  <label>내 이름 <input id="me" placeholder="이름 입력"></label>
+  <button class="pri" onclick="openNew()">+ 불량 신고</button>
+  <button onclick="resetDemo()" title="데모 데이터로 초기화">데모 초기화</button>
+</header>
+<main>
+  <div class="kpis" id="kpis"></div>
+  <div class="row">
+    <div class="card">
+      <div class="pipe" id="pipe"></div>
+      <div class="filters">
+        <select id="fSev" onchange="load()"><option value="">심각도 전체</option><option>치명</option><option>중대</option><option>경미</option></select>
+        <select id="fAsg" onchange="load()"><option value="">담당자 전체</option></select>
+        <label><input type="checkbox" id="fOpen" checked onchange="load()"> 진행중만</label>
+        <input id="fQ" placeholder="로트 / 제품 / 내용 검색" oninput="debounce()" style="flex:1;min-width:160px">
+        <button onclick="clearFilters()">필터 해제</button>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>로트 / 제품</th><th>불량</th><th>심각도</th><th>상태</th><th>담당</th><th>기한</th></tr></thead>
+        <tbody id="tb"></tbody>
+      </table>
+      <div id="empty" class="mute" style="padding:20px;text-align:center;display:none">조건에 맞는 건이 없습니다.</div>
+    </div>
+    <div class="card">
+      <h2>담당자별 조치 현황 <span class="mute">(진행중 기준)</span></h2>
+      <div id="ppl"></div>
+      <div class="mute" style="margin-top:10px">기한: 치명 24시간 · 중대 72시간 · 경미 7일 (신고 시각 기준)</div>
+    </div>
+  </div>
+</main>
+
+<div class="modal" id="mNew"><div class="panel">
+  <h3>불량 신고</h3><div class="mute">생산 라인에서 발견한 로트 불량을 등록합니다.</div>
+  <div class="grid2" style="margin-top:12px">
+    <div><label>로트 번호</label><input id="nLot" placeholder="LOT-2610-123"></div>
+    <div><label>제품</label><input id="nProd" placeholder="KB-2201 MCU"></div>
+    <div><label>라인</label><select id="nLine"></select></div>
+    <div><label>불량 유형</label><select id="nType"></select></div>
+    <div><label>심각도 (기한)</label><select id="nSev"></select></div>
+    <div><label>불량 수량</label><input id="nQty" type="number" min="0" value="1"></div>
+    <div class="full"><label>상세 내용</label><textarea id="nDesc"></textarea></div>
+  </div>
+  <div class="err" id="nErr"></div>
+  <div style="text-align:right"><button onclick="closeM('mNew')">취소</button> <button class="pri" onclick="submitNew()">신고하기</button></div>
+</div></div>
+
+<div class="modal" id="mDet"><div class="panel" id="det"></div></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let META,state={status:"",assignee:"",overdue:false,dueSoon:false},timer,rows=[];
+const me=()=>$("me").value.trim();
+$("me").value=localStorage.getItem("me")||"";
+$("me").onchange=()=>localStorage.setItem("me",me());
+
+const fmt=s=>{const d=new Date(s);return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`};
+function dur(h){h=Math.abs(h);return h>=48?`${Math.floor(h/24)}일 ${Math.round(h%24)}시간`:h>=1?`${Math.floor(h)}시간 ${Math.round((h%1)*60)}분`:`${Math.round(h*60)}분`}
+function dueHtml(r){
+  if(r.status==="종결")return `<span class="due done">종결 ${fmt(r.closed_at)}</span>`;
+  const h=r.remaining_hours;
+  if(r.overdue)return `<span class="due over">⚠ ${dur(h)} 초과</span><div class="mute">${fmt(r.due_at)}</div>`;
+  return `<span class="due ${h<=12?"soon":"ok"}">${dur(h)} 남음</span><div class="mute">${fmt(r.due_at)}</div>`;
+}
+async function api(path,opt){
+  const r=await fetch(path,opt&&{...opt,headers:{"Content-Type":"application/json"},body:JSON.stringify(opt.body)});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(typeof j.detail==="string"?j.detail:"입력값을 확인하세요.");
+  return j;
+}
+function debounce(){clearTimeout(timer);timer=setTimeout(load,250)}
+function clearFilters(){state={status:"",assignee:"",overdue:false,dueSoon:false};$("fSev").value="";$("fQ").value="";$("fOpen").checked=true;load()}
+function setF(k,v){state[k]=state[k]===v?(typeof v==="boolean"?false:""):v;if(k==="status"&&state.status)$("fOpen").checked=false;load()}
+
+async function load(){
+  const p=new URLSearchParams();
+  if(state.status)p.set("status",state.status);
+  if(state.assignee)p.set("assignee",state.assignee);
+  if(state.overdue)p.set("overdue","true");
+  if($("fSev").value)p.set("severity",$("fSev").value);
+  if($("fQ").value.trim())p.set("q",$("fQ").value.trim());
+  if($("fOpen").checked)p.set("open_only","true");
+  const [list,sum]=await Promise.all([api("/api/defects?"+p),api("/api/summary")]);
+  rows=state.dueSoon?list.filter(r=>!r.overdue&&r.status!=="종결"&&r.remaining_hours<=12):list;
+  renderSummary(sum);renderList();
+}
+function renderSummary(s){
+  $("kpis").innerHTML=`
+   <div class="kpi ${s.overdue?"bad":""} ${state.overdue?"on":""}" onclick="setF('overdue',true)"><div class="n">${s.overdue}</div><div class="l">기한 초과 (치명 ${s.overdue_by_severity.치명} · 중대 ${s.overdue_by_severity.중대} · 경미 ${s.overdue_by_severity.경미})</div></div>
+   <div class="kpi warn ${state.dueSoon?"on":""}" onclick="setF('dueSoon',true)"><div class="n">${s.due_soon}</div><div class="l">12시간 내 기한 임박</div></div>
+   <div class="kpi"><div class="n">${s.open}</div><div class="l">진행중 (전체 ${s.total}건)</div></div>
+   <div class="kpi ${s.unassigned?"warn":""} ${state.assignee==="__none"?"on":""}"><div class="n">${s.unassigned}</div><div class="l">담당자 미배정 (신고·분석 단계)</div></div>`;
+  $("pipe").innerHTML=META.statuses.map(st=>`<div class="${state.status===st?"on":""}" onclick="setF('status','${st}')"><b>${s.by_status[st]}</b><span>${st}</span></div>`).join("");
+  const mx=Math.max(1,...s.people.map(p=>p.open));
+  $("ppl").innerHTML=s.people.map(p=>`<div class="ppl ${state.assignee===p.name?"on":""}" ${p.name.startsWith("(")?"":`onclick="setF('assignee','${esc(p.name)}')"`}>
+     <div class="nm">${esc(p.name)}${p.critical?` <span class="tag sev-치명">치명 ${p.critical}</span>`:""}<div class="bar"><i style="width:${p.open/mx*100}%"></i></div></div>
+     <span class="badge n" title="진행중">${p.open}</span><span class="badge ${p.overdue?"o":"n"}" title="기한 초과">${p.overdue}</span></div>`).join("")
+   +`<div class="mute" style="text-align:right;margin-top:4px">진행 건수 · <span style="color:var(--red)">기한 초과</span></div>`;
+  const cur=$("fAsg").value;
+  $("fAsg").innerHTML='<option value="">담당자 전체</option>'+META.owners.map(o=>`<option>${o}</option>`).join("");
+  $("fAsg").value=state.assignee||cur;
+  $("fAsg").onchange=()=>{state.assignee=$("fAsg").value;load()};
+}
+function renderList(){
+  $("empty").style.display=rows.length?"none":"block";
+  $("tb").innerHTML=rows.map(r=>`<tr class="item ${r.overdue?"over":""}" onclick="openDet(${r.id})">
+    <td class="mute">${r.id}</td>
+    <td><b>${esc(r.lot_no)}</b><div class="mute">${esc(r.product)} · ${esc(r.line)}</div></td>
+    <td>${esc(r.defect_type)}<div class="mute">${r.qty}개</div></td>
+    <td><span class="tag sev-${r.severity}">${r.severity}</span></td>
+    <td><span class="tag st st-${r.status}">${r.status}</span></td>
+    <td>${r.assignee?esc(r.assignee):'<span class="mute">미배정</span>'}</td>
+    <td>${dueHtml(r)}</td></tr>`).join("");
+}
+
+function closeM(id){$(id).classList.remove("show")}
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("mousedown",e=>{if(e.target===m)m.classList.remove("show")}));
+const opts=(a)=>a.map(x=>`<option>${esc(x)}</option>`).join("");
+function openNew(){
+  $("nLine").innerHTML=opts(META.lines);$("nType").innerHTML=opts(META.defect_types);
+  $("nSev").innerHTML=Object.entries(META.sla_hours).map(([k,v])=>`<option value="${k}">${k} (${v>=48?v/24+"일":v+"시간"} 내)</option>`).join("");
+  ["nLot","nProd","nDesc"].forEach(i=>$(i).value="");$("nQty").value=1;$("nErr").textContent="";
+  $("mNew").classList.add("show");
+}
+async function submitNew(){
+  if(!me()){$("nErr").textContent="상단에 내 이름을 먼저 입력하세요.";return}
+  try{
+    await api("/api/defects",{method:"POST",body:{lot_no:$("nLot").value,product:$("nProd").value,line:$("nLine").value,
+      defect_type:$("nType").value,severity:$("nSev").value,qty:+$("nQty").value||0,description:$("nDesc").value,reporter:me()}});
+    closeM("mNew");load();
+  }catch(e){$("nErr").textContent=e.message.includes("입력값")?"로트, 제품, 상세 내용을 모두 입력하세요.":e.message}
+}
+
+async function openDet(id){const d=await api("/api/defects/"+id);renderDet(d);$("mDet").classList.add("show")}
+function actionForm(d){
+  const s=d.status;
+  if(s==="신고")return `<h4>품질팀 접수</h4><textarea id="aNote" placeholder="접수 메모 (선택)"></textarea>
+    <div class="btns"><button class="pri" onclick="act(${d.id},'accept')">접수하고 분석 시작</button></div>`;
+  if(s==="분석중")return `<h4>원인 분석 · 담당자 지정</h4><div class="grid2">
+    <div class="full"><label>근본 원인</label><textarea id="aRc"></textarea></div>
+    <div class="full"><label>조치 계획</label><textarea id="aPlan"></textarea></div>
+    <div><label>조치 담당자</label><input id="aWho" list="owners" placeholder="이름"><datalist id="owners">${opts(META.owners)}</datalist></div></div>
+    <div class="btns"><button class="pri" onclick="act(${d.id},'analyze')">조치 지시</button></div>`;
+  if(s==="조치중")return `<h4>조치 결과 보고 <span class="mute">(담당: ${esc(d.assignee)})</span></h4><textarea id="aNote" placeholder="수행한 조치와 결과"></textarea>
+    <div class="btns"><button class="pri" onclick="act(${d.id},'complete')">조치 완료 · 검증 요청</button></div>`;
+  if(s==="검증중")return `<h4>조치 검증</h4><textarea id="aNote" placeholder="검증 결과 (재발 여부, 후속 로트 확인 등) / 반려 시 사유"></textarea>
+    <div class="btns"><button class="danger" onclick="act(${d.id},'reject')">반려 (재조치)</button><button class="pri" onclick="act(${d.id},'verify')">검증 완료 · 종결</button></div>`;
+  return "";
+}
+function renderDet(d){
+  const idx=META.statuses.indexOf(d.status);
+  $("det").innerHTML=`
+   <div style="display:flex;gap:8px;align-items:center"><h3 style="flex:1">#${d.id} ${esc(d.lot_no)} · ${esc(d.defect_type)}</h3>
+     <span class="tag sev-${d.severity}">${d.severity}</span><button onclick="closeM('mDet')">닫기</button></div>
+   <div class="step">${META.statuses.map((s,i)=>`<span class="${i<idx?"done":i===idx?"cur":""}">${s}</span>`).join("")}</div>
+   <div style="margin:6px 0">${dueHtml(d)}</div>
+   <dl><dt>제품 / 라인</dt><dd>${esc(d.product)} / ${esc(d.line)}</dd>
+   <dt>불량 수량</dt><dd>${d.qty}개</dd>
+   <dt>신고</dt><dd>${esc(d.reporter)} · ${fmt(d.reported_at)}</dd>
+   <dt>내용</dt><dd>${esc(d.description)}</dd>
+   <dt>품질팀</dt><dd>${esc(d.analyst||"-")}</dd>
+   <dt>근본 원인</dt><dd>${esc(d.root_cause||"-")}</dd>
+   <dt>조치 담당</dt><dd>${esc(d.assignee||"-")}</dd>
+   <dt>조치 계획</dt><dd>${esc(d.action_plan||"-")}</dd></dl>
+   ${d.status!=="종결"?`<div class="actbox">${actionForm(d)}<div class="err" id="aErr"></div></div>`:""}
+   <h4 style="margin:16px 0 0">이력</h4>
+   <div class="tl">${d.events.map(e=>`<div><b>${esc(e.kind)}</b> <span class="mute">${esc(e.actor)} · ${fmt(e.at)}</span><div>${esc(e.note)}</div></div>`).join("")}</div>
+   <div style="display:flex;gap:6px;margin-top:8px"><input id="cNote" placeholder="메모 남기기" style="flex:1"><button onclick="act(${d.id},'comment',true)">등록</button></div>
+   <div class="err" id="cErr"></div>`;
+}
+async function act(id,action,isComment){
+  const err=$(isComment?"cErr":"aErr");
+  if(!me()){err.textContent="상단에 내 이름을 먼저 입력하세요.";return}
+  const g=i=>$(i)?$(i).value:undefined;
+  const body={action,actor:me(),note:isComment?g("cNote"):g("aNote")||"",root_cause:g("aRc"),assignee:g("aWho"),action_plan:g("aPlan")};
+  try{const d=await api(`/api/defects/${id}/transition`,{method:"POST",body});renderDet(d);load()}
+  catch(e){err.textContent=e.message}
+}
+async function resetDemo(){if(confirm("모든 데이터를 지우고 데모 데이터로 되돌릴까요?")){await api("/api/reset",{method:"POST",body:{}});clearFilters()}}
+
+(async()=>{META=await api("/api/meta");load();setInterval(load,60000)})();
+</script>
+</body>
+</html>

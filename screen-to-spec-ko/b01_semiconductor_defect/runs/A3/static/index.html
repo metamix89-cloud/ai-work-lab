@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>콩알반도체 · 불량 신고 · 조치 추적판</title>
+<style>
+:root{--bg:#f4f6f9;--card:#fff;--ink:#1c2430;--mute:#6b7685;--line:#e1e6ed;--brand:#1f5eff;
+--c0:#d92d20;--c1:#f79009;--c2:#2e90fa;--c3:#98a2b3;--ok:#12b76a}
+*{box-sizing:border-box}
+body{margin:0;font:14px/1.5 "Malgun Gothic","Apple SD Gothic Neo",sans-serif;background:var(--bg);color:var(--ink)}
+header{background:#101828;color:#fff;padding:12px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:5}
+header h1{font-size:17px;margin:0;flex:1}
+header h1 small{font-weight:400;color:#98a2b3;margin-left:8px}
+header select,header button{font:inherit;padding:6px 10px;border-radius:6px;border:0}
+header button{background:var(--brand);color:#fff;cursor:pointer}
+main{padding:20px 24px;max-width:1400px;margin:auto}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;cursor:pointer}
+.kpi b{display:block;font-size:28px;line-height:1.2}
+.kpi span{color:var(--mute);font-size:12px}
+.kpi.bad{border-color:var(--c0);background:#fef3f2}.kpi.bad b{color:var(--c0)}
+.kpi.warn b{color:var(--c1)}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-top:16px;align-items:start}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.panel h2{font-size:14px;margin:0 0 10px}
+.flow{display:flex;gap:6px;margin-bottom:14px}
+.flow div{flex:1;text-align:center;padding:8px 4px;background:var(--card);border:1px solid var(--line);border-radius:8px;cursor:pointer;font-size:12px;color:var(--mute)}
+.flow div b{display:block;font-size:18px;color:var(--ink)}
+.flow div.on{border-color:var(--brand);background:#eef3ff}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.filters select,.filters input{font:inherit;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:#fff}
+table{width:100%;border-collapse:collapse}
+th{font-size:12px;color:var(--mute);text-align:left;font-weight:600;padding:6px 8px;border-bottom:1px solid var(--line)}
+td{padding:8px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr{cursor:pointer}tbody tr:hover{background:#f8fafc}
+tr.over{background:#fef3f2}tr.over:hover{background:#fee4e2}
+.tag{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;font-weight:600;color:#fff;white-space:nowrap}
+.s0{background:var(--c0)}.s1{background:var(--c1)}.s2{background:var(--c2)}.s3{background:var(--c3)}
+.st{background:#eef2f6;color:#344054}
+.due{white-space:nowrap;font-size:12px}
+.due.over{color:var(--c0);font-weight:700}.due.soon{color:var(--c1);font-weight:700}.due.done{color:var(--mute)}
+.person{padding:8px 0;border-bottom:1px solid var(--line)}
+.person:last-child{border:0}
+.person .top{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.person .top small{color:var(--mute)}
+.chip{display:inline-block;margin:3px 4px 0 0;padding:1px 7px;border-radius:6px;font-size:12px;background:#eef2f6;cursor:pointer}
+.chip.over{background:#fee4e2;color:var(--c0);font-weight:700}
+.bar{height:6px;background:#eef2f6;border-radius:3px;margin-top:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--brand)}
+.drawer{position:fixed;top:0;right:0;width:520px;max-width:100%;height:100%;background:#fff;box-shadow:-4px 0 24px #0003;padding:20px;overflow:auto;transform:translateX(105%);transition:.2s;z-index:10}
+.drawer.open{transform:none}
+.drawer h3{margin:0 0 4px}
+.dl{display:grid;grid-template-columns:90px 1fr;gap:4px 10px;margin:12px 0}.dl dt{color:var(--mute)}.dl dd{margin:0}
+.tl{border-left:2px solid var(--line);margin:8px 0 0 6px;padding-left:14px}
+.tl div{margin-bottom:10px;position:relative}.tl div:before{content:"";position:absolute;left:-20px;top:6px;width:8px;height:8px;border-radius:50%;background:var(--brand)}
+.tl small{color:var(--mute)}
+.actions{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:12px;margin:12px 0}
+label{display:block;font-size:12px;color:var(--mute);margin:8px 0 2px}
+input,select,textarea{font:inherit;width:100%;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:#fff}
+textarea{min-height:60px}
+.btn{font:inherit;padding:7px 14px;border:0;border-radius:6px;background:var(--brand);color:#fff;cursor:pointer;margin-top:10px;margin-right:6px}
+.btn.sec{background:#eef2f6;color:var(--ink)}.btn.red{background:var(--c0)}.btn.ok{background:var(--ok)}
+.x{float:right;cursor:pointer;font-size:20px;color:var(--mute);border:0;background:none}
+.mask{position:fixed;inset:0;background:#0006;display:none;z-index:9}.mask.open{display:block}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#101828;color:#fff;padding:10px 18px;border-radius:8px;display:none;z-index:20}
+.muted{color:var(--mute)}
+@media(max-width:980px){.kpis{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>콩알반도체 불량 신고 · 조치 추적판<small id="clock"></small></h1>
+  <label style="margin:0;color:#98a2b3">접속자</label>
+  <select id="me"></select>
+  <button onclick="openNew()">+ 불량 신고</button>
+</header>
+<main>
+  <div class="kpis" id="kpis"></div>
+  <div class="grid">
+    <div>
+      <div class="flow" id="flow"></div>
+      <div class="panel">
+        <div class="filters">
+          <input id="q" placeholder="로트 / 내용 검색" oninput="load()">
+          <select id="fSev" onchange="load()"><option value="">심각도 전체</option></select>
+          <select id="fAsg" onchange="load()"><option value="">담당자 전체</option></select>
+          <select id="fSt" onchange="load()"></select>
+          <label style="display:flex;align-items:center;gap:4px;margin:0;color:var(--ink)"><input type="checkbox" id="fOver" style="width:auto" onchange="load()">기한 초과만</label>
+        </div>
+        <table><thead><tr><th>#</th><th>심각도</th><th>로트 / 불량</th><th>상태</th><th>담당자</th><th>기한</th></tr></thead><tbody id="rows"></tbody></table>
+      </div>
+    </div>
+    <div class="panel"><h2>담당자별 조치 현황</h2><div id="work"></div>
+      <div id="unas" class="muted" style="margin-top:10px"></div></div>
+  </div>
+</main>
+<div class="mask" id="mask" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer"></aside>
+<div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let META,USERS,SUM,me,openId=null,stFilter="open";
+const sevCls=s=>"s"+META.severity[s].rank;
+const ROLE={worker:"작업자",quality:"품질팀",engineer:"담당 엔지니어"};
+const api=async(u,o)=>{const r=await fetch(u,o&&{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(o)});
+  const j=await r.json();if(!r.ok)throw new Error(typeof j.detail==="string"?j.detail:"입력값을 확인하세요");return j};
+const toast=m=>{const t=$("#toast");t.textContent=m;t.style.display="block";setTimeout(()=>t.style.display="none",2800)};
+const fdt=s=>s?s.replace("T"," ").slice(5,16):"-";
+function dueHtml(d){
+  if(d.status==="종결")return `<span class="due ${d.overdue?'over':'done'}">${d.overdue?'초과 종결':'기한 내 종결'}</span>`;
+  const h=d.hours_left;
+  if(h<0){const a=-h;return `<span class="due over">⚠ ${a>=24?Math.floor(a/24)+'일 ':''}${Math.round(a%24)}시간 초과</span><br><small class="muted">${fdt(d.due_at)}</small>`}
+  const cls=h<=24?"soon":"";
+  return `<span class="due ${cls}">${h>=24?Math.floor(h/24)+'일 ':''}${Math.round(h%24)}시간 남음</span><br><small class="muted">${fdt(d.due_at)}</small>`}
+
+async function init(){
+  [META,USERS]=await Promise.all([api("/api/meta"),api("/api/users")]);
+  $("#me").innerHTML=USERS.map(u=>`<option value="${u.id}">${esc(u.name)} (${ROLE[u.role]} · ${esc(u.team)})</option>`).join("");
+  $("#me").value=localStorage.me||4; me=USERS.find(u=>u.id==$("#me").value);
+  $("#me").onchange=()=>{me=USERS.find(u=>u.id==$("#me").value);localStorage.me=me.id;if(openId)showDetail(openId)};
+  $("#fSev").innerHTML+=Object.keys(META.severity).map(s=>`<option>${s}</option>`).join("");
+  $("#fAsg").innerHTML+=USERS.filter(u=>u.role==="engineer").map(u=>`<option value="${u.id}">${esc(u.name)}</option>`).join("");
+  $("#fSt").innerHTML=`<option value="open">미종결 전체</option><option value="">전체(종결 포함)</option>`+META.statuses.map(s=>`<option>${s}</option>`).join("");
+  load(); setInterval(load,60000);
+  setInterval(()=>$("#clock").textContent=new Date().toLocaleString("ko-KR"),1000);
+}
+async function load(){
+  const p=new URLSearchParams({status:$("#fSt").value,severity:$("#fSev").value,assignee_id:$("#fAsg").value||0,overdue:$("#fOver").checked,q:$("#q").value});
+  const [list,sum]=await Promise.all([api("/api/defects?"+p),api("/api/summary")]);SUM=sum;
+  renderKpi();renderWork();
+  $("#flow").innerHTML=META.statuses.map(s=>`<div class="${$("#fSt").value===s?'on':''}" onclick="setSt('${s}')">${s}<b>${sum.by_status[s]}</b></div>`).join("");
+  $("#rows").innerHTML=list.map(d=>`<tr class="${d.overdue&&d.status!=='종결'?'over':''}" onclick="showDetail(${d.id})">
+    <td>${d.id}</td><td><span class="tag ${sevCls(d.severity)}">${d.severity}</span></td>
+    <td><b>${esc(d.lot_no)}</b> · ${esc(d.defect_type)}<br><small class="muted">${esc(d.line)} / ${esc(d.process)} · ${d.qty}개</small></td>
+    <td><span class="tag st">${d.status}</span></td>
+    <td>${d.assignee_name?esc(d.assignee_name)+'<br><small class="muted">'+esc(d.assignee_team)+'</small>':'<span class="muted">미지정</span>'}</td>
+    <td>${dueHtml(d)}</td></tr>`).join("")||`<tr><td colspan="6" class="muted" style="text-align:center;padding:24px">해당하는 건이 없습니다</td></tr>`;
+}
+function setSt(s){$("#fSt").value=s;load()}
+function kpi(label,val,cls,fn){return `<div class="kpi ${cls}" onclick="${fn}"><b>${val}</b><span>${label}</span></div>`}
+function renderKpi(){const s=SUM;
+  $("#kpis").innerHTML=kpi("진행 중",s.open,"","reset()")+kpi("기한 초과",s.overdue,s.overdue?"bad":"","overOnly()")+
+   kpi("24시간 내 기한",s.due_soon,"warn","reset()")+kpi("담당자 미지정",s.unassigned,"","setSt('분석중')")+
+   kpi("기한 내 종결률",s.closed_on_time_rate==null?"-":s.closed_on_time_rate+"%","","setSt('종결')")}
+function reset(){$("#fOver").checked=false;$("#fSt").value="open";$("#fSev").value="";$("#fAsg").value="";load()}
+function overOnly(){$("#fOver").checked=true;$("#fSt").value="open";load()}
+function renderWork(){
+  const max=Math.max(1,...SUM.workload.map(w=>w.active));
+  $("#work").innerHTML=SUM.workload.map(w=>`<div class="person"><div class="top" onclick="$('#fAsg').value=${w.id};$('#fSt').value='open';load()">
+    <span><b>${esc(w.name)}</b> <small>${esc(w.team)}</small></span>
+    <span>${w.active}건${w.overdue?` <span class="tag s0">초과 ${w.overdue}</span>`:''}</span></div>
+    <div class="bar"><i style="width:${w.active/max*100}%"></i></div>
+    <div>${w.items.map(i=>`<span class="chip ${i.overdue?'over':''}" onclick="showDetail(${i.id})">#${i.id} ${i.status}${i.overdue?' ⚠':''}</span>`).join("")||'<small class="muted">조치 중인 건 없음</small>'}</div></div>`).join("");
+  $("#unas").innerHTML=SUM.unassigned?`담당자 미지정 ${SUM.unassigned}건 (신고·분석중)`:"";
+}
+function closeDrawer(){$("#drawer").classList.remove("open");$("#mask").classList.remove("open");openId=null}
+function openDrawer(h){$("#drawer").innerHTML=`<button class="x" onclick="closeDrawer()">×</button>`+h;$("#drawer").classList.add("open");$("#mask").classList.add("open")}
+async function showDetail(id){
+  openId=id;const d=await api("/api/defects/"+id);
+  const q=me.role==="quality",mine=me.id===d.assignee_id;
+  let act="";
+  if(q&&d.status==="신고")act=`<button class="btn" onclick="doAct(${id},'start_analysis')">분석 착수</button>`;
+  if(q&&d.status==="분석중")act=`<h4>원인 분석 · 담당자 지정</h4>
+    <label>추정 원인</label><textarea id="a_rc"></textarea><label>조치 계획</label><textarea id="a_ap"></textarea>
+    <label>담당자</label><select id="a_as">${USERS.filter(u=>u.role==="engineer").map(u=>`<option value="${u.id}">${esc(u.name)} (${esc(u.team)}) – 진행 ${SUM.workload.find(w=>w.id===u.id).active}건</option>`).join("")}</select>
+    <button class="btn" onclick="doAct(${id},'assign')">담당자 지정 · 조치 시작</button>`;
+  if(d.status==="조치중"&&(q||mine))act=`<h4>조치 완료 보고</h4><label>조치 결과</label><textarea id="a_note"></textarea>
+    <button class="btn ok" onclick="doAct(${id},'complete')">완료 보고 → 검증 요청</button>`;
+  if(q&&d.status==="검증중")act=`<h4>검증</h4><label>검증 의견</label><textarea id="a_note"></textarea>
+    <button class="btn ok" onclick="doAct(${id},'verify')">검증 완료 · 종결</button><button class="btn red" onclick="doAct(${id},'reject')">반려 (재조치)</button>`;
+  if(q&&(d.status==="조치중"||d.status==="검증중"))
+    act+=`<hr><label>담당자 재지정</label><select id="a_re">${USERS.filter(u=>u.role==="engineer"&&u.id!==d.assignee_id).map(u=>`<option value="${u.id}">${esc(u.name)} (${esc(u.team)})</option>`).join("")}</select>
+    <button class="btn sec" onclick="doAct(${id},'reassign')">재지정</button>`;
+  openDrawer(`<h3>#${d.id} ${esc(d.lot_no)} <span class="tag ${sevCls(d.severity)}">${d.severity}</span> <span class="tag st">${d.status}</span></h3>
+   <div>${dueHtml(d)}</div>
+   <dl class="dl"><dt>불량 유형</dt><dd>${esc(d.defect_type)} · ${d.qty}개</dd><dt>위치</dt><dd>${esc(d.line)} / ${esc(d.process)}</dd>
+   <dt>내용</dt><dd>${esc(d.description)}</dd><dt>신고</dt><dd>${esc(d.reporter_name)} · ${fdt(d.reported_at)}</dd>
+   <dt>담당자</dt><dd>${d.assignee_name?esc(d.assignee_name)+' ('+esc(d.assignee_team)+')':'미지정'}</dd>
+   <dt>원인</dt><dd>${esc(d.root_cause)||'-'}</dd><dt>조치 계획</dt><dd>${esc(d.action_plan)||'-'}</dd>
+   <dt>조치 결과</dt><dd>${esc(d.action_result)||'-'}</dd><dt>검증</dt><dd>${esc(d.verify_note)||'-'}</dd></dl>
+   ${act?`<div class="actions">${act}</div>`:`<p class="muted">현재 접속자(${esc(me.name)}, ${ROLE[me.role]})가 할 수 있는 처리가 없습니다.</p>`}
+   <h4>처리 이력</h4><div class="tl">${d.events.map(e=>`<div><b>${esc(e.kind)}</b> <small>${esc(e.actor_name||'')} · ${fdt(e.at)}</small><br>${esc(e.note)}</div>`).join("")}</div>`);
+}
+async function doAct(id,action){
+  const v=i=>{const e=document.getElementById(i);return e?e.value:""};
+  try{await api(`/api/defects/${id}/action`,{actor_id:me.id,action,root_cause:v("a_rc"),action_plan:v("a_ap"),
+    assignee_id:+(v("a_as")||v("a_re")||0),note:v("a_note")});
+    toast("처리되었습니다");await load();showDetail(id)}catch(e){toast(e.message)}
+}
+function openNew(){
+  const o=a=>a.map(x=>`<option>${x}</option>`).join("");
+  openDrawer(`<h3>불량 신고</h3><p class="muted">신고자: ${esc(me.name)}</p>
+   <label>로트 번호</label><input id="n_lot" placeholder="LOT-241024-123">
+   <div class="row2"><div><label>라인</label><select id="n_line">${o(META.lines)}</select></div><div><label>공정</label><select id="n_proc">${o(META.processes)}</select></div>
+   <div><label>불량 유형</label><select id="n_type">${o(META.defect_types)}</select></div><div><label>수량</label><input id="n_qty" type="number" min="1" value="1"></div></div>
+   <label>심각도 (기한: ${Object.entries(META.severity).map(([k,v])=>k+' '+(v.hours>=48?v.hours/24+'일':v.hours+'시간')).join(' / ')})</label>
+   <select id="n_sev">${o(Object.keys(META.severity)).replace("<option>보통","<option selected>보통")}</select>
+   <label>불량 내용</label><textarea id="n_desc"></textarea>
+   <button class="btn" onclick="submitNew()">신고 접수</button>`)}
+async function submitNew(){
+  const v=i=>document.getElementById(i).value;
+  try{const r=await api("/api/defects",{lot_no:v("n_lot"),line:v("n_line"),process:v("n_proc"),defect_type:v("n_type"),
+    qty:+v("n_qty"),severity:v("n_sev"),description:v("n_desc"),reporter_id:me.id});
+    toast("신고가 접수되었습니다");await load();showDetail(r.id)}catch(e){toast(e.message)}
+}
+init();
+</script>
+</body>
+</html>

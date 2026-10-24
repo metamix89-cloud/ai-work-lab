@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>콩알반도체 불량 신고 · 조치 추적판</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f4f5f7; color: #222; }
+  header, main { max-width: 1100px; margin: 0 auto; padding: 12px 16px; }
+  h1 { font-size: 20px; margin: 8px 0; }
+  .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; background: #fff; padding: 10px 12px; border-radius: 8px; margin-bottom: 12px; }
+  .summary { display: flex; gap: 12px; margin-bottom: 12px; }
+  .card { flex: 1; background: #fff; border-radius: 8px; padding: 12px; text-align: center; }
+  .card b { display: block; font-size: 28px; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; }
+  th, td { padding: 8px; border-bottom: 1px solid #e5e7eb; text-align: left; font-size: 14px; vertical-align: top; }
+  tr[data-overdue="1"] { background: #fff1f0; }
+  .over { color: #c00; font-weight: bold; }
+  #message { min-height: 22px; margin: 8px 0; color: #b00020; font-weight: bold; }
+  #message.ok { color: #1a7f37; }
+  #error { background: #fff; padding: 16px; border-radius: 8px; }
+  .acts { display: flex; flex-direction: column; gap: 4px; }
+  .acts > div { display: flex; flex-wrap: wrap; gap: 4px; }
+  button, select, input { font: inherit; padding: 4px 8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>불량 신고 · 조치 추적판</h1>
+  <div class="bar">
+    <label>사용자 <select data-testid="user" id="user"></select></label>
+  </div>
+  <form class="bar" id="form" onsubmit="return false">
+    <label>로트 <select data-testid="lot" id="lot"></select></label>
+    <label>증상 <select data-testid="symptom" id="symptom"></select></label>
+    <label>심각도 <select data-testid="severity" id="severity">
+      <option value="치명">치명</option><option value="중" selected>중</option><option value="경">경</option>
+    </select></label>
+    <label>수량 <input data-testid="qty" id="qty" type="number" style="width:80px"></label>
+    <button type="button" data-testid="report" id="report">신고</button>
+  </form>
+</header>
+<main>
+  <div class="summary">
+    <div class="card">미종결<b data-testid="sum-open">0</b></div>
+    <div class="card">기한 넘김<b data-testid="sum-overdue">0</b></div>
+    <div class="card">재작업 횟수 합<b data-testid="sum-rework">0</b></div>
+  </div>
+  <div id="message" data-testid="message"></div>
+  <div id="error" hidden>불러오지 못했습니다 <button type="button" id="retry">다시 시도</button></div>
+  <table id="board">
+    <thead><tr>
+      <th>번호</th><th>로트</th><th>제품</th><th>라인</th><th>증상</th><th>심각도</th><th>수량</th>
+      <th>상태</th><th>담당</th><th>기한</th><th>재작업</th><th>동작</th>
+    </tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+</main>
+<script>
+const STATUS_KO = { reported: "신고", fixing: "조치 중", verifying: "검증 대기", closed: "종결" };
+let users = [], lots = [], symptoms = [], causes = [], defects = [];
+const $ = (id) => document.getElementById(id);
+
+function esc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+}
+function opts(list, v, l) { return list.map((x) => `<option value="${esc(x[v])}">${esc(x[l])}</option>`).join(""); }
+function currentUser() { return users.find((u) => u.user_id === $("user").value); }
+function say(text, ok) { const m = $("message"); m.textContent = text || ""; m.className = ok ? "ok" : ""; }
+
+async function api(path, body) {
+  const res = await fetch(path, body === undefined ? {} : {
+    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
+  });
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  return { ok: res.ok, status: res.status, data };
+}
+
+async function loadAll() {
+  $("error").hidden = true;
+  try {
+    const [u, l, s, c] = await Promise.all(["/api/users", "/api/lots", "/api/symptoms", "/api/causes"].map((p) => fetch(p).then((r) => { if (!r.ok) throw 0; return r.json(); })));
+    const keep = $("user").value;
+    users = u; lots = l; symptoms = s; causes = c;
+    $("user").innerHTML = opts(users, "user_id", "name");
+    if (keep && users.some((x) => x.user_id === keep)) $("user").value = keep;
+    $("lot").innerHTML = lots.map((x) => `<option value="${esc(x.lot_id)}">${esc(x.lot_id)} (${esc(x.product)}, ${x.qty}개)</option>`).join("");
+    $("symptom").innerHTML = opts(symptoms, "code", "label");
+    await loadDefects();
+  } catch (e) {
+    $("error").hidden = false;
+    $("board").hidden = true;
+  }
+}
+
+async function loadDefects() {
+  const r = await fetch("/api/defects");
+  if (!r.ok) throw 0;
+  const data = await r.json();
+  defects = data.defects;
+  $("board").hidden = false;
+  document.querySelector('[data-testid="sum-open"]').textContent = data.summary.open;
+  document.querySelector('[data-testid="sum-overdue"]').textContent = data.summary.overdue;
+  document.querySelector('[data-testid="sum-rework"]').textContent = data.summary.rework;
+  render();
+}
+
+function actions(d) {
+  const me = currentUser();
+  if (!me) return "";
+  let h = "";
+  if (d.status === "reported" && me.role === "quality") {
+    const qual = users.filter((u) => u.role === "quality");
+    h += `<div><select data-testid="cause">${opts(causes, "code", "label")}</select>
+      <select data-testid="assignee">${opts(qual, "user_id", "name")}</select>
+      <button type="button" data-testid="act-analyze" data-do="analyze">원인 분석</button></div>`;
+  }
+  if (d.status === "fixing" && d.assignee === me.user_id) {
+    h += `<div><input data-testid="note" placeholder="조치 내용" maxlength="600">
+      <button type="button" data-testid="act-fix" data-do="fix">조치 등록</button></div>`;
+  }
+  if (d.status === "verifying" && me.role === "quality" && d.assignee !== me.user_id && d.reporter !== me.user_id) {
+    h += `<div><button type="button" data-testid="act-pass" data-do="pass">검증 통과</button>
+      <button type="button" data-testid="act-fail" data-do="fail">검증 실패</button></div>`;
+  }
+  return `<div class="acts">${h}</div>`;
+}
+
+function render() {
+  $("rows").innerHTML = defects.map((d) => `
+    <tr data-testid="defect" data-id="${esc(d.defect_id)}" data-status="${esc(d.status)}" data-overdue="${d.overdue ? 1 : 0}">
+      <td>${esc(d.defect_id)}</td><td>${esc(d.lot_id)}</td><td>${esc(d.product)}</td><td>${esc(d.line)}</td>
+      <td>${esc(d.symptom_label)}</td><td>${esc(d.severity)}</td><td>${d.qty}</td>
+      <td>${STATUS_KO[d.status]}</td>
+      <td>${esc(d.assignee_name || "-")}</td>
+      <td>${esc(d.due)}${d.overdue ? ' <span class="over">기한 넘김</span>' : ""}</td>
+      <td>${d.rework}</td>
+      <td>${actions(d)}</td>
+    </tr>`).join("");
+}
+
+async function submitAction(tr, kind) {
+  const id = tr.dataset.id;
+  const user = $("user").value;
+  const q = (t) => tr.querySelector(`[data-testid="${t}"]`);
+  let path, body;
+  if (kind === "analyze") { path = "analyze"; body = { user, cause: q("cause").value, assignee: q("assignee").value }; }
+  else if (kind === "fix") { path = "fix"; body = { user, note: q("note").value }; }
+  else { path = "verify"; body = { user, result: kind }; }
+  await send(`/api/defects/${encodeURIComponent(id)}/${path}`, body, "처리했습니다");
+}
+
+async function send(path, body, okText) {
+  try {
+    const r = await api(path, body);
+    if (!r.ok) { say((r.data && r.data.detail) || "요청을 처리하지 못했습니다"); }
+    else { say(okText, true); }
+    await loadDefects();
+  } catch (e) {
+    $("error").hidden = false;
+  }
+}
+
+$("rows").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-do]");
+  if (b) submitAction(b.closest("tr"), b.dataset.do);
+});
+$("user").addEventListener("change", () => { say(""); render(); });
+$("retry").addEventListener("click", loadAll);
+$("report").addEventListener("click", () => {
+  const raw = $("qty").value;
+  send("/api/defects", {
+    user: $("user").value, lot_id: $("lot").value, symptom: $("symptom").value,
+    severity: $("severity").value, qty: raw === "" ? null : Number(raw),
+  }, "신고했습니다");
+});
+loadAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 콩알반도체 '불량 신고 · 조치 추적판' 웹앱을 만들어 줘. 생산 라인 작업자가 로트의 불량을 신고하면 품질팀이 원인을 분석하고 담당자를 정해 조치하고, 검증한 뒤 종결하는 흐름이야. 심각도에 따라 기한이 있고, 누가 조치 중인지와 기한을 넘긴 건이 한눈에 보여야 해. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 126066,
+ "num_turns": 6,
+ "total_cost_usd": 0.36074680000000003,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 36034,
+  "cache_read_input_tokens": 230268,
+  "output_tokens": 19356,
+  "output_tokens_details": {
+   "thinking_tokens": 1295
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 36034,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1074,
+    "cache_read_input_tokens": 52241,
+    "cache_creation_input_tokens": 465,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 465
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "불량 신고 · 조치 추적판을 만들었고, API 호출로 확인했습니다. 브라우저 화면은 열어 보지 못했습니다.\n\n**실행:** 폴더에서 `run.bat`을 실행하거나 `pip install -r requirements.txt` 후 `python -m uvicorn main:app --port 8000`을 실행하고, http://localhost:8000 에 접속하세요. 처음 실행할 때 `defects.db`가 만들어지고 가상 데이터 15건이 들어갑니다. 테스트하다 꼬였으면 `defects.db`를 지우고 다시 실행하면 처음 상태로 돌아갑니다.\n\n**흐름:** 신고 → 분석중 → 조치중 → 검증중 → 종결 순서입니다.\n- **작업자**가 로트 불량을 신고합니다.\n- **품질팀**이 분석을 시작하고, 원인과 조치 계획을 적고 담당자를 지정합니다.\n- **담당 엔지니어**가 조치 결과를 보고합니다.\n- **품질팀**이 검증해서 종결하거나 반려해 다시 조치중으로 돌립니다. 담당자 재지정도 됩니다.\n- 각 단계는 해당 역할만 처리할 수 있고, 조치 완료 보고는 지정된 담당자만 할 수 있습니다. 모든 처리는 이력에 남습니다.\n\n**기한:** 신고 시각부터 심각도별로 치명 24시간, 높음 3일, 보통 7일, 낮음 14일입니다. 신고할 때 자동으로 계산됩니다.\n\n**화면:**\n- 상단 카드에 진행 중, 기한 초과, 24시간 내 기한, 담당자 미지정, 기한 내 종결률이 나옵니다. 기한 초과 카드를 누르면 초과 건만 걸러 보입니다.\n- 단계별 건수를 누르면 그 단계만 필터링되고, 목록에서 기한이 지난 건은 빨간 배경에 \"N시간 초과\"로 표시됩니다.\n- 오른쪽 \"담당자별 조치 현황\"에서 누가 몇 건을 조치 중인지, 그중 몇 건이 초과인지, 어떤 건인지 보입니다.\n- 건을 누르면 상세와 처리 이력이 열립니다.\n\n**접속자 선택:** 로그인은 없고, 상단 드롭다운에서 접속자를 바꿔 역할을 전환합니다. 예를 들어 최유진(품질팀)이나 한소희(엔지니어)로 바꿔 보면 됩니다. 실제로 쓰려면 인증을 붙여야 합니다.\n\n**가상 데이터:** 진행 중 10건 중 4건이 기한 초과이고 3건이 24시간 내 기한입니다. 종결 5건이 섞여 있어서 기한 내 종결률은 40%로 나옵니다.\n\n파일은 `main.py`(API와 DB), `static/index.html`(화면), `requirements.txt`, `run.bat`입니다.",
+ "wall_s": 137.7
+}

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>콩알반도체 불량 신고 · 조치 추적판</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 20px; color: #222; }
+  h1 { font-size: 20px; }
+  .bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .sum { display: flex; gap: 12px; margin: 12px 0; }
+  .sum div { border: 1px solid #bbb; padding: 8px 20px; text-align: center; min-width: 120px; }
+  .sum b { display: block; font-size: 24px; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #ccc; padding: 4px 8px; font-size: 13px; text-align: left; vertical-align: top; }
+  th { background: #f0f0f0; }
+  tr[data-overdue="1"] { background: #ffe5e5; }
+  .over { color: #c00; font-weight: bold; }
+  #message { min-height: 20px; margin: 8px 0; color: #b00; }
+  #error { display: none; margin: 8px 0; }
+  input[type=number] { width: 80px; }
+</style>
+</head>
+<body>
+<h1>불량 신고 · 조치 추적판</h1>
+
+<div class="bar">
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+</div>
+
+<div class="bar">
+  <label>로트 <select data-testid="lot" id="lot"></select></label>
+  <label>증상 <select data-testid="symptom" id="symptom"></select></label>
+  <label>심각도 <select data-testid="severity" id="severity">
+    <option value="치명">치명</option><option value="중" selected>중</option><option value="경">경</option></select></label>
+  <label>수량 <input data-testid="qty" id="qty" type="number" value="1"></label>
+  <button data-testid="report" id="report">신고</button>
+</div>
+
+<div class="sum">
+  <div>미종결 <b data-testid="sum-open" id="sum-open">0</b></div>
+  <div>기한 넘김 <b data-testid="sum-overdue" id="sum-overdue">0</b></div>
+  <div>재작업 횟수 <b data-testid="sum-rework" id="sum-rework">0</b></div>
+</div>
+
+<div data-testid="message" id="message"></div>
+<div id="error"><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+
+<table>
+  <thead><tr><th>번호</th><th>로트</th><th>제품</th><th>라인</th><th>증상</th><th>심각도</th><th>수량</th>
+  <th>상태</th><th>담당</th><th>기한</th><th>넘김</th><th>재작업</th><th>동작</th></tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+
+<script>
+const STATUS = { reported: "신고", fixing: "조치 중", verifying: "검증 대기", closed: "종결" };
+let users = [], lots = [], symptoms = [], causes = [], data = null;
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+async function api(method, url, body) {
+  const r = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined });
+  let j = null;
+  try { j = await r.json(); } catch (e) {}
+  if (!r.ok) { const err = new Error((j && j.detail) || "요청에 실패했습니다"); err.rejected = true; throw err; }
+  return j;
+}
+
+const me = () => users.find((u) => u.user_id === $("user").value);
+const name = (id) => { const u = users.find((x) => x.user_id === id); return u ? u.name : (id || ""); };
+const label = (list, code) => { const x = list.find((i) => i.code === code); return x ? x.label : (code || ""); };
+const opts = (list, v, t) => list.map((i) => `<option value="${esc(i[v])}">${esc(typeof t === "function" ? t(i) : i[t])}</option>`).join("");
+
+async function loadBase() {
+  [users, lots, symptoms, causes] = await Promise.all([
+    api("GET", "/api/users"), api("GET", "/api/lots"), api("GET", "/api/symptoms"), api("GET", "/api/causes")]);
+  $("user").innerHTML = opts(users, "user_id", (u) => u.name + " (" + (u.role === "quality" ? "품질팀" : "작업자") + ")");
+  $("lot").innerHTML = opts(lots, "lot_id", (l) => l.lot_id + " · " + l.product + " · " + l.line);
+  $("symptom").innerHTML = opts(symptoms, "code", "label");
+}
+
+async function refresh() {
+  try {
+    if (!users.length) await loadBase();
+    data = await api("GET", "/api/defects");
+    $("error").style.display = "none";
+    render();
+  } catch (e) {
+    $("error").style.display = "block";
+  }
+}
+
+function buttons(d, u) {
+  if (!u) return "";
+  const q = u.role === "quality";
+  let h = "";
+  if (d.status === "reported" && q) {
+    const quality = users.filter((x) => x.role === "quality");
+    h += `<select data-testid="cause">${opts(causes, "code", "label")}</select> ` +
+         `<select data-testid="assignee">${opts(quality, "user_id", "name")}</select> ` +
+         `<button data-testid="act-analyze" data-do="analyze">원인 분석</button>`;
+  }
+  if (d.status === "fixing" && d.assignee === u.user_id) {
+    h += `<input data-testid="note" placeholder="조치 내용" maxlength="500"> <button data-testid="act-fix" data-do="fix">조치 등록</button>`;
+  }
+  if (d.status === "verifying" && q && d.assignee !== u.user_id && d.reporter !== u.user_id) {
+    h += `<button data-testid="act-pass" data-do="pass">검증 통과</button> <button data-testid="act-fail" data-do="fail">검증 실패</button>`;
+  }
+  return h;
+}
+
+function render() {
+  const u = me();
+  const s = data.summary;
+  $("sum-open").textContent = s.open;
+  $("sum-overdue").textContent = s.overdue;
+  $("sum-rework").textContent = s.rework;
+  $("rows").innerHTML = data.defects.map((d) => `
+    <tr data-testid="defect" data-id="${esc(d.defect_id)}" data-status="${d.status}" data-overdue="${d.overdue ? 1 : 0}">
+      <td>${esc(d.defect_id)}</td><td>${esc(d.lot_id)}</td><td>${esc(d.product)}</td><td>${esc(d.line)}</td>
+      <td>${esc(label(symptoms, d.symptom))}</td><td>${esc(d.severity)}</td><td>${d.qty}</td>
+      <td>${STATUS[d.status]}</td><td>${esc(name(d.assignee))}</td><td>${esc(d.due)}</td>
+      <td>${d.overdue ? '<span class="over">기한 넘김</span>' : ""}</td><td>${d.rework}</td>
+      <td>${buttons(d, u)}</td>
+    </tr>`).join("");
+}
+
+function say(t) { $("message").textContent = t || ""; }
+
+async function run(fn) {
+  say("");
+  try { await fn(); } catch (e) { say(e.rejected ? e.message : "불러오지 못했습니다"); }
+  await refresh();
+}
+
+$("user").addEventListener("change", () => { say(""); if (data) render(); });
+$("retry").addEventListener("click", refresh);
+
+$("report").addEventListener("click", () => run(async () => {
+  const raw = $("qty").value.trim();
+  const qty = /^-?\d+$/.test(raw) ? parseInt(raw, 10) : raw;
+  await api("POST", "/api/defects", { user: $("user").value, lot_id: $("lot").value,
+    symptom: $("symptom").value, severity: $("severity").value, qty });
+}));
+
+$("rows").addEventListener("click", (ev) => {
+  const b = ev.target.closest("button[data-do]");
+  if (!b) return;
+  const tr = b.closest("tr"), id = tr.dataset.id, user = $("user").value, what = b.dataset.do;
+  const val = (t) => tr.querySelector(`[data-testid="${t}"]`).value;
+  run(async () => {
+    if (what === "analyze") await api("POST", `/api/defects/${id}/analyze`, { user, cause: val("cause"), assignee: val("assignee") });
+    else if (what === "fix") await api("POST", `/api/defects/${id}/fix`, { user, note: val("note") });
+    else await api("POST", `/api/defects/${id}/verify`, { user, result: what });
+  });
+});
+
+refresh();
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+user_id,name,role
+w1,김작업,worker
+w2,이조립,worker
+q1,박품질,quality
+q2,최검사,quality
+q3,정분석,quality

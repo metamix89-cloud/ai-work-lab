@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>콩알반도체 불량 신고 · 조치 추적판</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 20px; color: #222; }
+  h1 { font-size: 20px; }
+  .bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 10px 0; }
+  .sum { display: flex; gap: 12px; margin: 14px 0; }
+  .sum div { border: 1px solid #ccc; border-radius: 6px; padding: 8px 16px; min-width: 120px; }
+  .sum b { font-size: 22px; display: block; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { border: 1px solid #ddd; padding: 5px 7px; text-align: left; vertical-align: top; }
+  th { background: #f3f3f3; }
+  tr[data-overdue="1"] { background: #ffecec; }
+  .over { color: #c00; font-weight: bold; }
+  #message { min-height: 22px; color: #a30; margin: 8px 0; }
+  #error { display: none; color: #c00; margin: 10px 0; }
+  .acts > * { margin: 2px 2px 2px 0; }
+</style>
+</head>
+<body>
+<h1>불량 신고 · 조치 추적판</h1>
+
+<div class="bar">
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+</div>
+
+<div class="bar">
+  <label>로트 <select data-testid="lot" id="lot"></select></label>
+  <label>증상 <select data-testid="symptom" id="symptom"></select></label>
+  <label>심각도 <select data-testid="severity" id="severity">
+    <option value="치명">치명</option><option value="중" selected>중</option><option value="경">경</option></select></label>
+  <label>수량 <input data-testid="qty" id="qty" type="number" value="1" style="width:80px"></label>
+  <button data-testid="report" id="report">신고</button>
+</div>
+
+<div class="sum">
+  <div>미종결<b data-testid="sum-open" id="sum-open">0</b></div>
+  <div>기한 넘김<b data-testid="sum-overdue" id="sum-overdue">0</b></div>
+  <div>재작업 횟수<b data-testid="sum-rework" id="sum-rework">0</b></div>
+</div>
+
+<div data-testid="message" id="message"></div>
+<div id="error"><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+
+<table>
+  <thead><tr><th>번호</th><th>로트</th><th>제품</th><th>라인</th><th>증상</th><th>심각도</th><th>수량</th>
+    <th>상태</th><th>담당</th><th>기한</th><th>넘김</th><th>재작업</th><th>동작</th></tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+
+<script>
+const STATUS_KO = { reported: "신고", fixing: "조치 중", verifying: "검증 대기", closed: "종결" };
+let users = [], lots = [], symptoms = [], causes = [], defects = [];
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const nameOf = (id) => { const u = users.find((x) => x.user_id === id); return u ? u.name : (id || ""); };
+const label = (list, code) => { const x = list.find((i) => i.code === code); return x ? x.label : (code || ""); };
+const me = () => users.find((u) => u.user_id === $("user").value);
+
+function setMessage(t) { $("message").textContent = t || ""; }
+
+async function api(method, url, body) {
+  const r = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined });
+  let data = null;
+  try { data = await r.json(); } catch (e) {}
+  if (!r.ok) { const err = new Error((data && data.detail) || "요청에 실패했습니다"); err.rejected = true; throw err; }
+  return data;
+}
+
+function fill(sel, items, val, text) {
+  const keep = sel.value;
+  sel.innerHTML = items.map((i) => `<option value="${esc(i[val])}">${esc(text(i))}</option>`).join("");
+  if (keep && items.some((i) => i[val] === keep)) sel.value = keep;
+}
+
+async function loadAll() {
+  try {
+    [users, lots, symptoms, causes] = await Promise.all([
+      api("GET", "/api/users"), api("GET", "/api/lots"), api("GET", "/api/symptoms"), api("GET", "/api/causes")]);
+    fill($("user"), users, "user_id", (u) => `${u.name} (${u.role === "quality" ? "품질팀" : "작업자"})`);
+    fill($("lot"), lots, "lot_id", (l) => `${l.lot_id} · ${l.product} · ${l.line} (${l.qty})`);
+    fill($("symptom"), symptoms, "code", (s) => s.label);
+    await loadBoard();
+    $("error").style.display = "none";
+  } catch (e) {
+    $("error").style.display = "block";
+  }
+}
+
+async function loadBoard() {
+  const b = await api("GET", "/api/defects");
+  defects = b.defects;
+  $("sum-open").textContent = b.summary.open;
+  $("sum-overdue").textContent = b.summary.overdue;
+  $("sum-rework").textContent = b.summary.rework;
+  render();
+}
+
+function actions(d) {
+  const u = me();
+  if (!u || d.status === "closed") return "";
+  let h = "";
+  if (d.status === "reported" && u.role === "quality") {
+    const q = users.filter((x) => x.role === "quality");
+    h += `<select data-testid="cause">${causes.map((c) => `<option value="${esc(c.code)}">${esc(c.label)}</option>`).join("")}</select>`;
+    h += `<select data-testid="assignee">${q.map((x) => `<option value="${esc(x.user_id)}">${esc(x.name)}</option>`).join("")}</select>`;
+    h += `<button data-testid="act-analyze">원인 분석</button>`;
+  }
+  if (d.status === "fixing" && d.assignee === u.user_id) {
+    h += `<input data-testid="note" placeholder="조치 내용" maxlength="500">`;
+    h += `<button data-testid="act-fix">조치 등록</button>`;
+  }
+  if (d.status === "verifying" && u.role === "quality" && d.assignee !== u.user_id && d.reporter !== u.user_id) {
+    h += `<button data-testid="act-pass">검증 통과</button><button data-testid="act-fail">검증 실패</button>`;
+  }
+  return h;
+}
+
+function render() {
+  $("rows").innerHTML = defects.map((d) => `
+    <tr data-testid="defect" data-id="${esc(d.defect_id)}" data-status="${esc(d.status)}" data-overdue="${d.overdue ? 1 : 0}">
+      <td>${esc(d.defect_id)}</td><td>${esc(d.lot_id)}</td><td>${esc(d.product)}</td><td>${esc(d.line)}</td>
+      <td>${esc(label(symptoms, d.symptom))}</td><td>${esc(d.severity)}</td><td>${esc(d.qty)}</td>
+      <td>${STATUS_KO[d.status] || esc(d.status)}</td>
+      <td>${esc(nameOf(d.assignee))}</td><td>${esc(d.due)}</td>
+      <td>${d.overdue ? '<span class="over">기한 넘김</span>' : ""}</td><td>${esc(d.rework)}</td>
+      <td class="acts">${actions(d)}</td>
+    </tr>`).join("");
+}
+
+async function run(fn, okText) {
+  try {
+    await fn();
+    setMessage(okText);
+  } catch (e) {
+    setMessage(e.rejected ? e.message : "불러오지 못했습니다");
+  }
+  try { await loadBoard(); } catch (e) { $("error").style.display = "block"; return; }
+  $("error").style.display = "none";
+}
+
+$("report").onclick = () => {
+  const raw = $("qty").value.trim();
+  const qty = /^-?\d+$/.test(raw) ? parseInt(raw, 10) : raw;
+  run(() => api("POST", "/api/defects", {
+    user: $("user").value, lot_id: $("lot").value, symptom: $("symptom").value,
+    severity: $("severity").value, qty }), "신고했습니다");
+};
+
+$("rows").onclick = (ev) => {
+  const btn = ev.target.closest("button");
+  if (!btn) return;
+  const tr = btn.closest("tr"), id = tr.dataset.id, user = $("user").value;
+  const t = btn.dataset.testid, url = `/api/defects/${id}/`;
+  const q = (k) => tr.querySelector(`[data-testid="${k}"]`);
+  if (t === "act-analyze") run(() => api("POST", url + "analyze", { user, cause: q("cause").value, assignee: q("assignee").value }), "원인 분석을 등록했습니다");
+  else if (t === "act-fix") run(() => api("POST", url + "fix", { user, note: q("note").value }), "조치를 등록했습니다");
+  else if (t === "act-pass") run(() => api("POST", url + "verify", { user, result: "pass" }), "검증 통과 — 종결했습니다");
+  else if (t === "act-fail") run(() => api("POST", url + "verify", { user, result: "fail" }), "검증 실패 — 조치 중으로 돌아갑니다");
+};
+
+$("user").onchange = () => { setMessage(""); render(); };
+$("retry").onclick = loadAll;
+loadAll();
+</script>
+</body>
+</html>

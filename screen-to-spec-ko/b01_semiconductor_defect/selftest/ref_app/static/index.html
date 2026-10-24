@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>불량 신고 · 조치 추적판</title>
+<style>
+body{font-family:"Malgun Gothic",system-ui,sans-serif;margin:20px;color:#111318}
+.sum{display:flex;gap:10px;margin:10px 0}.card{border:1px solid #e6e8ef;border-radius:10px;padding:8px 14px}
+table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid #e6e8ef;padding:6px;text-align:left;font-size:13px}
+tr[data-overdue="1"] td{color:#b91c1c}#message{color:#b91c1c;min-height:20px}.err{background:#fff5f5;border:1px solid #fecaca;padding:12px}
+</style></head><body>
+<h1>불량 신고 · 조치 추적판</h1>
+<label>사용자 <select data-testid="user" id="user"></select></label>
+<div>로트 <select data-testid="lot" id="lot"></select> 증상 <select data-testid="symptom" id="symptom"></select>
+ 심각도 <select data-testid="severity" id="severity"><option>치명</option><option selected>중</option><option>경</option></select>
+ 수량 <input data-testid="qty" id="qty" type="number" value="1" style="width:60px"> <button data-testid="report" id="report">신고</button></div>
+<div>원인 <select data-testid="cause" id="cause"></select> 담당자 <select data-testid="assignee" id="assignee"></select> 조치 내용 <input data-testid="note" id="note" style="width:260px"></div>
+<div data-testid="message" id="message"></div>
+<div class="sum"><div class="card">미종결 <b data-testid="sum-open" id="so"></b></div><div class="card">기한 넘김 <b data-testid="sum-overdue" id="sv"></b></div><div class="card">재작업 <b data-testid="sum-rework" id="sr"></b></div></div>
+<div id="main"></div>
+<script>
+const KO={reported:"신고",fixing:"조치 중",verifying:"검증 대기",closed:"종결"};
+const SYM={};let users=[],me=null;
+const $=id=>document.getElementById(id);
+async function j(u,o){const r=await fetch(u,o);const b=await r.json().catch(()=>null);if(!r.ok)throw {detail:(b&&b.detail)||r.status};return b}
+function opt(sel,value,text){const o=document.createElement("option");o.value=value;o.textContent=text;$(sel).append(o)}
+function btn(t,label,f){const b=document.createElement("button");b.setAttribute("data-testid",t);b.textContent=label;b.onclick=f;return b}
+async function act(id,a,extra){$("message").textContent="";try{await j(`/api/defects/${id}/${a}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign({user:$("user").value},extra))});await load()}catch(e){$("message").textContent=e.detail}}
+function row(d){
+  const tr=document.createElement("tr");tr.setAttribute("data-testid","defect");tr.dataset.id=d.defect_id;tr.dataset.status=d.status;tr.dataset.overdue=d.overdue?"1":"0";
+  [d.defect_id,d.lot_id+" · "+d.product+" · "+d.line,SYM[d.symptom]||d.symptom,d.severity,d.qty,KO[d.status],d.assignee||"—",d.due+(d.overdue?" 넘김":""),d.rework].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td)});
+  const td=document.createElement("td");
+  if(me&&me.role==="quality"){
+    if(d.status==="reported")td.append(btn("act-analyze","원인 분석",()=>act(d.defect_id,"analyze",{cause:$("cause").value,assignee:$("assignee").value})));
+    if(d.status==="fixing"&&d.assignee===me.user_id)td.append(btn("act-fix","조치 등록",()=>act(d.defect_id,"fix",{note:$("note").value})));
+    if(d.status==="verifying"&&d.assignee!==me.user_id&&d.reporter!==me.user_id){td.append(btn("act-pass","검증 통과",()=>act(d.defect_id,"verify",{result:"pass"})));td.append(btn("act-fail","검증 실패",()=>act(d.defect_id,"verify",{result:"fail"})))}
+  }
+  tr.append(td);return tr;
+}
+async function load(){
+  try{
+    if(!users.length){
+      users=await j("/api/users");
+      users.forEach(u=>{opt("user",u.user_id,u.name+(u.role==="quality"?" (품질팀)":" (작업자)"));if(u.role==="quality")opt("assignee",u.user_id,u.name)});
+      (await j("/api/lots")).forEach(l=>opt("lot",l.lot_id,l.lot_id+" "+l.product));
+      (await j("/api/symptoms")).forEach(s=>{SYM[s.code]=s.label;opt("symptom",s.code,s.label)});
+      (await j("/api/causes")).forEach(c=>opt("cause",c.code,c.label));
+    }
+    me=users.find(u=>u.user_id===$("user").value);
+    const b=await j("/api/defects");
+    $("so").textContent=b.summary.open;$("sv").textContent=b.summary.overdue;$("sr").textContent=b.summary.rework;
+    const t=document.createElement("table");t.innerHTML="<tr><th>번호</th><th>로트</th><th>증상</th><th>심각도</th><th>수량</th><th>상태</th><th>담당</th><th>기한</th><th>재작업</th><th>동작</th></tr>";
+    b.defects.forEach(d=>t.append(row(d)));$("main").innerHTML="";$("main").append(t);
+  }catch(e){$("main").innerHTML='<div class="err">불러오지 못했습니다 <button onclick="load()">다시 시도</button></div>'}
+}
+$("report").onclick=async()=>{$("message").textContent="";try{await j("/api/defects",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user:$("user").value,lot_id:$("lot").value,symptom:$("symptom").value,severity:$("severity").value,qty:Number($("qty").value)})});await load()}catch(e){$("message").textContent=e.detail}};
+$("user").onchange=load;
+load();
+</script></body></html>

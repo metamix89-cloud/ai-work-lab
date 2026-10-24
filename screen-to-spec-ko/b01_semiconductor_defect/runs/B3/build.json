@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 114190,
+ "num_turns": 9,
+ "total_cost_usd": 0.3562020000000001,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 39980,
+  "cache_read_input_tokens": 255280,
+  "output_tokens": 17073,
+  "output_tokens_details": {
+   "thinking_tokens": 4459
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 39980,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1199,
+    "cache_read_input_tokens": 56373,
+    "cache_creation_input_tokens": 279,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 279
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD.md대로 웹앱을 만들었습니다. API와 업무 규칙은 curl과 Python으로 직접 호출해 확인했습니다. 화면은 브라우저로 열어 보지 못했습니다.\n\n**실행:** 프로젝트 폴더에서 `python -m uvicorn main:app --port 8000` 을 실행하세요. `PORT` 환경 변수가 있으면 그 포트를 씁니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/` CSV를 읽어 `qc.db`를 새로 만들고, API 7개와 업무 규칙 R1~R9를 구현했습니다.\n- `static/index.html`: `/` 한 페이지로, 사용자 선택·신고 폼·요약 3칸·추적판·메시지 줄·오류 상태를 담았습니다. 프레임워크 없이 순수 HTML/JS이고 `data-testid`는 PRD 그대로입니다. 버튼은 사용자와 상태에 맞는 것만 보이고, 막는 건 서버입니다.\n- `seed/*.csv` 5개: 사용자 5명, 로트 4개, 증상 4개, 원인 5개(`미상` 포함), 불량 6건입니다. 불량은 네 상태가 모두 있고 기한 넘김 1건, 재작업 1건입니다.\n- `requirements.txt`: `fastapi`와 `uvicorn`만 넣었습니다.\n\n**확인한 것**\n- 시드 데이터 기준으로 요약이 open 5, overdue 1, rework 1로 나옵니다.\n- 사용자 선택 상자의 첫 번째 사용자는 작업자라서 첫 화면에는 원인 분석 버튼이 없습니다.\n- `/`가 200으로 열립니다.\n- 신고 거부 중에서는 수량 0, 로트 수량 초과, 같은 로트·증상의 미종결 신고 중복(409)을 확인했습니다. 정상 신고는 201로 접수됐습니다.\n- 작업자의 원인 분석은 403, 담당자 본인의 검증은 403입니다. 제3자의 검증 실패는 조치 중으로 돌아가고 `rework`가 1 늘었습니다. 종결 건은 작업자가 검증하면 403, 품질팀이 검증하면 409입니다.\n\n**알아둘 점**\n- `tests/test_dod.py`가 폴더에 없어서 DoD 테스트는 돌리지 못했습니다.\n- 시드의 신고 날짜는 PRD 예시와 같은 2026-10-24 기준입니다. 서버 PC의 오늘 날짜가 다르면 기한 넘김 개수가 바뀝니다.\n- PRD에 거부 순서가 애매한 곳이 있어 이렇게 정했습니다.\n  - 원인·담당자가 목록에 없는 400은 403 다음에 확인합니다.\n  - 신고에서 없는 증상(400)과 수량 초과(400)는 없는 로트(404) 다음에 확인합니다.\n- 목록 응답에 PRD에 없는 `symptom_label`, `cause_label`, `reporter_name`, `assignee_name` 필드를 덧붙였습니다. 화면에 한글 이름을 보여주기 위한 것이고, `symptom`과 `cause` 값은 코드 그대로입니다.",
+ "wall_s": 136.7
+}
