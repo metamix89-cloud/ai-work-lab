@@ -242,7 +242,7 @@ $("#newBtn").onclick = () => {
     <div class="row"><div style="flex:1"><label>분류</label><select id="nCat">${opts(META.categories)}</select></div>
       <div style="flex:1"><label>우선순위 (처리기한: 보통 7일 / 높음 5일 / 긴급 2일)</label><select id="nPri">${opts(META.priorities)}</select></div></div>
     <div class="row"><div style="flex:1"><label>민원인</label><input id="nName" maxlength="30"></div>
-      <div style="flex:1"><label>연락처</label><input id="nPhone" maxlength="30" placeholder="010-0000-0011"></div></div>
+      <div style="flex:1"><label>연락처</label><input id="nPhone" maxlength="30" placeholder="010-0000-0000"></div></div>
     <div class="row" style="justify-content:flex-end"><button class="btn" id="cBtn">취소</button><button class="btn primary" id="sBtn">접수</button></div>`;
   $("#mbg").classList.add("on");
   $("#cBtn").onclick = closeModal;

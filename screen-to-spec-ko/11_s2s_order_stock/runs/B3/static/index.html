@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>가나다식품 주문 · 재고 백오피스</title>
+<style>
+body{font-family:"Malgun Gothic",sans-serif;margin:16px;color:#222}
+header{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+main{display:flex;gap:24px;align-items:flex-start}
+#orders{flex:3}#inventory{flex:1}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #ccc;padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#f3f3f3}
+[data-testid=message]{min-height:1.4em;margin:8px 0;color:#b00020}
+button{margin-right:4px;cursor:pointer}
+#error{display:none;padding:12px;border:1px solid #b00020;color:#b00020;margin:8px 0}
+</style>
+</head>
+<body>
+<header>
+  <h1 style="margin:0;font-size:20px">가나다식품 주문 · 재고</h1>
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+</header>
+<div data-testid="message" id="message"></div>
+<div id="error"><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+<main>
+  <section id="orders">
+    <h2>주문</h2>
+    <table>
+      <thead><tr><th>주문 번호</th><th>손님</th><th>주문 시각</th><th>상품 · 수량</th><th>상태</th><th>동작</th></tr></thead>
+      <tbody id="order-body"></tbody>
+    </table>
+  </section>
+  <section id="inventory">
+    <h2>재고</h2>
+    <table>
+      <thead><tr><th>상품</th><th>재고</th></tr></thead>
+      <tbody id="stock-body"></tbody>
+    </table>
+  </section>
+</main>
+<script>
+const LABEL={placed:"접수",confirmed:"확정",shipped:"출고",cancelled:"취소",refunded:"환불"};
+const ACTS={placed:["confirm","cancel"],confirmed:["ship","cancel"],shipped:["refund"],cancelled:[],refunded:[]};
+const ACT_LABEL={confirm:"확정",ship:"출고",cancel:"취소",refund:"환불"};
+let orders=[],products=[];
+const $=id=>document.getElementById(id);
+
+async function getJson(url){
+  const r=await fetch(url);
+  if(!r.ok) throw new Error(url);
+  return r.json();
+}
+function td(text){const e=document.createElement("td");e.textContent=text;return e}
+
+function render(){
+  const body=$("order-body");body.innerHTML="";
+  for(const o of orders){
+    const tr=document.createElement("tr");
+    tr.setAttribute("data-testid","order");
+    tr.dataset.id=o.order_id;tr.dataset.status=o.status;
+    tr.append(td(o.order_id),td(o.customer),td(o.ordered_at),
+      td(o.lines.map(l=>l.name+" × "+l.qty).join(", ")));
+    tr.append(td(LABEL[o.status]));
+    const ac=document.createElement("td");
+    for(const a of ACTS[o.status]){
+      const b=document.createElement("button");
+      b.setAttribute("data-testid","act-"+a);b.textContent=ACT_LABEL[a];
+      b.onclick=()=>act(o.order_id,a);ac.append(b);
+    }
+    tr.append(ac);body.append(tr);
+  }
+  const sb=$("stock-body");sb.innerHTML="";
+  for(const p of products){
+    const tr=document.createElement("tr");
+    tr.setAttribute("data-testid","stock");tr.dataset.id=p.product_id;
+    tr.append(td(p.name),td(p.stock));sb.append(tr);
+  }
+}
+
+async function load(){
+  try{
+    const [users,prods,ords]=await Promise.all([getJson("/api/users"),getJson("/api/products"),getJson("/api/orders")]);
+    const sel=$("user"),cur=sel.value;sel.innerHTML="";
+    for(const u of users){const op=document.createElement("option");op.value=u.user_id;
+      op.textContent=u.name+" ("+(u.role==="manager"?"관리자":"직원")+")";sel.append(op)}
+    if(cur&&users.some(u=>u.user_id===cur)) sel.value=cur;
+    products=prods;orders=ords;
+    $("error").style.display="none";render();
+  }catch(e){$("error").style.display="block"}
+}
+
+async function act(id,a){
+  $("message").textContent="";
+  try{
+    const r=await fetch("/api/orders/"+encodeURIComponent(id)+"/"+a,{method:"POST",
+      headers:{"Content-Type":"application/json"},body:JSON.stringify({user:$("user").value})});
+    const data=await r.json();
+    if(!r.ok){$("message").textContent=data.detail||"요청을 처리하지 못했습니다";return}
+    orders=orders.map(o=>o.order_id===data.order.order_id?data.order:o);
+    products=data.products;render();
+  }catch(e){$("message").textContent="요청을 처리하지 못했습니다"}
+}
+$("retry").onclick=load;
+load();
+</script>
+</body>
+</html>

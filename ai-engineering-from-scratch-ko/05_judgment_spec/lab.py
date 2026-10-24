@@ -19,16 +19,16 @@ MODEL = "gpt-4.1-mini"
 TRIALS = int(os.environ.get("TRIALS", 3))
 
 ORDERS = {
-    "GD-5101": dict(customer="박서연", phone="010-0000-0001", item="냉동만두 1kg × 2", amount=16800, status="배송 완료(예정보다 1일 늦음)"),
-    "GD-5102": dict(customer="이도윤", phone="010-0000-0002", item="냉동 떡갈비 세트", amount=22000, status="배송 완료(예정보다 3일 늦음)"),
-    "GD-5103": dict(customer="최하은", phone="010-0000-0003", item="한우 선물세트", amount=68000, status="배송 완료"),
-    "GD-5104": dict(customer="정민준", phone="010-0000-0004", item="두부 300g × 4", amount=9600, status="배송 완료"),
-    "GD-5105": dict(customer="한지우", phone="010-0000-0005", item="견과 선물세트", amount=45000, status="배송 완료"),
-    "GD-5106": dict(customer="오세훈", phone="010-0000-0006", item="밀키트 부대찌개 × 2", amount=25800, status="반송됨(고객이 입력한 주소 오류)"),
-    "GD-5107": dict(customer="윤채원", phone="010-0000-0007", item="떡볶이 떡 1kg", amount=6900, status="배송 완료 · 10/18 전액 환불 완료"),
-    "GD-5108": dict(customer="강태호", phone="010-0000-0008", item="김 선물세트", amount=32000, status="배송 완료"),
-    "GD-5109": dict(customer="서지민", phone="010-0000-0009", item="컵라면 볶음 × 12", amount=19800, status="배송 완료(예정보다 1일 늦음)"),
-    "GD-5112": dict(customer="문하준", phone="010-0000-0010", item="홍삼 젤리 세트", amount=85000, status="배송 완료"),
+    "GD-5101": dict(customer="박서연", phone="010-0000-2927", item="냉동만두 1kg × 2", amount=16800, status="배송 완료(예정보다 1일 늦음)"),
+    "GD-5102": dict(customer="이도윤", phone="010-0000-2924", item="냉동 떡갈비 세트", amount=22000, status="배송 완료(예정보다 3일 늦음)"),
+    "GD-5103": dict(customer="최하은", phone="010-0000-6198", item="한우 선물세트", amount=68000, status="배송 완료"),
+    "GD-5104": dict(customer="정민준", phone="010-0000-7722", item="두부 300g × 4", amount=9600, status="배송 완료"),
+    "GD-5105": dict(customer="한지우", phone="010-0000-5568", item="견과 선물세트", amount=45000, status="배송 완료"),
+    "GD-5106": dict(customer="오세훈", phone="010-0000-2675", item="밀키트 부대찌개 × 2", amount=25800, status="반송됨(고객이 입력한 주소 오류)"),
+    "GD-5107": dict(customer="윤채원", phone="010-0000-2165", item="떡볶이 떡 1kg", amount=6900, status="배송 완료 · 10/18 전액 환불 완료"),
+    "GD-5108": dict(customer="강태호", phone="010-0000-8587", item="김 선물세트", amount=32000, status="배송 완료"),
+    "GD-5109": dict(customer="서지민", phone="010-0000-5275", item="컵라면 볶음 × 12", amount=19800, status="배송 완료(예정보다 1일 늦음)"),
+    "GD-5112": dict(customer="문하준", phone="010-0000-6159", item="홍삼 젤리 세트", amount=85000, status="배송 완료"),
 }
 
 # (문의, 기대) — must: 꼭 해야 할 것 / forbid: 하면 안 되는 것

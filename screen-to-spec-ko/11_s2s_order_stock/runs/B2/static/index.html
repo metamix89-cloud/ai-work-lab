@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>가나다식품 주문 · 재고 백오피스</title>
+<style>
+body{font-family:sans-serif;margin:16px;color:#222}
+header{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+#message{min-height:1.5em;color:#b00020;margin:8px 0}
+main{display:flex;gap:24px;align-items:flex-start}
+#orders-pane{flex:3}#stock-pane{flex:1}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #ccc;padding:6px 8px;text-align:left}
+th{background:#f3f3f3}
+button{margin-right:4px;cursor:pointer}
+#error{color:#b00020}
+</style>
+</head>
+<body>
+<header>
+  <h1>주문 · 재고 백오피스</h1>
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+</header>
+<div id="message" data-testid="message"></div>
+<div id="error" hidden>불러오지 못했습니다 <button id="retry">다시 시도</button></div>
+<main id="main">
+  <section id="orders-pane">
+    <h2>주문</h2>
+    <table>
+      <thead><tr><th>주문 번호</th><th>손님</th><th>주문 시각</th><th>상품 · 수량</th><th>상태</th><th>동작</th></tr></thead>
+      <tbody id="orders"></tbody>
+    </table>
+  </section>
+  <section id="stock-pane">
+    <h2>재고</h2>
+    <table>
+      <thead><tr><th>상품</th><th>재고</th></tr></thead>
+      <tbody id="stocks"></tbody>
+    </table>
+  </section>
+</main>
+<script>
+const LABEL={placed:"접수",confirmed:"확정",shipped:"출고",cancelled:"취소",refunded:"환불"};
+const ACTIONS={placed:["confirm","cancel"],confirmed:["ship","cancel"],shipped:["refund"],cancelled:[],refunded:[]};
+const ACTION_LABEL={confirm:"확정",ship:"출고",cancel:"취소",refund:"환불"};
+let users=[],products=[],orders=[];
+const $=id=>document.getElementById(id);
+function el(tag,attrs,text){const e=document.createElement(tag);
+  for(const k in(attrs||{}))e.setAttribute(k,attrs[k]);
+  if(text!==undefined)e.textContent=text;return e}
+async function api(path,opts){
+  const r=await fetch(path,opts);let data=null;
+  try{data=await r.json()}catch(e){}
+  if(!r.ok){const err=new Error(data&&data.detail||"오류");err.detail=data&&data.detail;err.status=r.status;throw err}
+  return data}
+function renderStocks(){
+  const tb=$("stocks");tb.innerHTML="";
+  for(const p of products){
+    const tr=el("tr");tr.appendChild(el("td",{},p.name));
+    tr.appendChild(el("td",{"data-testid":"stock","data-id":p.product_id},String(p.stock)));
+    tb.appendChild(tr)}}
+function orderRow(o){
+  const tr=el("tr",{"data-testid":"order","data-id":o.order_id,"data-status":o.status});
+  tr.appendChild(el("td",{},o.order_id));
+  tr.appendChild(el("td",{},o.customer));
+  tr.appendChild(el("td",{},o.ordered_at));
+  tr.appendChild(el("td",{},o.lines.map(l=>l.name+" × "+l.qty).join(", ")));
+  tr.appendChild(el("td",{},LABEL[o.status]));
+  const td=el("td");
+  for(const a of ACTIONS[o.status]){
+    const b=el("button",{"data-testid":"act-"+a},ACTION_LABEL[a]);
+    b.onclick=()=>act(o.order_id,a);td.appendChild(b)}
+  tr.appendChild(td);return tr}
+function renderOrders(){
+  const tb=$("orders");tb.innerHTML="";
+  for(const o of orders)tb.appendChild(orderRow(o))}
+async function act(id,a){
+  $("message").textContent="";
+  try{
+    const res=await api("/api/orders/"+encodeURIComponent(id)+"/"+a,{method:"POST",
+      headers:{"Content-Type":"application/json"},body:JSON.stringify({user:$("user").value})});
+    const i=orders.findIndex(o=>o.order_id===res.order.order_id);
+    if(i>=0)orders[i]=res.order;
+    products=res.products;renderOrders();renderStocks()
+  }catch(e){
+    $("message").textContent=e.detail||"요청에 실패했습니다";
+    if(e.status===409)load(true)}}
+async function load(keepMessage){
+  try{
+    const [u,p,o]=await Promise.all([api("/api/users"),api("/api/products"),api("/api/orders")]);
+    users=u;products=p;orders=o;
+    const sel=$("user"),cur=sel.value;sel.innerHTML="";
+    for(const x of users){const op=el("option",{value:x.user_id},x.name+" ("+(x.role==="manager"?"관리자":"직원")+")");sel.appendChild(op)}
+    if(cur&&users.some(x=>x.user_id===cur))sel.value=cur;
+    $("error").hidden=true;$("main").hidden=false;
+    if(!keepMessage)$("message").textContent="";
+    renderOrders();renderStocks()
+  }catch(e){$("main").hidden=true;$("error").hidden=false}}
+$("retry").onclick=()=>load();
+load();
+</script>
+</body>
+</html>

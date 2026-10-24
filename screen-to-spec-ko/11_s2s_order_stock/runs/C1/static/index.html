@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>가나다식품 주문 · 재고 백오피스</title>
+<style>
+  body { font-family: sans-serif; margin: 16px; color: #222; }
+  header { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; }
+  #message { min-height: 1.4em; color: #b00020; margin: 8px 0; }
+  main { display: flex; gap: 24px; align-items: flex-start; }
+  #orders { flex: 3; } #stocks { flex: 1; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: #f3f3f3; }
+  button { margin-right: 4px; }
+  #error { color: #b00020; }
+</style>
+</head>
+<body>
+<header>
+  <h1 style="margin:0;font-size:20px">주문 · 재고</h1>
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+</header>
+<div id="message" data-testid="message"></div>
+<div id="error" hidden><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+<main>
+  <section id="orders"><h2>주문</h2>
+    <table><thead><tr><th>주문 번호</th><th>손님</th><th>주문 시각</th><th>줄</th><th>상태</th><th>동작</th></tr></thead>
+    <tbody id="order-body"></tbody></table>
+  </section>
+  <section id="stocks"><h2>재고</h2>
+    <table><thead><tr><th>상품</th><th>재고</th></tr></thead><tbody id="stock-body"></tbody></table>
+  </section>
+</main>
+<script>
+const LABEL = {placed: '접수', confirmed: '확정', shipped: '출고', cancelled: '취소', refunded: '환불'};
+const ACTION_LABEL = {confirm: '확정', ship: '출고', cancel: '취소', refund: '환불'};
+const BUTTONS = {placed: ['confirm', 'cancel'], confirmed: ['ship', 'cancel'], shipped: ['refund'], cancelled: [], refunded: []};
+let users = [], products = [], orders = [];
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function currentUser() { return document.getElementById('user').value; }
+function currentRole() { const u = users.find(x => x.user_id === currentUser()); return u ? u.role : ''; }
+
+async function getJson(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(url);
+  return r.json();
+}
+
+function render() {
+  document.getElementById('stock-body').innerHTML = products.map(p =>
+    `<tr><td>${esc(p.name)}</td><td data-testid="stock" data-id="${esc(p.product_id)}">${p.stock}</td></tr>`).join('');
+  const role = currentRole();
+  document.getElementById('order-body').innerHTML = orders.map(o => {
+    const btns = BUTTONS[o.status].filter(a => a !== 'refund' || role === 'manager').map(a =>
+      `<button data-testid="act-${a}" data-action="${a}">${ACTION_LABEL[a]}</button>`).join('');
+    const lines = o.lines.map(l => `${esc(l.name || l.product_id)} × ${l.qty}`).join('<br>');
+    return `<tr data-testid="order" data-id="${esc(o.order_id)}" data-status="${o.status}">` +
+      `<td>${esc(o.order_id)}</td><td>${esc(o.customer)}</td><td>${esc(o.ordered_at)}</td>` +
+      `<td>${lines}</td><td>${LABEL[o.status]}</td><td>${btns}</td></tr>`;
+  }).join('');
+}
+
+async function load() {
+  try {
+    const [u, p, o] = await Promise.all([getJson('/api/users'), getJson('/api/products'), getJson('/api/orders')]);
+    const sel = document.getElementById('user');
+    const keep = sel.value;
+    users = u; products = p; orders = o;
+    sel.innerHTML = users.map(x => `<option value="${esc(x.user_id)}">${esc(x.name)} (${x.role === 'manager' ? '관리자' : '직원'})</option>`).join('');
+    if (keep && users.some(x => x.user_id === keep)) sel.value = keep;
+    document.getElementById('error').hidden = true;
+    render();
+  } catch (e) {
+    document.getElementById('error').hidden = false;
+  }
+}
+
+async function act(orderId, action) {
+  const msg = document.getElementById('message');
+  try {
+    const r = await fetch(`/api/orders/${encodeURIComponent(orderId)}/${action}`, {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({user: currentUser()})
+    });
+    const body = await r.json();
+    if (!r.ok) { msg.textContent = body.detail; await load(); return; }
+    msg.textContent = '';
+    products = body.products;
+    orders = orders.map(o => o.order_id === body.order.order_id ? body.order : o);
+    render();
+  } catch (e) {
+    document.getElementById('error').hidden = false;
+  }
+}
+
+document.getElementById('order-body').addEventListener('click', e => {
+  const b = e.target.closest('button[data-action]');
+  if (b) act(b.closest('tr').dataset.id, b.dataset.action);
+});
+document.getElementById('user').addEventListener('change', render);
+document.getElementById('retry').addEventListener('click', load);
+load();
+</script>
+</body>
+</html>

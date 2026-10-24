@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 77229,
+ "num_turns": 12,
+ "total_cost_usd": 0.2915492,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 34347,
+  "cache_read_input_tokens": 225872,
+  "output_tokens": 13155,
+  "output_tokens_details": {
+   "thinking_tokens": 730
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 34347,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 848,
+    "cache_read_input_tokens": 50364,
+    "cache_creation_input_tokens": 655,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 655
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD.md대로 웹앱을 만들었습니다. 브라우저 화면(T9)은 열어 보지 못했고, 동시 확정(T7)은 시험하지 못했습니다. `tests/test_dod.py`가 폴더에 없어서 DoD 9개를 직접 돌리지 못했고, API만 스모크 테스트했습니다.\n\n**스모크 테스트에서 확인한 것**\n- `/`가 200으로 열립니다.\n- 확정하면 재고가 줍니다.\n- 한 줄이라도 재고가 모자라면 409 `재고가 부족합니다: 참치캔`으로 거부됩니다.\n- 같은 주문을 두 번 확정하면 두 번째는 409입니다.\n- 접수 주문의 출고는 409입니다.\n- 취소하면 재고가 돌아옵니다.\n- 환불은 직원이 하면 403, 관리자가 하면 200, 취소 주문이면 409입니다.\n- 본문이 없으면 400, 없는 주문이나 없는 사용자는 404입니다.\n- 직원이 접수 주문을 환불하면 409가 아니라 403입니다.\n\n**동시 확정(R5)**\n동작 처리 전체를 잠금 하나로 직렬화하고, 재고에 `CHECK (stock >= 0)`도 걸어 두었습니다.\n\n**구성**\n- `main.py`에 API 4개와 업무 규칙 R1~R8이 있습니다. 서버를 시작할 때마다 `seed/` CSV로 `backoffice.db`를 새로 만듭니다.\n- `static/index.html`은 순수 HTML/JS 한 페이지입니다. 사용자 선택, 주문 표, 재고 패널, 메시지 줄, 오류 화면이 PRD에 적힌 `data-testid`대로 들어 있습니다.\n- `seed/`에는 사용자 3명, 상품 5개(재고 0인 상품 1개), 주문 8개(상태 다섯 가지 모두)를 가상 데이터로 넣었습니다.\n\n**실행**\n```\npython -m uvicorn main:app --port 8000\n```\n\n참고로 시드에서 재고 3인 상품(현미누룽지)에 걸린 접수 주문은 2건뿐입니다. \"재고 3인 상품에 확정 8건\" 시험을 이 시드로 돌리려면 그만큼 접수 주문을 추가해야 합니다.",
+ "wall_s": 82.6
+}

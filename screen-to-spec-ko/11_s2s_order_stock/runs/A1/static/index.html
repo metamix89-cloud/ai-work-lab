@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 주문·재고 백오피스</title>
+<style>
+  :root { --bg:#f5f6f8; --card:#fff; --line:#e3e6ea; --text:#1f2933; --sub:#6b7785; --brand:#d9480f; --brand2:#fff1e8;
+          --ok:#2b8a3e; --warn:#e67700; --bad:#c92a2a; --blue:#1c7ed6; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.5 "Malgun Gothic","Apple SD Gothic Neo",sans-serif; background:var(--bg); color:var(--text); }
+  header { background:var(--brand); color:#fff; padding:0 20px; display:flex; align-items:center; gap:24px; height:52px; }
+  header h1 { font-size:17px; margin:0; }
+  nav { display:flex; gap:4px; flex:1; }
+  nav button { background:none; border:0; color:#ffd8c2; padding:15px 14px; cursor:pointer; font:inherit; border-bottom:3px solid transparent; }
+  nav button.on { color:#fff; border-color:#fff; font-weight:700; }
+  .who { font-size:13px; } .who button { margin-left:8px; }
+  main { max-width:1100px; margin:20px auto; padding:0 16px; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:16px; }
+  .stat { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px 14px; cursor:pointer; }
+  .stat b { display:block; font-size:22px; } .stat span { color:var(--sub); font-size:12px; }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:14px; margin-bottom:16px; }
+  .bar { display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; align-items:center; }
+  table { width:100%; border-collapse:collapse; }
+  th, td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:left; }
+  th { color:var(--sub); font-weight:600; font-size:12px; background:#fafbfc; }
+  td.n, th.n { text-align:right; font-variant-numeric:tabular-nums; }
+  tr.click { cursor:pointer; } tr.click:hover { background:#fafbfc; }
+  button, input, select { font:inherit; }
+  input, select { padding:6px 8px; border:1px solid #cdd3da; border-radius:6px; }
+  .btn { padding:6px 12px; border:1px solid #cdd3da; background:#fff; border-radius:6px; cursor:pointer; }
+  .btn:hover { background:#f1f3f5; }
+  .btn.pri { background:var(--brand); border-color:var(--brand); color:#fff; } .btn.pri:hover { background:#bf3f0c; }
+  .btn.ok { background:var(--ok); border-color:var(--ok); color:#fff; }
+  .btn.bad { background:#fff; color:var(--bad); border-color:var(--bad); }
+  .btn.blue { background:var(--blue); border-color:var(--blue); color:#fff; }
+  .tag { display:inline-block; padding:1px 9px; border-radius:10px; font-size:12px; font-weight:600; }
+  .PENDING { background:#fff3bf; color:#8a6100; } .CONFIRMED { background:#d0ebff; color:#145a96; }
+  .SHIPPED { background:#d3f9d8; color:#237032; } .CANCELLED { background:#e9ecef; color:#555; }
+  .REFUNDED { background:#ffe3e3; color:#a61e1e; }
+  .low { color:var(--bad); font-weight:700; } .muted { color:var(--sub); }
+  dialog { border:0; border-radius:10px; padding:20px; width:min(640px,94vw); box-shadow:0 10px 40px #0004; }
+  dialog::backdrop { background:#0006; }
+  dialog h2 { margin:0 0 10px; font-size:17px; }
+  .grid2 { display:grid; grid-template-columns:90px 1fr; gap:4px 10px; margin-bottom:10px; }
+  .grid2 dt { color:var(--sub); } .grid2 dd { margin:0; }
+  .actions { display:flex; gap:8px; justify-content:flex-end; margin-top:14px; flex-wrap:wrap; }
+  .events { font-size:12px; color:var(--sub); margin:8px 0 0; padding-left:16px; }
+  #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); padding:10px 18px; border-radius:8px; color:#fff;
+           display:none; max-width:90vw; z-index:99; } #toast.ok { background:var(--ok); } #toast.err { background:var(--bad); }
+  .login { max-width:320px; margin:12vh auto; } .login .panel { display:flex; flex-direction:column; gap:10px; }
+  .login h1 { color:var(--brand); text-align:center; font-size:20px; }
+  .hint { font-size:12px; color:var(--sub); }
+  .line { display:flex; gap:6px; margin-bottom:6px; } .line select { flex:1; } .line input { width:80px; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast"></div>
+<dialog id="dlg"></dialog>
+
+<script>
+const $ = (s, el = document) => el.querySelector(s);
+const won = n => Number(n).toLocaleString("ko-KR") + "원";
+const KO = { PENDING:"접수", CONFIRMED:"확정", SHIPPED:"출고", CANCELLED:"취소", REFUNDED:"환불" };
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const tag = s => `<span class="tag ${s}">${KO[s]}</span>`;
+let user = null, view = "orders", filter = { status:"", q:"" };
+
+async function api(path, opts = {}) {
+  const res = await fetch("/api" + path, {
+    method: opts.body ? "POST" : (opts.method || "GET"),
+    headers: { "Content-Type":"application/json", Authorization:"Bearer " + (localStorage.token || "") },
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (res.status === 401 && path !== "/login") { logout(); throw new Error("로그인이 필요합니다."); }
+  if (!res.ok) {
+    const d = data.detail;
+    throw new Error(typeof d === "string" ? d : Array.isArray(d) ? "입력값을 확인하세요." : "요청 실패");
+  }
+  return data;
+}
+function toast(msg, ok = true) {
+  const t = $("#toast"); t.textContent = msg; t.className = ok ? "ok" : "err"; t.style.display = "block";
+  clearTimeout(toast.h); toast.h = setTimeout(() => t.style.display = "none", 3500);
+}
+const guard = fn => async (...a) => { try { await fn(...a); } catch (e) { toast(e.message, false); } };
+
+function logout() { localStorage.removeItem("token"); user = null; render(); }
+
+async function init() {
+  if (localStorage.token) { try { user = await api("/me"); } catch { user = null; } }
+  render();
+}
+
+function render() {
+  if (!user) return renderLogin();
+  $("#app").innerHTML = `
+    <header><h1>🍚 가나다식품 백오피스</h1>
+      <nav>${[["orders","주문"],["products","재고"],["log","재고 이력"]].map(([k,l]) =>
+        `<button class="${view===k?"on":""}" data-v="${k}">${l}</button>`).join("")}</nav>
+      <div class="who">${esc(user.name)} (${user.role==="admin"?"관리자":"직원"})
+        <button class="btn" id="lo">로그아웃</button></div></header>
+    <main id="main"></main>`;
+  document.querySelectorAll("nav button").forEach(b => b.onclick = () => { view = b.dataset.v; render(); });
+  $("#lo").onclick = logout;
+  ({ orders:viewOrders, products:viewProducts, log:viewLog })[view]();
+}
+
+function renderLogin() {
+  $("#app").innerHTML = `<div class="login"><h1>🍚 가나다식품 백오피스</h1>
+    <form class="panel" id="lf"><input id="u" placeholder="아이디" autofocus><input id="p" type="password" placeholder="비밀번호">
+    <button class="btn pri">로그인</button>
+    <div class="hint">직원: staff / staff123<br>관리자: admin / admin123</div></form></div>`;
+  $("#lf").onsubmit = guard(async e => {
+    e.preventDefault();
+    const r = await api("/login", { body:{ username:$("#u").value, password:$("#p").value } });
+    localStorage.token = r.token; user = r.user; render();
+  });
+}
+
+// ---------------------------------------------------------------- 주문
+const viewOrders = guard(async () => {
+  const [dash, orders] = await Promise.all([
+    api("/dashboard"),
+    api(`/orders?status=${filter.status}&q=${encodeURIComponent(filter.q)}`)]);
+  $("#main").innerHTML = `
+    <div class="cards">
+      ${Object.keys(KO).map(s => `<div class="stat" data-s="${s}"><b>${dash.counts[s]}</b><span>${KO[s]}</span></div>`).join("")}
+      <div class="stat" id="lowc"><b class="${dash.low_stock?"low":""}">${dash.low_stock}</b><span>안전재고 이하 상품</span></div>
+      <div class="stat"><b>${won(dash.sales)}</b><span>확정·출고 매출</span></div></div>
+    <div class="panel"><div class="bar">
+      <select id="fs"><option value="">전체 상태</option>${Object.entries(KO).map(([k,v]) =>
+        `<option value="${k}" ${filter.status===k?"selected":""}>${v}</option>`).join("")}</select>
+      <input id="fq" placeholder="주문번호 / 고객 / 전화" value="${esc(filter.q)}">
+      <button class="btn" id="fgo">검색</button><span style="flex:1"></span>
+      <button class="btn pri" id="nw">+ 주문 등록</button></div>
+      <table><tr><th>주문번호</th><th>고객</th><th>상태</th><th class="n">금액</th><th>접수 시각</th></tr>
+      ${orders.map(o => `<tr class="click" data-id="${o.id}"><td>${o.order_no}</td><td>${esc(o.customer)}</td>
+        <td>${tag(o.status)}</td><td class="n">${won(o.total)}</td><td class="muted">${o.created_at}</td></tr>`).join("")
+        || `<tr><td colspan="5" class="muted">주문이 없습니다.</td></tr>`}</table></div>`;
+  document.querySelectorAll(".stat[data-s]").forEach(el => el.onclick = () => { filter.status = el.dataset.s; viewOrders(); });
+  $("#lowc").onclick = () => { view = "products"; render(); };
+  const go = () => { filter = { status:$("#fs").value, q:$("#fq").value }; viewOrders(); };
+  $("#fgo").onclick = go; $("#fs").onchange = go; $("#fq").onkeydown = e => e.key === "Enter" && go();
+  document.querySelectorAll("tr.click").forEach(tr => tr.onclick = () => openOrder(tr.dataset.id));
+  $("#nw").onclick = newOrderDialog;
+});
+
+const openOrder = guard(async id => {
+  const o = await api("/orders/" + id);
+  showOrder(o);
+});
+
+function showOrder(o) {
+  const admin = user.role === "admin", s = o.status;
+  const dlg = $("#dlg");
+  dlg.innerHTML = `<h2>${o.order_no} ${tag(s)}</h2>
+    <dl class="grid2"><dt>고객</dt><dd>${esc(o.customer)} · ${esc(o.phone)}</dd>
+      <dt>배송지</dt><dd>${esc(o.address)}</dd><dt>접수</dt><dd>${o.created_at}</dd></dl>
+    <table><tr><th>상품</th><th class="n">수량</th><th class="n">단가</th><th class="n">현재고</th></tr>
+      ${o.items.map(i => `<tr><td>${esc(i.name)}</td><td class="n">${i.qty}</td><td class="n">${won(i.unit_price)}</td>
+        <td class="n ${s==="PENDING"&&i.stock<i.qty?"low":""}">${i.stock}</td></tr>`).join("")}
+      <tr><td colspan="2"><b>합계</b></td><td class="n" colspan="2"><b>${won(o.total)}</b></td></tr></table>
+    <ul class="events">${o.events.map(e => `<li>${e.at} ${e.from_status?KO[e.from_status]+" → ":""}${KO[e.to_status]} (${esc(e.actor)})${e.note?" - "+esc(e.note):""}</li>`).join("")}</ul>
+    <div class="actions">
+      ${s==="PENDING" ? `<button class="btn ok" id="a-confirm">주문 확정 (재고 차감)</button>` : ""}
+      ${s==="CONFIRMED" ? `<button class="btn blue" id="a-ship">출고 처리</button>` : ""}
+      ${s==="PENDING"||s==="CONFIRMED" ? `<button class="btn bad" id="a-cancel">주문 취소</button>` : ""}
+      ${s==="SHIPPED"&&admin ? `<button class="btn bad" id="a-refund">환불 (관리자)</button>` : ""}
+      ${s==="SHIPPED"&&!admin ? `<span class="muted">출고 후 환불은 관리자만 가능합니다.</span>` : ""}
+      <button class="btn" id="a-close">닫기</button></div>`;
+  if (!dlg.open) dlg.showModal();
+  const act = (id, path, body) => { const b = $(id); if (b) b.onclick = guard(async () => {
+      b.disabled = true;
+      try { const r = await api(`/orders/${o.id}/${path}`, { body: body ?? {} }); toast(`${KO[r.status]} 처리되었습니다.`); showOrder(r); refresh(); }
+      catch (e) { b.disabled = false; throw e; } }); };
+  act("#a-confirm", "confirm"); act("#a-ship", "ship");
+  if ($("#a-cancel")) $("#a-cancel").onclick = guard(async () => {
+    if (!confirm("이 주문을 취소할까요?" + (s==="CONFIRMED" ? "\n차감된 재고가 복원됩니다." : ""))) return;
+    const r = await api(`/orders/${o.id}/cancel`, { body:{} }); toast("취소되었습니다."); showOrder(r); refresh(); });
+  if ($("#a-refund")) $("#a-refund").onclick = guard(async () => {
+    if (!confirm("환불 처리할까요?")) return;
+    const restock = confirm("반품 상품이 입고되었나요?\n[확인] 재고 복원  /  [취소] 재고 변동 없음(폐기·미회수)");
+    const r = await api(`/orders/${o.id}/refund`, { body:{ restock } }); toast("환불 처리되었습니다."); showOrder(r); refresh(); });
+  $("#a-close").onclick = () => dlg.close();
+}
+const refresh = () => ({ orders:viewOrders, products:viewProducts, log:viewLog })[view]();
+
+const newOrderDialog = guard(async () => {
+  const prods = await api("/products");
+  const opts = prods.map(p => `<option value="${p.id}">${esc(p.name)} (${won(p.price)}, 재고 ${p.stock})</option>`).join("");
+  const dlg = $("#dlg");
+  dlg.innerHTML = `<h2>주문 등록</h2>
+    <div class="bar"><input id="nc" placeholder="고객명"><input id="np" placeholder="전화번호"></div>
+    <div class="bar"><input id="na" placeholder="배송지" style="flex:1"></div>
+    <div id="lines"></div><button class="btn" id="addl">+ 상품 추가</button>
+    <div class="actions"><button class="btn" id="x">취소</button><button class="btn pri" id="ok">등록</button></div>`;
+  const addLine = () => { const d = document.createElement("div"); d.className = "line";
+    d.innerHTML = `<select>${opts}</select><input type="number" min="1" value="1">`; $("#lines").append(d); };
+  addLine(); $("#addl").onclick = addLine; $("#x").onclick = () => dlg.close();
+  $("#ok").onclick = guard(async () => {
+    const items = [...document.querySelectorAll(".line")].map(l => ({ product_id:+$("select", l).value, qty:+$("input", l).value }));
+    const r = await api("/orders", { body:{ customer:$("#nc").value.trim(), phone:$("#np").value.trim(), address:$("#na").value.trim(), items } });
+    toast("주문이 등록되었습니다."); showOrder(r); refresh(); });
+  dlg.showModal();
+});
+
+// ---------------------------------------------------------------- 재고
+const viewProducts = guard(async () => {
+  const ps = await api("/products");
+  $("#main").innerHTML = `<div class="panel"><table>
+    <tr><th>SKU</th><th>상품</th><th>분류</th><th class="n">가격</th><th class="n">재고</th><th class="n">안전재고</th><th></th></tr>
+    ${ps.map(p => `<tr><td class="muted">${p.sku}</td><td>${esc(p.name)}</td><td>${p.category}</td><td class="n">${won(p.price)}</td>
+      <td class="n ${p.stock<=p.safety_stock?"low":""}">${p.stock}${p.stock===0?" (품절)":""}</td><td class="n muted">${p.safety_stock}</td>
+      <td>${user.role==="admin" ? `<button class="btn" data-adj="${p.id}">재고 조정</button>` : ""}</td></tr>`).join("")}
+    </table>${user.role==="admin" ? "" : `<p class="hint">재고 수동 조정(입고·폐기)은 관리자만 가능합니다.</p>`}</div>`;
+  document.querySelectorAll("[data-adj]").forEach(b => b.onclick = () => adjustDialog(ps.find(p => p.id == b.dataset.adj)));
+});
+
+function adjustDialog(p) {
+  const dlg = $("#dlg");
+  dlg.innerHTML = `<h2>재고 조정 - ${esc(p.name)}</h2><p>현재 재고: <b>${p.stock}</b></p>
+    <div class="bar"><input id="ad" type="number" placeholder="증감 (입고 +, 폐기 -)"><input id="ar" placeholder="사유" style="flex:1"></div>
+    <div class="actions"><button class="btn" id="x">취소</button><button class="btn pri" id="ok">적용</button></div>`;
+  $("#x").onclick = () => dlg.close();
+  $("#ok").onclick = guard(async () => {
+    await api(`/products/${p.id}/adjust`, { body:{ delta:parseInt($("#ad").value, 10) || 0, reason:$("#ar").value.trim() } });
+    dlg.close(); toast("재고가 조정되었습니다."); refresh(); });
+  dlg.showModal();
+}
+
+const viewLog = guard(async () => {
+  const rows = await api("/stock-log");
+  $("#main").innerHTML = `<div class="panel"><table><tr><th>시각</th><th>상품</th><th class="n">증감</th><th>사유</th><th>주문</th><th>처리자</th></tr>
+    ${rows.map(r => `<tr><td class="muted">${r.at}</td><td>${esc(r.product)}</td>
+      <td class="n" style="color:${r.delta<0?"var(--bad)":"var(--ok)"}">${r.delta>0?"+":""}${r.delta}</td>
+      <td>${esc(r.reason)}</td><td>${r.order_no||""}</td><td>${esc(r.actor)}</td></tr>`).join("")}</table></div>`;
+});
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '주문 · 재고 백오피스' 웹앱을 만들어 줘. 직원이 쇼핑몰 주문을 확정하고 출고하고 취소할 수 있고, 관리자는 환불도 할 수 있어. 주문에 따라 상품 재고가 맞게 바뀌어야 하고, 재고가 마이너스가 되면 안 돼. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 139915,
+ "num_turns": 15,
+ "total_cost_usd": 0.41576199999999996,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 16,
+  "cache_creation_input_tokens": 40175,
+  "cache_read_input_tokens": 314300,
+  "output_tokens": 22360,
+  "output_tokens_details": {
+   "thinking_tokens": 1494
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 40175,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1220,
+    "cache_read_input_tokens": 54662,
+    "cache_creation_input_tokens": 2185,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 2185
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "가나다식품 주문·재고 백오피스를 만들었습니다. 테스트 9개가 통과했고, 서버를 실제로 띄워 첫 화면과 로그인·상품 조회까지 확인했습니다. 브라우저에서 화면을 직접 눌러 보지는 않았습니다. 상품 이름이 터미널에서 깨져 보인 건 출력 인코딩 문제로 보이고, 데이터 자체는 정상입니다.\n\n## 실행\n```\npip install -r requirements.txt\npython -m uvicorn app.main:app --port 8000\n```\nhttp://localhost:8000 에 접속하면 됩니다. 처음 실행하면 `ganada.db`가 만들어지고 가상 데이터가 들어갑니다. 상품 12종, 주문 13건(접수·확정·출고·취소·환불 상태별)이 들어 있고, 일부 상품은 안전재고 이하입니다.\n\n데모 계정은 직원 `staff / staff123`, 관리자 `admin / admin123`입니다.\n\n## 기능과 재고 규칙\n| 동작 | 가능한 상태 | 재고 변화 |\n|---|---|---|\n| 확정 | 접수 | 차감. 한 품목이라도 부족하면 전체 실패하고 아무것도 차감되지 않음 |\n| 출고 | 확정 | 변화 없음 (확정 때 이미 차감) |\n| 취소 | 접수, 확정 | 확정 상태였다면 복원 |\n| 환불 (관리자만) | 출고 | 반품 재입고를 체크하면 복원 |\n| 재고 조정 (관리자만) | - | 0 미만이면 거부 |\n\n- 직원은 새 주문 접수, 확정, 출고, 취소를 할 수 있고, 환불은 관리자만 할 수 있습니다. 서버에서도 권한을 검사합니다.\n- 재고가 마이너스가 되는 경우는 세 겹으로 막았습니다. 차감할 때 재고가 충분한 경우에만 갱신되고, DB에 `stock >= 0` 제약이 있으며, 하나라도 실패하면 전체를 롤백합니다.\n- 더블클릭이나 동시 요청이 와도 재고가 두 번 차감되거나 복원되지 않습니다. 테스트에서 재고 10에 3개짜리 주문 8건을 동시에 확정하면 3건만 성공하고, 같은 주문을 동시에 6번 취소하면 1번만 복원됐습니다.\n- 모든 재고 증감은 \"재고 이력\" 탭에 처리자와 함께 남습니다.\n\n## 제가 정한 가정\n- 재고는 확정할 때 차감합니다. 접수 단계에서 차감하지 않는 이유는 아직 확정되지 않은 주문이 재고를 잡고 있지 않게 하려는 것입니다.\n- 출고된 뒤에는 취소할 수 없고 환불만 가능합니다.\n- 환불 시 반품 재입고 여부는 관리자가 체크박스로 고릅니다. 기본값은 재입고입니다.\n\n원하시면 정책을 바꿀 수 있습니다. 예를 들면 접수 시점에 재고를 잡거나, 부분 환불을 지원하는 식입니다.\n\n주요 파일은 `app/service.py`(재고·상태 전이 로직), `app/main.py`(API), `static/index.html`(화면), `tests/test_stock.py`(테스트)입니다.",
+ "wall_s": 158.4
+}

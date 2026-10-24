@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 75881,
+ "num_turns": 12,
+ "total_cost_usd": 0.3273008,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 42267,
+  "cache_read_input_tokens": 296148,
+  "output_tokens": 12859,
+  "output_tokens_details": {
+   "thinking_tokens": 541
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 42267,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 574,
+    "cache_read_input_tokens": 58713,
+    "cache_creation_input_tokens": 226,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 226
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (PRD 의 API 4개만 있고, 추가한 API·칸·화면 요소는 없음)\nPRD 가 정하지 않아 직접 정한 것:\n- 거부 사유 문구 중 PRD 에 없는 것: 없는 주문 404 `주문을 찾을 수 없습니다`, 없는 사용자 404 `사용자를 찾을 수 없습니다`, 없는 동작 404 `없는 동작입니다`.\n- 본문이 JSON 이 아니거나 `user` 가 문자열이 아니면 400 으로 처리함.\n- 한 주문에 같은 상품 줄이 여러 개면 수량을 합쳐서 재고를 확인하고 차감함.\n- 동시 요청은 서버 전체 락(`threading.Lock`)과 SQLite `BEGIN IMMEDIATE` 로 직렬화함.\n- 화면에서 환불 버튼은 사용자 역할과 상관없이 출고 상태 주문에 보임. 직원이 누르면 서버가 403 을 돌려주고 메시지 줄에 보임.\n- 가상 seed 는 주문 8개(상태 5가지 모두), 상품 5개(재고 0 인 상품 1개), 사용자 3명으로 직접 만듦.\n```",
+ "wall_s": 88.0
+}

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>가나다식품 주문 · 재고 백오피스 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 11편 목업. 가상 회사 · 가상 손님 · 가상 수량. ?state=ok|empty|error. Mock-IT 라이트 테마. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--indigo:#6366F1;--emerald:#10B981;--amber:#F59E0B;--rose:#EF4444}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:var(--indigo);display:inline-block}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#EEF0FF;color:var(--indigo);font-weight:700}
+.main{padding:18px 26px 14px 26px;display:flex;flex-direction:column;gap:9px}
+.top{display:flex;justify-content:space-between;align-items:flex-end}
+h1{margin:0;font-size:21px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:12px;margin-top:3px}
+.who{font-size:12.5px;color:var(--ink2);background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.row{display:grid;grid-template-columns:1fr 250px;gap:12px;flex:1;min-height:0}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-height:0}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{color:var(--mute);font-weight:600;text-align:left;padding:6px 6px;border-bottom:1px solid var(--line);font-size:11.5px}
+td{padding:7px 6px;border-bottom:1px solid var(--line)}
+.chip{display:inline-block;border-radius:999px;padding:1px 9px;font-size:11px;font-weight:700}
+.placed{background:#EEF0FF;color:#3730A3}.confirmed{background:#ECFDF5;color:#047857}.shipped{background:#F3F4F6;color:#374151}
+.cancelled{background:#FEF2F2;color:#B91C1C}.refunded{background:#FFF7ED;color:#C2410C}
+.b{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;margin-right:3px}
+.b.p{background:var(--indigo);color:#fff;border-color:var(--indigo)}.b.off{color:#C0C4CE;border-style:dashed}
+.st h3{margin:0 0 6px;font-size:13px;color:var(--ink2)}
+.st div{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
+.st b.z{color:var(--rose)}.st b.low{color:var(--amber)}
+.msg{color:var(--rose);font-size:12px}
+.hint{font-size:11px;color:var(--ink2);background:#EEF0FF;border-radius:7px;padding:6px 9px;margin-top:8px}
+.empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mute);gap:4px;font-size:12px}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:12px;padding:20px;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700}
+</style></head><body>
+<div class="app">
+ <div class="side">
+  <div class="logo"><i></i>가나다식품</div>
+  <div class="nav"><div>오늘의 현황판</div><div>세금계산서</div><div class="on">주문 · 재고</div><div>쇼핑몰</div></div>
+ </div>
+ <div class="main" id="main"></div>
+</div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const head=`<div class="top"><div><h1>주문 · 재고 백오피스</h1><div class="sub">재고는 확정 때 줄고(전부 아니면 전무) · 취소하면 돌아오고 · 환불은 관리자만, 재고 그대로 · 0 미만 금지(동시에 와도)</div></div><span class="who">사용자: 김하나 (직원) ▾</span></div>`;
+const stock=`<div class="card st"><h3>재고</h3><div><span>두부 300g</span><b>7</b></div><div><span>고추장 1kg</span><b class="z">0</b></div><div><span>냉동만두 1kg</span><b class="z">0</b></div><div><span>참기름 320ml</span><b class="low">1</b></div><div><span>김 선물세트</span><b>5</b></div>
+ <div class="hint">참기름 1개 남음 — 직원 둘이 동시에 확정해도 한 건만 성공해야 한다</div></div>`;
+let html='';
+if(state==='ok'){
+  html=head+`<div class="msg">재고가 부족합니다: 냉동만두 1kg — O-1002 는 접수 그대로, 김 선물세트도 줄지 않았다(409)</div><div class="row"><div class="card"><table>
+  <tr><th>주문</th><th>손님</th><th>시각</th><th>상품 · 수량</th><th>상태</th><th>동작</th></tr>
+  <tr><td>O-1001</td><td>한가람</td><td>09:00</td><td>두부 ×3 · 고추장 ×2</td><td><span class="chip confirmed">확정</span></td><td><span class="b p">출고</span><span class="b">취소</span></td></tr>
+  <tr><td>O-1002</td><td>두레상회</td><td>09:05</td><td>김 선물세트 ×2 · 냉동만두 ×1</td><td><span class="chip placed">접수</span></td><td><span class="b p">확정</span><span class="b">취소</span></td></tr>
+  <tr><td>O-1003</td><td>마루식당</td><td>09:10</td><td>김 선물세트 ×1</td><td><span class="chip cancelled">취소</span></td><td><span class="b off">재고 +1 돌아옴</span></td></tr>
+  <tr><td>O-1005</td><td>다솜카페</td><td>09:20</td><td>고추장 ×1</td><td><span class="chip shipped">출고</span></td><td><span class="b off">환불(관리자만)</span></td></tr>
+  <tr><td>O-1008</td><td>하늘빵집</td><td>09:35</td><td>김 선물세트 ×1</td><td><span class="chip refunded">환불</span></td><td><span class="b off">재고 그대로</span></td></tr>
+  <tr><td>O-1009</td><td>소담</td><td>09:40</td><td>김 선물세트 ×1</td><td><span class="chip placed">접수</span></td><td><span class="b p">확정</span><span class="b">취소</span></td></tr>
+  <tr><td>O-1010</td><td>온새미</td><td>09:45</td><td>두부 ×1</td><td><span class="chip placed">접수</span></td><td><span class="b p">확정</span><span class="b">취소</span></td></tr>
+  <tr><td>O-1101</td><td>동시주문 1</td><td>10:01</td><td>참기름 ×1</td><td><span class="chip placed">접수</span></td><td><span class="b p">확정</span><span class="b">취소</span></td></tr>
+  <tr><td>O-1102</td><td>동시주문 2</td><td>10:02</td><td>참기름 ×1</td><td><span class="chip placed">접수</span></td><td><span class="b p">확정</span><span class="b">취소</span></td></tr>
+  </table></div>${stock}</div>`;
+}else if(state==='empty'){
+  html=head+`<div class="row"><div class="card"><div class="empty"><b style="color:#4B5563;font-size:15px">처리할 주문이 없습니다</b>접수 · 확정 주문이 없으면 동작 버튼도 없다 — 재고 패널은 그대로 보인다</div></div>${stock}</div>`;
+}else{
+  html=head+`<div class="err"><div><b>불러오지 못했습니다.</b> 주문 API(/api/orders) 가 응답하지 않습니다 — 상태를 모르면 동작 버튼을 열지 않습니다.</div><button>다시 시도</button></div>
+  <div class="card" style="flex:1"><div class="empty">재고 숫자는 서버가 바꾼다 — 화면이 버튼을 누른 뒤 스스로 빼면, 거부(409)된 확정에서도 숫자가 줄어 보인다</div></div>`;
+}
+document.getElementById('main').innerHTML=html;
+</script></body></html>

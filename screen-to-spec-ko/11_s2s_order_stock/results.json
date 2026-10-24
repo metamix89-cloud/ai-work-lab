@@ -1,0 +1,855 @@
+{
+ "A1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: (404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T3": "AssertionError: ('GET /api/products', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 200",
+   "T4": "AssertionError: ('GET /api/products', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 200",
+   "T5": "AssertionError: ('직원의 환불은 403', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 403",
+   "T6": "AssertionError: ('접수 주문의 출고는 409', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 409",
+   "T7": "AssertionError: ('GET /api/products', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 200",
+   "T8": "AssertionError: ('본문에 user 없음 + 없는 주문은 400 이 먼저', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 400",
+   "T9": "AssertionError: O-1010 줄(data-status=placed)이 없다\nassert (None is not None)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": ": '로그인이 필요합니다.'})\nE       assert 401 == 200\n\n_grader\\test_dod.py:172: AssertionError\n____________________________ test_T8_reject_order _____________________________\n\nsrv = <test_dod.Server object at 0x0000011E46BE6CF0>\n\n    def test_T8_reject_order(srv):\n        st, body = http(\"POST\", srv.base + \"/api/orders/O-9999/confirm\", {})\n>       assert st == 400, (\"본문에 user 없음 + 없는 주문은 400 이 먼저\", st, body)\nE       AssertionError: ('본문에 user 없음 + 없는 주문은 400 이 먼저', 401, {'detail': '로그인이 필요합니다.'})\nE       assert 401 == 400\n\n_grader\\test_dod.py:316: AssertionError\n_______________________________ test_T9_screen ________________________________\n\nsrv = <test_dod.Server object at 0x0000011E46BE6CF0>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen(srv, pw):\n        page = open_page(pw, srv)\n        row = page.query_selector('[data-testid=\"order\"][data-id=\"O-1010\"]')\n>       assert row is not None and row.get_attribute(\"data-status\") == \"placed\", \"O-1010 줄(data-status=placed)이 없다\"\nE       AssertionError: O-1010 줄(data-status=placed)이 없다\nE       assert (None is not None)\n\n_grader\\test_dod.py:329: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: (404, {'detail...\nFAILED _grader/test_dod.py::test_T3_confirm_all_or_nothing - AssertionError: ...\nFAILED _grader/test_dod.py::test_T4_cancel_restores - AssertionError: ('GET /...\nFAILED _grader/test_dod.py::test_T5_refund - AssertionError: ('직원의 환불은 ...\nFAILED _grader/test_dod.py::test_T6_transitions - AssertionError: ('접수 주문...\nFAILED _grader/test_dod.py::test_T7_concurrent_confirm - AssertionError: ('GE...\nFAILED _grader/test_dod.py::test_T8_reject_order - AssertionError: ('본문에 u...\nFAILED _grader/test_dod.py::test_T9_screen - AssertionError: O-1010 줄(data-s...\n8 failed, 1 passed in 7.34s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/dashboard",
+   "/api/login",
+   "/api/me",
+   "/api/orders",
+   "/api/orders/{oid}",
+   "/api/orders/{oid}/cancel",
+   "/api/orders/{oid}/confirm",
+   "/api/orders/{oid}/refund",
+   "/api/orders/{oid}/ship",
+   "/api/products",
+   "/api/products/{pid}/adjust",
+   "/api/stock-log",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/dashboard",
+   "/api/login",
+   "/api/me",
+   "/api/orders/{oid}",
+   "/api/products/{pid}/adjust",
+   "/api/stock-log"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "ganada.db-shm",
+   "ganada.db-wal",
+   "main.py",
+   "requirements.txt",
+   "seed/order_lines.csv",
+   "seed/orders.csv",
+   "seed/products.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '주문 · 재고 백오피스' 웹앱을 만들어 줘. 직원이 쇼핑몰 주문을 확정하고 출고하고 취소할 수 있고, 관리자는 환불도 할 수 있어. 주문에 따라 상품 재고가 맞게 바뀌어야 하고, 재고가 마이너스가 되면 안 돼. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 152355,
+   "num_turns": 9,
+   "total_cost_usd": 0.4107686,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 38671,
+    "cache_read_input_tokens": 332326,
+    "output_tokens": 22282,
+    "output_tokens_details": {
+     "thinking_tokens": 1698
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 38671,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1501,
+      "cache_read_input_tokens": 54981,
+      "cache_creation_input_tokens": 362,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 362
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "가나다식품 주문·재고 백오피스를 만들었고, 가상 데이터까지 들어 있어 바로 실행됩니다. 서버를 띄워 화면(`/`)과 정적 파일이 열리는 것은 확인했습니다. 브라우저에서 직접 눌러 보지는 못했고, 화면 코드는 API 호출 부분만 서버 쪽 시험으로 확인했습니다.\n\n## 실행\n```\ncd <작업 폴더>/A1\npip install -r requirements.txt   # 이미 설치돼 있으면 생략\npython main.py                    # http://127.0.0.1:8000\n```\n- 직원은 `staff` / `staff123`, 관리자는 `admin` / `admin123`으로 로그인합니다.\n- 첫 실행 때 `ganada.db`가 만들어지고 상품 15개와 주문 13건(접수·확정·출고·취소·환불 상태 모두)이 들어갑니다. 데이터를 처음 상태로 되돌리려면 `ganada.db`를 지우고 다시 실행하세요.\n\n## 주문과 재고 규칙\n| 동작 | 상태 변화 | 재고 | 권한 |\n|---|---|---|---|\n| 확정 | 접수 → 확정 | 차감. 한 품목이라도 부족하면 전부 되돌리고 409 오류 | 직원 |\n| 출고 | 확정 → 출고 | 변동 없음 | 직원 |\n| 취소 | 접수나 확정 → 취소 | 확정 주문은 복원, 접수 주문은 변동 없음 | 직원 |\n| 환불 | 출고 → 환불 | 반품이 입고됐다고 선택하면 복원 | 관리자 |\n\n- **재고 조정:** 관리자는 입고·폐기용 재고 조정도 할 수 있고, 결과가 마이너스가 되면 거부됩니다.\n- **환불 재고:** 환불 때 반품 입고 여부는 화면에서 묻습니다. 폐기·미회수 상품까지 재고로 되돌리지 않으려는 선택입니다.\n- **취소와 환불 구분:** 출고된 주문은 직원이 취소할 수 없고 관리자 환불만 가능합니다.\n- **이중 방어:** 재고 차감은 \"재고가 충분할 때만\" 갱신하고, DB에도 `CHECK(stock >= 0)` 제약이 있습니다. 같은 주문을 두 번 처리하는 것도 막았습니다.\n- **재고 이력:** 모든 재고 변동은 이력 탭에 남습니다.\n\n## 화면\n- 주문 탭에서 상태 카드로 필터링하고, 주문번호·고객·전화로 검색합니다. 주문을 누르면 상세에서 확정·출고·취소·환불을 처리하고, \"+ 주문 등록\"으로 새 주문도 넣을 수 있습니다.\n- 재고 탭에서는 안전재고 이하 상품이 빨간색으로 표시됩니다.\n- 이력 탭에서는 재고 변동 기록을 봅니다.\n\n## 시험 결과\n임시 DB로 직접 시험했습니다.\n- **재고 부족 확정:** 거부됐고, 같은 주문의 다른 품목 재고도 그대로였습니다.\n- **취소 복원:** 확정 취소 후 재고가 원래대로 돌아왔습니다.\n- **직원 환불:** 403으로 막혔습니다.\n- **같은 주문 환불 두 번:** 두 번째는 409로 거부됐습니다.\n- **마이너스 조정:** 거부됐습니다.\n- **동시 확정:** 재고 5개에 3개짜리 주문 4건을 동시에 확정하니 1건만 성공했고 재고는 2개로 맞았습니다.\n\n시드 데이터에 일부러 넣어 둔 확정 불가 주문 2건(송지호: 잔치국수 재고 부족, 배수아: 식혜 품절)으로 오류 메시지를 바로 확인할 수 있습니다.\n\n로그인 세션은 서버 메모리에 있어서 서버를 재시작하면 다시 로그인해야 합니다.",
+   "wall_s": 165.5
+  }
+ },
+ "A2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: (404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T3": "AssertionError: ('GET /api/products', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 200",
+   "T4": "AssertionError: ('GET /api/products', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 200",
+   "T5": "AssertionError: ('직원의 환불은 403', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 403",
+   "T6": "AssertionError: ('접수 주문의 출고는 409', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 409",
+   "T7": "AssertionError: ('GET /api/products', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 200",
+   "T8": "AssertionError: ('본문에 user 없음 + 없는 주문은 400 이 먼저', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 400",
+   "T9": "AssertionError: O-1010 줄(data-status=placed)이 없다\nassert (None is not None)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": " '로그인이 필요합니다.'})\nE       assert 401 == 200\n\n_grader\\test_dod.py:172: AssertionError\n____________________________ test_T8_reject_order _____________________________\n\nsrv = <test_dod.Server object at 0x0000025A19876CF0>\n\n    def test_T8_reject_order(srv):\n        st, body = http(\"POST\", srv.base + \"/api/orders/O-9999/confirm\", {})\n>       assert st == 400, (\"본문에 user 없음 + 없는 주문은 400 이 먼저\", st, body)\nE       AssertionError: ('본문에 user 없음 + 없는 주문은 400 이 먼저', 401, {'detail': '로그인이 필요합니다.'})\nE       assert 401 == 400\n\n_grader\\test_dod.py:316: AssertionError\n_______________________________ test_T9_screen ________________________________\n\nsrv = <test_dod.Server object at 0x0000025A19876CF0>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen(srv, pw):\n        page = open_page(pw, srv)\n        row = page.query_selector('[data-testid=\"order\"][data-id=\"O-1010\"]')\n>       assert row is not None and row.get_attribute(\"data-status\") == \"placed\", \"O-1010 줄(data-status=placed)이 없다\"\nE       AssertionError: O-1010 줄(data-status=placed)이 없다\nE       assert (None is not None)\n\n_grader\\test_dod.py:329: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: (404, {'detail...\nFAILED _grader/test_dod.py::test_T3_confirm_all_or_nothing - AssertionError: ...\nFAILED _grader/test_dod.py::test_T4_cancel_restores - AssertionError: ('GET /...\nFAILED _grader/test_dod.py::test_T5_refund - AssertionError: ('직원의 환불은 ...\nFAILED _grader/test_dod.py::test_T6_transitions - AssertionError: ('접수 주문...\nFAILED _grader/test_dod.py::test_T7_concurrent_confirm - AssertionError: ('GE...\nFAILED _grader/test_dod.py::test_T8_reject_order - AssertionError: ('본문에 u...\nFAILED _grader/test_dod.py::test_T9_screen - AssertionError: O-1010 줄(data-s...\n8 failed, 1 passed in 10.22s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/login",
+   "/api/me",
+   "/api/movements",
+   "/api/orders",
+   "/api/orders/{order_id}/cancel",
+   "/api/orders/{order_id}/confirm",
+   "/api/orders/{order_id}/events",
+   "/api/orders/{order_id}/refund",
+   "/api/orders/{order_id}/ship",
+   "/api/products",
+   "/api/products/{product_id}/adjust",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/login",
+   "/api/me",
+   "/api/movements",
+   "/api/orders/{order_id}/events",
+   "/api/products/{product_id}/adjust"
+  ],
+  "tests_modified": null,
+  "files": [
+   "README.md",
+   "app/__init__.py",
+   "app/db.py",
+   "app/main.py",
+   "app/seed.py",
+   "app/service.py",
+   "build.json",
+   "requirements.txt",
+   "seed/order_lines.csv",
+   "seed/orders.csv",
+   "seed/products.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_stock.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '주문 · 재고 백오피스' 웹앱을 만들어 줘. 직원이 쇼핑몰 주문을 확정하고 출고하고 취소할 수 있고, 관리자는 환불도 할 수 있어. 주문에 따라 상품 재고가 맞게 바뀌어야 하고, 재고가 마이너스가 되면 안 돼. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 139915,
+   "num_turns": 15,
+   "total_cost_usd": 0.41576199999999996,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 40175,
+    "cache_read_input_tokens": 314300,
+    "output_tokens": 22360,
+    "output_tokens_details": {
+     "thinking_tokens": 1494
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 40175,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1220,
+      "cache_read_input_tokens": 54662,
+      "cache_creation_input_tokens": 2185,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 2185
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "가나다식품 주문·재고 백오피스를 만들었습니다. 테스트 9개가 통과했고, 서버를 실제로 띄워 첫 화면과 로그인·상품 조회까지 확인했습니다. 브라우저에서 화면을 직접 눌러 보지는 않았습니다. 상품 이름이 터미널에서 깨져 보인 건 출력 인코딩 문제로 보이고, 데이터 자체는 정상입니다.\n\n## 실행\n```\npip install -r requirements.txt\npython -m uvicorn app.main:app --port 8000\n```\nhttp://localhost:8000 에 접속하면 됩니다. 처음 실행하면 `ganada.db`가 만들어지고 가상 데이터가 들어갑니다. 상품 12종, 주문 13건(접수·확정·출고·취소·환불 상태별)이 들어 있고, 일부 상품은 안전재고 이하입니다.\n\n데모 계정은 직원 `staff / staff123`, 관리자 `admin / admin123`입니다.\n\n## 기능과 재고 규칙\n| 동작 | 가능한 상태 | 재고 변화 |\n|---|---|---|\n| 확정 | 접수 | 차감. 한 품목이라도 부족하면 전체 실패하고 아무것도 차감되지 않음 |\n| 출고 | 확정 | 변화 없음 (확정 때 이미 차감) |\n| 취소 | 접수, 확정 | 확정 상태였다면 복원 |\n| 환불 (관리자만) | 출고 | 반품 재입고를 체크하면 복원 |\n| 재고 조정 (관리자만) | - | 0 미만이면 거부 |\n\n- 직원은 새 주문 접수, 확정, 출고, 취소를 할 수 있고, 환불은 관리자만 할 수 있습니다. 서버에서도 권한을 검사합니다.\n- 재고가 마이너스가 되는 경우는 세 겹으로 막았습니다. 차감할 때 재고가 충분한 경우에만 갱신되고, DB에 `stock >= 0` 제약이 있으며, 하나라도 실패하면 전체를 롤백합니다.\n- 더블클릭이나 동시 요청이 와도 재고가 두 번 차감되거나 복원되지 않습니다. 테스트에서 재고 10에 3개짜리 주문 8건을 동시에 확정하면 3건만 성공하고, 같은 주문을 동시에 6번 취소하면 1번만 복원됐습니다.\n- 모든 재고 증감은 \"재고 이력\" 탭에 처리자와 함께 남습니다.\n\n## 제가 정한 가정\n- 재고는 확정할 때 차감합니다. 접수 단계에서 차감하지 않는 이유는 아직 확정되지 않은 주문이 재고를 잡고 있지 않게 하려는 것입니다.\n- 출고된 뒤에는 취소할 수 없고 환불만 가능합니다.\n- 환불 시 반품 재입고 여부는 관리자가 체크박스로 고릅니다. 기본값은 재입고입니다.\n\n원하시면 정책을 바꿀 수 있습니다. 예를 들면 접수 시점에 재고를 잡거나, 부분 환불을 지원하는 식입니다.\n\n주요 파일은 `app/service.py`(재고·상태 전이 로직), `app/main.py`(API), `static/index.html`(화면), `tests/test_stock.py`(테스트)입니다.",
+   "wall_s": 158.4
+  }
+ },
+ "A3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: (404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T3": "AssertionError: ('GET /api/products', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 200",
+   "T4": "AssertionError: ('GET /api/products', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 200",
+   "T5": "AssertionError: ('직원의 환불은 403', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 403",
+   "T6": "AssertionError: ('접수 주문의 출고는 409', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 409",
+   "T7": "AssertionError: ('GET /api/products', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 200",
+   "T8": "AssertionError: ('본문에 user 없음 + 없는 주문은 400 이 먼저', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 400",
+   "T9": "AssertionError: O-1010 줄(data-status=placed)이 없다\nassert (None is not None)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": ": '로그인이 필요합니다.'})\nE       assert 401 == 200\n\n_grader\\test_dod.py:172: AssertionError\n____________________________ test_T8_reject_order _____________________________\n\nsrv = <test_dod.Server object at 0x0000021912C72CF0>\n\n    def test_T8_reject_order(srv):\n        st, body = http(\"POST\", srv.base + \"/api/orders/O-9999/confirm\", {})\n>       assert st == 400, (\"본문에 user 없음 + 없는 주문은 400 이 먼저\", st, body)\nE       AssertionError: ('본문에 user 없음 + 없는 주문은 400 이 먼저', 401, {'detail': '로그인이 필요합니다.'})\nE       assert 401 == 400\n\n_grader\\test_dod.py:316: AssertionError\n_______________________________ test_T9_screen ________________________________\n\nsrv = <test_dod.Server object at 0x0000021912C72CF0>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen(srv, pw):\n        page = open_page(pw, srv)\n        row = page.query_selector('[data-testid=\"order\"][data-id=\"O-1010\"]')\n>       assert row is not None and row.get_attribute(\"data-status\") == \"placed\", \"O-1010 줄(data-status=placed)이 없다\"\nE       AssertionError: O-1010 줄(data-status=placed)이 없다\nE       assert (None is not None)\n\n_grader\\test_dod.py:329: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: (404, {'detail...\nFAILED _grader/test_dod.py::test_T3_confirm_all_or_nothing - AssertionError: ...\nFAILED _grader/test_dod.py::test_T4_cancel_restores - AssertionError: ('GET /...\nFAILED _grader/test_dod.py::test_T5_refund - AssertionError: ('직원의 환불은 ...\nFAILED _grader/test_dod.py::test_T6_transitions - AssertionError: ('접수 주문...\nFAILED _grader/test_dod.py::test_T7_concurrent_confirm - AssertionError: ('GE...\nFAILED _grader/test_dod.py::test_T8_reject_order - AssertionError: ('본문에 u...\nFAILED _grader/test_dod.py::test_T9_screen - AssertionError: O-1010 줄(data-s...\n8 failed, 1 passed in 6.23s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/dashboard",
+   "/api/login",
+   "/api/me",
+   "/api/orders",
+   "/api/orders/{oid}",
+   "/api/orders/{oid}/cancel",
+   "/api/orders/{oid}/confirm",
+   "/api/orders/{oid}/refund",
+   "/api/orders/{oid}/ship",
+   "/api/products",
+   "/api/products/{pid}/receive",
+   "/api/stock-movements"
+  ],
+  "extra_routes": [
+   "/api/dashboard",
+   "/api/login",
+   "/api/me",
+   "/api/orders/{oid}",
+   "/api/products/{pid}/receive",
+   "/api/stock-movements"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/order_lines.csv",
+   "seed/orders.csv",
+   "seed/products.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "test_flow.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '주문 · 재고 백오피스' 웹앱을 만들어 줘. 직원이 쇼핑몰 주문을 확정하고 출고하고 취소할 수 있고, 관리자는 환불도 할 수 있어. 주문에 따라 상품 재고가 맞게 바뀌어야 하고, 재고가 마이너스가 되면 안 돼. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 121057,
+   "num_turns": 8,
+   "total_cost_usd": 0.3518036,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 35179,
+    "cache_read_input_tokens": 228836,
+    "output_tokens": 18818,
+    "output_tokens_details": {
+     "thinking_tokens": 834
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 35179,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1157,
+      "cache_read_input_tokens": 51589,
+      "cache_creation_input_tokens": 262,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 262
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "가나다식품 주문·재고 백오피스를 만들었고 바로 실행됩니다. 재고 규칙을 확인하는 테스트(`test_flow.py`)는 모두 통과했습니다. 서버를 띄워 첫 화면이 200으로 열리는 것도 확인했습니다. 브라우저 화면에서 직접 클릭해 보지는 못했습니다.\n\n## 실행 방법\n```\npython -m uvicorn main:app --port 8000\n```\nhttp://127.0.0.1:8000 에 접속하세요. 첫 실행 때 `ganada.db`가 만들어지고 가상 데이터가 들어갑니다. 필요한 패키지는 `requirements.txt`에 있습니다.\n\n| 계정 | 비밀번호 | 권한 |\n|---|---|---|\n| `staff` | `staff123` | 직원: 확정, 출고, 취소, 입고 |\n| `admin` | `admin123` | 관리자: 직원 권한 전부, 환불 |\n\n## 재고 규칙\n| 동작 | 재고 변화 |\n|---|---|\n| 주문 접수 (대기) | 변화 없음 |\n| 확정 | 차감 |\n| 출고 | 변화 없음 (확정할 때 이미 차감됨) |\n| 대기 상태에서 취소 | 변화 없음 |\n| 확정 상태에서 취소 | 복원 |\n| 출고 후 취소 | 불가 (환불로만 처리) |\n| 환불 (관리자, 출고 후에만) | 관리자가 \"재입고 여부\"를 선택. 재입고하면 복원, 아니면 변화 없음 |\n\n- **음수 재고 방지**: 확정할 때 재고가 부족하면 그 주문의 차감을 모두 되돌리고 409 오류와 부족 상품 목록을 보여 줍니다. 같은 상품이 여러 줄이어도 합산해서 검사합니다. DB에도 `CHECK(stock>=0)`를 걸어 두 겹으로 막습니다.\n- **중복 처리 방지**: 확정을 두 번 누르거나 이미 환불된 주문을 다시 환불해도 재고는 한 번만 바뀝니다.\n- **권한**: 환불은 서버에서도 관리자만 허용합니다. 직원이 요청하면 403입니다.\n\n## 기능\n- **대시보드**: 상태별 건수, 매출, 안전재고 이하 상품을 보여 줍니다.\n- **주문 관리**: 상태 필터, 고객명·주문번호 검색, 주문 접수(쇼핑몰 주문 입력 대용), 상세 화면의 처리 이력과 버튼.\n- **재고 관리**: 입고 처리와 상품별 재고 변동 이력.\n- **가상 데이터**: 상품 12종과 모든 상태의 주문 9건이 들어 있습니다. 재고 0개인 상품과 안전재고 이하 상품도 있어서 부족 상황을 바로 시험할 수 있습니다.\n\n## 한계\n인증은 데모 수준입니다. 세션 만료와 비밀번호 변경 기능이 없고, 시드 계정의 비밀번호가 코드에 그대로 적혀 있습니다. 실제로 운영하려면 이 부분을 먼저 바꾸세요.",
+   "wall_s": 132.9
+  }
+ },
+ "B1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 10.06s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/orders",
+   "/api/orders/{order_id}/{action}",
+   "/api/products",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/order_lines.csv",
+   "seed/orders.csv",
+   "seed/products.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/smoke.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 47081,
+   "num_turns": 6,
+   "total_cost_usd": 0.20084370000000001,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 27822,
+    "cache_read_input_tokens": 173557,
+    "output_tokens": 7218,
+    "output_tokens_details": {
+     "thinking_tokens": 469
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 27822,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 780,
+      "cache_read_input_tokens": 44311,
+      "cache_creation_input_tokens": 183,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 183
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD.md대로 웹앱을 만들었습니다. 지금까지 확인한 것은 제가 만든 스모크 테스트(`tests/smoke.py`)와 서버 기동 후 `/api/orders` 응답 확인까지입니다. PRD가 완료 기준으로 정한 `tests/test_dod.py`는 폴더에 없어서 실행하지 못했습니다. 그래서 T1~T9 통과 여부는 확인하지 못했습니다.\n\n- **스모크 테스트가 확인한 것:** 화면 열림, 재고 부족 시 409, 확정 시 재고 차감, 같은 주문 재확정 409, 취소 시 재고 복구, 직원 환불 403과 관리자 환불 200, 400/404/403 우선순위.\n- **확인하지 못한 것:** 동시 확정 8건(T7)과 화면 동작(T9)은 따로 돌려 보지 않았습니다. 동시 처리는 전역 락 안에서 트랜잭션으로 묶었습니다. 브라우저에서 화면을 직접 열어 보지도 않았습니다.\n\n서버는 프로젝트 폴더에서 `python -m uvicorn main:app --port 8000`으로 실행하면 됩니다. 서버를 시작할 때마다 `seed/`의 CSV 4개로 `backoffice.db`를 새로 만듭니다.\n\n| 구분 | 파일 |\n|---|---|\n| 서버 | `main.py` |\n| 화면 | `static/index.html` |\n| 가상 데이터 | `seed/` 아래 CSV 4개 |\n\n가상 데이터는 사용자 3명, 상품 5개(재고 0인 상품 1개), 주문 8개(상태 5가지 모두 포함)입니다.\n\n- **포트 환경 변수:** PRD는 `PORT` 환경 변수가 있으면 그 포트를 쓰라고 했는데, 지금은 반영하지 않았습니다. uvicorn 명령의 `--port`로 지정해야 합니다.\n- **상품이 없는 주문 줄:** 주문 줄의 `product_id`가 상품 목록에 없으면 확정이 409(`재고가 부족합니다`)로 거부됩니다.",
+   "wall_s": 57.8
+  }
+ },
+ "B2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 10.06s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/orders",
+   "/api/orders/{order_id}/{action}",
+   "/api/products",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/order_lines.csv",
+   "seed/orders.csv",
+   "seed/products.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 77229,
+   "num_turns": 12,
+   "total_cost_usd": 0.2915492,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 34347,
+    "cache_read_input_tokens": 225872,
+    "output_tokens": 13155,
+    "output_tokens_details": {
+     "thinking_tokens": 730
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 34347,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 848,
+      "cache_read_input_tokens": 50364,
+      "cache_creation_input_tokens": 655,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 655
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD.md대로 웹앱을 만들었습니다. 브라우저 화면(T9)은 열어 보지 못했고, 동시 확정(T7)은 시험하지 못했습니다. `tests/test_dod.py`가 폴더에 없어서 DoD 9개를 직접 돌리지 못했고, API만 스모크 테스트했습니다.\n\n**스모크 테스트에서 확인한 것**\n- `/`가 200으로 열립니다.\n- 확정하면 재고가 줍니다.\n- 한 줄이라도 재고가 모자라면 409 `재고가 부족합니다: 참치캔`으로 거부됩니다.\n- 같은 주문을 두 번 확정하면 두 번째는 409입니다.\n- 접수 주문의 출고는 409입니다.\n- 취소하면 재고가 돌아옵니다.\n- 환불은 직원이 하면 403, 관리자가 하면 200, 취소 주문이면 409입니다.\n- 본문이 없으면 400, 없는 주문이나 없는 사용자는 404입니다.\n- 직원이 접수 주문을 환불하면 409가 아니라 403입니다.\n\n**동시 확정(R5)**\n동작 처리 전체를 잠금 하나로 직렬화하고, 재고에 `CHECK (stock >= 0)`도 걸어 두었습니다.\n\n**구성**\n- `main.py`에 API 4개와 업무 규칙 R1~R8이 있습니다. 서버를 시작할 때마다 `seed/` CSV로 `backoffice.db`를 새로 만듭니다.\n- `static/index.html`은 순수 HTML/JS 한 페이지입니다. 사용자 선택, 주문 표, 재고 패널, 메시지 줄, 오류 화면이 PRD에 적힌 `data-testid`대로 들어 있습니다.\n- `seed/`에는 사용자 3명, 상품 5개(재고 0인 상품 1개), 주문 8개(상태 다섯 가지 모두)를 가상 데이터로 넣었습니다.\n\n**실행**\n```\npython -m uvicorn main:app --port 8000\n```\n\n참고로 시드에서 재고 3인 상품(현미누룽지)에 걸린 접수 주문은 2건뿐입니다. \"재고 3인 상품에 확정 8건\" 시험을 이 시드로 돌리려면 그만큼 접수 주문을 추가해야 합니다.",
+   "wall_s": 82.6
+  }
+ },
+ "B3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 10.15s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/orders",
+   "/api/orders/{order_id}/{action}",
+   "/api/products",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/order_lines.csv",
+   "seed/orders.csv",
+   "seed/products.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 78164,
+   "num_turns": 12,
+   "total_cost_usd": 0.29184519999999997,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 34405,
+    "cache_read_input_tokens": 226212,
+    "output_tokens": 13158,
+    "output_tokens_details": {
+     "thinking_tokens": 686
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 34405,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 808,
+      "cache_read_input_tokens": 50476,
+      "cache_creation_input_tokens": 601,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 601
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD대로 웹앱을 만들었습니다. `tests/test_dod.py`는 폴더에 없어서 T1~T9는 돌려보지 못했습니다. 대신 FastAPI 테스트 클라이언트로 간단히 확인했습니다.\n\n- **확인한 것:** `/`가 200으로 열리고, 재고가 모자란 주문의 확정이 409 `재고가 부족합니다: 즉석밥`으로 거부됩니다. 직원의 환불은 403, 본문 없는 요청은 400입니다. 재고 3인 참치캔에 확정 요청을 동시에 여러 건 보내면 3건만 성공하고 재고는 0이 됩니다.\n- **확인하지 못한 것:** 화면(T9)은 브라우저에서 띄워 보지 않았습니다.\n\n폴더에는 PRD.md만 있었고 `seed/`도 없었습니다. 그래서 가상 데이터는 제가 만들었습니다. 사용자 3명(직원 2·관리자 1), 상품 5개(즉석밥 재고 0, 참치캔 재고 3), 주문 10개(상태 다섯 가지 모두 포함)입니다. 같은 이름의 CSV로 바꿔 끼우면 됩니다.\n\n만든 파일은 다음과 같습니다.\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/` CSV로 `backoffice.db`를 새로 만들고, API 4개와 규칙 R1~R8을 구현했습니다. 확정·취소는 락으로 직렬화해 재고가 0 미만이 되지 않게 했습니다.\n- `static/index.html`: 한 페이지 화면입니다. 사용자 선택, 주문 표, 재고 패널, 메시지 줄, 오류 상태와 다시 시도 버튼이 있고, 프레임워크는 쓰지 않았습니다.\n- `seed/*.csv`: 위의 가상 데이터 4개입니다.\n\n실행은 프로젝트 폴더에서 `python -m uvicorn main:app --port 8000`입니다. `PORT` 환경 변수는 uvicorn이 자동으로 읽지 않습니다. 쓰려면 `--port $PORT`처럼 직접 넘겨야 합니다.",
+   "wall_s": 83.6
+  }
+ },
+ "C1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 9.62s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/orders",
+   "/api/orders/{order_id}/{action}",
+   "/api/products",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/order_lines.csv",
+   "seed/orders.csv",
+   "seed/products.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 76616,
+   "num_turns": 12,
+   "total_cost_usd": 0.3245312,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 43144,
+    "cache_read_input_tokens": 250812,
+    "output_tokens": 12685,
+    "output_tokens_details": {
+     "thinking_tokens": 568
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 43144,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 660,
+      "cache_read_input_tokens": 59637,
+      "cache_creation_input_tokens": 179,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 179
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "pytest 9개가 모두 통과했습니다. 앱은 PRD 대로 만들었습니다.\n\n```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (추가한 API 경로도 없음. `GET /` 가 index.html 을 내줌)\nPRD 가 정하지 않아 직접 정한 것:\n- 확정·취소 등 동작은 한 요청씩 순서대로 처리하는 잠금(lock) 안에서 읽고, 확인하고, 쓴다. 그래서 동시에 와도 재고가 0 미만이 되지 않는다.\n- 거부 사유 문구: 없는 주문은 `주문을 찾을 수 없습니다`, 없는 사용자는 `사용자를 찾을 수 없습니다`, 없는 동작은 `동작을 찾을 수 없습니다`.\n- 본문이 JSON 이 아니거나 `user` 가 문자열이 아니면 400 `사용자를 확인하세요`.\n- 한 주문에 같은 상품 줄이 여럿이면 수량을 합쳐서 재고와 비교한다.\n- 화면에서는 직원이 보고 있을 때 환불 버튼을 숨긴다. 막는 건 서버(403)다.\n- 사용자 선택 상자의 option 에는 이름과 역할을 함께 표시한다 (value 는 user_id).\n- 동작에 성공하면 메시지 줄을 비운다. 거부되면 `detail` 을 보여주고 목록을 다시 불러온다.\n- 가상 데이터: 사용자 3명, 상품 5개 (냉동만두 재고 0), 주문 8개 (상태 다섯 가지 모두 포함).\n```",
+   "wall_s": 90.9
+  }
+ },
+ "C2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 10.09s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/orders",
+   "/api/orders/{order_id}/{action}",
+   "/api/products",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/order_lines.csv",
+   "seed/orders.csv",
+   "seed/products.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 73569,
+   "num_turns": 13,
+   "total_cost_usd": 0.31941830000000004,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 42539,
+    "cache_read_input_tokens": 302443,
+    "output_tokens": 11899,
+    "output_tokens_details": {
+     "thinking_tokens": 435
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 42539,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 564,
+      "cache_read_input_tokens": 58991,
+      "cache_creation_input_tokens": 220,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 220
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (users · products · orders · order_lines)\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (추가한 API·칸·화면 요소 없음)\nPRD 가 정하지 않아 직접 정한 것:\n- 거부 사유 문구: 404는 `없는 주문 또는 동작입니다` / `없는 사용자입니다`. PRD가 문구를 정한 400·403·409(재고 부족 · 상태)는 PRD 문구 그대로.\n- 동시 확정은 프로세스 전체에 락 하나를 걸어 한 번에 한 요청씩 처리하고, 그 안에서 SQLite 트랜잭션(BEGIN IMMEDIATE)으로 한 번에 쓴다.\n- 한 주문에 같은 상품 줄이 둘 이상이면 수량을 합쳐서 재고와 비교한다.\n- 환불 버튼은 선택한 사용자가 관리자일 때만 보인다. 직원에게는 숨기고, 막는 건 서버다.\n- 가상 데이터: 사용자 3명 · 상품 5개 · 주문 8개(상태 다섯 가지 모두). 상품 중 하나(P03 냉동만두)는 재고 0.\n- 테이블에 `stock >= 0` CHECK 제약을 하나 더 걸었다.\n```",
+   "wall_s": 88.0
+  }
+ },
+ "C3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 25.76s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/orders",
+   "/api/orders/{order_id}/{action}",
+   "/api/products",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/order_lines.csv",
+   "seed/orders.csv",
+   "seed/products.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 75881,
+   "num_turns": 12,
+   "total_cost_usd": 0.3273008,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 42267,
+    "cache_read_input_tokens": 296148,
+    "output_tokens": 12859,
+    "output_tokens_details": {
+     "thinking_tokens": 541
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 42267,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 574,
+      "cache_read_input_tokens": 58713,
+      "cache_creation_input_tokens": 226,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 226
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (PRD 의 API 4개만 있고, 추가한 API·칸·화면 요소는 없음)\nPRD 가 정하지 않아 직접 정한 것:\n- 거부 사유 문구 중 PRD 에 없는 것: 없는 주문 404 `주문을 찾을 수 없습니다`, 없는 사용자 404 `사용자를 찾을 수 없습니다`, 없는 동작 404 `없는 동작입니다`.\n- 본문이 JSON 이 아니거나 `user` 가 문자열이 아니면 400 으로 처리함.\n- 한 주문에 같은 상품 줄이 여러 개면 수량을 합쳐서 재고를 확인하고 차감함.\n- 동시 요청은 서버 전체 락(`threading.Lock`)과 SQLite `BEGIN IMMEDIATE` 로 직렬화함.\n- 화면에서 환불 버튼은 사용자 역할과 상관없이 출고 상태 주문에 보임. 직원이 누르면 서버가 403 을 돌려주고 메시지 줄에 보임.\n- 가상 seed 는 주문 8개(상태 5가지 모두), 상품 5개(재고 0 인 상품 1개), 사용자 3명으로 직접 만듦.\n```",
+   "wall_s": 88.0
+  }
+ }
+}

@@ -1,0 +1,12 @@
+{
+ "add": {
+  "ORDERS": [["O-2001", "같은 상품 두 줄", "placed", "2026-10-24 11:00"],
+             ["O-2003", "없는 상품 줄", "placed", "2026-10-24 11:10"]],
+  "LINES": [["O-2001", "P04", 2], ["O-2001", "P04", 2], ["O-2003", "P99", 1]]
+ },
+ "cases": [
+  {"name": "같은 상품 2줄(P04 ×2 + ×2, 재고 3) 확정", "method": "POST", "path": "api/orders/O-2001/confirm", "body": {"user": "u1"}},
+  {"name": "그 뒤 P04 재고", "method": "GET", "path": "api/products", "find": {"key": "product_id", "value": "P04", "field": "stock"}},
+  {"name": "없는 상품(P99) 줄 주문 확정", "method": "POST", "path": "api/orders/O-2003/confirm", "body": {"user": "u1"}}
+ ]
+}

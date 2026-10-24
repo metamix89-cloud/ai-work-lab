@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>주문 · 재고 백오피스</title>
+<style>
+body{font-family:"Malgun Gothic",system-ui,sans-serif;margin:20px;color:#111318}
+.wrap{display:grid;grid-template-columns:1fr 260px;gap:16px}
+table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid #e6e8ef;padding:6px;text-align:left;font-size:14px}
+.err{background:#fff5f5;border:1px solid #fecaca;padding:12px}#message{color:#b91c1c;min-height:20px}
+</style></head><body>
+<h1>주문 · 재고 백오피스</h1>
+<label>사용자 <select data-testid="user" id="user"></select></label>
+<div data-testid="message" id="message"></div>
+<div id="main"></div>
+<script>
+const KO={placed:"접수",confirmed:"확정",shipped:"출고",cancelled:"취소",refunded:"환불"};
+const ACTS={placed:["confirm","cancel"],confirmed:["ship","cancel"],shipped:["refund"],cancelled:[],refunded:[]};
+const NAME={confirm:"확정",ship:"출고",cancel:"취소",refund:"환불"};
+let orders=[],products=[];
+async function j(u,o){const r=await fetch(u,o);const b=await r.json().catch(()=>null);if(!r.ok)throw {status:r.status,detail:(b&&b.detail)||r.status};return b}
+function draw(){
+  const rows=orders.map(o=>`<tr data-testid="order" data-id="${o.order_id}" data-status="${o.status}"><td>${o.order_id}</td><td>${o.customer}</td><td>${o.ordered_at}</td>
+   <td>${o.lines.map(l=>l.name+" ×"+l.qty).join(", ")}</td><td>${KO[o.status]}</td>
+   <td>${ACTS[o.status].map(a=>`<button data-testid="act-${a}" onclick="act('${o.order_id}','${a}')">${NAME[a]}</button>`).join(" ")}</td></tr>`).join("");
+  const st=products.map(p=>`<li data-testid="stock" data-id="${p.product_id}">${p.name} ${p.stock}</li>`).join("");
+  document.getElementById("main").innerHTML=`<div class="wrap"><table><tr><th>주문</th><th>손님</th><th>시각</th><th>줄</th><th>상태</th><th>동작</th></tr>${rows}</table><ul>${st}</ul></div>`;
+}
+async function load(){
+  try{
+    const us=await j("/api/users");const sel=document.getElementById("user");
+    if(!sel.options.length)sel.innerHTML=us.map(u=>`<option value="${u.user_id}">${u.name} (${u.role==="manager"?"관리자":"직원"})</option>`).join("");
+    orders=await j("/api/orders");products=await j("/api/products");draw();
+  }catch(e){document.getElementById("main").innerHTML=`<div class="err">불러오지 못했습니다 <button onclick="load()">다시 시도</button></div>`}
+}
+async function act(id,a){
+  const m=document.getElementById("message");m.textContent="";
+  try{const r=await j(`/api/orders/${id}/${a}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({user:document.getElementById("user").value})});
+      orders=orders.map(o=>o.order_id===id?r.order:o);products=r.products;draw();}
+  catch(e){m.textContent=e.detail}
+}
+load();
+</script></body></html>

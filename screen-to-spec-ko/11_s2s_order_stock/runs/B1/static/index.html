@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>가나다식품 주문 · 재고 백오피스</title>
+<style>
+ body{font-family:sans-serif;margin:16px;color:#222}
+ header{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+ h1{font-size:20px;margin:0}
+ #wrap{display:flex;gap:24px;align-items:flex-start}
+ #left{flex:3} #right{flex:1;min-width:220px}
+ table{border-collapse:collapse;width:100%}
+ th,td{border:1px solid #ccc;padding:6px 8px;text-align:left;vertical-align:top}
+ th{background:#f3f3f3}
+ [data-testid=message]{min-height:1.5em;color:#b00020;margin:8px 0}
+ button{margin-right:4px;cursor:pointer}
+ #error{color:#b00020}
+</style>
+</head>
+<body>
+<header>
+ <h1>가나다식품 주문 · 재고</h1>
+ <label>사용자 <select data-testid="user" id="user"></select></label>
+</header>
+<div data-testid="message" id="message"></div>
+<div id="error" hidden><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+<div id="wrap">
+ <section id="left"><h2>주문</h2>
+  <table><thead><tr><th>주문 번호</th><th>손님</th><th>주문 시각</th><th>상품 · 수량</th><th>상태</th><th>동작</th></tr></thead>
+  <tbody id="orders"></tbody></table>
+ </section>
+ <section id="right"><h2>재고</h2>
+  <table><thead><tr><th>상품</th><th>재고</th></tr></thead><tbody id="stocks"></tbody></table>
+ </section>
+</div>
+<script>
+const LABEL={placed:'접수',confirmed:'확정',shipped:'출고',cancelled:'취소',refunded:'환불'};
+const BTN={confirm:'확정',ship:'출고',cancel:'취소',refund:'환불'};
+const ACTS={placed:['confirm','cancel'],confirmed:['ship','cancel'],shipped:['refund'],cancelled:[],refunded:[]};
+let users=[],products=[],orders=[];
+const $=id=>document.getElementById(id);
+function el(tag,props,...kids){const e=document.createElement(tag);Object.assign(e,props||{});
+ for(const k of kids)e.append(k);return e}
+async function getJSON(url){const r=await fetch(url);if(!r.ok)throw new Error(r.status);return r.json()}
+function renderStocks(){const tb=$('stocks');tb.replaceChildren();
+ for(const p of products){const td=el('td',{},String(p.stock));td.dataset.testid='stock';td.dataset.id=p.product_id;
+  tb.append(el('tr',{},el('td',{},p.name),td))}}
+function orderRow(o){
+ const tr=el('tr');tr.dataset.testid='order';tr.dataset.id=o.order_id;tr.dataset.status=o.status;
+ const lines=o.lines.map(l=>`${l.name} × ${l.qty}`).join(', ');
+ const acts=el('td');
+ for(const a of ACTS[o.status]||[]){const b=el('button',{type:'button'},BTN[a]);b.dataset.testid='act-'+a;
+  b.onclick=()=>act(o.order_id,a);acts.append(b)}
+ const st=el('td',{},LABEL[o.status]||o.status);st.dataset.testid='status';
+ tr.append(el('td',{},o.order_id),el('td',{},o.customer),el('td',{},o.ordered_at),el('td',{},lines),st,acts);
+ return tr}
+function renderOrders(){const tb=$('orders');tb.replaceChildren(...orders.map(orderRow))}
+async function load(){
+ try{[users,products,orders]=await Promise.all([getJSON('/api/users'),getJSON('/api/products'),getJSON('/api/orders')]);
+  $('error').hidden=true;
+  const sel=$('user');if(!sel.options.length){for(const u of users)sel.append(el('option',{value:u.user_id},`${u.name} (${u.role==='manager'?'관리자':'직원'})`))}
+  renderStocks();renderOrders()}
+ catch(e){$('error').hidden=false}}
+async function act(id,a){
+ $('message').textContent='';
+ try{const r=await fetch(`/api/orders/${encodeURIComponent(id)}/${a}`,{method:'POST',
+   headers:{'Content-Type':'application/json'},body:JSON.stringify({user:$('user').value})});
+  const d=await r.json();
+  if(!r.ok){$('message').textContent=d.detail||'오류';return}
+  orders=orders.map(o=>o.order_id===d.order.order_id?d.order:o);products=d.products;
+  renderOrders();renderStocks()}
+ catch(e){$('error').hidden=false}}
+$('retry').onclick=load;
+load();
+</script>
+</body>
+</html>

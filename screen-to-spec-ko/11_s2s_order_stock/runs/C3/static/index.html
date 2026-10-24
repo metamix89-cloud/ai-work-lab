@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>가나다식품 주문 · 재고 백오피스</title>
+<style>
+  body { font-family: sans-serif; margin: 16px; color: #222; }
+  header { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; }
+  h1 { font-size: 20px; margin: 0; }
+  #message { min-height: 22px; margin: 8px 0; color: #b00020; font-weight: bold; }
+  #layout { display: flex; gap: 24px; align-items: flex-start; }
+  #orders { flex: 3; } #inventory { flex: 1; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: #f3f3f3; }
+  button { margin-right: 4px; cursor: pointer; }
+  #error { color: #b00020; }
+</style>
+</head>
+<body>
+<header>
+  <h1>주문 · 재고 백오피스</h1>
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+</header>
+<div id="error" hidden><span>불러오지 못했습니다</span> <button id="retry" type="button">다시 시도</button></div>
+<div data-testid="message" id="message"></div>
+<div id="layout">
+  <section id="orders">
+    <h2>주문</h2>
+    <table>
+      <thead><tr><th>주문 번호</th><th>손님</th><th>주문 시각</th><th>줄</th><th>상태</th><th>동작</th></tr></thead>
+      <tbody id="order-body"></tbody>
+    </table>
+  </section>
+  <section id="inventory">
+    <h2>재고</h2>
+    <table>
+      <thead><tr><th>상품</th><th>재고</th></tr></thead>
+      <tbody id="stock-body"></tbody>
+    </table>
+  </section>
+</div>
+<script>
+const LABEL = {placed: "접수", confirmed: "확정", shipped: "출고", cancelled: "취소", refunded: "환불"};
+const ACTIONS = {placed: ["confirm", "cancel"], confirmed: ["ship", "cancel"], shipped: ["refund"], cancelled: [], refunded: []};
+const ACTION_LABEL = {confirm: "확정", ship: "출고", cancel: "취소", refund: "환불"};
+let orders = [], products = [];
+
+const $ = (id) => document.getElementById(id);
+function el(tag, attrs, text) {
+  const e = document.createElement(tag);
+  for (const k in (attrs || {})) e.setAttribute(k, attrs[k]);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+function render() {
+  const ob = $("order-body");
+  ob.innerHTML = "";
+  for (const o of orders) {
+    const tr = el("tr", {"data-testid": "order", "data-id": o.order_id, "data-status": o.status});
+    tr.appendChild(el("td", {}, o.order_id));
+    tr.appendChild(el("td", {}, o.customer));
+    tr.appendChild(el("td", {}, o.ordered_at));
+    tr.appendChild(el("td", {}, o.lines.map(l => l.name + " × " + l.qty).join(", ")));
+    tr.appendChild(el("td", {}, LABEL[o.status] || o.status));
+    const td = el("td");
+    for (const a of ACTIONS[o.status] || []) {
+      const b = el("button", {"data-testid": "act-" + a, type: "button"}, ACTION_LABEL[a]);
+      b.onclick = () => doAction(o.order_id, a);
+      td.appendChild(b);
+    }
+    tr.appendChild(td);
+    ob.appendChild(tr);
+  }
+  const sb = $("stock-body");
+  sb.innerHTML = "";
+  for (const p of products) {
+    const tr = el("tr");
+    tr.appendChild(el("td", {}, p.name));
+    tr.appendChild(el("td", {"data-testid": "stock", "data-id": p.product_id}, String(p.stock)));
+    sb.appendChild(tr);
+  }
+}
+
+async function getJson(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(url);
+  return r.json();
+}
+
+async function load() {
+  try {
+    const [u, p, o] = await Promise.all([getJson("/api/users"), getJson("/api/products"), getJson("/api/orders")]);
+    const sel = $("user"), cur = sel.value;
+    sel.innerHTML = "";
+    for (const x of u) sel.appendChild(el("option", {value: x.user_id}, x.name + " (" + (x.role === "manager" ? "관리자" : "직원") + ")"));
+    if (cur && u.some(x => x.user_id === cur)) sel.value = cur;
+    products = p; orders = o;
+    $("error").hidden = true;
+    render();
+  } catch (e) {
+    $("error").hidden = false;
+  }
+}
+
+async function doAction(orderId, action) {
+  try {
+    const r = await fetch("/api/orders/" + encodeURIComponent(orderId) + "/" + action, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({user: $("user").value}),
+    });
+    const data = await r.json();
+    if (!r.ok) { $("message").textContent = data.detail || "요청을 처리하지 못했습니다"; return; }
+    $("message").textContent = "";
+    orders = orders.map(o => o.order_id === data.order.order_id ? data.order : o);
+    products = data.products;
+    render();
+  } catch (e) {
+    $("error").hidden = false;
+  }
+}
+
+$("retry").onclick = load;
+load();
+</script>
+</body>
+</html>

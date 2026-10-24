@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 주문·재고 백오피스</title>
+<style>
+  :root { --green:#2f7d4f; --bg:#f4f6f5; --line:#dde3df; --red:#c0392b; --amber:#b9770e; --blue:#2a6fb0; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif; background:var(--bg); color:#222; font-size:14px; }
+  header { background:var(--green); color:#fff; padding:12px 20px; display:flex; align-items:center; gap:16px; }
+  header h1 { font-size:18px; margin:0; flex:1; }
+  header button { background:#fff3; color:#fff; border:1px solid #fff6; }
+  main { max-width:1100px; margin:0 auto; padding:16px; }
+  button { cursor:pointer; border:1px solid var(--line); background:#fff; padding:6px 12px; border-radius:6px; font:inherit; }
+  button:hover { background:#eef3ef; }
+  button.primary { background:var(--green); color:#fff; border-color:var(--green); }
+  button.danger { background:var(--red); color:#fff; border-color:var(--red); }
+  button:disabled { opacity:.5; cursor:default; }
+  .tabs { display:flex; gap:6px; margin-bottom:12px; }
+  .tabs button.active { background:var(--green); color:#fff; border-color:var(--green); }
+  table { width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--line); }
+  th, td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+  th { background:#eef3ef; font-weight:600; }
+  td.num, th.num { text-align:right; }
+  .badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:12px; color:#fff; }
+  .PENDING{background:#7f8c8d}.CONFIRMED{background:var(--blue)}.SHIPPED{background:var(--green)}
+  .CANCELLED{background:var(--red)}.REFUNDED{background:var(--amber)}
+  .low { color:var(--red); font-weight:700; }
+  .toolbar { display:flex; gap:8px; align-items:center; margin-bottom:10px; flex-wrap:wrap; }
+  .actions { display:flex; gap:4px; flex-wrap:wrap; }
+  #toast { position:fixed; right:20px; bottom:20px; background:#333; color:#fff; padding:10px 16px; border-radius:6px; display:none; max-width:420px; }
+  #toast.err { background:var(--red); }
+  .login { max-width:320px; margin:80px auto; background:#fff; padding:24px; border:1px solid var(--line); border-radius:8px; }
+  .login input { width:100%; margin:6px 0 12px; }
+  input, select { padding:6px 8px; border:1px solid var(--line); border-radius:6px; font:inherit; }
+  dialog { border:1px solid var(--line); border-radius:8px; min-width:380px; }
+  .hint { color:#777; font-size:12px; }
+  .itemrow { display:flex; gap:6px; margin-bottom:6px; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast"></div>
+<dialog id="dlg"></dialog>
+
+<script>
+const STATUS = {PENDING:'접수', CONFIRMED:'확정', SHIPPED:'출고', CANCELLED:'취소', REFUNDED:'환불'};
+let token = localStorage.getItem('token');
+let user = null, tab = 'orders', filter = '', products = [], orders = [], movements = [];
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const won = n => Number(n).toLocaleString('ko-KR') + '원';
+
+function toast(msg, err) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = err ? 'err' : ''; t.style.display = 'block';
+  clearTimeout(toast.h); toast.h = setTimeout(() => t.style.display = 'none', 3500);
+}
+
+async function api(path, method = 'GET', body) {
+  const res = await fetch('/api' + path, {
+    method,
+    headers: {'Content-Type': 'application/json', ...(token ? {Authorization: 'Bearer ' + token} : {})},
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (res.status === 401 && path !== '/login') { logout(); throw new Error(data.detail || '로그인이 필요합니다.'); }
+  if (!res.ok) {
+    const d = data.detail;
+    throw new Error(Array.isArray(d) ? '입력값이 올바르지 않습니다.' : (d || '요청 실패'));
+  }
+  return data;
+}
+
+function logout() { token = null; user = null; localStorage.removeItem('token'); render(); }
+
+async function doLogin(e) {
+  e.preventDefault();
+  const f = e.target;
+  try {
+    const r = await api('/login', 'POST', {username: f.username.value, password: f.password.value});
+    token = r.token; user = r.user; localStorage.setItem('token', token);
+    await refresh();
+  } catch (err) { toast(err.message, true); }
+}
+
+async function refresh() {
+  try {
+    if (!user) user = await api('/me');
+    [products, orders, movements] = await Promise.all([
+      api('/products'), api('/orders' + (filter ? '?status=' + filter : '')), api('/movements?limit=100')]);
+    render();
+  } catch (err) { toast(err.message, true); render(); }
+}
+
+async function act(id, action, body) {
+  try {
+    await api(`/orders/${id}/${action}`, 'POST', body ?? {});
+    toast(`주문 #${id} ${({confirm:'확정',ship:'출고',cancel:'취소',refund:'환불'})[action]} 완료`);
+  } catch (err) { toast(err.message, true); }
+  await refresh();   // 실패해도 최신 상태/재고로 갱신
+}
+
+function actionsFor(o) {
+  const b = [];
+  if (o.status === 'PENDING') b.push(`<button class="primary" onclick="act(${o.id},'confirm')">확정</button>`);
+  if (o.status === 'CONFIRMED') b.push(`<button class="primary" onclick="act(${o.id},'ship')">출고</button>`);
+  if (o.status === 'PENDING' || o.status === 'CONFIRMED')
+    b.push(`<button onclick="if(confirm('주문 #${o.id}을(를) 취소할까요?'))act(${o.id},'cancel')">취소</button>`);
+  if (o.status === 'SHIPPED' && user.role === 'admin')
+    b.push(`<button class="danger" onclick="refundDlg(${o.id})">환불</button>`);
+  return `<div class="actions">${b.join('') || '-'}</div>`;
+}
+
+function refundDlg(id) {
+  const d = document.getElementById('dlg');
+  d.innerHTML = `<form method="dialog" onsubmit="return false">
+    <h3>주문 #${id} 환불</h3>
+    <p><label><input type="checkbox" id="rf-restock" checked> 반품 상품을 재고에 복원</label></p>
+    <p><input id="rf-note" placeholder="사유 (선택)" style="width:100%"></p>
+    <div class="actions"><button class="danger" onclick="doRefund(${id})">환불 처리</button>
+    <button onclick="document.getElementById('dlg').close()">닫기</button></div></form>`;
+  d.showModal();
+}
+async function doRefund(id) {
+  const restock = document.getElementById('rf-restock').checked;
+  const note = document.getElementById('rf-note').value;
+  document.getElementById('dlg').close();
+  await act(id, 'refund', {restock, note});
+}
+
+function newOrderDlg() {
+  const d = document.getElementById('dlg');
+  const opts = products.map(p => `<option value="${p.id}">${esc(p.name)} (재고 ${p.stock})</option>`).join('');
+  d.innerHTML = `<form method="dialog" onsubmit="return false">
+    <h3>새 주문 접수</h3>
+    <p><input id="no-name" placeholder="고객명" style="width:100%"></p>
+    <p><input id="no-phone" placeholder="연락처" style="width:100%"></p>
+    <p><input id="no-addr" placeholder="배송지" style="width:100%"></p>
+    <div id="no-items"></div>
+    <p><button onclick="addItemRow()">+ 상품 추가</button></p>
+    <div class="actions"><button class="primary" onclick="doCreate()">접수</button>
+    <button onclick="document.getElementById('dlg').close()">닫기</button></div></form>`;
+  d.dataset.opts = opts;
+  d.showModal();
+  addItemRow();
+}
+function addItemRow() {
+  const d = document.getElementById('dlg');
+  const row = document.createElement('div');
+  row.className = 'itemrow';
+  row.innerHTML = `<select style="flex:1">${d.dataset.opts}</select><input type="number" min="1" value="1" style="width:70px">`;
+  document.getElementById('no-items').appendChild(row);
+}
+async function doCreate() {
+  const items = [...document.querySelectorAll('#no-items .itemrow')].map(r => ({
+    product_id: +r.querySelector('select').value, qty: +r.querySelector('input').value}));
+  try {
+    const r = await api('/orders', 'POST', {
+      customer: document.getElementById('no-name').value,
+      phone: document.getElementById('no-phone').value,
+      address: document.getElementById('no-addr').value, items});
+    document.getElementById('dlg').close();
+    toast(`주문 #${r.id} 접수 완료`);
+    await refresh();
+  } catch (err) { toast(err.message, true); }
+}
+
+function adjustDlg(id) {
+  const p = products.find(x => x.id === id);
+  const d = document.getElementById('dlg');
+  d.innerHTML = `<form method="dialog" onsubmit="return false">
+    <h3>${esc(p.name)} 재고 조정</h3>
+    <p>현재 재고: <b>${p.stock}</b></p>
+    <p><input id="ad-delta" type="number" placeholder="증감 (예: 50 / -3)" style="width:100%"></p>
+    <p><input id="ad-reason" placeholder="사유 (예: 입고, 파손)" style="width:100%"></p>
+    <div class="actions"><button class="primary" onclick="doAdjust(${id})">적용</button>
+    <button onclick="document.getElementById('dlg').close()">닫기</button></div></form>`;
+  d.showModal();
+}
+async function doAdjust(id) {
+  try {
+    await api(`/products/${id}/adjust`, 'POST', {
+      delta: parseInt(document.getElementById('ad-delta').value, 10),
+      reason: document.getElementById('ad-reason').value});
+    document.getElementById('dlg').close();
+    toast('재고가 조정되었습니다.');
+  } catch (err) { toast(err.message, true); }
+  await refresh();
+}
+
+function ordersView() {
+  const opts = ['', ...Object.keys(STATUS)].map(s =>
+    `<option value="${s}" ${s === filter ? 'selected' : ''}>${s ? STATUS[s] : '전체'}</option>`).join('');
+  const rows = orders.map(o => `<tr>
+    <td>#${o.id}</td>
+    <td>${esc(o.customer)}<div class="hint">${esc(o.phone)}<br>${esc(o.address)}</div></td>
+    <td>${o.items.map(i => `${esc(i.name)} × ${i.qty}`).join('<br>')}</td>
+    <td class="num">${won(o.total)}</td>
+    <td><span class="badge ${o.status}">${STATUS[o.status]}</span><div class="hint">${esc(o.updated_at)}</div></td>
+    <td>${actionsFor(o)}</td></tr>`).join('');
+  return `<div class="toolbar">
+      <select onchange="filter=this.value;refresh()">${opts}</select>
+      <button class="primary" onclick="newOrderDlg()">+ 새 주문</button>
+      <button onclick="refresh()">새로고침</button></div>
+    <table><tr><th>번호</th><th>고객</th><th>상품</th><th class="num">금액</th><th>상태</th><th>처리</th></tr>
+    ${rows || '<tr><td colspan="6">주문이 없습니다.</td></tr>'}</table>`;
+}
+
+function stockView() {
+  const rows = products.map(p => `<tr>
+    <td>${esc(p.sku)}</td><td>${esc(p.name)}</td><td class="num">${won(p.price)}</td>
+    <td class="num ${p.stock <= p.safety_stock ? 'low' : ''}">${p.stock}${p.stock <= p.safety_stock ? ' ⚠' : ''}</td>
+    <td class="num">${p.safety_stock}</td>
+    <td>${user.role === 'admin' ? `<button onclick="adjustDlg(${p.id})">조정</button>` : '-'}</td></tr>`).join('');
+  return `<p class="hint">안전재고 이하는 빨간색으로 표시됩니다. 재고 직접 조정은 관리자만 가능합니다.</p>
+    <table><tr><th>SKU</th><th>상품</th><th class="num">가격</th><th class="num">현재고</th><th class="num">안전재고</th><th>조정</th></tr>${rows}</table>`;
+}
+
+function movementView() {
+  const rows = movements.map(m => `<tr><td>${esc(m.created_at)}</td><td>${esc(m.product_name)}</td>
+    <td class="num ${m.delta < 0 ? 'low' : ''}">${m.delta > 0 ? '+' : ''}${m.delta}</td>
+    <td>${esc(m.reason)}</td><td>${m.order_id ? '#' + m.order_id : '-'}</td><td>${esc(m.actor)}</td></tr>`).join('');
+  return `<table><tr><th>일시</th><th>상품</th><th class="num">증감</th><th>사유</th><th>주문</th><th>처리자</th></tr>
+    ${rows || '<tr><td colspan="6">이력이 없습니다.</td></tr>'}</table>`;
+}
+
+function render() {
+  const app = document.getElementById('app');
+  if (!token || !user) {
+    app.innerHTML = `<form class="login" onsubmit="doLogin(event)">
+      <h2>가나다식품 백오피스</h2>
+      <label>아이디<input name="username" autofocus></label>
+      <label>비밀번호<input name="password" type="password"></label>
+      <button class="primary" style="width:100%">로그인</button>
+      <p class="hint">데모 계정: staff / staff123 (직원), admin / admin123 (관리자)</p></form>`;
+    return;
+  }
+  const tabBtn = (k, t) => `<button class="${tab === k ? 'active' : ''}" onclick="tab='${k}';render()">${t}</button>`;
+  app.innerHTML = `<header><h1>가나다식품 주문·재고 백오피스</h1>
+      <span>${esc(user.name)} (${user.role === 'admin' ? '관리자' : '직원'})</span>
+      <button onclick="logout()">로그아웃</button></header>
+    <main><div class="tabs">${tabBtn('orders', '주문')}${tabBtn('stock', '재고')}${tabBtn('moves', '재고 이력')}</div>
+    ${tab === 'orders' ? ordersView() : tab === 'stock' ? stockView() : movementView()}</main>`;
+}
+
+if (token) refresh(); else render();
+</script>
+</body>
+</html>

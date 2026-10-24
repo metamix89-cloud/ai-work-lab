@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 76616,
+ "num_turns": 12,
+ "total_cost_usd": 0.3245312,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 43144,
+  "cache_read_input_tokens": 250812,
+  "output_tokens": 12685,
+  "output_tokens_details": {
+   "thinking_tokens": 568
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 43144,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 660,
+    "cache_read_input_tokens": 59637,
+    "cache_creation_input_tokens": 179,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 179
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "pytest 9개가 모두 통과했습니다. 앱은 PRD 대로 만들었습니다.\n\n```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (추가한 API 경로도 없음. `GET /` 가 index.html 을 내줌)\nPRD 가 정하지 않아 직접 정한 것:\n- 확정·취소 등 동작은 한 요청씩 순서대로 처리하는 잠금(lock) 안에서 읽고, 확인하고, 쓴다. 그래서 동시에 와도 재고가 0 미만이 되지 않는다.\n- 거부 사유 문구: 없는 주문은 `주문을 찾을 수 없습니다`, 없는 사용자는 `사용자를 찾을 수 없습니다`, 없는 동작은 `동작을 찾을 수 없습니다`.\n- 본문이 JSON 이 아니거나 `user` 가 문자열이 아니면 400 `사용자를 확인하세요`.\n- 한 주문에 같은 상품 줄이 여럿이면 수량을 합쳐서 재고와 비교한다.\n- 화면에서는 직원이 보고 있을 때 환불 버튼을 숨긴다. 막는 건 서버(403)다.\n- 사용자 선택 상자의 option 에는 이름과 역할을 함께 표시한다 (value 는 user_id).\n- 동작에 성공하면 메시지 줄을 비운다. 거부되면 `detail` 을 보여주고 목록을 다시 불러온다.\n- 가상 데이터: 사용자 3명, 상품 5개 (냉동만두 재고 0), 주문 8개 (상태 다섯 가지 모두 포함).\n```",
+ "wall_s": 90.9
+}

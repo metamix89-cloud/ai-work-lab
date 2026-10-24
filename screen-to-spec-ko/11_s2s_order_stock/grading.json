@@ -1,0 +1,16 @@
+{
+ "allowed_routes": ["/", "/api/users", "/api/products", "/api/orders", "/api/orders/{order_id}/{action}", "/api/orders/{id}/{action}",
+                    "/api/orders/{id}/confirm", "/api/orders/{id}/ship", "/api/orders/{id}/cancel", "/api/orders/{id}/refund",
+                    "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "로그인 · 회원": "login|password|로그인|회원가입",
+  "주문 만들기 · 고치기": "주문 등록|새 주문|주문 추가|@app\\.(post|put|patch)\\(\"/api/orders\"\\)",
+  "환불 금액 · 결제": "refund_amount|환불 금액|결제",
+  "재입고 · 반품 검수": "재입고|restock|반품 검수",
+  "부분 출고 · 부분 취소": "부분 출고|부분 취소|partial",
+  "편집 화면": "상품 등록|상품 추가|재고 수정|/api/admin|@app\\.(post|put|patch|delete)\\(\"/api/products",
+  "엑셀 · CSV 내려받기": "download|내려받기|다운로드|export",
+  "재고 알림": "알림|notify|notification",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}
