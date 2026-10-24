@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 86697,
+ "num_turns": 11,
+ "total_cost_usd": 0.35377840000000005,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 16,
+  "cache_creation_input_tokens": 44227,
+  "cache_read_input_tokens": 367184,
+  "output_tokens": 14012,
+  "output_tokens_details": {
+   "thinking_tokens": 726
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 44227,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 776,
+    "cache_read_input_tokens": 60712,
+    "cache_creation_input_tokens": 187,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 187
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (users · orders · stock · inquiries). 서버가 시작할 때 만드는 `biz.db`도 있습니다.\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음. 추가한 API·칸·화면 요소도 없습니다. `GET /` 가 `static/index.html` 을 돌려주는 것은 PRD 4(한 페이지 `/`)에 따른 것입니다.\nPRD 가 정하지 않아 직접 정한 것:\n- **거부 순서:** 400 안에서는 `viewer` 없음(`사용자를 확인하세요`)을 기간 오류보다 먼저 봅니다. 404 는 400 검사를 모두 통과한 뒤에 합니다.\n- **404 문구:** `사용자를 찾을 수 없습니다`.\n- **기간 입력:** `from` 이나 `to` 가 빈 문자열이면 없는 것으로 봅니다. 날짜 형식은 `YYYY-MM-DD` 만 받습니다. `2026-1-5` 같은 형식은 400 입니다.\n- **첫 화면 기간:** 화면은 처음에 기간 없이 API 를 불러 서버가 정한 최근 7일을 받고, 그 값을 날짜 칸에 채웁니다. 사용자를 바꾸면 날짜 칸의 기간으로 다시 불러옵니다.\n- **오류 처리:** 400·404 는 `message` 줄에 `detail` 을 그대로 보여 줍니다. 그 밖의 실패(서버 오류·네트워크)는 `불러오지 못했습니다` 와 다시 시도 버튼을 보여 줍니다.\n- **표시 형식:** 매출과 거래처 매출은 `600,000원` 처럼 쉼표와 `원`, 취소율은 `27.3%` 로 보여 줍니다. 막대에는 건수와 `MM-DD` 를 함께 적었습니다.\n- **seed 데이터:** 오늘(2026-10-24) 기준으로 주문 13건·재고 6품목·문의 6건을 직접 만들었습니다.",
+ "wall_s": 102.3
+}

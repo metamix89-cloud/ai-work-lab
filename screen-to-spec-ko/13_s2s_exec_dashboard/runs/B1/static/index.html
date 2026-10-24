@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 경영 현황</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f5f6f8; color: #222; }
+  main { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+  h1 { font-size: 22px; margin: 0 0 16px; }
+  .bar-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+  button, select, input { font: inherit; padding: 6px 10px; }
+  #message { min-height: 22px; color: #c0392b; margin-bottom: 8px; }
+  #cards { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+  .card { background: #fff; border-radius: 8px; padding: 14px 18px; min-width: 140px; box-shadow: 0 1px 3px #0002; }
+  .card .label { font-size: 13px; color: #666; }
+  .card .value { font-size: 26px; font-weight: bold; margin-top: 4px; }
+  section { background: #fff; border-radius: 8px; padding: 14px 18px; margin-bottom: 16px; box-shadow: 0 1px 3px #0002; }
+  h2 { font-size: 16px; margin: 0 0 12px; }
+  #daily { display: flex; align-items: flex-end; gap: 6px; height: 170px; }
+  .day { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; font-size: 11px; min-width: 0; }
+  .day .fill { width: 100%; background: #3b7ddd; border-radius: 3px 3px 0 0; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #eee; }
+  td.num, th.num { text-align: right; }
+  #error { background: #fff; padding: 20px; border-radius: 8px; text-align: center; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>가나다식품 경영 현황</h1>
+  <div class="bar-row">
+    <label>사용자 <select data-testid="user"></select></label>
+    <label>시작일 <input type="date" data-testid="from"></label>
+    <label>종료일 <input type="date" data-testid="to"></label>
+    <button data-testid="apply">적용</button>
+  </div>
+  <div id="message" data-testid="message"></div>
+  <div id="error" hidden>
+    <p>불러오지 못했습니다</p>
+    <button id="retry">다시 시도</button>
+  </div>
+  <div id="content">
+    <div id="cards"></div>
+    <section>
+      <h2>일별 주문</h2>
+      <div id="daily"></div>
+    </section>
+    <section id="top-section" hidden>
+      <h2>거래처별 매출 상위 5</h2>
+      <table>
+        <thead><tr><th>거래처</th><th class="num">매출(원)</th></tr></thead>
+        <tbody id="top"></tbody>
+      </table>
+    </section>
+    <div style="font-size:12px;color:#888" id="updated"></div>
+  </div>
+</main>
+<script>
+const $ = (s) => document.querySelector(s);
+const userSel = $('[data-testid="user"]');
+const fromEl = $('[data-testid="from"]');
+const toEl = $('[data-testid="to"]');
+const CARDS = [
+  ['orders', 'm-orders', '주문 수', (v) => v.toLocaleString('ko-KR')],
+  ['revenue', 'm-revenue', '매출', (v) => v.toLocaleString('ko-KR')],
+  ['cancel_rate', 'm-cancel-rate', '취소율', (v) => v + '%'],
+  ['stock_alerts', 'm-stock-alerts', '재고 경고', (v) => v.toLocaleString('ko-KR')],
+  ['open_inquiries', 'm-open-inquiries', '미처리 문의', (v) => v.toLocaleString('ko-KR')],
+];
+
+function ymd(d) {
+  const p = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+
+function showError(on) {
+  $('#error').hidden = !on;
+  $('#content').hidden = on;
+}
+
+function render(data) {
+  const cards = $('#cards');
+  cards.innerHTML = '';
+  for (const [key, tid, label, fmt] of CARDS) {
+    if (!(key in data.metrics)) continue;
+    const v = data.metrics[key];
+    const card = document.createElement('div');
+    card.className = 'card';
+    const l = document.createElement('div');
+    l.className = 'label';
+    l.textContent = label;
+    const val = document.createElement('div');
+    val.className = 'value';
+    val.dataset.testid = tid;
+    val.textContent = v === null ? '—' : fmt(v);
+    card.append(l, val);
+    cards.append(card);
+  }
+
+  const max = Math.max(1, ...data.daily.map((d) => d.count));
+  const daily = $('#daily');
+  daily.innerHTML = '';
+  for (const d of data.daily) {
+    const bar = document.createElement('div');
+    bar.className = 'day';
+    bar.dataset.testid = 'daily-bar';
+    bar.title = `${d.date}: ${d.count}건`;
+    const fill = document.createElement('div');
+    fill.className = 'fill';
+    fill.style.height = `${(d.count / max) * 120}px`;
+    const cnt = document.createElement('span');
+    cnt.textContent = d.count;
+    const dt = document.createElement('span');
+    dt.textContent = d.date.slice(5);
+    bar.append(cnt, fill, dt);
+    daily.append(bar);
+  }
+
+  const top = $('#top');
+  top.innerHTML = '';
+  $('#top-section').hidden = !('top_customers' in data);
+  for (const t of data.top_customers || []) {
+    const tr = document.createElement('tr');
+    tr.dataset.testid = 'top-customer';
+    const a = document.createElement('td');
+    a.textContent = t.customer;
+    const b = document.createElement('td');
+    b.className = 'num';
+    b.textContent = t.revenue.toLocaleString('ko-KR');
+    tr.append(a, b);
+    top.append(tr);
+  }
+  $('#updated').textContent = `기준: ${data.updated_at}`;
+}
+
+async function load() {
+  const qs = new URLSearchParams({ viewer: userSel.value });
+  if (fromEl.value) qs.set('from', fromEl.value);
+  if (toEl.value) qs.set('to', toEl.value);
+  let res, body;
+  try {
+    res = await fetch('/api/dashboard?' + qs);
+    body = await res.json();
+  } catch (e) {
+    showError(true);
+    return;
+  }
+  if (!res.ok) {
+    if (res.status >= 500 || !body || !body.detail) { showError(true); return; }
+    showError(false);
+    $('#message').textContent = body.detail;
+    return;
+  }
+  showError(false);
+  $('#message').textContent = '';
+  render(body);
+}
+
+async function init() {
+  const today = new Date();
+  const start = new Date(today);
+  start.setDate(today.getDate() - 6);
+  fromEl.value = ymd(start);
+  toEl.value = ymd(today);
+  try {
+    const users = await (await fetch('/api/users')).json();
+    for (const u of users) {
+      const o = document.createElement('option');
+      o.value = u.user_id;
+      o.textContent = `${u.name} (${{ exec: '대표', sales: '영업팀', logistics: '물류팀' }[u.role] || u.role})`;
+      userSel.append(o);
+    }
+  } catch (e) {
+    showError(true);
+    return;
+  }
+  load();
+}
+
+$('[data-testid="apply"]').addEventListener('click', load);
+userSel.addEventListener('change', load);
+$('#retry').addEventListener('click', () => (userSel.options.length ? load() : init()));
+init();
+</script>
+</body>
+</html>

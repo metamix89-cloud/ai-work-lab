@@ -1,0 +1,797 @@
+{
+ "A1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: ('GET /api/dashboard', {}, 401, {'detail': '로그인이 필요합니다'})\nassert (401 == 200)",
+   "T3": "AssertionError: ('GET /api/dashboard', {}, 401, {'detail': '로그인이 필요합니다'})\nassert (401 == 200)",
+   "T4": "AssertionError: ('GET /api/dashboard', {}, 401, {'detail': '로그인이 필요합니다'})\nassert (401 == 200)",
+   "T5": "AssertionError: ('GET /api/dashboard', {'frm': '2026-10-21', 'to': '2026-10-23'}, 401, {'detail': '로그인이 필요합니다'})\nassert (401 == 200)",
+   "T6": "AssertionError: ('기간 오류는 400', {'frm': '2026-10-23', 'to': '2026-10-21'}, 401, {'detail': '로그인이 필요합니다'})\nassert 401 == 400",
+   "T7": "AssertionError: (401, '{\"detail\":\"로그인이 필요합니다\"}')\nassert 401 == 200",
+   "T8": "AssertionError: ('GET /api/dashboard', {'frm': '2026-09-24', 'to': '2026-09-29'}, 401, {'detail': '로그인이 필요합니다'})\nassert (401 == 200)",
+   "T9": "AssertionError: ('대표에게 매출 카드(600,000)', None)\nassert (None is not None)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "^^^^^^^^^^^^^^^^^^^\n\n_grader\\test_dod.py:297: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\ns = <test_dod.Server object at 0x0000028212386A50>\nkw = {'frm': '2026-09-24', 'to': '2026-09-29'}\n\n    def ok(s, **kw):\n        st, body = dash(s, **kw)\n>       assert st == 200 and isinstance(body, dict), (\"GET /api/dashboard\", kw, st, body)\nE       AssertionError: ('GET /api/dashboard', {'frm': '2026-09-24', 'to': '2026-09-29'}, 401, {'detail': '로그인이 필요합니다'})\nE       assert (401 == 200)\n\n_grader\\test_dod.py:199: AssertionError\n_______________________________ test_T9_screen ________________________________\n\nsrv = <test_dod.Server object at 0x0000028212386A50>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen(srv, pw):\n        pg = open_page(pw, srv)\n        rev = pg.query_selector('[data-testid=\"m-revenue\"]')\n>       assert rev is not None and 600000 in digits(rev.inner_text()), (\"대표에게 매출 카드(600,000)\", rev.inner_text() if rev else None)\nE       AssertionError: ('대표에게 매출 카드(600,000)', None)\nE       assert (None is not None)\n\n_grader\\test_dod.py:308: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: ('GET /api/das...\nFAILED _grader/test_dod.py::test_T3_orders_and_revenue - AssertionError: ('GE...\nFAILED _grader/test_dod.py::test_T4_cancel_rate_and_top - AssertionError: ('G...\nFAILED _grader/test_dod.py::test_T5_period_boundary - AssertionError: ('GET /...\nFAILED _grader/test_dod.py::test_T6_period_errors - AssertionError: ('기간 오...\nFAILED _grader/test_dod.py::test_T7_roles - AssertionError: (401, '{\"detail\":...\nFAILED _grader/test_dod.py::test_T8_empty_period - AssertionError: ('GET /api...\nFAILED _grader/test_dod.py::test_T9_screen - AssertionError: ('대표에게 매출 ...\n8 failed, 1 passed in 5.79s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/dashboard",
+   "/api/login",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/login"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "u.log"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '경영 현황 대시보드' 웹앱을 만들어 줘. 기간을 골라서 주문 수, 매출, 취소율, 재고 경고, 미처리 문의를 보고, 일별 주문 그래프와 거래처별 매출 순위도 보여 줘. 대표, 영업팀, 물류팀이 쓰는데 역할마다 볼 수 있는 숫자가 달라야 해. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 104560,
+   "num_turns": 8,
+   "total_cost_usd": 0.3401192,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 36707,
+    "cache_read_input_tokens": 183912,
+    "output_tokens": 17488,
+    "output_tokens_details": {
+     "thinking_tokens": 666
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 36707,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 981,
+      "cache_read_input_tokens": 52691,
+      "cache_creation_input_tokens": 688,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 688
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "가나다식품 경영 현황 대시보드를 만들었고, 지금 `http://localhost:8000`에서 서버가 실행 중입니다. 브라우저 화면은 직접 열어 보지 못했습니다. 물류팀·영업팀 계정으로 API를 호출해 응답 내용을 확인했고, 첫 화면 로딩과 로그인 없이 호출했을 때의 거부(401)도 확인했습니다.\n\n**실행**\n```\npip install -r requirements.txt\npython -m uvicorn main:app --port 8000\n```\n처음 실행하면 `ganada.db`가 만들어지고, 최근 120일치 가상 데이터(거래처 8곳, 품목 10개, 주문, 문의)가 자동으로 들어갑니다.\n\n**데모 계정**\n\n| 아이디 | 비밀번호 | 역할 |\n|---|---|---|\n| ceo | ceo1234 | 대표 |\n| sales | sales1234 | 영업팀 |\n| logistics | logi1234 | 물류팀 |\n\n**역할별로 보이는 숫자**\n\n| 항목 | 대표 | 영업팀 | 물류팀 |\n|---|---|---|---|\n| 주문 수, 취소율, 일별 주문 그래프 | O | O | O |\n| 매출, 거래처별 매출 순위 | O | O | X |\n| 미처리 문의 | O | O | X |\n| 재고 경고, 경고 품목 목록 | O | X | O |\n\n권한 없는 값은 화면에서 숨기는 게 아니라 서버가 응답에 아예 넣지 않습니다. 물류팀 응답에는 매출 값이 들어 있지 않습니다.\n\n**화면**\n- 기간은 7일, 30일, 90일 버튼이나 날짜 직접 선택으로 고릅니다.\n- 일별 주문 그래프에 마우스를 올리면 날짜와 건수가 나옵니다.\n- 거래처 순위도 마우스를 올리면 매출과 주문 건수가 나옵니다.\n- 다크 모드를 자동으로 따라갑니다.\n\n**알아 둘 점**\n- 매출은 취소된 주문을 뺀 금액입니다.\n- 재고 경고는 기간과 상관없이 현재 재고가 안전재고보다 적은 품목입니다.\n- 미처리 문의는 선택한 기간에 접수된 건만 셉니다.\n- 로그인 세션은 서버 메모리에만 있어서 서버를 재시작하면 다시 로그인해야 합니다. 계정도 코드에 고정한 데모용이라, 실제로 쓰려면 계정 관리를 따로 붙여야 합니다.\n\n코드는 `main.py`(API, DB, 가상 데이터, 권한)와 `static/index.html`(화면)에 있습니다.",
+   "wall_s": 116.1
+  }
+ },
+ "A2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: ('GET /api/dashboard', {}, 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T3": "AssertionError: ('GET /api/dashboard', {}, 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T4": "AssertionError: ('GET /api/dashboard', {}, 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T5": "AssertionError: ('GET /api/dashboard', {'frm': '2026-10-21', 'to': '2026-10-23'}, 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T6": "AssertionError: ('기간 오류는 400', {'frm': '2026-10-23', 'to': '2026-10-21'}, 404, {'detail': 'Not Found'})\nassert 404 == 400",
+   "T7": "AssertionError: (404, '{\"detail\":\"Not Found\"}')\nassert 404 == 200",
+   "T8": "AssertionError: ('GET /api/dashboard', {'frm': '2026-09-24', 'to': '2026-09-29'}, 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T9": "AssertionError: ('대표에게 매출 카드(600,000)', None)\nassert (None is not None)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "^^^^^^^^^^^^^^^^^^^^\n\n_grader\\test_dod.py:297: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\ns = <test_dod.Server object at 0x00000279F2432A50>\nkw = {'frm': '2026-09-24', 'to': '2026-09-29'}\n\n    def ok(s, **kw):\n        st, body = dash(s, **kw)\n>       assert st == 200 and isinstance(body, dict), (\"GET /api/dashboard\", kw, st, body)\nE       AssertionError: ('GET /api/dashboard', {'frm': '2026-09-24', 'to': '2026-09-29'}, 404, {'detail': 'Not Found'})\nE       assert (404 == 200)\n\n_grader\\test_dod.py:199: AssertionError\n_______________________________ test_T9_screen ________________________________\n\nsrv = <test_dod.Server object at 0x00000279F2432A50>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen(srv, pw):\n        pg = open_page(pw, srv)\n        rev = pg.query_selector('[data-testid=\"m-revenue\"]')\n>       assert rev is not None and 600000 in digits(rev.inner_text()), (\"대표에게 매출 카드(600,000)\", rev.inner_text() if rev else None)\nE       AssertionError: ('대표에게 매출 카드(600,000)', None)\nE       assert (None is not None)\n\n_grader\\test_dod.py:308: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: ('GET /api/das...\nFAILED _grader/test_dod.py::test_T3_orders_and_revenue - AssertionError: ('GE...\nFAILED _grader/test_dod.py::test_T4_cancel_rate_and_top - AssertionError: ('G...\nFAILED _grader/test_dod.py::test_T5_period_boundary - AssertionError: ('GET /...\nFAILED _grader/test_dod.py::test_T6_period_errors - AssertionError: ('기간 오...\nFAILED _grader/test_dod.py::test_T7_roles - AssertionError: (404, '{\"detail\":...\nFAILED _grader/test_dod.py::test_T8_empty_period - AssertionError: ('GET /api...\nFAILED _grader/test_dod.py::test_T9_screen - AssertionError: ('대표에게 매출 ...\n8 failed, 1 passed in 7.21s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/login",
+   "/api/summary"
+  ],
+  "extra_routes": [
+   "/api/login",
+   "/api/summary"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv",
+   "seed/users.csv",
+   "server.log",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '경영 현황 대시보드' 웹앱을 만들어 줘. 기간을 골라서 주문 수, 매출, 취소율, 재고 경고, 미처리 문의를 보고, 일별 주문 그래프와 거래처별 매출 순위도 보여 줘. 대표, 영업팀, 물류팀이 쓰는데 역할마다 볼 수 있는 숫자가 달라야 해. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 120616,
+   "num_turns": 10,
+   "total_cost_usd": 0.36168240000000007,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 37528,
+    "cache_read_input_tokens": 269224,
+    "output_tokens": 18462,
+    "output_tokens_details": {
+     "thinking_tokens": 971
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 37528,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1263,
+      "cache_read_input_tokens": 47576,
+      "cache_creation_input_tokens": 6624,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 6624
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "가나다식품 경영 현황 대시보드를 만들었고, 지금 http://127.0.0.1:8000 에서 서버가 돌고 있습니다. 세 계정으로 로그인해 API 응답을 확인했고, 역할별로 숫자가 다르게 나오는 것까지 봤습니다. 브라우저에서 화면을 열어 보지는 못했으니 차트 모양과 간격은 한 번 직접 봐 주세요.\n\n**실행 방법**\n- 설치: `pip install -r requirements.txt`\n- 실행: `python main.py`\n- 처음 실행하면 가상 데이터가 들어 있는 `ganada.db`가 자동으로 만들어집니다. 거래처 8곳, 품목 8개, 최근 120일 주문, 문의 60건이 들어갑니다.\n- 가상 데이터는 2026-10-24를 오늘로 보고 만들었습니다. 기본 조회 기간은 최근 30일입니다.\n\n**데모 계정과 역할별 화면**\n\n| 계정 | 비밀번호 | 보이는 내용 |\n|---|---|---|\n| 대표 `ceo` | `ceo1234` | 전부: 주문 수, 매출, 취소율, 재고 경고, 미처리 문의, 일별 주문·매출 그래프, 거래처별 매출 순위 |\n| 영업팀 `sales` | `sales1234` | 재고 경고를 뺀 나머지 전부 |\n| 물류팀 `logistics` | `logi1234` | 주문 수, 취소율, 재고 경고, 일별 주문 그래프. 매출, 거래처 순위, 문의는 안 보임 |\n\n- **서버에서 막음**: 권한이 없는 항목은 화면에서 숨기는 게 아니라 서버가 아예 보내지 않습니다. 물류팀 응답에는 매출 데이터가 들어 있지 않고, 로그인 없이 호출하면 401이 나옵니다.\n- **기간 선택**: 최근 7일, 30일, 90일 버튼이나 날짜 직접 입력으로 고릅니다. 최대 1년까지 됩니다.\n- **계산 기준**: 매출은 취소 주문을 뺀 금액입니다. 취소율은 선택 기간의 취소 건수를 전체 주문 수로 나눈 값입니다.\n- **재고와 문의**: 재고 경고는 안전재고보다 적은 품목 전체를 보여 주고, 기간과 무관합니다. 안전재고의 절반 미만이면 '긴급'으로 표시합니다. 미처리 문의는 선택 기간에 접수된 건만 세고, 목록에는 최근 8건만 나옵니다.\n- **그래프**: 일별 그래프는 막대에 마우스를 올리면 값이 뜹니다. 대표와 영업팀은 주문 수와 매출을 전환해서 볼 수 있습니다. 거래처 순위는 막대로 보여 주고 거래처별 매출과 주문 건수가 함께 뜹니다.\n\n**참고**\n- 비밀번호는 데모용으로 코드에 적혀 있습니다. 실제로 쓰려면 `main.py`의 `USERS`를 바꾸세요.\n- 로그인 세션은 서버 메모리에만 있어서 서버를 다시 켜면 다시 로그인해야 합니다.\n\n파일은 `main.py`(서버, 데이터, 권한), `static/index.html`(화면), `requirements.txt` 세 개입니다.",
+   "wall_s": 134.4
+  }
+ },
+ "A3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: ('GET /api/dashboard', {}, 401, {'detail': '로그인이 필요합니다.'})\nassert (401 == 200)",
+   "T3": "AssertionError: ('GET /api/dashboard', {}, 401, {'detail': '로그인이 필요합니다.'})\nassert (401 == 200)",
+   "T4": "AssertionError: ('GET /api/dashboard', {}, 401, {'detail': '로그인이 필요합니다.'})\nassert (401 == 200)",
+   "T5": "AssertionError: ('GET /api/dashboard', {'frm': '2026-10-21', 'to': '2026-10-23'}, 401, {'detail': '로그인이 필요합니다.'})\nassert (401 == 200)",
+   "T6": "AssertionError: ('기간 오류는 400', {'frm': '2026-10-23', 'to': '2026-10-21'}, 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 400",
+   "T7": "AssertionError: (401, '{\"detail\":\"로그인이 필요합니다.\"}')\nassert 401 == 200",
+   "T8": "AssertionError: ('GET /api/dashboard', {'frm': '2026-09-24', 'to': '2026-09-29'}, 401, {'detail': '로그인이 필요합니다.'})\nassert (401 == 200)",
+   "T9": "AssertionError: ('대표에게 매출 카드(600,000)', None)\nassert (None is not None)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "^^^^^^^^^^^^^^^^^^\n\n_grader\\test_dod.py:297: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\ns = <test_dod.Server object at 0x00000252161F2A50>\nkw = {'frm': '2026-09-24', 'to': '2026-09-29'}\n\n    def ok(s, **kw):\n        st, body = dash(s, **kw)\n>       assert st == 200 and isinstance(body, dict), (\"GET /api/dashboard\", kw, st, body)\nE       AssertionError: ('GET /api/dashboard', {'frm': '2026-09-24', 'to': '2026-09-29'}, 401, {'detail': '로그인이 필요합니다.'})\nE       assert (401 == 200)\n\n_grader\\test_dod.py:199: AssertionError\n_______________________________ test_T9_screen ________________________________\n\nsrv = <test_dod.Server object at 0x00000252161F2A50>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen(srv, pw):\n        pg = open_page(pw, srv)\n        rev = pg.query_selector('[data-testid=\"m-revenue\"]')\n>       assert rev is not None and 600000 in digits(rev.inner_text()), (\"대표에게 매출 카드(600,000)\", rev.inner_text() if rev else None)\nE       AssertionError: ('대표에게 매출 카드(600,000)', None)\nE       assert (None is not None)\n\n_grader\\test_dod.py:308: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: ('GET /api/das...\nFAILED _grader/test_dod.py::test_T3_orders_and_revenue - AssertionError: ('GE...\nFAILED _grader/test_dod.py::test_T4_cancel_rate_and_top - AssertionError: ('G...\nFAILED _grader/test_dod.py::test_T5_period_boundary - AssertionError: ('GET /...\nFAILED _grader/test_dod.py::test_T6_period_errors - AssertionError: ('기간 오...\nFAILED _grader/test_dod.py::test_T7_roles - AssertionError: (401, '{\"detail\":...\nFAILED _grader/test_dod.py::test_T8_empty_period - AssertionError: ('GET /api...\nFAILED _grader/test_dod.py::test_T9_screen - AssertionError: ('대표에게 매출 ...\n8 failed, 1 passed in 6.22s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/dashboard",
+   "/api/login"
+  ],
+  "extra_routes": [
+   "/api/login"
+  ],
+  "tests_modified": null,
+  "files": [
+   "app/__init__.py",
+   "app/db.py",
+   "app/main.py",
+   "build.json",
+   "requirements.txt",
+   "run.py",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '경영 현황 대시보드' 웹앱을 만들어 줘. 기간을 골라서 주문 수, 매출, 취소율, 재고 경고, 미처리 문의를 보고, 일별 주문 그래프와 거래처별 매출 순위도 보여 줘. 대표, 영업팀, 물류팀이 쓰는데 역할마다 볼 수 있는 숫자가 달라야 해. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 107532,
+   "num_turns": 13,
+   "total_cost_usd": 0.3320109,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 36169,
+    "cache_read_input_tokens": 215509,
+    "output_tokens": 16576,
+    "output_tokens_details": {
+     "thinking_tokens": 1006
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 36169,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1104,
+      "cache_read_input_tokens": 46363,
+      "cache_creation_input_tokens": 6478,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 6478
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "가나다식품 경영 현황 대시보드를 만들었습니다. API 응답은 세 역할 모두 테스트했고 정상이었습니다. 하지만 화면은 브라우저에서 열어 보지 못했습니다. 그래프 배치와 툴팁은 직접 확인해 보세요.\n\n**실행 방법**\n```\npip install -r requirements.txt\npython run.py\n```\n브라우저에서 http://127.0.0.1:8000 으로 접속하면 됩니다. 처음 실행하면 `ganada.db`가 만들어지면서 가상 데이터가 들어갑니다. 거래처 12곳, 품목 15개, 최근 120일 주문, 문의가 들어 있고, 날짜는 오늘 기준입니다. 데이터를 처음부터 다시 만들려면 `ganada.db`를 지우고 재실행하세요.\n\n**데모 계정**: 비밀번호는 모두 `demo1234`입니다.\n\n| 계정 | 볼 수 있는 항목 |\n|---|---|\n| `ceo` (대표) | 전부 |\n| `sales` (영업팀) | 주문 수, 매출, 취소율, 미처리 문의, 일별 주문 그래프, 거래처 순위 (재고 제외) |\n| `logistics` (물류팀) | 주문 수, 재고 경고, 미처리 문의, 일별 주문 그래프 (매출·취소율·거래처 순위 제외) |\n\n**주요 기능**\n- 기간은 최근 7·30·90일 버튼이나 직접 날짜 입력으로 고릅니다. 최대 1년까지 조회됩니다.\n- 매출은 취소 주문을 뺀 금액입니다. 취소율은 취소 건수를 전체 주문 건수로 나눈 값입니다.\n- 재고 경고는 현재고가 안전재고보다 적은 품목입니다. 안전재고의 절반 미만이면 \"긴급\"으로 표시합니다.\n- 미처리 문의는 선택한 기간에 접수된 건만 셉니다.\n- 일별 주문 그래프와 거래처 순위(상위 10)에 마우스를 올리면 상세 수치가 나옵니다.\n- 다크 모드를 지원합니다.\n\n**권한 처리**: 권한 없는 숫자는 서버가 응답에 아예 담지 않습니다. 화면에서 숨기는 방식이 아니라서 개발자 도구로 API를 열어 봐도 보이지 않습니다. 로그인하지 않으면 401을 돌려줍니다.\n\n**운영 전에 바꿀 점**: 로그인은 데모용입니다. 공용 비밀번호를 쓰고 세션을 서버 메모리에 보관합니다. 실제로 쓰려면 사용자별 비밀번호 해시와 영구 세션으로 바꿔야 합니다.\n\n파일은 `app/main.py`(API·권한), `app/db.py`(스키마·가상 데이터), `static/index.html`(화면)입니다.",
+   "wall_s": 113.7
+  }
+ },
+ "B1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 10.20s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/dashboard",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 62047,
+   "num_turns": 7,
+   "total_cost_usd": 0.23167290000000001,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 31312,
+    "cache_read_input_tokens": 134289,
+    "output_tokens": 9298,
+    "output_tokens_details": {
+     "thinking_tokens": 1631
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 31312,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 982,
+      "cache_read_input_tokens": 46326,
+      "cache_creation_input_tokens": 1658,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 1658
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD.md대로 웹앱을 만들었습니다. API는 `TestClient`로 확인했지만, 브라우저 화면은 열어서 확인하지 못했습니다. `tests/test_dod.py`가 폴더에 없어서 DoD 9개를 직접 돌려보지는 못했고, PRD의 예시 값으로만 대조했습니다.\n\n**실행:** 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`을 실행하면 됩니다. `PORT` 환경 변수 처리는 넣지 않았습니다. `PORT`로 포트를 지정하려면 `--port $PORT`처럼 실행 때 넘겨야 합니다.\n\n**구성**\n- `main.py`: 시작할 때마다 `seed/*.csv`를 읽어 `biz.db`를 새로 만듭니다. `biz_` 접두어 테이블 4개에 넣고, `GET /api/users`와 `GET /api/dashboard`, 규칙 R1~R9를 구현했습니다.\n- `static/index.html`: 한 페이지 화면입니다. PRD의 `data-testid`를 모두 붙였고, 역할이 못 보는 카드는 그리지 않습니다. API가 실패하면 `불러오지 못했습니다`와 다시 시도 버튼이 나옵니다.\n- `seed/`: 가상 데이터입니다. 사용자 3명, 주문 14건, 재고 6품목, 문의 6건입니다. 기간 경계(10-17 23:59, 10-24 23:50)를 확인할 수 있는 주문을 넣었습니다.\n\n**직접 확인한 것**\n- 대표, 2026-10-18~10-24: 주문 수 8, 매출 600000, 취소율 27.3, 재고 경고 2, 미처리 문의 3이 PRD 예시와 같습니다.\n- 물류팀 응답에는 `orders`와 `stock_alerts`만 있고, 영업팀에는 `stock_alerts`와 거래처 키가 없습니다.\n- 주문이 없는 기간은 주문 수 0, 매출 0, 취소율 null이고 막대는 날 수만큼 0입니다.\n- 기간 오류(시작이 종료보다 늦음, 32일, 형식 오류, 하나만 입력)는 400을 돌려주고, 없는 사용자는 404입니다.\n- `/`는 200으로 열리고 '현황'이 보입니다.\n\nPRD에 없는 부분은 이렇게 정했습니다.\n- `viewer`가 없고 기간도 틀리면, `viewer` 오류(`사용자를 확인하세요`)를 먼저 돌려줍니다.\n- 없는 사용자의 404 문구는 `사용자를 찾을 수 없습니다`로 했습니다.",
+   "wall_s": 66.6
+  }
+ },
+ "B2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 10.25s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/dashboard",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/smoke.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 87542,
+   "num_turns": 9,
+   "total_cost_usd": 0.3093617,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 35630,
+    "cache_read_input_tokens": 276337,
+    "output_tokens": 13918,
+    "output_tokens_details": {
+     "thinking_tokens": 1876
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 35630,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1325,
+      "cache_read_input_tokens": 51112,
+      "cache_creation_input_tokens": 1190,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 1190
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD.md대로 웹앱을 만들었습니다. API는 `tests/smoke.py`로 확인했습니다. 화면(`/`)은 브라우저에서 열어 보지 않았습니다. `tests/test_dod.py`는 폴더에 없어서 DoD 9개 항목은 돌려 보지 못했습니다.\n\n`tests/smoke.py`로 확인한 것:\n- 대표 계정에 7일 기간(2026-10-18~24)을 주면 PRD 예시와 같은 값이 나옵니다. 주문 수 8, 매출 600,000, 취소율 27.3, 재고 경고 2, 미처리 문의 3입니다. 막대는 7칸이고 거래처 상위 표도 나옵니다.\n- 물류팀 응답에는 주문 수와 재고 경고만 있고, 영업팀 응답에는 재고 경고와 거래처 키가 없습니다.\n- 시작일이 종료일보다 늦거나, 32일이거나, 날짜를 하나만 주면 400 `기간을 확인하세요`가 나옵니다.\n- `viewer`가 없으면 400, 없는 사용자는 404입니다.\n- 주문이 없는 기간은 주문 수 0, 매출 0, 취소율 null, 막대는 날 수만큼 0으로 나옵니다.\n\n**만든 것**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/*.csv`를 읽어 `biz.db`(SQLite, `biz_` 테이블)를 새로 만듭니다. `GET /api/users`와 `GET /api/dashboard`에 규칙 R1~R9를 적용했습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. 사용자 선택, 기간 입력과 적용 버튼, 역할에 맞는 지표 카드, 일별 막대, 거래처 상위 5 표(대표만), 메시지 줄, 오류 상태(`불러오지 못했습니다` + 다시 시도)가 있고 PRD의 `data-testid`를 그대로 붙였습니다.\n- `seed/`: 사용자 3명, 주문 13건, 재고 6품목, 문의 6건입니다. 예시 값이 그대로 나오도록 맞춰 놓았습니다.\n- `tests/smoke.py`: 위 확인에 쓴 스크립트입니다.\n\n실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`입니다. `PORT` 환경 변수가 있으면 `python main.py`로 실행할 때 그 포트를 씁니다.\n\n시드 데이터의 날짜가 2026-10-18~24에 고정돼 있어서, 기본 기간(최근 7일)이 이 날짜와 겹칠 때만 예시 값이 나옵니다. 오늘이 이 기간을 벗어나면 기본 화면의 숫자는 달라지고, 시작일과 종료일을 직접 고르면 됩니다.\n\nPRD에 없어서 제가 정한 부분이 둘 있습니다.\n- `viewer`가 없고 기간도 틀렸을 때는 `사용자를 확인하세요`를 먼저 돌려줍니다. 둘 다 400입니다.\n- 없는 사용자의 404 문구는 `사용자를 찾을 수 없습니다`로 했습니다.",
+   "wall_s": 93.7
+  }
+ },
+ "B3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 10.73s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/dashboard",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": true,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 95615,
+   "num_turns": 10,
+   "total_cost_usd": 0.3295386,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 36521,
+    "cache_read_input_tokens": 325526,
+    "output_tokens": 15087,
+    "output_tokens_details": {
+     "thinking_tokens": 2167
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 36521,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 819,
+      "cache_read_input_tokens": 52767,
+      "cache_creation_input_tokens": 426,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 426
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD대로 웹앱을 만들었고, API 테스트 7개가 통과했습니다. 브라우저에서 `/` 화면을 직접 열어 보지는 못했습니다. 그래서 PRD의 화면 기준(T9)은 아직 확인하지 못했습니다.\n\n`python -m uvicorn main:app --port 8000`으로 실행하면 됩니다. 서버는 시작할 때마다 `seed/`의 CSV 4개를 읽어 `biz.db`를 새로 만듭니다. `PORT` 환경 변수도 지원합니다.\n\n- **서버:** `main.py`에 API 두 개(`/api/users`, `/api/dashboard`)와 규칙 R1~R9를 구현했습니다. 역할이 못 보는 지표는 응답에 키 자체가 없습니다.\n- **화면:** `static/index.html`은 순수 HTML/JS입니다. PRD의 `data-testid`를 모두 붙였고, 못 보는 카드는 아예 그리지 않습니다. API가 실패하면 \"불러오지 못했습니다\"와 다시 시도 버튼이 나옵니다.\n- **시드 데이터:** `seed/`의 CSV는 PRD 예시와 같은 숫자(주문 8, 매출 600,000, 취소율 27.3, 재고 경고 2, 미처리 문의 3)가 나오도록 만들었습니다. 기간 경계를 확인할 수 있게 기간 밖 주문도 넣었습니다.\n- **테스트:** `tests/test_dod.py`는 제가 직접 쓴 API 테스트입니다. 화면 확인(T1과 T9의 화면 부분)은 들어 있지 않습니다. PRD가 말하는 DoD 테스트 파일은 폴더에 없었습니다.\n\n- **거부 순서:** 사용자 지정 없음이나 기간 오류는 400, 없는 사용자는 404 순서로 처리합니다. `viewer`가 없고 기간도 틀리면 `사용자를 확인하세요`를 먼저 돌려줍니다. PRD가 이 경우의 문구를 정하지 않아 제가 정했습니다.\n- **빈 값 처리:** `from`과 `to`가 빈 문자열이면 값이 없는 것으로 보고 최근 7일로 처리합니다.",
+   "wall_s": 102.1
+  }
+ },
+ "C1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 10.24s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/dashboard",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 51757,
+   "num_turns": 6,
+   "total_cost_usd": 0.2431109,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 37284,
+    "cache_read_input_tokens": 189549,
+    "output_tokens": 7500,
+    "output_tokens_details": {
+     "thinking_tokens": 831
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 37284,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 626,
+      "cache_read_input_tokens": 51314,
+      "cache_creation_input_tokens": 2642,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 2642
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (users · orders · stock · inquiries)\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음. PRD 의 API 2개(/api/users, /api/dashboard)와 화면 `/` 만 있다.\nPRD 가 정하지 않아 직접 정한 것:\n- viewer 없음과 기간 오류가 함께 있으면 viewer 거부(`사용자를 확인하세요`)를 먼저 낸다. 둘 다 400이다.\n- 없는 사용자 404의 detail 은 `사용자를 찾을 수 없습니다`로 했다.\n- 기간 비교는 `substr(ordered_at,1,10)` 로 날짜만 잘라 하므로 종료일 23:59 주문도 들어간다.\n- 같은 기준으로 문의의 `received_at` 도 날짜로 비교한다.\n- 시드 CSV 는 2026-10-24 기준으로 만들었다. 테스트는 이 파일을 자기 데이터로 바꿨다가 되돌린다.\n- 화면에서 사용자를 바꾸면 바로 다시 불러온다. 기간은 '적용' 을 눌러야 바뀐다.\n- 서버가 400/404 를 주면 메시지 줄에 detail 을 그대로 쓰고 이전 카드는 그대로 둔다. 그 밖의 실패는 `불러오지 못했습니다` + 다시 시도 버튼을 보인다.\n- `updated_at` 은 응답을 만든 서버 시각이다. 화면 오른쪽 위에 `기준 …` 으로 작게 보인다.\n```",
+   "wall_s": 67.5
+  }
+ },
+ "C2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 10.30s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/dashboard",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 51027,
+   "num_turns": 5,
+   "total_cost_usd": 0.2416268,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 36934,
+    "cache_read_input_tokens": 188508,
+    "output_tokens": 7502,
+    "output_tokens_details": {
+     "thinking_tokens": 654
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 36934,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 731,
+      "cache_read_input_tokens": 50897,
+      "cache_creation_input_tokens": 2709,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 2709
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (users · orders · stock · inquiries)\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (추가한 API 경로 없음. PRD 의 `/api/users` · `/api/dashboard` 와 `/` 화면만 있음)\nPRD 가 정하지 않아 직접 정한 것:\n- 거부 사유 문구: 없는 사용자는 404 `사용자를 찾을 수 없습니다`. 400 은 PRD 문구(`사용자를 확인하세요`, `기간을 확인하세요`) 그대로.\n- `viewer` 가 없고 기간도 틀리면 `사용자를 확인하세요` 를 돌려준다. PRD 는 400 하나만 정했다.\n- 기간 입력칸에서 날짜를 비운 채 적용하면 서버가 하나만 있는 경우로 보고 400 `기간을 확인하세요`.\n- 사용자 선택 상자의 표시는 `이름 (role)`. 막대 아래에 월-일, 위에 건수를 같이 적었다.\n- 금액은 `원`, 취소율은 `%` 를 붙여 표시. 취소율 분모가 0 이면 `—`.\n- 사용자를 바꾸면 현재 입력된 기간으로 다시 불러온다. 4xx 는 메시지 줄에, 네트워크 오류나 5xx 는 `불러오지 못했습니다` 와 다시 시도 버튼으로 보인다.\n- 시드 데이터: 주문 12건(세 상태 모두 있음), 재고 6품목, 문의 6건. 날짜는 만든 날(2026-10-24) 기준으로 한 번 생성한 고정 CSV.\n- `updated_at` 은 응답을 만든 서버 로컬 시각 `YYYY-MM-DD HH:MM`.\n```",
+   "wall_s": 66.5
+  }
+ },
+ "C3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 10.21s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/dashboard",
+   "/api/users"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/inquiries.csv",
+   "seed/orders.csv",
+   "seed/stock.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 86697,
+   "num_turns": 11,
+   "total_cost_usd": 0.35377840000000005,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 44227,
+    "cache_read_input_tokens": 367184,
+    "output_tokens": 14012,
+    "output_tokens_details": {
+     "thinking_tokens": 726
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 44227,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 776,
+      "cache_read_input_tokens": 60712,
+      "cache_creation_input_tokens": 187,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 187
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (users · orders · stock · inquiries). 서버가 시작할 때 만드는 `biz.db`도 있습니다.\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음. 추가한 API·칸·화면 요소도 없습니다. `GET /` 가 `static/index.html` 을 돌려주는 것은 PRD 4(한 페이지 `/`)에 따른 것입니다.\nPRD 가 정하지 않아 직접 정한 것:\n- **거부 순서:** 400 안에서는 `viewer` 없음(`사용자를 확인하세요`)을 기간 오류보다 먼저 봅니다. 404 는 400 검사를 모두 통과한 뒤에 합니다.\n- **404 문구:** `사용자를 찾을 수 없습니다`.\n- **기간 입력:** `from` 이나 `to` 가 빈 문자열이면 없는 것으로 봅니다. 날짜 형식은 `YYYY-MM-DD` 만 받습니다. `2026-1-5` 같은 형식은 400 입니다.\n- **첫 화면 기간:** 화면은 처음에 기간 없이 API 를 불러 서버가 정한 최근 7일을 받고, 그 값을 날짜 칸에 채웁니다. 사용자를 바꾸면 날짜 칸의 기간으로 다시 불러옵니다.\n- **오류 처리:** 400·404 는 `message` 줄에 `detail` 을 그대로 보여 줍니다. 그 밖의 실패(서버 오류·네트워크)는 `불러오지 못했습니다` 와 다시 시도 버튼을 보여 줍니다.\n- **표시 형식:** 매출과 거래처 매출은 `600,000원` 처럼 쉼표와 `원`, 취소율은 `27.3%` 로 보여 줍니다. 막대에는 건수와 `MM-DD` 를 함께 적었습니다.\n- **seed 데이터:** 오늘(2026-10-24) 기준으로 주문 13건·재고 6품목·문의 6건을 직접 만들었습니다.",
+   "wall_s": 102.3
+  }
+ }
+}

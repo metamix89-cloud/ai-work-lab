@@ -1,0 +1,10 @@
+INFO:     Started server process [7136]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:4597 - "POST /api/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:4599 - "GET /api/dashboard?start=2026-10-01&end=2026-10-24 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:4601 - "POST /api/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:4603 - "GET /api/dashboard?start=2026-10-01&end=2026-10-24 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:4605 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:4607 - "GET /api/dashboard?start=2026-10-01&end=2026-10-24 HTTP/1.1" 401 Unauthorized

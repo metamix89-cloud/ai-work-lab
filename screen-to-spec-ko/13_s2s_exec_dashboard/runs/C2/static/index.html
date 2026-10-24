@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 경영 현황 대시보드</title>
+<style>
+body{font-family:"Malgun Gothic",sans-serif;margin:0;background:#f5f6f8;color:#222}
+main{max-width:960px;margin:0 auto;padding:20px}
+h1{font-size:22px;margin:0 0 16px}
+.bar-row,.cards{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px}
+.card{background:#fff;border:1px solid #dde;border-radius:8px;padding:14px 18px;min-width:150px}
+.card .l{font-size:13px;color:#667}.card .v{font-size:26px;font-weight:bold;margin-top:4px}
+#bars{display:flex;gap:6px;align-items:flex-end;height:160px;background:#fff;border:1px solid #dde;border-radius:8px;padding:12px}
+.daily{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font-size:12px}
+.daily i{display:block;width:70%;background:#3b82c4;min-height:2px}
+table{border-collapse:collapse;background:#fff;width:100%;max-width:480px}
+td,th{border:1px solid #dde;padding:6px 10px;text-align:left}td.n{text-align:right}
+#message{min-height:20px;color:#b3261e;margin-bottom:8px}
+#err{display:none;background:#fff;border:1px solid #b3261e;padding:14px;border-radius:8px;margin-bottom:16px}
+h2{font-size:16px;margin:20px 0 8px}
+</style>
+</head>
+<body>
+<main>
+<h1>경영 현황</h1>
+<div class="bar-row">
+  <label>사용자 <select data-testid="user"></select></label>
+  <label>시작일 <input type="date" data-testid="from"></label>
+  <label>종료일 <input type="date" data-testid="to"></label>
+  <button data-testid="apply">적용</button>
+</div>
+<div data-testid="message" id="message"></div>
+<div id="err"><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+<div class="cards" id="cards"></div>
+<div id="daily-wrap"><h2>일별 주문</h2><div id="bars"></div></div>
+<div id="top-wrap" style="display:none"><h2>거래처별 매출 상위 5</h2><table id="top"></table></div>
+<p id="upd" style="font-size:12px;color:#889"></p>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+const sel = $('[data-testid="user"]'), fromEl = $('[data-testid="from"]'), toEl = $('[data-testid="to"]');
+const LABELS = [["orders","m-orders","주문 수"],["revenue","m-revenue","매출"],["cancel_rate","m-cancel-rate","취소율"],
+  ["stock_alerts","m-stock-alerts","재고 경고"],["open_inquiries","m-open-inquiries","미처리 문의"]];
+const fmt = n => Number(n).toLocaleString("ko-KR");
+
+function fmtVal(k, v) {
+  if (v === null || v === undefined) return "—";
+  if (k === "cancel_rate") return v + "%";
+  if (k === "revenue") return fmt(v) + "원";
+  return fmt(v);
+}
+
+async function load(useInputs) {
+  $("#message").textContent = "";
+  $("#err").style.display = "none";
+  const q = new URLSearchParams({viewer: sel.value});
+  if (useInputs) { q.set("from", fromEl.value); q.set("to", toEl.value); }
+  let r, body;
+  try {
+    r = await fetch("/api/dashboard?" + q);
+    body = await r.json();
+  } catch (e) { return fail(); }
+  if (!r.ok) {
+    if (r.status < 500 && body && body.detail) { $("#message").textContent = body.detail; return; }
+    return fail();
+  }
+  render(body);
+}
+
+function fail() { $("#err").style.display = "block"; }
+
+function render(b) {
+  fromEl.value = b.period.from; toEl.value = b.period.to;
+  const cards = $("#cards"); cards.innerHTML = "";
+  for (const [k, tid, label] of LABELS) {
+    if (!(k in b.metrics)) continue;
+    const d = document.createElement("div");
+    d.className = "card"; d.dataset.testid = tid;
+    d.innerHTML = '<div class="l"></div><div class="v"></div>';
+    d.firstChild.textContent = label; d.lastChild.textContent = fmtVal(k, b.metrics[k]);
+    cards.appendChild(d);
+  }
+  const max = Math.max(1, ...b.daily.map(x => x.count));
+  const bars = $("#bars"); bars.innerHTML = "";
+  for (const x of b.daily) {
+    const d = document.createElement("div");
+    d.className = "daily"; d.dataset.testid = "daily-bar";
+    d.title = x.date;
+    d.innerHTML = '<span></span><i></i><small></small>';
+    d.children[0].textContent = x.count;
+    d.children[1].style.height = Math.round(x.count / max * 100) + "px";
+    d.children[2].textContent = x.date.slice(5);
+    bars.appendChild(d);
+  }
+  const wrap = $("#top-wrap");
+  if (b.top_customers) {
+    wrap.style.display = "";
+    const t = $("#top"); t.innerHTML = "<tr><th>거래처</th><th>매출</th></tr>";
+    for (const c of b.top_customers) {
+      const tr = document.createElement("tr"); tr.dataset.testid = "top-customer";
+      tr.innerHTML = "<td></td><td class='n'></td>";
+      tr.children[0].textContent = c.customer; tr.children[1].textContent = fmt(c.revenue) + "원";
+      t.appendChild(tr);
+    }
+  } else wrap.style.display = "none";
+  $("#upd").textContent = "갱신 " + b.updated_at;
+}
+
+async function init() {
+  try {
+    const r = await fetch("/api/users");
+    if (!r.ok) throw 0;
+    const us = await r.json();
+    for (const u of us) { const o = document.createElement("option"); o.value = u.user_id; o.textContent = u.name + " (" + u.role + ")"; sel.appendChild(o); }
+  } catch (e) { return fail(); }
+  load(false);
+}
+sel.addEventListener("change", () => load(!!(fromEl.value && toEl.value)));
+$('[data-testid="apply"]').addEventListener("click", () => load(true));
+$("#retry").addEventListener("click", () => sel.options.length ? load(!!(fromEl.value && toEl.value)) : init());
+init();
+</script>
+</body>
+</html>

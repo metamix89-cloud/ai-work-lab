@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 경영 현황</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f5f6f8; color: #222; }
+  main { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+  h1 { font-size: 22px; margin: 0 0 16px; }
+  .bar-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 12px; }
+  label { font-size: 14px; }
+  select, input, button { font: inherit; padding: 6px 8px; }
+  #message { min-height: 22px; color: #b3261e; margin-bottom: 8px; }
+  #cards { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+  .card { background: #fff; border-radius: 8px; padding: 14px 18px; min-width: 150px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+  .card .label { font-size: 13px; color: #666; }
+  .card .value { font-size: 26px; font-weight: bold; margin-top: 4px; }
+  section { background: #fff; border-radius: 8px; padding: 14px 18px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+  h2 { font-size: 16px; margin: 0 0 12px; }
+  #daily { display: flex; align-items: flex-end; gap: 4px; height: 160px; }
+  .daily-col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; min-width: 0; }
+  .daily-col .fill { width: 100%; background: #3f7fd9; min-height: 1px; }
+  .daily-col .n { font-size: 12px; }
+  .daily-col .d { font-size: 10px; color: #666; white-space: nowrap; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #eee; font-size: 14px; }
+  td.num, th.num { text-align: right; }
+  #error { background: #fff; border: 1px solid #b3261e; border-radius: 8px; padding: 14px 18px; margin-bottom: 16px; }
+  [hidden] { display: none !important; }
+  #updated { font-size: 12px; color: #888; }
+</style>
+</head>
+<body>
+<main>
+  <h1>가나다식품 경영 현황</h1>
+
+  <div class="bar-row">
+    <label>사용자 <select data-testid="user" id="user"></select></label>
+    <label>시작일 <input type="date" data-testid="from" id="from"></label>
+    <label>종료일 <input type="date" data-testid="to" id="to"></label>
+    <button type="button" data-testid="apply" id="apply">적용</button>
+  </div>
+
+  <div id="message" data-testid="message"></div>
+
+  <div id="error" hidden>
+    <span>불러오지 못했습니다</span>
+    <button type="button" id="retry">다시 시도</button>
+  </div>
+
+  <div id="content">
+    <div id="cards"></div>
+    <section>
+      <h2>일별 주문</h2>
+      <div id="daily"></div>
+    </section>
+    <section id="top-section" hidden>
+      <h2>거래처별 매출 상위 5</h2>
+      <table>
+        <thead><tr><th>거래처</th><th class="num">매출</th></tr></thead>
+        <tbody id="top"></tbody>
+      </table>
+    </section>
+    <div id="updated"></div>
+  </div>
+</main>
+
+<script>
+const CARDS = [
+  ["orders", "m-orders", "주문 수"],
+  ["revenue", "m-revenue", "매출"],
+  ["cancel_rate", "m-cancel-rate", "취소율"],
+  ["stock_alerts", "m-stock-alerts", "재고 경고"],
+  ["open_inquiries", "m-open-inquiries", "미처리 문의"],
+];
+const $ = (id) => document.getElementById(id);
+
+function fmt(key, v) {
+  if (v === null || v === undefined) return "—";
+  if (key === "revenue") return v.toLocaleString("en-US");
+  if (key === "cancel_rate") return v + "%";
+  return String(v);
+}
+
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+function render(data) {
+  const cards = $("cards");
+  cards.replaceChildren();
+  for (const [key, testid, label] of CARDS) {
+    if (!(key in data.metrics)) continue;
+    const c = el("div", "card");
+    c.append(el("div", "label", label));
+    const v = el("div", "value", fmt(key, data.metrics[key]));
+    v.dataset.testid = testid;
+    c.append(v);
+    cards.append(c);
+  }
+
+  const daily = $("daily");
+  daily.replaceChildren();
+  const max = Math.max(1, ...data.daily.map((d) => d.count));
+  for (const d of data.daily) {
+    const col = el("div", "daily-col");
+    col.dataset.testid = "daily-bar";
+    col.title = d.date + " " + d.count + "건";
+    col.append(el("div", "n", String(d.count)));
+    const fill = el("div", "fill");
+    fill.style.height = Math.round((d.count / max) * 110) + "px";
+    col.append(fill);
+    col.append(el("div", "d", d.date.slice(5)));
+    daily.append(col);
+  }
+
+  const top = $("top");
+  top.replaceChildren();
+  $("top-section").hidden = !("top_customers" in data);
+  for (const t of data.top_customers || []) {
+    const tr = el("tr");
+    tr.dataset.testid = "top-customer";
+    tr.append(el("td", "", t.customer), el("td", "num", t.revenue.toLocaleString("en-US")));
+    top.append(tr);
+  }
+  $("updated").textContent = "갱신 " + data.updated_at;
+}
+
+async function load(useDates) {
+  const q = new URLSearchParams({ viewer: $("user").value });
+  if (useDates) {
+    q.set("from", $("from").value);
+    q.set("to", $("to").value);
+  }
+  let res, body;
+  try {
+    res = await fetch("/api/dashboard?" + q);
+    body = await res.json();
+  } catch (e) {
+    return fail();
+  }
+  if (res.status >= 500) return fail();
+  $("error").hidden = true;
+  $("content").hidden = false;
+  if (!res.ok) {
+    $("message").textContent = body.detail || "";
+    return;
+  }
+  $("message").textContent = "";
+  $("from").value = body.period.from;
+  $("to").value = body.period.to;
+  render(body);
+}
+
+function fail() {
+  $("message").textContent = "";
+  $("content").hidden = true;
+  $("error").hidden = false;
+}
+
+async function init() {
+  try {
+    const res = await fetch("/api/users");
+    if (!res.ok) throw new Error();
+    const users = await res.json();
+    $("user").replaceChildren(...users.map((u) => {
+      const o = el("option", "", u.name);
+      o.value = u.user_id;
+      return o;
+    }));
+  } catch (e) {
+    return fail();
+  }
+  load(false);
+}
+
+$("apply").onclick = () => load(true);
+$("user").onchange = () => load(true);
+$("retry").onclick = () => ($("user").options.length ? load(true) : init());
+init();
+</script>
+</body>
+</html>

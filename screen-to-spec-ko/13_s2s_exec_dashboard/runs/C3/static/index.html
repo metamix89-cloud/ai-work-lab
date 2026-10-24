@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>경영 현황 대시보드 - 가나다식품</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:"Malgun Gothic",sans-serif;margin:0;padding:24px;background:#f5f6f8;color:#222}
+h1{font-size:20px;margin:0 0 16px}
+.bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+select,input,button{font:inherit;padding:6px 8px}
+#cards{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.card{background:#fff;border:1px solid #dde;border-radius:8px;padding:14px 18px;min-width:150px}
+.card .label{font-size:13px;color:#666}
+.card .value{font-size:26px;font-weight:bold;margin-top:6px}
+#message{min-height:20px;color:#b00020;margin-bottom:12px}
+.panel{background:#fff;border:1px solid #dde;border-radius:8px;padding:14px 18px;margin-bottom:16px}
+.panel h2{font-size:15px;margin:0 0 10px}
+#daily{display:flex;gap:6px;align-items:flex-end;height:170px}
+.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;min-width:24px}
+.col .fill{width:70%;background:#3b6fd4;min-height:1px}
+.col .n{font-size:12px}.col .d{font-size:11px;color:#666}
+table{border-collapse:collapse;width:100%}td,th{padding:6px 8px;border-bottom:1px solid #eee;text-align:left}
+td.r,th.r{text-align:right}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<h1>경영 현황 대시보드</h1>
+<div class="bar">
+  <label>사용자 <select data-testid="user"></select></label>
+  <label>시작일 <input type="date" data-testid="from"></label>
+  <label>종료일 <input type="date" data-testid="to"></label>
+  <button data-testid="apply">적용</button>
+</div>
+<div data-testid="message" id="message"></div>
+<div id="error" class="hidden">불러오지 못했습니다 <button id="retry">다시 시도</button></div>
+<div id="content">
+  <div id="cards"></div>
+  <div class="panel"><h2>일별 주문</h2><div id="daily"></div></div>
+  <div class="panel hidden" id="toppanel"><h2>거래처별 매출 상위 5</h2>
+    <table><thead><tr><th>거래처</th><th class="r">매출</th></tr></thead><tbody id="top"></tbody></table></div>
+  <div id="updated" style="font-size:12px;color:#888"></div>
+</div>
+<script>
+const LABELS = [["orders","m-orders","주문 수"],["revenue","m-revenue","매출"],["cancel_rate","m-cancel-rate","취소율"],
+  ["stock_alerts","m-stock-alerts","재고 경고"],["open_inquiries","m-open-inquiries","미처리 문의"]];
+const $ = s => document.querySelector(s);
+const fmt = (k, v) => v === null || v === undefined ? "—" : k === "cancel_rate" ? v + "%" : k === "revenue" ? v.toLocaleString("en-US") + "원" : v.toLocaleString("en-US");
+let lastUseInputs = false;
+
+function setError(on) { $("#error").classList.toggle("hidden", !on); $("#content").classList.toggle("hidden", on); }
+
+async function load(useInputs) {
+  const q = new URLSearchParams({viewer: $('[data-testid="user"]').value});
+  if (useInputs) { q.set("from", $('[data-testid="from"]').value); q.set("to", $('[data-testid="to"]').value); }
+  lastUseInputs = useInputs;
+  let res, body;
+  try {
+    res = await fetch("/api/dashboard?" + q);
+    body = await res.json();
+  } catch (e) { $("#message").textContent = ""; setError(true); return; }
+  if (res.status === 400 || res.status === 404) { setError(false); $("#message").textContent = body.detail; return; }
+  if (!res.ok) { $("#message").textContent = ""; setError(true); return; }
+  setError(false);
+  $("#message").textContent = "";
+  $('[data-testid="from"]').value = body.period.from;
+  $('[data-testid="to"]').value = body.period.to;
+  const cards = $("#cards"); cards.innerHTML = "";
+  for (const [k, id, label] of LABELS) {
+    if (!(k in body.metrics)) continue;
+    const c = document.createElement("div"); c.className = "card";
+    c.innerHTML = '<div class="label"></div><div class="value" data-testid="' + id + '"></div>';
+    c.querySelector(".label").textContent = label;
+    c.querySelector(".value").textContent = fmt(k, body.metrics[k]);
+    cards.appendChild(c);
+  }
+  const max = Math.max(1, ...body.daily.map(d => d.count));
+  const daily = $("#daily"); daily.innerHTML = "";
+  for (const d of body.daily) {
+    const col = document.createElement("div"); col.className = "col"; col.setAttribute("data-testid", "daily-bar");
+    col.innerHTML = '<span class="n"></span><div class="fill"></div><span class="d"></span>';
+    col.querySelector(".n").textContent = d.count;
+    col.querySelector(".fill").style.height = Math.round(d.count / max * 100) + "px";
+    col.querySelector(".d").textContent = d.date.slice(5);
+    col.title = d.date + " " + d.count + "건";
+    daily.appendChild(col);
+  }
+  const tp = $("#toppanel"), top = $("#top"); top.innerHTML = "";
+  tp.classList.toggle("hidden", !body.top_customers);
+  for (const t of body.top_customers || []) {
+    const tr = document.createElement("tr"); tr.setAttribute("data-testid", "top-customer");
+    tr.innerHTML = "<td></td><td class='r'></td>";
+    tr.children[0].textContent = t.customer; tr.children[1].textContent = t.revenue.toLocaleString("en-US") + "원";
+    top.appendChild(tr);
+  }
+  $("#updated").textContent = "갱신 " + body.updated_at;
+}
+
+async function init() {
+  const sel = $('[data-testid="user"]');
+  try {
+    const users = await (await fetch("/api/users")).json();
+    for (const u of users) { const o = document.createElement("option"); o.value = u.user_id; o.textContent = u.name; sel.appendChild(o); }
+  } catch (e) { setError(true); return; }
+  sel.addEventListener("change", () => load(true));
+  $('[data-testid="apply"]').addEventListener("click", () => load(true));
+  $("#retry").addEventListener("click", () => load(lastUseInputs));
+  load(false);
+}
+init();
+</script>
+</body>
+</html>

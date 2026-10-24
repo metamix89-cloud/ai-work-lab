@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 경영 현황 대시보드</title>
+<style>
+  :root { --bg:#f6f7f9; --surface:#fff; --ink:#1b2430; --ink2:#566274; --muted:#8a94a3; --line:#e3e7ee;
+          --accent:#2a6fdb; --warn:#b4540a; --crit:#c0262d; --grid:#edf0f4; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#12161c; --surface:#1b222b; --ink:#e8ecf1; --ink2:#a9b3c1; --muted:#76818f; --line:#2b3441;
+            --accent:#5b9bf5; --warn:#f0a35e; --crit:#f26a70; --grid:#262e39; } }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif; background:var(--bg); color:var(--ink); }
+  header { display:flex; justify-content:space-between; align-items:center; padding:14px 24px; background:var(--surface); border-bottom:1px solid var(--line); }
+  h1 { font-size:18px; margin:0; } h2 { font-size:15px; margin:0 0 12px; }
+  main { max-width:1200px; margin:0 auto; padding:20px 24px 40px; }
+  .hidden { display:none !important; }
+  .filters { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:16px; }
+  input, button { font:inherit; padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:var(--surface); color:var(--ink); }
+  button { cursor:pointer; } button:hover { border-color:var(--accent); }
+  button.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px; margin-bottom:16px; }
+  .card, .panel { background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:16px; }
+  .card .label { color:var(--ink2); font-size:13px; } .card .value { font-size:28px; font-weight:700; margin-top:4px; }
+  .card .sub { color:var(--muted); font-size:12px; margin-top:2px; }
+  .grid2 { display:grid; grid-template-columns:2fr 1fr; gap:12px; margin-bottom:12px; }
+  .grid2b { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media (max-width:900px) { .grid2, .grid2b { grid-template-columns:1fr; } }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { text-align:left; padding:6px 4px; border-bottom:1px solid var(--line); } td.n, th.n { text-align:right; font-variant-numeric:tabular-nums; }
+  .warn { color:var(--warn); font-weight:600; } .crit { color:var(--crit); font-weight:600; }
+  .tip { position:fixed; pointer-events:none; background:var(--ink); color:var(--bg); padding:6px 10px; border-radius:6px; font-size:12px; z-index:9; white-space:nowrap; }
+  svg text { fill:var(--ink2); font-size:11px; }
+  .rank-row { display:grid; grid-template-columns:110px 1fr 90px; gap:8px; align-items:center; margin:7px 0; font-size:13px; }
+  .rank-bar { height:14px; background:var(--accent); border-radius:0 4px 4px 0; }
+  .login { max-width:340px; margin:12vh auto; } .login input { width:100%; margin-bottom:8px; }
+  .err { color:var(--crit); font-size:13px; min-height:18px; } .hint { color:var(--muted); font-size:12px; line-height:1.6; }
+  .role-badge { background:var(--grid); padding:2px 8px; border-radius:10px; font-size:12px; margin-right:8px; }
+</style>
+</head>
+<body>
+<div id="loginView" class="login panel">
+  <h1>가나다식품 경영 현황</h1>
+  <p class="hint">데모 계정 (비밀번호 <b>demo1234</b>)<br>ceo = 대표 · sales = 영업팀 · logistics = 물류팀</p>
+  <input id="user" placeholder="아이디" value="ceo" autocomplete="username">
+  <input id="pw" type="password" placeholder="비밀번호" value="demo1234" autocomplete="current-password">
+  <button class="primary" id="loginBtn" style="width:100%">로그인</button>
+  <div class="err" id="loginErr"></div>
+</div>
+
+<div id="appView" class="hidden">
+  <header>
+    <h1>가나다식품 경영 현황 대시보드</h1>
+    <div><span class="role-badge" id="who"></span><button id="logout">로그아웃</button></div>
+  </header>
+  <main>
+    <div class="filters">
+      <button data-days="7">최근 7일</button><button data-days="30">최근 30일</button><button data-days="90">최근 90일</button>
+      <input type="date" id="start"> ~ <input type="date" id="end">
+      <button class="primary" id="apply">조회</button>
+      <span class="err" id="err"></span>
+    </div>
+    <div class="cards" id="cards"></div>
+    <div class="grid2">
+      <div class="panel"><h2 id="chartTitle">일별 주문 수</h2><div id="chart"></div></div>
+      <div class="panel" id="rankPanel"><h2>거래처별 매출 순위 (상위 10)</h2><div id="rank"></div></div>
+    </div>
+    <div class="grid2b">
+      <div class="panel" id="stockPanel"><h2>재고 경고 (안전재고 미만)</h2><div id="stock"></div></div>
+      <div class="panel" id="inqPanel"><h2>미처리 문의</h2><div id="inq"></div></div>
+    </div>
+  </main>
+</div>
+<div class="tip hidden" id="tip"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const won = n => n.toLocaleString("ko-KR") + "원";
+const short = n => n >= 1e8 ? (n/1e8).toFixed(2)+"억원" : n >= 1e4 ? Math.round(n/1e4).toLocaleString("ko-KR")+"만원" : won(n);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ROLE = { ceo:"대표", sales:"영업팀", logistics:"물류팀" };
+let token = sessionStorage.getItem("token"), me = JSON.parse(sessionStorage.getItem("me") || "null");
+
+async function api(path, opts = {}) {
+  const r = await fetch(path, { ...opts, headers: { "Content-Type":"application/json", Authorization:"Bearer "+(token||""), ...(opts.headers||{}) } });
+  if (r.status === 401 && path !== "/api/login") { logout(); throw new Error("세션이 만료되었습니다."); }
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(data.detail || "요청 실패");
+  return data;
+}
+function logout() { token = me = null; sessionStorage.clear(); $("appView").classList.add("hidden"); $("loginView").classList.remove("hidden"); }
+$("logout").onclick = logout;
+$("loginBtn").onclick = async () => {
+  try {
+    const d = await api("/api/login", { method:"POST", body:JSON.stringify({ username:$("user").value, password:$("pw").value }) });
+    token = d.token; me = d; sessionStorage.setItem("token", token); sessionStorage.setItem("me", JSON.stringify(me)); start();
+  } catch (e) { $("loginErr").textContent = e.message; }
+};
+$("pw").addEventListener("keydown", e => e.key === "Enter" && $("loginBtn").click());
+
+const iso = d => { const z = new Date(d.getTime() - d.getTimezoneOffset()*6e4); return z.toISOString().slice(0,10); };
+function setRange(days) { const e = new Date(), s = new Date(); s.setDate(e.getDate() - days + 1); $("start").value = iso(s); $("end").value = iso(e); }
+document.querySelectorAll("[data-days]").forEach(b => b.onclick = () => { setRange(+b.dataset.days); load(); });
+$("apply").onclick = load;
+
+function start() {
+  $("loginView").classList.add("hidden"); $("appView").classList.remove("hidden");
+  $("who").textContent = `${ROLE[me.role]} · ${me.name}`;
+  setRange(30); load();
+}
+
+function card(label, value, sub, cls = "") { return `<div class="card"><div class="label">${label}</div><div class="value ${cls}">${value}</div><div class="sub">${sub}</div></div>`; }
+
+async function load() {
+  $("err").textContent = "";
+  try {
+    const d = await api(`/api/dashboard?start=${$("start").value}&end=${$("end").value}`);
+    render(d);
+  } catch (e) { $("err").textContent = e.message; }
+}
+
+function render(d) {
+  const k = d.kpi, c = [];
+  if ("orders" in k) c.push(card("주문 수", k.orders.toLocaleString("ko-KR")+"건", "선택 기간 전체"));
+  if ("revenue" in k) c.push(card("매출", short(k.revenue), won(k.revenue) + " (취소 제외)"));
+  if ("cancel_rate" in k) c.push(card("취소율", k.cancel_rate+"%", "취소 건 / 전체 주문", k.cancel_rate >= 12 ? "crit" : ""));
+  if ("stock_warnings" in k) c.push(card("재고 경고", k.stock_warnings+"품목", "현재고 < 안전재고", k.stock_warnings ? "warn" : ""));
+  if ("pending_inquiries" in k) c.push(card("미처리 문의", k.pending_inquiries+"건", "선택 기간 접수분", k.pending_inquiries ? "warn" : ""));
+  $("cards").innerHTML = c.join("");
+
+  const hasRev = d.daily.length && "revenue" in d.daily[0];
+  $("chartTitle").textContent = "일별 주문 수";
+  barChart(d.daily);
+  $("rankPanel").classList.toggle("hidden", !d.ranking);
+  if (d.ranking) rank(d.ranking);
+  $("stockPanel").classList.toggle("hidden", !d.stock_items);
+  if (d.stock_items) $("stock").innerHTML = d.stock_items.length ? `<table><tr><th>품목</th><th class="n">현재고</th><th class="n">안전재고</th><th>상태</th></tr>` +
+    d.stock_items.map(s => { const crit = s.stock < s.safety_stock * 0.5;
+      return `<tr><td>${esc(s.name)}</td><td class="n">${s.stock}</td><td class="n">${s.safety_stock}</td><td class="${crit?"crit":"warn"}">${crit?"▲ 긴급":"△ 부족"}</td></tr>`; }).join("") + "</table>" : "경고 품목 없음";
+  $("inqPanel").classList.toggle("hidden", !d.inquiry_items);
+  if (d.inquiry_items) $("inq").innerHTML = d.inquiry_items.length ? `<table><tr><th>접수</th><th>거래처</th><th>제목</th></tr>` +
+    d.inquiry_items.map(i => `<tr><td>${esc(i.created_at.slice(5,16))}</td><td>${esc(i.client)}</td><td>${esc(i.subject)}</td></tr>`).join("") + "</table>" +
+    (d.kpi.pending_inquiries > d.inquiry_items.length ? `<div class="hint">최근 ${d.inquiry_items.length}건만 표시</div>` : "") : "미처리 문의 없음";
+}
+
+function barChart(data) {
+  const W = 760, H = 260, m = { l:36, r:8, t:10, b:28 }, iw = W-m.l-m.r, ih = H-m.t-m.b;
+  const max = Math.max(5, ...data.map(x => x.orders)), nice = Math.ceil(max/5)*5;
+  const bw = iw / data.length, bar = Math.max(1, Math.min(22, bw - 2));
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="일별 주문 수 막대그래프">`;
+  for (let i = 0; i <= 5; i++) { const y = m.t + ih - ih*i/5;
+    s += `<line x1="${m.l}" x2="${W-m.r}" y1="${y}" y2="${y}" stroke="var(--grid)"/><text x="${m.l-6}" y="${y+4}" text-anchor="end">${nice*i/5}</text>`; }
+  const every = Math.ceil(data.length / 10);
+  data.forEach((x, i) => {
+    const h = ih * x.orders / nice, cx = m.l + bw*i + bw/2;
+    if (x.orders) s += `<rect x="${cx-bar/2}" y="${m.t+ih-h}" width="${bar}" height="${h}" rx="3" fill="var(--accent)"/>`;
+    if (i % every === 0) s += `<text x="${cx}" y="${H-8}" text-anchor="middle">${x.date.slice(5)}</text>`;
+    s += `<rect class="hit" data-i="${i}" x="${m.l+bw*i}" y="${m.t}" width="${bw}" height="${ih}" fill="transparent"/>`;
+  });
+  $("chart").innerHTML = s + "</svg>";
+  document.querySelectorAll(".hit").forEach(r => {
+    r.onmousemove = ev => { const x = data[+r.dataset.i];
+      tip(ev, `${x.date}<br>주문 ${x.orders}건` + ("revenue" in x ? `<br>매출 ${won(x.revenue)}` : "")); };
+    r.onmouseleave = () => $("tip").classList.add("hidden");
+  });
+}
+function rank(list) {
+  const max = Math.max(...list.map(x => x.revenue), 1);
+  $("rank").innerHTML = list.map((x, i) => `<div class="rank-row" data-t="${esc(x.name)}|${x.orders}|${x.revenue}">
+    <span>${i+1}. ${esc(x.name)}</span><div><div class="rank-bar" style="width:${x.revenue/max*100}%"></div></div><span style="text-align:right">${short(x.revenue)}</span></div>`).join("") || "데이터 없음";
+  document.querySelectorAll(".rank-row").forEach(r => {
+    const [n, o, v] = r.dataset.t.split("|");
+    r.onmousemove = ev => tip(ev, `${n}<br>주문 ${o}건<br>매출 ${won(+v)}`);
+    r.onmouseleave = () => $("tip").classList.add("hidden");
+  });
+}
+function tip(ev, html) { const t = $("tip"); t.innerHTML = html; t.classList.remove("hidden"); t.style.left = ev.clientX + 12 + "px"; t.style.top = ev.clientY + 12 + "px"; }
+
+if (token && me) start();
+</script>
+</body>
+</html>

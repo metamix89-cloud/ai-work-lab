@@ -64,7 +64,12 @@ def probe(app_src, lab, cases, port, add=None):
             st, raw = call(base, c["method"], c["path"].replace("{cart}", str(cart)), c.get("body"))
             try:
                 j = json.loads(raw)
-                if c.get("find") and isinstance(j, list):
+                if c.get("pick") and isinstance(j, dict):        # "pick": "metrics.cancel_rate" — 응답 속 값을 점 경로로
+                    v = j
+                    for part in c["pick"].split("."):
+                        v = v.get(part, "키 없음") if isinstance(v, dict) else v
+                    detail = "%s=%s" % (c["pick"], json.dumps(v, ensure_ascii=False)[:70])
+                elif c.get("find") and isinstance(j, list):
                     f = c["find"]
                     hit = [x for x in j if str(x.get(f["key"])) == f["value"]]
                     detail = "%s=%s" % (f["field"], hit[0].get(f["field"]) if hit else "없음")

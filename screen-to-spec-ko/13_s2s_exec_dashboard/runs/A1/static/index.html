@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>가나다식품 경영 현황</title>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--ink:#1c2230;--ink2:#566074;--grid:#e6e9ee;--accent:#2a6fdb;--warn:#b45309;--bad:#b91c1c;--bar:#2a6fdb}
+@media(prefers-color-scheme:dark){:root{--bg:#12151c;--card:#1b2029;--ink:#e8ecf3;--ink2:#9aa5b8;--grid:#2c3340;--accent:#6ea3f5;--warn:#f0a85a;--bad:#f27878;--bar:#6ea3f5}}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 "Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:14px 24px;background:var(--card);border-bottom:1px solid var(--grid)}
+header h1{font-size:18px;margin:0;flex:1}
+main{max-width:1100px;margin:0 auto;padding:20px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px}
+input,button,select{font:inherit;padding:6px 10px;border:1px solid var(--grid);border-radius:6px;background:var(--card);color:var(--ink)}
+button{cursor:pointer}button.on,button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--grid);border-radius:10px;padding:16px}
+.kpi .l{color:var(--ink2);font-size:13px}.kpi .v{font-size:26px;font-weight:700;margin-top:4px}.kpi .s{font-size:12px;color:var(--ink2)}
+.kpi.warn .v{color:var(--warn)}
+.grid2{display:grid;grid-template-columns:3fr 2fr;gap:12px}@media(max-width:800px){.grid2{grid-template-columns:1fr}}
+h2{font-size:15px;margin:0 0 10px}
+svg{width:100%;display:block}svg text{fill:var(--ink2);font-size:11px}
+.row{display:grid;grid-template-columns:120px 1fr 90px;gap:8px;align-items:center;margin:7px 0;font-size:13px}
+.track{height:14px}.fill{height:100%;background:var(--bar);border-radius:0 4px 4px 0}
+.row .n{text-align:right;font-variant-numeric:tabular-nums}
+table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:5px 6px;border-bottom:1px solid var(--grid);text-align:left}
+td.r,th.r{text-align:right}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);padding:4px 8px;border-radius:6px;font-size:12px;display:none}
+#login{max-width:340px;margin:12vh auto;display:grid;gap:10px}
+.hint{font-size:12px;color:var(--ink2)}.err{color:var(--bad);font-size:13px}
+.hide{display:none!important}
+</style></head><body>
+<div id="login" class="card"><h1 style="margin:0;font-size:18px">가나다식품 경영 현황</h1>
+<select id="u"><option value="ceo">대표</option><option value="sales">영업팀</option><option value="logistics">물류팀</option></select>
+<input id="p" type="password" placeholder="비밀번호"><button class="primary" id="go">로그인</button><div class="err" id="err"></div>
+<div class="hint">데모 계정 — ceo/ceo1234 · sales/sales1234 · logistics/logi1234</div></div>
+<div id="app" class="hide">
+<header><h1>가나다식품 경영 현황 대시보드</h1><span id="who" class="hint"></span><button id="out">로그아웃</button></header>
+<main>
+<div class="filters"><button data-d="7">7일</button><button data-d="30" class="on">30일</button><button data-d="90">90일</button>
+<input type="date" id="s"> ~ <input type="date" id="e"><button class="primary" id="apply">조회</button></div>
+<div class="kpis" id="kpis"></div>
+<div class="card" id="dailyCard" style="margin-bottom:12px"><h2>일별 주문 수</h2><div id="chart"></div></div>
+<div class="grid2"><div class="card" id="rankCard"><h2>거래처별 매출 순위</h2><div id="rank"></div></div>
+<div class="card" id="stockCard"><h2>재고 경고 품목</h2><div id="stock"></div></div></div>
+</main></div><div id="tip"></div>
+<script>
+const $=id=>document.getElementById(id),fmt=n=>n.toLocaleString('ko-KR');
+const won=n=>n>=1e8?(n/1e8).toFixed(2)+'억원':fmt(Math.round(n/1e4))+'만원';
+let token=sessionStorage.token||'';
+const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+function setRange(n){const e=new Date(),s=new Date();s.setDate(e.getDate()-n+1);$('s').value=iso(s);$('e').value=iso(e)}
+async function api(url,opt={}){
+ const r=await fetch(url,{...opt,headers:{...(opt.headers||{}),Authorization:'Bearer '+token}});
+ if(r.status==401&&url!='/api/login'){logout();throw 0}
+ const j=await r.json();if(!r.ok)throw new Error(j.detail);return j}
+function logout(){sessionStorage.clear();token='';$('app').classList.add('hide');$('login').classList.remove('hide')}
+$('out').onclick=logout;
+$('go').onclick=async()=>{try{
+ const j=await api('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:$('u').value,password:$('p').value})});
+ token=sessionStorage.token=j.token;$('err').textContent='';start()}catch(e){$('err').textContent=e.message}};
+$('p').onkeydown=e=>e.key=='Enter'&&$('go').click();
+document.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('[data-d]').forEach(x=>x.classList.remove('on'));b.classList.add('on');setRange(+b.dataset.d);load()});
+$('apply').onclick=()=>{document.querySelectorAll('[data-d]').forEach(x=>x.classList.remove('on'));load()};
+function start(){$('login').classList.add('hide');$('app').classList.remove('hide');setRange(30);load()}
+function tip(e,t){const x=$('tip');x.textContent=t;x.style.display='block';x.style.left=e.clientX+12+'px';x.style.top=e.clientY+12+'px'}
+const untip=()=>$('tip').style.display='none';
+function hover(root,sel){root.querySelectorAll(sel).forEach(r=>{r.onmousemove=e=>tip(e,r.dataset.t);r.onmouseleave=untip})}
+async function load(){
+ let d;try{d=await api(`/api/dashboard?start=${$('s').value}&end=${$('e').value}`)}catch(e){if(e)alert(e.message);return}
+ const a=new Set(d.allowed);$('who').textContent=d.role+' 권한';
+ const k=[];
+ if(a.has('orders'))k.push(['주문 수',fmt(d.orders)+'건','']);
+ if(a.has('revenue'))k.push(['매출(취소 제외)',won(d.revenue),'']);
+ if(a.has('cancel_rate'))k.push(['취소율',d.cancel_rate+'%','취소 '+fmt(d.cancel_count)+'건']);
+ if(a.has('stock_alerts'))k.push(['재고 경고',d.stock_alerts+'개 품목','안전재고 미달 (현재 기준)',d.stock_alerts?'warn':'']);
+ if(a.has('open_inquiries'))k.push(['미처리 문의',d.open_inquiries+'건','선택 기간 접수분',d.open_inquiries?'warn':'']);
+ $('kpis').innerHTML=k.map(x=>`<div class="card kpi ${x[3]||''}"><div class="l">${x[0]}</div><div class="v">${x[1]}</div><div class="s">${x[2]}</div></div>`).join('');
+ $('dailyCard').classList.toggle('hide',!a.has('daily'));
+ $('rankCard').classList.toggle('hide',!a.has('ranking'));
+ $('stockCard').classList.toggle('hide',!a.has('stock_list'));
+ if(d.daily)chart(d.daily);
+ if(d.ranking){const m=Math.max(...d.ranking.map(r=>r.revenue),1);
+  $('rank').innerHTML=d.ranking.length?d.ranking.map((r,i)=>`<div class="row" data-t="${r.name}: ${won(r.revenue)} · ${r.orders}건"><span>${i+1}. ${r.name}</span><div class="track"><div class="fill" style="width:${r.revenue/m*100}%"></div></div><span class="n">${won(r.revenue)}</span></div>`).join(''):'<span class="hint">데이터 없음</span>';
+  hover($('rank'),'.row')}
+ if(d.stock_list)$('stock').innerHTML=d.stock_list.length?`<table><tr><th>품목</th><th class=r>재고</th><th class=r>안전재고</th></tr>`+d.stock_list.map(s=>`<tr><td>⚠ ${s.name}</td><td class=r>${s.stock}</td><td class=r>${s.safety_stock}</td></tr>`).join('')+'</table>':'<span class="hint">경고 없음</span>';
+}
+function chart(data){
+ const W=760,H=240,L=36,B=26,T=10,R=8,n=data.length,max=Math.max(...data.map(x=>x.orders),1);
+ const step=Math.ceil(max/4),top=step*4,bw=(W-L-R)/n,y=v=>T+(H-T-B)*(1-v/top);
+ let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="일별 주문 수">`;
+ for(let i=0;i<=4;i++){const v=i*step;s+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/><text x="${L-6}" y="${y(v)+4}" text-anchor="end">${v}</text>`}
+ const every=Math.ceil(n/8);
+ data.forEach((x,i)=>{const w=Math.max(bw-2,1),X=L+i*bw+1,h=(H-B)-y(x.orders);
+  s+=`<rect x="${X}" y="${y(x.orders)}" width="${w}" height="${Math.max(h,0)}" rx="${w>6?3:0}" fill="var(--bar)"/>`;
+  s+=`<rect class="hit" x="${L+i*bw}" y="${T}" width="${bw}" height="${H-T-B}" fill="transparent" data-t="${x.date} · ${x.orders}건"/>`;
+  if(i%every==0)s+=`<text x="${X+w/2}" y="${H-8}" text-anchor="middle">${x.date.slice(5)}</text>`});
+ $('chart').innerHTML=s+'</svg>';hover($('chart'),'.hit')}
+if(token)start();
+</script></body></html>

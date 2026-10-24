@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>경영 현황 대시보드</title>
+<style>
+body{font-family:"Malgun Gothic",system-ui,sans-serif;margin:20px;color:#111318}
+.cards{display:flex;gap:10px;margin:12px 0}.card{border:1px solid #e6e8ef;border-radius:10px;padding:10px 14px;min-width:120px}
+.bars{display:flex;gap:6px;align-items:flex-end;height:120px}.bar{background:#6366f1;width:22px}
+#message{color:#b91c1c;min-height:20px}.err{background:#fff5f5;border:1px solid #fecaca;padding:12px}
+</style></head><body>
+<h1>경영 현황</h1>
+<label>사용자 <select data-testid="user" id="user"></select></label>
+<input type="date" data-testid="from" id="from"> ~ <input type="date" data-testid="to" id="to"> <button data-testid="apply" id="apply">적용</button>
+<div data-testid="message" id="message"></div>
+<div id="main"></div>
+<script>
+const $=id=>document.getElementById(id);
+const CARDS=[["orders","m-orders","주문 수"],["revenue","m-revenue","매출"],["cancel_rate","m-cancel-rate","취소율"],["stock_alerts","m-stock-alerts","재고 경고"],["open_inquiries","m-open-inquiries","미처리 문의"]];
+const fmt=(k,v)=>v===null||v===undefined?"—":(k==="cancel_rate"?v.toFixed(1)+"%":(k==="revenue"?v.toLocaleString("ko-KR")+"원":String(v)));
+async function load(useDates){
+  $("message").textContent="";
+  try{
+    if(!$("user").options.length){const us=await (await fetch("/api/users")).json();us.forEach(u=>{const o=document.createElement("option");o.value=u.user_id;o.textContent=u.name;$("user").append(o)})}
+    const q=new URLSearchParams({viewer:$("user").value});
+    if(useDates){q.set("from",$("from").value);q.set("to",$("to").value)}
+    const r=await fetch("/api/dashboard?"+q);const b=await r.json();
+    if(!r.ok){$("message").textContent=b.detail;return}
+    $("from").value=b.period.from;$("to").value=b.period.to;
+    const main=$("main");main.innerHTML="";
+    const cards=document.createElement("div");cards.className="cards";
+    CARDS.forEach(([k,t,label])=>{if(!(k in b.metrics))return;const c=document.createElement("div");c.className="card";const l=document.createElement("div");l.textContent=label;const n=document.createElement("b");n.setAttribute("data-testid",t);n.textContent=fmt(k,b.metrics[k]);c.append(l,n);cards.append(c)});
+    main.append(cards);
+    const bars=document.createElement("div");bars.className="bars";const mx=Math.max(1,...b.daily.map(d=>d.count));
+    b.daily.forEach(d=>{const e=document.createElement("div");e.className="bar";e.setAttribute("data-testid","daily-bar");e.title=d.date+" "+d.count;e.style.height=(d.count/mx*100)+"px";bars.append(e)});
+    main.append(bars);
+    if(b.top_customers){const t=document.createElement("table");b.top_customers.forEach(x=>{const tr=document.createElement("tr");tr.setAttribute("data-testid","top-customer");const a=document.createElement("td");a.textContent=x.customer;const v=document.createElement("td");v.textContent=x.revenue.toLocaleString("ko-KR");tr.append(a,v);t.append(tr)});main.append(t)}
+  }catch(e){$("main").innerHTML='<div class="err">불러오지 못했습니다 <button onclick="load(false)">다시 시도</button></div>'}
+}
+$("apply").onclick=()=>load(true);
+$("user").onchange=()=>load(true);
+load(false);
+</script></body></html>

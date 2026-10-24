@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 95615,
+ "num_turns": 10,
+ "total_cost_usd": 0.3295386,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 16,
+  "cache_creation_input_tokens": 36521,
+  "cache_read_input_tokens": 325526,
+  "output_tokens": 15087,
+  "output_tokens_details": {
+   "thinking_tokens": 2167
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 36521,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 819,
+    "cache_read_input_tokens": 52767,
+    "cache_creation_input_tokens": 426,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 426
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD대로 웹앱을 만들었고, API 테스트 7개가 통과했습니다. 브라우저에서 `/` 화면을 직접 열어 보지는 못했습니다. 그래서 PRD의 화면 기준(T9)은 아직 확인하지 못했습니다.\n\n`python -m uvicorn main:app --port 8000`으로 실행하면 됩니다. 서버는 시작할 때마다 `seed/`의 CSV 4개를 읽어 `biz.db`를 새로 만듭니다. `PORT` 환경 변수도 지원합니다.\n\n- **서버:** `main.py`에 API 두 개(`/api/users`, `/api/dashboard`)와 규칙 R1~R9를 구현했습니다. 역할이 못 보는 지표는 응답에 키 자체가 없습니다.\n- **화면:** `static/index.html`은 순수 HTML/JS입니다. PRD의 `data-testid`를 모두 붙였고, 못 보는 카드는 아예 그리지 않습니다. API가 실패하면 \"불러오지 못했습니다\"와 다시 시도 버튼이 나옵니다.\n- **시드 데이터:** `seed/`의 CSV는 PRD 예시와 같은 숫자(주문 8, 매출 600,000, 취소율 27.3, 재고 경고 2, 미처리 문의 3)가 나오도록 만들었습니다. 기간 경계를 확인할 수 있게 기간 밖 주문도 넣었습니다.\n- **테스트:** `tests/test_dod.py`는 제가 직접 쓴 API 테스트입니다. 화면 확인(T1과 T9의 화면 부분)은 들어 있지 않습니다. PRD가 말하는 DoD 테스트 파일은 폴더에 없었습니다.\n\n- **거부 순서:** 사용자 지정 없음이나 기간 오류는 400, 없는 사용자는 404 순서로 처리합니다. `viewer`가 없고 기간도 틀리면 `사용자를 확인하세요`를 먼저 돌려줍니다. PRD가 이 경우의 문구를 정하지 않아 제가 정했습니다.\n- **빈 값 처리:** `from`과 `to`가 빈 문자열이면 값이 없는 것으로 보고 최근 7일로 처리합니다.",
+ "wall_s": 102.1
+}

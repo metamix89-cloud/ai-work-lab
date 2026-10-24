@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>가나다식품 경영 현황 대시보드</title>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--ink:#1b1f27;--ink2:#515a6b;--muted:#8a93a3;--line:#e3e6ec;--accent:#2f6fdb;--warn:#b45309;--warnbg:#fff4e0;--crit:#b42318;--critbg:#fdecea}
+@media(prefers-color-scheme:dark){:root{--bg:#12151b;--card:#1b2028;--ink:#e9ecf2;--ink2:#aab2c2;--muted:#7d8697;--line:#2c3340;--accent:#6ea0f5;--warn:#f0b254;--warnbg:#3a2d14;--crit:#f48b82;--critbg:#3b1d1a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "Malgun Gothic",system-ui,sans-serif}
+header{display:flex;align-items:center;gap:16px;padding:14px 24px;background:var(--card);border-bottom:1px solid var(--line);flex-wrap:wrap}
+header h1{font-size:18px;margin:0;flex:1}
+main{max-width:1100px;margin:0 auto;padding:20px 24px 40px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+input,button{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+button{cursor:pointer}button:hover{border-color:var(--accent)}
+button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:16px}
+.kpi .l{color:var(--ink2);font-size:13px}.kpi .v{font-size:28px;font-weight:700;margin-top:4px}
+.grid{display:grid;grid-template-columns:3fr 2fr;gap:12px;margin-bottom:12px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
+h2{font-size:15px;margin:0 0 10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+h2 .seg{display:flex;gap:4px}h2 .seg button{padding:2px 8px;font-size:12px}
+svg{width:100%;display:block}svg text{fill:var(--ink2);font-size:11px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line)}td.n,th.n{text-align:right}
+.badge{font-size:11px;border-radius:4px;padding:1px 6px}.b-crit{background:var(--critbg);color:var(--crit)}.b-warn{background:var(--warnbg);color:var(--warn)}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);padding:5px 9px;border-radius:6px;font-size:12px;display:none;white-space:nowrap;z-index:9}
+#login{max-width:340px;margin:12vh auto;text-align:center}#login input{width:100%;margin:5px 0}
+#login .hint{font-size:12px;color:var(--muted);text-align:left;margin-top:14px}
+.hidden{display:none!important}.err{color:var(--crit);min-height:20px}
+.empty{color:var(--muted);padding:20px 0;text-align:center}
+</style>
+</head>
+<body>
+<div id="login" class="card">
+  <h1>가나다식품</h1><p>경영 현황 대시보드</p>
+  <input id="u" placeholder="아이디" autocomplete="username">
+  <input id="p" type="password" placeholder="비밀번호" autocomplete="current-password">
+  <div class="err" id="lerr"></div>
+  <button id="lbtn" class="on" style="width:100%">로그인</button>
+  <div class="hint">데모 계정<br>대표 ceo / ceo1234<br>영업팀 sales / sales1234<br>물류팀 logistics / logi1234</div>
+</div>
+
+<div id="app" class="hidden">
+<header><h1>가나다식품 경영 현황 대시보드</h1><span id="who"></span><button id="logout">로그아웃</button></header>
+<main>
+  <div class="filters">
+    <button data-d="7">최근 7일</button><button data-d="30" class="on">최근 30일</button><button data-d="90">최근 90일</button>
+    <span style="width:12px"></span>
+    <input type="date" id="s"> ~ <input type="date" id="e"><button id="go">조회</button>
+  </div>
+  <div class="err" id="err"></div>
+  <div class="kpis" id="kpis"></div>
+  <div class="grid">
+    <div class="card"><h2><span id="dtitle">일별 주문 수</span><span class="seg" id="seg"></span></h2><svg id="daily" viewBox="0 0 640 260"></svg></div>
+    <div class="card" id="rankcard"><h2>거래처별 매출 순위</h2><svg id="rank"></svg></div>
+  </div>
+  <div class="grid">
+    <div class="card" id="stockcard"><h2>재고 경고 품목</h2><div id="stock"></div></div>
+    <div class="card" id="inqcard"><h2>미처리 문의 (선택 기간)</h2><div id="inq"></div></div>
+  </div>
+</main>
+</div>
+<div id="tip"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const won=n=>n>=1e8?(n/1e8).toFixed(2)+'억원':n>=1e4?Math.round(n/1e4).toLocaleString()+'만원':n.toLocaleString()+'원';
+const iso=d=>{const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4);return z.toISOString().slice(0,10)};
+// 데모 데이터 기준일(2026-10-24)을 오늘로 간주
+const TODAY=new Date(2026,9,24);
+let token=sessionStorage.getItem('tok'),data=null,metric='orders';
+const tip=$('tip');
+function showTip(ev,html){tip.innerHTML=html;tip.style.display='block';tip.style.left=Math.min(ev.clientX+12,innerWidth-tip.offsetWidth-8)+'px';tip.style.top=(ev.clientY-34)+'px'}
+const hideTip=()=>tip.style.display='none';
+
+async function api(path,opt={}){
+  const r=await fetch(path,{...opt,headers:{'Content-Type':'application/json',Authorization:'Bearer '+(token||''),...(opt.headers||{})}});
+  if(r.status===401&&path!=='/api/login'){logout();throw new Error('세션이 만료되었습니다.')}
+  const j=await r.json();if(!r.ok)throw new Error(j.detail||'오류');return j;
+}
+$('lbtn').onclick=async()=>{
+  try{const j=await api('/api/login',{method:'POST',body:JSON.stringify({username:$('u').value,password:$('p').value})});
+    token=j.token;sessionStorage.setItem('tok',token);start();}
+  catch(e){$('lerr').textContent=e.message}
+};
+$('p').onkeydown=e=>{if(e.key==='Enter')$('lbtn').click()};
+function logout(){token=null;sessionStorage.removeItem('tok');$('app').classList.add('hidden');$('login').classList.remove('hidden')}
+$('logout').onclick=logout;
+
+function setRange(days){const e=new Date(TODAY),s=new Date(TODAY);s.setDate(s.getDate()-days+1);$('s').value=iso(s);$('e').value=iso(e)}
+document.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('[data-d]').forEach(x=>x.classList.remove('on'));b.classList.add('on');setRange(+b.dataset.d);load()});
+$('go').onclick=()=>{document.querySelectorAll('[data-d]').forEach(x=>x.classList.remove('on'));load()};
+
+function start(){$('login').classList.add('hidden');$('app').classList.remove('hidden');setRange(30);load()}
+
+async function load(){
+  $('err').textContent='';
+  try{data=await api(`/api/summary?start=${$('s').value}&end=${$('e').value}`)}catch(e){$('err').textContent=e.message;return}
+  $('who').textContent='접속: '+data.label;
+  render();
+}
+
+const KPI=[['orders','주문 수',v=>v.toLocaleString()+'건'],['sales','매출 (취소 제외)',won],
+  ['cancel_rate','취소율',v=>v+'%'],['stock_alerts','재고 경고',v=>v+'품목'],['open_inquiries','미처리 문의',v=>v+'건']];
+function render(){
+  $('kpis').innerHTML=KPI.filter(([k])=>k in data.kpi).map(([k,l,f])=>{
+    const v=data.kpi[k],bad=(k==='stock_alerts'||k==='open_inquiries')&&v>0;
+    return `<div class="card kpi"><div class="l">${l}</div><div class="v" style="${bad?'color:var(--warn)':''}">${f(v)}</div></div>`}).join('');
+  const both=data.daily.length&&'sales' in data.daily[0];
+  if(!both)metric='orders';
+  $('seg').innerHTML=both?['orders','sales'].map(m=>`<button data-m="${m}" class="${m===metric?'on':''}">${m==='orders'?'주문 수':'매출'}</button>`).join(''):'';
+  document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{metric=b.dataset.m;render()});
+  $('dtitle').textContent=metric==='orders'?'일별 주문 수':'일별 매출';
+  drawDaily();
+  $('rankcard').classList.toggle('hidden',!data.ranking);if(data.ranking)drawRank();
+  $('stockcard').classList.toggle('hidden',!data.stock_items);
+  if(data.stock_items)$('stock').innerHTML=data.stock_items.length?`<table><tr><th>품목<th class=n>재고<th class=n>안전재고<th></tr>`+
+    data.stock_items.map(x=>{const crit=x.stock<x.safety_stock*.5;return `<tr><td>${x.name}<td class=n>${x.stock}<td class=n>${x.safety_stock}<td><span class="badge ${crit?'b-crit':'b-warn'}">${crit?'긴급':'부족'}</span>`}).join('')+'</table>':'<div class=empty>경고 품목 없음</div>';
+  $('inqcard').classList.toggle('hidden',!data.open_inquiry_items);
+  if(data.open_inquiry_items)$('inq').innerHTML=data.open_inquiry_items.length?`<table><tr><th>접수일<th>거래처<th>제목</tr>`+
+    data.open_inquiry_items.map(x=>`<tr><td>${x.created_at.slice(5)}<td>${x.client}<td>${x.title}`).join('')+
+    '</table>'+(data.kpi.open_inquiries>8?`<div class=empty>외 ${data.kpi.open_inquiries-8}건</div>`:''):'<div class=empty>미처리 문의 없음</div>';
+}
+
+function niceStep(x){const p=10**Math.floor(Math.log10(x||1)),f=x/p;return (f<=1?1:f<=2?2:f<=5?5:10)*p}
+function drawDaily(){
+  const W=640,H=260,m={l:44,r:8,t:8,b:26},pw=W-m.l-m.r,ph=H-m.t-m.b,D=data.daily,key=metric;
+  const svg=$('daily');
+  if(!D.length){svg.innerHTML='';return}
+  const max=Math.max(1,...D.map(d=>d[key])),step=niceStep(max/4),top=Math.ceil(max/step)*step;
+  let h='';
+  for(let v=0;v<=top;v+=step){const y=m.t+ph-v/top*ph;h+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y}" y2="${y}" stroke="var(--line)"/><text x="${m.l-6}" y="${y+4}" text-anchor="end">${key==='sales'?(v>=1e4?(v/1e4).toLocaleString()+'만':v):v}</text>`}
+  const bw=pw/D.length,g=D.length>45?0:2;
+  D.forEach((d,i)=>{const bh=d[key]/top*ph,x=m.l+i*bw;
+    h+=`<rect x="${x+g/2}" y="${m.t+ph-bh}" width="${Math.max(1,bw-g)}" height="${bh}" rx="${bw>6?2:0}" fill="var(--accent)"/>`;
+    h+=`<rect class="hit" data-i="${i}" x="${x}" y="${m.t}" width="${bw}" height="${ph}" fill="transparent"/>`});
+  const every=Math.ceil(D.length/7);
+  D.forEach((d,i)=>{if(i%every===0)h+=`<text x="${m.l+i*bw+bw/2}" y="${H-8}" text-anchor="middle">${d.date.slice(5)}</text>`});
+  svg.innerHTML=h;
+  svg.querySelectorAll('.hit').forEach(r=>{
+    r.onmousemove=ev=>{const d=D[+r.dataset.i];showTip(ev,`${d.date}<br>${key==='sales'?'매출 '+won(d[key]):'주문 '+d[key]+'건'}`)};
+    r.onmouseleave=hideTip});
+}
+
+function drawRank(){
+  const R=data.ranking,row=30,W=420,lw=100,vw=70,H=Math.max(row*R.length+4,40),max=Math.max(1,...R.map(r=>r.sales));
+  const svg=$('rank');svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  if(!R.length){svg.innerHTML='<text x="10" y="24">데이터 없음</text>';return}
+  svg.innerHTML=R.map((r,i)=>{const y=i*row+2,w=(W-lw-vw)*r.sales/max;
+    return `<text x="0" y="${y+17}" style="fill:var(--ink)">${i+1}. ${r.name}</text>
+    <rect x="${lw}" y="${y+4}" width="${w}" height="16" rx="3" fill="var(--accent)"/>
+    <text x="${lw+w+6}" y="${y+17}">${won(r.sales)}</text>
+    <rect class="hit" data-i="${i}" x="0" y="${y}" width="${W}" height="${row}" fill="transparent"/>`}).join('');
+  svg.querySelectorAll('.hit').forEach(r=>{
+    r.onmousemove=ev=>{const d=R[+r.dataset.i];showTip(ev,`${d.name}<br>매출 ${d.sales.toLocaleString()}원 · 주문 ${d.orders}건`)};
+    r.onmouseleave=hideTip});
+}
+if(token)start();
+</script>
+</body>
+</html>

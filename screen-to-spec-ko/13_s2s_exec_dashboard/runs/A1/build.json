@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '경영 현황 대시보드' 웹앱을 만들어 줘. 기간을 골라서 주문 수, 매출, 취소율, 재고 경고, 미처리 문의를 보고, 일별 주문 그래프와 거래처별 매출 순위도 보여 줘. 대표, 영업팀, 물류팀이 쓰는데 역할마다 볼 수 있는 숫자가 달라야 해. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 104560,
+ "num_turns": 8,
+ "total_cost_usd": 0.3401192,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 36707,
+  "cache_read_input_tokens": 183912,
+  "output_tokens": 17488,
+  "output_tokens_details": {
+   "thinking_tokens": 666
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 36707,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 981,
+    "cache_read_input_tokens": 52691,
+    "cache_creation_input_tokens": 688,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 688
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "가나다식품 경영 현황 대시보드를 만들었고, 지금 `http://localhost:8000`에서 서버가 실행 중입니다. 브라우저 화면은 직접 열어 보지 못했습니다. 물류팀·영업팀 계정으로 API를 호출해 응답 내용을 확인했고, 첫 화면 로딩과 로그인 없이 호출했을 때의 거부(401)도 확인했습니다.\n\n**실행**\n```\npip install -r requirements.txt\npython -m uvicorn main:app --port 8000\n```\n처음 실행하면 `ganada.db`가 만들어지고, 최근 120일치 가상 데이터(거래처 8곳, 품목 10개, 주문, 문의)가 자동으로 들어갑니다.\n\n**데모 계정**\n\n| 아이디 | 비밀번호 | 역할 |\n|---|---|---|\n| ceo | ceo1234 | 대표 |\n| sales | sales1234 | 영업팀 |\n| logistics | logi1234 | 물류팀 |\n\n**역할별로 보이는 숫자**\n\n| 항목 | 대표 | 영업팀 | 물류팀 |\n|---|---|---|---|\n| 주문 수, 취소율, 일별 주문 그래프 | O | O | O |\n| 매출, 거래처별 매출 순위 | O | O | X |\n| 미처리 문의 | O | O | X |\n| 재고 경고, 경고 품목 목록 | O | X | O |\n\n권한 없는 값은 화면에서 숨기는 게 아니라 서버가 응답에 아예 넣지 않습니다. 물류팀 응답에는 매출 값이 들어 있지 않습니다.\n\n**화면**\n- 기간은 7일, 30일, 90일 버튼이나 날짜 직접 선택으로 고릅니다.\n- 일별 주문 그래프에 마우스를 올리면 날짜와 건수가 나옵니다.\n- 거래처 순위도 마우스를 올리면 매출과 주문 건수가 나옵니다.\n- 다크 모드를 자동으로 따라갑니다.\n\n**알아 둘 점**\n- 매출은 취소된 주문을 뺀 금액입니다.\n- 재고 경고는 기간과 상관없이 현재 재고가 안전재고보다 적은 품목입니다.\n- 미처리 문의는 선택한 기간에 접수된 건만 셉니다.\n- 로그인 세션은 서버 메모리에만 있어서 서버를 재시작하면 다시 로그인해야 합니다. 계정도 코드에 고정한 데모용이라, 실제로 쓰려면 계정 관리를 따로 붙여야 합니다.\n\n코드는 `main.py`(API, DB, 가상 데이터, 권한)와 `static/index.html`(화면)에 있습니다.",
+ "wall_s": 116.1
+}

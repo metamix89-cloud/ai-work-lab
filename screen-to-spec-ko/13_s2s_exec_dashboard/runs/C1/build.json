@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 51757,
+ "num_turns": 6,
+ "total_cost_usd": 0.2431109,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 37284,
+  "cache_read_input_tokens": 189549,
+  "output_tokens": 7500,
+  "output_tokens_details": {
+   "thinking_tokens": 831
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 37284,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 626,
+    "cache_read_input_tokens": 51314,
+    "cache_creation_input_tokens": 2642,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 2642
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (users · orders · stock · inquiries)\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음. PRD 의 API 2개(/api/users, /api/dashboard)와 화면 `/` 만 있다.\nPRD 가 정하지 않아 직접 정한 것:\n- viewer 없음과 기간 오류가 함께 있으면 viewer 거부(`사용자를 확인하세요`)를 먼저 낸다. 둘 다 400이다.\n- 없는 사용자 404의 detail 은 `사용자를 찾을 수 없습니다`로 했다.\n- 기간 비교는 `substr(ordered_at,1,10)` 로 날짜만 잘라 하므로 종료일 23:59 주문도 들어간다.\n- 같은 기준으로 문의의 `received_at` 도 날짜로 비교한다.\n- 시드 CSV 는 2026-10-24 기준으로 만들었다. 테스트는 이 파일을 자기 데이터로 바꿨다가 되돌린다.\n- 화면에서 사용자를 바꾸면 바로 다시 불러온다. 기간은 '적용' 을 눌러야 바뀐다.\n- 서버가 400/404 를 주면 메시지 줄에 detail 을 그대로 쓰고 이전 카드는 그대로 둔다. 그 밖의 실패는 `불러오지 못했습니다` + 다시 시도 버튼을 보인다.\n- `updated_at` 은 응답을 만든 서버 시각이다. 화면 오른쪽 위에 `기준 …` 으로 작게 보인다.\n```",
+ "wall_s": 67.5
+}

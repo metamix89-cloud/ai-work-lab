@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 62047,
+ "num_turns": 7,
+ "total_cost_usd": 0.23167290000000001,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 8,
+  "cache_creation_input_tokens": 31312,
+  "cache_read_input_tokens": 134289,
+  "output_tokens": 9298,
+  "output_tokens_details": {
+   "thinking_tokens": 1631
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 31312,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 982,
+    "cache_read_input_tokens": 46326,
+    "cache_creation_input_tokens": 1658,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1658
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD.md대로 웹앱을 만들었습니다. API는 `TestClient`로 확인했지만, 브라우저 화면은 열어서 확인하지 못했습니다. `tests/test_dod.py`가 폴더에 없어서 DoD 9개를 직접 돌려보지는 못했고, PRD의 예시 값으로만 대조했습니다.\n\n**실행:** 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`을 실행하면 됩니다. `PORT` 환경 변수 처리는 넣지 않았습니다. `PORT`로 포트를 지정하려면 `--port $PORT`처럼 실행 때 넘겨야 합니다.\n\n**구성**\n- `main.py`: 시작할 때마다 `seed/*.csv`를 읽어 `biz.db`를 새로 만듭니다. `biz_` 접두어 테이블 4개에 넣고, `GET /api/users`와 `GET /api/dashboard`, 규칙 R1~R9를 구현했습니다.\n- `static/index.html`: 한 페이지 화면입니다. PRD의 `data-testid`를 모두 붙였고, 역할이 못 보는 카드는 그리지 않습니다. API가 실패하면 `불러오지 못했습니다`와 다시 시도 버튼이 나옵니다.\n- `seed/`: 가상 데이터입니다. 사용자 3명, 주문 14건, 재고 6품목, 문의 6건입니다. 기간 경계(10-17 23:59, 10-24 23:50)를 확인할 수 있는 주문을 넣었습니다.\n\n**직접 확인한 것**\n- 대표, 2026-10-18~10-24: 주문 수 8, 매출 600000, 취소율 27.3, 재고 경고 2, 미처리 문의 3이 PRD 예시와 같습니다.\n- 물류팀 응답에는 `orders`와 `stock_alerts`만 있고, 영업팀에는 `stock_alerts`와 거래처 키가 없습니다.\n- 주문이 없는 기간은 주문 수 0, 매출 0, 취소율 null이고 막대는 날 수만큼 0입니다.\n- 기간 오류(시작이 종료보다 늦음, 32일, 형식 오류, 하나만 입력)는 400을 돌려주고, 없는 사용자는 404입니다.\n- `/`는 200으로 열리고 '현황'이 보입니다.\n\nPRD에 없는 부분은 이렇게 정했습니다.\n- `viewer`가 없고 기간도 틀리면, `viewer` 오류(`사용자를 확인하세요`)를 먼저 돌려줍니다.\n- 없는 사용자의 404 문구는 `사용자를 찾을 수 없습니다`로 했습니다.",
+ "wall_s": 66.6
+}

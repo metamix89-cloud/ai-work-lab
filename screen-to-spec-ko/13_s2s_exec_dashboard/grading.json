@@ -1,0 +1,14 @@
+{
+ "allowed_routes": ["/", "/api/users", "/api/dashboard", "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "로그인 · 회원": "login|password|로그인|회원가입",
+  "데이터 입력 · 수정": "@app\\.(post|put|patch|delete)\\(\"/api/(orders|stock|inquiries)",
+  "내려받기": "download|내려받기|다운로드|text/csv|export",
+  "드릴다운 · 상세": "/api/orders/\\{|드릴다운|상세 보기",
+  "목표 · 전년 대비": "목표|target|전년|yoy|YoY",
+  "원가 · 이익": "원가|이익|profit|gross_margin|cost_price|unit_cost",
+  "자동 새로고침": "setInterval|자동 새로고침",
+  "권한 편집": "/api/admin|권한 편집|/api/roles",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}

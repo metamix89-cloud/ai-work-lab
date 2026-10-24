@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 가나다식품 '경영 현황 대시보드' 웹앱을 만들어 줘. 기간을 골라서 주문 수, 매출, 취소율, 재고 경고, 미처리 문의를 보고, 일별 주문 그래프와 거래처별 매출 순위도 보여 줘. 대표, 영업팀, 물류팀이 쓰는데 역할마다 볼 수 있는 숫자가 달라야 해. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 120616,
+ "num_turns": 10,
+ "total_cost_usd": 0.36168240000000007,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 37528,
+  "cache_read_input_tokens": 269224,
+  "output_tokens": 18462,
+  "output_tokens_details": {
+   "thinking_tokens": 971
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 37528,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1263,
+    "cache_read_input_tokens": 47576,
+    "cache_creation_input_tokens": 6624,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 6624
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "가나다식품 경영 현황 대시보드를 만들었고, 지금 http://127.0.0.1:8000 에서 서버가 돌고 있습니다. 세 계정으로 로그인해 API 응답을 확인했고, 역할별로 숫자가 다르게 나오는 것까지 봤습니다. 브라우저에서 화면을 열어 보지는 못했으니 차트 모양과 간격은 한 번 직접 봐 주세요.\n\n**실행 방법**\n- 설치: `pip install -r requirements.txt`\n- 실행: `python main.py`\n- 처음 실행하면 가상 데이터가 들어 있는 `ganada.db`가 자동으로 만들어집니다. 거래처 8곳, 품목 8개, 최근 120일 주문, 문의 60건이 들어갑니다.\n- 가상 데이터는 2026-10-24를 오늘로 보고 만들었습니다. 기본 조회 기간은 최근 30일입니다.\n\n**데모 계정과 역할별 화면**\n\n| 계정 | 비밀번호 | 보이는 내용 |\n|---|---|---|\n| 대표 `ceo` | `ceo1234` | 전부: 주문 수, 매출, 취소율, 재고 경고, 미처리 문의, 일별 주문·매출 그래프, 거래처별 매출 순위 |\n| 영업팀 `sales` | `sales1234` | 재고 경고를 뺀 나머지 전부 |\n| 물류팀 `logistics` | `logi1234` | 주문 수, 취소율, 재고 경고, 일별 주문 그래프. 매출, 거래처 순위, 문의는 안 보임 |\n\n- **서버에서 막음**: 권한이 없는 항목은 화면에서 숨기는 게 아니라 서버가 아예 보내지 않습니다. 물류팀 응답에는 매출 데이터가 들어 있지 않고, 로그인 없이 호출하면 401이 나옵니다.\n- **기간 선택**: 최근 7일, 30일, 90일 버튼이나 날짜 직접 입력으로 고릅니다. 최대 1년까지 됩니다.\n- **계산 기준**: 매출은 취소 주문을 뺀 금액입니다. 취소율은 선택 기간의 취소 건수를 전체 주문 수로 나눈 값입니다.\n- **재고와 문의**: 재고 경고는 안전재고보다 적은 품목 전체를 보여 주고, 기간과 무관합니다. 안전재고의 절반 미만이면 '긴급'으로 표시합니다. 미처리 문의는 선택 기간에 접수된 건만 세고, 목록에는 최근 8건만 나옵니다.\n- **그래프**: 일별 그래프는 막대에 마우스를 올리면 값이 뜹니다. 대표와 영업팀은 주문 수와 매출을 전환해서 볼 수 있습니다. 거래처 순위는 막대로 보여 주고 거래처별 매출과 주문 건수가 함께 뜹니다.\n\n**참고**\n- 비밀번호는 데모용으로 코드에 적혀 있습니다. 실제로 쓰려면 `main.py`의 `USERS`를 바꾸세요.\n- 로그인 세션은 서버 메모리에만 있어서 서버를 다시 켜면 다시 로그인해야 합니다.\n\n파일은 `main.py`(서버, 데이터, 권한), `static/index.html`(화면), `requirements.txt` 세 개입니다.",
+ "wall_s": 134.4
+}

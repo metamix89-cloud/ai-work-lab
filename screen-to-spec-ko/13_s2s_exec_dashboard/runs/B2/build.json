@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 87542,
+ "num_turns": 9,
+ "total_cost_usd": 0.3093617,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 35630,
+  "cache_read_input_tokens": 276337,
+  "output_tokens": 13918,
+  "output_tokens_details": {
+   "thinking_tokens": 1876
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 35630,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1325,
+    "cache_read_input_tokens": 51112,
+    "cache_creation_input_tokens": 1190,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1190
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD.md대로 웹앱을 만들었습니다. API는 `tests/smoke.py`로 확인했습니다. 화면(`/`)은 브라우저에서 열어 보지 않았습니다. `tests/test_dod.py`는 폴더에 없어서 DoD 9개 항목은 돌려 보지 못했습니다.\n\n`tests/smoke.py`로 확인한 것:\n- 대표 계정에 7일 기간(2026-10-18~24)을 주면 PRD 예시와 같은 값이 나옵니다. 주문 수 8, 매출 600,000, 취소율 27.3, 재고 경고 2, 미처리 문의 3입니다. 막대는 7칸이고 거래처 상위 표도 나옵니다.\n- 물류팀 응답에는 주문 수와 재고 경고만 있고, 영업팀 응답에는 재고 경고와 거래처 키가 없습니다.\n- 시작일이 종료일보다 늦거나, 32일이거나, 날짜를 하나만 주면 400 `기간을 확인하세요`가 나옵니다.\n- `viewer`가 없으면 400, 없는 사용자는 404입니다.\n- 주문이 없는 기간은 주문 수 0, 매출 0, 취소율 null, 막대는 날 수만큼 0으로 나옵니다.\n\n**만든 것**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/*.csv`를 읽어 `biz.db`(SQLite, `biz_` 테이블)를 새로 만듭니다. `GET /api/users`와 `GET /api/dashboard`에 규칙 R1~R9를 적용했습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. 사용자 선택, 기간 입력과 적용 버튼, 역할에 맞는 지표 카드, 일별 막대, 거래처 상위 5 표(대표만), 메시지 줄, 오류 상태(`불러오지 못했습니다` + 다시 시도)가 있고 PRD의 `data-testid`를 그대로 붙였습니다.\n- `seed/`: 사용자 3명, 주문 13건, 재고 6품목, 문의 6건입니다. 예시 값이 그대로 나오도록 맞춰 놓았습니다.\n- `tests/smoke.py`: 위 확인에 쓴 스크립트입니다.\n\n실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`입니다. `PORT` 환경 변수가 있으면 `python main.py`로 실행할 때 그 포트를 씁니다.\n\n시드 데이터의 날짜가 2026-10-18~24에 고정돼 있어서, 기본 기간(최근 7일)이 이 날짜와 겹칠 때만 예시 값이 나옵니다. 오늘이 이 기간을 벗어나면 기본 화면의 숫자는 달라지고, 시작일과 종료일을 직접 고르면 됩니다.\n\nPRD에 없어서 제가 정한 부분이 둘 있습니다.\n- `viewer`가 없고 기간도 틀렸을 때는 `사용자를 확인하세요`를 먼저 돌려줍니다. 둘 다 400입니다.\n- 없는 사용자의 404 문구는 `사용자를 찾을 수 없습니다`로 했습니다.",
+ "wall_s": 93.7
+}
