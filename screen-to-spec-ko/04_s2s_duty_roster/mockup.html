@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>한빛요양병원 당직 순번표 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 4편 목업. 가상 병원 · 가상 직원. ?state=ok|empty|error. Mock-IT 라이트 테마. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--card:#FFFFFF;--indigo:#6366F1;--indigo2:#E0E7FF;--indigo3:#3730A3;--emerald:#10B981;--amber:#F59E0B;--rose:#EF4444}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:var(--emerald);display:inline-block}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#ECFDF5;color:#047857;font-weight:700}
+.main{padding:20px 28px 16px 28px;display:flex;flex-direction:column;gap:10px}
+.top{display:flex;justify-content:space-between;align-items:center}
+h1{margin:0;font-size:21px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:12px;margin-top:3px}
+.ctl{display:flex;gap:8px;align-items:center;font-size:12px}
+.chip{background:#fff;border:1px solid var(--line);padding:5px 11px;border-radius:999px;color:var(--ink2)}.chip b{color:var(--ink)}
+.btn{background:var(--indigo);color:#fff;border-radius:8px;padding:6px 12px;font-weight:700}.btn.ghost{background:#fff;color:var(--ink2);border:1px solid var(--line)}
+.st{background:#ECFDF5;color:#047857;border-radius:999px;padding:5px 11px;font-weight:700}
+.row{display:grid;grid-template-columns:1fr 250px;gap:12px;flex:1;min-height:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;min-height:0}
+.card h3{margin:0 0 6px;font-size:13px;color:var(--ink2);font-weight:600;display:flex;justify-content:space-between}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;flex:1}
+.dow{font-size:11px;color:var(--mute);text-align:center;font-weight:600}.dow.wk{color:var(--rose)}
+.day{background:#F7F8FB;border:1px solid var(--line);border-radius:7px;padding:5px 7px;font-size:11px;color:var(--mute);position:relative;min-height:0}
+.day.wk{background:#FFF7F7;border-color:#FDE2E2}.day b{display:block;color:var(--ink);font-size:12px;margin-top:2px}.day small{display:block;color:var(--amber);font-size:10px}
+.day.sel{outline:2px solid var(--indigo)}.day.blank{background:transparent;border-color:transparent}
+.day .me{color:var(--indigo3)}
+table{border-collapse:collapse;width:100%;font-size:12px}th{text-align:left;color:var(--mute);font-weight:600;padding:5px 6px;border-bottom:1px solid var(--line)}
+td{padding:6px;border-bottom:1px solid var(--line)}td.n{text-align:center;font-weight:700}
+.bar{height:6px;background:var(--indigo2);border-radius:3px;position:relative}.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--indigo);border-radius:3px}
+.msg{font-size:12px;color:var(--rose);min-height:15px}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mute);gap:6px}
+.empty b{font-size:15px;color:var(--ink2)}.empty small{font-size:11px}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:14px;padding:20px;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700}
+</style></head><body>
+<div class="app">
+ <div class="side">
+  <div class="logo"><i></i>한빛요양병원</div>
+  <div class="nav"><div class="on">당직 순번표</div><div>병동 물품</div><div>교육 이수</div><div>인수인계</div></div>
+ </div>
+ <div class="main" id="main"></div>
+</div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const NAMES=['김민수','박지연','이서준','최유나','정하늘','한도윤'];
+const UNAV={'03':'박지연','04':'박지연','05':'박지연','06':'박지연','07':'박지연','15':'이서준','21':'정하늘','22':'한도윤'};
+// 11월 2026: 1일 = 일요일. 규칙(제외 · 연속 금지 · 공평 5씩 · 주말 1~2)을 만족하는 예시 순번
+const PLAN=['최유나','박지연','이서준','정하늘','한도윤','이서준','김민수','박지연','정하늘','김민수','한도윤','최유나','정하늘','한도윤','정하늘','박지연','이서준','김민수','최유나','한도윤','박지연','최유나','이서준','정하늘','김민수','박지연','한도윤','이서준','김민수','최유나'];
+const head=(status)=>`<div class="top"><div><h1>3병동 야간 당직 순번표</h1><div class="sub">매일 1명 · 제외일 금지 · 연속 금지 · 총 횟수 ±1 · 주말 ±1 — 규칙은 코드가 아니라 글이 기준</div></div>
+<div class="ctl"><span class="chip">◀ <b>2026-11</b> ▶</span><span class="btn">생성</span><span class="btn ghost">확정</span><span class="st">${status}</span></div></div>`;
+function cal(plan){
+  let h=['일','월','화','수','목','금','토'].map((d,i)=>`<div class="dow ${i===0||i===6?'wk':''}">${d}</div>`).join('');
+  for(let d=1;d<=30;d++){const dow=(d-1)%7;const wk=dow===0||dow===6;const dd=String(d).padStart(2,'0');const name=plan?plan[d-1]:'';
+    const sel=plan&&(d===10||d===20)?' sel':'';
+    h+=`<div class="day ${wk?'wk':''}${sel}">${d}<b class="${name==='김민수'?'me':''}">${name||'—'}</b>${UNAV[dd]?`<small>제외 ${UNAV[dd]}</small>`:'<small>&nbsp;</small>'}</div>`;}
+  for(let i=0;i<5;i++)h+='<div class="day blank"></div>';
+  return h;
+}
+function stats(plan){
+  const t={},w={};NAMES.forEach(n=>{t[n]=0;w[n]=0;});
+  if(plan)plan.forEach((n,i)=>{t[n]++;const dow=i%7;if(dow===0||dow===6)w[n]++;});
+  return '<table><tr><th>이름</th><th>총</th><th>주말</th><th></th></tr>'+NAMES.map(n=>`<tr><td>${n}</td><td class="n">${t[n]}</td><td class="n">${w[n]}</td><td style="width:70px"><div class="bar"><i style="width:${t[n]/6*100}%"></i></div></td></tr>`).join('')+'</table>';
+}
+let html='';
+if(state==='ok'){
+  html=head('생성됨')+`<div class="row"><div class="card"><h3>2026년 11월 <span>10일 ↔ 20일 선택 · <b style="color:#6366F1">바꾸기</b></span></h3><div class="cal">${cal(PLAN)}</div>
+   <div class="msg">한도윤 이(가) 2026-11-11 과 연속 당직이 됩니다 (R3) — 바꾸기 거부</div></div>
+   <div class="card"><h3>통계 <span>총 30 · 주말 9</span></h3>${stats(PLAN)}<div class="empty" style="flex:1"><small>최대 − 최소 ≤ 1 · 주말도 ≤ 1 — "왜 나만" 이 숫자로 끝난다</small></div></div></div>`;
+}else if(state==='empty'){
+  html=head('미생성')+`<div class="row"><div class="card"><h3>2026년 11월</h3><div class="cal">${cal(null)}</div>
+   <div class="msg" style="color:#8A94A6">아직 순번이 없습니다 — 생성을 누르세요 · 제외일 8건은 미리 표시됩니다</div></div>
+   <div class="card"><h3>통계</h3>${stats(null)}</div></div>`;
+}else{
+  html=head('—')+`<div class="err"><div><b>불러오지 못했습니다.</b> 순번 API(/api/roster) 가 응답하지 않습니다 — 빈 달력처럼 보이면 안 되므로 달력을 그리지 않습니다.</div><button>다시 시도</button></div>
+  <div class="card" style="flex:1"><div class="empty"><b>달력 잠금</b><small>서버가 응답하면 자동으로 다시 그립니다</small></div></div>`;
+}
+document.getElementById('main').innerHTML=html;
+</script></body></html>

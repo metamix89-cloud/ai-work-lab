@@ -1,0 +1,14 @@
+{
+ "allowed_routes": ["/", "/api/staff", "/api/unavailable", "/api/roster", "/api/roster/generate", "/api/roster/swap", "/api/roster/confirm", "/api/stats", "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "2교대 이상": "주간 당직|day_shift|night_shift|2교대|3교대|shift_type",
+  "희망 근무 신청": "희망|preference|wish",
+  "바꾸기 승인 흐름": "교환 요청|swap_request|swap.*approve|승인 대기",
+  "공휴일 가중치": "공휴일|holiday",
+  "알림 · 메신저": "알림|notify|메신저|kakao|slack",
+  "인쇄 · 엑셀": "인쇄|print\\(|엑셀|xlsx|csv 내보내기|export",
+  "여러 병동": "병동 선택|ward_id|wards",
+  "로그인 · 권한": "login|password|로그인|auth",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}

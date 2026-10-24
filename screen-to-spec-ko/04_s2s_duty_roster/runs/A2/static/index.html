@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>한빛요양병원 3병동 야간 당직 순번표</title>
+<style>
+  :root { --bg:#f5f7fa; --card:#fff; --line:#e3e8ee; --txt:#1f2933; --sub:#6b7785; --accent:#2f6fdb; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif; background:var(--bg); color:var(--txt); }
+  header { background:var(--accent); color:#fff; padding:16px 24px; }
+  header h1 { margin:0; font-size:20px; }
+  header p { margin:4px 0 0; font-size:13px; opacity:.85; }
+  main { max-width:1100px; margin:20px auto; padding:0 16px; display:grid; gap:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; }
+  .bar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .bar h2 { margin:0; font-size:18px; min-width:120px; text-align:center; }
+  button { border:1px solid var(--line); background:#fff; border-radius:6px; padding:7px 12px; cursor:pointer; font:inherit; }
+  button:hover { background:#eef3fb; }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button.primary:hover { background:#2559b3; }
+  .spacer { flex:1; }
+  .cal { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-top:12px; }
+  .dow { text-align:center; font-size:12px; color:var(--sub); padding:4px 0; }
+  .dow:first-child, .cell.sun .num { color:#d64545; }
+  .dow:nth-child(7), .cell.sat .num { color:#2f6fdb; }
+  .cell { min-height:92px; border:1px solid var(--line); border-radius:6px; padding:5px; background:#fff; font-size:12px; }
+  .cell.empty { background:transparent; border:none; }
+  .cell.today { outline:2px solid var(--accent); }
+  .num { font-weight:bold; font-size:12px; }
+  .duty { margin-top:4px; padding:4px 6px; border-radius:4px; color:#fff; font-weight:bold; font-size:13px; text-align:center; }
+  .duty.none { background:#c0392b; }
+  .leaves { margin-top:4px; display:flex; flex-wrap:wrap; gap:2px; }
+  .lv { background:#eceff3; color:var(--sub); border-radius:3px; padding:1px 4px; font-size:11px; cursor:pointer; }
+  .lv:hover { background:#ffd9d9; color:#a00; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { padding:8px; border-bottom:1px solid var(--line); text-align:center; }
+  th { color:var(--sub); font-weight:normal; font-size:13px; }
+  td.name { text-align:left; }
+  .dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; }
+  .form { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  select, input { font:inherit; padding:6px 8px; border:1px solid var(--line); border-radius:6px; }
+  .note { font-size:12px; color:var(--sub); margin-top:8px; }
+  @media (max-width:640px){ .cell{min-height:70px;font-size:11px;} .lv{font-size:10px;} }
+</style>
+</head>
+<body>
+<header>
+  <h1>한빛요양병원 3병동 · 야간 당직 순번표</h1>
+  <p>휴가자 제외 · 연속 야간 방지 · 총 횟수와 주말 당직 균등 배분</p>
+</header>
+<main>
+  <section class="card">
+    <div class="bar">
+      <button id="prev">◀</button>
+      <h2 id="title"></h2>
+      <button id="next">▶</button>
+      <span class="spacer"></span>
+      <button class="primary" id="gen">이 달 당직 자동 배정</button>
+    </div>
+    <div class="cal" id="cal"></div>
+    <div class="note">회색 칩은 휴가자입니다. 클릭하면 휴가가 취소됩니다. 휴가를 바꾼 뒤에는 '자동 배정'을 다시 눌러 주세요.</div>
+  </section>
+
+  <section class="card">
+    <h3 style="margin-top:0">당직 공평성 현황</h3>
+    <table>
+      <thead><tr><th style="text-align:left">간호사</th><th>당직 횟수</th><th>주말 당직</th><th>휴가일수</th></tr></thead>
+      <tbody id="stats"></tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h3 style="margin-top:0">휴가 등록</h3>
+    <div class="form">
+      <select id="lvNurse"></select>
+      <input type="date" id="lvStart"> ~ <input type="date" id="lvEnd">
+      <button id="lvAdd">등록</button>
+    </div>
+  </section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+let nurses = [], byId = {}, cur = new Date(), data = null;
+cur.setDate(1);
+
+const iso = (y, m, d) => `${y}-${String(m).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+async function api(url, opt) {
+  const r = await fetch(url, opt);
+  if (!r.ok) { alert((await r.json()).detail || "오류"); throw 0; }
+  return r.json();
+}
+
+async function load() {
+  const y = cur.getFullYear(), m = cur.getMonth() + 1;
+  data = await api(`/api/schedule?year=${y}&month=${m}`);
+  render();
+}
+
+function render() {
+  const y = data.year, m = data.month;
+  $("title").textContent = `${y}년 ${m}월`;
+  const first = new Date(y, m - 1, 1).getDay(), last = new Date(y, m, 0).getDate();
+  const now = new Date(), t = iso(now.getFullYear(), now.getMonth() + 1, now.getDate());
+  let h = ["일","월","화","수","목","금","토"].map(d => `<div class="dow">${d}</div>`).join("");
+  for (let i = 0; i < first; i++) h += `<div class="cell empty"></div>`;
+  for (let d = 1; d <= last; d++) {
+    const key = iso(y, m, d), dow = (first + d - 1) % 7;
+    const nid = data.duty[key], n = byId[nid];
+    const duty = !data.generated ? "" :
+      n ? `<div class="duty" style="background:${n.color}">${n.name}</div>` : `<div class="duty none">배정 불가</div>`;
+    const lv = (data.leaves[key] || []).map(id =>
+      `<span class="lv" title="클릭: 휴가 취소" data-n="${id}" data-d="${key}">${byId[id].name} 휴가</span>`).join("");
+    h += `<div class="cell ${dow===0?"sun":dow===6?"sat":""} ${key===t?"today":""}">
+      <span class="num">${d}</span>${duty}<div class="leaves">${lv}</div></div>`;
+  }
+  $("cal").innerHTML = h;
+  $("cal").querySelectorAll(".lv").forEach(el => el.onclick = async () => {
+    await api(`/api/leaves?nurse_id=${el.dataset.n}&day=${el.dataset.d}`, { method: "DELETE" });
+    load();
+  });
+  $("stats").innerHTML = Object.entries(data.stats).map(([id, s]) =>
+    `<tr><td class="name"><span class="dot" style="background:${byId[id].color}"></span>${s.name}</td>
+     <td><b>${s.total}</b></td><td>${s.weekend}</td><td>${s.leave}</td></tr>`).join("");
+}
+
+$("prev").onclick = () => { cur.setMonth(cur.getMonth() - 1); load(); };
+$("next").onclick = () => { cur.setMonth(cur.getMonth() + 1); load(); };
+$("gen").onclick = async () => {
+  data = await api(`/api/schedule/generate?year=${cur.getFullYear()}&month=${cur.getMonth()+1}`, { method: "POST" });
+  render();
+};
+$("lvAdd").onclick = async () => {
+  const s = $("lvStart").value, e = $("lvEnd").value || s;
+  if (!s) return alert("시작일을 선택하세요");
+  await api("/api/leaves", { method: "POST", headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ nurse_id: +$("lvNurse").value, start: s, end: e }) });
+  load();
+};
+
+(async () => {
+  nurses = await api("/api/nurses");
+  nurses.forEach(n => byId[n.id] = n);
+  $("lvNurse").innerHTML = nurses.map(n => `<option value="${n.id}">${n.name}</option>`).join("");
+  load();
+})();
+</script>
+</body>
+</html>

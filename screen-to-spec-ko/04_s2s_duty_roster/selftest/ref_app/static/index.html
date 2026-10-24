@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>한빛요양병원 3병동 당직 순번표</title>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif;background:#F6F7FB;color:#111318;margin:0;padding:24px}
+h1{font-size:20px;margin:0}.top{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.wrap{display:grid;grid-template-columns:1fr 280px;gap:16px;margin-top:14px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.day{background:#fff;border:1px solid #E5E7EB;border-radius:8px;min-height:64px;padding:6px;font-size:12px;cursor:pointer}
+.day.wk{background:#F3F4F6}.day.sel{outline:2px solid #6366F1}.day b{display:block;font-size:14px;margin-top:4px}.day small{color:#9CA3AF}
+table{border-collapse:collapse;width:100%;font-size:13px;background:#fff}td,th{border-bottom:1px solid #E5E7EB;padding:6px 8px;text-align:left}
+.msg{color:#B91C1C;min-height:18px;margin-top:8px}
+</style></head><body>
+<div class="top"><h1>한빛요양병원 3병동 당직 순번표</h1>
+ <input data-testid="month" id="month" type="month" value="2026-11">
+ <button data-testid="generate-btn" id="gen">생성</button>
+ <button data-testid="confirm-btn" id="confirm">확정</button>
+ <span data-testid="status" id="status"></span>
+ <button data-testid="swap-btn" id="swap" style="display:none">바꾸기</button></div>
+<div class="wrap"><div><div class="cal" id="cal"></div><div class="msg" data-testid="message" id="msg"></div></div>
+ <div><table id="stats"></table></div></div>
+<script>
+const $=id=>document.getElementById(id);let sel=[];
+const month=()=>$('month').value;
+const api=async(m,u,b)=>{const r=await fetch(u,{method:m,headers:{'Content-Type':'application/json'},body:b?JSON.stringify(b):undefined});
+  const j=await r.json().catch(()=>({}));if(!r.ok){$('msg').textContent=j.detail||'오류';throw 0;}return j;};
+async function load(){
+  $('msg').textContent='';sel=[];$('swap').style.display='none';
+  try{
+    const [ro,un,st]=await Promise.all([api('GET','/api/roster?month='+month()),api('GET','/api/unavailable?month='+month()),api('GET','/api/stats?month='+month())]);
+    $('status').textContent=ro.status;
+    const unav={};un.forEach(u=>{(unav[u.date]=unav[u.date]||[]).push(u.name);});
+    $('cal').innerHTML=ro.days.map(d=>`<div class="day ${d.weekend?'wk':''}" data-testid="day" data-date="${d.date}" data-name="${d.name}" ${d.weekend?'data-weekend="1"':''}>${d.date.slice(8)}<b>${d.name||'—'}</b><small>${(unav[d.date]||[]).map(n=>'제외 '+n).join(', ')}</small></div>`).join('');
+    if(ro.status==='미생성')$('msg').textContent='아직 순번이 없습니다 — 생성을 누르세요';
+    $('stats').innerHTML='<tr><th>이름</th><th>총</th><th>주말</th></tr>'+st.map(s=>`<tr data-testid="stat-row" data-name="${s.name}" data-total="${s.total}" data-weekend="${s.weekend}"><td>${s.name}</td><td>${s.total}</td><td>${s.weekend}</td></tr>`).join('');
+  }catch(e){$('cal').innerHTML='<div>불러오지 못했습니다 <button onclick="load()">다시 시도</button></div>';}
+}
+$('cal').onclick=e=>{const d=e.target.closest('.day');if(!d||!d.dataset.name)return;d.classList.toggle('sel');
+  sel=[...document.querySelectorAll('.day.sel')].map(x=>x.dataset.date);$('swap').style.display=sel.length===2?'':'none';};
+$('gen').onclick=async()=>{await api('POST','/api/roster/generate',{month:month()});load();};
+$('confirm').onclick=async()=>{await api('POST','/api/roster/confirm',{month:month()});load();};
+$('swap').onclick=async()=>{await api('POST','/api/roster/swap',{date_a:sel[0],date_b:sel[1]});load();};
+$('month').onchange=load;load();
+</script></body></html>

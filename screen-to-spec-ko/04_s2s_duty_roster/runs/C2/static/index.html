@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>한빛요양병원 3병동 당직 순번표</title>
+<style>
+body{font-family:'Malgun Gothic',sans-serif;margin:16px;color:#222}
+header{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+h1{font-size:20px;margin:0 16px 0 0}
+button{padding:6px 12px;cursor:pointer}
+#status{font-weight:bold;padding:2px 8px;background:#eef;border-radius:4px}
+main{display:flex;gap:24px;margin-top:14px;align-items:flex-start}
+#cal{flex:1}
+#grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.hd{text-align:center;font-weight:bold;background:#f0f0f0;padding:4px}
+.day{border:1px solid #ccc;min-height:72px;padding:4px;cursor:pointer;font-size:13px}
+.day[data-weekend="1"]{background:#fff4e5}
+.day.sel{outline:3px solid #2a7}
+.day .dn{font-weight:bold}.day .nm{font-size:15px;color:#036}.day .un{font-size:10px;color:#a00}
+table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:4px 10px;text-align:center}
+#msg{margin-top:12px;min-height:24px;color:#a00}
+#empty,#err{padding:8px;background:#ffd;margin-bottom:8px}#err{background:#fdd}
+</style>
+</head>
+<body>
+<header>
+  <h1>한빛요양병원 3병동 당직 순번표</h1>
+  <input type="month" data-testid="month" id="month" value="2026-11">
+  <button data-testid="generate-btn" id="gen">생성</button>
+  <button data-testid="confirm-btn" id="conf">확정</button>
+  <span data-testid="status" id="status">미생성</span>
+</header>
+<main>
+  <section id="cal">
+    <div id="err" hidden>불러오지 못했습니다 <button id="retry">다시 시도</button></div>
+    <div id="empty" hidden>아직 순번이 없습니다 — 생성을 누르세요</div>
+    <div><button data-testid="swap-btn" id="swap" hidden>선택한 두 날 바꾸기</button></div>
+    <div id="grid"></div>
+  </section>
+  <aside>
+    <table><thead><tr><th>이름</th><th>총</th><th>주말</th></tr></thead><tbody id="stats"></tbody></table>
+  </aside>
+</main>
+<div id="msg" data-testid="message"></div>
+<script>
+const $ = id => document.getElementById(id);
+let sel = [];
+const msg = t => $('msg').textContent = t || '';
+
+async function api(method, url, body) {
+  const r = await fetch(url, {method, headers: {'Content-Type': 'application/json'}, body: body ? JSON.stringify(body) : undefined});
+  let data = null;
+  try { data = await r.json(); } catch (e) {}
+  if (!r.ok) { const e = new Error((data && data.detail) || '요청 실패'); e.rejected = true; throw e; }
+  return data;
+}
+
+async function load() {
+  const m = $('month').value;
+  if (!m) return;
+  try {
+    const [ro, un, st] = await Promise.all([
+      api('GET', '/api/roster?month=' + m), api('GET', '/api/unavailable?month=' + m), api('GET', '/api/stats?month=' + m)]);
+    $('err').hidden = true;
+    render(ro, un, st);
+  } catch (e) {
+    $('err').hidden = false;
+  }
+}
+
+function render(ro, un, st) {
+  sel = []; $('swap').hidden = true;
+  $('status').textContent = ro.status;
+  $('empty').hidden = ro.status !== '미생성';
+  $('conf').disabled = ro.status === '미생성';
+  $('gen').disabled = ro.status === '확정';
+  const ex = {};
+  un.forEach(u => (ex[u.date] = ex[u.date] || []).push(u.name));
+  const g = $('grid'); g.innerHTML = '';
+  ['일','월','화','수','목','금','토'].forEach(w => { const h = document.createElement('div'); h.className = 'hd'; h.textContent = w; g.appendChild(h); });
+  const lead = new Date(ro.days[0].date + 'T00:00:00').getDay();
+  for (let i = 0; i < lead; i++) g.appendChild(document.createElement('div'));
+  ro.days.forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'day';
+    el.setAttribute('data-testid', 'day');
+    el.setAttribute('data-date', d.date);
+    el.setAttribute('data-name', d.name);
+    if (d.weekend) el.setAttribute('data-weekend', '1');
+    el.innerHTML = '<div class="dn"></div><div class="nm"></div><div class="un"></div>';
+    el.children[0].textContent = Number(d.date.slice(8));
+    el.children[1].textContent = d.name;
+    el.children[2].textContent = (ex[d.date] || []).map(n => n + ' 제외').join(', ');
+    el.onclick = () => pick(el, d.date);
+    g.appendChild(el);
+  });
+  const tb = $('stats'); tb.innerHTML = '';
+  st.forEach(s => {
+    const tr = document.createElement('tr');
+    tr.setAttribute('data-testid', 'stat-row');
+    tr.setAttribute('data-name', s.name);
+    tr.setAttribute('data-total', s.total);
+    tr.setAttribute('data-weekend', s.weekend);
+    [s.name, s.total, s.weekend].forEach(v => { const td = document.createElement('td'); td.textContent = v; tr.appendChild(td); });
+    tb.appendChild(tr);
+  });
+}
+
+function pick(el, date) {
+  const i = sel.indexOf(date);
+  if (i >= 0) { sel.splice(i, 1); el.classList.remove('sel'); }
+  else {
+    if (sel.length === 2) {
+      document.querySelector('.day[data-date="' + sel[0] + '"]').classList.remove('sel');
+      sel.shift();
+    }
+    sel.push(date); el.classList.add('sel');
+  }
+  $('swap').hidden = sel.length !== 2;
+}
+
+async function act(fn) {
+  msg('');
+  try { await fn(); } catch (e) { if (e.rejected) msg(e.message); else $('err').hidden = false; return; }
+  await load();
+}
+$('gen').onclick = () => act(() => api('POST', '/api/roster/generate', {month: $('month').value}));
+$('conf').onclick = () => act(() => api('POST', '/api/roster/confirm', {month: $('month').value}));
+$('swap').onclick = () => act(() => api('POST', '/api/roster/swap', {date_a: sel[0], date_b: sel[1]}));
+$('month').onchange = () => { msg(''); load(); };
+$('retry').onclick = load;
+load();
+</script>
+</body>
+</html>

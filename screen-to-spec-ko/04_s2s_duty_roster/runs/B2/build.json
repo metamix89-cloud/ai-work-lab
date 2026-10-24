@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 99994,
+ "num_turns": 11,
+ "total_cost_usd": 0.3283534,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 18,
+  "cache_creation_input_tokens": 36735,
+  "cache_read_input_tokens": 366374,
+  "output_tokens": 14474,
+  "output_tokens_details": {
+   "thinking_tokens": 2147
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 36735,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 815,
+    "cache_read_input_tokens": 52933,
+    "cache_creation_input_tokens": 474,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 474
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD의 웹앱을 만들었습니다. 테스트 11개가 모두 통과했습니다. 여기에는 PRD의 완료 기준 T1~T9가 들어 있고, T9는 Playwright로 실제 브라우저를 띄워 확인했습니다.\n\n폴더에 `PRD.md`만 있어서 `seed/`와 `tests/test_dod.py`도 제가 새로 만들었습니다. 이 테스트는 PRD의 완료 기준을 옮겨 쓴 것이라, 원래 의도한 테스트 파일이 따로 있으면 그걸로 다시 돌려 보세요.\n\n**만든 것**\n- `main.py`: FastAPI 서버입니다. 서버를 시작할 때마다 CSV로 `duty.db`를 새로 만듭니다. API 7개와 `/`가 들어 있습니다.\n- `static/index.html`: 순수 HTML/JS 화면입니다. 달력, 통계 표, 날짜 두 개를 눌러 바꾸기, 확정, 미생성/오류 상태가 있고, PRD의 `data-testid`를 그대로 썼습니다.\n- `seed/`: 직원 6명, 제외일 6건(박지연 11-03~07, 이서준 11-15), 2026-10 순번 31일치(10-31 당직은 최유나)입니다. 가상 데이터라 같은 형식의 CSV로 바꿔 끼울 수 있습니다.\n- `tests/test_dod.py`: 위 테스트 파일입니다.\n\n**생성 방식**\n- 표준 라이브러리 백트래킹으로 R1~R5를 만족시킵니다. 6명 × 30일 생성은 몇 초 안에 끝납니다.\n- 바꾸기는 R2 → R3 순서로 검사해 위반이면 409와 규칙 이름을 돌려줍니다. 입력 오류(400)가 먼저 걸립니다.\n\n**실행:** 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`을 실행하세요.\n\n한 가지 알아 둘 점은 요청 본문의 필드가 아예 빠지면 FastAPI 기본 검증이 422로 답한다는 것입니다. PRD는 이 경우를 따로 정하지 않아서 그대로 뒀습니다.",
+ "wall_s": 124.4
+}

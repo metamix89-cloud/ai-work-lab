@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>한빛요양병원 3병동 당직 순번표</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 20px; color: #222; }
+  header { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  h1 { font-size: 20px; margin: 0 12px 0 0; }
+  button { padding: 6px 12px; cursor: pointer; }
+  #status { font-weight: bold; padding: 2px 8px; border-radius: 10px; background: #eee; }
+  main { display: flex; gap: 24px; margin-top: 16px; align-items: flex-start; }
+  #left { flex: 3; position: relative; }
+  #right { flex: 1; min-width: 260px; }
+  #grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .head { text-align: center; font-weight: bold; padding: 4px; background: #f0f0f0; }
+  .blank { min-height: 78px; }
+  [data-testid="day"] { min-height: 78px; border: 1px solid #ccc; border-radius: 4px; padding: 4px; cursor: pointer; font-size: 13px; }
+  [data-testid="day"][data-weekend="1"] { background: #fff4e5; }
+  [data-testid="day"].sel { outline: 3px solid #2f6fdb; }
+  .num { color: #666; font-size: 12px; }
+  .who { font-weight: bold; font-size: 15px; min-height: 20px; }
+  .off { color: #b33; font-size: 11px; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #ccc; padding: 6px; text-align: center; }
+  #empty { position: absolute; top: 40px; left: 0; right: 0; text-align: center; background: rgba(255,255,255,.9); padding: 12px; font-weight: bold; }
+  #message { margin-top: 16px; min-height: 22px; color: #b33; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>한빛요양병원 3병동 당직 순번표</h1>
+  <input type="month" data-testid="month" id="month" value="2026-11">
+  <button data-testid="generate-btn" id="gen">생성</button>
+  <button data-testid="confirm-btn" id="conf">확정</button>
+  <span data-testid="status" id="status">미생성</span>
+  <button data-testid="swap-btn" id="swap" class="hidden">선택한 두 날 바꾸기</button>
+</header>
+<main>
+  <section id="left">
+    <div id="empty" class="hidden">아직 순번이 없습니다 — 생성을 누르세요</div>
+    <div id="grid"></div>
+  </section>
+  <section id="right">
+    <table>
+      <thead><tr><th>이름</th><th>총 횟수</th><th>주말</th></tr></thead>
+      <tbody id="stats"></tbody>
+    </table>
+  </section>
+</main>
+<div data-testid="message" id="message"></div>
+<div id="error" class="hidden">불러오지 못했습니다 <button id="retry">다시 시도</button></div>
+<script>
+const $ = id => document.getElementById(id);
+let selected = [];
+let seq = 0;
+
+function say(t) { $("message").textContent = t || ""; }
+
+async function api(method, url, body) {
+  const r = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined });
+  let data = null;
+  try { data = await r.json(); } catch (e) {}
+  if (!r.ok) { const err = new Error((data && data.detail) || "요청 실패"); err.rejected = true; throw err; }
+  return data;
+}
+
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+async function load() {
+  const month = $("month").value;
+  if (!/^\d{4}-\d{2}$/.test(month)) return;
+  const my = ++seq;
+  try {
+    const [ro, un, st] = await Promise.all([
+      api("GET", "/api/roster?month=" + month),
+      api("GET", "/api/unavailable?month=" + month),
+      api("GET", "/api/stats?month=" + month),
+    ]);
+    if (my !== seq) return;
+    $("error").classList.add("hidden");
+    render(ro, un, st);
+  } catch (e) {
+    if (my !== seq) return;
+    $("error").classList.remove("hidden");
+  }
+}
+
+function render(ro, un, st) {
+  $("status").textContent = ro.status;
+  $("empty").classList.toggle("hidden", ro.status !== "미생성");
+  $("conf").disabled = ro.status === "미생성";
+  $("gen").disabled = ro.status === "확정";
+  const off = {};
+  un.forEach(u => (off[u.date] = off[u.date] || []).push(u.name));
+  selected = selected.filter(d => ro.days.some(x => x.date === d));
+  let h = ["일", "월", "화", "수", "목", "금", "토"].map(d => `<div class="head">${d}</div>`).join("");
+  const first = new Date(ro.days[0].date + "T00:00:00").getDay();
+  for (let i = 0; i < first; i++) h += '<div class="blank"></div>';
+  ro.days.forEach(d => {
+    const o = (off[d.date] || []).map(n => esc(n) + " 제외").join(", ");
+    h += `<div data-testid="day" data-date="${d.date}" data-name="${esc(d.name)}"${d.weekend ? ' data-weekend="1"' : ""}` +
+      `${selected.includes(d.date) ? ' class="sel"' : ""}>` +
+      `<div class="num">${+d.date.slice(8)}</div><div class="who">${esc(d.name)}</div><div class="off">${o}</div></div>`;
+  });
+  $("grid").innerHTML = h;
+  $("swap").classList.toggle("hidden", selected.length !== 2);
+  $("stats").innerHTML = st.map(s =>
+    `<tr data-testid="stat-row" data-name="${esc(s.name)}" data-total="${s.total}" data-weekend="${s.weekend}">` +
+    `<td>${esc(s.name)}</td><td>${s.total}</td><td>${s.weekend}</td></tr>`).join("");
+}
+
+async function act(fn) {
+  say("");
+  try { await fn(); } catch (e) { say(e.rejected ? e.message : "불러오지 못했습니다"); }
+  await load();
+}
+
+$("grid").addEventListener("click", ev => {
+  const cell = ev.target.closest('[data-testid="day"]');
+  if (!cell) return;
+  const d = cell.dataset.date;
+  selected = selected.includes(d) ? selected.filter(x => x !== d) : [...selected, d].slice(-2);
+  cell.parentNode.querySelectorAll('[data-testid="day"]').forEach(c => c.classList.toggle("sel", selected.includes(c.dataset.date)));
+  $("swap").classList.toggle("hidden", selected.length !== 2);
+});
+$("gen").onclick = () => act(() => api("POST", "/api/roster/generate", { month: $("month").value }));
+$("conf").onclick = () => act(() => api("POST", "/api/roster/confirm", { month: $("month").value }));
+$("swap").onclick = () => act(async () => {
+  const [a, b] = selected;
+  try { await api("POST", "/api/roster/swap", { date_a: a, date_b: b }); selected = []; }
+  catch (e) { throw e; }
+});
+$("month").onchange = () => { selected = []; say(""); load(); };
+$("retry").onclick = load;
+load();
+</script>
+</body>
+</html>

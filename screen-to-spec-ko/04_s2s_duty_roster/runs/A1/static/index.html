@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>한빛요양병원 3병동 야간 당직표</title>
+<style>
+*{box-sizing:border-box}body{font-family:'Malgun Gothic',sans-serif;margin:0;background:#f4f6fa;color:#222}
+header{background:#1d3557;color:#fff;padding:14px 24px}header h1{margin:0;font-size:20px}header small{opacity:.75}
+main{max-width:1100px;margin:16px auto;padding:0 12px;display:grid;grid-template-columns:1fr 280px;gap:16px}
+@media(max-width:860px){main{grid-template-columns:1fr}}
+.card{background:#fff;border-radius:10px;padding:14px;box-shadow:0 1px 4px #0001}
+.bar{display:flex;align-items:center;gap:10px;margin-bottom:10px}.bar h2{margin:0;flex:1;text-align:center;font-size:18px}
+button{border:0;background:#1d3557;color:#fff;padding:7px 12px;border-radius:6px;cursor:pointer}button.alt{background:#e9edf5;color:#1d3557}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.dow{text-align:center;font-weight:bold;font-size:13px;padding:4px;color:#555}.dow:first-child{color:#d33}.dow:nth-child(7){color:#36c}
+.cell{min-height:84px;border:1px solid #e3e7ef;border-radius:6px;padding:4px;font-size:12px;background:#fff}
+.cell.empty{background:none;border:0}.cell.today{outline:2px solid #1d3557}
+.num{color:#666;font-size:12px}.pill{display:block;margin-top:4px;padding:3px 5px;border-radius:4px;color:#fff;font-weight:bold;font-size:13px;text-align:center}
+.lv{display:inline-block;margin:2px 2px 0 0;padding:1px 5px;border-radius:3px;background:#eee;color:#666;font-size:11px}
+table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:5px 3px;text-align:left}th{color:#666}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+.meter{height:6px;background:#e9edf5;border-radius:3px}.meter i{display:block;height:6px;border-radius:3px}
+select,input{padding:6px;border:1px solid #ccd;border-radius:6px;width:100%;margin-bottom:6px}
+.leave{font-size:12px;display:flex;justify-content:space-between;padding:2px 0}.leave a{color:#d33;cursor:pointer}
+h3{margin:0 0 8px;font-size:15px}.msg{font-size:13px;color:#2a7;margin-top:6px}
+</style></head><body>
+<header><h1>🌙 한빛요양병원 3병동 야간 당직 순번표</h1><small>간호사 6명 · 휴가자 자동 제외 · 가용일 대비 공평 배분</small></header>
+<main>
+<section class="card">
+  <div class="bar"><button class="alt" id="prev">◀</button><h2 id="title"></h2><button class="alt" id="next">▶</button><button id="gen">자동 배정</button></div>
+  <div class="grid" id="cal"></div>
+</section>
+<aside>
+  <div class="card"><h3>공평성 현황</h3><table id="stats"></table></div>
+  <div class="card" style="margin-top:16px"><h3>휴가 등록</h3>
+    <select id="ln"></select><input type="date" id="ld"><input id="lr" placeholder="사유 (선택)">
+    <button id="la" style="width:100%">휴가 추가</button>
+    <div class="msg" id="msg">휴가 추가/삭제 후 ‘자동 배정’을 눌러 다시 짜세요.</div>
+    <div id="lvs" style="margin-top:8px"></div>
+  </div>
+</aside>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+let cur=new Date();cur=new Date(cur.getFullYear(),cur.getMonth(),1);let nurses=[],data=null;
+const pad=n=>String(n).padStart(2,'0');
+const ym=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}`;
+async function api(u,o){const r=await fetch(u,o);if(!r.ok)throw new Error(await r.text());return r.json()}
+async function load(){
+  if(!nurses.length){nurses=await api('/api/nurses');$('ln').innerHTML=nurses.map(n=>`<option value="${n.id}">${n.name}</option>`).join('')}
+  data=await api('/api/schedule/'+ym(cur));render()}
+function render(){
+  const y=cur.getFullYear(),m=cur.getMonth();$('title').textContent=`${y}년 ${m+1}월`;
+  const byId=Object.fromEntries(nurses.map(n=>[n.id,n]));
+  const lv={};data.leaves.forEach(l=>(lv[l.day]??=[]).push(l));
+  let h=['일','월','화','수','목','금','토'].map(d=>`<div class="dow">${d}</div>`).join('');
+  const first=new Date(y,m,1).getDay(),last=new Date(y,m+1,0).getDate(),t=new Date();
+  for(let i=0;i<first;i++)h+='<div class="cell empty"></div>';
+  for(let d=1;d<=last;d++){
+    const k=`${y}-${pad(m+1)}-${pad(d)}`,n=byId[data.duty[k]];
+    const isT=t.getFullYear()==y&&t.getMonth()==m&&t.getDate()==d;
+    h+=`<div class="cell ${isT?'today':''}"><span class="num">${d}</span>
+      ${n?`<span class="pill" style="background:${n.color}">${n.name}</span>`:''}
+      ${(lv[k]||[]).map(l=>`<span class="lv" title="${l.reason}">🏖 ${byId[l.nurse_id].name}</span>`).join('')}</div>`}
+  $('cal').innerHTML=h;
+  const mx=Math.max(1,...data.stats.map(s=>s.duties));
+  $('stats').innerHTML='<tr><th>간호사</th><th>당직</th><th>휴가</th><th></th></tr>'+data.stats.map(s=>
+    `<tr><td><span class="dot" style="background:${s.color}"></span>${s.name}</td><td>${s.duties}</td><td>${s.leave_days}</td>
+    <td style="width:70px"><div class="meter"><i style="width:${s.duties/mx*100}%;background:${s.color}"></i></div></td></tr>`).join('');
+  $('lvs').innerHTML=data.leaves.map(l=>`<div class="leave"><span>${l.day.slice(5)} ${byId[l.nurse_id].name} ${l.reason}</span>
+    <a onclick="del(${l.nurse_id},'${l.day}')">삭제</a></div>`).join('')}
+async function del(n,d){await api(`/api/leaves?nurse_id=${n}&day=${d}`,{method:'DELETE'});$('msg').textContent='삭제됨 — ‘자동 배정’으로 다시 짜세요.';load()}
+$('prev').onclick=()=>{cur=new Date(cur.getFullYear(),cur.getMonth()-1,1);load()};
+$('next').onclick=()=>{cur=new Date(cur.getFullYear(),cur.getMonth()+1,1);load()};
+$('gen').onclick=async()=>{data=await api(`/api/schedule/${ym(cur)}/generate`,{method:'POST'});$('msg').textContent='다시 배정했습니다.';render()};
+$('la').onclick=async()=>{if(!$('ld').value)return;
+  await api('/api/leaves',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nurse_id:+$('ln').value,day:$('ld').value,reason:$('lr').value})});
+  $('msg').textContent='추가됨 — ‘자동 배정’으로 다시 짜세요.';load()};
+load();
+</script></body></html>

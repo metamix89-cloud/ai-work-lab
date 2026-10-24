@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 100618,
+ "num_turns": 9,
+ "total_cost_usd": 0.31561849999999997,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 36359,
+  "cache_read_input_tokens": 277245,
+  "output_tokens": 14243,
+  "output_tokens_details": {
+   "thinking_tokens": 2962
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 36359,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 952,
+    "cache_read_input_tokens": 52472,
+    "cache_creation_input_tokens": 559,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 559
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD.md대로 당직 순번표 웹앱을 만들었습니다. 서버는 정상적으로 뜹니다. 화면은 브라우저로 열어 보지 못했습니다.\n\n제가 만든 `tests/test_dod.py`(API 3개 테스트)는 통과했습니다. 이 테스트는 T1~T8에 해당하는 항목을 확인합니다. 화면을 확인하는 T9(`day` 칸 30개, `data-total` 합 30)는 돌려 보지 못했습니다. 구현은 PRD의 `data-testid`와 `data-*` 속성을 그대로 따랐습니다.\n\n- **실행:** 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`을 실행하면 됩니다. `PORT` 환경 변수를 따로 읽는 코드는 넣지 않았습니다. 주소는 `/`입니다.\n- **가상 데이터:** `seed/`의 CSV 3개는 제가 만들었습니다. 직원 6명, 제외일 6건(박지연 11-03~07, 이서준 11-15), 2026-10 순번 31일치입니다. 같은 형식의 CSV로 바꿔 끼우면 됩니다.\n- **서버 시작:** 시작할 때마다 `duty.db`를 CSV에서 새로 만듭니다.\n- **생성(R1~R5):** 표준 라이브러리만 쓰는 백트래킹으로 만들고, 2.5초가 지나면 중단합니다. 지난달 마지막 날과의 연속도 검사합니다. 불가능하면 422를 돌려줍니다. 2026-11은 30일 모두 채워졌고 직원별 5회씩입니다. 소요 시간은 따로 재지 않았고, 테스트 전체가 0.5초대에 끝났습니다.\n- **바꾸기(R6, R8):** 입력 오류(400)를 먼저 검사하고, 그다음에 R2(제외일), R3(연속) 위반(409)을 검사합니다. 위반 시 `detail`에 어느 규칙인지 적습니다.\n- **확정(R7):** 확정한 달은 다시 생성하면 409이고, 바꾸기는 계속 됩니다.\n- **화면:** 달력(제외자 이름 표시, 주말 구분), 통계 표, 두 칸을 고르면 나타나는 바꾸기 버튼, 메시지 줄이 있습니다. 미생성 안내와 오류 상태(`불러오지 못했습니다` + 다시 시도)도 넣었습니다.\n\n만든 파일은 `main.py`, `static/index.html`, `seed/*.csv`, `tests/test_dod.py`입니다.",
+ "wall_s": 115.9
+}

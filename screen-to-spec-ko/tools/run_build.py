@@ -132,6 +132,8 @@ def main():
             if only and name not in only:
                 continue
             work = os.path.join(work_root, name)
+            # 앞 빌드(특히 B 의 자기 테스트)가 남긴 서버가 다음 빌드의 기본 포트를 막지 않게 — 포트 기준으로 정리 (ep074 C 셋이 PORT 를 바꿔 돌렸던 일)
+            subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "kill_servers.py")], capture_output=True)
             prepare(lab, cond, work)
             print(name, "빌드 중 ...", end=" ", flush=True)
             info = build(claude, work, prompts[cond], model, max_turns, timeout=1500)

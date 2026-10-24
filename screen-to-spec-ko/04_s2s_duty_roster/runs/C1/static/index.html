@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>한빛요양병원 3병동 당직 순번표</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; padding: 16px 24px; color: #222; background: #fafafa; }
+  h1 { font-size: 22px; margin: 0 0 12px; }
+  .top { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; }
+  button, input { font: inherit; padding: 5px 12px; }
+  #status { font-weight: bold; padding: 3px 10px; border-radius: 12px; background: #e5e7eb; }
+  #status[data-state="생성됨"] { background: #dbeafe; }
+  #status[data-state="확정"] { background: #d1fae5; }
+  .main { display: flex; gap: 24px; align-items: flex-start; }
+  .left { flex: 1; min-width: 0; }
+  .right { width: 280px; }
+  #calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .dow { text-align: center; font-weight: bold; padding: 2px; }
+  .dow.we { color: #b91c1c; }
+  .day { background: #fff; border: 1px solid #d1d5db; border-radius: 4px; min-height: 76px; padding: 4px 6px; cursor: pointer; }
+  .day.blank { visibility: hidden; border: 0; }
+  .day[data-weekend="1"] { background: #fef2f2; }
+  .day.sel { outline: 3px solid #2563eb; }
+  .day .dn { font-size: 12px; color: #666; }
+  .day .who { font-weight: bold; font-size: 15px; min-height: 20px; }
+  .day .ex { font-size: 11px; color: #b45309; }
+  table { border-collapse: collapse; width: 100%; background: #fff; }
+  th, td { border: 1px solid #d1d5db; padding: 5px 8px; text-align: center; }
+  #notice { text-align: center; padding: 8px; color: #555; }
+  #message { margin-top: 14px; min-height: 22px; color: #b91c1c; font-weight: bold; }
+  #message.ok { color: #047857; }
+  #error { color: #b91c1c; padding: 8px 0; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<h1>한빛요양병원 3병동 당직 순번표</h1>
+<div class="top">
+  <input type="month" data-testid="month" id="month" aria-label="월 선택">
+  <button data-testid="generate-btn" id="gen">생성</button>
+  <button data-testid="confirm-btn" id="confirm">확정</button>
+  <span data-testid="status" id="status" data-state="미생성">미생성</span>
+  <button data-testid="swap-btn" id="swap" hidden>바꾸기</button>
+</div>
+<div id="error" hidden><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+<div class="main">
+  <div class="left">
+    <div id="notice" hidden>아직 순번이 없습니다 — 생성을 누르세요</div>
+    <div id="calendar"></div>
+  </div>
+  <div class="right">
+    <table>
+      <thead><tr><th>이름</th><th>총 횟수</th><th>주말</th></tr></thead>
+      <tbody id="stats"></tbody>
+    </table>
+  </div>
+</div>
+<div data-testid="message" id="message"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+let selected = [];
+let unav = {};
+
+async function api(method, url, body) {
+  const r = await fetch(url, {
+    method, headers: body ? {"Content-Type": "application/json"} : {},
+    body: body ? JSON.stringify(body) : undefined
+  });
+  let data = null;
+  try { data = await r.json(); } catch (e) {}
+  if (!r.ok) {
+    const err = new Error(data && data.detail ? data.detail : "요청이 실패했습니다");
+    err.rejected = true;
+    throw err;
+  }
+  return data;
+}
+
+function msg(text, ok) {
+  const m = $("message");
+  m.textContent = text || "";
+  m.className = ok ? "ok" : "";
+}
+
+async function load() {
+  const month = $("month").value;
+  if (!/^\d{4}-\d{2}$/.test(month)) return;
+  try {
+    const [roster, stats, un] = await Promise.all([
+      api("GET", "/api/roster?month=" + month),
+      api("GET", "/api/stats?month=" + month),
+      api("GET", "/api/unavailable?month=" + month)
+    ]);
+    $("error").hidden = true;
+    unav = {};
+    un.forEach(u => { (unav[u.date] = unav[u.date] || []).push(u.name + "(" + u.reason + ")"); });
+    render(roster, stats);
+  } catch (e) {
+    $("error").hidden = false;
+  }
+}
+
+function render(roster, stats) {
+  const st = $("status");
+  st.textContent = roster.status;
+  st.dataset.state = roster.status;
+  $("notice").hidden = roster.status !== "미생성";
+  selected = selected.filter(d => roster.days.some(x => x.date === d));
+  const cal = $("calendar");
+  cal.innerHTML = "";
+  ["일", "월", "화", "수", "목", "금", "토"].forEach((n, i) => {
+    const h = document.createElement("div");
+    h.className = "dow" + (i === 0 || i === 6 ? " we" : "");
+    h.textContent = n;
+    cal.appendChild(h);
+  });
+  const first = new Date(roster.days[0].date + "T00:00:00");
+  for (let i = 0; i < first.getDay(); i++) {
+    const b = document.createElement("div");
+    b.className = "day blank";
+    cal.appendChild(b);
+  }
+  roster.days.forEach(d => {
+    const c = document.createElement("div");
+    c.className = "day" + (selected.includes(d.date) ? " sel" : "");
+    c.dataset.testid = "day";
+    c.setAttribute("data-testid", "day");
+    c.setAttribute("data-date", d.date);
+    c.setAttribute("data-name", d.name);
+    if (d.weekend) c.setAttribute("data-weekend", "1");
+    const ex = (unav[d.date] || []).join(", ");
+    c.innerHTML = '<div class="dn"></div><div class="who"></div><div class="ex"></div>';
+    c.children[0].textContent = Number(d.date.slice(8));
+    c.children[1].textContent = d.name;
+    c.children[2].textContent = ex ? "제외: " + ex : "";
+    c.addEventListener("click", () => pick(d.date));
+    cal.appendChild(c);
+  });
+  const tb = $("stats");
+  tb.innerHTML = "";
+  stats.forEach(s => {
+    const tr = document.createElement("tr");
+    tr.setAttribute("data-testid", "stat-row");
+    tr.setAttribute("data-name", s.name);
+    tr.setAttribute("data-total", s.total);
+    tr.setAttribute("data-weekend", s.weekend);
+    [s.name, s.total, s.weekend].forEach(v => {
+      const td = document.createElement("td");
+      td.textContent = v;
+      tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+  $("swap").hidden = selected.length !== 2;
+}
+
+function pick(date) {
+  const i = selected.indexOf(date);
+  if (i >= 0) selected.splice(i, 1);
+  else { if (selected.length === 2) selected.shift(); selected.push(date); }
+  document.querySelectorAll('[data-testid="day"]').forEach(c =>
+    c.classList.toggle("sel", selected.includes(c.getAttribute("data-date"))));
+  $("swap").hidden = selected.length !== 2;
+}
+
+async function act(fn, okText) {
+  try {
+    await fn();
+    msg(okText, true);
+  } catch (e) {
+    if (e.rejected) msg(e.message);
+    else $("error").hidden = false;
+  }
+  await load();
+}
+
+$("gen").onclick = () => act(() => api("POST", "/api/roster/generate", {month: $("month").value}), "생성했습니다");
+$("confirm").onclick = () => act(() => api("POST", "/api/roster/confirm", {month: $("month").value}), "확정했습니다");
+$("swap").onclick = () => {
+  const [a, b] = selected;
+  selected = [];
+  return act(() => api("POST", "/api/roster/swap", {date_a: a, date_b: b}), "바꿨습니다");
+};
+$("retry").onclick = load;
+$("month").addEventListener("change", () => { selected = []; msg(""); load(); });
+$("month").addEventListener("input", () => { selected = []; load(); });
+
+(async () => {
+  try {
+    $("month").value = (await api("GET", "/api/default-month")).month;
+  } catch (e) {
+    const d = new Date();
+    $("month").value = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
+  }
+  load();
+})();
+</script>
+</body>
+</html>

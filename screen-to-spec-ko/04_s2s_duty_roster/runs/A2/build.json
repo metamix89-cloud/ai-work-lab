@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 한빛요양병원 3병동 '야간 당직 순번표' 웹앱을 만들어 줘. 간호사 6명의 한 달 당직을 자동으로 짜서 달력으로 보여 주고, 휴가인 사람은 빼고, 공평하게 나누면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 77752,
+ "num_turns": 10,
+ "total_cost_usd": 0.23350450000000003,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 27774,
+  "cache_read_input_tokens": 210345,
+  "output_tokens": 10135,
+  "output_tokens_details": {
+   "thinking_tokens": 693
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 27774,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1065,
+    "cache_read_input_tokens": 43621,
+    "cache_creation_input_tokens": 825,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 825
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "한빛요양병원 3병동 야간 당직 순번표 웹앱을 만들었고, 실제로 서버를 띄워 확인했습니다. 한글이 깨져 보인 건 PowerShell 출력 인코딩 때문이고, 데이터는 정상입니다.\n\n**실행 방법** (작업 폴더에서)\n```\npip install -r requirements.txt\npython -m uvicorn main:app --port 8077\n```\n브라우저에서 http://127.0.0.1:8077 을 열면 됩니다. 8000번 포트는 이 PC에서 이미 다른 프로그램이 쓰고 있어서 8077로 했습니다. 첫 실행 때 `duty.db`가 만들어지고, 가상 간호사 6명과 가상 휴가가 들어가며, 이번 달(10월)과 다음 달(11월) 당직이 자동으로 짜입니다.\n\n**기능**\n- **달력:** 날짜마다 당직자가 이름과 색깔로 보입니다. 휴가자는 회색 칩으로 같이 표시되고, ◀ ▶로 달을 넘길 수 있습니다.\n- **자동 배정:** \"이 달 당직 자동 배정\" 버튼을 누르면 다시 짭니다.\n- **휴가 관리:** 아래 폼에서 기간으로 등록하고, 달력의 회색 칩을 클릭하면 취소됩니다. 휴가를 바꾼 뒤에는 자동 배정을 다시 눌러야 반영됩니다.\n- **공평성 표:** 간호사별 당직 횟수, 주말 당직 횟수, 휴가일수를 보여 줍니다.\n\n**배정 규칙**\n- 휴가인 날에는 배정하지 않습니다.\n- 전날 당직한 사람은 다음 날 배정하지 않습니다. 대신할 사람이 없을 때만 예외로 둡니다.\n- 당직 횟수가 가장 적은 사람을 먼저 뽑고, 주말은 주말 횟수가 적은 사람을 먼저 뽑습니다.\n- 무작위 시작을 300번 시도해서 가장 공평한 결과를 고릅니다. 시드를 고정해서 같은 입력이면 같은 결과가 나옵니다.\n\n**검증 결과**\n- **10월:** 5·5·6·5·5·5회입니다. 6회인 사람이 한 명 있는데, 31일이라 6명에게 똑같이 나눌 수 없어서입니다.\n- **11월:** 모두 5회입니다.\n- **휴가·연속 근무:** 두 달 모두 휴가일 배정이 0건이고 연속 야간도 0건입니다.\n- **주말 당직:** 1~3회로 완전히 같지는 않습니다.\n- **화면:** 페이지는 200으로 열렸습니다. 브라우저에서 직접 눈으로 본 것은 아닙니다.\n\n파일은 `main.py`(API와 DB), `scheduler.py`(배정 로직), `static/index.html`(화면)입니다.",
+ "wall_s": 113.6
+}
