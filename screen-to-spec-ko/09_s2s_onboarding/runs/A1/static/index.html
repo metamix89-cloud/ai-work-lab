@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 신입사원 온보딩</title>
+<style>
+  :root { --brand:#2f6fed; --ok:#1a8a4a; --bad:#c93030; --bg:#f5f7fb; --line:#dde3ee; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Malgun Gothic",system-ui,sans-serif; background:var(--bg); color:#1f2937; }
+  header { background:var(--brand); color:#fff; padding:14px 24px; display:flex; justify-content:space-between; align-items:center; }
+  header h1 { font-size:18px; margin:0; }
+  main { max-width:820px; margin:24px auto; padding:0 16px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:20px; margin-bottom:16px; }
+  button { background:var(--brand); color:#fff; border:0; border-radius:6px; padding:9px 16px; font-size:14px; cursor:pointer; }
+  button.ghost { background:#fff; color:var(--brand); border:1px solid var(--brand); }
+  button:disabled { background:#b8c2d6; cursor:not-allowed; }
+  input[type=text], input[type=password] { width:100%; padding:9px; margin:4px 0 12px; border:1px solid var(--line); border-radius:6px; }
+  .lesson { display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--line); }
+  .lesson:last-child { border:0; }
+  .badge { font-size:12px; padding:2px 8px; border-radius:10px; background:#e8edf7; }
+  .badge.ok { background:#dff3e7; color:var(--ok); } .badge.bad { background:#fbe3e3; color:var(--bad); }
+  .bar { height:8px; background:#e8edf7; border-radius:4px; overflow:hidden; margin:8px 0 16px; }
+  .bar > div { height:100%; background:var(--brand); }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { text-align:left; padding:8px 6px; border-bottom:1px solid var(--line); }
+  .q { margin-bottom:18px; } .q label { display:block; padding:4px 0; cursor:pointer; }
+  .err { color:var(--bad); margin:0 0 8px; } .hint { color:#6b7280; font-size:13px; }
+  .big { font-size:42px; font-weight:bold; }
+</style>
+</head>
+<body>
+<header><h1>다온소프트 신입사원 온보딩</h1><div id="who"></div></header>
+<main id="app"></main>
+
+<script>
+let token = sessionStorage.getItem("token"), me = JSON.parse(sessionStorage.getItem("me") || "null");
+const $app = document.getElementById("app");
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+async function api(path, opts = {}) {
+  const res = await fetch("/api" + path, {
+    ...opts,
+    headers: { "Content-Type":"application/json", ...(token ? { Authorization:"Bearer " + token } : {}) },
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (res.status === 401 && token) { logout(); throw new Error("세션이 만료되었습니다."); }
+  if (!res.ok) throw new Error(data.detail || "오류가 발생했습니다.");
+  return data;
+}
+
+function logout() { token = null; me = null; sessionStorage.clear(); render(); }
+
+function render() {
+  const who = document.getElementById("who");
+  who.innerHTML = me ? `${esc(me.name)}님 <button class="ghost" id="lo">로그아웃</button>` : "";
+  if (me) document.getElementById("lo").onclick = logout;
+  if (!me) return loginView();
+  me.role === "hr" ? hrView() : homeView();
+}
+
+function loginView() {
+  $app.innerHTML = `<div class="card"><h2>로그인</h2>
+    <p class="err" id="err"></p>
+    <label>사번</label><input type="text" id="no" autofocus>
+    <label>비밀번호</label><input type="password" id="pw">
+    <button id="go">로그인</button>
+    <p class="hint">데모 계정 — 신입: N2607 / 1234 (시작 전), N2605 / 1234 (진행 중), N2603 / 1234 (미수료) · 인사팀: HR001 / hr1234</p></div>`;
+  const go = async () => {
+    try {
+      const r = await api("/login", { method:"POST", body:{ emp_no:no.value, password:pw.value } });
+      token = r.token; me = { name:r.name, role:r.role };
+      sessionStorage.setItem("token", token); sessionStorage.setItem("me", JSON.stringify(me));
+      render();
+    } catch (e) { document.getElementById("err").textContent = e.message; }
+  };
+  document.getElementById("go").onclick = go;
+  pw.onkeydown = e => { if (e.key === "Enter") go(); };
+}
+
+async function homeView() {
+  try {
+    const d = await api("/lessons");
+    const n = d.lessons.filter(l => l.done).length, pct = Math.round(n / d.lessons.length * 100);
+    let status = "";
+    if (d.passed) status = `<span class="badge ok">수료 완료 (최고 ${d.best_score}점)</span>`;
+    else if (d.best_score != null) status = `<span class="badge bad">미수료 (최고 ${d.best_score}점) – 재응시 가능</span>`;
+    $app.innerHTML = `<div class="card"><h2>내 교육 현황 ${status}</h2>
+      <div class="bar"><div style="width:${pct}%"></div></div>
+      <div class="hint">레슨 ${n}/${d.lessons.length} 완료 · 수료 기준 ${d.pass_score}점 이상</div></div>
+      <div class="card"><h3>레슨</h3>${d.lessons.map(l => `
+        <div class="lesson"><span>${l.id}. ${esc(l.title)} ${l.done ? '<span class="badge ok">완료</span>' : ""}</span>
+        <button data-id="${l.id}" ${l.unlocked ? "" : "disabled"}>${l.done ? "다시 보기" : "학습하기"}</button></div>`).join("")}
+        <div class="lesson"><span>최종 퀴즈 (10문항)</span>
+        <button id="quizbtn" ${d.quiz_unlocked ? "" : "disabled"}>${d.passed ? "다시 풀기" : "퀴즈 시작"}</button></div></div>`;
+    $app.querySelectorAll("button[data-id]").forEach(b => b.onclick = () => lessonView(+b.dataset.id));
+    document.getElementById("quizbtn").onclick = quizView;
+  } catch (e) { $app.innerHTML = `<p class="err">${esc(e.message)}</p>`; }
+}
+
+async function lessonView(id) {
+  try {
+    const l = await api("/lessons/" + id);
+    $app.innerHTML = `<div class="card"><h2>${l.id}. ${esc(l.title)}</h2>${l.html}
+      <p class="err" id="err"></p>
+      <button class="ghost" id="back">목록으로</button> <button id="done">학습 완료</button></div>`;
+    document.getElementById("back").onclick = homeView;
+    document.getElementById("done").onclick = async () => {
+      try {
+        await api(`/lessons/${id}/complete`, { method:"POST" });
+        l.last ? quizView() : lessonView(id + 1);
+      } catch (e) { document.getElementById("err").textContent = e.message; }
+    };
+  } catch (e) { $app.innerHTML = `<p class="err">${esc(e.message)}</p><button onclick="homeView()">목록으로</button>`; }
+}
+
+async function quizView() {
+  try {
+    const q = await api("/quiz");
+    $app.innerHTML = `<div class="card"><h2>최종 퀴즈</h2><p class="hint">${q.pass_score}점 이상이면 수료입니다. (문항당 10점)</p>
+      ${q.questions.map(x => `<div class="q"><b>${x.id}. ${esc(x.text)}</b>${x.choices.map((c, i) =>
+        `<label><input type="radio" name="q${x.id}" value="${i}"> ${esc(c)}</label>`).join("")}</div>`).join("")}
+      <p class="err" id="err"></p><button class="ghost" id="back">목록으로</button> <button id="sub">제출</button></div>`;
+    document.getElementById("back").onclick = homeView;
+    document.getElementById("sub").onclick = async () => {
+      const answers = {};
+      q.questions.forEach(x => { const c = document.querySelector(`input[name=q${x.id}]:checked`); if (c) answers[x.id] = +c.value; });
+      if (Object.keys(answers).length < q.questions.length && !confirm("풀지 않은 문항은 오답 처리됩니다. 제출할까요?")) return;
+      try { resultView(await api("/quiz/submit", { method:"POST", body:{ answers } })); }
+      catch (e) { document.getElementById("err").textContent = e.message; }
+    };
+  } catch (e) { $app.innerHTML = `<p class="err">${esc(e.message)}</p><button onclick="homeView()">목록으로</button>`; }
+}
+
+function resultView(r) {
+  $app.innerHTML = `<div class="card" style="text-align:center">
+    <div class="big" style="color:var(${r.passed ? "--ok" : "--bad"})">${r.score}점</div>
+    <h2>${r.passed ? "🎉 수료를 축하합니다!" : "아쉽게도 미수료입니다"}</h2>
+    <p>${r.total}문항 중 ${r.correct}문항 정답 · 수료 기준 ${r.pass_score}점</p>
+    <button id="back">${r.passed ? "처음으로" : "레슨 복습 / 재응시"}</button></div>`;
+  document.getElementById("back").onclick = homeView;
+}
+
+async function hrView() {
+  try {
+    const d = await api("/hr/all");
+    const rows = d.employees, inc = rows.filter(r => !r.passed);
+    const stage = r => r.passed ? '<span class="badge ok">수료</span>'
+      : r.attempts ? '<span class="badge bad">퀴즈 미통과</span>'
+      : r.lessons_done === d.lesson_count ? '<span class="badge">퀴즈 대기</span>'
+      : r.lessons_done ? '<span class="badge">레슨 진행 중</span>' : '<span class="badge">미시작</span>';
+    const table = list => `<table><tr><th>사번</th><th>이름</th><th>부서</th><th>입사일</th><th>레슨</th><th>최고점</th><th>응시</th><th>상태</th></tr>
+      ${list.map(r => `<tr><td>${esc(r.emp_no)}</td><td>${esc(r.name)}</td><td>${esc(r.department)}</td><td>${esc(r.hired_at)}</td>
+      <td>${r.lessons_done}/${d.lesson_count}</td><td>${r.best_score ?? "-"}</td><td>${r.attempts}</td><td>${stage(r)}</td></tr>`).join("")}</table>`;
+    $app.innerHTML = `<div class="card"><h2>교육 현황 (인사팀)</h2>
+      <p>대상 ${rows.length}명 · 수료 <b>${rows.length - inc.length}</b>명 · <span style="color:var(--bad)">미수료 <b>${inc.length}</b>명</span></p></div>
+      <div class="card"><h3>미수료자 목록</h3>${inc.length ? table(inc) : "<p>미수료자가 없습니다.</p>"}
+      <p><button class="ghost" id="csv">미수료자 CSV 다운로드</button></p></div>
+      <div class="card"><h3>전체 신입사원</h3>${table(rows)}</div>`;
+    document.getElementById("csv").onclick = () => {
+      const head = ["사번","이름","부서","입사일","완료 레슨","최고점","응시 횟수"];
+      const lines = [head, ...inc.map(r => [r.emp_no, r.name, r.department, r.hired_at, r.lessons_done, r.best_score ?? "", r.attempts])]
+        .map(a => a.map(v => `"${String(v).replace(/"/g, '""')}"`).join(","));
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob(["﻿" + lines.join("\n")], { type:"text/csv" }));
+      a.download = "미수료자.csv"; a.click();
+    };
+  } catch (e) { $app.innerHTML = `<p class="err">${esc(e.message)}</p>`; }
+}
+
+render();
+</script>
+</body>
+</html>

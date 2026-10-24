@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 다온소프트 '신입사원 온보딩 교육' 웹앱을 만들어 줘. 신입이 레슨 4개를 순서대로 듣고 마지막에 퀴즈를 풀어서 80점 이상이면 수료, 인사팀은 미수료자 목록을 볼 수 있으면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 101686,
+ "num_turns": 8,
+ "total_cost_usd": 0.30066760000000003,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 32099,
+  "cache_read_input_tokens": 173316,
+  "output_tokens": 15492,
+  "output_tokens_details": {
+   "thinking_tokens": 867
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 32099,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1239,
+    "cache_read_input_tokens": 47758,
+    "cache_creation_input_tokens": 1013,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1013
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "FastAPI + HTML/JS + SQLite로 온보딩 교육 앱을 만들었고 가상 데이터도 넣었습니다. 서버를 직접 띄워 브라우저로 화면을 보지는 않았습니다. 대신 API를 직접 호출해 아래 동작은 확인했습니다. 화면(`static/` 의 HTML/JS)은 별도로 확인해 보세요.\n\n## 실행\n\n```\npython -m uvicorn main:app --reload\n```\nhttp://127.0.0.1:8000 에 접속하면 됩니다. 처음 실행할 때 `onboarding.db`가 자동으로 만들어지고 가상 데이터가 들어갑니다.\n\n## 데모 계정\n\n로그인 화면에 계정이 표시되어 있고, 클릭하면 바로 로그인됩니다.\n\n| 사번 | 역할 | 상태 |\n|---|---|---|\n| `N2026005` | 신입 | 레슨 3개 완료 |\n| `N2026007` | 신입 | 레슨 2개 완료 |\n| `N2026012` | 신입 | 처음부터 시작 |\n| `H0001` | 인사팀 | 미수료자 목록 확인 |\n\n## 동작\n\n- **레슨 4개**: 회사 소개, 근무 규정, 정보보안, 협업 도구입니다. 이전 레슨을 완료해야 다음 레슨이 열립니다. 서버에서도 막아서 URL로 건너뛸 수 없습니다.\n- **퀴즈**: 5문항이고 문항당 20점입니다. 80점 이상이면 수료이고, 미달이면 재응시할 수 있습니다. 정답은 서버에만 두고 화면으로 내려보내지 않습니다. 레슨 4개를 모두 마쳐야 퀴즈가 열립니다.\n- **인사팀 화면**: 전체 신입 수, 수료자 수, 미수료자 수, 수료율을 보여줍니다. 미수료자는 입사일 기준 경과일이 긴 순으로 정렬되고, 레슨 진행도, 최근 퀴즈 점수와 응시 횟수, 상태(미시작/진행중)가 함께 나옵니다. \"전체 보기\"로 전환할 수 있습니다. 신입 계정으로 인사팀 API를 호출하면 403이 나옵니다.\n- **가상 데이터**: 신입 12명에 수료 4명, 퀴즈 미달 2명, 레슨만 마친 사람, 미시작이 섞여 있습니다. 데이터를 처음 상태로 되돌리려면 `onboarding.db`를 삭제하고 재시작하세요.\n\n## 참고\n\n- **로그인**: 사번만 확인하는 데모용입니다. 실제로 쓰려면 비밀번호나 사내 SSO를 붙여야 합니다.\n- **세션**: 서버 메모리에 저장하므로 서버를 재시작하면 다시 로그인해야 합니다.\n- **파일 구성**: `main.py`, `static/`(`index.html`, `app.js`, `style.css`), `requirements.txt`입니다. 레슨 내용과 퀴즈 문항은 `main.py`의 `LESSONS`, `QUESTIONS`에 있으니 실제 사내 자료로 바꿔 쓰시면 됩니다.",
+ "wall_s": 108.5
+}

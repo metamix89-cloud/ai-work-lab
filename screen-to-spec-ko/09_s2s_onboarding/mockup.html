@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>다온소프트 온보딩 교육 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 9편 목업. 가상 회사 · 가상 직원. ?state=ok(신입)|empty(관리자)|error. Mock-IT 라이트 테마. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--card:#FFFFFF;--indigo:#6366F1;--indigo2:#E0E7FF;--indigo3:#3730A3;--emerald:#10B981;--amber:#F59E0B;--rose:#EF4444}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:var(--indigo);display:inline-block}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#EEF0FF;color:var(--indigo);font-weight:700}
+.main{padding:20px 28px 16px 28px;display:flex;flex-direction:column;gap:10px}
+.top{display:flex;justify-content:space-between;align-items:center}
+h1{margin:0;font-size:21px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:12px;margin-top:3px}
+.chip{font-size:12.5px;color:var(--ink2);background:#fff;border:1px solid var(--line);padding:6px 12px;border-radius:999px}.chip b{color:var(--indigo3)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1;min-height:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-height:0;font-size:12.5px}
+.card h3{margin:0;font-size:13px;color:var(--ink2);font-weight:600;display:flex;justify-content:space-between}
+.bar{height:10px;background:var(--indigo2);border-radius:5px;position:relative}.bar i{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--indigo)}
+.pct{font-size:26px;font-weight:800}
+.ls{display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--line);border-radius:9px}
+.ls .n{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;background:#F3F4F6;color:var(--mute)}
+.ls.done .n{background:#D1FAE5;color:#065F46}.ls.open{border-color:var(--indigo)}.ls.open .n{background:var(--indigo);color:#fff}.ls.locked{opacity:.55}
+.ls .t{flex:1}.ls .b{font-size:11px;background:var(--indigo);color:#fff;border-radius:6px;padding:4px 9px;font-weight:700}
+.ls .s{font-size:11px;color:var(--mute)}
+.quiz{border:1.5px dashed var(--line);border-radius:10px;padding:14px;color:var(--mute);text-align:center}
+.q{border:1px solid var(--line);border-radius:9px;padding:8px 10px}.q b{display:block;margin-bottom:4px}.q span{display:inline-block;margin-right:10px;color:var(--ink2)}
+.res{background:#F0FDF4;border:1px solid #BBF7D0;border-radius:9px;padding:9px 11px;color:#166534}
+table{border-collapse:collapse;width:100%;font-size:12px}th{text-align:left;color:var(--mute);font-weight:600;padding:6px;border-bottom:1px solid var(--line)}td{padding:8px 6px;border-bottom:1px solid var(--line)}
+.mini{display:inline-block;width:80px;height:6px;background:var(--indigo2);border-radius:3px;position:relative;vertical-align:middle;margin-right:6px}.mini i{position:absolute;left:0;top:0;bottom:0;background:var(--indigo);border-radius:3px}
+.warn{color:var(--rose);font-weight:700}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mute);gap:4px;font-size:11px;text-align:center}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:12px;padding:20px;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700}
+</style></head><body>
+<div class="app">
+ <div class="side">
+  <div class="logo"><i></i>다온소프트</div>
+  <div class="nav"><div>회의실 예약</div><div>휴가 · 출장</div><div>사내 규정 검색</div><div class="on">온보딩</div></div>
+ </div>
+ <div class="main" id="main"></div>
+</div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const head=(who,role)=>`<div class="top"><div><h1>온보딩 교육</h1><div class="sub">레슨 4개는 순서대로 · 퀴즈는 레슨을 다 마친 뒤 · 80점 이상 합격(80 포함) · 응시 3회 · 정답은 화면에 나오지 않는다</div></div><span class="chip">사용자 <b>${who}</b> · ${role} ▾</span></div>`;
+let html='';
+if(state==='ok'){
+  html=head('이신입','신입')+`<div class="row"><div class="card"><h3>내 진도 <span>레슨 2 / 4</span></h3>
+   <div style="display:flex;align-items:center;gap:12px"><span class="pct">50%</span><div class="bar" style="flex:1"><i style="width:50%"></i></div></div>
+   <div class="ls done"><span class="n">✓</span><span class="t">L1 회사 소개와 조직도</span><span class="s">10-21 완료</span></div>
+   <div class="ls done"><span class="n">✓</span><span class="t">L2 근무 시간과 휴가</span><span class="s">10-24 완료</span></div>
+   <div class="ls open"><span class="n">3</span><span class="t">L3 보안 수칙</span><span class="b">다 봤어요</span></div>
+   <div class="ls locked"><span class="n">4</span><span class="t">L4 업무 도구 사용법</span><span class="s">L3 을 마치면 열림</span></div></div>
+   <div class="card"><h3>확인 퀴즈 <span>5문항 · 80점 이상</span></h3>
+   <div class="quiz"><b style="color:#4B5563;font-size:14px">레슨을 모두 마친 뒤 열립니다</b><br>지금 제출하면 서버가 거부한다(409)</div>
+   <div class="q"><b>예시 — 2. 반차는 몇 일로 계산하나?</b><span>○ 1일</span><span>○ 0.5일</span><span>○ 0.25일</span><span>○ 0일</span></div>
+   <div class="res">결과에는 점수 · 합격 여부 · 남은 응시만 — 어느 문항이 틀렸는지, 정답이 무엇인지는 나오지 않는다</div></div></div>`;
+}else if(state==='empty'){
+  html=head('최인사','인사팀 관리자')+`<div class="row"><div class="card"><h3>미수료자 <span>진도 낮은 순 · 2명</span></h3>
+   <table><tr><th>이름</th><th>진도</th><th>응시</th><th>최고</th></tr>
+    <tr><td>이신입</td><td><span class="mini"><i style="width:50%"></i></span>50%</td><td>0</td><td>—</td></tr>
+    <tr><td>박신입</td><td><span class="mini"><i style="width:100%"></i></span>100%</td><td class="warn">3 / 3</td><td>60</td></tr></table>
+   <div class="empty">김신입은 수료(80점) — 목록에 없다 · 박신입은 레슨은 다 했지만 세 번 다 떨어져 미수료</div></div>
+   <div class="card"><h3>관리자 화면 <span>신입 화면 요소 없음</span></h3><div class="empty"><b style="color:#4B5563;font-size:14px">신입은 자기 진도만, 관리자는 미수료자 목록</b>권한은 화면이 아니라 서버가 — 신입이 남의 이름으로 API 를 불러도 403</div></div></div>`;
+}else{
+  html=head('이신입','신입')+`<div class="err"><div><b>불러오지 못했습니다.</b> 진도 API(/api/progress) 가 응답하지 않습니다 — 레슨 버튼을 열지 않습니다(순서를 모르면 잠금 상태를 알 수 없다).</div><button>다시 시도</button></div>
+  <div class="card" style="flex:1"><div class="empty">서버가 응답하면 진도와 퀴즈 상태를 다시 불러옵니다</div></div>`;
+}
+document.getElementById('main').innerHTML=html;
+</script></body></html>

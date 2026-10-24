@@ -1,0 +1,16 @@
+{
+ "allowed_routes": ["/", "/api/users", "/api/lessons", "/api/quiz", "/api/progress", "/api/lessons/{id}/complete", "/api/lessons/{lesson_id}/complete",
+                    "/api/quiz/submit", "/api/admin/incomplete", "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "오답 해설 · 정답 공개": "해설|explanation|correct_answer|정답은|오답 노트",
+  "재응시 허용 · 초기화": "재응시 허용|reset_attempt|attempts.*reset|초기화",
+  "편집 화면": "레슨 추가|문항 추가|직원 추가|@app\\.(put|patch|delete)",
+  "동영상": "<video|youtube|duration|재생 시간",
+  "수료증 PDF": "pdf|수료증 출력|certificate\\.pdf",
+  "문항 섞기": "shuffle|random\\.sample|섞",
+  "알림 · 메일": "알림|notify|메일 발송|smtp",
+  "차트": "chart|canvas",
+  "로그인 · 비밀번호": "login|password|로그인|비밀번호",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}

@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 64599,
+ "num_turns": 10,
+ "total_cost_usd": 0.2842082,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 39619,
+  "cache_read_input_tokens": 302942,
+  "output_tokens": 9541,
+  "output_tokens_details": {
+   "thinking_tokens": 1314
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 39619,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 369,
+    "cache_read_input_tokens": 55938,
+    "cache_creation_input_tokens": 353,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 353
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것:\n- 관리자 계정으로 레슨 완료나 퀴즈 제출을 하면 403 `신입만 할 수 있습니다` 를 돌려줍니다. PRD 에 없는 거부 규칙인데, 관리자 진도가 쌓이는 걸 막으려고 넣었습니다.\n- 응시 전의 `best_score` 는 `null` 이 아니라 `0` 으로 돌려줍니다.\n- `attempts_left` 는 합격해도 `3 - 응시 횟수` 입니다. PRD 예시(2회째 합격, 남은 1회)를 따랐습니다.\n- 추가한 API 경로는 없습니다.\n- 레슨 본문 글은 넣지 않았습니다. `lessons.csv` 에 본문 칸이 없고 칸을 바꿀 수 없어서 제목만 보여 줍니다.\n```",
+ "wall_s": 85.4
+}

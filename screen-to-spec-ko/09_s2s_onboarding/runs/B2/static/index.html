@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 온보딩 교육</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; max-width: 720px; margin: 24px auto; padding: 0 16px; color: #222; }
+  header { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  h1 { font-size: 22px; margin: 0; }
+  select, button { font: inherit; padding: 6px 10px; }
+  button { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+  #message { min-height: 1.4em; margin: 12px 0; color: #b00020; }
+  .bar { background: #e5e7eb; border-radius: 6px; height: 12px; margin: 6px 0 16px; overflow: hidden; }
+  .bar > div { background: #2563eb; height: 100%; }
+  .lesson { display: flex; justify-content: space-between; align-items: center; border: 1px solid #d1d5db;
+            border-radius: 8px; padding: 10px 14px; margin: 8px 0; }
+  .lesson[data-state="done"] { background: #ecfdf5; }
+  .lesson[data-state="open"] { background: #eff6ff; border-color: #2563eb; }
+  .lesson[data-state="locked"] { background: #f3f4f6; color: #888; }
+  .q { border: 1px solid #d1d5db; border-radius: 8px; padding: 10px 14px; margin: 10px 0; }
+  .q label { display: block; margin: 4px 0; }
+  #certified { color: #047857; font-weight: bold; margin: 12px 0; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border-bottom: 1px solid #e5e7eb; padding: 8px; text-align: left; }
+  #error { border: 1px solid #b00020; border-radius: 8px; padding: 12px; color: #b00020; }
+</style>
+</head>
+<body>
+<header>
+  <h1>다온소프트 온보딩 교육</h1>
+  <select data-testid="user-select" id="user-select" aria-label="사용자 선택"></select>
+</header>
+<div data-testid="message" id="message"></div>
+<div id="error" hidden>
+  <span>불러오지 못했습니다</span>
+  <button id="retry-btn" type="button">다시 시도</button>
+</div>
+<main id="view"></main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const view = $("view"), msg = $("message"), errBox = $("error"), sel = $("user-select");
+let users = [], lessons = [], quiz = null;
+
+function el(tag, attrs = {}, text) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+async function api(path, opts) {
+  const res = await fetch(path, opts);
+  let data = null;
+  try { data = await res.json(); } catch (e) { /* 본문 없음 */ }
+  if (!res.ok) {
+    const err = new Error((data && data.detail) || "요청 실패");
+    err.status = res.status;
+    err.rejected = !!(data && data.detail);
+    throw err;
+  }
+  return data;
+}
+
+function showFailure() { view.replaceChildren(); errBox.hidden = false; }
+
+function post(path, body) {
+  return api(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+}
+
+async function init() {
+  errBox.hidden = true;
+  msg.textContent = "";
+  try {
+    [users, lessons] = await Promise.all([api("/api/users"), api("/api/lessons")]);
+    const prev = sel.value;
+    sel.replaceChildren(...users.map((u) => el("option", { value: u.user }, u.user)));
+    if (prev && users.some((u) => u.user === prev)) sel.value = prev;
+    await render();
+  } catch (e) { showFailure(); }
+}
+
+async function render() {
+  errBox.hidden = true;
+  const me = users.find((u) => u.user === sel.value);
+  if (!me) { view.replaceChildren(); return; }
+  try {
+    if (me.role === "admin") await renderAdmin(me);
+    else await renderTrainee(me);
+  } catch (e) {
+    if (e.rejected) { msg.textContent = e.message; view.replaceChildren(); }
+    else showFailure();
+  }
+}
+
+async function renderAdmin(me) {
+  const rows = await api("/api/admin/incomplete?viewer=" + encodeURIComponent(me.user));
+  const table = el("table");
+  const head = el("tr");
+  ["이름", "진도율", "응시 횟수", "최고 점수"].forEach((h) => head.append(el("th", {}, h)));
+  table.append(head);
+  for (const r of rows) {
+    const tr = el("tr", { "data-testid": "incomplete-row", "data-user": r.user, "data-progress": String(r.progress) });
+    [r.user, r.progress + "%", r.attempts + "회", r.attempts ? r.best_score + "점" : "-"]
+      .forEach((c) => tr.append(el("td", {}, c)));
+    table.append(tr);
+  }
+  const frag = [el("h2", {}, "미수료자 목록")];
+  frag.push(rows.length ? table : el("p", {}, "미수료자가 없습니다."));
+  view.replaceChildren(...frag);
+}
+
+async function renderTrainee(me) {
+  const q = "user=" + encodeURIComponent(me.user) + "&viewer=" + encodeURIComponent(me.user);
+  const p = await api("/api/progress?" + q);
+  const titles = Object.fromEntries(lessons.map((l) => [l.lesson_id, l.title]));
+  const stateText = { done: "완료", open: "진행 가능", locked: "잠김" };
+  const nodes = [];
+
+  nodes.push(el("h2", {}, me.user + "님의 진도"));
+  nodes.push(el("div", { "data-testid": "progress" }, p.progress + "%"));
+  const bar = el("div", { class: "bar" });
+  const fill = el("div"); fill.style.width = p.progress + "%";
+  bar.append(fill); nodes.push(bar);
+  nodes.push(el("p", {}, "퀴즈 응시 " + p.attempts + "회 · 최고 점수 " + p.best_score + "점"));
+
+  for (const l of p.lessons) {
+    const row = el("div", { class: "lesson", "data-testid": "lesson", "data-id": l.lesson_id, "data-state": l.state });
+    row.append(el("span", {}, l.lesson_id + ". " + (titles[l.lesson_id] || "") + " (" + stateText[l.state] + ")"));
+    if (l.state === "open") {
+      const b = el("button", { type: "button", "data-testid": "complete-btn" }, "다 봤어요");
+      b.addEventListener("click", () => completeLesson(l.lesson_id, me.user));
+      row.append(b);
+    }
+    nodes.push(row);
+  }
+
+  if (p.certified) nodes.push(el("div", { "data-testid": "certified", id: "certified" }, "수료"));
+
+  if (p.lessons.every((l) => l.state === "done")) nodes.push(await quizSection(me.user, p));
+  view.replaceChildren(...nodes);
+}
+
+async function quizSection(user, p) {
+  if (!quiz) quiz = await api("/api/quiz");
+  const box = el("section", { "data-testid": "quiz" });
+  box.append(el("h2", {}, "확인 퀴즈"));
+  quiz.forEach((qq, i) => {
+    const d = el("div", { class: "q" });
+    d.append(el("div", {}, (i + 1) + ". " + qq.text));
+    qq.choices.forEach((c, j) => {
+      const lab = el("label");
+      lab.append(el("input", { type: "radio", name: "q" + i, value: String(j) }), document.createTextNode(" " + c));
+      d.append(lab);
+    });
+    box.append(d);
+  });
+  const btn = el("button", { type: "button", "data-testid": "submit-btn" }, "제출");
+  if (p.attempts_left <= 0) btn.disabled = true;
+  btn.addEventListener("click", () => submitQuiz(user, box));
+  box.append(btn);
+  box.append(el("div", { "data-testid": "result", id: "result" },
+    p.attempts ? ("최고 " + p.best_score + "점 · " + (p.passed ? "합격" : "불합격") + " · 남은 응시 횟수 " + p.attempts_left + "회") : ""));
+  return box;
+}
+
+async function completeLesson(id, user) {
+  msg.textContent = "";
+  try {
+    await post("/api/lessons/" + encodeURIComponent(id) + "/complete", { user });
+  } catch (e) {
+    if (e.rejected) msg.textContent = e.message; else { showFailure(); return; }
+  }
+  await render();
+}
+
+async function submitQuiz(user, box) {
+  msg.textContent = "";
+  const answers = quiz.map((_, i) => {
+    const c = box.querySelector('input[name="q' + i + '"]:checked');
+    return c ? Number(c.value) : null;
+  });
+  if (answers.some((a) => a === null)) { msg.textContent = "모든 문항에 답해 주세요"; return; }
+  let r;
+  try {
+    r = await post("/api/quiz/submit", { user, answers });
+  } catch (e) {
+    if (e.rejected) msg.textContent = e.message; else showFailure();
+    return;
+  }
+  await render();
+  const out = $("result");
+  if (out) out.textContent = r.score + "점 · " + (r.passed ? "합격" : "불합격") + " · 남은 응시 횟수 " + r.attempts_left + "회";
+}
+
+sel.addEventListener("change", () => { msg.textContent = ""; render(); });
+$("retry-btn").addEventListener("click", init);
+init();
+</script>
+</body>
+</html>

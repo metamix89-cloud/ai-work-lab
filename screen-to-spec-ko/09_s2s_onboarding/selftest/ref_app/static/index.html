@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>다온소프트 온보딩 교육</title>
+<style>
+body{font-family:Pretendard,system-ui,sans-serif;background:#F6F7FB;color:#111318;margin:0;padding:20px}
+h1{font-size:20px;margin:0}.top{display:flex;gap:12px;align-items:center}
+.card{background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:12px;margin-top:12px;font-size:13px}
+.lesson{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #F3F4F6}.msg{color:#B91C1C;min-height:18px;margin-top:8px}
+</style></head><body>
+<div class="top"><h1>다온소프트 온보딩 교육</h1><label>사용자 <select data-testid="user-select" id="user"></select></label></div>
+<div id="view"></div><div class="msg" data-testid="message" id="msg"></div>
+<script>
+const $=id=>document.getElementById(id);let users=[],lessons=[],quiz=[];
+async function api(u,o){const r=await fetch(u,o);const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.detail||'오류');return j;}
+const post=(u,b)=>api(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+const me=()=>$('user').value;const enc=encodeURIComponent;
+async function init(){try{[users,lessons,quiz]=await Promise.all([api('/api/users'),api('/api/lessons'),api('/api/quiz')]);}
+  catch(e){$('view').innerHTML='<div class="card">불러오지 못했습니다 <button onclick="location.reload()">다시 시도</button></div>';return;}
+  $('user').innerHTML=users.map(u=>`<option>${u.user}</option>`).join('');$('user').onchange=render;render();}
+async function render(){
+  $('msg').textContent='';const u=users.find(x=>x.user===me());
+  if(u.role==='admin'){const rows=await api('/api/admin/incomplete?viewer='+enc(me()));
+    $('view').innerHTML='<div class="card"><b>미수료자</b>'+rows.map(r=>`<div class="lesson" data-testid="incomplete-row" data-user="${r.user}" data-progress="${r.progress}">${r.user} · 진도 ${r.progress}% · 응시 ${r.attempts} · 최고 ${r.best_score??'—'}</div>`).join('')+'</div>';return;}
+  const p=await api('/api/progress?user='+enc(me())+'&viewer='+enc(me()));
+  let h=`<div class="card">진도율 <b data-testid="progress">${p.progress}%</b> ${p.certified?'<b data-testid="certified">수료</b>':''}`;
+  h+=p.lessons.map(l=>{const t=lessons.find(x=>x.lesson_id===l.lesson_id).title;return `<div class="lesson" data-testid="lesson" data-id="${l.lesson_id}" data-state="${l.state}">${t} · ${l.state}${l.state==='open'?` <button data-testid="complete-btn" onclick="done('${l.lesson_id}')">다 봤어요</button>`:''}</div>`;}).join('')+'</div>';
+  if(p.progress===100&&!p.passed&&p.attempts_left>0){h+='<div class="card" data-testid="quiz">'+quiz.map((q,i)=>`<div>${i+1}. ${q.text}<br>${q.choices.map((c,j)=>`<label><input type="radio" name="q${i}" value="${j}">${c}</label>`).join(' ')}</div>`).join('')+'<button data-testid="submit-btn" onclick="sub()">제출</button></div>';}
+  h+=`<div class="card" data-testid="result" id="result">응시 ${p.attempts}회 · 최고 ${p.best_score??'—'} · 남은 응시 ${p.attempts_left}</div>`;
+  $('view').innerHTML=h;
+}
+async function done(id){try{await post('/api/lessons/'+id+'/complete',{user:me()});render();}catch(e){$('msg').textContent=e.message;}}
+async function sub(){const a=quiz.map((q,i)=>{const s=document.querySelector(`input[name=q${i}]:checked`);return s?Number(s.value):-1;});
+  try{const r=await post('/api/quiz/submit',{user:me(),answers:a});await render();$('result').textContent=`${r.score}점 · ${r.passed?'합격':'불합격'} · 남은 응시 ${r.attempts_left}`;}catch(e){$('msg').textContent=e.message;}}
+init();
+</script></body></html>

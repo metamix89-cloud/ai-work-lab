@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 다온소프트 '신입사원 온보딩 교육' 웹앱을 만들어 줘. 신입이 레슨 4개를 순서대로 듣고 마지막에 퀴즈를 풀어서 80점 이상이면 수료, 인사팀은 미수료자 목록을 볼 수 있으면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 105607,
+ "num_turns": 7,
+ "total_cost_usd": 0.3091864999999999,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 33028,
+  "cache_read_input_tokens": 180945,
+  "output_tokens": 15896,
+  "output_tokens_details": {
+   "thinking_tokens": 697
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 33028,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1020,
+    "cache_read_input_tokens": 48781,
+    "cache_creation_input_tokens": 919,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 919
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "온보딩 웹앱을 만들었습니다. API는 테스트 클라이언트로 확인했지만, 브라우저 화면(HTML/JS)은 열어 보지 못했습니다.\n\n**실행 방법** (폴더: `A3`)\n```\npip install -r requirements.txt\nuvicorn main:app --reload\n```\nhttp://127.0.0.1:8000 에 접속하면 됩니다. 처음 실행할 때 `onboarding.db`가 가상 데이터와 함께 자동으로 만들어집니다. 초기화하려면 db 파일을 지우고 다시 시작하세요.\n\n**데모 계정**\n- 신입 12명: 사번 `N2610`~`N2621`, 비밀번호 `1234`\n- 인사팀: `HR001` / `hr1234`\n\n**동작**\n- **레슨**: 4개를 순서대로만 들을 수 있고, 서버가 건너뛰기를 막습니다.\n- **퀴즈**: 레슨 4개를 모두 완료해야 열립니다. 10문항이고 80점 이상이면 수료입니다. 불합격이면 재응시할 수 있습니다. 정답은 서버에서만 채점하고 화면으로는 내려보내지 않습니다.\n- **인사팀**: 로그인하면 미수료자 목록이 나옵니다. 사번, 부서, 레슨 진행(예: 3/4), 퀴즈 최고점과 응시 횟수, 상태(미시작·수강 중·퀴즈 대기·퀴즈 불합격)가 표시되고, 위쪽에 전체·수료·미수료 인원 요약이 있습니다.\n- **가상 데이터**: 신입 12명이 수료, 불합격, 수강 중, 미시작 등 여러 상태로 들어 있습니다. 레슨 4개와 퀴즈 10문항은 가상의 사내 내용으로 채웠으니 실제 내용으로 바꾸세요.\n\n**확인한 결과**\n- 신입 계정으로 레슨을 건너뛰거나 레슨을 마치기 전에 퀴즈를 열면 403이 나옵니다.\n- 레슨 4개를 마치고 만점으로 제출하면 수료 처리됩니다.\n- 일반 신입 계정은 인사팀 API에 접근할 수 없습니다.\n- 인사팀 목록에 미수료 8명이 상태와 함께 나옵니다.\n- 테스트로 바뀐 db는 지웠으므로 처음 실행하면 깨끗한 데모 데이터로 시작합니다.\n\n**참고**: 이름과 사번으로만 구분하는 단순 로그인입니다. 데모용 비밀번호가 고정되어 있으니 실제로 쓰기 전에 인증 방식을 바꿔야 합니다.\n\n주요 파일은 `main.py`(API·DB·시드 데이터)와 `static/index.html`(화면)입니다.",
+ "wall_s": 117.2
+}

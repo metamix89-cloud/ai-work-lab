@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 119049,
+ "num_turns": 14,
+ "total_cost_usd": 0.3954064,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 41670,
+  "cache_read_input_tokens": 299284,
+  "output_tokens": 19877,
+  "output_tokens_details": {
+   "thinking_tokens": 1986
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 41670,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1080,
+    "cache_read_input_tokens": 58139,
+    "cache_creation_input_tokens": 203,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 203
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD대로 웹앱을 만들었습니다. 서버를 띄워 API 흐름은 확인했지만, 브라우저 화면(T9)은 열어서 확인하지 못했고 `tests/test_dod.py`도 폴더에 없어 돌리지 못했습니다.\n\n**실행:** 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`을 실행하면 됩니다. `PORT` 환경 변수가 있으면 그 포트를 씁니다. 서버는 시작할 때마다 `seed/`의 CSV로 `onboard.db`를 새로 만듭니다.\n\n**만든 파일**\n- `main.py`: API 7개와 규칙 R1~R8. 거부 응답은 모두 `{\"detail\": ...}`이고, 검사 순서는 400, 403, 404, 409입니다.\n- `static/index.html`: `/` 한 페이지입니다. 신입 화면, 관리자 화면, 메시지 줄, `불러오지 못했습니다`와 다시 시도 버튼이 있고 `data-testid`는 PRD대로 달았습니다. 프레임워크나 CDN은 쓰지 않았습니다.\n- `seed/*.csv` 5개: 폴더에 없어서 제가 만든 가상 데이터입니다.\n  - 김신입: 레슨 2개 완료(50%)\n  - 이열정: 아무것도 안 함(0%)\n  - 박수료: 레슨 4개 완료, 퀴즈 합격(수료)\n  - 최인사: 관리자\n\n**API로 확인한 것**\n- 레슨 순서를 건너뛰면 409, 다음 레슨은 200이고 진도율은 75%로 나왔습니다.\n- 레슨을 다 안 마치고 퀴즈를 내면 409였습니다.\n- 4문항을 맞히면 80점 합격과 수료였고, 합격 뒤 다시 내면 409였습니다.\n- 정답은 퀴즈 응답과 채점 결과 어디에도 없었습니다.\n- 신입이 남의 진도를 보면 403, 신입이 미수료자 목록을 보면 403이었습니다.\n- 없는 사용자에 잘못된 `answers`는 400, 올바른 `answers`는 404였습니다.\n- 미수료자 목록에서는 수료자가 빠지고 진도율 낮은 순으로 나왔습니다.\n- `/`는 200으로 열렸습니다.\n\n**확인하지 못한 것**\n- 3회 모두 떨어졌을 때의 409는 따로 돌려보지 않았습니다.\n- 제 환경에서는 한글 응답이 터미널에서 깨져 보여 문구를 직접 읽지 못했습니다. 상태 코드와 값으로만 확인했습니다. 서버는 UTF-8로 내보냅니다.\n\n**PRD와 다르게 한 점:** `lessons.csv`에 본문 칸이 없어서, 레슨 행에는 제목과 '다 봤어요' 버튼만 있고 본문 글은 넣지 않았습니다.",
+ "wall_s": 129.2
+}

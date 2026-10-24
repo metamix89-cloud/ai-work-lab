@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 온보딩 교육</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; max-width: 720px; margin: 24px auto; padding: 0 16px; color: #222; }
+  h1 { font-size: 1.5rem; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .lesson { border: 1px solid #ccc; border-radius: 8px; padding: 10px 14px; margin: 8px 0; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .lesson[data-state="done"] { background: #eaf7ea; }
+  .lesson[data-state="open"] { border-color: #2563eb; }
+  .lesson[data-state="locked"] { background: #f3f3f3; color: #888; }
+  .q { margin: 14px 0; }
+  .q label { display: block; padding: 2px 0; }
+  #message { min-height: 1.4em; color: #b91c1c; margin: 10px 0; }
+  button { padding: 6px 14px; cursor: pointer; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border-bottom: 1px solid #ddd; padding: 6px 8px; text-align: left; }
+  .cert { color: #15803d; font-weight: bold; }
+</style>
+</head>
+<body>
+<header>
+  <h1>다온소프트 온보딩 교육</h1>
+  <select data-testid="user-select" id="user-select" aria-label="사용자 선택"></select>
+</header>
+<div data-testid="message" id="message"></div>
+<main id="main"></main>
+
+<script>
+const $main = document.getElementById("main");
+const $sel = document.getElementById("user-select");
+const $msg = document.getElementById("message");
+let users = [], lessons = [], quiz = [], lastResult = null;
+
+class ApiError extends Error {}
+class Rejected extends Error {}
+
+async function api(url, body) {
+  let res;
+  try {
+    res = await fetch(url, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : undefined);
+  } catch (e) { throw new ApiError("network"); }
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  if (res.ok) return data;
+  if (res.status >= 400 && res.status < 500 && data && data.detail) throw new Rejected(data.detail);
+  throw new ApiError("server");
+}
+
+function el(tag, attrs = {}, text) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+function showError() {
+  $main.replaceChildren();
+  const box = el("div");
+  box.append(el("p", {}, "불러오지 못했습니다"));
+  const b = el("button", { type: "button", "data-testid": "retry-btn" }, "다시 시도");
+  b.onclick = () => init(true);
+  box.append(b);
+  $main.append(box);
+}
+
+async function init(reload) {
+  try {
+    if (reload || !users.length) {
+      [users, lessons, quiz] = await Promise.all([api("/api/users"), api("/api/lessons"), api("/api/quiz")]);
+      const cur = $sel.value;
+      $sel.replaceChildren(...users.map(u => el("option", { value: u.user }, u.user)));
+      if (cur && users.some(u => u.user === cur)) $sel.value = cur;
+    }
+    await render();
+  } catch (e) { showError(); }
+}
+
+async function render() {
+  const name = $sel.value;
+  const u = users.find(x => x.user === name);
+  if (!u) { $main.replaceChildren(); return; }
+  try {
+    if (u.role === "admin") await renderAdmin(name);
+    else await renderTrainee(name);
+  } catch (e) {
+    if (e instanceof Rejected) { $msg.textContent = e.message; } else showError();
+  }
+}
+
+async function renderAdmin(name) {
+  const list = await api("/api/admin/incomplete?viewer=" + encodeURIComponent(name));
+  $main.replaceChildren();
+  $main.append(el("h2", {}, "미수료자 목록"));
+  const t = el("table");
+  const head = el("tr");
+  ["이름", "진도율", "응시 횟수", "최고 점수"].forEach(h => head.append(el("th", {}, h)));
+  t.append(head);
+  list.forEach(r => {
+    const tr = el("tr", { "data-testid": "incomplete-row", "data-user": r.user, "data-progress": r.progress });
+    [r.user, r.progress + "%", r.attempts + "회", r.best_score + "점"].forEach(v => tr.append(el("td", {}, v)));
+    t.append(tr);
+  });
+  $main.append(t);
+  if (!list.length) $main.append(el("p", {}, "미수료자가 없습니다."));
+}
+
+async function renderTrainee(name) {
+  const p = await api("/api/progress?user=" + encodeURIComponent(name) + "&viewer=" + encodeURIComponent(name));
+  $main.replaceChildren();
+  $main.append(el("h2", {}, "내 진도"));
+  $main.append(el("div", { "data-testid": "progress" }, p.progress + "%"));
+  $main.append(el("p", {}, `퀴즈 응시 ${p.attempts}회 · 최고 점수 ${p.best_score}점`));
+  if (p.certified) $main.append(el("div", { "data-testid": "certified", class: "cert" }, "수료"));
+
+  const title = Object.fromEntries(lessons.map(l => [l.lesson_id, l.title]));
+  p.lessons.forEach(l => {
+    const row = el("div", { class: "lesson", "data-testid": "lesson", "data-id": l.lesson_id, "data-state": l.state });
+    const label = { done: "완료", open: "열림", locked: "잠김" }[l.state];
+    row.append(el("span", {}, `${l.lesson_id}. ${title[l.lesson_id] || ""} (${label})`));
+    if (l.state === "open") {
+      const b = el("button", { type: "button", "data-testid": "complete-btn" }, "다 봤어요");
+      b.onclick = async () => {
+        $msg.textContent = "";
+        try { await api(`/api/lessons/${l.lesson_id}/complete`, { user: name }); }
+        catch (e) { if (e instanceof Rejected) $msg.textContent = e.message; else return showError(); }
+        await render();
+      };
+      row.append(b);
+    }
+    $main.append(row);
+  });
+
+  if (p.lessons.every(l => l.state === "done")) renderQuiz(name, p);
+}
+
+function renderQuiz(name, p) {
+  const box = el("section", { "data-testid": "quiz" });
+  box.append(el("h2", {}, "확인 퀴즈"));
+  quiz.forEach((q, i) => {
+    const qd = el("div", { class: "q" });
+    qd.append(el("div", {}, `${i + 1}. ${q.text}`));
+    q.choices.forEach((c, j) => {
+      const lab = el("label");
+      lab.append(el("input", { type: "radio", name: "q" + i, value: j }), document.createTextNode(" " + c));
+      qd.append(lab);
+    });
+    box.append(qd);
+  });
+  const btn = el("button", { type: "button", "data-testid": "submit-btn" }, "제출");
+  if (p.attempts_left === 0) btn.disabled = true;
+  btn.onclick = async () => {
+    $msg.textContent = "";
+    const answers = quiz.map((_, i) => {
+      const r = box.querySelector(`input[name="q${i}"]:checked`);
+      return r ? Number(r.value) : -1;
+    });
+    if (answers.includes(-1)) { $msg.textContent = "모든 문항에 답해 주세요"; return; }
+    try { lastResult = Object.assign(await api("/api/quiz/submit", { user: name, answers }), { user: name }); }
+    catch (e) { if (e instanceof Rejected) $msg.textContent = e.message; else showError(); return; }
+    await render();
+  };
+  box.append(btn);
+  const r = el("div", { "data-testid": "result" });
+  if (lastResult && lastResult.user === name) {
+    r.textContent = `${lastResult.score}점 · ${lastResult.passed ? "합격" : "불합격"} · 남은 응시 ${lastResult.attempts_left}회`;
+  } else if (p.attempts) {
+    r.textContent = `최고 ${p.best_score}점 · ${p.passed ? "합격" : "미합격"} · 남은 응시 ${p.attempts_left}회`;
+  }
+  box.append(r);
+  $main.append(box);
+}
+
+$sel.onchange = () => { $msg.textContent = ""; lastResult = null; render(); };
+init(true);
+</script>
+</body>
+</html>

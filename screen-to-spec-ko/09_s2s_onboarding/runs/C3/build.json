@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 62703,
+ "num_turns": 9,
+ "total_cost_usd": 0.274484,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 38794,
+  "cache_read_input_tokens": 245940,
+  "output_tokens": 9469,
+  "output_tokens_details": {
+   "thinking_tokens": 989
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 38794,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 562,
+    "cache_read_input_tokens": 55067,
+    "cache_creation_input_tokens": 399,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 399
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "DoD: 9/9. 한 번은 통과했지만, 첫 실행에서는 마지막 테스트 뒤 정리 단계에서 오류가 났습니다. 9개는 모두 통과했고, 오류는 `tests/` 의 `restore_seed` 가 서버 종료 직후 `seed/` 를 되돌리다 난 것입니다. 두 번째 실행은 9 passed 로 깨끗이 끝났고, `seed/` 도 제 CSV 5개로 복원돼 있습니다. 서버가 `seed/` 를 계속 열어 두는 곳은 없습니다. 원인은 Windows 에서 죽은 서버 프로세스가 파일을 놓기 전에 테스트가 폴더를 지우려는 타이밍으로 보이는데, 확인하지는 못했습니다. 다시 돌리면 한 번 더 날 수도 있습니다.\n\n만든 파일: `main.py`, `static/index.html`, `seed/*.csv`\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (PRD 에 없는 API 경로·칸·화면 요소는 추가하지 않았습니다)\n\n- **`onboard.db`:** 서버가 시작할 때마다 새로 만드는 파일이라 프로젝트 폴더에 남아 있습니다.\n- **PRD 에 없는 응답 처리:** 없는 사용자를 조회하면 404, `user`·`viewer` 가 비어 있으면 400, 관리자가 아닌 사람이 `admin/incomplete` 를 부르면 403 입니다.",
+ "wall_s": 84.2
+}

@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>다온소프트 신입사원 온보딩</title>
+<style>
+  :root { --brand:#2f5bea; --ok:#1a9d5a; --bad:#d6403a; --bg:#f4f6fb; --line:#e0e4ee; --mute:#6b7385; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif; background:var(--bg); color:#1d2433; line-height:1.6; }
+  header { background:#fff; border-bottom:1px solid var(--line); padding:14px 24px; display:flex; align-items:center; justify-content:space-between; }
+  header b { color:var(--brand); font-size:18px; }
+  main { max-width:880px; margin:24px auto; padding:0 16px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:20px 24px; margin-bottom:16px; }
+  h2 { margin:0 0 12px; font-size:20px; }
+  button { font:inherit; background:var(--brand); color:#fff; border:0; border-radius:8px; padding:9px 18px; cursor:pointer; }
+  button.ghost { background:#fff; color:var(--brand); border:1px solid var(--brand); }
+  button:disabled { background:#b9c0d4; cursor:not-allowed; }
+  input[type=text], input[type=password] { font:inherit; width:100%; padding:10px; border:1px solid var(--line); border-radius:8px; margin-bottom:10px; }
+  .lesson { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 0; border-top:1px solid var(--line); }
+  .lesson:first-of-type { border-top:0; }
+  .lesson.locked { opacity:.5; }
+  .mute { color:var(--mute); font-size:14px; }
+  .tag { font-size:12px; padding:2px 9px; border-radius:99px; background:#e8ecf8; color:var(--brand); white-space:nowrap; }
+  .tag.ok { background:#dff5e9; color:var(--ok); } .tag.bad { background:#fbe3e1; color:var(--bad); }
+  .bar { height:8px; background:#e6e9f2; border-radius:99px; overflow:hidden; margin:8px 0; }
+  .bar > i { display:block; height:100%; background:var(--brand); }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { text-align:left; padding:9px 8px; border-bottom:1px solid var(--line); }
+  th { color:var(--mute); font-weight:600; }
+  .q { margin-bottom:20px; } .opt { display:block; padding:8px 12px; border:1px solid var(--line); border-radius:8px; margin:6px 0; cursor:pointer; }
+  .opt:has(input:checked) { border-color:var(--brand); background:#eef2ff; }
+  .stats { display:flex; gap:12px; margin-bottom:16px; } .stats .card { flex:1; margin:0; text-align:center; }
+  .stats b { font-size:28px; display:block; }
+  .content h3 { margin:18px 0 6px; font-size:16px; color:var(--brand); }
+  .err { color:var(--bad); font-size:14px; min-height:20px; }
+  .result { text-align:center; padding:12px 0; } .result .score { font-size:52px; font-weight:700; }
+</style>
+</head>
+<body>
+<header><b>다온소프트 · 신입사원 온보딩</b><span id="who"></span></header>
+<main id="app"></main>
+
+<script>
+const $ = s => document.querySelector(s);
+const app = $('#app');
+let S = { token: localStorage.token || '', role: localStorage.role || '', name: localStorage.name || '' };
+
+async function api(path, opts = {}) {
+  const r = await fetch('/api' + path, {
+    method: opts.body ? 'POST' : (opts.method || 'GET'),
+    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + S.token },
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  if (r.status === 401 && S.token) { logout(); throw new Error('세션이 만료되었습니다.'); }
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(data.detail || '요청에 실패했습니다.');
+  return data;
+}
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function logout() { localStorage.clear(); S = { token:'', role:'', name:'' }; route(); }
+
+function header() {
+  $('#who').innerHTML = S.token ? `${esc(S.name)} <button class="ghost" style="margin-left:8px" onclick="logout()">로그아웃</button>` : '';
+}
+
+async function route() {
+  header();
+  if (!S.token) return loginView();
+  S.role === 'hr' ? hrView() : homeView();
+}
+
+/* ---------- 로그인 ---------- */
+function loginView(msg = '') {
+  app.innerHTML = `<div class="card" style="max-width:420px;margin:60px auto">
+    <h2>로그인</h2>
+    <input id="no" type="text" placeholder="사번 (예: N2613)" autofocus>
+    <input id="pw" type="password" placeholder="비밀번호">
+    <div class="err" id="err">${esc(msg)}</div>
+    <button id="go" style="width:100%">로그인</button>
+    <p class="mute">데모 계정<br>신입: <b>N2610 ~ N2621</b> / 비밀번호 <b>1234</b><br>인사팀: <b>HR001</b> / 비밀번호 <b>hr1234</b></p></div>`;
+  const go = async () => {
+    try {
+      const d = await api('/login', { body: { emp_no: $('#no').value, password: $('#pw').value } });
+      S = { token: d.token, role: d.role, name: d.name };
+      Object.assign(localStorage, S);
+      route();
+    } catch (e) { $('#err').textContent = e.message; }
+  };
+  $('#go').onclick = go;
+  $('#pw').onkeydown = e => e.key === 'Enter' && go();
+}
+
+/* ---------- 신입: 홈 ---------- */
+async function homeView() {
+  const o = await api('/me/overview');
+  const done = o.lessons.filter(l => l.completed).length;
+  const pct = Math.round(done / o.lessons.length * 100);
+  const quizTag = o.certified ? '<span class="tag ok">수료 완료</span>'
+    : o.attempts ? `<span class="tag bad">불합격 (최고 ${o.best_score}점)</span>` : '';
+  app.innerHTML = `
+    <div class="card">
+      <h2>${esc(o.user.name)}님, 환영합니다 👋</h2>
+      <div class="mute">${esc(o.user.dept)} · 사번 ${esc(o.user.emp_no)}</div>
+      <div class="bar"><i style="width:${pct}%"></i></div>
+      <div class="mute">레슨 ${done}/${o.lessons.length} 완료 · 수료 기준: 퀴즈 ${o.pass_score}점 이상</div>
+      ${o.certified ? '<p><b style="color:var(--ok)">🎉 수료를 축하합니다! 온보딩 교육을 모두 마쳤습니다.</b></p>' : ''}
+    </div>
+    <div class="card">
+      <h2>교육 과정</h2>
+      ${o.lessons.map(l => `
+        <div class="lesson ${l.locked ? 'locked' : ''}">
+          <div><b>${l.seq}. ${esc(l.title)}</b><div class="mute">${esc(l.summary)}</div></div>
+          <div>${l.completed ? '<span class="tag ok">완료</span> ' : ''}
+            <button class="${l.completed ? 'ghost' : ''}" ${l.locked ? 'disabled' : ''} onclick="lessonView(${l.seq})">
+              ${l.locked ? '🔒 잠김' : l.completed ? '다시 보기' : '학습하기'}</button></div>
+        </div>`).join('')}
+      <div class="lesson ${o.quiz_unlocked ? '' : 'locked'}">
+        <div><b>최종 퀴즈</b> ${quizTag}<div class="mute">10문항 · ${o.pass_score}점 이상 합격 · 재응시 가능</div></div>
+        <button ${o.quiz_unlocked ? '' : 'disabled'} onclick="quizView()">${o.quiz_unlocked ? (o.attempts ? '재응시' : '응시하기') : '🔒 잠김'}</button>
+      </div>
+    </div>`;
+}
+
+/* ---------- 레슨 ---------- */
+async function lessonView(seq) {
+  try {
+    const l = await api('/lessons/' + seq);
+    app.innerHTML = `<div class="card content">
+      <div class="mute">레슨 ${l.seq} / 4</div><h2>${esc(l.title)}</h2>
+      ${l.content}
+      <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+      <button class="ghost" onclick="homeView()">← 목록</button>
+      <button id="done" style="float:right">${l.is_last ? '완료하고 퀴즈로' : '완료하고 다음 레슨'}</button></div>`;
+    $('#done').onclick = async () => {
+      await api(`/lessons/${seq}/complete`, { method: 'POST' });
+      l.is_last ? quizView() : lessonView(seq + 1);
+    };
+  } catch (e) { alert(e.message); homeView(); }
+}
+
+/* ---------- 퀴즈 ---------- */
+async function quizView() {
+  try {
+    const q = await api('/quiz');
+    app.innerHTML = `<div class="card"><h2>최종 퀴즈</h2><div class="mute">${q.pass_score}점 이상이면 수료입니다.</div></div>
+      <div class="card">${q.questions.map((x, i) => `
+        <div class="q"><b>${i + 1}. ${esc(x.question)}</b>
+          ${x.options.map((o, j) => `<label class="opt"><input type="radio" name="q${x.id}" value="${j}"> ${esc(o)}</label>`).join('')}
+        </div>`).join('')}
+        <div class="err" id="err"></div>
+        <button class="ghost" onclick="homeView()">← 나가기</button>
+        <button id="sub" style="float:right">제출</button></div>`;
+    $('#sub').onclick = async () => {
+      const answers = {};
+      q.questions.forEach(x => { const c = document.querySelector(`input[name=q${x.id}]:checked`); if (c) answers[x.id] = +c.value; });
+      if (Object.keys(answers).length < q.questions.length) return $('#err').textContent = '모든 문항에 답해 주세요.';
+      resultView(await api('/quiz/submit', { body: { answers } }));
+    };
+  } catch (e) { alert(e.message); homeView(); }
+}
+
+function resultView(r) {
+  app.innerHTML = `<div class="card result">
+    <div class="score" style="color:var(${r.passed ? '--ok' : '--bad'})">${r.score}점</div>
+    <p>${r.total}문항 중 ${r.correct}문항 정답</p>
+    <h2>${r.passed ? '🎉 수료를 축하합니다!' : `아쉽게도 불합격입니다 (합격 ${r.pass_score}점)`}</h2>
+    <p class="mute">${r.passed ? '온보딩 교육을 모두 마쳤습니다.' : '레슨을 복습한 뒤 다시 응시할 수 있습니다.'}</p>
+    <button onclick="homeView()">홈으로</button> ${r.passed ? '' : '<button class="ghost" onclick="quizView()">다시 응시</button>'}</div>`;
+}
+
+/* ---------- 인사팀 ---------- */
+async function hrView() {
+  const d = await api('/hr/incomplete');
+  const tagCls = s => s === '퀴즈 불합격' ? 'bad' : '';
+  app.innerHTML = `
+    <div class="stats">
+      <div class="card"><b>${d.summary.total}</b><span class="mute">전체 신입</span></div>
+      <div class="card"><b style="color:var(--ok)">${d.summary.certified}</b><span class="mute">수료</span></div>
+      <div class="card"><b style="color:var(--bad)">${d.summary.incomplete}</b><span class="mute">미수료</span></div>
+    </div>
+    <div class="card"><h2>미수료자 목록</h2>
+      <div class="mute" style="margin-bottom:8px">수료 기준: 레슨 전체 완료 + 퀴즈 ${d.pass_score}점 이상</div>
+      <table><tr><th>사번</th><th>이름</th><th>부서</th><th>입사일</th><th>레슨</th><th>퀴즈(최고/횟수)</th><th>상태</th></tr>
+      ${d.incomplete.map(r => `<tr><td>${esc(r.emp_no)}</td><td>${esc(r.name)}</td><td>${esc(r.dept)}</td><td>${esc(r.hired_at)}</td>
+        <td>${r.lessons_done}/${r.lessons_total}</td><td>${r.attempts ? `${r.best_score}점 / ${r.attempts}회` : '-'}</td>
+        <td><span class="tag ${tagCls(r.state)}">${esc(r.state)}</span></td></tr>`).join('')
+        || '<tr><td colspan="7" class="mute">미수료자가 없습니다.</td></tr>'}
+      </table></div>`;
+}
+
+route();
+</script>
+</body>
+</html>
