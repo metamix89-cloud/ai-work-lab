@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "FastAPI + HTML/JS + SQLite 로 푸른구청 '고시 · 공고 열람' 웹앱을 만들어 줘. 주민이 주차 · 위생 · 건축 · 복지 분야별로 구청 고시와 공고를 찾아보고, 요약과 원문을 볼 수 있으면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 89910,
+ "num_turns": 7,
+ "total_cost_usd": 0.25967250000000003,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 8,
+  "cache_creation_input_tokens": 29575,
+  "cache_read_input_tokens": 129465,
+  "output_tokens": 12841,
+  "output_tokens_details": {
+   "thinking_tokens": 113
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 29575,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 778,
+    "cache_read_input_tokens": 45856,
+    "cache_creation_input_tokens": 391,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 391
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "푸른구청 고시·공고 열람 웹앱을 만들었습니다. 서버를 띄워 브라우저로 화면을 직접 열어 보지는 않았습니다. 대신 FastAPI 테스트 클라이언트로 API는 확인했습니다. 분야별·검색·진행 중 조건 조회, 상세 조회, 없는 글 404, 메인 페이지 응답이 모두 정상이었습니다.\n\n**실행 방법** (작업 폴더에서)\n```\npip install -r requirements.txt\nuvicorn main:app --reload\n```\n그다음 http://127.0.0.1:8000 으로 접속하면 됩니다. 처음 실행하면 `notices.db`가 자동으로 만들어지고 가상 데이터 18건이 들어갑니다.\n\n**화면 기능**\n- **분야 탭:** 전체·주차·위생·건축·복지 탭이 있고, 탭마다 건수가 보입니다.\n- **필터와 검색:** 고시/공고 구분, 제목·요약·원문 검색(검색어 강조 표시), \"신청·열람 진행 중만\" 보기를 쓸 수 있습니다.\n- **목록 카드:** 분야, 고시/공고 구분, 마감 D-day, 요약, 문서번호, 게시일, 담당부서가 나옵니다.\n- **상세 화면:** 카드를 누르면 문서 정보 표, 요약 박스, 원문이 보입니다. 주소(`#/번호`)로 직접 열 수 있고 브라우저 뒤로가기도 됩니다.\n\n**파일**\n- `main.py`: FastAPI 서버와 SQLite 처리\n- `seed.py`: 가상 데이터. 문서번호, 법령 조문, 부서 번호까지 모두 허구입니다.\n- `index.html`: 화면 전체(HTML, CSS, JS)\n\n- **D-day와 \"진행 중\" 기준:** 접속한 PC의 오늘 날짜로 계산합니다. 가상 데이터의 마감일은 2026년 10~12월입니다.\n- **관리 기능:** 글을 등록하거나 수정하는 기능은 넣지 않았습니다. 필요하시면 추가하겠습니다.",
+ "wall_s": 99.5
+}

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>푸른구청 고시 · 공고</title>
+<style>
+  :root { --blue:#1d5fb4; --blue-d:#14437f; --bg:#f4f7fb; --line:#dbe3ee; --text:#1f2937; --mute:#6b7280; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+  header { background:var(--blue); color:#fff; padding:22px 0; }
+  .wrap { max-width:960px; margin:0 auto; padding:0 16px; }
+  header h1 { margin:0; font-size:24px; }
+  header p { margin:4px 0 0; opacity:.85; font-size:14px; }
+  .search { display:flex; gap:8px; margin:20px 0 12px; }
+  .search input { flex:1; padding:12px 14px; border:1px solid var(--line); border-radius:8px; font-size:15px; }
+  button { cursor:pointer; font-family:inherit; }
+  .btn { background:var(--blue); color:#fff; border:0; border-radius:8px; padding:0 20px; font-size:15px; }
+  .btn:hover { background:var(--blue-d); }
+  .tabs { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+  .tab { border:1px solid var(--line); background:#fff; border-radius:20px; padding:6px 16px; font-size:14px; }
+  .tab.on { background:var(--blue); color:#fff; border-color:var(--blue); }
+  .tab small { opacity:.7; margin-left:4px; }
+  .bar { display:flex; justify-content:space-between; align-items:center; font-size:14px; color:var(--mute); margin-bottom:10px; flex-wrap:wrap; gap:8px; }
+  .bar select { padding:5px 8px; border:1px solid var(--line); border-radius:6px; font-family:inherit; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:16px 18px; margin-bottom:10px; cursor:pointer; }
+  .card:hover, .card:focus { border-color:var(--blue); box-shadow:0 2px 8px rgba(29,95,180,.12); outline:none; }
+  .card h3 { margin:6px 0; font-size:17px; }
+  .card p { margin:0 0 8px; color:#374151; font-size:14px; }
+  .meta { font-size:13px; color:var(--mute); }
+  .tag { display:inline-block; font-size:12px; padding:1px 9px; border-radius:10px; margin-right:6px; background:#e8f0fb; color:var(--blue-d); }
+  .tag.kind { background:#eef2f6; color:#475569; }
+  .tag.closed { background:#fde8e8; color:#b42318; }
+  .tag.open { background:#e3f6ea; color:#1a7f45; }
+  .empty { text-align:center; padding:48px 0; color:var(--mute); }
+  .pager { display:flex; justify-content:center; gap:6px; margin:18px 0 40px; }
+  .pager button { border:1px solid var(--line); background:#fff; border-radius:6px; padding:6px 12px; }
+  .pager button.on { background:var(--blue); color:#fff; border-color:var(--blue); }
+  .overlay { position:fixed; inset:0; background:rgba(15,23,42,.55); display:none; align-items:flex-start; justify-content:center; overflow:auto; padding:30px 12px; }
+  .overlay.show { display:flex; }
+  .modal { background:#fff; border-radius:12px; max-width:760px; width:100%; padding:26px 28px; position:relative; }
+  .modal h2 { margin:8px 0 12px; font-size:21px; }
+  .close { position:absolute; top:14px; right:16px; background:none; border:0; font-size:26px; color:var(--mute); }
+  .sum { background:#eef5ff; border-left:4px solid var(--blue); padding:12px 14px; border-radius:6px; margin:14px 0; font-size:15px; }
+  .sum b { display:block; color:var(--blue-d); font-size:13px; margin-bottom:2px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; margin-bottom:14px; }
+  th, td { border-top:1px solid var(--line); padding:8px 10px; text-align:left; }
+  th { width:90px; background:#f8fafc; color:var(--mute); font-weight:600; }
+  tr:last-child th, tr:last-child td { border-bottom:1px solid var(--line); }
+  .body { white-space:pre-wrap; background:#fafafa; border:1px solid var(--line); border-radius:8px; padding:16px; font-size:14.5px; }
+  .actions { margin-top:14px; display:flex; gap:8px; }
+  .actions .btn { padding:8px 16px; }
+  footer { text-align:center; color:var(--mute); font-size:12px; padding-bottom:30px; }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>푸른구청 고시 · 공고</h1>
+  <p>주차 · 위생 · 건축 · 복지 분야의 구청 고시와 공고를 한곳에서 확인하세요.</p>
+</div></header>
+
+<main class="wrap">
+  <form class="search" id="searchForm">
+    <input id="q" type="search" placeholder="제목·내용 검색 (예: 난방비, 주정차, 지구단위)" aria-label="검색어">
+    <button class="btn" type="submit">검색</button>
+  </form>
+  <div class="tabs" id="tabs" role="tablist"></div>
+  <div class="bar">
+    <span id="count"></span>
+    <span>
+      <select id="kind" aria-label="유형">
+        <option value="">고시+공고</option><option value="고시">고시</option><option value="공고">공고</option>
+      </select>
+      <select id="sort" aria-label="정렬">
+        <option value="latest">최신순</option><option value="views">조회순</option>
+      </select>
+    </span>
+  </div>
+  <div id="list"></div>
+  <div class="pager" id="pager"></div>
+</main>
+<footer>※ 이 화면의 모든 고시·공고는 시연용 가상 데이터입니다.</footer>
+
+<div class="overlay" id="overlay"><div class="modal" id="modal" role="dialog" aria-modal="true"></div></div>
+
+<script>
+const state = { category: "", kind: "", q: "", sort: "latest", page: 1, size: 8 };
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const today = new Date().toISOString().slice(0, 10);
+
+function status(n) {
+  if (!n.deadline) return "";
+  return n.deadline < today ? '<span class="tag closed">마감</span>' : '<span class="tag open">접수중</span>';
+}
+
+async function api(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error((await r.json().catch(() => ({}))).detail || r.statusText);
+  return r.json();
+}
+
+async function loadTabs() {
+  const cats = await api("/api/categories");
+  const total = cats.reduce((a, c) => a + c.count, 0);
+  const all = [{ name: "", label: "전체", count: total }, ...cats.map(c => ({ ...c, label: c.name }))];
+  $("tabs").innerHTML = all.map(c =>
+    `<button class="tab ${state.category === c.name ? "on" : ""}" data-c="${esc(c.name)}">${esc(c.label)}<small>${c.count}</small></button>`).join("");
+}
+
+async function loadList() {
+  const p = new URLSearchParams({ sort: state.sort, page: state.page, size: state.size });
+  if (state.category) p.set("category", state.category);
+  if (state.kind) p.set("kind", state.kind);
+  if (state.q) p.set("q", state.q);
+  try {
+    const d = await api("/api/notices?" + p);
+    $("count").textContent = `총 ${d.total}건`;
+    $("list").innerHTML = d.items.length ? d.items.map(n => `
+      <div class="card" tabindex="0" data-id="${n.id}">
+        <span class="tag">${esc(n.category)}</span><span class="tag kind">${esc(n.kind)}</span>${status(n)}
+        <h3>${esc(n.title)}</h3>
+        <p>${esc(n.summary)}</p>
+        <div class="meta">${esc(n.doc_no)} · ${esc(n.department)} · 게시 ${esc(n.posted_at)}${n.deadline ? " · 마감 " + esc(n.deadline) : ""} · 조회 ${n.views}</div>
+      </div>`).join("") : '<div class="empty">검색 결과가 없습니다.</div>';
+    const pages = Math.ceil(d.total / d.size);
+    $("pager").innerHTML = pages > 1 ? Array.from({ length: pages }, (_, i) =>
+      `<button class="${i + 1 === state.page ? "on" : ""}" data-p="${i + 1}">${i + 1}</button>`).join("") : "";
+  } catch (e) {
+    $("list").innerHTML = `<div class="empty">목록을 불러오지 못했습니다: ${esc(e.message)}</div>`;
+  }
+}
+
+async function openDetail(id) {
+  try {
+    const n = await api("/api/notices/" + id);
+    $("modal").innerHTML = `
+      <button class="close" aria-label="닫기">&times;</button>
+      <span class="tag">${esc(n.category)}</span><span class="tag kind">${esc(n.kind)}</span>${status(n)}
+      <h2>${esc(n.title)}</h2>
+      <div class="sum"><b>요약</b>${esc(n.summary)}</div>
+      <table>
+        <tr><th>문서번호</th><td>${esc(n.doc_no)}</td></tr>
+        <tr><th>게시일</th><td>${esc(n.posted_at)}</td></tr>
+        ${n.deadline ? `<tr><th>마감일</th><td>${esc(n.deadline)}</td></tr>` : ""}
+        <tr><th>담당부서</th><td>${esc(n.department)} (${esc(n.phone)})</td></tr>
+      </table>
+      <h3>원문</h3>
+      <div class="body">${esc(n.body)}</div>
+      <div class="actions"><button class="btn" onclick="window.print()">인쇄</button></div>`;
+    $("overlay").classList.add("show");
+    loadList();
+  } catch (e) { alert(e.message); }
+}
+
+const closeModal = () => $("overlay").classList.remove("show");
+
+$("tabs").onclick = e => { const b = e.target.closest(".tab"); if (!b) return; state.category = b.dataset.c; state.page = 1; loadTabs(); loadList(); };
+$("pager").onclick = e => { const b = e.target.closest("button"); if (!b) return; state.page = +b.dataset.p; loadList(); scrollTo(0, 0); };
+$("list").onclick = e => { const c = e.target.closest(".card"); if (c) openDetail(c.dataset.id); };
+$("list").onkeydown = e => { if (e.key === "Enter") { const c = e.target.closest(".card"); if (c) openDetail(c.dataset.id); } };
+$("searchForm").onsubmit = e => { e.preventDefault(); state.q = $("q").value.trim(); state.page = 1; loadList(); };
+$("kind").onchange = e => { state.kind = e.target.value; state.page = 1; loadList(); };
+$("sort").onchange = e => { state.sort = e.target.value; state.page = 1; loadList(); };
+$("overlay").onclick = e => { if (e.target === $("overlay") || e.target.closest(".close")) closeModal(); };
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+loadTabs(); loadList();
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 60307,
+ "num_turns": 8,
+ "total_cost_usd": 0.2250807,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 8,
+  "cache_creation_input_tokens": 30042,
+  "cache_read_input_tokens": 134167,
+  "output_tokens": 9148,
+  "output_tokens_details": {
+   "thinking_tokens": 754
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 30042,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 745,
+    "cache_read_input_tokens": 46516,
+    "cache_creation_input_tokens": 198,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 198
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD대로 웹앱을 만들었습니다. 내가 만든 API 테스트 8개는 모두 통과했지만, 화면(T9)은 브라우저로 확인하지 못했습니다.\n\n**실행:** 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`을 실행하고 `/`로 접속하면 됩니다. `PORT` 환경 변수가 있으면 그 포트를 씁니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/notices.csv`로 SQLite(`notice.db`, 테이블 `nt_notices`)를 새로 만듭니다. API 3개와 업무 규칙 R1~R7을 구현했습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. PRD에 적힌 `data-testid`와 `data-id`·`data-status` 속성을 그대로 썼습니다. 분야 필터, 검색, 폐지 포함, 기준일, 상세 원문/요약 나란히 보기, 없음 상태, 오류 상태와 다시 시도 버튼이 들어 있습니다.\n- `seed/notices.csv`: PRD에 파일이 없어 직접 만든 가상 고시 10건입니다. 시행 예정 2건, 폐지 2건, 원문 링크 없음 1건, 요약 없음 2건입니다.\n- `tests/test_dod.py`: T1~T8을 확인합니다. 서버를 직접 띄워서 검사합니다.\n\n**확인하지 못한 것과 주의할 점**\n- T9(화면 확인)는 브라우저 테스트 도구가 없어서 실행하지 않았습니다.\n- 시행 예정과 폐지 상태는 서버의 오늘 날짜로 계산합니다. 샘플 CSV의 날짜는 PRD의 기준일 2026-10-24에 맞춰 놓았습니다. 실제 날짜가 크게 다르면 시행 예정이나 폐지 건수가 PRD 숫자와 달라질 수 있습니다.",
+ "wall_s": 68.5
+}

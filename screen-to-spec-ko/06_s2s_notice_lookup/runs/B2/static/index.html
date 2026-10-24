@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>푸른구청 고시 · 공고 열람</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f5f7fa; color: #222; }
+  main { max-width: 960px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 1.5rem; }
+  .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+  input[type=text], select { padding: 6px; }
+  button { padding: 6px 12px; cursor: pointer; }
+  .meta { color: #555; margin: 8px 0; display: flex; gap: 16px; }
+  .card { background: #fff; border: 1px solid #d5dbe3; border-radius: 6px; padding: 12px; margin-bottom: 8px; cursor: pointer; }
+  .card:hover { border-color: #2a6fdb; }
+  .card h3 { margin: 6px 0; font-size: 1.05rem; }
+  .sub { color: #555; font-size: .9rem; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: .8rem; color: #fff; }
+  .s-ing { background: #1c8a4a; } .s-plan { background: #d98200; } .s-end { background: #888; }
+  .detail { background: #fff; border: 2px solid #2a6fdb; border-radius: 6px; padding: 12px; margin: 12px 0; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .col { border: 1px solid #d5dbe3; border-radius: 4px; padding: 10px; white-space: pre-wrap; }
+  .col h4 { margin: 0 0 8px; }
+  #summary { background: #fffbe6; border-style: dashed; }
+  #error, #no-result { padding: 16px; text-align: center; }
+  @media (max-width: 640px) { .cols { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>푸른구청 고시 · 공고 열람</h1>
+  <div class="bar">
+    <select data-testid="category" aria-label="분야">
+      <option value="">전체</option>
+      <option>주차</option><option>위생</option><option>건축</option><option>복지</option>
+    </select>
+    <input type="text" data-testid="q" placeholder="검색어 (공백으로 여러 단어)" aria-label="검색어">
+    <button data-testid="search-btn">검색</button>
+    <label><input type="checkbox" data-testid="include-repealed"> 폐지 포함</label>
+  </div>
+  <div class="meta">
+    <span>기준일 <span data-testid="as-of"></span></span>
+    <span>건수 <span data-testid="count"></span></span>
+  </div>
+  <div id="detail-area"></div>
+  <div id="list"></div>
+  <div id="no-result" data-testid="no-result" hidden>해당 고시 없음</div>
+  <div id="error" hidden>
+    <p>불러오지 못했습니다</p>
+    <button id="retry">다시 시도</button>
+  </div>
+</main>
+<script>
+const $ = (sel) => document.querySelector(sel);
+const tid = (id) => document.querySelector(`[data-testid="${id}"]`);
+const STATUS_CLASS = { "시행 중": "s-ing", "시행 예정": "s-plan", "폐지": "s-end" };
+
+function el(tag, props = {}, ...children) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(props)) {
+    if (k === "text") e.textContent = v;
+    else if (k === "class") e.className = v;
+    else e.setAttribute(k, v);
+  }
+  children.forEach((c) => e.append(c));
+  return e;
+}
+
+function badgeText(n) {
+  return n.status === "시행 예정" ? `시행 예정 D-${n.days_until}` : n.status;
+}
+
+async function api(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(res.status);
+  return res.json();
+}
+
+function showError(on) {
+  $("#error").hidden = !on;
+}
+
+async function load() {
+  const params = new URLSearchParams({
+    category: tid("category").value,
+    q: tid("q").value.trim(),
+    include_repealed: tid("include-repealed").checked ? "1" : "0",
+  });
+  let data;
+  try {
+    data = await api("/api/notices?" + params);
+  } catch (e) {
+    $("#list").replaceChildren();
+    $("#detail-area").replaceChildren();
+    tid("no-result").hidden = true;
+    showError(true);
+    return;
+  }
+  showError(false);
+  tid("as-of").textContent = data.as_of;
+  tid("count").textContent = data.count;
+  tid("no-result").hidden = data.count !== 0;
+  $("#detail-area").replaceChildren();
+  $("#list").replaceChildren(...data.items.map(renderCard));
+}
+
+function renderCard(n) {
+  const link = el("a", { "data-testid": "source-link", href: n.source_url, target: "_blank", rel: "noopener noreferrer", text: "원문" });
+  link.addEventListener("click", (e) => e.stopPropagation());
+  const card = el("div", { class: "card", "data-testid": "notice", "data-id": n.notice_id, "data-status": n.status },
+    el("span", { class: "badge " + STATUS_CLASS[n.status], "data-testid": "badge", text: badgeText(n) }),
+    el("h3", { text: n.title }),
+    el("div", { class: "sub", text: `${n.issuer} · 공고 ${n.published} · 시행 ${n.effective_from}` }),
+    link);
+  card.addEventListener("click", () => showDetail(n.notice_id));
+  return card;
+}
+
+async function showDetail(id) {
+  let n;
+  try {
+    n = await api("/api/notices/" + encodeURIComponent(id));
+  } catch (e) {
+    showError(true);
+    return;
+  }
+  showError(false);
+  const summaryBody = n.has_summary ? n.summary : "요약 없음 — 원문을 보세요";
+  const box = el("div", { class: "detail" },
+    el("h2", { text: n.title }),
+    el("div", { class: "sub", text: `${badgeText(n)} · ${n.issuer} · 공고 ${n.published} · 시행 ${n.effective_from}` }),
+    el("div", { class: "cols" },
+      el("div", { class: "col", id: "original", "data-testid": "original" },
+        el("h4", { text: "원문 전문" }), n.original),
+      el("div", { class: "col", id: "summary", "data-testid": "summary" },
+        el("h4", { text: "요약 — 법적 효력은 원문에 있습니다" }), summaryBody)),
+    el("p", {}, el("a", { href: n.source_url, target: "_blank", rel: "noopener noreferrer", text: "원문 보기" })));
+  const close = el("button", { text: "닫기" });
+  close.addEventListener("click", () => $("#detail-area").replaceChildren());
+  box.append(close);
+  $("#detail-area").replaceChildren(box);
+  box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+tid("search-btn").addEventListener("click", load);
+tid("q").addEventListener("keydown", (e) => { if (e.key === "Enter") load(); });
+tid("category").addEventListener("change", load);
+tid("include-repealed").addEventListener("change", load);
+$("#retry").addEventListener("click", load);
+load();
+</script>
+</body>
+</html>

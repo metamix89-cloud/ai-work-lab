@@ -1,0 +1,15 @@
+{
+ "allowed_routes": ["/", "/api/categories", "/api/notices", "/api/notices/{id}", "/api/notices/{notice_id}", "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "고시 편집 화면": "고시 등록|고시 추가|고시 수정|@app\\.(post|put|delete|patch)",
+  "자동 요약 · LLM": "openai|anthropic|llm|자동 요약|summarize\\(",
+  "원문을 잘라 요약으로": "original\\[:\\s*\\d+\\]|original\\.slice\\(0|substring\\(0|\\[:1\\d\\d\\]",
+  "크롤링 · 외부 요청": "requests\\.get|urllib\\.request\\.urlopen|httpx|fetch\\(['\"]http",
+  "알림 · 구독": "알림|구독|subscribe|notify",
+  "PDF · 첨부": "pdf|첨부",
+  "인쇄 · 엑셀": "window\\.print|인쇄|xlsx|엑셀",
+  "즐겨찾기": "즐겨찾기|bookmark|favorite",
+  "로그인 · 권한": "login|password|로그인|auth",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}

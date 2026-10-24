@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>푸른구청 고시 · 공고</title>
+<style>
+  :root { --blue:#1f5fbf; --bg:#f4f6fa; --line:#dde3ee; --text:#1c2433; --mute:#6b7689; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Malgun Gothic",system-ui,sans-serif; background:var(--bg); color:var(--text); }
+  header { background:var(--blue); color:#fff; padding:20px 16px; }
+  header .in, main { max-width:900px; margin:0 auto; }
+  header h1 { margin:0; font-size:22px; }
+  header p { margin:4px 0 0; opacity:.85; font-size:14px; }
+  main { padding:16px; }
+  .tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+  .tab { border:1px solid var(--line); background:#fff; padding:8px 14px; border-radius:20px; cursor:pointer; font-size:14px; font-family:inherit; }
+  .tab.on { background:var(--blue); color:#fff; border-color:var(--blue); }
+  .tab small { opacity:.7; margin-left:4px; }
+  .bar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; align-items:center; }
+  .bar input[type=search] { flex:1; min-width:180px; padding:9px 12px; border:1px solid var(--line); border-radius:8px; font-size:14px; font-family:inherit; }
+  .bar select, .bar label { font-size:14px; }
+  .bar select { padding:9px; border:1px solid var(--line); border-radius:8px; background:#fff; font-family:inherit; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin-bottom:10px; cursor:pointer; }
+  .card:hover { border-color:var(--blue); }
+  .meta { font-size:12px; color:var(--mute); display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
+  .card h3 { margin:6px 0 4px; font-size:16px; }
+  .card p { margin:0; font-size:14px; color:#3b4659; }
+  .badge { display:inline-block; font-size:11px; padding:2px 8px; border-radius:10px; background:#e6eefb; color:var(--blue); margin-right:4px; }
+  .badge.k { background:#eef0f4; color:#475066; }
+  .badge.d { background:#fdecea; color:#c0392b; }
+  .empty { text-align:center; color:var(--mute); padding:40px 0; }
+  .detail { background:#fff; border:1px solid var(--line); border-radius:10px; padding:20px; }
+  .detail h2 { margin:8px 0 12px; font-size:20px; }
+  .back { background:none; border:none; color:var(--blue); cursor:pointer; font-size:14px; padding:0 0 12px; font-family:inherit; }
+  table { width:100%; border-collapse:collapse; font-size:14px; margin-bottom:16px; }
+  th, td { border:1px solid var(--line); padding:8px 10px; text-align:left; }
+  th { background:#f0f3f9; width:110px; font-weight:600; }
+  .sum { background:#eef4ff; border-left:4px solid var(--blue); padding:12px 14px; border-radius:4px; margin-bottom:16px; font-size:15px; }
+  .sum b { display:block; margin-bottom:4px; color:var(--blue); font-size:13px; }
+  pre { white-space:pre-wrap; font-family:inherit; line-height:1.75; background:#fafbfd; border:1px solid var(--line); border-radius:8px; padding:16px; font-size:14px; margin:0; }
+  h4 { margin:16px 0 8px; font-size:14px; color:var(--mute); }
+  mark { background:#fff2a8; }
+</style>
+</head>
+<body>
+<header><div class="in"><h1>푸른구청 고시 · 공고</h1><p>주차 · 위생 · 건축 · 복지 분야별 구청 고시와 공고를 확인하세요.</p></div></header>
+<main id="app"></main>
+<script>
+const $ = s => document.querySelector(s);
+const state = { category:"", kind:"", q:"", openOnly:false };
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; };
+
+function dday(deadline) {
+  if (!deadline) return "";
+  const diff = Math.round((new Date(deadline) - new Date(today())) / 86400000);
+  if (diff < 0) return `<span class="badge k">마감</span>`;
+  return `<span class="badge d">${diff === 0 ? "D-day" : "D-" + diff}</span>`;
+}
+
+function hl(text) {
+  const t = esc(text);
+  if (!state.q) return t;
+  const re = new RegExp(esc(state.q).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+  return t.replace(re, m => `<mark>${m}</mark>`);
+}
+
+async function renderList() {
+  const cats = await (await fetch("/api/categories")).json();
+  const p = new URLSearchParams();
+  if (state.category) p.set("category", state.category);
+  if (state.kind) p.set("kind", state.kind);
+  if (state.q) p.set("q", state.q);
+  if (state.openOnly) { p.set("open_only", "true"); p.set("today", today()); }
+  const items = await (await fetch("/api/notices?" + p)).json();
+  const total = cats.reduce((a, c) => a + c.count, 0);
+
+  $("#app").innerHTML = `
+    <div class="tabs">
+      <button class="tab ${state.category ? "" : "on"}" data-cat="">전체<small>${total}</small></button>
+      ${cats.map(c => `<button class="tab ${state.category === c.name ? "on" : ""}" data-cat="${esc(c.name)}">${esc(c.name)}<small>${c.count}</small></button>`).join("")}
+    </div>
+    <div class="bar">
+      <input type="search" id="q" placeholder="제목 · 내용 검색" value="${esc(state.q)}">
+      <select id="kind">
+        <option value="">고시+공고</option>
+        <option value="고시" ${state.kind === "고시" ? "selected" : ""}>고시</option>
+        <option value="공고" ${state.kind === "공고" ? "selected" : ""}>공고</option>
+      </select>
+      <label><input type="checkbox" id="open" ${state.openOnly ? "checked" : ""}> 신청·열람 진행 중만</label>
+    </div>
+    ${items.length ? items.map(n => `
+      <div class="card" data-id="${n.id}">
+        <span class="badge">${esc(n.category)}</span><span class="badge k">${esc(n.kind)}</span>${dday(n.deadline)}
+        <h3>${hl(n.title)}</h3>
+        <p>${hl(n.summary)}</p>
+        <div class="meta"><span>${esc(n.number)}</span><span>게시일 ${esc(n.posted)}</span>${n.deadline ? `<span>마감 ${esc(n.deadline)}</span>` : ""}<span>${esc(n.dept)}</span></div>
+      </div>`).join("") : `<div class="empty">조건에 맞는 게시물이 없습니다.</div>`}`;
+
+  document.querySelectorAll(".tab").forEach(b => b.onclick = () => { state.category = b.dataset.cat; renderList(); });
+  $("#kind").onchange = e => { state.kind = e.target.value; renderList(); };
+  $("#open").onchange = e => { state.openOnly = e.target.checked; renderList(); };
+  const q = $("#q");
+  q.onkeydown = e => { if (e.key === "Enter") { state.q = q.value.trim(); renderList(); } };
+  q.onsearch = () => { state.q = q.value.trim(); renderList(); };
+  document.querySelectorAll(".card").forEach(c => c.onclick = () => { location.hash = "#/" + c.dataset.id; });
+}
+
+async function renderDetail(id) {
+  const res = await fetch("/api/notices/" + id);
+  if (!res.ok) { $("#app").innerHTML = `<button class="back" onclick="location.hash=''">← 목록</button><div class="empty">게시물을 찾을 수 없습니다.</div>`; return; }
+  const n = await res.json();
+  $("#app").innerHTML = `
+    <button class="back" onclick="location.hash=''">← 목록으로</button>
+    <div class="detail">
+      <span class="badge">${esc(n.category)}</span><span class="badge k">${esc(n.kind)}</span>${dday(n.deadline)}
+      <h2>${esc(n.title)}</h2>
+      <table>
+        <tr><th>문서번호</th><td>${esc(n.number)}</td></tr>
+        <tr><th>게시일</th><td>${esc(n.posted)}</td></tr>
+        <tr><th>마감일</th><td>${esc(n.deadline || "해당 없음")}</td></tr>
+        <tr><th>담당부서</th><td>${esc(n.dept)} (${esc(n.phone)})</td></tr>
+      </table>
+      <div class="sum"><b>요약</b>${esc(n.summary)}</div>
+      <h4>원문</h4>
+      <pre>${esc(n.body)}</pre>
+    </div>`;
+  window.scrollTo(0, 0);
+}
+
+function route() {
+  const m = location.hash.match(/^#\/(\d+)$/);
+  m ? renderDetail(m[1]) : renderList();
+}
+window.addEventListener("hashchange", route);
+route();
+</script>
+</body>
+</html>

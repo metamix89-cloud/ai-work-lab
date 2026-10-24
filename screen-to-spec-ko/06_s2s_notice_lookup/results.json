@@ -1,0 +1,774 @@
+{
+ "A1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "KeyError: 'notice_id'",
+   "T3": "KeyError: 'notice_id'",
+   "T4": "KeyError: 'notice_id'",
+   "T5": "KeyError: 'notice_id'",
+   "T6": "AssertionError: as_of 가 오늘이 아니다: None\nassert None == '2026-10-24'\n +  where None = <built-in method get of dict object at 0x000001DC30DC4C40>('as_of')\n +    where <built-in method get of dict object at 0x000001DC30DC4C40> = {'total': 16, 'page': 1, 'size': 8, 'items': [{'id': 13, 'category': '복지', 'kind': '공고', 'doc_no': '푸른구 공고 제2026-325호'...'doc_no': '푸른구 고시 제2026-45호', ...}, {'id': 1, 'category': '주차', 'kind': '고시', 'doc_no': '푸른구 고시 제2026-41호', ...}, ...]}.get\n +  and   '2026-10-24' = <built-in method isoformat of datetime.date object at 0x000001DC2DA3E990>()\n +    where <built-in method i",
+   "T7": "AssertionError: []\nassert [] == ['N-01']\n  \n  Right contains one more item: 'N-01'\n  Use -v to get more diff",
+   "T8": "AssertionError: ('알 수 없는 분야는 400', 200)\nassert 200 == 400",
+   "T9": "AssertionError: N-02 카드가 없다\nassert None is not None"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": " body[\"items\"]] == [\"N-01\"], body[\"items\"]\nE       AssertionError: []\nE       assert [] == ['N-01']\nE         \nE         Right contains one more item: 'N-01'\nE         Use -v to get more diff\n\n_grader\\test_dod.py:249: AssertionError\n________________________ test_T8_bad_input_and_missing ________________________\n\nsrv = <test_dod.Server object at 0x000001DC2D896900>\n\n    def test_T8_bad_input_and_missing(srv):\n        st, _ = notices(srv, category=\"교육\")\n>       assert st == 400, (\"알 수 없는 분야는 400\", st)\nE       AssertionError: ('알 수 없는 분야는 400', 200)\nE       assert 200 == 400\n\n_grader\\test_dod.py:258: AssertionError\n_____________________ test_T9_screen_badges_links_summary _____________________\n\nsrv = <test_dod.Server object at 0x000001DC2D896900>\npw = <Browser type=<BrowserType name=chromium executable_path=C:\\Users\\DESKTOP_KIM\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen_badges_links_summary(srv, pw):\n        page = open_page(pw, srv)\n        card = page.query_selector('[data-testid=\"notice\"][data-id=\"N-02\"]')\n>       assert card is not None, \"N-02 카드가 없다\"\nE       AssertionError: N-02 카드가 없다\nE       assert None is not None\n\n_grader\\test_dod.py:272: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_default_hides_repealed_and_sourceless - K...\nFAILED _grader/test_dod.py::test_T3_upcoming_status_and_days - KeyError: 'not...\nFAILED _grader/test_dod.py::test_T4_include_repealed - KeyError: 'notice_id'\nFAILED _grader/test_dod.py::test_T5_summary_not_fabricated - KeyError: 'notic...\nFAILED _grader/test_dod.py::test_T6_every_item_has_basis_and_as_of - Assertio...\nFAILED _grader/test_dod.py::test_T7_category_and_query_and_order - AssertionE...\nFAILED _grader/test_dod.py::test_T8_bad_input_and_missing - AssertionError: (...\nFAILED _grader/test_dod.py::test_T9_screen_badges_links_summary - AssertionEr...\n8 failed, 1 passed in 5.73s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/categories",
+   "/api/notices",
+   "/api/notices/{notice_id}"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/notices.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 푸른구청 '고시 · 공고 열람' 웹앱을 만들어 줘. 주민이 주차 · 위생 · 건축 · 복지 분야별로 구청 고시와 공고를 찾아보고, 요약과 원문을 볼 수 있으면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 96649,
+   "num_turns": 6,
+   "total_cost_usd": 0.2723335,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 30365,
+    "cache_read_input_tokens": 130175,
+    "output_tokens": 13784,
+    "output_tokens_details": {
+     "thinking_tokens": 198
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 30365,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 833,
+      "cache_read_input_tokens": 46603,
+      "cache_creation_input_tokens": 434,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 434
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "푸른구청 '고시 · 공고 열람' 웹앱을 만들었습니다. 브라우저 화면은 직접 열어 보지 않았습니다. API는 테스트 클라이언트로 확인했습니다. 분야별 건수가 맞게 나오고, 분야 필터, 검색, 상세 조회, 없는 번호의 404까지 정상입니다.\n\n**실행 방법**\n```\ncd C:\\Users\\Public\\Documents\\ESTsoft\\CreatorTemp\\s2s_runs\\06_s2s_notice_lookup\\A1\npip install -r requirements.txt\npython main.py\n```\nhttp://127.0.0.1:8000 에서 열립니다. 첫 실행 때 `notices.db`가 자동으로 만들어지고 가상 데이터가 들어갑니다.\n\n**파일**\n- `main.py`: FastAPI 서버, SQLite 테이블 생성, 가상 데이터 16건(주차·위생·건축·복지 각 4건)\n- `static/index.html`: 화면 전체(HTML/JS/CSS가 한 파일)\n- `requirements.txt`\n\n**화면 기능**\n- 분야 탭: 전체, 주차, 위생, 건축, 복지. 탭마다 건수가 표시됩니다.\n- 검색: 제목, 요약, 원문에서 찾습니다.\n- 필터와 정렬: 고시/공고 유형, 최신순/조회순, 8건 단위 페이지 이동\n- 목록 카드: 요약과 문서번호, 담당부서, 게시일을 보여 주고, 마감일이 있으면 '접수중'이나 '마감' 표시가 붙습니다.\n- 상세 창: 카드를 누르면 요약, 문서번호, 마감일, 담당부서 연락처, 원문 전체가 나옵니다. 인쇄 버튼이 있고, 열 때마다 조회수가 올라갑니다.\n- 데이터에 들어 있는 `<`나 `&` 같은 문자는 이스케이프해서 화면에 출력합니다.\n\n고시·공고 내용, 문서번호, 전화번호는 모두 지어낸 것이고 화면 하단에 가상 데이터라는 안내를 넣었습니다. 데이터를 바꾸려면 `main.py`의 `SEED` 목록을 고치고 `notices.db`를 지운 뒤 다시 실행하면 됩니다.",
+   "wall_s": 106.5
+  }
+ },
+ "A2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "KeyError: 'notice_id'",
+   "T3": "KeyError: 'notice_id'",
+   "T4": "KeyError: 'notice_id'",
+   "T5": "KeyError: 'notice_id'",
+   "T6": "AssertionError: as_of 가 오늘이 아니다: None\nassert None == '2026-10-24'\n +  where None = <built-in method get of dict object at 0x000001A1838FDC40>('as_of')\n +    where <built-in method get of dict object at 0x000001A1838FDC40> = {'total': 24, 'page': 1, 'size': 10, 'items': [{'id': 24, 'number': '푸른구 공고 제2026-14호', 'category': '복지', 'kind': '공고'...ategory': '주차', 'kind': '공고', ...}, {'id': 19, 'number': '푸른구 공고 제2026-9호', 'category': '위생', 'kind': '공고', ...}, ...]}.get\n +  and   '2026-10-24' = <built-in method isoformat of datetime.date object at 0x000001A1815BE230>()\n +    where <built-in method i",
+   "T7": "AssertionError: []\nassert [] == ['N-01']\n  \n  Right contains one more item: 'N-01'\n  Use -v to get more diff",
+   "T8": "AssertionError: ('알 수 없는 분야는 400', 200)\nassert 200 == 400",
+   "T9": "AssertionError: N-02 카드가 없다\nassert None is not None"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": " body[\"items\"]] == [\"N-01\"], body[\"items\"]\nE       AssertionError: []\nE       assert [] == ['N-01']\nE         \nE         Right contains one more item: 'N-01'\nE         Use -v to get more diff\n\n_grader\\test_dod.py:249: AssertionError\n________________________ test_T8_bad_input_and_missing ________________________\n\nsrv = <test_dod.Server object at 0x000001A18144A900>\n\n    def test_T8_bad_input_and_missing(srv):\n        st, _ = notices(srv, category=\"교육\")\n>       assert st == 400, (\"알 수 없는 분야는 400\", st)\nE       AssertionError: ('알 수 없는 분야는 400', 200)\nE       assert 200 == 400\n\n_grader\\test_dod.py:258: AssertionError\n_____________________ test_T9_screen_badges_links_summary _____________________\n\nsrv = <test_dod.Server object at 0x000001A18144A900>\npw = <Browser type=<BrowserType name=chromium executable_path=C:\\Users\\DESKTOP_KIM\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen_badges_links_summary(srv, pw):\n        page = open_page(pw, srv)\n        card = page.query_selector('[data-testid=\"notice\"][data-id=\"N-02\"]')\n>       assert card is not None, \"N-02 카드가 없다\"\nE       AssertionError: N-02 카드가 없다\nE       assert None is not None\n\n_grader\\test_dod.py:272: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_default_hides_repealed_and_sourceless - K...\nFAILED _grader/test_dod.py::test_T3_upcoming_status_and_days - KeyError: 'not...\nFAILED _grader/test_dod.py::test_T4_include_repealed - KeyError: 'notice_id'\nFAILED _grader/test_dod.py::test_T5_summary_not_fabricated - KeyError: 'notic...\nFAILED _grader/test_dod.py::test_T6_every_item_has_basis_and_as_of - Assertio...\nFAILED _grader/test_dod.py::test_T7_category_and_query_and_order - AssertionE...\nFAILED _grader/test_dod.py::test_T8_bad_input_and_missing - AssertionError: (...\nFAILED _grader/test_dod.py::test_T9_screen_badges_links_summary - AssertionEr...\n8 failed, 1 passed in 5.68s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/categories",
+   "/api/notices",
+   "/api/notices/{notice_id}",
+   "/static"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "app/__init__.py",
+   "app/main.py",
+   "app/seed.py",
+   "build.json",
+   "requirements.txt",
+   "seed/notices.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 푸른구청 '고시 · 공고 열람' 웹앱을 만들어 줘. 주민이 주차 · 위생 · 건축 · 복지 분야별로 구청 고시와 공고를 찾아보고, 요약과 원문을 볼 수 있으면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 157321,
+   "num_turns": 11,
+   "total_cost_usd": 0.4275489,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 40760,
+    "cache_read_input_tokens": 279109,
+    "output_tokens": 23657,
+    "output_tokens_details": {
+     "thinking_tokens": 476
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 40760,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 781,
+      "cache_read_input_tokens": 56956,
+      "cache_creation_input_tokens": 476,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 476
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "푸른구청 '고시 · 공고 열람' 웹앱을 만들었습니다. 가상 데이터 24건이 들어 있어 실행하면 바로 볼 수 있습니다. API는 `TestClient`로 점검했지만, 서버를 띄워 브라우저로 화면을 열어 보지는 않았습니다.\n\n**실행 방법**\n\n```powershell\npip install -r requirements.txt\nuvicorn app.main:app --reload\n```\n\n실행 후 http://127.0.0.1:8000 에 접속하면 됩니다. 첫 실행 때 `notices.db`가 자동으로 생기고 가상 데이터가 들어갑니다. 데이터를 처음 상태로 되돌리려면 이 파일을 지우고 다시 실행하세요.\n\n**주민이 할 수 있는 것**\n- 주차·위생·건축·복지 탭으로 분야를 고르면 분야별 건수와 함께 목록이 바뀝니다.\n- 고시/공고 구분, 최신순/조회순 정렬, 제목·요약·원문 검색을 쓸 수 있고, 목록은 페이지로 나뉩니다.\n- 항목을 누르면 상세 창이 열립니다. 담당부서·게시일·시행/마감일·조회수가 보이고, 요약과 원문을 탭으로 바꿔 볼 수 있습니다.\n- 상세를 열 때마다 조회수가 올라갑니다.\n\n**구성**\n- `app/main.py`: FastAPI 서버(`/api/categories`, `/api/notices`, `/api/notices/{id}`)와 SQLite 초기화\n- `app/seed.py`: 분야별 6건씩의 가상 고시·공고. 고시·공고 번호(예: `푸른구 고시 제2026-3호`)는 게시일 순으로 자동 부여됩니다.\n- `static/index.html`: 화면 전체(HTML/JS/CSS를 한 파일에 넣었고, 외부 라이브러리는 쓰지 않았습니다)\n\n화면 아래에 \"시연용 가상 데이터이며 실제 행정 문서가 아니다\"라는 문구를 넣어 두었습니다. 법령 조문과 수치는 모두 허구입니다.",
+   "wall_s": 173.1
+  }
+ },
+ "A3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "TypeError: list indices must be integers or slices, not str",
+   "T3": "TypeError: list indices must be integers or slices, not str",
+   "T4": "TypeError: list indices must be integers or slices, not str",
+   "T5": "TypeError: list indices must be integers or slices, not str",
+   "T6": "AttributeError: 'list' object has no attribute 'get'",
+   "T7": "TypeError: list indices must be integers or slices, not str",
+   "T8": "AssertionError: ('알 수 없는 분야는 400', 200)\nassert 200 == 400",
+   "T9": "AssertionError: N-02 카드가 없다\nassert None is not None"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "ert [i[\"notice_id\"] for i in body[\"items\"]] == [\"N-01\"], body[\"items\"]\n                                        ^^^^^^^^^^^^^\nE       TypeError: list indices must be integers or slices, not str\n\n_grader\\test_dod.py:249: TypeError\n________________________ test_T8_bad_input_and_missing ________________________\n\nsrv = <test_dod.Server object at 0x000001BD8ED0E900>\n\n    def test_T8_bad_input_and_missing(srv):\n        st, _ = notices(srv, category=\"교육\")\n>       assert st == 400, (\"알 수 없는 분야는 400\", st)\nE       AssertionError: ('알 수 없는 분야는 400', 200)\nE       assert 200 == 400\n\n_grader\\test_dod.py:258: AssertionError\n_____________________ test_T9_screen_badges_links_summary _____________________\n\nsrv = <test_dod.Server object at 0x000001BD8ED0E900>\npw = <Browser type=<BrowserType name=chromium executable_path=C:\\Users\\DESKTOP_KIM\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen_badges_links_summary(srv, pw):\n        page = open_page(pw, srv)\n        card = page.query_selector('[data-testid=\"notice\"][data-id=\"N-02\"]')\n>       assert card is not None, \"N-02 카드가 없다\"\nE       AssertionError: N-02 카드가 없다\nE       assert None is not None\n\n_grader\\test_dod.py:272: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_default_hides_repealed_and_sourceless - T...\nFAILED _grader/test_dod.py::test_T3_upcoming_status_and_days - TypeError: lis...\nFAILED _grader/test_dod.py::test_T4_include_repealed - TypeError: list indice...\nFAILED _grader/test_dod.py::test_T5_summary_not_fabricated - TypeError: list ...\nFAILED _grader/test_dod.py::test_T6_every_item_has_basis_and_as_of - Attribut...\nFAILED _grader/test_dod.py::test_T7_category_and_query_and_order - TypeError:...\nFAILED _grader/test_dod.py::test_T8_bad_input_and_missing - AssertionError: (...\nFAILED _grader/test_dod.py::test_T9_screen_badges_links_summary - AssertionEr...\n8 failed, 1 passed in 5.68s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/categories",
+   "/api/notices",
+   "/api/notices/{nid}"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "index.html",
+   "main.py",
+   "requirements.txt",
+   "seed.py",
+   "seed/notices.csv"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 푸른구청 '고시 · 공고 열람' 웹앱을 만들어 줘. 주민이 주차 · 위생 · 건축 · 복지 분야별로 구청 고시와 공고를 찾아보고, 요약과 원문을 볼 수 있으면 돼. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 89910,
+   "num_turns": 7,
+   "total_cost_usd": 0.25967250000000003,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 29575,
+    "cache_read_input_tokens": 129465,
+    "output_tokens": 12841,
+    "output_tokens_details": {
+     "thinking_tokens": 113
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 29575,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 778,
+      "cache_read_input_tokens": 45856,
+      "cache_creation_input_tokens": 391,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 391
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "푸른구청 고시·공고 열람 웹앱을 만들었습니다. 서버를 띄워 브라우저로 화면을 직접 열어 보지는 않았습니다. 대신 FastAPI 테스트 클라이언트로 API는 확인했습니다. 분야별·검색·진행 중 조건 조회, 상세 조회, 없는 글 404, 메인 페이지 응답이 모두 정상이었습니다.\n\n**실행 방법** (작업 폴더에서)\n```\npip install -r requirements.txt\nuvicorn main:app --reload\n```\n그다음 http://127.0.0.1:8000 으로 접속하면 됩니다. 처음 실행하면 `notices.db`가 자동으로 만들어지고 가상 데이터 18건이 들어갑니다.\n\n**화면 기능**\n- **분야 탭:** 전체·주차·위생·건축·복지 탭이 있고, 탭마다 건수가 보입니다.\n- **필터와 검색:** 고시/공고 구분, 제목·요약·원문 검색(검색어 강조 표시), \"신청·열람 진행 중만\" 보기를 쓸 수 있습니다.\n- **목록 카드:** 분야, 고시/공고 구분, 마감 D-day, 요약, 문서번호, 게시일, 담당부서가 나옵니다.\n- **상세 화면:** 카드를 누르면 문서 정보 표, 요약 박스, 원문이 보입니다. 주소(`#/번호`)로 직접 열 수 있고 브라우저 뒤로가기도 됩니다.\n\n**파일**\n- `main.py`: FastAPI 서버와 SQLite 처리\n- `seed.py`: 가상 데이터. 문서번호, 법령 조문, 부서 번호까지 모두 허구입니다.\n- `index.html`: 화면 전체(HTML, CSS, JS)\n\n- **D-day와 \"진행 중\" 기준:** 접속한 PC의 오늘 날짜로 계산합니다. 가상 데이터의 마감일은 2026년 10~12월입니다.\n- **관리 기능:** 글을 등록하거나 수정하는 기능은 넣지 않았습니다. 필요하시면 추가하겠습니다.",
+   "wall_s": 99.5
+  }
+ },
+ "B1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "fail"
+  },
+  "detail": {
+   "T9": "AssertionError: 요약 칸 표시가 없다: '거주자 우선주차 신청, 추첨 선정.'\nassert (<JSHandle preview=JSHandle@<div id=\"summary\" data-testid=\"summary\">거주자 우선주차 신청, 추첨 선정.</div>> is not None and '법적 효력은 원문' in '거주자 우선주차 신청, 추첨 선정.')\n +  where '거주자 우선주차 신청, 추첨 선정.' = inner_text()\n +    where inner_text = <JSHandle preview=JSHandle@<div id=\"summary\" data-testid=\"summary\">거주자 우선주차 신청, 추첨 선정.</div>>.inner_text"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "........F                                                                [100%]\n================================== FAILURES ===================================\n_____________________ test_T9_screen_badges_links_summary _____________________\n\nsrv = <test_dod.Server object at 0x00000234DFE42900>\npw = <Browser type=<BrowserType name=chromium executable_path=C:\\Users\\DESKTOP_KIM\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screen_badges_links_summary(srv, pw):\n        page = open_page(pw, srv)\n        card = page.query_selector('[data-testid=\"notice\"][data-id=\"N-02\"]')\n        assert card is not None, \"N-02 카드가 없다\"\n        badge = card.query_selector('[data-testid=\"badge\"]')\n        assert badge is not None and re.search(r\"D-\\s*3\", badge.inner_text()), \"시행 예정 배지에 D-3 이 없다: %r\" % (badge.inner_text() if badge else None)\n        link = card.query_selector('[data-testid=\"source-link\"]')\n        assert link is not None and (link.get_attribute(\"href\") or \"\").startswith(\"http\"), \"원문 링크가 없다\"\n        card.click()\n        page.wait_for_timeout(900)\n        summ = page.query_selector('[data-testid=\"summary\"]')\n>       assert summ is not None and \"법적 효력은 원문\" in summ.inner_text(), \"요약 칸 표시가 없다: %r\" % (summ.inner_text() if summ else None)\nE       AssertionError: 요약 칸 표시가 없다: '거주자 우선주차 신청, 추첨 선정.'\nE       assert (<JSHandle preview=JSHandle@<div id=\"summary\" data-testid=\"summary\">거주자 우선주차 신청, 추첨 선정.</div>> is not None and '법적 효력은 원문' in '거주자 우선주차 신청, 추첨 선정.')\nE        +  where '거주자 우선주차 신청, 추첨 선정.' = inner_text()\nE        +    where inner_text = <JSHandle preview=JSHandle@<div id=\"summary\" data-testid=\"summary\">거주자 우선주차 신청, 추첨 선정.</div>>.inner_text\n\n_grader\\test_dod.py:280: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T9_screen_badges_links_summary - AssertionEr...\n1 failed, 8 passed in 6.72s\n",
+  "passed": 8,
+  "routes": [
+   "/",
+   "/api/categories",
+   "/api/notices",
+   "/api/notices/{notice_id}"
+  ],
+  "extra_routes": [],
+  "tests_modified": true,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/notices.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 58824,
+   "num_turns": 8,
+   "total_cost_usd": 0.2223448,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 30194,
+    "cache_read_input_tokens": 132928,
+    "output_tokens": 8826,
+    "output_tokens_details": {
+     "thinking_tokens": 1041
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 30194,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 706,
+      "cache_read_input_tokens": 45277,
+      "cache_creation_input_tokens": 1589,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 1589
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD대로 웹앱을 만들었습니다. API 쪽 테스트(T1~T8)는 통과했지만, 화면(T9)은 브라우저에서 확인하지 못했습니다.\n\n폴더에 `PRD.md`만 있어서 `seed/notices.csv`와 `tests/test_dod.py`도 새로 만들었습니다. CSV는 PRD의 구성(10건, 시행 예정 2·폐지 2·원문 링크 없음 1·요약 없음 2)에 맞춘 가상 데이터입니다.\n\n실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000` 입니다. 포트는 환경 변수 `PORT`가 있으면 그 값을 씁니다.\n\n- **`main.py`:** CSV를 읽어 SQLite(`notice.db`)를 서버를 시작할 때마다 새로 만듭니다. API 3개와 규칙 R1~R7을 구현했습니다.\n- **`static/index.html`:** 순수 HTML/JS 한 페이지입니다. PRD에 적힌 `data-testid` 이름을 그대로 썼습니다.\n- **`tests/test_dod.py`:** 완료 기준 T1~T8을 확인하는 테스트입니다. 직접 쓴 것이라 PRD가 말하는 원본 테스트와는 다를 수 있습니다.\n- **T9 미확인:** 화면 요소는 PRD의 이름과 문구대로 만들었습니다. 서버를 띄워 브라우저로 직접 열어 보지는 않았습니다.\n- **기준일:** 서버의 오늘 날짜(`date.today()`)를 씁니다. 시행 예정 고시 2건(N002, N005)의 시행일은 2026-11-01과 2026-12-01로 고정해 뒀습니다. 이 날짜들이 지나면 시행 예정 건수가 달라져 T3이 깨지므로, 그때는 CSV 날짜를 바꿔야 합니다.",
+   "wall_s": 63.9
+  }
+ },
+ "B2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 7.61s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/categories",
+   "/api/notices",
+   "/api/notices/{notice_id}"
+  ],
+  "extra_routes": [],
+  "tests_modified": true,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/notices.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 60307,
+   "num_turns": 8,
+   "total_cost_usd": 0.2250807,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 30042,
+    "cache_read_input_tokens": 134167,
+    "output_tokens": 9148,
+    "output_tokens_details": {
+     "thinking_tokens": 754
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 30042,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 745,
+      "cache_read_input_tokens": 46516,
+      "cache_creation_input_tokens": 198,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 198
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD대로 웹앱을 만들었습니다. 내가 만든 API 테스트 8개는 모두 통과했지만, 화면(T9)은 브라우저로 확인하지 못했습니다.\n\n**실행:** 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`을 실행하고 `/`로 접속하면 됩니다. `PORT` 환경 변수가 있으면 그 포트를 씁니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 `seed/notices.csv`로 SQLite(`notice.db`, 테이블 `nt_notices`)를 새로 만듭니다. API 3개와 업무 규칙 R1~R7을 구현했습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. PRD에 적힌 `data-testid`와 `data-id`·`data-status` 속성을 그대로 썼습니다. 분야 필터, 검색, 폐지 포함, 기준일, 상세 원문/요약 나란히 보기, 없음 상태, 오류 상태와 다시 시도 버튼이 들어 있습니다.\n- `seed/notices.csv`: PRD에 파일이 없어 직접 만든 가상 고시 10건입니다. 시행 예정 2건, 폐지 2건, 원문 링크 없음 1건, 요약 없음 2건입니다.\n- `tests/test_dod.py`: T1~T8을 확인합니다. 서버를 직접 띄워서 검사합니다.\n\n**확인하지 못한 것과 주의할 점**\n- T9(화면 확인)는 브라우저 테스트 도구가 없어서 실행하지 않았습니다.\n- 시행 예정과 폐지 상태는 서버의 오늘 날짜로 계산합니다. 샘플 CSV의 날짜는 PRD의 기준일 2026-10-24에 맞춰 놓았습니다. 실제 날짜가 크게 다르면 시행 예정이나 폐지 건수가 PRD 숫자와 달라질 수 있습니다.",
+   "wall_s": 68.5
+  }
+ },
+ "B3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 7.61s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/categories",
+   "/api/notices",
+   "/api/notices/{notice_id}"
+  ],
+  "extra_routes": [],
+  "tests_modified": true,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/notices.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 90578,
+   "num_turns": 11,
+   "total_cost_usd": 0.3233192,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 20,
+    "cache_creation_input_tokens": 35438,
+    "cache_read_input_tokens": 398172,
+    "output_tokens": 14171,
+    "output_tokens_details": {
+     "thinking_tokens": 1250
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 35438,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 817,
+      "cache_read_input_tokens": 51456,
+      "cache_creation_input_tokens": 654,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 654
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD대로 웹앱을 만들었습니다. `tests/test_dod.py`의 8개 테스트가 모두 통과했고, 브라우저(Playwright)로 화면 동작도 확인했습니다. 다만 T9는 pytest에 넣지 않고 따로 확인한 것입니다.\n\n- **화면 확인 결과:** 기준일 2026-10-24에 7건이 나왔습니다. 배지는 `시행 예정 D-3`, `D-8`이 보였습니다. 요약 없는 고시를 누르면 `요약 없음 — 원문을 보세요`가 뜨고, '폐지 포함'을 켜면 9건이 됩니다. 없는 검색어를 넣으면 `해당 고시 없음`이 나옵니다.\n- **확인하지 못한 것:** 오류 상태 화면(`불러오지 못했습니다` + 다시 시도 버튼)은 코드만 넣었고 실제로 띄워 보지는 않았습니다.\n\n폴더에는 `PRD.md`만 있었습니다. 그래서 PRD의 요약대로 가상 고시 10건짜리 `seed/notices.csv`를 새로 만들었고, DoD 테스트는 `tests/test_dod.py`를 새로 써서 T1~T8을 담았습니다. 파일은 아래와 같습니다.\n\n- `main.py`: FastAPI 서버입니다. 시작할 때마다 CSV로 `notice.db`를 새로 만들고, API 3개와 규칙 R1~R7을 구현했습니다.\n- `static/index.html`: 순수 HTML/JS 한 페이지입니다. PRD의 `data-testid`를 그대로 썼습니다.\n\n실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`입니다.\n\n시드 데이터의 날짜는 고정값이라 기준일이 2026-10-24일 때를 전제로 만들었습니다. 날짜가 많이 지나면 시행 예정이 시행 중으로 바뀌어서, 건수 기대값(7건·9건)이 맞지 않을 수 있습니다.\n\n`PORT` 환경 변수는 `python main.py`로 실행할 때만 적용됩니다. `uvicorn` 명령으로 띄울 때는 `--port` 값이 쓰입니다.",
+   "wall_s": 112.9
+  }
+ },
+ "C1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 7.54s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/categories",
+   "/api/notices",
+   "/api/notices/{notice_id}"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/notices.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 63267,
+   "num_turns": 9,
+   "total_cost_usd": 0.28545560000000003,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 38737,
+    "cache_read_input_tokens": 234236,
+    "output_tokens": 10706,
+    "output_tokens_details": {
+     "thinking_tokens": 452
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 38737,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 402,
+      "cache_read_input_tokens": 50110,
+      "cache_creation_input_tokens": 5299,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 5299
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/notices.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음. 추가한 API 경로도 없습니다. 아래 두 가지는 PRD 에 명시되지 않아 내가 정한 것입니다.\n- `include_repealed` 가 0·1 이 아닐 때 400 의 `detail` 은 \"include_repealed 는 0 또는 1 이어야 합니다\" 입니다.\n- 없는 고시나 출처 없는 고시의 404 `detail` 은 \"고시를 찾을 수 없습니다\" 입니다.\n\n`seed/notices.csv` 의 날짜는 오늘(2026-10-24) 기준으로 만든 값이라, 날짜가 지나면 상태와 D-n 이 달라집니다. 테스트는 자기 데이터로 이 파일을 바꿨다가 끝나면 되돌립니다. `notice.db` 는 서버를 시작할 때마다 새로 만들어지고, 지금 폴더에 남아 있는 것은 테스트가 만든 파일입니다.",
+   "wall_s": 74.2
+  }
+ },
+ "C2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 7.47s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/categories",
+   "/api/notices",
+   "/api/notices/{notice_id}"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/notices.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 69433,
+   "num_turns": 10,
+   "total_cost_usd": 0.303539,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 40380,
+    "cache_read_input_tokens": 300810,
+    "output_tokens": 11191,
+    "output_tokens_details": {
+     "thinking_tokens": 326
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 40380,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 245,
+      "cache_read_input_tokens": 56892,
+      "cache_creation_input_tokens": 160,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 160
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/notices.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음. 추가한 API 경로, 칸, 화면 요소도 없습니다.\n\n- **`include_repealed` 400 문구:** PRD 는 이 400 의 `detail` 문구를 정하지 않아서 `include_repealed 는 0 또는 1 이어야 합니다` 로 정했습니다.\n- **404 문구:** 없는 고시와 원문 링크 없는 고시의 404 `detail` 도 PRD 에 문구가 없어서 `없는 고시입니다` 로 정했습니다.",
+   "wall_s": 85.1
+  }
+ },
+ "C3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 7.59s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/categories",
+   "/api/notices",
+   "/api/notices/{notice_id}",
+   "/static"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/notices.csv",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 46599,
+   "num_turns": 8,
+   "total_cost_usd": 0.2283151,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 35553,
+    "cache_read_input_tokens": 188231,
+    "output_tokens": 6726,
+    "output_tokens_details": {
+     "thinking_tokens": 464
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 35553,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 368,
+      "cache_read_input_tokens": 52035,
+      "cache_creation_input_tokens": 190,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 190
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/notices.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: PRD 의 API 3개 외에 `/static` 정적 파일 경로(StaticFiles 마운트)를 하나 두었다. 화면은 `static/index.html` 한 파일이고 이 경로는 쓰지 않는다. 그리고 FastAPI 의 입력 검증 오류(422)를 400 `{\"detail\": \"잘못된 입력입니다\"}` 로 바꿨다. R7 이 입력 오류를 400 으로 정했기 때문이다.\n```\n\n`seed/notices.csv` 의 날짜는 2026-10-24 기준으로 만든 고시 10건이다. 날짜가 고정이라 날이 지나면 시행 예정 · 폐지 상태가 달라질 수 있다.",
+   "wall_s": 58.5
+  }
+ }
+}

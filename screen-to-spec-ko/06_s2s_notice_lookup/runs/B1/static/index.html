@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>푸른구청 고시 · 공고 열람</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f4f6f8; color: #222; }
+  main { max-width: 960px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 22px; }
+  .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+  input, select, button { font: inherit; padding: 6px 10px; }
+  #as-of, #count { color: #555; font-size: 14px; margin: 4px 0; }
+  .card { background: #fff; border: 1px solid #d5dbe1; border-radius: 6px; padding: 12px; margin: 8px 0; cursor: pointer; }
+  .card:hover { border-color: #2b6cb0; }
+  .card h3 { margin: 6px 0; font-size: 16px; }
+  .meta { color: #555; font-size: 13px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; color: #fff; }
+  .s-active { background: #2f855a; } .s-soon { background: #c05621; } .s-gone { background: #718096; }
+  .card a { font-size: 13px; }
+  #detail { margin-top: 16px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cols > div { background: #fff; border: 1px solid #d5dbe1; border-radius: 6px; padding: 12px; white-space: pre-wrap; }
+  #summary { background: #fffbea; }
+  .head { font-weight: bold; margin-bottom: 8px; white-space: normal; }
+  @media (max-width: 640px) { .cols { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>푸른구청 고시 · 공고 열람</h1>
+  <div class="bar">
+    <select data-testid="category" aria-label="분야"></select>
+    <input data-testid="q" type="search" placeholder="검색어 (공백으로 여러 단어)" aria-label="검색어">
+    <button data-testid="search-btn" type="button">검색</button>
+    <label><input data-testid="include-repealed" type="checkbox"> 폐지 포함</label>
+  </div>
+  <div id="as-of-line">기준일 <span data-testid="as-of"></span></div>
+  <div id="count-line">총 <span data-testid="count"></span>건</div>
+  <div id="error" hidden>불러오지 못했습니다 <button type="button" id="retry">다시 시도</button></div>
+  <div data-testid="no-result" hidden>해당 고시 없음</div>
+  <div id="list"></div>
+  <section id="detail" hidden>
+    <div class="cols">
+      <div><div class="head">원문 전문</div><div data-testid="original" id="original"></div></div>
+      <div id="summary-box"><div class="head">요약 — 법적 효력은 원문에 있습니다</div><div data-testid="summary" id="summary"></div></div>
+    </div>
+  </section>
+</main>
+<script>
+const $ = (t) => document.querySelector(`[data-testid="${t}"]`);
+const BADGE = { "시행 중": "s-active", "시행 예정": "s-soon", "폐지": "s-gone" };
+
+function el(tag, props = {}, ...kids) {
+  const e = Object.assign(document.createElement(tag), props);
+  kids.forEach((k) => e.append(k));
+  return e;
+}
+
+async function api(path) {
+  const r = await fetch(path);
+  if (!r.ok) throw new Error(r.status);
+  return r.json();
+}
+
+async function init() {
+  try {
+    const cats = await api("/api/categories");
+    const sel = $("category");
+    sel.append(el("option", { value: "", textContent: "전체" }));
+    cats.forEach((c) => sel.append(el("option", { value: c, textContent: c })));
+  } catch (e) { /* 분야 목록 실패 시에도 목록 조회에서 오류 표시 */ }
+  load();
+}
+
+async function load() {
+  $("no-result").hidden = true;
+  document.getElementById("error").hidden = true;
+  document.getElementById("detail").hidden = true;
+  const p = new URLSearchParams({
+    category: $("category").value,
+    q: $("q").value.trim(),
+    include_repealed: $("include-repealed").checked ? "1" : "0",
+  });
+  let data;
+  try {
+    data = await api("/api/notices?" + p);
+  } catch (e) {
+    document.getElementById("list").replaceChildren();
+    document.getElementById("error").hidden = false;
+    return;
+  }
+  $("as-of").textContent = data.as_of;
+  $("count").textContent = data.count;
+  $("no-result").hidden = data.count !== 0;
+  document.getElementById("list").replaceChildren(...data.items.map(card));
+}
+
+function card(n) {
+  const label = n.status === "시행 예정" ? `시행 예정 D-${n.days_until}` : n.status;
+  const link = el("a", { href: n.source_url, target: "_blank", rel: "noopener noreferrer", textContent: "원문" });
+  link.dataset.testid = "source-link";
+  link.addEventListener("click", (e) => e.stopPropagation());
+  const badge = el("span", { className: "badge " + BADGE[n.status], textContent: label });
+  badge.dataset.testid = "badge";
+  const c = el("div", { className: "card" },
+    badge,
+    el("h3", { textContent: n.title }),
+    el("div", { className: "meta", textContent: `${n.issuer} · 공고 ${n.published} · 시행 ${n.effective_from}` }),
+    link);
+  c.dataset.testid = "notice";
+  c.dataset.id = n.notice_id;
+  c.dataset.status = n.status;
+  c.addEventListener("click", () => showDetail(n.notice_id));
+  return c;
+}
+
+async function showDetail(id) {
+  try {
+    const n = await api("/api/notices/" + encodeURIComponent(id));
+    $("original").textContent = n.original;
+    $("summary").textContent = n.has_summary ? n.summary : "요약 없음 — 원문을 보세요";
+    const d = document.getElementById("detail");
+    d.hidden = false;
+    d.scrollIntoView({ behavior: "smooth" });
+  } catch (e) {
+    document.getElementById("error").hidden = false;
+  }
+}
+
+$("search-btn").addEventListener("click", load);
+$("q").addEventListener("keydown", (e) => { if (e.key === "Enter") load(); });
+$("category").addEventListener("change", load);
+$("include-repealed").addEventListener("change", load);
+document.getElementById("retry").addEventListener("click", load);
+init();
+</script>
+</body>
+</html>

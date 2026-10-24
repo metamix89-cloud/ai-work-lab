@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>푸른구청 고시 · 공고 열람 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 6편 목업. 가상 구청 · 가상 고시(실제 법령 · 수치 아님). ?state=ok|empty|error. Mock-IT 라이트 테마. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--card:#FFFFFF;--teal:#0D9488;--teal2:#CCFBF1;--indigo:#6366F1;--amber:#F59E0B;--rose:#EF4444}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:var(--teal);display:inline-block}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#F0FDFA;color:#0F766E;font-weight:700}
+.main{padding:20px 28px 16px 28px;display:flex;flex-direction:column;gap:9px}
+.top{display:flex;justify-content:space-between;align-items:flex-end}
+h1{margin:0;font-size:21px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:12px;margin-top:3px}
+.asof{font-size:12px;color:var(--ink2);background:#fff;border:1px solid var(--line);padding:5px 11px;border-radius:999px}
+.bar{display:flex;gap:8px;align-items:center;font-size:12.5px}
+.chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 12px;color:var(--ink2)}.chip.on{background:var(--teal);color:#fff;border-color:var(--teal);font-weight:700}
+.q{flex:1;background:#fff;border:1px solid var(--line);border-radius:8px;padding:7px 12px;color:var(--ink)}
+.chk{color:var(--ink2)}
+.row{display:grid;grid-template-columns:1fr 1.15fr;gap:12px;flex:1;min-height:0}
+.list{display:flex;flex-direction:column;gap:7px;min-height:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:10px 12px}
+.card.sel{outline:2px solid var(--teal)}
+.badge{display:inline-block;font-size:10.5px;border-radius:999px;padding:2px 8px;font-weight:700;margin-right:6px}
+.b-on{background:#D1FAE5;color:#065F46}.b-up{background:#FEF3C7;color:#92400E}
+.t{font-weight:700;font-size:13.5px}.m{font-size:11.5px;color:var(--mute);margin-top:4px;display:flex;justify-content:space-between}
+.m a{color:var(--teal);font-weight:700;text-decoration:none}
+.detail{display:grid;grid-template-columns:1fr 1fr;gap:10px;min-height:0}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:12.5px;line-height:1.6;display:flex;flex-direction:column}
+.box h4{margin:0 0 6px;font-size:11.5px;color:var(--ink2);font-weight:700}
+.box.sum{background:#FFFBEB;border-color:#FDE68A}.box.sum h4{color:#92400E}
+.box .src{margin-top:auto;font-size:11px;color:var(--mute)}
+.none{background:#fff;border:1.5px dashed #D1D5DB;border-radius:12px;padding:26px;text-align:center;color:var(--ink2)}
+.none b{display:block;font-size:15px;margin-bottom:5px;color:var(--ink)}.none small{color:var(--mute)}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:12px;padding:20px;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mute);gap:4px}.empty small{font-size:11px}
+</style></head><body>
+<div class="app">
+ <div class="side">
+  <div class="logo"><i></i>푸른구청</div>
+  <div class="nav"><div>민원 현황판</div><div class="on">고시 · 공고 열람</div><div>보조금 신청</div><div>시설 대관</div></div>
+ </div>
+ <div class="main" id="main"></div>
+</div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const head=(q)=>`<div class="top"><div><h1>고시 · 공고 열람</h1><div class="sub">시행 중 · 시행 예정만 · 항목마다 부서 · 공고일 · 시행일 · 원문 · 요약은 요약이라고 표시</div></div><span class="asof">기준일 2026-10-24 (서버)</span></div>
+<div class="bar"><span class="chip">전체</span><span class="chip on">주차</span><span class="chip">위생</span><span class="chip">건축</span><span class="chip">복지</span><span class="q">${q}</span><span class="chk">☐ 폐지 포함</span></div>`;
+const card=(sel,b,bc,t,m)=>`<div class="card ${sel?'sel':''}"><span class="badge ${bc}">${b}</span><span class="t">${t}</span><div class="m"><span>${m}</span><a>원문 ↗</a></div></div>`;
+let html='';
+if(state==='ok'){
+  html=head('공영주차장')+`<div class="row"><div class="list">
+   ${card(false,'시행 중','b-on','공영주차장 야간 무료 개방 공고','교통행정과 · 공고 10-22 · 시행 10-22')}
+   ${card(false,'시행 예정 D-3','b-up','거주자 우선주차 신청 공고','교통행정과 · 공고 10-14 · 시행 10-27')}
+   ${card(true,'시행 중','b-on','공영주차장 요금 조정 고시','교통행정과 · 공고 09-14 · 시행 09-24')}
+   <div class="empty"><small>폐지된 '요금 고시(구) — 30분 800원' 은 기본 목록에 없다 · 원문 링크 없는 안내문은 어디에도 없다</small></div></div>
+   <div class="detail"><div class="box"><h4>원문 · 교통행정과 · 공고 2026-09-14</h4>푸른구 공영주차장의 기본 요금을 30분 1,000원으로 정한다. 이후 10분마다 300원을 더한다.<div class="src">원문 링크 notice.pureun-gu.example/n/N-01 · 가상 고시</div></div>
+   <div class="box sum"><h4>요약 — 법적 효력은 원문에 있습니다</h4>공영주차장 기본 요금 30분 1,000원, 이후 10분당 300원.<div class="src">담당자 요약 · 원문과 다르면 원문이 맞다</div></div></div></div>`;
+}else if(state==='empty'){
+  html=head('음식점 위생')+`<div class="row"><div class="list">
+   ${card(true,'시행 중','b-on','음식점 위생 점검 기준 고시','위생과 · 공고 10-04 · 시행 10-19')}
+   <div class="empty"><small>요약이 없는 고시 — 원문을 잘라 요약처럼 보여 주지 않는다</small></div></div>
+   <div class="detail"><div class="box"><h4>원문 · 위생과 · 공고 2026-10-04</h4>일반음식점의 위생 점검 항목을 12개로 정한다. 점검 결과는 구청 누리집에 공개한다.<div class="src">원문 링크 notice.pureun-gu.example/n/N-04 · 가상 고시</div></div>
+   <div class="box sum"><h4>요약 — 법적 효력은 원문에 있습니다</h4><div class="empty"><b style="color:#92400E">요약 없음 — 원문을 보세요</b><small>담당자가 아직 요약을 쓰지 않았다</small></div></div></div></div>`;
+}else{
+  html=head('공영주차장')+`<div class="err"><div><b>불러오지 못했습니다.</b> 고시 API(/api/notices) 가 응답하지 않습니다 — 지난 목록을 그대로 두지 않습니다(폐지 여부가 바뀌었을 수 있다).</div><button>다시 시도</button></div>
+  <div class="box" style="flex:1"><div class="empty"><small>서버가 응답하면 기준일과 함께 다시 불러옵니다</small></div></div>`;
+}
+document.getElementById('main').innerHTML=html;
+</script></body></html>

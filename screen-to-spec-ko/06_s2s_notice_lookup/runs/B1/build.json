@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 58824,
+ "num_turns": 8,
+ "total_cost_usd": 0.2223448,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 8,
+  "cache_creation_input_tokens": 30194,
+  "cache_read_input_tokens": 132928,
+  "output_tokens": 8826,
+  "output_tokens_details": {
+   "thinking_tokens": 1041
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 30194,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 706,
+    "cache_read_input_tokens": 45277,
+    "cache_creation_input_tokens": 1589,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1589
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD대로 웹앱을 만들었습니다. API 쪽 테스트(T1~T8)는 통과했지만, 화면(T9)은 브라우저에서 확인하지 못했습니다.\n\n폴더에 `PRD.md`만 있어서 `seed/notices.csv`와 `tests/test_dod.py`도 새로 만들었습니다. CSV는 PRD의 구성(10건, 시행 예정 2·폐지 2·원문 링크 없음 1·요약 없음 2)에 맞춘 가상 데이터입니다.\n\n실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000` 입니다. 포트는 환경 변수 `PORT`가 있으면 그 값을 씁니다.\n\n- **`main.py`:** CSV를 읽어 SQLite(`notice.db`)를 서버를 시작할 때마다 새로 만듭니다. API 3개와 규칙 R1~R7을 구현했습니다.\n- **`static/index.html`:** 순수 HTML/JS 한 페이지입니다. PRD에 적힌 `data-testid` 이름을 그대로 썼습니다.\n- **`tests/test_dod.py`:** 완료 기준 T1~T8을 확인하는 테스트입니다. 직접 쓴 것이라 PRD가 말하는 원본 테스트와는 다를 수 있습니다.\n- **T9 미확인:** 화면 요소는 PRD의 이름과 문구대로 만들었습니다. 서버를 띄워 브라우저로 직접 열어 보지는 않았습니다.\n- **기준일:** 서버의 오늘 날짜(`date.today()`)를 씁니다. 시행 예정 고시 2건(N002, N005)의 시행일은 2026-11-01과 2026-12-01로 고정해 뒀습니다. 이 날짜들이 지나면 시행 예정 건수가 달라져 T3이 깨지므로, 그때는 CSV 날짜를 바꿔야 합니다.",
+ "wall_s": 63.9
+}

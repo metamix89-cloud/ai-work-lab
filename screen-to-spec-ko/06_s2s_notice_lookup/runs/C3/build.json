@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 46599,
+ "num_turns": 8,
+ "total_cost_usd": 0.2283151,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 35553,
+  "cache_read_input_tokens": 188231,
+  "output_tokens": 6726,
+  "output_tokens_details": {
+   "thinking_tokens": 464
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 35553,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 368,
+    "cache_read_input_tokens": 52035,
+    "cache_creation_input_tokens": 190,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 190
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/notices.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: PRD 의 API 3개 외에 `/static` 정적 파일 경로(StaticFiles 마운트)를 하나 두었다. 화면은 `static/index.html` 한 파일이고 이 경로는 쓰지 않는다. 그리고 FastAPI 의 입력 검증 오류(422)를 400 `{\"detail\": \"잘못된 입력입니다\"}` 로 바꿨다. R7 이 입력 오류를 400 으로 정했기 때문이다.\n```\n\n`seed/notices.csv` 의 날짜는 2026-10-24 기준으로 만든 고시 10건이다. 날짜가 고정이라 날이 지나면 시행 예정 · 폐지 상태가 달라질 수 있다.",
+ "wall_s": 58.5
+}

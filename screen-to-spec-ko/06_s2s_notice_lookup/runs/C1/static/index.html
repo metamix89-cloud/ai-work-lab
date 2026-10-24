@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>푸른구청 고시 · 공고 열람</title>
+<style>
+body{font-family:sans-serif;max-width:1100px;margin:0 auto;padding:16px;color:#222}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.card{border:1px solid #ccc;border-radius:6px;padding:10px;margin:8px 0;cursor:pointer}
+.card:hover{background:#f6f9ff}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:13px;color:#fff;background:#2a7}
+.card[data-status="시행 예정"] .badge{background:#27c}
+.card[data-status="폐지"] .badge{background:#888}
+.meta{color:#555;font-size:14px;margin-top:4px}
+.detail{display:flex;gap:12px;margin-top:16px}
+.detail>div{flex:1;border:1px solid #ccc;border-radius:6px;padding:12px;white-space:pre-wrap}
+.detail h3{margin-top:0}
+#summary{background:#fffbe6}
+#err{color:#b00}
+</style>
+</head>
+<body>
+<h1>푸른구청 고시 · 공고 열람</h1>
+<div class="bar">
+  <select data-testid="category" id="category"></select>
+  <input data-testid="q" id="q" placeholder="검색어">
+  <button data-testid="search-btn" id="search">검색</button>
+  <label><input type="checkbox" data-testid="include-repealed" id="rep"> 폐지 포함</label>
+  <span data-testid="as-of" id="asof"></span>
+</div>
+<div data-testid="count" id="count"></div>
+<div id="err" hidden>불러오지 못했습니다 <button id="retry">다시 시도</button></div>
+<div data-testid="no-result" id="none" hidden>해당 고시 없음</div>
+<div id="list"></div>
+<div class="detail" id="detail" hidden>
+  <div data-testid="original" id="original"></div>
+  <div data-testid="summary" id="summary"></div>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+async function api(url){
+  const r = await fetch(url);
+  if(!r.ok) throw new Error(r.status);
+  return r.json();
+}
+function el(tag, text, attrs){
+  const e = document.createElement(tag);
+  if(text != null) e.textContent = text;
+  for(const k in (attrs||{})) e.setAttribute(k, attrs[k]);
+  return e;
+}
+async function init(){
+  const sel = $("category");
+  sel.innerHTML = "";
+  sel.add(new Option("전체", ""));
+  try { (await api("/api/categories")).forEach(c => sel.add(new Option(c, c))); } catch(e){}
+  load();
+}
+async function load(){
+  const p = new URLSearchParams({category: $("category").value, q: $("q").value.trim(),
+    include_repealed: $("rep").checked ? "1" : "0"});
+  $("err").hidden = true;
+  try{
+    const d = await api("/api/notices?" + p);
+    $("asof").textContent = "기준일 " + d.as_of;
+    $("count").textContent = d.count + "건";
+    $("none").hidden = d.count !== 0;
+    const list = $("list");
+    list.innerHTML = "";
+    d.items.forEach(i => list.appendChild(card(i)));
+  }catch(e){
+    $("list").innerHTML = "";
+    $("count").textContent = "";
+    $("none").hidden = true;
+    $("err").hidden = false;
+  }
+}
+function card(i){
+  const c = el("div", null, {"data-testid":"notice", "data-id":i.notice_id, "data-status":i.status, "class":"card"});
+  const label = i.status === "시행 예정" ? "시행 예정 D-" + i.days_until : i.status;
+  c.appendChild(el("span", label, {"data-testid":"badge", "class":"badge"}));
+  c.appendChild(el("strong", " " + i.title));
+  c.appendChild(el("div", i.issuer + " · 공고 " + i.published + " · 시행 " + i.effective_from, {"class":"meta"}));
+  const a = el("a", "원문", {"data-testid":"source-link", "href":i.source_url, "target":"_blank", "rel":"noopener"});
+  a.addEventListener("click", e => e.stopPropagation());
+  c.appendChild(a);
+  c.addEventListener("click", () => show(i.notice_id));
+  return c;
+}
+async function show(id){
+  try{
+    const d = await api("/api/notices/" + encodeURIComponent(id));
+    $("original").textContent = "";
+    $("original").appendChild(el("h3", "원문"));
+    $("original").appendChild(document.createTextNode(d.original));
+    $("summary").textContent = "";
+    if(d.has_summary){
+      $("summary").appendChild(el("h3", "요약 — 법적 효력은 원문에 있습니다"));
+      $("summary").appendChild(document.createTextNode(d.summary));
+    }else{
+      $("summary").appendChild(el("h3", "요약 없음 — 원문을 보세요"));
+    }
+    $("detail").hidden = false;
+  }catch(e){
+    $("err").hidden = false;
+  }
+}
+$("search").addEventListener("click", load);
+$("q").addEventListener("keydown", e => { if(e.key === "Enter") load(); });
+$("category").addEventListener("change", load);
+$("rep").addEventListener("change", load);
+$("retry").addEventListener("click", init);
+init();
+</script>
+</body>
+</html>

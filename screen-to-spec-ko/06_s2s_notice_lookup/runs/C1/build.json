@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 63267,
+ "num_turns": 9,
+ "total_cost_usd": 0.28545560000000003,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 38737,
+  "cache_read_input_tokens": 234236,
+  "output_tokens": 10706,
+  "output_tokens_details": {
+   "thinking_tokens": 452
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 38737,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 402,
+    "cache_read_input_tokens": 50110,
+    "cache_creation_input_tokens": 5299,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 5299
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/notices.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음. 추가한 API 경로도 없습니다. 아래 두 가지는 PRD 에 명시되지 않아 내가 정한 것입니다.\n- `include_repealed` 가 0·1 이 아닐 때 400 의 `detail` 은 \"include_repealed 는 0 또는 1 이어야 합니다\" 입니다.\n- 없는 고시나 출처 없는 고시의 404 `detail` 은 \"고시를 찾을 수 없습니다\" 입니다.\n\n`seed/notices.csv` 의 날짜는 오늘(2026-10-24) 기준으로 만든 값이라, 날짜가 지나면 상태와 D-n 이 달라집니다. 테스트는 자기 데이터로 이 파일을 바꿨다가 끝나면 되돌립니다. `notice.db` 는 서버를 시작할 때마다 새로 만들어지고, 지금 폴더에 남아 있는 것은 테스트가 만든 파일입니다.",
+ "wall_s": 74.2
+}
