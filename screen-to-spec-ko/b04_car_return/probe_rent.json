@@ -1,0 +1,14 @@
+{
+ "cases": [
+  {"name": "대여 전 손상 부위(앞범퍼)에 더 심한 등급(severe) 신고 — PRD R4 는 부위만 보고 0원", "method": "POST", "path": "api/rentals/R-1001/quote",
+   "body": {"user": "s1", "returned_at": "__DUE_1001_PLUS_30__", "fuel": 6, "km": 12480, "damages": [{"part": "앞범퍼", "grade": "severe", "photos": 1}]}, "pick": "damage_fee"},
+  {"name": "지연 딱 60분 — 시작된 1시간 = 1시간이면 10,000 (61분은 20,000)", "method": "POST", "path": "api/rentals/R-1001/quote",
+   "body": {"user": "s1", "returned_at": "__DUE_1001_PLUS_60__", "fuel": 6, "km": 12480, "damages": []}, "pick": "late_fee"},
+  {"name": "목록에 없는 부위 '문짝' — PRD 는 화면 선택지만 8개, 서버 제한은 안 적음", "method": "POST", "path": "api/rentals/R-1001/quote",
+   "body": {"user": "s1", "returned_at": "__DUE_1001_PLUS_30__", "fuel": 6, "km": 12480, "damages": [{"part": "문짝", "grade": "minor", "photos": 1}]}, "pick": "damage_fee"},
+  {"name": "사진 수를 문자열 \"2\" 로 — 정수 요구를 글자 그대로 보나", "method": "POST", "path": "api/rentals/R-1001/quote",
+   "body": {"user": "s1", "returned_at": "__DUE_1001_PLUS_30__", "fuel": 6, "km": 12480, "damages": [{"part": "뒷범퍼", "grade": "minor", "photos": "2"}]}, "pick": "damage_fee"},
+  {"name": "damages 칸을 아예 안 보냄 — 빈 목록으로 보나 400 이나", "method": "POST", "path": "api/rentals/R-1001/quote",
+   "body": {"user": "s1", "returned_at": "__DUE_1001_PLUS_30__", "fuel": 6, "km": 12480}, "pick": "total"}
+ ]
+}

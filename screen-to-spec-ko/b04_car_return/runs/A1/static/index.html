@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>부릉부릉렌터카 · 반납 점검표</title>
+<style>
+  :root { --bg:#f4f6f9; --card:#fff; --ink:#1d2433; --mute:#667085; --line:#e2e6ee; --brand:#1f5eff; --warn:#b54708; --bad:#b42318; --ok:#067647; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:15px/1.5 "Malgun Gothic","Apple SD Gothic Neo",sans-serif; background:var(--bg); color:var(--ink); }
+  header { background:var(--ink); color:#fff; padding:12px 20px; display:flex; align-items:center; gap:12px; }
+  header h1 { font-size:18px; margin:0; flex:1; }
+  header .who { font-size:14px; opacity:.85; }
+  main { max-width:980px; margin:20px auto; padding:0 14px 60px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:14px; }
+  h2 { font-size:17px; margin:0 0 10px; } h3 { font-size:15px; margin:14px 0 6px; }
+  button { font:inherit; border:1px solid var(--line); background:#fff; border-radius:7px; padding:7px 14px; cursor:pointer; }
+  button.primary { background:var(--brand); color:#fff; border-color:var(--brand); }
+  button.danger { color:var(--bad); }
+  button:disabled { opacity:.5; cursor:default; }
+  input, select, textarea { font:inherit; padding:7px 9px; border:1px solid #cfd5e1; border-radius:7px; background:#fff; max-width:100%; }
+  label { display:block; font-size:13px; color:var(--mute); margin-bottom:3px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px; }
+  table { width:100%; border-collapse:collapse; } th,td { text-align:left; padding:7px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { font-size:13px; color:var(--mute); font-weight:600; }
+  td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+  .badge { display:inline-block; padding:1px 9px; border-radius:99px; font-size:12px; font-weight:600; }
+  .b-active { background:#fef0c7; color:var(--warn); } .b-returned { background:#d1fadf; color:var(--ok); }
+  .b-new { background:#fee4e2; color:var(--bad); } .b-existing { background:#e8ebf2; color:var(--mute); } .b-worse { background:#fef0c7; color:var(--warn); }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; }
+  .mute { color:var(--mute); font-size:13px; }
+  .err { color:var(--bad); margin:8px 0; white-space:pre-wrap; }
+  .total { font-size:20px; font-weight:700; }
+  .dmg { border:1px solid var(--line); border-radius:8px; padding:10px; margin:8px 0; background:#fafbfd; }
+  .thumb { height:54px; border-radius:5px; border:1px solid var(--line); cursor:zoom-in; }
+  .list-item { cursor:pointer; } .list-item:hover { background:#f0f4ff; }
+  .tabs button.on { background:var(--ink); color:#fff; }
+  .login { max-width:340px; margin:80px auto; }
+  .hint { background:#eef3ff; border-radius:8px; padding:8px 10px; font-size:13px; margin-top:12px; }
+  dialog { border:0; border-radius:10px; padding:8px; } dialog img { max-width:88vw; max-height:84vh; display:block; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🚗 부릉부릉렌터카 <span style="font-weight:400;font-size:14px">반납 점검표</span></h1>
+  <span class="who" id="who"></span>
+  <button id="logout" hidden>로그아웃</button>
+</header>
+<main id="app"></main>
+<dialog id="viewer"><img alt="흠집 사진"></dialog>
+<script src="/static/app.js"></script>
+</body>
+</html>

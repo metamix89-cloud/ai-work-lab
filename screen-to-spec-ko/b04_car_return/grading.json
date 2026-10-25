@@ -1,0 +1,18 @@
+{
+ "allowed_routes": ["/", "/api/users", "/api/rentals", "/api/rentals/{rental_id}", "/api/rentals/{id}",
+                    "/api/rentals/{rental_id}/quote", "/api/rentals/{id}/quote", "/api/rentals/{rental_id}/return", "/api/rentals/{id}/return",
+                    "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "로그인 · 회원가입": "login|password|로그인|회원가입",
+  "예약 · 배차 · 대여 시작": "@app\\.(post|put|patch|delete)\\(\"/api/(rentals|cars|reservations)\"|대여 시작|배차|/api/reservations|checkout",
+  "결제 · 영수증": "결제|payment|receipt|영수증",
+  "사진 업로드": "UploadFile|multipart|File\\(|사진 업로드",
+  "주행거리 요금": "km_fee|mileage_fee|주행 요금|주행거리 요금|초과 주행",
+  "보험 · 면책": "보험|면책|insurance",
+  "사고 · 정비": "accident|사고 접수|정비|maintenance",
+  "문자 · 알림": "sms|문자 발송|notify|notification|알림",
+  "통계": "/api/stats|통계",
+  "편집 화면": "/api/admin|차량 등록|고객 등록|@app\\.(post|put|patch|delete)\\(\"/api/(users|cars)\"",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}

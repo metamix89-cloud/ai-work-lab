@@ -1,0 +1,26 @@
+:root { --bg:#f4f6f9; --card:#fff; --line:#dde2ea; --ink:#1d2430; --mute:#6b7685; --brand:#1f6feb; --bad:#c62828; --ok:#2e7d32; }
+* { box-sizing: border-box; }
+body { margin:0; font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif; background:var(--bg); color:var(--ink); }
+header { display:flex; justify-content:space-between; align-items:center; padding:12px 20px; background:var(--card); border-bottom:1px solid var(--line); }
+header h1 { font-size:18px; margin:0; } header small { color:var(--mute); font-weight:normal; }
+main { max-width:960px; margin:20px auto; padding:0 16px; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:16px; }
+h2 { font-size:16px; margin:0 0 12px; }
+table { width:100%; border-collapse:collapse; font-size:14px; }
+th, td { text-align:left; padding:8px 6px; border-bottom:1px solid var(--line); vertical-align:top; }
+td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+label { display:block; font-size:13px; color:var(--mute); margin-bottom:10px; }
+input, select, textarea { display:block; width:100%; padding:7px 8px; margin-top:3px; border:1px solid var(--line); border-radius:6px; font:inherit; color:var(--ink); }
+button { padding:8px 14px; border:0; border-radius:6px; background:var(--brand); color:#fff; font:inherit; cursor:pointer; }
+button.ghost { background:transparent; color:var(--brand); border:1px solid var(--line); }
+button:disabled { opacity:.5; cursor:default; }
+.row { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+.badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:12px; background:#e8eef9; color:var(--brand); }
+.badge.done { background:#e6f4ea; color:var(--ok); } .badge.waive { background:#eee; color:var(--mute); }
+.err { color:var(--bad); font-size:14px; margin:8px 0; white-space:pre-wrap; }
+.mute { color:var(--mute); font-size:13px; }
+.total { font-size:18px; font-weight:bold; text-align:right; margin-top:10px; }
+.dmg { border:1px dashed var(--line); border-radius:8px; padding:10px; margin-bottom:10px; }
+.thumbs img { width:90px; height:90px; object-fit:cover; border-radius:6px; border:1px solid var(--line); }
+tr.click { cursor:pointer; } tr.click:hover { background:#f0f5ff; }
+.hint { background:#fff8e1; border:1px solid #ffe08a; border-radius:8px; padding:10px; font-size:13px; }

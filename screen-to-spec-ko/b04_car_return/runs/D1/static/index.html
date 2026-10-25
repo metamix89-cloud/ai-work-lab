@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>부릉부릉렌터카 반납 점검표</title>
+<style>
+  :root { --bg:#f5f6f8; --card:#fff; --ink:#1d2330; --mute:#6b7384; --line:#e1e4ea; --pri:#1f5eff; --bad:#c62828; --ok:#1b7f3b; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.5 "Malgun Gothic",system-ui,sans-serif; background:var(--bg); color:var(--ink); }
+  header { background:#fff; border-bottom:1px solid var(--line); padding:12px 20px; display:flex; align-items:center; gap:12px; }
+  header h1 { font-size:18px; margin:0; flex:1; }
+  main { max-width:960px; margin:20px auto; padding:0 16px; display:grid; gap:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; }
+  h2 { font-size:16px; margin:0 0 10px; }
+  table { width:100%; border-collapse:collapse; }
+  th,td { text-align:left; padding:8px 6px; border-bottom:1px solid var(--line); vertical-align:middle; }
+  th { color:var(--mute); font-weight:600; font-size:13px; }
+  tr.click { cursor:pointer; } tr.click:hover { background:#f0f4ff; }
+  .num { text-align:right; font-variant-numeric:tabular-nums; }
+  button { font:inherit; padding:7px 14px; border-radius:7px; border:1px solid var(--line); background:#fff; cursor:pointer; }
+  button.pri { background:var(--pri); color:#fff; border-color:var(--pri); }
+  button:disabled { opacity:.5; cursor:default; }
+  input,select { font:inherit; padding:6px 8px; border:1px solid var(--line); border-radius:6px; }
+  label { display:grid; gap:3px; font-size:13px; color:var(--mute); }
+  .row { display:flex; flex-wrap:wrap; gap:12px; align-items:end; }
+  .tag { display:inline-block; padding:1px 8px; border-radius:99px; font-size:12px; background:#eef0f4; }
+  .tag.active { background:#fff3d6; color:#8a5a00; } .tag.returned { background:#dff3e5; color:var(--ok); }
+  .tag.free { background:#dff3e5; color:var(--ok); }
+  .msg { padding:8px 12px; border-radius:7px; margin-top:10px; } .msg.err { background:#fdeaea; color:var(--bad); } .msg.ok { background:#e6f5ea; color:var(--ok); }
+  .dmg { display:flex; gap:8px; align-items:center; padding:6px 0; border-bottom:1px dashed var(--line); flex-wrap:wrap; }
+  .dmg img, .thumb { width:56px; height:56px; object-fit:cover; border-radius:6px; border:1px solid var(--line); }
+  .total { font-size:18px; font-weight:700; }
+  .hide { display:none; } .mute { color:var(--mute); }
+  #login { max-width:340px; margin:80px auto; }
+  #login label { margin-bottom:10px; } .demo { font-size:12px; color:var(--mute); margin-top:12px; }
+</style>
+</head>
+<body>
+<header><h1>🚗 부릉부릉렌터카 반납 점검표</h1><span id="who" class="mute"></span><button id="logout" class="hide">로그아웃</button></header>
+<main>
+  <section id="login" class="card">
+    <h2>로그인</h2>
+    <label>아이디<input id="u" autocomplete="username"></label>
+    <label>비밀번호<input id="p" type="password" autocomplete="current-password"></label>
+    <button class="pri" id="loginBtn">로그인</button>
+    <div id="loginMsg"></div>
+    <div class="demo">데모 계정: staff/staff1234 (직원), kim/kim1234, lee/lee1234, park/park1234 (고객)</div>
+  </section>
+  <section id="app" class="hide">
+    <div class="card"><h2 id="listTitle"></h2><div id="list"></div></div>
+    <div id="detail" class="card hide"></div>
+  </section>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const won = n => (n ?? 0).toLocaleString('ko-KR') + '원';
+const GRADE_ORDER = ['minor', 'major', 'severe'];
+let me = null, meta = null, current = null;
+
+// 요소 생성 헬퍼: 텍스트는 항상 textContent로 넣어 서버 데이터가 HTML로 해석되지 않게 한다
+function el(tag, props = {}, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(props)) {
+    if (k === 'class') e.className = v; else if (k.startsWith('on')) e[k] = v; else e.setAttribute(k, v);
+  }
+  for (const k of kids.flat()) if (k != null) e.append(k.nodeType ? k : document.createTextNode(k));
+  return e;
+}
+async function api(path, opts = {}) {
+  const res = await fetch(path, { credentials: 'same-origin', ...opts });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    if (res.status === 401 && path !== '/api/login') showLogin();
+    const d = data.detail;
+    throw new Error(typeof d === 'string' ? d : '요청을 처리하지 못했습니다');
+  }
+  return data;
+}
+const fmt = s => s ? s.replace('T', ' ') : '-';
+
+function showLogin() { me = null; $('login').classList.remove('hide'); $('app').classList.add('hide'); $('logout').classList.add('hide'); $('who').textContent = ''; }
+async function start() {
+  try { me = await api('/api/me'); } catch { return showLogin(); }
+  meta = await api('/api/meta');
+  $('login').classList.add('hide'); $('app').classList.remove('hide'); $('logout').classList.remove('hide');
+  $('who').textContent = `${me.name} (${me.role === 'staff' ? '직원' : '고객'})`;
+  $('listTitle').textContent = me.role === 'staff' ? '대여 건 (진행 중 우선)' : '내 대여 건';
+  $('detail').classList.add('hide');
+  loadList();
+}
+$('loginBtn').onclick = async () => {
+  $('loginMsg').replaceChildren();
+  try {
+    await api('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: $('u').value, password: $('p').value }) });
+    $('p').value = ''; start();
+  } catch (e) { $('loginMsg').replaceChildren(el('div', { class: 'msg err' }, e.message)); }
+};
+$('p').onkeydown = e => { if (e.key === 'Enter') $('loginBtn').click(); };
+$('logout').onclick = async () => { await api('/api/logout', { method: 'POST' }); showLogin(); };
+
+async function loadList() {
+  const rows = await api('/api/rentals');
+  const staff = me.role === 'staff';
+  const head = el('tr', {}, ...['#', staff ? '고객' : null, '차량', '대여', '반납 예정', '상태', '청구액'].filter(Boolean).map(t => el('th', {}, t)));
+  const body = rows.map(r => el('tr', { class: 'click', onclick: () => openRental(r.id) },
+    el('td', {}, r.id), staff ? el('td', {}, r.customer_name) : null,
+    el('td', {}, `${r.model} ${r.plate}`), el('td', {}, fmt(r.pickup_at)), el('td', {}, fmt(r.due_at)),
+    el('td', {}, el('span', { class: 'tag ' + r.status }, r.status === 'active' ? '대여 중' : '반납 완료')),
+    el('td', { class: 'num' }, r.status === 'returned' ? won(r.total) : '-')));
+  $('list').replaceChildren(el('table', {}, head, ...body));
+  if (!rows.length) $('list').append(el('p', { class: 'mute' }, '대여 건이 없습니다.'));
+}
+
+function damageRow(d) {
+  const label = `${meta.parts[d.part] || d.part} · ${meta.grades[d.grade]}`;
+  const right = d.phase === 'pickup' ? el('span', { class: 'mute' }, '대여 시 기록')
+    : d.pre_existing ? el('span', { class: 'tag free' }, '기존 흠집 · 0원')
+    : el('b', {}, won(d.charge));
+  return el('div', { class: 'dmg' },
+    el('img', { src: `/api/photos/${d.id}`, alt: label }), el('span', { style: 'flex:1' }, label, d.note && d.phase === 'return' ? el('div', { class: 'mute' }, d.note) : null), right);
+}
+
+async function openRental(id) {
+  current = await api('/api/rentals/' + id);
+  const r = current, d = $('detail');
+  d.classList.remove('hide');
+  const parts = [el('h2', {}, `#${r.id} ${r.model} ${r.plate} — ${r.customer_name}`),
+    el('p', { class: 'mute' }, `대여 ${fmt(r.pickup_at)} · 반납 예정 ${fmt(r.due_at)} · 대여 시 연료 ${r.pickup_fuel}/8칸 · 주행거리 ${r.pickup_odometer.toLocaleString()}km`)];
+  const pick = r.damages.filter(x => x.phase === 'pickup');
+  parts.push(el('h3', {}, '대여 전부터 있던 흠집'), pick.length ? pick.map(damageRow) : el('p', { class: 'mute' }, '없음'));
+  if (r.status === 'returned') {
+    parts.push(el('p', { class: 'mute' }, `반납 ${fmt(r.returned_at)} · 연료 ${r.return_fuel}/8칸 · 주행거리 ${r.return_odometer.toLocaleString()}km`));
+    const ret = r.damages.filter(x => x.phase === 'return');
+    parts.push(el('h3', {}, '반납 시 기록한 흠집'), ret.length ? ret.map(damageRow) : el('p', { class: 'mute' }, '없음'), billTable(r));
+  } else if (me.role === 'staff') {
+    parts.push(returnForm());
+  } else {
+    parts.push(el('p', {}, '아직 반납 전입니다. 반납이 처리되면 청구 내역이 여기에 표시됩니다.'));
+  }
+  d.replaceChildren(...parts.flat());
+  d.scrollIntoView({ behavior: 'smooth' });
+}
+
+function billTable(b) {
+  const line = (a, c) => el('tr', {}, el('td', {}, a), el('td', { class: 'num' }, c));
+  return el('div', {}, el('h3', {}, '청구 내역'), el('table', {},
+    line(`지연 요금 (${b.late_minutes}분 지연)`, won(b.late_fee)),
+    line(`연료 요금 (${b.fuel_short}칸 부족)`, won(b.fuel_fee)),
+    line('손상 요금', won(b.damage_fee)),
+    el('tr', {}, el('td', {}, el('b', {}, '합계')), el('td', { class: 'num total' }, won(b.total)))));
+}
+
+function nowLocal() { const d = new Date(); d.setSeconds(0, 0); return new Date(d - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 16); }
+
+function returnForm() {
+  const r = current;
+  const at = el('input', { type: 'datetime-local', value: nowLocal(), required: '' });
+  const fuel = el('select', {}, ...[...Array(meta.fuel_max + 1).keys()].reverse().map(i => el('option', { value: i }, `${i}칸`)));
+  fuel.value = r.pickup_fuel;
+  const odo = el('input', { type: 'number', min: r.pickup_odometer, value: r.pickup_odometer, step: 1 });
+  const dmgBox = el('div'), out = el('div');
+  const addBtn = el('button', { type: 'button', onclick: () => dmgBox.append(newDamage()) }, '+ 흠집 추가');
+  function newDamage() {
+    const part = el('select', {}, ...Object.entries(meta.parts).map(([k, v]) => el('option', { value: k }, v)));
+    const grade = el('select', {}, ...GRADE_ORDER.map(g => el('option', { value: g }, `${meta.grades[g]} (${won(meta.damage_price[g])})`)));
+    const file = el('input', { type: 'file', accept: 'image/jpeg,image/png,image/webp' });
+    const thumb = el('img', { class: 'thumb hide', alt: '미리보기' });
+    file.onchange = () => { const f = file.files[0]; thumb.classList.toggle('hide', !f); if (f) thumb.src = URL.createObjectURL(f); };
+    const row = el('div', { class: 'dmg' }, part, grade, file, thumb, el('button', { type: 'button', onclick: () => row.remove() }, '삭제'));
+    row.get = () => ({ part: part.value, grade: grade.value, file: file.files[0] || null });
+    return row;
+  }
+  function build(dry) {
+    const fd = new FormData(), items = [];
+    for (const row of dmgBox.children) {
+      const x = row.get(); let idx = null;
+      if (x.file) { idx = fd.getAll('photos').length; fd.append('photos', x.file); }
+      items.push({ part: x.part, grade: x.grade, photo: idx });
+    }
+    fd.append('returned_at', at.value); fd.append('fuel', fuel.value); fd.append('odometer', odo.value);
+    fd.append('damages', JSON.stringify(items)); fd.append('dry_run', dry ? 'true' : 'false');
+    return fd;
+  }
+  const go = async dry => {
+    out.replaceChildren();
+    if (!at.value || odo.value === '') return out.append(el('div', { class: 'msg err' }, '반납 시각과 주행거리를 입력하세요.'));
+    if (!dry && !confirm('반납을 확정하고 청구합니다. 확정 후에는 수정할 수 없습니다. 진행할까요?')) return;
+    try {
+      const res = await api(`/api/rentals/${r.id}/return`, { method: 'POST', body: build(dry) });
+      if (res.saved) { await loadList(); await openRental(r.id); return; }
+      const items = res.damages.map(x => el('div', { class: 'dmg' },
+        el('span', { style: 'flex:1' }, `${meta.parts[x.part]} · ${meta.grades[x.grade]} — ${x.note}`),
+        x.pre_existing ? el('span', { class: 'tag free' }, '0원') : el('b', {}, won(x.charge))));
+      out.replaceChildren(el('div', { class: 'msg ok' }, '미리보기입니다. 아직 저장되지 않았습니다.'), items, billTable(res));
+    } catch (e) { out.replaceChildren(el('div', { class: 'msg err' }, e.message)); }
+  };
+  return el('div', {}, el('h3', {}, '반납 점검'),
+    el('div', { class: 'row' }, el('label', {}, '반납 시각', at), el('label', {}, '연료 게이지', fuel), el('label', {}, '주행거리(km)', odo)),
+    el('h3', {}, '흠집 (사진 필수)'), dmgBox, addBtn,
+    el('div', { class: 'row', style: 'margin-top:14px' },
+      el('button', { type: 'button', onclick: () => go(true) }, '요금 계산'),
+      el('button', { type: 'button', class: 'pri', onclick: () => go(false) }, '반납 확정')), out);
+}
+start();
+</script>
+</body>
+</html>

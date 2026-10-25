@@ -255,6 +255,12 @@ AI 상담원에게 문의 12건을 지시서 세 가지로 108번 맡겼습니�
 
 ▶ 영상은 공개되면 여기에 링크합니다 · [📁 코드](screen-to-spec-ko/b03_gym_booking)
 
+### 2부 4 · car return
+
+
+
+▶ 영상은 공개되면 여기에 링크합니다 · [📁 코드](screen-to-spec-ko/b04_car_return)
+
 ## 가나다식품 LLM 위키 (ep059~070)
 
 원작 Andrej Karpathy, 'LLM Wiki' (GitHub Gist, 2026-04) — 아이디어를 바탕으로 업무용 예제로 재구성, 원문 미사용 — 예시를 새로 만들어 다시 쓴 것으로, 저자의 공식 과정이 아닙니다.

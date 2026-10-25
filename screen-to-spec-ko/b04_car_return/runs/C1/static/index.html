@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>부릉부릉렌터카 · 반납 점검표</title>
+<style>
+  body { font-family: sans-serif; margin: 0; color: #222; }
+  header { padding: 10px 16px; background: #1f4e79; color: #fff; display: flex; gap: 16px; align-items: center; }
+  header h1 { font-size: 18px; margin: 0; }
+  main { display: flex; gap: 16px; padding: 16px; }
+  #list { width: 380px; }
+  #detail { flex: 1; }
+  .rental { border: 1px solid #ccc; border-radius: 6px; padding: 8px; margin-bottom: 8px; cursor: pointer; }
+  .rental.sel { border-color: #1f4e79; background: #eef4fa; }
+  .rental small { color: #555; display: block; }
+  .tag { font-size: 12px; padding: 1px 6px; border-radius: 8px; background: #ddd; }
+  .tag.out { background: #ffe6b3; }
+  .tag.returned { background: #cdeccd; }
+  label { display: block; margin: 6px 0; }
+  .dmg { display: flex; gap: 6px; margin: 4px 0; }
+  .box { border: 1px solid #ccc; border-radius: 6px; padding: 10px; margin-top: 10px; }
+  .box div { margin: 3px 0; }
+  #message { margin-top: 10px; color: #b00020; min-height: 1.2em; }
+  #error { padding: 16px; color: #b00020; }
+  button { padding: 5px 12px; cursor: pointer; }
+</style>
+</head>
+<body>
+<header>
+  <h1>반납 점검표 · 추가 요금</h1>
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+</header>
+<div id="error" hidden><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+<main id="main">
+  <section id="list"></section>
+  <section id="detail"><p>왼쪽에서 대여 건을 고르세요.</p></section>
+</main>
+<script>
+const $ = (s) => document.querySelector(s);
+let users = [], viewer = null, rentals = [], selected = null, lastResult = null;
+
+async function api(method, url, body) {
+  const r = await fetch(url, { method, headers: body ? { "Content-Type": "application/json" } : {}, body: body ? JSON.stringify(body) : undefined });
+  let data = null;
+  try { data = await r.json(); } catch (e) {}
+  return { ok: r.ok, status: r.status, data };
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+function won(n) { return Number(n).toLocaleString("en-US"); }
+function setMessage(t) { $("#message") && ($("#message").textContent = t || ""); }
+function isStaff() { const u = users.find((x) => x.user_id === viewer); return !!u && u.role === "staff"; }
+
+function showError(on) { $("#error").hidden = !on; $("#main").hidden = on; }
+
+async function loadUsers() {
+  const r = await api("GET", "/api/users");
+  if (!r.ok) throw new Error("users");
+  users = r.data;
+  $("#user").innerHTML = users.map((u) => `<option value="${esc(u.user_id)}">${esc(u.name)} (${u.role === "staff" ? "직원" : "고객"})</option>`).join("");
+  viewer = users.length ? users[0].user_id : null;
+}
+async function loadRentals() {
+  const r = await api("GET", "/api/rentals?viewer=" + encodeURIComponent(viewer));
+  if (!r.ok) throw new Error("rentals");
+  rentals = r.data;
+  renderList();
+}
+function renderList() {
+  $("#list").innerHTML = rentals.map((r) => `
+    <div class="rental${r.rental_id === selected ? " sel" : ""}" data-testid="rental" data-id="${esc(r.rental_id)}" data-status="${esc(r.status)}">
+      <b>${esc(r.plate)}</b> ${esc(r.model)} <span class="tag ${esc(r.status)}">${r.status === "out" ? "대여 중" : "반납 완료"}</span>
+      <small>고객 ${esc(r.customer_name)} · 반납 예정 ${esc(r.due_at)}</small>
+      <small>대여 때 연료 ${r.out_fuel}칸 · ${won(r.out_km)}km</small>
+    </div>`).join("") || "<p>대여 건이 없습니다.</p>";
+  document.querySelectorAll(".rental").forEach((el) => el.addEventListener("click", () => select(el.dataset.id)));
+}
+
+function feeBox(c) {
+  const dm = (c.damages || []).map((d) =>
+    `<div>${esc(d.part)} · ${esc(d.grade)} · 사진 ${d.photos}장 · ${d.pre_existing ? "기존 손상 · 청구 없음" : won(d.fee) + "원"}</div>`).join("");
+  return `<div class="box" data-testid="fees">
+    <div>지연 <b data-testid="fee-late">${won(c.late_fee)}</b>원 (${c.late_minutes}분)</div>
+    <div>연료 <b data-testid="fee-fuel">${won(c.fuel_fee)}</b>원</div>
+    <div>손상 <b data-testid="fee-damage">${won(c.damage_fee)}</b>원</div>${dm}
+    <div>합계 <b data-testid="fee-total">${won(c.total)}</b>원</div></div>`;
+}
+
+async function select(id) {
+  selected = id;
+  lastResult = null;
+  renderList();
+  const r = await api("GET", `/api/rentals/${encodeURIComponent(id)}?viewer=${encodeURIComponent(viewer)}`);
+  const d = $("#detail");
+  if (!r.ok) { d.innerHTML = `<div data-testid="message" id="message"></div>`; setMessage(r.data && r.data.detail); return; }
+  const x = r.data;
+  let html = `<h2>${esc(x.plate)} ${esc(x.model)} · ${esc(x.customer_name)}</h2>
+    <p>대여 ${esc(x.out_at)} / 반납 예정 ${esc(x.due_at)} / 대여 때 연료 ${x.out_fuel}칸 · ${won(x.out_km)}km</p>`;
+  if (x.status === "returned") {
+    html += x.charges ? feeBox(x.charges) : "<p>청구 내역이 없습니다.</p>";
+  } else if (isStaff()) {
+    html += `<div data-testid="pre-damage">대여 전 손상: ${x.pre_damages.length ? x.pre_damages.map(esc).join(", ") : "없음"}</div>
+      <div class="box">
+        <label>반납 시각 (비우면 지금) <input data-testid="returned-at" placeholder="YYYY-MM-DD HH:MM"></label>
+        <label>연료 칸 <select data-testid="fuel">${[0,1,2,3,4,5,6,7,8].map((n) => `<option value="${n}"${n === x.out_fuel ? " selected" : ""}>${n}</option>`).join("")}</select></label>
+        <label>주행거리 <input data-testid="km" type="number" value="${x.out_km}"></label>
+        <div id="dmgs"></div>
+        <button data-testid="add-damage" type="button">손상 추가</button>
+        <button data-testid="quote" type="button">미리보기</button>
+        <button data-testid="return" type="button">반납 처리</button>
+      </div>
+      <div id="feeslot"></div>`;
+  } else {
+    html += "<p>반납 처리 전입니다.</p>";
+  }
+  html += `<div data-testid="message" id="message"></div>`;
+  d.innerHTML = html;
+  if (x.status === "out" && isStaff()) {
+    $('[data-testid="add-damage"]').onclick = addDamage;
+    $('[data-testid="quote"]').onclick = () => submit("quote");
+    $('[data-testid="return"]').onclick = () => submit("return");
+  }
+}
+
+function addDamage() {
+  const parts = ["앞범퍼", "뒷범퍼", "운전석문", "조수석문", "보닛", "트렁크", "앞유리", "휠"];
+  const row = document.createElement("div");
+  row.className = "dmg";
+  row.innerHTML = `<select data-testid="dmg-part">${parts.map((p) => `<option>${p}</option>`).join("")}</select>
+    <select data-testid="dmg-grade"><option>minor</option><option>major</option><option>severe</option></select>
+    <input data-testid="dmg-photos" type="number" value="1" min="0" style="width:60px"> 장
+    <button type="button">삭제</button>`;
+  row.querySelector("button").onclick = () => row.remove();
+  $("#dmgs").appendChild(row);
+}
+
+function collect() {
+  const b = { user: viewer, fuel: parseInt($('[data-testid="fuel"]').value, 10), damages: [] };
+  const km = $('[data-testid="km"]').value.trim();
+  b.km = /^-?\d+$/.test(km) ? parseInt(km, 10) : km;
+  const at = $('[data-testid="returned-at"]').value.trim();
+  if (at) b.returned_at = at;
+  document.querySelectorAll("#dmgs .dmg").forEach((row) => {
+    const ph = row.querySelector('[data-testid="dmg-photos"]').value.trim();
+    b.damages.push({ part: row.querySelector('[data-testid="dmg-part"]').value, grade: row.querySelector('[data-testid="dmg-grade"]').value,
+      photos: /^-?\d+$/.test(ph) ? parseInt(ph, 10) : ph });
+  });
+  return b;
+}
+
+async function submit(kind) {
+  setMessage("");
+  const r = await api("POST", `/api/rentals/${encodeURIComponent(selected)}/${kind}`, collect());
+  if (!r.ok) { setMessage((r.data && r.data.detail) || "불러오지 못했습니다"); return; }
+  $("#feeslot").innerHTML = feeBox(r.data);
+  if (kind === "return") {
+    setMessage("반납 처리했습니다");
+    await loadRentals();
+    await select(selected);
+    $("#feeslot") || 0;
+  }
+}
+
+async function start() {
+  try {
+    showError(false);
+    if (!users.length) await loadUsers();
+    await loadRentals();
+  } catch (e) { showError(true); }
+}
+$("#retry").onclick = start;
+$("#user").onchange = async (e) => {
+  viewer = e.target.value; selected = null;
+  $("#detail").innerHTML = "<p>왼쪽에서 대여 건을 고르세요.</p>";
+  try { await loadRentals(); } catch (err) { showError(true); }
+};
+start();
+</script>
+</body>
+</html>

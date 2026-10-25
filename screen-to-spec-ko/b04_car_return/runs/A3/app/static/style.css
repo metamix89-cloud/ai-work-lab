@@ -1,0 +1,32 @@
+:root { --brand:#0b5fff; --bg:#f4f6fa; --line:#dde2ea; --bad:#d6336c; --ok:#2b8a3e; --warn:#e67700; }
+* { box-sizing:border-box; }
+body { margin:0; font-family:"Malgun Gothic",system-ui,sans-serif; background:var(--bg); color:#1c2330; }
+header { background:var(--brand); color:#fff; padding:12px 20px; display:flex; justify-content:space-between; align-items:center; }
+header h1 { margin:0; font-size:1.2rem; } header small { opacity:.8; font-weight:normal; }
+main { max-width:960px; margin:20px auto; padding:0 14px; }
+.card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:14px; }
+h2 { margin:0 0 10px; font-size:1.1rem; } h3 { margin:14px 0 6px; font-size:1rem; }
+table { width:100%; border-collapse:collapse; font-size:.92rem; }
+th, td { text-align:left; padding:7px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+th { background:#f0f3f8; }
+td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+button { background:var(--brand); color:#fff; border:0; border-radius:6px; padding:8px 14px; cursor:pointer; font-size:.95rem; }
+button.ghost { background:#fff; color:var(--brand); border:1px solid var(--brand); }
+button.danger { background:var(--bad); }
+button:disabled { opacity:.5; cursor:default; }
+input, select { padding:7px; border:1px solid var(--line); border-radius:6px; font-size:.95rem; }
+label { display:block; margin:10px 0 4px; font-weight:bold; font-size:.9rem; }
+.row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.tabs button { background:#fff; color:#333; border:1px solid var(--line); }
+.tabs button.on { background:var(--brand); color:#fff; }
+.badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:.8rem; color:#fff; background:#868e96; }
+.badge.late { background:var(--bad); } .badge.ok { background:var(--ok); } .badge.warn { background:var(--warn); }
+.msg { padding:10px; border-radius:6px; margin:10px 0; }
+.msg.err { background:#ffe3ec; color:#a61e4d; } .msg.info { background:#e7f0ff; color:#1c4fb8; }
+.damage-row { border:1px solid var(--line); border-radius:8px; padding:10px; margin:8px 0; background:#fafbfd; }
+.thumb { max-width:120px; max-height:80px; border:1px solid var(--line); border-radius:4px; display:block; margin-top:4px; }
+.total { font-size:1.3rem; font-weight:bold; text-align:right; }
+.muted { color:#6b7280; font-size:.88rem; }
+.login { max-width:340px; margin:60px auto; }
+.login input { width:100%; }
+.hint { font-size:.82rem; color:#6b7280; margin-top:12px; line-height:1.6; }

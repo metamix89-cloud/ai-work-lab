@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>부릉부릉렌터카 반납 점검표 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 2부 4편 목업. 가상 회사(부릉부릉렌터카) · 가상 고객 · 가상 차량. ?state=ok|empty|error. Mock-IT 라이트 테마. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--indigo:#6366F1;--emerald:#10B981;--amber:#F59E0B;--rose:#EF4444}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:#F59E0B;display:inline-block}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#EEF0FF;color:var(--indigo);font-weight:700}
+.main{padding:16px 26px 14px 26px;display:flex;flex-direction:column;gap:9px}
+.top{display:flex;justify-content:space-between;align-items:flex-end}
+h1{margin:0;font-size:21px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:12px;margin-top:3px}
+.who{font-size:12.5px;color:var(--ink2);background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.row{display:grid;grid-template-columns:1fr 1.25fr;gap:12px;flex:1;min-height:0}
+.box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 14px;min-height:0;overflow:hidden}
+.box h3{margin:0 0 6px;font-size:13px;color:var(--ink2)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}th{color:var(--mute);font-weight:600;text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);font-size:11.5px}
+td{padding:6px 6px;border-bottom:1px solid var(--line)}tr.sel td{background:#F5F6FF}
+.chip{display:inline-block;border-radius:999px;padding:1px 9px;font-size:11px;font-weight:700}
+.out{background:#FFF7E6;color:#B45309}.returned{background:#ECFDF5;color:#047857}.late{color:#B91C1C;font-weight:700}
+.form{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+.f{border:1px solid var(--line);border-radius:8px;padding:5px 9px;font-size:12px;background:#FAFAFC}.f b{display:block;font-size:10.5px;color:var(--mute);font-weight:600;margin-bottom:2px}
+.dmg{font-size:12px;border:1px dashed var(--line);border-radius:8px;padding:6px 9px;margin-bottom:6px;display:flex;gap:14px;align-items:center}
+.dmg .pre{color:var(--mute);font-size:11px}
+.fees{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.fee{background:#F5F6FF;border-radius:10px;padding:6px 10px}.fee .l{font-size:11px;color:var(--ink2)}.fee .n{font-size:18px;font-weight:800}.fee.tot{background:var(--indigo);color:#fff}.fee.tot .l{color:#E0E7FF}
+.b{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:3px 10px;font-size:11.5px;font-weight:700;margin-right:4px}.b.p{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+.msg{color:var(--rose);font-size:12px}
+.empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mute);gap:4px;font-size:12px;text-align:center}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:12px;padding:20px;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700}
+</style></head><body>
+<div class="app">
+ <div class="side">
+  <div class="logo"><i></i>부릉부릉렌터카</div>
+  <div class="nav"><div>차량 예약</div><div>배차</div><div class="on">반납 점검표</div><div>사고 접수</div><div>정비 일정</div></div>
+ </div>
+ <div class="main" id="main"></div>
+</div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const head=(who)=>`<div class="top"><div><h1>반납 점검표 · 추가 요금</h1><div class="sub">지연 = 유예 30분 · 시작된 1시간마다 10,000원 · 상한 80,000원 · 연료 = 모자란 칸당 15,000원 · 손상 = 경 30,000 · 중 150,000 · 대 500,000 · 대여 전 손상은 0원 · 사진 없는 손상은 안 받음</div></div><span class="who">사용자: ${who} ▾</span></div>`;
+let html='';
+if(state==='ok'){
+  html=head('한직원 (직원)')+`<div class="row"><div class="box"><h3>대여 중 · 반납 완료</h3><table><tr><th>번호</th><th>차량</th><th>고객</th><th>반납 예정</th><th>상태</th></tr>
+   <tr class="sel"><td>R-1001</td><td>12가 3456 소형 SUV</td><td>김고객</td><td>오늘 12:30 <span class="late">2시간 10분 지남</span></td><td><span class="chip out">대여 중</span></td></tr>
+   <tr><td>R-1002</td><td>34나 5678 준중형</td><td>이고객</td><td>오늘 16:00</td><td><span class="chip out">대여 중</span></td></tr>
+   <tr><td>R-1003</td><td>56다 7890 경차</td><td>박고객</td><td>내일 10:00</td><td><span class="chip out">대여 중</span></td></tr>
+   <tr><td>R-1004</td><td>78라 1234 승합</td><td>최고객</td><td>어제 18:00</td><td><span class="chip returned">반납 완료 · 45,000원</span></td></tr></table></div>
+  <div class="box"><h3>R-1001 반납 점검표 — 대여 때 연료 6칸 · 12,480 km</h3>
+   <div class="form"><div class="f"><b>반납 시각</b>오늘 14:40 (지금)</div><div class="f"><b>연료 칸 (0~8)</b>4 ▾ <span style="color:#B91C1C">−2칸</span></div><div class="f"><b>주행거리</b>12,840 km</div></div>
+   <div class="dmg"><span><b>앞범퍼</b> 긁힘 · minor · 사진 2장</span><span class="pre">대여 전 손상 — 기록만, 청구 없음</span></div>
+   <div class="dmg"><span><b>운전석문</b> 찍힘 · major · 사진 3장</span><span>150,000원</span></div>
+   <div class="msg">손상 사진이 없습니다 (뒷범퍼) — 사진 0장으로 추가하려다 거절(400)</div>
+   <div class="fees"><div class="fee"><div class="l">지연 130분 → 3시간</div><div class="n">30,000</div></div><div class="fee"><div class="l">연료 −2칸</div><div class="n">30,000</div></div><div class="fee"><div class="l">손상 (기존 1건 제외)</div><div class="n">150,000</div></div><div class="fee tot"><div class="l">합계</div><div class="n">210,000</div></div></div>
+   <div style="margin-top:8px"><span class="b">요금 미리보기</span><span class="b p">반납 처리</span></div></div></div>`;
+}else if(state==='empty'){
+  html=head('김고객 (고객)')+`<div class="row"><div class="box"><h3>내 대여</h3><table><tr><th>번호</th><th>차량</th><th>반납 예정</th><th>상태</th></tr>
+   <tr><td>R-1001</td><td>12가 3456 소형 SUV</td><td>오늘 12:30</td><td><span class="chip out">대여 중</span></td></tr></table></div>
+  <div class="box"><div class="empty"><b style="color:#4B5563;font-size:15px">점검표는 직원이 작성합니다</b>고객 화면엔 연료 · 손상 입력과 반납 처리 버튼이 없다 — 막는 건 서버(403)</div></div></div>`;
+}else{
+  html=head('한직원 (직원)')+`<div class="err"><div><b>불러오지 못했습니다.</b> 대여 API(/api/rentals) 가 응답하지 않습니다 — 대여 때 연료 · 주행거리 · 대여 전 손상을 모르면 점검표를 열지 않습니다.</div><button>다시 시도</button></div>
+  <div class="box" style="flex:1"><div class="empty">요금은 서버가 계산한다 — 화면이 계산하면 직원마다 지연 요금이 달라진다</div></div>`;
+}
+document.getElementById('main').innerHTML=html;
+</script></body></html>

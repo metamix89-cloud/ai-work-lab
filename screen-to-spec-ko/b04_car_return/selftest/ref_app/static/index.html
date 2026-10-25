@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>부릉부릉렌터카 반납 점검표</title>
+<style>
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;margin:0;background:#F4F5F9;color:#111318}
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 24px;background:#fff;border-bottom:1px solid #E6E8EF}
+h1{font-size:20px;margin:0}.row{display:grid;grid-template-columns:1fr 1.25fr;gap:14px;padding:16px 24px}
+.box{background:#fff;border:1px solid #E6E8EF;border-radius:12px;padding:12px 16px}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:6px;border-bottom:1px solid #E6E8EF}
+tr[data-testid=rental]{cursor:pointer}tr.sel td{background:#F5F6FF}
+.fees{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}.fee{background:#F5F6FF;border-radius:10px;padding:8px 10px}.fee b{display:block;font-size:18px}
+.msg{color:#EF4444;min-height:20px;font-size:14px}.pre{color:#8A94A6;font-size:13px}
+.dmg{display:flex;gap:8px;margin:4px 0}.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;padding:12px;border-radius:10px;margin:16px 24px}
+button{border:1px solid #E6E8EF;border-radius:8px;padding:6px 12px;background:#fff;cursor:pointer}button.p{background:#6366F1;color:#fff;border-color:#6366F1}
+</style></head><body>
+<div class="top"><h1>반납 점검표 · 추가 요금</h1><label>사용자 <select data-testid="user" id="user"></select></label></div>
+<div id="err"></div>
+<div class="row"><div class="box"><h3>대여 목록</h3><table><thead><tr><th>번호</th><th>차량</th><th>고객</th><th>반납 예정</th><th>상태</th></tr></thead><tbody id="list"></tbody></table></div>
+<div class="box" id="right"><div class="pre">왼쪽에서 대여 건을 고르세요</div></div></div>
+<script>
+const PARTS=["앞범퍼","뒷범퍼","운전석문","조수석문","보닛","트렁크","앞유리","휠"];
+let users=[],me=null,rentals=[],cur=null,dmgs=[];
+const $=s=>document.querySelector(s);
+async function api(m,p,b){const r=await fetch(p,{method:m,headers:{"Content-Type":"application/json"},body:b?JSON.stringify(b):undefined});let j=null;try{j=await r.json()}catch(e){}return [r.status,j]}
+function won(n){return (n==null?0:n).toLocaleString()}
+async function loadUsers(){const [st,j]=await api("GET","/api/users");if(st!==200){fail();return}users=j;$("#user").innerHTML=users.map(u=>`<option value="${u.user_id}">${u.name} (${u.role==="staff"?"직원":"고객"})</option>`).join("");me=users[0];await loadList()}
+function fail(){$("#err").innerHTML='<div class="err"><b>불러오지 못했습니다.</b> 대여 API 가 응답하지 않습니다 — 대여 정보를 모르면 점검표를 열지 않습니다. <button onclick="location.reload()">다시 시도</button></div>'}
+async function loadList(){const [st,j]=await api("GET","/api/rentals?viewer="+me.user_id);if(st!==200){fail();return}rentals=j;$("#list").innerHTML=rentals.map(r=>`<tr data-testid="rental" data-id="${r.rental_id}" data-status="${r.status}" class="${cur&&cur.rental_id===r.rental_id?"sel":""}"><td>${r.rental_id}</td><td>${r.plate} ${r.model}</td><td>${r.customer_name}</td><td>${r.due_at}</td><td>${r.status==="out"?"대여 중":"반납 완료"}</td></tr>`).join("");document.querySelectorAll('[data-testid=rental]').forEach(tr=>tr.onclick=()=>pick(tr.dataset.id));if(!cur&&rentals.length)pick(rentals[0].rental_id)}
+async function pick(id){const [st,j]=await api("GET",`/api/rentals/${id}?viewer=${me.user_id}`);if(st!==200){$("#right").innerHTML=`<div class="msg" data-testid="message">${j&&j.detail||"조회 실패"}</div>`;return}cur=j;dmgs=[];render();loadList()}
+function fees(q){return `<div class="fees"><div class="fee">지연 ${q?q.late_minutes:0}분<b data-testid="fee-late">${won(q&&q.late_fee)}</b></div><div class="fee">연료<b data-testid="fee-fuel">${won(q&&q.fuel_fee)}</b></div><div class="fee">손상<b data-testid="fee-damage">${won(q&&q.damage_fee)}</b></div><div class="fee">합계<b data-testid="fee-total">${won(q&&q.total)}</b></div></div>`}
+function render(q){const r=cur,staff=me.role==="staff";let h=`<h3>${r.rental_id} · ${r.plate} ${r.model} · ${r.customer_name} — 대여 때 연료 ${r.out_fuel}칸 · ${r.out_km.toLocaleString()} km · 반납 예정 ${r.due_at}</h3>`;
+ h+=`<div class="pre" data-testid="pre-damage">대여 전 손상: ${r.pre_damages.length?r.pre_damages.join(" · "):"없음"} — 같은 부위를 신고하면 기록만 남기고 청구하지 않음</div>`;
+ if(staff&&r.status==="out"){h+=`<div style="display:flex;gap:10px;margin:8px 0;flex-wrap:wrap"><label>반납 시각 <input data-testid="returned-at" id="rat" placeholder="비우면 지금" size="16"></label><label>연료 칸 <select data-testid="fuel" id="fuel">${[0,1,2,3,4,5,6,7,8].map(n=>`<option ${n===r.out_fuel?"selected":""}>${n}</option>`).join("")}</select></label><label>주행거리 <input data-testid="km" id="km" value="${r.out_km}" size="8"></label></div>`;
+  h+=`<div id="dm">`+dmgs.map((d,i)=>`<div class="dmg"><select data-testid="dmg-part" onchange="dmgs[${i}].part=this.value">${PARTS.map(p=>`<option ${p===d.part?"selected":""}>${p}</option>`).join("")}</select><select data-testid="dmg-grade" onchange="dmgs[${i}].grade=this.value">${["minor","major","severe"].map(g=>`<option ${g===d.grade?"selected":""}>${g}</option>`).join("")}</select><label>사진 <input data-testid="dmg-photos" value="${d.photos}" size="3" onchange="dmgs[${i}].photos=parseInt(this.value)||0"></label></div>`).join("")+`</div>`;
+  h+=`<button data-testid="add-damage" onclick="dmgs.push({part:'뒷범퍼',grade:'minor',photos:1});render()">+ 손상 추가</button> <button data-testid="quote" onclick="send('quote')">요금 미리보기</button> <button class="p" data-testid="return" onclick="send('return')">반납 처리</button>`}
+ h+=`<div class="msg" data-testid="message" id="msg"></div>`+fees(q||r.charges);$("#right").innerHTML=h}
+async function send(kind){const body={user:me.user_id,fuel:parseInt($("#fuel").value),km:parseInt($("#km").value),damages:dmgs.map(d=>({part:d.part,grade:d.grade,photos:d.photos}))};if($("#rat").value)body.returned_at=$("#rat").value;
+ const [st,j]=await api("POST",`/api/rentals/${cur.rental_id}/${kind}`,body);if(st===200||st===201){render(j);if(kind==="return"){cur.status="returned";cur.charges=j;render(j);loadList()}}else{$("#msg").textContent=j&&j.detail||("오류 "+st)}}
+$("#user").onchange=async e=>{me=users.find(u=>u.user_id===e.target.value);cur=null;await loadList()};
+loadUsers();
+</script></body></html>

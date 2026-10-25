@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>부릉부릉렌터카 반납 점검표</title>
+<style>
+  :root { --b:#1f5fbf; --bg:#f4f6f9; --line:#d8dee6; --bad:#c0392b; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.5 "Malgun Gothic",system-ui,sans-serif; background:var(--bg); color:#1b2430; }
+  header { background:var(--b); color:#fff; padding:12px 20px; display:flex; justify-content:space-between; align-items:center; }
+  main { max-width:900px; margin:20px auto; padding:0 14px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:14px; }
+  h2,h3 { margin:0 0 10px; }
+  label { display:block; margin:8px 0 2px; font-weight:600; }
+  input,select,button { font:inherit; padding:7px 10px; border:1px solid var(--line); border-radius:6px; }
+  button { background:var(--b); color:#fff; border:0; cursor:pointer; }
+  button.ghost { background:#fff; color:var(--b); border:1px solid var(--b); }
+  button:disabled { opacity:.5; cursor:default; }
+  table { width:100%; border-collapse:collapse; }
+  th,td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); }
+  td.n,th.n { text-align:right; }
+  .tag { display:inline-block; padding:1px 8px; border-radius:10px; font-size:12px; background:#e6edf7; }
+  .tag.late { background:#fde4e1; color:var(--bad); } .tag.done { background:#e2f4e6; color:#1d7a35; }
+  .err { color:var(--bad); margin:8px 0; white-space:pre-wrap; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:end; } .row > div { flex:1; min-width:150px; }
+  .dmg { border:1px dashed var(--line); border-radius:8px; padding:8px; margin:8px 0; }
+  .total { font-size:20px; font-weight:700; text-align:right; }
+  img.thumb { height:56px; border-radius:4px; border:1px solid var(--line); vertical-align:middle; }
+  .muted { color:#6b7684; font-size:13px; }
+</style>
+</head>
+<body>
+<header><strong>🚗 부릉부릉렌터카 · 반납 점검표</strong><span id="who"></span></header>
+<main id="app"></main>
+<script src="/static/app.js"></script>
+</body>
+</html>

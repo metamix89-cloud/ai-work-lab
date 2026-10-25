@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 121859,
+ "num_turns": 12,
+ "total_cost_usd": 0.4167365,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 44744,
+  "cache_read_input_tokens": 251465,
+  "output_tokens": 21259,
+  "output_tokens_details": {
+   "thinking_tokens": 1346
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 44744,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 804,
+    "cache_read_input_tokens": 60680,
+    "cache_creation_input_tokens": 736,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 736
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD.md대로 웹앱을 만들었습니다. 간단한 API 점검(TestClient)에서는 정상 동작했지만, 브라우저 화면은 열어 보지 못했고 `tests/test_dod.py`도 이 폴더에 없어 돌리지 못했습니다.\n\n**점검한 것**\n- `/` 가 200으로 열리고 사용자는 5명입니다.\n- 직원 목록은 반납 예정 순으로 나옵니다.\n- 미리보기 → 반납 처리(201) → 같은 건에 다시 미리보기(409) → 고객 조회 시 청구 합계 유지가 계약대로 나왔습니다.\n- 대여 전 손상 부위(앞범퍼)는 요금 0원, `pre_existing` true로 남았습니다.\n- 연료 9칸 + 없는 건은 400이 먼저 나왔습니다.\n- 지연 요금 상한(80,000원)과 연료 요금도 계산이 맞았습니다.\n\n**실행:** 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`을 실행하면 됩니다. 시작할 때마다 `seed/` CSV로 `rent.db`를 새로 만듭니다.\n\n**만든 파일**\n- `main.py`: API 5개와 규칙 R1~R9.\n- `static/index.html`: 한 페이지 화면. 사용자 선택, 대여 목록, 점검표, 요금 상자, 메시지 줄, 오류와 다시 시도 버튼이 들어 있고, 고객 화면에는 점검표와 버튼이 없습니다.\n- `seed/*.csv`: 가상 데이터. 고객 4명, 직원 1명, 차량 4대, 대여 6건이고, 대여 전 손상이 있는 건은 3건입니다.\n\n**PRD에 없어서 제가 정한 것**\n- 시드 CSV에서 처음부터 반납 완료(`returned`)인 건은 반납 기록이 없어서, 청구 내역을 0원으로 보여 줍니다.\n- 시드 날짜는 오늘(2026-10-25) 기준으로 잡았습니다. 지연 요금 테스트는 `returned_at`을 직접 넣는 방식이라 영향이 없을 것으로 봅니다.",
+ "wall_s": 128.8
+}

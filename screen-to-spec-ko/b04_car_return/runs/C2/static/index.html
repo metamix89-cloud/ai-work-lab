@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>부릉부릉렌터카 · 반납 점검표</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; color: #222; background: #f5f6f8; }
+  header { background: #1f4e8c; color: #fff; padding: 12px 20px; display: flex; align-items: center; gap: 16px; }
+  header h1 { font-size: 18px; margin: 0; }
+  main { display: flex; gap: 16px; padding: 16px 20px; align-items: flex-start; }
+  #list { width: 380px; }
+  #detail { flex: 1; background: #fff; border-radius: 6px; padding: 16px; min-height: 200px; }
+  .rental { background: #fff; border: 1px solid #d5d9e0; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px; cursor: pointer; }
+  .rental.sel { border-color: #1f4e8c; box-shadow: 0 0 0 2px #c9d9f0; }
+  .rental .sub { color: #666; font-size: 13px; margin-top: 4px; }
+  .badge { font-size: 12px; padding: 1px 8px; border-radius: 10px; background: #e8f1e4; color: #2d6a1f; }
+  .badge.out { background: #fde9d4; color: #9a5300; }
+  .row { margin: 8px 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .dmg { display: flex; gap: 8px; margin: 6px 0; align-items: center; }
+  .fees { border: 1px solid #d5d9e0; border-radius: 6px; padding: 10px 14px; margin-top: 14px; background: #fafbfc; }
+  .fees div { display: flex; justify-content: space-between; padding: 3px 0; }
+  .fees .total { font-weight: bold; border-top: 1px solid #ccc; margin-top: 4px; padding-top: 6px; }
+  .pre { background: #fff6d6; padding: 6px 10px; border-radius: 4px; }
+  #message { color: #b00020; margin: 8px 0; min-height: 18px; }
+  .note { color: #666; font-size: 13px; }
+  button { padding: 6px 14px; cursor: pointer; }
+</style>
+</head>
+<body>
+<header>
+  <h1>부릉부릉렌터카 · 반납 점검표</h1>
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+</header>
+<main>
+  <section id="list"></section>
+  <section id="detail"><p class="note">왼쪽에서 대여 건을 고르세요.</p></section>
+</main>
+<script>
+const PARTS = ["앞범퍼", "뒷범퍼", "운전석문", "조수석문", "보닛", "트렁크", "앞유리", "휠"];
+const GRADES = ["minor", "major", "severe"];
+let users = [], me = null, rentals = [], selId = null, lastCharges = null;
+
+const $ = (s) => document.querySelector(s);
+const won = (n) => Number(n).toLocaleString("ko-KR");
+function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+async function api(method, url, body) {
+  const res = await fetch(url, { method, headers: body ? { "Content-Type": "application/json" } : {}, body: body ? JSON.stringify(body) : undefined });
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  return { ok: res.ok, status: res.status, data };
+}
+
+function failed(retry) {
+  $("#list").innerHTML = '<div data-testid="error">불러오지 못했습니다 <button data-testid="retry" id="retry">다시 시도</button></div>';
+  $("#retry").onclick = retry;
+}
+
+async function boot() {
+  try {
+    const r = await api("GET", "/api/users");
+    if (!r.ok) throw new Error();
+    users = r.data;
+  } catch (e) { return failed(boot); }
+  $("#user").innerHTML = users.map((u) => `<option value="${esc(u.user_id)}">${esc(u.name)} (${u.role === "staff" ? "직원" : "고객"})</option>`).join("");
+  me = users[0];
+  $("#user").onchange = () => { me = users.find((u) => u.user_id === $("#user").value); selId = null; showEmpty(); loadList(); };
+  loadList();
+}
+
+function showEmpty() { $("#detail").innerHTML = '<p class="note">왼쪽에서 대여 건을 고르세요.</p>'; }
+
+async function loadList() {
+  if (!me) return;
+  try {
+    const r = await api("GET", "/api/rentals?viewer=" + encodeURIComponent(me.user_id));
+    if (!r.ok) throw new Error();
+    rentals = r.data;
+  } catch (e) { return failed(loadList); }
+  renderList();
+}
+
+function renderList() {
+  if (!rentals.length) { $("#list").innerHTML = '<p class="note">대여 건이 없습니다.</p>'; return; }
+  $("#list").innerHTML = rentals.map((r) => `
+    <div class="rental${r.rental_id === selId ? " sel" : ""}" data-testid="rental" data-id="${esc(r.rental_id)}" data-status="${esc(r.status)}">
+      <div><b>${esc(r.plate)}</b> · ${esc(r.model)} <span class="badge ${r.status}">${r.status === "out" ? "대여 중" : "반납 완료"}</span></div>
+      <div class="sub">${esc(r.customer_name)} · 반납 예정 ${esc(r.due_at)}</div>
+      <div class="sub">대여 때 연료 ${r.out_fuel}칸 · ${won(r.out_km)}km</div>
+    </div>`).join("");
+  document.querySelectorAll('[data-testid="rental"]').forEach((el) => { el.onclick = () => select(el.dataset.id); });
+}
+
+async function select(id) {
+  selId = id;
+  renderList();
+  let d;
+  try {
+    const r = await api("GET", `/api/rentals/${encodeURIComponent(id)}?viewer=${encodeURIComponent(me.user_id)}`);
+    if (!r.ok) { $("#detail").innerHTML = `<div data-testid="message" id="message">${esc((r.data && r.data.detail) || "불러오지 못했습니다")}</div>`; return; }
+    d = r.data;
+  } catch (e) {
+    $("#detail").innerHTML = '<div>불러오지 못했습니다 <button id="retry2">다시 시도</button></div>';
+    $("#retry2").onclick = () => select(id);
+    return;
+  }
+  renderDetail(d);
+}
+
+function feeBox(c) {
+  const dm = (c.damages || []).map((x) => `<div class="note">${esc(x.part)} · ${esc(x.grade)} · 사진 ${x.photos}장 · ${x.pre_existing ? "기존 손상 · 청구 없음" : won(x.fee) + "원"}</div>`).join("");
+  return `<div class="fees">
+    <div><span>지연 요금${c.late_minutes != null ? " (" + c.late_minutes + "분)" : ""}</span><span><span data-testid="fee-late">${c.late_fee}</span>원</span></div>
+    <div><span>연료 요금</span><span><span data-testid="fee-fuel">${c.fuel_fee}</span>원</span></div>
+    <div><span>손상 요금</span><span><span data-testid="fee-damage">${c.damage_fee}</span>원</span></div>
+    ${dm}
+    <div class="total"><span>합계</span><span><span data-testid="fee-total">${c.total}</span>원</span></div>
+  </div>`;
+}
+
+function renderDetail(d) {
+  const staff = me.role === "staff";
+  let h = `<h2>${esc(d.plate)} · ${esc(d.model)}</h2>
+    <div class="note">${esc(d.rental_id)} · ${esc(d.customer_name)} · 대여 ${esc(d.out_at)} → 반납 예정 ${esc(d.due_at)}</div>`;
+  if (d.status === "returned") {
+    h += '<h3>청구 내역</h3>' + (d.charges ? `<div class="note">반납 ${esc(d.charges.returned_at)} · 연료 ${d.charges.fuel}칸 · ${won(d.charges.km)}km</div>` + feeBox(d.charges) : "");
+    h += '<div data-testid="message" id="message"></div>';
+    $("#detail").innerHTML = h;
+    return;
+  }
+  if (!staff) {
+    $("#detail").innerHTML = h + '<p class="note">아직 반납 전입니다.</p>';
+    return;
+  }
+  h += `<div class="row pre" data-testid="pre-damage">대여 전 손상: ${d.pre_damages.length ? d.pre_damages.map(esc).join(", ") : "없음"}</div>
+    <h3>반납 점검표</h3>
+    <div class="row"><label>반납 시각 <input data-testid="returned-at" id="returned-at" placeholder="YYYY-MM-DD HH:MM (비우면 지금)" size="24"></label></div>
+    <div class="row"><label>연료 칸 <select data-testid="fuel" id="fuel">${[0,1,2,3,4,5,6,7,8].map((n) => `<option value="${n}"${n === d.out_fuel ? " selected" : ""}>${n}</option>`).join("")}</select></label>
+      <label>주행거리 <input data-testid="km" id="km" value="${d.out_km}" size="8"></label></div>
+    <div id="dmgs"></div>
+    <div class="row"><button data-testid="add-damage" id="add-damage">손상 추가</button></div>
+    <div class="row"><button data-testid="quote" id="quote">요금 미리보기</button> <button data-testid="return" id="return">반납 처리</button></div>
+    <div data-testid="message" id="message"></div>
+    <div id="fees"></div>`;
+  $("#detail").innerHTML = h;
+  $("#add-damage").onclick = addDamage;
+  $("#quote").onclick = () => submit(d.rental_id, false);
+  $("#return").onclick = () => submit(d.rental_id, true);
+}
+
+function addDamage() {
+  const div = document.createElement("div");
+  div.className = "dmg";
+  div.innerHTML = `<select data-testid="dmg-part">${PARTS.map((p) => `<option>${p}</option>`).join("")}</select>
+    <select data-testid="dmg-grade">${GRADES.map((g) => `<option>${g}</option>`).join("")}</select>
+    <label>사진 <input data-testid="dmg-photos" value="1" size="3"></label>
+    <button type="button">삭제</button>`;
+  div.querySelector("button").onclick = () => div.remove();
+  $("#dmgs").appendChild(div);
+}
+
+function collect() {
+  const b = { user: me.user_id, fuel: Number($("#fuel").value) };
+  const km = $("#km").value.trim();
+  b.km = /^-?\d+$/.test(km) ? Number(km) : km;
+  const at = $("#returned-at").value.trim();
+  if (at) b.returned_at = at;
+  b.damages = [...document.querySelectorAll("#dmgs .dmg")].map((el) => {
+    const p = el.querySelector('[data-testid="dmg-photos"]').value.trim();
+    return {
+      part: el.querySelector('[data-testid="dmg-part"]').value,
+      grade: el.querySelector('[data-testid="dmg-grade"]').value,
+      photos: /^-?\d+$/.test(p) ? Number(p) : p,
+    };
+  });
+  return b;
+}
+
+async function submit(id, commit) {
+  $("#message").textContent = "";
+  let r;
+  try {
+    r = await api("POST", `/api/rentals/${encodeURIComponent(id)}/${commit ? "return" : "quote"}`, collect());
+  } catch (e) { $("#message").textContent = "불러오지 못했습니다"; return; }
+  if (!r.ok) { $("#message").textContent = (r.data && r.data.detail) || "불러오지 못했습니다"; return; }
+  $("#fees").innerHTML = feeBox(r.data);
+  if (commit) {
+    $("#message").style.color = "#2d6a1f";
+    $("#message").textContent = "반납 처리했습니다";
+    await loadList();
+  }
+}
+
+boot();
+</script>
+</body>
+</html>

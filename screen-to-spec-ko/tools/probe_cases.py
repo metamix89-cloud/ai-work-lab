@@ -10,6 +10,7 @@ cases.json: [{"name": "설명", "method": "POST", "path": "api/carts/{cart}/item
 import importlib.util
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -60,8 +61,19 @@ def probe(app_src, lab, cases, port, add=None):
             cart = json.loads(raw).get("cart_id", "none")
         except Exception:
             cart = "none"
+        def fill(obj):
+            """본문 속 "__이름_PLUS_분__" 을 test_dod 의 시각 상수(이름) + 분 으로 바꾼다 (2부 4편: 지연 분을 지금 기준으로 줘야 함)"""
+            if isinstance(obj, dict):
+                return {k: fill(v) for k, v in obj.items()}
+            if isinstance(obj, list):
+                return [fill(v) for v in obj]
+            if isinstance(obj, str):
+                m = re.fullmatch(r"__([A-Z][A-Z0-9_]*?)_PLUS_(-?\d+)__", obj)
+                if m and hasattr(dod, m.group(1)):
+                    return dod.plus(getattr(dod, m.group(1)), int(m.group(2))) if hasattr(dod, "plus") else getattr(dod, m.group(1))
+            return obj
         for c in cases:
-            st, raw = call(base, c["method"], c["path"].replace("{cart}", str(cart)), c.get("body"))
+            st, raw = call(base, c["method"], c["path"].replace("{cart}", str(cart)), fill(c.get("body")))
             try:
                 j = json.loads(raw)
                 if c.get("pick") and isinstance(j, dict):        # "pick": "metrics.cancel_rate" — 응답 속 값을 점 경로로
