@@ -1,0 +1,27 @@
+INFO:     Started server process [21484]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:6978 - "GET /api/board HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6980 - "GET /api/manager/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6982 - "GET /api/manager/summary HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:6984 - "POST /api/teller/call HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6986 - "POST /api/teller/call HTTP/1.1" 409 Conflict
+INFO:     127.0.0.1:6988 - "POST /api/tickets HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:6990 - "GET /api/slots?d=2026-10-30 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6992 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6994 - "GET /board.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6996 - "GET /teller.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6998 - "GET /manager.html HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7002 - "POST /api/tickets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7004 - "POST /api/tickets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7006 - "POST /api/tickets HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:7008 - "POST /api/reservations HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7010 - "POST /api/checkin HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:7012 - "POST /api/checkin HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:7014 - "GET /api/teller/state?counter=3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7016 - "POST /api/teller/20/done HTTP/1.1" 409 Conflict
+INFO:     127.0.0.1:7018 - "POST /api/teller/20/start HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7020 - "POST /api/teller/20/done HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7022 - "POST /api/teller/call HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7024 - "POST /api/checkin HTTP/1.1" 200 OK

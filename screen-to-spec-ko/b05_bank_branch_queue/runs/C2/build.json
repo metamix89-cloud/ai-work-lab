@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 143174,
+ "num_turns": 14,
+ "total_cost_usd": 0.4950172,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 18,
+  "cache_creation_input_tokens": 59100,
+  "cache_read_input_tokens": 469012,
+  "output_tokens": 21168,
+  "output_tokens_details": {
+   "thinking_tokens": 3756
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 59100,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 846,
+    "cache_read_input_tokens": 71761,
+    "cache_creation_input_tokens": 372,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 372
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, static/board.html, seed/users.csv, seed/counters.csv, seed/tickets.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (PRD 에 없는 API · 칸 · 화면 요소 추가 없음)\nPRD 가 정하지 않아 직접 정한 것:\n- 한 글자 이름의 가린 이름은 `*`.\n- `at` 이나 `reserved_at` 이 `YYYY-MM-DD HH:MM` 형식이 아니면 400 (`시각을 확인하세요` / `예약 시각을 확인하세요`).\n- 없는 사용자 · 창구 · 번호표의 404 사유는 각각 `사용자를 찾을 수 없습니다` · `창구를 찾을 수 없습니다` · `번호표를 찾을 수 없습니다`.\n- 새 `ticket_id` 는 기존 `K-숫자` 중 최댓값 + 1 (`K-11` 꼴).\n- 우선 여부(`priority`)는 도착 처리 때 계산해 DB 에 저장한다. CSV 로 읽은 대기 고객은 예약 시각과 도착 시각으로 시작할 때 계산한다.\n- 호출 중인 고객이 있고 대기 줄이 비어 있어도 3분이 지나면 앞 고객은 보류된다 (`called` 는 null, `held` 는 그 고객).\n- 호출한 고객 상세는 브라우저가 가진 것만 보여 준다. 새로고침하거나 사용자를 바꾸면 사라진다. 현재 호출 중인 고객을 찾는 API 가 PRD 에 없다.\n- `/` 화면은 5초마다 대기 줄 · 현황을 다시 읽고, `/board` 도 5초마다 다시 읽는다.\n- 화면에서 호출 · 완료할 때는 `at` 없이 서버 시각을 쓴다.\n- 직접 만든 seed 는 날짜가 2026-10-30 이고 번호표 8개(대기 4 · 예약 2 · 완료 1 · 보류 1)다. 테스트는 이 seed 를 자기 데이터로 바꿔 끼웠다가 되돌린다.\n```\n\n`python -m pytest tests -q` 를 돌려 9개가 모두 통과했습니다.",
+ "wall_s": 159.5
+}

@@ -1,0 +1,44 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>두둑은행 방문 예약</title><link rel="stylesheet" href="common.css"></head><body>
+<header><h1>🏦 두둑은행 방문 예약 · 번호표</h1><span id="nav"></span></header>
+<main>
+<div class="tabs"><button data-t="rsv" class="on">방문 예약</button><button data-t="walk">현장 번호표</button><button data-t="chk">예약 도착 확인</button></div>
+<div class="card" id="form"></div>
+<p class="notice">입력하신 개인정보는 업무 상담 목적으로만 사용되며, 대기 화면에는 이름 일부와 번호표만 표시됩니다. 예약 시각 후 15분 내 도착하지 않으면 예약이 취소(노쇼)됩니다.</p>
+</main>
+<script src="common.js"></script>
+<script>
+document.getElementById('nav').replaceWith(NAV());
+const f = document.getElementById('form');
+let F = {};
+function field(id, label, attrs) { F[id] = h('input', attrs); return [h('label', {}, label), F[id]]; }
+function svcSel() { F.service = h('select', {}, ['예금', '대출', '외환'].map(s => h('option', { value: s }, s))); return [h('label', {}, '업무 종류'), F.service]; }
+const val = () => ({ name: F.name.value, phone: F.phone.value, account: F.account.value, service: F.service.value });
+const base = () => [...field('name', '이름', { autocomplete: 'name', maxlength: 20 }),
+  ...field('phone', '휴대전화', { placeholder: '010-0000-4878', inputmode: 'tel' }),
+  ...field('account', '계좌번호', { placeholder: '숫자 10~14자리', inputmode: 'numeric' }), ...svcSel()];
+async function render(t) {
+  F = {};
+  document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.t === t));
+  const out = h('div', { class: 'msg', style: 'display:none' });
+  const show = (cls, txt) => { out.className = 'msg ' + cls; out.style.display = 'block'; out.textContent = txt; };
+  const run = fn => async () => { try { await fn(); } catch (e) { show('err', e.message); } };
+  if (t === 'rsv') {
+    const fields = base();
+    F.slot = h('select');
+    const { slots } = await api('/api/slots');
+    if (!slots.length) F.slot.append(h('option', { value: '' }, '오늘 예약 가능한 시간이 없습니다'));
+    slots.forEach(s => F.slot.append(h('option', { value: s.slot }, `${s.slot} (잔여 ${s.left})`)));
+    f.replaceChildren(h('h2', {}, '방문 예약 (예약 고객 우선 호출)'), ...fields, h('label', {}, '방문 시간'), F.slot,
+      h('button', { onclick: run(async () => { const r = await api('/api/reservations', { body: { ...val(), slot: F.slot.value } }); show('ok', r.message); }) }, '예약하기'), out);
+  } else if (t === 'walk') {
+    f.replaceChildren(h('h2', {}, '현장 번호표 발급'), ...base(),
+      h('button', { onclick: run(async () => { const r = await api('/api/walkin', { body: val() }); show('ok', `번호표 ${r.ticket_no} — 앞에 ${r.ahead}명 대기 중입니다. 대기 화면을 확인해 주세요.`); }) }, '번호표 뽑기'), out);
+  } else {
+    f.replaceChildren(h('h2', {}, '예약 도착 확인'), ...field('no', '예약번호', { placeholder: 'R001' }), ...field('l4', '휴대전화 뒤 4자리', { maxlength: 4, inputmode: 'numeric' }),
+      h('button', { onclick: run(async () => { const r = await api('/api/checkin', { body: { ticket_no: F.no.value, phone_last4: F.l4.value } }); show('ok', `도착 확인 완료. ${r.ticket_no} 현재 ${r.position}번째 순서입니다.`); }) }, '도착 확인'), out);
+  }
+}
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => render(b.dataset.t));
+render('rsv');
+</script></body></html>

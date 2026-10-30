@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 124484,
+ "num_turns": 11,
+ "total_cost_usd": 0.45820989999999995,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 57088,
+  "cache_read_input_tokens": 289539,
+  "output_tokens": 20088,
+  "output_tokens_details": {
+   "thinking_tokens": 2620
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 57088,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 908,
+    "cache_read_input_tokens": 69844,
+    "cache_creation_input_tokens": 277,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 277
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "방문 예약·대기 현황판을 만들었고, `python -m pytest tests -q` 가 9/9 통과했습니다. 테스트가 끝난 뒤 `seed/` 가 제 CSV 로 되돌아온 것도 확인했습니다.\n\n```\nDoD: 9/9\n만든 파일: main.py, static/index.html, static/board.html, seed/users.csv, seed/counters.csv, seed/tickets.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (API 는 PRD 의 9개뿐이고, PRD 에 없는 칸이나 화면 요소도 추가하지 않았습니다)\nPRD 가 정하지 않아 직접 정한 것:\n- `bk_tickets` 에 `priority` 칸을 하나 더 두었습니다 (DB 안에서만 쓰고 CSV 칸은 그대로입니다). 도착 처리 때 R1 로 정해서 저장하고, CSV 에서 `waiting` 이면서 예약 시각이 있는 건은 읽을 때 같은 규칙으로 계산합니다.\n- 한 글자 이름의 가린 이름은 `*` 입니다.\n- `at` 형식이 틀리면 400 `시각을 확인하세요` 를 돌려줍니다. 틀린 `reserved_at` 은 400 `예약 시각을 확인하세요` 입니다.\n- 번호표 `ticket_id` 는 `K-NN` 꼴로 새로 붙입니다.\n- 없는 `user`(사용자) 는 404 `사용자를 찾을 수 없습니다` 입니다. 없는 창구와 번호표도 같은 꼴의 404 입니다.\n- 호출한 고객 상세 화면은 브라우저가 기억하는 값으로 띄웁니다. 그래서 새로고침하면 사라집니다. 호출 직후 자동으로 불러오고, 계좌는 `****끝4자리` 로 보여 줍니다.\n- 화면의 업무 종류는 한글 (예금·대출·외환) 로 보여 줍니다.\n- 대기 화면은 5초마다 다시 읽습니다.\n```\n\n한 가지 알아 두세요. 제가 만든 `seed/tickets.csv` 의 시각은 `2026-10-30` 으로 고정했습니다. 테스트는 이 파일을 자기 데이터로 바꿔 끼우기 때문에 통과에는 영향이 없습니다.",
+ "wall_s": 140.5
+}

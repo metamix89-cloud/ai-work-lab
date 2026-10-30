@@ -1,0 +1,6 @@
+user_id,name,role,counter_id
+t1,한창구,teller,C1
+t2,두창구,teller,C2
+t3,세창구,teller,C3
+t4,네창구,teller,C4
+m1,오지점,manager,

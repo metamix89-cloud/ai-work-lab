@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>두둑은행 대기 현황판</title></head><body>
+<h1>두둑은행 넉넉지점 대기 현황판</h1>
+<select data-testid="user" id="u"></select>
+<div data-testid="message" id="msg"></div>
+<div id="main"></div>
+<script>
+let users=[],current=null;
+const $=id=>document.getElementById(id);
+async function api(p,o){const r=await fetch(p,o);const j=await r.json();if(!r.ok)throw new Error(j.detail||'불러오지 못했습니다');return j;}
+async function render(){
+ const u=users.find(x=>x.user_id===$('u').value);$('msg').textContent='';
+ if(u.role==='manager'){
+  const s=await api('/api/manager/summary?viewer='+u.user_id);
+  $('main').innerHTML=`<div data-testid="summary">예금 ${s.waiting.deposit} · 대출 ${s.waiting.loan} · 외환 ${s.waiting.fx} · 보류 ${s.held} · 완료 ${s.done}</div>`;
+  return;}
+ const q=await api(`/api/counters/${u.counter_id}/queue?viewer=${u.user_id}`);
+ $('main').innerHTML=q.map(t=>`<div data-testid="ticket" data-id="${t.ticket_id}">${t.number} ${t.masked_name} ${t.priority?'우선':''}</div>`).join('')+
+  `<button data-testid="next" id="n">다음 호출</button><div id="d"></div>`;
+ $('n').onclick=async()=>{
+  try{const b=await api(`/api/counters/${u.counter_id}/next`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user:u.user_id})});
+   if(b.called)showDetail(u,b.called.ticket_id);
+  }catch(e){$('msg').textContent=e.message;}};
+}
+async function showDetail(u,id){
+ const d=await api(`/api/tickets/${id}?viewer=${u.user_id}`);
+ $('d').innerHTML=`<div data-testid="detail-name">${d.name}</div><div data-testid="detail-phone">${d.phone}</div><div data-testid="detail-account">끝 ${d.account_last4}</div><button data-testid="complete" id="c">완료</button>`;
+ $('c').onclick=async()=>{await api(`/api/tickets/${id}/complete`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user:u.user_id})});render();};
+}
+api('/api/users').then(l=>{users=l;$('u').innerHTML=l.map(x=>`<option value="${x.user_id}">${x.name}</option>`).join('');$('u').onchange=render;render();}).catch(()=>{$('main').textContent='불러오지 못했습니다';});
+</script></body></html>

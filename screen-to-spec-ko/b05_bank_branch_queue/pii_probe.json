@@ -1,0 +1,270 @@
+{
+ "_prd": {
+  "use_fixture": true,
+  "display": "/board",
+  "setup": [
+   {"method": "POST", "path": "/api/tickets", "body": {"name": "{q_name}", "phone": "{q_phone}", "account": "{q_account}", "service": "fx"}, "save": {"q_id": "ticket_id", "q_num": "number"}},
+   {"method": "POST", "path": "/api/tickets", "body": {"name": "{p_name}", "phone": "{p_phone}", "account": "{p_account}", "service": "loan"}, "save": {"p_id": "ticket_id", "p_num": "number"}},
+   {"method": "POST", "path": "/api/counters/C4/next", "body": {"user": "t4"}},
+   {"method": "POST", "path": "/api/tickets/K-04/complete", "body": {"user": "t4"}},
+   {"method": "POST", "path": "/api/counters/C4/next", "body": {"user": "t4"}}
+  ],
+  "checks": [
+   {"name": "호출한 창구의 직원", "path": "/api/tickets/{q_id}?viewer=t4"},
+   {"name": "다른 창구의 직원", "path": "/api/tickets/{q_id}?viewer=t1"},
+   {"name": "지점장이 고객 상세", "path": "/api/tickets/{q_id}?viewer=m1"},
+   {"name": "지점장 현황", "path": "/api/manager/summary?viewer=m1"}
+  ]
+ },
+ "A1": {
+  "display": "/board.html",
+  "setup": [
+   {"method": "POST", "path": "/api/tickets", "body": {"name": "{q_name}", "phone": "{q_phone}", "account": "{q_account}", "service": "외환"}},
+   {"method": "POST", "path": "/api/tickets", "body": {"name": "{p_name}", "phone": "{p_phone}", "account": "{p_account}", "service": "대출"}},
+   {"loop": [
+     {"method": "POST", "path": "/api/teller/call", "body": {"counter": 3}, "headers": {"X-Staff-PIN": "1234"}, "save": {"vid": "id"}},
+     {"method": "POST", "path": "/api/teller/{vid}/noshow", "body": {"counter": 3}, "headers": {"X-Staff-PIN": "1234"}}
+   ], "path": "(loop)"}
+  ],
+  "checks": [
+   {"name": "호출한 창구의 직원", "path": "/api/teller/state?counter=3", "headers": {"X-Staff-PIN": "1234"}},
+   {"name": "다른 창구의 직원", "path": "/api/teller/state?counter=3", "headers": {"X-Staff-PIN": "1234"}, "note": "창구별 구분 없음 — 직원 PIN 하나"},
+   {"name": "지점장이 고객 상세", "path": "/api/teller/state?counter=3", "headers": {"X-Staff-PIN": "9999"}},
+   {"name": "(준비) 호출 고객 노쇼", "method": "POST", "path": "/api/teller/{vid}/noshow", "body": {"counter": 3}, "headers": {"X-Staff-PIN": "1234"}},
+   {"name": "지점장 현황", "path": "/api/manager/summary", "headers": {"X-Staff-PIN": "9999"}}
+  ]
+ },
+ "A2": {
+  "display": "/static/display.html",
+  "setup": [
+   {"method": "POST", "path": "/api/login", "body": {"role": "teller", "pin": "1111"}, "save": {"tt": "token"}},
+   {"method": "POST", "path": "/api/login", "body": {"role": "manager", "pin": "9999"}, "save": {"mt": "token"}},
+   {"method": "POST", "path": "/api/walkin", "body": {"name": "{q_name}", "phone": "{q_phone}", "account": "{q_account}", "service": "외환"}},
+   {"method": "POST", "path": "/api/walkin", "body": {"name": "{p_name}", "phone": "{p_phone}", "account": "{p_account}", "service": "대출"}},
+   {"loop": [
+     {"method": "POST", "path": "/api/teller/call", "body": {"counter": 4}, "headers": {"X-Token": "{tt}"}},
+     {"method": "POST", "path": "/api/teller/noshow", "body": {"counter": 4}, "headers": {"X-Token": "{tt}"}}
+   ], "path": "(loop)"}
+  ],
+  "checks": [
+   {"name": "호출한 창구의 직원", "path": "/api/teller/state?counter=4", "headers": {"X-Token": "{tt}"}},
+   {"name": "다른 창구의 직원", "path": "/api/teller/state?counter=4", "headers": {"X-Token": "{tt}"}, "note": "창구별 구분 없음 — 직원 PIN 하나"},
+   {"name": "지점장이 고객 상세", "path": "/api/teller/state?counter=4", "headers": {"X-Token": "{mt}"}},
+   {"name": "(준비) 호출 고객 노쇼", "method": "POST", "path": "/api/teller/noshow", "body": {"counter": 4}, "headers": {"X-Token": "{tt}"}},
+   {"name": "지점장 현황", "path": "/api/manager/summary", "headers": {"X-Token": "{mt}"}}
+  ]
+ },
+ "A3": {
+  "display": "/board",
+  "setup": [
+   {"method": "POST", "path": "/api/login", "body": {"role": "teller", "pin": "1111"}, "save": {"tt": "token"}},
+   {"method": "POST", "path": "/api/login", "body": {"role": "manager", "pin": "9999"}, "save": {"mt": "token"}},
+   {"method": "POST", "path": "/api/walkin", "body": {"name": "{q_name}", "phone": "{q_phone}", "account": "{q_account}", "service": "fx"}},
+   {"method": "POST", "path": "/api/walkin", "body": {"name": "{p_name}", "phone": "{p_phone}", "account": "{p_account}", "service": "loan"}},
+   {"loop": [
+     {"method": "POST", "path": "/api/teller/4/call", "headers": {"Authorization": "Bearer {tt}"}},
+     {"method": "POST", "path": "/api/teller/4/finish?outcome=noshow", "headers": {"Authorization": "Bearer {tt}"}}
+   ], "path": "(loop)"}
+  ],
+  "checks": [
+   {"name": "호출한 창구의 직원", "path": "/api/teller/4", "headers": {"Authorization": "Bearer {tt}"}},
+   {"name": "다른 창구의 직원", "path": "/api/teller/4", "headers": {"Authorization": "Bearer {tt}"}, "note": "창구별 구분 없음 — 직원 PIN 하나"},
+   {"name": "지점장이 고객 상세", "path": "/api/teller/4", "headers": {"Authorization": "Bearer {mt}"}},
+   {"name": "(준비) 호출 고객 노쇼", "method": "POST", "path": "/api/teller/4/finish?outcome=noshow", "headers": {"Authorization": "Bearer {tt}"}},
+   {"name": "지점장 현황", "path": "/api/manager/summary", "headers": {"Authorization": "Bearer {mt}"}}
+  ]
+ },
+ "D1": {
+  "display": "/display.html",
+  "setup": [
+   {"method": "POST", "path": "/api/staff/login", "body": {"counter": 4, "pin": "4444"}, "save": {"t4": "token"}},
+   {"method": "POST", "path": "/api/staff/login", "body": {"counter": 1, "pin": "1111"}, "save": {"t1": "token"}},
+   {"method": "POST", "path": "/api/manager/login", "body": {"pin": "9999"}, "save": {"mt": "token"}},
+   {"method": "POST", "path": "/api/walkin", "body": {"name": "{q_name}", "phone": "{q_phone}", "account": "{q_account}", "service": "외환"}},
+   {"method": "POST", "path": "/api/walkin", "body": {"name": "{p_name}", "phone": "{p_phone}", "account": "{p_account}", "service": "대출"}},
+   {"loop": [
+     {"method": "POST", "path": "/api/staff/call-next", "headers": {"Authorization": "Bearer {t4}"}},
+     {"path": "/api/staff/me", "headers": {"Authorization": "Bearer {t4}"}},
+     {"method": "POST", "path": "/api/staff/start", "headers": {"Authorization": "Bearer {t4}"}},
+     {"method": "POST", "path": "/api/staff/finish", "headers": {"Authorization": "Bearer {t4}"}}
+   ], "path": "(loop)"}
+  ],
+  "checks": [
+   {"name": "호출한 창구의 직원", "path": "/api/staff/me", "headers": {"Authorization": "Bearer {t4}"}},
+   {"name": "다른 창구의 직원", "path": "/api/staff/me", "headers": {"Authorization": "Bearer {t1}"}},
+   {"name": "지점장이 고객 상세", "path": "/api/staff/me", "headers": {"Authorization": "Bearer {mt}"}},
+   {"name": "지점장 현황", "path": "/api/manager/stats", "headers": {"Authorization": "Bearer {mt}"}}
+  ]
+ },
+ "D2": {
+  "display": "/display.html",
+  "setup": [
+   {"method": "POST", "path": "/api/login", "body": {"role": "counter", "counter": 4, "pin": "4444"}, "save": {"t4": "token"}},
+   {"method": "POST", "path": "/api/login", "body": {"role": "counter", "counter": 1, "pin": "1111"}, "save": {"t1": "token"}},
+   {"method": "POST", "path": "/api/login", "body": {"role": "manager", "pin": "9999"}, "save": {"mt": "token"}},
+   {"method": "POST", "path": "/api/walkin", "body": {"name": "{q_name}", "phone": "{q_phone}", "account": "{q_account}", "service": "외환"}},
+   {"method": "POST", "path": "/api/walkin", "body": {"name": "{p_name}", "phone": "{p_phone}", "account": "{p_account}", "service": "대출"}},
+   {"loop": [
+     {"method": "POST", "path": "/api/counter/call-next", "headers": {"X-Token": "{t4}"}},
+     {"path": "/api/counter/state", "headers": {"X-Token": "{t4}"}},
+     {"method": "POST", "path": "/api/counter/start", "headers": {"X-Token": "{t4}"}},
+     {"method": "POST", "path": "/api/counter/finish", "headers": {"X-Token": "{t4}"}}
+   ], "path": "(loop)"}
+  ],
+  "checks": [
+   {"name": "호출한 창구의 직원", "path": "/api/counter/state", "headers": {"X-Token": "{t4}"}},
+   {"name": "다른 창구의 직원", "path": "/api/counter/state", "headers": {"X-Token": "{t1}"}},
+   {"name": "지점장이 고객 상세", "path": "/api/counter/state", "headers": {"X-Token": "{mt}"}},
+   {"name": "지점장 현황", "path": "/api/manager/stats", "headers": {"X-Token": "{mt}"}}
+  ]
+ },
+ "D3": {
+  "display": "/display.html",
+  "setup": [
+   {"method": "POST", "path": "/api/login", "body": {"role": "teller", "window": 4, "pin": "4444"}, "save": {"t4": "token"}},
+   {"method": "POST", "path": "/api/login", "body": {"role": "teller", "window": 1, "pin": "1111"}, "save": {"t1": "token"}},
+   {"method": "POST", "path": "/api/login", "body": {"role": "manager", "pin": "9999"}, "save": {"mt": "token"}},
+   {"method": "POST", "path": "/api/tickets", "body": {"name": "{q_name}", "phone": "{q_phone}", "account": "{q_account}", "service": "fx"}},
+   {"method": "POST", "path": "/api/tickets", "body": {"name": "{p_name}", "phone": "{p_phone}", "account": "{p_account}", "service": "loan"}},
+   {"loop": [
+     {"method": "POST", "path": "/api/teller/call-next", "headers": {"Authorization": "Bearer {t4}"}},
+     {"path": "/api/teller/state", "headers": {"Authorization": "Bearer {t4}"}},
+     {"method": "POST", "path": "/api/teller/finish", "headers": {"Authorization": "Bearer {t4}"}}
+   ], "path": "(loop)"}
+  ],
+  "checks": [
+   {"name": "호출한 창구의 직원", "path": "/api/teller/state", "headers": {"Authorization": "Bearer {t4}"}},
+   {"name": "다른 창구의 직원", "path": "/api/teller/state", "headers": {"Authorization": "Bearer {t1}"}},
+   {"name": "지점장이 고객 상세", "path": "/api/teller/state", "headers": {"Authorization": "Bearer {mt}"}},
+   {"name": "지점장 현황", "path": "/api/manager/summary", "headers": {"Authorization": "Bearer {mt}"}}
+  ]
+ },
+ "A4": {
+  "display": "/board",
+  "setup": [
+   {"method": "POST", "path": "/api/login", "body": {"role": "staff", "pin": "1111"}, "save": {"tt": "token"}},
+   {"method": "POST", "path": "/api/login", "body": {"role": "manager", "pin": "9999"}, "save": {"mt": "token"}},
+   {"method": "POST", "path": "/api/tickets", "body": {"name": "{q_name}", "phone": "{q_phone}", "account": "{q_account}", "service": "외환"}},
+   {"method": "POST", "path": "/api/tickets", "body": {"name": "{p_name}", "phone": "{p_phone}", "account": "{p_account}", "service": "대출"}},
+   {"loop": [
+     {"method": "POST", "path": "/api/counter/4/next", "headers": {"X-Token": "{tt}"}},
+     {"method": "POST", "path": "/api/counter/4/noshow", "headers": {"X-Token": "{tt}"}}
+   ], "path": "(loop)"}
+  ],
+  "checks": [
+   {"name": "호출한 창구의 직원", "path": "/api/counter/4", "headers": {"X-Token": "{tt}"}},
+   {"name": "다른 창구의 직원", "path": "/api/counter/4", "headers": {"X-Token": "{tt}"}, "note": "창구별 구분 없음 — 직원 PIN 하나"},
+   {"name": "지점장이 고객 상세", "path": "/api/counter/4", "headers": {"X-Token": "{mt}"}},
+   {"name": "(준비) 호출 고객 노쇼", "method": "POST", "path": "/api/counter/4/noshow", "headers": {"X-Token": "{tt}"}},
+   {"name": "지점장 현황", "path": "/api/manager/summary", "headers": {"X-Token": "{mt}"}}
+  ]
+ },
+ "A5": {
+  "display": "/static/display.html",
+  "setup": [
+   {"method": "POST", "path": "/api/login", "body": {"role": "teller", "pin": "1111"}, "save": {"tt": "token"}},
+   {"method": "POST", "path": "/api/login", "body": {"role": "manager", "pin": "9999"}, "save": {"mt": "token"}},
+   {"method": "POST", "path": "/api/walkin", "body": {"name": "{q_name}", "phone": "{q_phone}", "account": "{q_account}", "service": "외환"}},
+   {"method": "POST", "path": "/api/walkin", "body": {"name": "{p_name}", "phone": "{p_phone}", "account": "{p_account}", "service": "대출"}},
+   {"loop": [
+     {"method": "POST", "path": "/api/teller/call", "body": {"counter": 4}, "headers": {"X-Token": "{tt}"}},
+     {"path": "/api/teller/state?counter=4", "headers": {"X-Token": "{tt}"}, "save": {"tid": "current.id"}},
+     {"method": "POST", "path": "/api/teller/{tid}/action", "body": {"action": "noshow"}, "headers": {"X-Token": "{tt}"}},
+     {"method": "POST", "path": "/api/teller/{tid}/action", "body": {"action": "done"}, "headers": {"X-Token": "{tt}"}}
+   ], "path": "(loop)"}
+  ],
+  "checks": [
+   {"name": "호출한 창구의 직원", "path": "/api/teller/state?counter=4", "headers": {"X-Token": "{tt}"}},
+   {"name": "다른 창구의 직원", "path": "/api/teller/state?counter=4", "headers": {"X-Token": "{tt}"}, "note": "창구별 구분 없음 — 직원 PIN 하나"},
+   {"name": "지점장이 고객 상세", "path": "/api/teller/state?counter=4", "headers": {"X-Token": "{mt}"}},
+   {"name": "(준비) 호출 고객 노쇼", "method": "POST", "path": "/api/teller/{tid}/action", "body": {"action": "noshow"}, "headers": {"X-Token": "{tt}"}},
+   {"name": "지점장 현황", "path": "/api/manager/summary", "headers": {"X-Token": "{mt}"}}
+  ]
+ },
+ "A6": {
+  "display": "/display.html",
+  "setup": [
+   {"method": "POST", "path": "/api/walkin", "body": {"name": "{q_name}", "phone": "{q_phone}", "account": "{q_account}", "service": "외환"}},
+   {"method": "POST", "path": "/api/walkin", "body": {"name": "{p_name}", "phone": "{p_phone}", "account": "{p_account}", "service": "대출"}},
+   {"loop": [
+     {"method": "POST", "path": "/api/teller/call", "body": {"counter": 4}, "headers": {"X-Pin": "1111"}},
+     {"method": "POST", "path": "/api/teller/noshow", "body": {"counter": 4}, "headers": {"X-Pin": "1111"}},
+     {"method": "POST", "path": "/api/teller/complete", "body": {"counter": 4}, "headers": {"X-Pin": "1111"}}
+   ], "path": "(loop)"}
+  ],
+  "checks": [
+   {"name": "호출한 창구의 직원", "path": "/api/teller/state?counter=4", "headers": {"X-Pin": "1111"}},
+   {"name": "다른 창구의 직원", "path": "/api/teller/state?counter=4", "headers": {"X-Pin": "1111"}, "note": "창구별 구분 없음 — 직원 PIN 하나"},
+   {"name": "지점장이 고객 상세", "path": "/api/teller/state?counter=4", "headers": {"X-Pin": "9999"}},
+   {"name": "(준비) 호출 고객 노쇼", "method": "POST", "path": "/api/teller/noshow", "body": {"counter": 4}, "headers": {"X-Pin": "1111"}},
+   {"name": "지점장 현황", "path": "/api/manager/stats", "headers": {"X-Pin": "9999"}}
+  ]
+ },
+ "D4": {
+  "subdir": "app",
+  "display": "/display.html",
+  "setup": [
+   {"method": "POST", "path": "/api/login", "body": {"role": "teller", "window": 4, "pin": "1114"}, "save": {"t4": "token"}},
+   {"method": "POST", "path": "/api/login", "body": {"role": "teller", "window": 1, "pin": "1111"}, "save": {"t1": "token"}},
+   {"method": "POST", "path": "/api/login", "body": {"role": "manager", "pin": "9999"}, "save": {"mt": "token"}},
+   {"method": "POST", "path": "/api/tickets", "body": {"name": "{q_name}", "phone": "{q_phone}", "account": "{q_account}", "service": "fx"}},
+   {"method": "POST", "path": "/api/tickets", "body": {"name": "{p_name}", "phone": "{p_phone}", "account": "{p_account}", "service": "loan"}},
+   {"loop": [
+     {"method": "POST", "path": "/api/teller/call-next", "headers": {"Authorization": "Bearer {t4}"}},
+     {"path": "/api/teller/me", "headers": {"Authorization": "Bearer {t4}"}},
+     {"method": "POST", "path": "/api/teller/serve", "headers": {"Authorization": "Bearer {t4}"}},
+     {"method": "POST", "path": "/api/teller/done", "headers": {"Authorization": "Bearer {t4}"}}
+   ], "path": "(loop)"}
+  ],
+  "checks": [
+   {"name": "호출한 창구의 직원", "path": "/api/teller/me", "headers": {"Authorization": "Bearer {t4}"}},
+   {"name": "다른 창구의 직원", "path": "/api/teller/me", "headers": {"Authorization": "Bearer {t1}"}},
+   {"name": "지점장이 고객 상세", "path": "/api/teller/me", "headers": {"Authorization": "Bearer {mt}"}},
+   {"name": "지점장 현황", "path": "/api/manager/stats", "headers": {"Authorization": "Bearer {mt}"}}
+  ]
+ },
+ "D5": {
+  "display": "/display",
+  "setup": [
+   {"method": "POST", "path": "/api/login", "body": {"role": "teller", "window": 4, "pin": "4444"}, "save": {"t4": "token"}},
+   {"method": "POST", "path": "/api/login", "body": {"role": "teller", "window": 1, "pin": "1111"}, "save": {"t1": "token"}},
+   {"method": "POST", "path": "/api/login", "body": {"role": "manager", "pin": "9999"}, "save": {"mt": "token"}},
+   {"method": "POST", "path": "/api/tickets", "body": {"name": "{q_name}", "phone": "{q_phone}", "account": "{q_account}", "service": "fx"}},
+   {"method": "POST", "path": "/api/tickets", "body": {"name": "{p_name}", "phone": "{p_phone}", "account": "{p_account}", "service": "loan"}},
+   {"loop": [
+     {"method": "POST", "path": "/api/teller/call-next", "headers": {"Authorization": "Bearer {t4}"}},
+     {"path": "/api/teller/state", "headers": {"Authorization": "Bearer {t4}"}},
+     {"method": "POST", "path": "/api/teller/start", "headers": {"Authorization": "Bearer {t4}"}},
+     {"method": "POST", "path": "/api/teller/finish", "headers": {"Authorization": "Bearer {t4}"}}
+   ], "path": "(loop)"}
+  ],
+  "checks": [
+   {"name": "호출한 창구의 직원", "path": "/api/teller/state", "headers": {"Authorization": "Bearer {t4}"}},
+   {"name": "다른 창구의 직원", "path": "/api/teller/state", "headers": {"Authorization": "Bearer {t1}"}},
+   {"name": "지점장이 고객 상세", "path": "/api/teller/state", "headers": {"Authorization": "Bearer {mt}"}},
+   {"name": "지점장 현황", "path": "/api/manager/summary", "headers": {"Authorization": "Bearer {mt}"}}
+  ]
+ },
+ "D6": {
+  "display": "/display",
+  "setup": [
+   {"method": "POST", "path": "/api/login", "body": {"role": "teller", "window": 4, "pin": "4444"}, "save": {"t4": "token"}},
+   {"method": "POST", "path": "/api/login", "body": {"role": "teller", "window": 1, "pin": "1111"}, "save": {"t1": "token"}},
+   {"method": "POST", "path": "/api/login", "body": {"role": "manager", "pin": "9999"}, "save": {"mt": "token"}},
+   {"method": "POST", "path": "/api/tickets", "body": {"name": "{q_name}", "phone": "{q_phone}", "account": "{q_account}", "work_type": "fx"}},
+   {"method": "POST", "path": "/api/tickets", "body": {"name": "{p_name}", "phone": "{p_phone}", "account": "{p_account}", "work_type": "loan"}},
+   {"loop": [
+     {"method": "POST", "path": "/api/teller/call-next", "headers": {"X-Token": "{t4}"}},
+     {"path": "/api/teller/state", "headers": {"X-Token": "{t4}"}, "save": {"tid": "current.id"}},
+     {"method": "POST", "path": "/api/teller/{tid}/start", "headers": {"X-Token": "{t4}"}},
+     {"method": "POST", "path": "/api/teller/{tid}/complete", "headers": {"X-Token": "{t4}"}}
+   ], "path": "(loop)"}
+  ],
+  "checks": [
+   {"name": "호출한 창구의 직원", "path": "/api/teller/state", "headers": {"X-Token": "{t4}"}},
+   {"name": "다른 창구의 직원", "path": "/api/teller/state", "headers": {"X-Token": "{t1}"}},
+   {"name": "지점장이 고객 상세", "path": "/api/teller/state", "headers": {"X-Token": "{mt}"}},
+   {"name": "지점장 현황", "path": "/api/manager/summary", "headers": {"X-Token": "{mt}"}}
+  ]
+ }
+}

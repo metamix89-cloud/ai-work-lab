@@ -1,0 +1,27 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>대기 화면</title>
+<link rel="stylesheet" href="common.css">
+<style>
+body{background:#06231a;color:#fff}header{font-size:32px}main{max-width:1400px}
+.row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.win{background:#0f3d2c;border-radius:14px;padding:18px;text-align:center}
+.win .c{font-size:28px;color:#9fd8bd}.win .n{font-size:64px;font-weight:800}.win .nm{font-size:28px}
+.win.on{background:#f5c518;color:#111}.win.on .c{color:#4b3a00}.win.idle .n{color:#4c7a66}
+.wl{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.w{background:#123f31;border-radius:10px;padding:12px 16px;font-size:26px;display:flex;justify-content:space-between;gap:8px}
+.w small{color:#9fd8bd}h2{font-size:30px}
+</style>
+<header>두둑은행 · 대기 현황</header>
+<main><h2>호출 중</h2><div class="row" id="calling"></div><h2>대기 순서</h2><div class="wl" id="wl"></div></main>
+<script src="common.js"></script>
+<script>
+async function tick() {
+  try {
+    const d = await api('/api/display');
+    $('#calling').replaceChildren(...d.calling.map(w => h('div', { class: 'win ' + (w.number ? 'on' : 'idle') },
+      h('div', { class: 'c' }, `창구 ${w.counter}`), h('div', { class: 'n' }, w.number || '—'), h('div', { class: 'nm' }, w.name || ' '))));
+    $('#wl').replaceChildren(...d.waiting.map(w => h('div', { class: 'w' },
+      h('b', {}, w.number), h('span', {}, w.name), h('small', {}, `창구 ${w.counters.join('·')}`))));
+  } catch { /* 다음 주기에 재시도 */ }
+}
+tick(); setInterval(tick, 3000);
+</script>

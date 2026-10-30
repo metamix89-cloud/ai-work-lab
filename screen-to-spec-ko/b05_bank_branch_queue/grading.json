@@ -1,0 +1,15 @@
+{
+ "allowed_routes": ["/", "/board", "/api/users", "/api/board", "/api/tickets", "/api/tickets/{ticket_id}", "/api/tickets/{ticket_id}/checkin", "/api/tickets/{ticket_id}/complete",
+                    "/api/counters/{counter_id}/queue", "/api/counters/{counter_id}/next", "/api/manager/summary", "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "로그인 · 회원가입": "/api/login|/api/auth|password|비밀번호|회원가입",
+  "금융 거래 · 계좌 조회": "이체|송금|잔액|balance|/api/accounts",
+  "문자 · 알림": "sms|문자 발송|notify|notification|send_message",
+  "보류 복귀": "/recall|/resume|/restore|재호출|복귀",
+  "예약 변경 · 취소": "/cancel|예약 취소|예약 변경",
+  "민원 · 점검표 · 교육": "/api/complaints|/api/checklists?|/api/training|민원 접수",
+  "통계 그래프": "chart\\.js|<canvas|/api/stats",
+  "편집 화면": "/api/admin|고객 등록|직원 등록|@app\\.(put|patch|delete)\\(\"/api/(users|counters)",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}

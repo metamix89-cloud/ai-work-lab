@@ -1,0 +1,21 @@
+INFO:     Started server process [24740]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+[데모] 예약 접수 코드 902071 (L006, 최*진)
+[데모] 예약 접수 코드 923551 (D010, 정*은)
+[데모] 예약 접수 코드 622774 (F006, 강*우)
+INFO:     127.0.0.1:7465 - "GET /api/board HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7466 - "POST /api/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7467 - "POST /api/teller/1/call HTTP/1.1" 409 Conflict
+INFO:     127.0.0.1:7468 - "POST /api/teller/1/finish HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7469 - "POST /api/teller/1/call HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7470 - "GET /api/manager/summary HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:7471 - "POST /api/walkin HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:7472 - "POST /api/walkin HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:7473 - "POST /api/walkin HTTP/1.1" 201 Created
+INFO:     127.0.0.1:7474 - "POST /api/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7475 - "GET /api/manager/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7476 - "POST /api/login HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:7477 - "POST /api/reservations HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:7478 - "POST /api/checkin HTTP/1.1" 404 Not Found

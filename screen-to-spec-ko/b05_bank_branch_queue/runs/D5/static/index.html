@@ -1,0 +1,50 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>두둑은행 방문 예약</title><link rel="stylesheet" href="/static/common.css"></head><body>
+<header>두둑은행 지점 <span><a href="/display">대기 화면</a><a href="/teller">창구</a><a href="/manager">지점장</a></span></header>
+<main>
+<div class="row">
+ <div class="card"><h2>번호표 뽑기 (현장)</h2>
+  <form id="walk"></form><div class="err" id="e-walk"></div><div id="r-walk"></div></div>
+ <div class="card"><h2>방문 예약</h2>
+  <form id="resv"></form><div class="err" id="e-resv"></div><div id="r-resv"></div></div>
+</div>
+<div class="card"><h2>예약 고객 도착 확인</h2>
+ <p style="margin:0;color:#667;font-size:14px">예약 시각 앞뒤 10분 안에 접수하면 우선 호출됩니다.</p>
+ <form id="chk"><label>예약번호</label><input name="code" maxlength="6" required style="text-transform:uppercase">
+ <label>전화번호</label><input name="phone" inputmode="tel" required><button>도착 접수</button></form>
+ <div class="err" id="e-chk"></div><div id="r-chk"></div></div>
+</main>
+<script src="/static/common.js"></script>
+<script>
+function fields(form, withTime) {
+  const sel = el('select', {name: 'service'});
+  [['deposit', '예금'], ['loan', '대출'], ['fx', '외환']].forEach(([v, t]) => sel.append(el('option', {value: v}, t)));
+  form.append(
+    el('label', {}, '이름'), el('input', {name: 'name', required: true, maxLength: 20}),
+    el('label', {}, '전화번호'), el('input', {name: 'phone', required: true, inputMode: 'tel', placeholder: '010-0000-0000'}),
+    el('label', {}, '계좌번호'), el('input', {name: 'account', required: true, inputMode: 'numeric', autocomplete: 'off'}),
+    el('label', {}, '업무 종류'), sel);
+  if (withTime) form.append(el('label', {}, '예약 일시'), el('input', {name: 'when', type: 'datetime-local', required: true}));
+  form.append(el('button', {}, withTime ? '예약하기' : '번호표 받기'));
+}
+fields(document.getElementById('walk'), false);
+fields(document.getElementById('resv'), true);
+
+async function submit(ev, id, path, build, render) {
+  ev.preventDefault();
+  const f = ev.target, E = document.getElementById('e-' + id), R = document.getElementById('r-' + id);
+  E.textContent = ''; R.replaceChildren();
+  try { R.append(render(await api(path, {body: build(Object.fromEntries(new FormData(f)))}))); f.reset(); }
+  catch (e) { E.textContent = e.message; }
+}
+const ticketBox = d => el('div', {class: 'ok'}, '번호표 ', el('span', {class: 'big'}, d.ticket_no),
+  el('div', {}, `${d.window} · 내 앞 ${d.ahead}명` + (d.priority ? ' · 예약 우선 호출' : '')),
+  el('div', {}, '화면에 번호가 뜨면 해당 창구로 오세요.'));
+document.getElementById('walk').onsubmit = ev => submit(ev, 'walk', '/api/tickets', x => x, ticketBox);
+document.getElementById('resv').onsubmit = ev => submit(ev, 'resv', '/api/reservations',
+  x => ({name: x.name, phone: x.phone, account: x.account, service: x.service,
+         reserved_at: Math.floor(new Date(x.when).getTime() / 1000)}),
+  d => el('div', {class: 'ok'}, '예약 완료! 예약번호 ', el('span', {class: 'big'}, d.code),
+         el('div', {}, `${d.service} · ${fmtTime(d.reserved_at)} — 방문 시 이 번호와 전화번호로 도착 접수하세요.`)));
+document.getElementById('chk').onsubmit = ev => submit(ev, 'chk', '/api/checkin', x => x, ticketBox);
+</script></body></html>

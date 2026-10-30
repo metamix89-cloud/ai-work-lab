@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>방문 예약 · 대기 현황판 — 직원</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; padding: 24px; background: #f4f6f8; color: #1d2733; }
+  h1 { margin: 0 0 16px; font-size: 22px; }
+  .bar { margin-bottom: 12px; }
+  select, button { font-size: 15px; padding: 6px 10px; }
+  .box { background: #fff; border-radius: 8px; padding: 16px; margin-top: 12px; }
+  h2 { margin: 0 0 8px; font-size: 17px; }
+  .item { padding: 6px 0; border-bottom: 1px solid #e3e8ee; }
+  .item b { margin-right: 10px; }
+  [data-testid="message"] { min-height: 22px; margin-top: 12px; color: #b3261e; }
+  #error { display: none; background: #fdecea; padding: 12px; border-radius: 8px; margin-top: 12px; }
+  .empty { color: #7a8794; }
+</style>
+</head>
+<body>
+<h1>방문 예약 · 대기 현황판</h1>
+<div class="bar">
+  사용자
+  <select data-testid="user"></select>
+  <a href="/board" style="margin-left:16px">대기 화면 보기</a>
+</div>
+<div data-testid="message"></div>
+<div id="error">불러오지 못했습니다 <button id="retry" type="button">다시 시도</button></div>
+<div id="teller">
+  <div class="box">
+    <h2>내 창구 대기 줄</h2>
+    <div id="queue"></div>
+    <button type="button" data-testid="next" style="margin-top:12px">다음 번호 호출</button>
+  </div>
+  <div class="box" id="detail-box" style="display:none">
+    <h2>호출한 고객</h2>
+    <div>이름: <span data-testid="detail-name"></span></div>
+    <div>전화번호: <span data-testid="detail-phone"></span></div>
+    <div>계좌 끝 4자리: <span data-testid="detail-account"></span></div>
+    <div>업무: <span id="detail-service"></span></div>
+    <button type="button" data-testid="complete" style="margin-top:12px">완료</button>
+  </div>
+</div>
+<div id="manager">
+  <div class="box" data-testid="summary"></div>
+</div>
+<script>
+const SERVICE = { deposit: "예금", loan: "대출", fx: "외환" };
+const $ = function (s) { return document.querySelector(s); };
+const calledByUser = {};
+let users = [];
+// 역할에 맞지 않는 영역은 숨기지 않고 문서에서 뺀다
+const tellerEl = $("#teller"), managerEl = $("#manager"), scripts = document.querySelector("script");
+
+function current() {
+  const id = $('[data-testid="user"]').value;
+  return users.find(function (u) { return u.user_id === id; });
+}
+function say(t) { $('[data-testid="message"]').textContent = t || ""; }
+function fail(on) { $("#error").style.display = on ? "block" : "none"; }
+
+async function api(method, url, body) {
+  const r = await fetch(url, {
+    method: method,
+    headers: body ? { "Content-Type": "application/json" } : {},
+    body: body ? JSON.stringify(body) : undefined
+  });
+  let j = null;
+  try { j = await r.json(); } catch (e) {}
+  if (!r.ok) {
+    const err = new Error((j && j.detail) || "오류");
+    err.rejected = true;
+    throw err;
+  }
+  return j;
+}
+
+async function showQueue(u) {
+  const q = await api("GET", "/api/counters/" + u.counter_id + "/queue?viewer=" + encodeURIComponent(u.user_id));
+  const box = $("#queue");
+  box.textContent = "";
+  if (!q.length) {
+    const e = document.createElement("div");
+    e.className = "empty";
+    e.textContent = "대기 고객 없음";
+    box.appendChild(e);
+  }
+  q.forEach(function (t) {
+    const d = document.createElement("div");
+    d.className = "item";
+    d.setAttribute("data-testid", "ticket");
+    d.setAttribute("data-id", t.ticket_id);
+    d.textContent = t.number + "  " + t.masked_name + "  " + (SERVICE[t.service] || "") + (t.priority ? "  [우선]" : "");
+    box.appendChild(d);
+  });
+}
+async function showDetail(u) {
+  const id = calledByUser[u.user_id];
+  if (!id) { $("#detail-box").style.display = "none"; return; }
+  const d = await api("GET", "/api/tickets/" + id + "?viewer=" + encodeURIComponent(u.user_id));
+  $('[data-testid="detail-name"]').textContent = d.name;
+  $('[data-testid="detail-phone"]').textContent = d.phone;
+  $('[data-testid="detail-account"]').textContent = d.account_last4;
+  $("#detail-service").textContent = SERVICE[d.service] || "";
+  $("#detail-box").style.display = "block";
+}
+async function render() {
+  const u = current();
+  fail(false);
+  tellerEl.remove();
+  managerEl.remove();
+  if (!u) return;
+  try {
+    if (u.role === "teller") {
+      document.body.insertBefore(tellerEl, scripts);
+      await showQueue(u);
+      await showDetail(u);
+    } else {
+      const s = await api("GET", "/api/manager/summary?viewer=" + encodeURIComponent(u.user_id));
+      document.body.insertBefore(managerEl, scripts);
+      const box = $('[data-testid="summary"]');
+      box.textContent = "";
+      const lines = [
+        "대기 — 예금 " + s.waiting.deposit + " · 대출 " + s.waiting.loan + " · 외환 " + s.waiting.fx,
+        "보류 " + s.held,
+        "완료 " + s.done
+      ].concat(s.counters.map(function (c) {
+        return c.counter_id + " (" + (SERVICE[c.service] || "") + ") 호출 번호: " + (c.number === null ? "없음" : c.number);
+      }));
+      lines.forEach(function (t) {
+        const d = document.createElement("div");
+        d.className = "item";
+        d.textContent = t;
+        box.appendChild(d);
+      });
+    }
+  } catch (e) {
+    if (e.rejected) say(e.message); else fail(true);
+  }
+}
+async function act(fn) {
+  say("");
+  try { await fn(); } catch (e) { if (e.rejected) say(e.message); else fail(true); return; }
+  await render();
+}
+$('[data-testid="next"]').addEventListener("click", function () {
+  const u = current();
+  act(async function () {
+    const r = await api("POST", "/api/counters/" + u.counter_id + "/next", { user: u.user_id });
+    calledByUser[u.user_id] = r.called ? r.called.ticket_id : null;
+    if (!r.called) say("대기 고객이 없습니다");
+  });
+});
+$('[data-testid="complete"]').addEventListener("click", function () {
+  const u = current();
+  act(async function () {
+    await api("POST", "/api/tickets/" + calledByUser[u.user_id] + "/complete", { user: u.user_id });
+    calledByUser[u.user_id] = null;
+  });
+});
+$('[data-testid="user"]').addEventListener("change", function () { say(""); render(); });
+$("#retry").addEventListener("click", init);
+
+async function init() {
+  fail(false);
+  try {
+    users = await api("GET", "/api/users");
+    const sel = $('[data-testid="user"]');
+    sel.textContent = "";
+    users.forEach(function (u) {
+      const o = document.createElement("option");
+      o.value = u.user_id;
+      o.textContent = u.name + (u.role === "manager" ? " (지점장)" : " (" + u.counter_id + ")");
+      sel.appendChild(o);
+    });
+    await render();
+  } catch (e) {
+    fail(true);
+  }
+}
+init();
+</script>
+</body>
+</html>

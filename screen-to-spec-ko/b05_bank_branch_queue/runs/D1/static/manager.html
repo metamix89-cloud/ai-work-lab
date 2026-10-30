@@ -1,0 +1,21 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>지점장 현황</title><link rel="stylesheet" href="/style.css"></head><body>
+<header>지점장 현황 <nav style="display:inline"><a href="/">처음</a></nav></header><main>
+<div class="card" id="login"><h2>로그인</h2><label>PIN</label><input id="pin" type="password"><button id="bLogin">로그인</button><div id="m0"></div></div>
+<div id="work" hidden><div class="card"><h2>오늘 현황</h2><div class="grid" id="g"></div></div>
+<div class="card"><h2>업무별 대기</h2><div class="grid" id="s"></div></div></div></main>
+<script src="/common.js"></script><script>
+let tok = sessionStorage.getItem("mt");
+bLogin.onclick = async () => { try {
+  tok = (await api("/api/manager/login", "POST", {pin: pin.value})).token; sessionStorage.setItem("mt", tok); pin.value = ""; start();
+} catch (e) { say(m0, e.message) } };
+const stat = (k, v) => { const d = el("div", null, "stat"); d.append(el("b", v), el("span", k)); return d; };
+async function refresh() { try {
+  const d = await api("/api/manager/stats", "GET", null, tok), b = d.by_status;
+  g.replaceChildren(stat("대기", b.waiting), stat("호출중", b.called), stat("응대중", b.serving), stat("완료", b.done),
+    stat("보류", b.hold), stat("예약 대기(미도착)", b.reserved), stat("노쇼", d.noshow), stat("노쇼율", d.noshow_rate + "%"));
+  s.replaceChildren(...Object.entries(d.waiting_by_service).map(([k, v]) => stat(k, v)));
+} catch (e) { if (e.status === 401) { sessionStorage.removeItem("mt"); login.hidden = false; work.hidden = true; } } }
+function start() { login.hidden = true; work.hidden = false; refresh(); }
+if (tok) start(); setInterval(() => tok && refresh(), 4000);
+</script></body></html>

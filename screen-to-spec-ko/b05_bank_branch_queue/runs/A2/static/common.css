@@ -1,0 +1,22 @@
+:root{--g:#0a7d4f;--gd:#065a39;--bg:#f3f6f4;--line:#d8e0db;--warn:#c0392b}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif;background:var(--bg);color:#1c2a23}
+header{background:var(--g);color:#fff;padding:14px 24px;display:flex;align-items:center;gap:16px}
+header h1{margin:0;font-size:20px}
+nav{display:flex;gap:14px}
+header a{color:#fff;opacity:.85;text-decoration:none;font-size:14px}header a:hover{opacity:1}
+main{max-width:960px;margin:24px auto;padding:0 16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px}
+label{display:block;font-size:13px;margin:12px 0 4px;color:#4a5a52}
+input,select,button{font:inherit;padding:10px 12px;border-radius:8px;border:1px solid #b9c6bf;width:100%}
+button{background:var(--g);color:#fff;border:0;cursor:pointer;font-weight:700;margin-top:14px}
+button:hover{background:var(--gd)}
+button.bad{background:var(--warn)}button:disabled{opacity:.5;cursor:not-allowed}
+.tabs{display:flex;gap:8px;margin-bottom:12px}.tabs button{margin:0;background:#fff;color:#333;border:1px solid var(--line)}
+.tabs button.on{background:var(--g);color:#fff}
+.msg{margin-top:12px;padding:12px;border-radius:8px;font-size:14px}.ok{background:#e3f4ea}.err{background:#fbe4e1;color:#8a1f12}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:8px;border-bottom:1px solid var(--line);text-align:left}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;background:#e8eeea}
+.tag.r{background:#fff1cc;color:#7a5600}.grid{display:grid;gap:12px}.g2{grid-template-columns:1fr 1fr}.g4{grid-template-columns:repeat(4,1fr)}
+.stat b{display:block;font-size:30px}.stat span{font-size:13px;color:#5b6b63}
+.notice{font-size:12px;color:#6b7b73;margin-top:8px}

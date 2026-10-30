@@ -1,0 +1,22 @@
+<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>창구</title><link rel=stylesheet href=/static/common.css>
+<header><h2>창구 직원</h2><a href=/>처음으로</a></header>
+<main><div class=card>창구 <select id=ctr style="width:auto"><option>1</option><option>2</option><option>3</option><option>4</option></select>
+<span id=svc></span></div>
+<div class=card><h3>현재 고객</h3><div id=cur>없음</div>
+<button id=call>다음 고객 호출</button> <button id=done class=sec>처리 완료</button> <button id=ns class=warn>호출했으나 미응답(노쇼)</button>
+<div class=msg id=msg></div></div>
+<div class=card><h3>대기 (우선순위 순)</h3><table id=q></table></div></main>
+<script src=/static/common.js></script><script>
+const c=()=>$('#ctr').value;
+async function load(){try{const s=await api('/api/teller/'+c());$('#svc').textContent='담당: '+s.services.join(', ');
+  const cur=$('#cur');cur.replaceChildren();
+  if(s.current){const x=s.current;const t=el('table');[['번호표',x.number],['구분',x.kind],['업무',x.service],['이름',x.name],['전화',x.phone],['계좌',x.account],['예약시각',x.slot_at||'-']]
+    .forEach(([k,v])=>t.append(el('tr',{},el('th',{},k),el('td',{},v))));cur.append(t)}else cur.textContent='없음';
+  $('#call').disabled=!!s.current;$('#done').disabled=$('#ns').disabled=!s.current;
+  $('#q').replaceChildren(...s.waiting.map((w,i)=>el('tr',{},el('td',{},String(i+1)),el('td',{},w.number),el('td',{},w.service),
+    el('td',{},el('span',{className:'tag'+(w.reservation?' r':'')},w.reservation?'예약':'현장')))))}
+  catch(e){if(e.status===401){sessionStorage.removeItem('tok');if(await login('teller'))load()}else say($('#msg'),e.message,false)}}
+async function act(p){try{await api(`/api/teller/${c()}/${p}`,{method:'POST'});$('#msg').className='msg'}catch(e){say($('#msg'),e.message,false)}load()}
+$('#call').onclick=()=>act('call');$('#done').onclick=()=>act('finish');$('#ns').onclick=()=>confirm('노쇼 처리할까요?')&&act('finish?outcome=noshow');
+$('#ctr').onchange=load;load();setInterval(load,4000);
+</script>

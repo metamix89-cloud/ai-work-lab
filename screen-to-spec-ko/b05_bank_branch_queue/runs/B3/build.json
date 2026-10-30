@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 182411,
+ "num_turns": 14,
+ "total_cost_usd": 0.5194143999999999,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 24,
+  "cache_creation_input_tokens": 53569,
+  "cache_read_input_tokens": 610304,
+  "output_tokens": 24406,
+  "output_tokens_details": {
+   "thinking_tokens": 4587
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 53569,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 990,
+    "cache_read_input_tokens": 66368,
+    "cache_creation_input_tokens": 234,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 234
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD대로 웹앱을 만들었습니다. API 9개와 `/board`, `/` 화면은 모두 구현했습니다.\n\n`tests/test_dod.py`는 폴더에 없어서 T1~T9를 돌리지 못했고, 브라우저로 화면을 열어 보지도 않았습니다. 대신 서버를 띄워 API를 직접 호출했습니다. 확인한 결과는 아래와 같습니다.\n- **번호표·예약:** 번호표는 201로 최댓값+1 번호를 받고, 예약은 `reserved` 상태입니다. 업무 종류·전화번호가 틀리면 400입니다.\n- **대기 화면 응답:** `김*수`, `이*`, `남**수`처럼 가린 이름만 나가고 업무 종류는 없습니다.\n- **예약 우선:** 10:00 예약을 10:11에 도착 처리하면 일반으로 줄을 서고, 다시 도착 처리하면 409입니다.\n- **호출 순서:** 예약 우선 고객이 대기 줄 맨 앞에 옵니다.\n- **보류:** 호출 후 2분은 409, 3분이면 앞 고객이 보류되고 다음 번호가 호출됩니다.\n- **권한:** 호출한 창구 직원만 고객 상세를 볼 수 있습니다. 다른 창구 직원과 지점장은 403입니다. 상세 응답에는 계좌 끝 4자리만 있습니다.\n- **지점장 현황:** 지점장만 볼 수 있고, 직원은 403입니다.\n- **화면:** `/`와 `/board`는 둘 다 200으로 열립니다.\n\n파일은 이 폴더에 있습니다.\n- `main.py`: FastAPI 서버. 시작할 때마다 `seed/` CSV로 `bank.db`를 새로 만듭니다.\n- `seed/`: 직원 4명, 지점장 1명, 창구 4개, 번호표 10개.\n- `static/index.html`, `static/board.html`: 순수 HTML/JS 화면 두 개.\n\n실행은 이 폴더에서 `python -m uvicorn main:app --port 8000`입니다.\n\n`/board`의 `serving`·`waiting`은 PRD에 항목 단위인지 영역 단위인지 적혀 있지 않아, 영역 전체를 감싸는 요소로 만들었습니다. 테스트가 항목마다 하나씩 찾는다면 이 부분을 바꿔야 합니다.\n\n`/`에서는 호출한 고객을 새로 고침 뒤에도 기억하려고 브라우저 `sessionStorage`에 저장합니다. 서버 응답에는 이 정보가 없기 때문입니다.\n\n확인용으로 띄운 서버(8765 포트)는 끝낸 상태입니다.",
+ "wall_s": 191.7
+}

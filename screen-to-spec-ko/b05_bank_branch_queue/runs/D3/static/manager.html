@@ -1,0 +1,20 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>지점장 - 두둑은행</title><link rel="stylesheet" href="/style.css"></head><body>
+<header>두둑은행 · 지점장 현황 (고객 상세 비공개)</header><main>
+<div class="card" id="login"><h2>로그인</h2><label>PIN</label><input id="pin" type="password" autocomplete="off"><button id="lg">로그인</button><div id="e" class="msg err" hidden></div></div>
+<div id="dash" hidden><div class="card"><h2>전체</h2><div class="grid" id="top"></div></div>
+<div class="card"><h2>업무별 오늘 현황</h2><table><thead><tr><th>업무</th><th>대기</th><th>호출</th><th>응대</th><th>완료</th><th>보류(노쇼)</th></tr></thead><tbody id="sv"></tbody></table></div>
+<div class="card"><h2>창구별</h2><table><tbody id="wn"></tbody></table></div></div></main>
+<script src="/common.js"></script><script>
+let tok=sessionStorage.getItem("mt");
+$("lg").onclick=async()=>{try{const r=await api("/api/login",{method:"POST",body:JSON.stringify({role:"manager",pin:$("pin").value})});tok=r.token;sessionStorage.setItem("mt",tok);boot()}catch(x){say("e",x.message,1)}};
+function stat(k,v){const d=el("div","","stat");d.append(el("b",String(v)),el("span",k,"muted"));return d}
+async function load(){try{const s=await api("/api/manager/summary",{},tok);
+ $("top").replaceChildren(stat("현재 대기",s.total_waiting),stat("예약 우선 대기",s.priority_waiting),stat("최장 대기(분)",s.longest_wait_min),
+  stat("오늘 예약",s.reservations_today),stat("예약 도착",s.reservations_arrived),stat("예약 노쇼",s.reservation_no_show),stat("호출 후 보류",s.call_no_show),stat("현장 발급",s.walkins_today));
+ const b=$("sv");b.replaceChildren();Object.values(s.services).forEach(v=>{const r=el("tr");[v.label,v.waiting,v.called,v.serving,v.done,v.hold].forEach(x=>r.append(el("td",String(x))));b.append(r)});
+ const w=$("wn");w.replaceChildren();Object.entries(s.windows).forEach(([k,v])=>{const r=el("tr");["창구 "+k,v.service,v.busy?"응대/호출 중":"대기","완료 "+v.done+"건"].forEach(x=>r.append(el("td",x)));w.append(r)})
+}catch(x){if(x.status===401||x.status===403){sessionStorage.removeItem("mt");tok=null;$("login").hidden=false;$("dash").hidden=true}}}
+function boot(){if(!tok)return;$("login").hidden=true;$("dash").hidden=false;load()}
+boot();setInterval(()=>tok&&load(),5000);
+</script></body></html>

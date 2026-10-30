@@ -1,0 +1,59 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>두둑은행 방문 예약</title><link rel="stylesheet" href="common.css"></head><body>
+<header><h1>두둑은행 지점 · 방문 예약 / 번호표</h1>
+<a href="/board.html" target="_blank">대기 화면</a><a href="/teller.html">창구</a><a href="/manager.html">지점장</a></header>
+<main>
+<div class="card"><h2>1. 번호표 받기 (현장)</h2>
+<form id="tk"><div class="row"><div><label>이름</label><input name="name" required></div>
+<div><label>휴대전화</label><input name="phone" placeholder="010-0000-4878" inputmode="tel" required></div></div>
+<div class="row"><div><label>계좌번호</label><input name="account" placeholder="숫자 10~16자리" required></div>
+<div><label>업무 종류</label><select name="service"><option>예금</option><option>대출</option><option>외환</option></select></div></div>
+<p style="margin:12px 0 0"><button>번호표 뽑기</button></p><div class="msg" id="tkm"></div></form></div>
+
+<div class="card"><h2>2. 예약 고객 도착 확인 (우선 호출)</h2>
+<form id="ci" class="row" style="align-items:end"><div><label>예약 시 입력한 휴대전화</label><input name="phone" required inputmode="tel"></div>
+<div style="flex:0"><button style="white-space:nowrap">예약 확인 · 번호표</button></div></form><div class="msg" id="cim"></div></div>
+
+<div class="card"><h2>3. 방문 예약하기</h2>
+<form id="rv"><div class="row"><div><label>이름</label><input name="name" required></div>
+<div><label>휴대전화</label><input name="phone" inputmode="tel" required></div></div>
+<div class="row"><div><label>계좌번호</label><input name="account" required></div>
+<div><label>업무 종류</label><select name="service"><option>예금</option><option>대출</option><option>외환</option></select></div>
+<div><label>날짜</label><input type="date" name="slot_date" required></div></div>
+<label>시간 (30분 단위, 괄호 안은 남은 팀 수)</label><div class="slots" id="slots"></div>
+<p style="margin:12px 0 0"><button>예약하기</button></p><div class="msg" id="rvm"></div></form>
+<p style="color:var(--mut);font-size:13px">예약 시간 후 15분 안에 도착 확인을 하지 않으면 노쇼로 처리됩니다.</p></div>
+</main>
+<script src="common.js"></script>
+<script>
+const form = id => Object.fromEntries(new FormData($(id)));
+function ticketMsg(el, r) {
+  const t = `번호표 ${r.ticket_no} · 내 앞 대기 ${r.ahead}명` + (r.kind === 'reservation' ? ' · 예약 우선' : '');
+  msg(el, (r.existing ? '이미 발급된 번호표입니다. ' : '') + t, true);
+}
+$('#tk').onsubmit = async e => { e.preventDefault();
+  try { const r = await api('/api/tickets', {method: 'POST', body: form('#tk')}); ticketMsg($('#tkm'), r); } catch (x) { msg($('#tkm'), x.message); } };
+$('#ci').onsubmit = async e => { e.preventDefault();
+  try { const r = await api('/api/checkin', {method: 'POST', body: form('#ci')}); ticketMsg($('#cim'), r); } catch (x) { msg($('#cim'), x.message); } };
+
+let slotTime = null;
+const dateEl = $('#rv [name=slot_date]');
+const pad = n => String(n).padStart(2, '0'), d0 = new Date();
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+dateEl.min = ymd(d0); dateEl.max = ymd(new Date(d0.getTime() + 7 * 864e5)); dateEl.value = dateEl.min;
+async function loadSlots() {
+  slotTime = null; const box = $('#slots'); box.replaceChildren();
+  try {
+    for (const s of await api('/api/slots?d=' + dateEl.value)) {
+      const b = h('button', {type: 'button', onclick: () => { slotTime = s.time; [...box.children].forEach(x => x.classList.toggle('sel', x === b)); }},
+        `${s.time} (${s.left})`);
+      b.disabled = !s.open; box.append(b);
+    }
+  } catch (x) { msg($('#rvm'), x.message); }
+}
+dateEl.onchange = loadSlots; loadSlots();
+$('#rv').onsubmit = async e => { e.preventDefault();
+  if (!slotTime) return msg($('#rvm'), '예약 시간을 선택해 주세요.');
+  try { const r = await api('/api/reservations', {method: 'POST', body: {...form('#rv'), slot_time: slotTime}});
+    msg($('#rvm'), `${r.slot} ${r.message}`, true); loadSlots(); } catch (x) { msg($('#rvm'), x.message); } };
+</script></body></html>

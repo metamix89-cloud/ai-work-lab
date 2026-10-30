@@ -1,0 +1,15 @@
+*{box-sizing:border-box}body{margin:0;font-family:"Malgun Gothic",system-ui,sans-serif;background:#f4f6f8;color:#1b2430}
+header{background:#0b6b3a;color:#fff;padding:14px 24px;font-size:20px;font-weight:700}
+main{max-width:960px;margin:24px auto;padding:0 16px}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px #0001}
+h2{margin:0 0 12px;font-size:18px}label{display:block;margin:10px 0 4px;font-size:14px;color:#456}
+input,select,button{font:inherit;padding:10px 12px;border:1px solid #bcc6d0;border-radius:8px;width:100%}
+button{background:#0b6b3a;color:#fff;border:0;cursor:pointer;font-weight:700;margin-top:12px}
+button.sub{background:#5b6b7b}button:disabled{opacity:.5;cursor:default}
+.msg{margin-top:12px;padding:10px;border-radius:8px;background:#e8f5ee}.err{background:#fde8e8;color:#a11}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.big{font-size:40px;font-weight:800}.muted{color:#678;font-size:13px}
+a.tile{display:block;padding:24px;background:#fff;border-radius:12px;text-decoration:none;color:#0b6b3a;font-weight:700;box-shadow:0 1px 4px #0001}
+.pill{display:inline-block;padding:2px 8px;border-radius:99px;background:#fff3c4;font-size:12px;margin-left:6px}
+table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #e3e8ee;text-align:left}
+.stat{background:#eef3f7;border-radius:10px;padding:14px}.stat b{display:block;font-size:30px}

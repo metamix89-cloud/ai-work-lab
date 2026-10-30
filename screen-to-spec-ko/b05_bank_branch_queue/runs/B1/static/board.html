@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>대기 현황판 - 두둑은행 넉넉지점</title>
+<style>
+  body { font-family: sans-serif; margin: 24px; background: #f5f7fa; color: #222; }
+  h1 { font-size: 24px; }
+  .cols { display: flex; gap: 24px; }
+  .col { flex: 1; background: #fff; border-radius: 8px; padding: 16px; }
+  .item { font-size: 20px; padding: 6px 0; border-bottom: 1px solid #eee; }
+  #error { color: #b00020; }
+</style>
+</head>
+<body>
+<h1>두둑은행 넉넉지점 대기 현황</h1>
+<div id="error" hidden><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+<div class="cols">
+  <div class="col"><h2>호출 중</h2><div data-testid="serving" id="serving"></div></div>
+  <div class="col"><h2>대기 중</h2><div data-testid="waiting" id="waiting"></div></div>
+</div>
+<script>
+function line(text) {
+  const d = document.createElement('div');
+  d.className = 'item';
+  d.textContent = text;
+  return d;
+}
+async function load() {
+  try {
+    const res = await fetch('/api/board');
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const s = document.getElementById('serving'), w = document.getElementById('waiting');
+    s.replaceChildren(...data.serving.map(t => line(`${t.number}번 ${t.masked_name} → ${t.counter_id.replace(/^\D+/, '')}번 창구`)));
+    w.replaceChildren(...data.waiting.map(t => line(`${t.number}번 ${t.masked_name}`)));
+    document.getElementById('error').hidden = true;
+  } catch (e) {
+    document.getElementById('error').hidden = false;
+  }
+}
+document.getElementById('retry').onclick = load;
+load();
+setInterval(load, 5000);
+</script>
+</body>
+</html>

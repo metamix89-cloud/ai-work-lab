@@ -1,0 +1,42 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>대기 현황</title><link rel="stylesheet" href="common.css">
+<style>
+body{background:#0d1f17;color:#fff;overflow:hidden}
+.wrap{display:grid;grid-template-columns:1.25fr 1fr;gap:24px;padding:24px;height:100vh}
+h2{margin:0 0 14px;font-size:28px;color:#9be0bd}
+.cs{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.c{background:#14352a;border-radius:16px;padding:20px;text-align:center}
+.c .n{font-size:22px;color:#9be0bd}.c .t{font-size:64px;font-weight:800;margin:8px 0;letter-spacing:2px}
+.c .s{font-size:20px;opacity:.85}.c.idle .t{color:#4f7565}
+.c.flash{animation:fl 1.2s 4}@keyframes fl{50%{background:#e8a317;color:#000}}
+.q{background:#14352a;border-radius:16px;padding:20px}
+.row{display:flex;align-items:center;gap:14px;padding:12px 8px;border-bottom:1px solid #265242;font-size:26px}
+.row .p{width:42px;color:#9be0bd}.row .t{font-weight:800;width:110px}.row .x{margin-left:auto;font-size:18px;opacity:.8}
+.rv{background:#e8a317;color:#000;border-radius:10px;font-size:14px;padding:2px 8px}
+.cnt{font-size:20px;margin-top:10px;color:#9be0bd}.clock{position:fixed;right:30px;bottom:14px;opacity:.6}
+</style></head><body>
+<div class="wrap"><div><h2>호출 중</h2><div class="cs" id="cs"></div></div>
+<div class="q"><h2>대기 순서 <span class="cnt" id="cnt"></span></h2><div id="q"></div><div class="cnt">예약 고객은 우선 호출됩니다</div></div></div>
+<div class="clock" id="clk"></div>
+<script src="common.js"></script>
+<script>
+const last = {};
+async function tick() {
+  try {
+    const d = await api('/api/display');
+    document.getElementById('cs').replaceChildren(...d.counters.map(c => {
+      const el = h('div', { class: 'c' + (c.ticket_no ? '' : ' idle') }, h('div', { class: 'n' }, `${c.counter}번 창구`),
+        h('div', { class: 't' }, c.ticket_no || '—'), h('div', { class: 's' }, c.ticket_no ? `${c.name} 고객님 · ${c.service}` : '대기'));
+      if (c.ticket_no && last[c.counter] !== undefined && last[c.counter] !== c.ticket_no) el.classList.add('flash');
+      last[c.counter] = c.ticket_no; return el;
+    }));
+    document.getElementById('cnt').textContent = `(${d.waiting_count}명)`;
+    document.getElementById('q').replaceChildren(...(d.waiting.length ? d.waiting.map(w =>
+      h('div', { class: 'row' }, h('span', { class: 'p' }, w.pos), h('span', { class: 't' }, w.ticket_no),
+        w.kind === 'reservation' ? h('span', { class: 'rv' }, '예약') : null, h('span', { class: 'x' }, `${w.name} · ${w.service}`)))
+      : [h('div', { class: 'row' }, '대기 고객이 없습니다')]));
+    document.getElementById('clk').textContent = d.now.slice(11, 19);
+  } catch (e) {}
+}
+tick(); setInterval(tick, 3000);
+</script></body></html>

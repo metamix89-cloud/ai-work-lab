@@ -1,0 +1,15 @@
+*{box-sizing:border-box}body{margin:0;font-family:"Malgun Gothic",system-ui,sans-serif;background:#f3f5f8;color:#1b2430}
+header{background:#0b5d3b;color:#fff;padding:14px 24px;font-size:20px;font-weight:700}
+main{max-width:960px;margin:20px auto;padding:0 16px}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 1px 3px #0002}
+label{display:block;margin:10px 0 4px;font-weight:600}
+input,select,button{font:inherit;padding:10px 12px;border-radius:8px;border:1px solid #b9c2cf;width:100%}
+button{background:#0b5d3b;color:#fff;border:0;cursor:pointer;font-weight:700;margin-top:14px}
+button.sub{background:#5b6b7f;margin-top:0}button:disabled{opacity:.4;cursor:default}
+.tabs{display:flex;gap:8px;margin-bottom:12px}.tabs button{margin:0;background:#dfe5ec;color:#1b2430}.tabs button.on{background:#0b5d3b;color:#fff}
+.msg{margin-top:12px;padding:12px;border-radius:8px;background:#e6f4ec}.msg.err{background:#fde8e8;color:#9b1c1c}
+.big{font-size:48px;font-weight:800}.muted{color:#5b6b7f}
+table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #e3e8ef;text-align:left}
+.badge{display:inline-block;padding:2px 8px;border-radius:99px;background:#fde68a;font-size:12px;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:8px}
+.stat{background:#eef3f0;border-radius:10px;padding:12px}.stat b{font-size:28px;display:block}

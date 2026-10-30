@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>창구 직원</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<header class="top"><h1>창구 업무</h1><nav><a href="/">고객 화면</a><a href="/display.html">대기 화면</a></nav></header>
+<main>
+  <section class="card" id="login">
+    <h2>창구 로그인</h2>
+    <div class="grid">
+      <div><label>창구 번호</label><select id="counter"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+      <div><label>직원 PIN</label><input id="pin" type="password" autocomplete="off"></div>
+    </div>
+    <button id="go">시작</button><div class="msg" id="lmsg"></div>
+  </section>
+
+  <div id="work" hidden>
+    <section class="card">
+      <h2><span id="ctitle"></span> · 대기 <span id="wtotal"></span>명 <button class="sec" id="out" style="float:right;margin:0">로그아웃</button></h2>
+      <div id="next" class="hint"></div>
+      <button id="call">다음 고객 호출</button>
+      <div class="msg" id="wmsg"></div>
+    </section>
+    <section class="card" id="cur" hidden>
+      <h2>현재 고객 <span id="cstatus" class="badge"></span></h2>
+      <div class="big" id="cno"></div>
+      <table id="detail"></table>
+      <button id="start">상담 시작</button>
+      <button id="done">상담 완료</button>
+      <button id="noshow" class="danger">노쇼 처리</button>
+    </section>
+  </div>
+</main>
+<script src="/common.js"></script>
+<script>
+let pin = sessionStorage.getItem("tpin") || "", counter = +sessionStorage.getItem("tcounter") || 0, timer = null;
+const $ = id => document.getElementById(id);
+
+async function act(path) {
+  try { await api(path, { method: "POST", body: JSON.stringify({ counter }) }, pin); $("wmsg").className = "msg"; }
+  catch (e) { showMsg($("wmsg"), e.message, false); }
+  refresh();
+}
+
+async function refresh() {
+  try {
+    const s = await api("/api/teller/state?counter=" + counter, {}, pin);
+    $("login").hidden = true; $("work").hidden = false;
+    $("ctitle").textContent = counter + "번 창구";
+    $("wtotal").textContent = s.waiting_total;
+    $("next").textContent = s.next_preview.length
+      ? "다음 순서: " + s.next_preview.map(n => n.ticket_no + (n.kind === "reservation" ? "(예약)" : "")).join(" → ") : "대기 고객 없음";
+    const c = s.current;
+    $("cur").hidden = !c;
+    $("call").disabled = !!c || s.waiting_total === 0;
+    if (c) {
+      $("cno").textContent = c.ticket_no;
+      $("cstatus").textContent = STATUS[c.status];
+      const t = $("detail"); t.replaceChildren();
+      for (const [k, v] of [["이름", c.name], ["전화번호", c.phone], ["계좌번호", c.account], ["업무", c.service],
+        ["구분", KIND[c.kind] + (c.reserved_at ? " (예약 " + hhmm(c.reserved_at) + ")" : "")],
+        ["도착", hhmm(c.checked_in_at)], ["호출", hhmm(c.called_at)]]) {
+        const r = el("tr"); r.append(el("th", k), el("td", v)); t.append(r);
+      }
+      $("start").disabled = c.status !== "called";
+      $("done").disabled = c.status !== "serving";
+      $("noshow").disabled = c.status !== "called";
+    }
+  } catch (e) {
+    if (e.status === 401) { logout(); showMsg($("lmsg"), e.message, false); }
+  }
+}
+
+function logout() {
+  clearInterval(timer); sessionStorage.clear(); pin = ""; counter = 0;
+  $("work").hidden = true; $("login").hidden = false; $("pin").value = "";
+}
+
+$("go").onclick = () => {
+  pin = $("pin").value; counter = +$("counter").value;
+  sessionStorage.setItem("tpin", pin); sessionStorage.setItem("tcounter", counter);
+  refresh(); clearInterval(timer); timer = setInterval(refresh, 3000);
+};
+$("out").onclick = logout;
+$("call").onclick = () => act("/api/teller/call");
+$("start").onclick = () => act("/api/teller/start");
+$("done").onclick = () => act("/api/teller/complete");
+$("noshow").onclick = () => { if (confirm("이 고객을 노쇼 처리할까요?")) act("/api/teller/noshow"); };
+if (pin && counter) { refresh(); timer = setInterval(refresh, 3000); }
+</script></body></html>

@@ -1,0 +1,28 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>창구 - 두둑은행</title><link rel="stylesheet" href="/style.css"></head><body>
+<header id="h">두둑은행 · 창구 직원</header><main>
+<div class="card" id="login"><h2>로그인</h2><label>창구</label><select id="win"><option>1</option><option>2</option><option>3</option><option>4</option></select>
+<label>PIN</label><input id="pin" type="password" autocomplete="off"><button id="lg">로그인</button><div id="e" class="msg err" hidden></div></div>
+<div id="desk" hidden><div class="card"><h2>현재 고객</h2><div id="cur"></div>
+<div class="grid"><button id="next">다음 고객 호출</button><button class="sub" id="start">응대 시작</button><button class="sub" id="fin">응대 완료</button></div>
+<div id="m" class="msg" hidden></div></div>
+<div class="card"><h2>내 업무 대기 목록</h2><table><tbody id="wl"></tbody></table></div></div></main>
+<script src="/common.js"></script><script>
+let tok=sessionStorage.getItem("tt");
+$("lg").onclick=async()=>{try{const r=await api("/api/login",{method:"POST",body:JSON.stringify({role:"teller",window:+$("win").value,pin:$("pin").value})});
+ tok=r.token;sessionStorage.setItem("tt",tok);boot()}catch(x){say("e",x.message,1)}};
+function line(k,v){const p=el("p");p.append(el("span",k+": ","muted"),el("b",v));return p}
+function draw(s){$("h").textContent=`두둑은행 · 창구 ${s.window} (${s.service})`;const c=$("cur");c.replaceChildren();const u=s.current;
+ if(!u)c.append(el("p","응대 중인 고객이 없습니다","muted"));
+ else{const big=el("div",u.ticket,"big");if(u.priority)big.append(el("span","예약 우선","pill"));c.append(big);
+  c.append(line("이름",u.name),line("전화번호",u.phone),line("계좌",u.account),line("업무",u.service),
+   line("구분",u.kind==="reservation"?"예약 "+(u.reserved_at||"").replace("T"," "):"현장 발급"),
+   line("상태",u.status==="called"?`호출됨 (${u.seconds_left}초 안에 안 오면 보류)`:"응대 중"))}
+ const w=$("wl");w.replaceChildren();s.waiting.forEach(x=>{const r=el("tr");r.append(el("td",x.ticket),el("td",x.name),el("td",x.priority?"예약 우선":""));w.append(r)});
+ $("next").disabled=!!u;$("start").disabled=!u||u.status!=="called";$("fin").disabled=!u}
+async function load(){try{draw(await api("/api/teller/state",{},tok))}catch(x){if(x.status===401||x.status===403){sessionStorage.removeItem("tt");tok=null;$("login").hidden=false;$("desk").hidden=true}}}
+async function act(p){try{draw(await api("/api/teller/"+p,{method:"POST"},tok));$("m").hidden=true}catch(x){say("m",x.message,1);load()}}
+$("next").onclick=()=>act("call-next");$("start").onclick=()=>act("start");$("fin").onclick=()=>act("finish");
+function boot(){if(!tok)return;$("login").hidden=true;$("desk").hidden=false;load()}
+boot();setInterval(()=>tok&&load(),3000);
+</script></body></html>

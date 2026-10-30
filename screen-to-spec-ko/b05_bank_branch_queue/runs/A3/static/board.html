@@ -1,0 +1,22 @@
+<!doctype html><meta charset=utf-8><title>대기 현황판</title>
+<link rel=stylesheet href=/static/common.css>
+<style>body{background:#0f2a1c;color:#fff}.cs{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:20px}
+.c{background:#1f5c3a;border-radius:14px;padding:18px;text-align:center}.c .n{font-size:64px;font-weight:700;min-height:76px}
+.c.on{background:#e9b949;color:#222}.w{padding:0 20px 20px}.w span{display:inline-block;margin:6px;padding:10px 18px;border-radius:30px;background:#2a7a4f;font-size:28px}
+.w span.r{background:#e9b949;color:#222}h2{padding:0 20px}header h2{padding:0}</style>
+<header><h2>두둑은행 대기 현황</h2><span id=clock></span></header>
+<div class=cs id=cs></div><h2>대기 순서 <small id=tot></small></h2><div class=w id=w></div>
+<p style="padding:0 20px;color:#9bb">노란색 = 예약 고객(우선 호출) · 번호표만 표시됩니다</p>
+<script src=/static/common.js></script><script>
+let prev={};
+async function tick(){try{const b=await api('/api/board');
+  $('#clock').textContent=b.now.slice(11,19);
+  $('#cs').replaceChildren(...b.counters.map(c=>{const d=el('div',{className:'c'+(c.number?' on':'')},el('div',{},c.counter+'번 창구'),
+    el('div',{className:'n'},c.number||'-'),el('small',{},c.services.join('/')));
+    if(c.number&&prev[c.counter]!==c.number&&Object.keys(prev).length&&window.speechSynthesis)
+      speechSynthesis.speak(new SpeechSynthesisUtterance(`${c.number} 번 고객님, ${c.counter}번 창구로 오세요`));
+    prev[c.counter]=c.number;return d}));
+  $('#tot').textContent=`(${b.waiting_total}명)`;
+  $('#w').replaceChildren(...b.waiting.map(x=>el('span',{className:x.reservation?'r':'',title:x.service},x.number)))}catch(e){}}
+tick();setInterval(tick,3000);
+</script>

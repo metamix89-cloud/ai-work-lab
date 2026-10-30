@@ -1,0 +1,84 @@
+INFO:     Started server process [15704]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+
+== 데모 PIN ==  창구1~4: 1=1111, 2=1112, 3=1113, 4=1114  지점장: 9999 
+
+INFO:     127.0.0.1:9190 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9192 - "GET /api/teller/me HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:9194 - "GET /api/manager/stats HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:9196 - "POST /api/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9198 - "POST /api/teller/call-next HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9200 - "GET /api/manager/stats HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:9202 - "POST /api/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9204 - "GET /api/manager/stats HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9206 - "GET /api/teller/me HTTP/1.1" 403 Forbidden
+INFO:     127.0.0.1:9208 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9210 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9212 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9214 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9216 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9218 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9220 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9222 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9224 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9226 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9228 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9230 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9233 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9235 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9237 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9239 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9241 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9243 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9245 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9247 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9249 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9251 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9253 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9255 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9257 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9259 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9261 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9263 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9265 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9267 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9269 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9271 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9273 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9275 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9277 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9279 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9282 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9284 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9286 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9288 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9290 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9292 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9294 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9296 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9298 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9300 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9303 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9305 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9307 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9309 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9311 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9313 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9315 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9317 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9320 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9322 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9325 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9327 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9329 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9331 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9333 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9335 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9337 - "GET /api/display HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9339 - "POST /api/tickets HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:9341 - "POST /api/tickets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:9343 - "POST /api/tickets HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:9345 - "POST /api/checkin HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:9347 - "POST /api/checkin HTTP/1.1" 200 OK

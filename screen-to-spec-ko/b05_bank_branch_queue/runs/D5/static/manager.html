@@ -1,0 +1,33 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>지점장 현황</title><link rel="stylesheet" href="/static/common.css"></head><body>
+<header><span>지점장 · 대기 현황</span><span><a href="/">고객</a><a href="#" id="out">로그아웃</a></span></header>
+<main>
+<div class="card" id="login"><h2>지점장 로그인</h2><label>PIN</label><input id="pin" type="password" autocomplete="off">
+ <button id="go">로그인</button><div class="err" id="lerr"></div></div>
+<div id="panel" hidden>
+ <div class="row" id="top"></div>
+ <div class="card"><h2>업무별 현황</h2><table><thead><tr><th>업무</th><th>대기</th><th>호출/응대</th><th>완료</th><th>보류</th></tr></thead><tbody id="svc"></tbody></table></div>
+ <p style="color:#667;font-size:13px">노쇼 = 예약 시각 + 10분이 지나도 도착 접수가 없는 예약 (늦게 도착하면 일반 순서로 접수됨). 고객 상세 정보는 제공되지 않습니다.</p>
+</div></main>
+<script src="/static/common.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const stat = (v, l) => el('div', {class: 'card stat'}, el('div', {class: 'v'}, String(v)), el('div', {class: 'l'}, l));
+async function load() {
+  try {
+    const d = await api('/api/manager/summary');
+    $('top').replaceChildren(stat(d.total_waiting, '현재 대기'), stat(d.avg_wait_min ?? '-', '평균 대기(분)'),
+      stat(d.noshow, '노쇼'), stat(d.hold, '보류'), stat(d.upcoming, '도착 예정 예약'),
+      stat(`${d.priority_served}/${d.reservations}`, '우선 적용/예약'), stat(d.walkins, '현장 발급'));
+    $('svc').replaceChildren(...d.by_service.map(s => el('tr', {}, el('td', {}, s.label), el('td', {}, String(s.waiting)),
+      el('td', {}, String(s.called)), el('td', {}, String(s.done)), el('td', {}, String(s.hold)))));
+  } catch (e) { if (e.status === 401 || e.status === 403) logout(); }
+}
+function logout() { sessionStorage.clear(); location.reload(); }
+function enter() { $('login').hidden = true; $('panel').hidden = false; load(); setInterval(load, 5000); }
+$('go').onclick = async () => {
+  try { const d = await api('/api/login', {body: {role: 'manager', pin: $('pin').value}});
+    sessionStorage.setItem('token', d.token); enter(); } catch (e) { $('lerr').textContent = e.message; }
+};
+$('out').onclick = logout; if (sessionStorage.getItem('token')) enter();
+</script></body></html>

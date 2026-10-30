@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>창구 직원</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header><h1>창구 직원</h1><nav><a href="index.html">고객 화면</a><a href="manager.html">지점장</a></nav></header>
+<main>
+<div class="card" id="login"><h2></h2>
+  <form><label>PIN</label><input id="pin" type="password" autocomplete="off"><p><button>로그인</button></p><div class="err"></div></form></div>
+<div id="app" hidden>
+  <div class="card row"><label style="margin:0">내 창구</label>
+    <select id="counter" style="width:auto"></select>
+    <span id="info" style="color:var(--mute)"></span></div>
+  <div class="card"><div class="row"><button id="call">다음 고객 호출</button><span class="err" id="err"></span></div></div>
+  <div class="card" id="cur"></div>
+</div>
+</main>
+<script src="common.js"></script>
+<script>
+let counters = {};
+async function call(path, opt) {
+  try { return await api(path, { ...opt, role: "teller" }); }
+  catch (e) {
+    if (e.status === 401) { location.reload(); }
+    $("#err").textContent = e.message; throw e;
+  }
+}
+async function refresh() {
+  $("#err").textContent = "";
+  const c = $("#counter").value;
+  const s = await call("/teller/state?counter=" + c);
+  $("#info").textContent = `처리 업무: ${counters[c].join("·")} / 대기 ${s.waiting}명` + (s.next ? ` / 다음 ${s.next}` : "");
+  $("#call").disabled = !!s.current;
+  const box = $("#cur");
+  if (!s.current) { box.replaceChildren(h("p", { style: "color:var(--mute)" }, "처리 중인 고객이 없습니다.")); return; }
+  const r = s.current;
+  const row = (k, v) => h("tr", {}, h("th", {}, k), h("td", {}, v));
+  box.replaceChildren(
+    h("h2", {}, `${r.number} `, svcTag(r.service), r.kind === "reserved" ? h("span", { class: "tag rsv", style: "margin-left:6px" }, "예약 " + r.slot.slice(11, 16)) : ""),
+    h("table", {}, row("이름", r.name), row("전화번호", r.phone), row("계좌번호", r.account),
+      row("업무", r.service), row("도착", r.arrived_at.slice(11, 16)), row("상태", r.status === "called" ? "호출됨 (응대 대기)" : "상담 중")),
+    h("p", { class: "row" },
+      r.status === "called" ? [h("button", { onclick: () => act(r.id, "start") }, "상담 시작"),
+        h("button", { class: "danger", onclick: () => confirm("노쇼 처리할까요?") && act(r.id, "noshow") }, "노쇼 (응답 없음)")] : "",
+      r.status === "serving" ? h("button", { onclick: () => act(r.id, "done") }, "상담 완료") : ""));
+}
+async function act(id, action) { await call(`/teller/${id}/action`, { method: "POST", body: { action } }); refresh(); }
+$("#call").onclick = async () => { await call("/teller/call", { method: "POST", body: { counter: +$("#counter").value } }); refresh(); };
+$("#counter").onchange = refresh;
+async function start() {
+  counters = await api("/counters");
+  $("#counter").replaceChildren(...Object.keys(counters).map(c => h("option", { value: c }, c + "번 창구")));
+  refresh(); setInterval(() => refresh().catch(() => {}), 5000);
+}
+loginGate("teller", "창구 직원", start);
+</script></body></html>

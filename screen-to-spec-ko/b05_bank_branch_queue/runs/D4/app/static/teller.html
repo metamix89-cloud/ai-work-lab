@@ -1,0 +1,26 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>창구</title>
+<link rel="stylesheet" href="style.css"><header><b>창구 업무</b><a href="/">고객</a><a href="/display.html">대기 화면</a></header><main>
+<div id="login" class="card"><label>창구</label><select id="win"><option>1</option><option>2</option><option>3</option><option>4</option></select>
+<label>PIN</label><input id="pin" type="password" autocomplete="off"><button id="in">로그인</button><div id="lm" class="msg"></div></div>
+<div id="work" class="card" hidden><h3 id="title"></h3><div id="cur"></div>
+<div class="row"><button id="call">다음 고객 호출</button><button id="serve" class="alt">고객 도착 (응대 시작)</button><button id="done" class="alt">업무 완료</button></div>
+<div id="m" class="msg"></div></div></main><script src="common.js"></script><script>
+function render(v){
+  $('#title').textContent=`창구 ${v.window} · ${v.service} · 대기 ${v.waiting_count}명`;
+  const c=v.current, el=$('#cur'); el.replaceChildren();
+  if(!c){el.textContent='처리 중인 고객이 없습니다.';}
+  else{const t=document.createElement('table');
+    [['번호표',c.ticket_no],['이름',c.name],['전화',c.phone],['계좌',c.account],['업무',c.service],
+     ['구분',(c.reservation?'예약':'현장')+(c.priority?' · 우선':'')],
+     ['상태',c.status==='called'?'호출됨 (마감 '+c.call_deadline.slice(11)+')':'응대 중']].forEach(([k,x])=>{
+      const r=t.insertRow();r.insertCell().textContent=k;r.insertCell().textContent=x;});el.append(t);}
+  $('#call').disabled=!!c;$('#serve').disabled=!c||c.status!=='called';$('#done').disabled=!c||c.status!=='serving';
+}
+async function load(){try{render(await api('/api/teller/me'))}catch(e){if(/로그인/.test(e.message)){sessionStorage.clear();location.reload()}}}
+async function act(p){try{render(await api('/api/teller/'+p,{method:'POST'}));say($('#m'),'',1)}catch(e){say($('#m'),e.message)}}
+$('#in').onclick=async()=>{try{const r=await api('/api/login',{method:'POST',body:{role:'teller',window:+$('#win').value,pin:$('#pin').value}});
+  sessionStorage.setItem('token',r.token);start()}catch(e){say($('#lm'),e.message)}};
+$('#call').onclick=()=>act('call-next');$('#serve').onclick=()=>act('serve');$('#done').onclick=()=>act('done');
+function start(){$('#login').hidden=true;$('#work').hidden=false;load();setInterval(load,3000)}
+if(sessionStorage.getItem('token'))start();
+</script></html>

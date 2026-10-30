@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>두둑은행 대기 현황</title><link rel="stylesheet" href="style.css"></head>
+<body class="board">
+<header><h1>두둑은행 · 대기 현황</h1><span class="clock" id="clock"></span></header>
+<main><div class="cols">
+  <section><h2>호출 중</h2><div id="calling"></div></section>
+  <section><h2>대기 순서 <small style="font-size:18px;color:#8fc">(예약 고객 우선)</small></h2><div id="waiting"></div></section>
+</div></main>
+<script src="common.js"></script>
+<script>
+// 공용 모니터: 번호표·업무·창구만 표시 (이름/전화/계좌 없음)
+let prev = new Set();
+async function tick() {
+  try {
+    const d = await api("/display");
+    $("#clock").textContent = d.now.slice(11, 16);
+    const nowCalled = new Set(d.calling.filter(c => c.status === "called").map(c => c.number));
+    $("#calling").replaceChildren(...(d.calling.length ? d.calling.map(c =>
+      h("div", { class: "callrow" + (c.status === "serving" ? " serving" : "") + (nowCalled.has(c.number) && !prev.has(c.number) ? " flash" : "") },
+        h("span", { class: "big" }, c.number), svcTag(c.service),
+        h("span", { class: "ctr" }, c.status === "serving" ? `${c.counter}번 창구 상담 중` : `${c.counter}번 창구로 오세요`))
+    ) : [h("div", { class: "empty" }, "호출 중인 번호가 없습니다.")]));
+    prev = nowCalled;
+    const w = d.waiting.slice(0, 10);
+    $("#waiting").replaceChildren(...(w.length ? w.map(x =>
+      h("div", { class: "qrow" }, h("span", { class: "order" }, x.order), h("b", {}, x.number), svcTag(x.service),
+        x.reserved ? h("span", { class: "tag rsv" }, "예약") : "")
+    ) : [h("div", { class: "empty" }, "대기 고객이 없습니다.")]));
+    if (d.waiting.length > 10) $("#waiting").append(h("div", { class: "empty" }, `외 ${d.waiting.length - 10}명 대기`));
+  } catch (e) { /* 다음 주기에 재시도 */ }
+}
+tick(); setInterval(tick, 3000);
+</script></body></html>

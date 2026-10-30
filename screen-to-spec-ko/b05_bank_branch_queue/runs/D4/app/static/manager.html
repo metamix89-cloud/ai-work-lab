@@ -1,0 +1,17 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>지점장</title>
+<link rel="stylesheet" href="style.css"><header><b>지점 현황 (집계)</b><a href="/">고객</a><a href="/display.html">대기 화면</a></header><main>
+<div id="login" class="card"><label>PIN</label><input id="pin" type="password" autocomplete="off"><button id="in">로그인</button><div id="lm" class="msg"></div></div>
+<div id="work" hidden><div class="card"><div class="grid" id="tot"></div></div><div class="card"><table id="svc"></table></div></div>
+</main><script src="common.js"></script><script>
+const L={reserved:'도착 전 예약',waiting:'대기',called:'호출',serving:'응대',done:'완료',hold:'보류',noshow:'노쇼'};
+function cell(k,v){const d=document.createElement('div');const a=document.createElement('div');a.textContent=k;const b=document.createElement('div');b.className='stat';b.textContent=v;d.append(a,b);return d}
+async function load(){try{const s=await api('/api/manager/stats');
+  $('#tot').replaceChildren(...Object.keys(L).map(k=>cell(L[k],s.totals[k])),cell('노쇼율',s.noshow_rate+'%'),cell('평균 대기(분)',s.avg_wait_min));
+  const t=$('#svc');t.replaceChildren();const h=t.insertRow();['업무',...Object.values(L)].forEach(x=>{const c=document.createElement('th');c.textContent=x;h.append(c)});
+  for(const [n,v] of Object.entries(s.by_service)){const r=t.insertRow();r.insertCell().textContent=n;Object.keys(L).forEach(k=>r.insertCell().textContent=v[k]||0)}
+ }catch(e){if(/로그인|지점장/.test(e.message)){sessionStorage.clear();location.reload()}}}
+$('#in').onclick=async()=>{try{const r=await api('/api/login',{method:'POST',body:{role:'manager',pin:$('#pin').value}});
+  sessionStorage.setItem('token',r.token);start()}catch(e){say($('#lm'),e.message)}};
+function start(){$('#login').hidden=true;$('#work').hidden=false;load();setInterval(load,5000)}
+if(sessionStorage.getItem('token'))start();
+</script></html>

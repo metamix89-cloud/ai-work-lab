@@ -1,0 +1,32 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>지점장</title>
+<link rel="stylesheet" href="common.css"><header>지점장 · 대기 현황 (고객 정보는 표시되지 않음)</header>
+<main>
+<div class="card" id="login"><label>PIN</label><input id="pin" type="password"><button id="go">로그인</button><div id="lm"></div></div>
+<div id="app" hidden></div>
+</main>
+<script src="common.js"></script>
+<script>
+const K = 'manager';
+$('#go').onclick = async () => {
+  try {
+    const r = await api('/api/login', { method: 'POST', body: { role: 'manager', pin: $('#pin').value } });
+    sessionStorage.setItem('tok:' + K, r.token); start();
+  } catch (e) { say($('#lm'), e.message, 1); }
+};
+const L = [['waiting', '대기'], ['in_service', '응대 중'], ['done', '완료'], ['hold', '보류'], ['noshow', '노쇼'], ['reserved_pending', '예약 미도착']];
+const stat = (l, v) => h('div', { class: 'stat' }, l, h('b', {}, v));
+async function load() {
+  try {
+    const d = await api('/api/manager/stats', { auth: K });
+    $('#app').replaceChildren(
+      h('div', { class: 'card' }, h('b', {}, '지점 전체'), h('div', { class: 'grid' }, L.map(([k, l]) => stat(l, d.total[k])))),
+      ...Object.entries(d.services).map(([n, s]) => h('div', { class: 'card' }, h('b', {}, `${n} (창구 ${s.counters.join('·')})`),
+        h('div', { class: 'grid' }, L.map(([k, l]) => stat(l, s[k])), stat('우선 대기', s.priority_waiting),
+          stat('평균 대기(분)', s.avg_wait_min ?? '-'), stat('최장 대기(분)', s.longest_wait_min)))));
+  } catch (e) {
+    if (e.status === 401) { sessionStorage.removeItem('tok:' + K); location.reload(); }
+  }
+}
+function start() { $('#login').hidden = true; $('#app').hidden = false; load(); setInterval(load, 5000); }
+if (sessionStorage.getItem('tok:' + K)) start();
+</script>

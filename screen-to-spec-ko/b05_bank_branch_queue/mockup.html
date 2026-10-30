@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>두둑은행 넉넉지점 대기 현황판 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 2부 5편 목업. 가상 회사(두둑은행) · 가상 고객 · 가짜 전화번호. ?state=ok|board|manager|error. Mock-IT 라이트 테마. 실제 은행 화면 아님. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--indigo:#6366F1;--emerald:#10B981;--amber:#F59E0B;--rose:#EF4444}
+*{box-sizing:border-box}html,body,#root{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:var(--emerald);display:inline-block;flex:none}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#EEF0FF;color:var(--indigo);font-weight:700}
+.main{padding:16px 26px 14px 26px;display:flex;flex-direction:column;gap:10px}
+.top{display:flex;justify-content:space-between;align-items:flex-end}
+h1{margin:0;font-size:21px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:12px;margin-top:3px}
+.who{font-size:12.5px;color:var(--ink2);background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px;white-space:nowrap}
+.row{display:grid;grid-template-columns:1.05fr 1fr;gap:12px;flex:1;min-height:0}
+.box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-height:0;overflow:hidden}
+.box h3{margin:0 0 7px;font-size:13px;color:var(--ink2)}
+table{width:100%;border-collapse:collapse;font-size:13px}th{color:var(--mute);font-weight:600;text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);font-size:11.5px}
+td{padding:7px 6px;border-bottom:1px solid var(--line)}tr.sel td{background:#F5F6FF}
+.chip{display:inline-block;border-radius:999px;padding:1px 9px;font-size:11px;font-weight:700}
+.pri{background:#EEF0FF;color:#4338CA}.gen{background:#F3F4F6;color:#6B7280}.held{background:#FFF7E6;color:#B45309}
+.d{display:grid;grid-template-columns:96px 1fr;gap:6px 10px;font-size:14px;margin-bottom:10px}.d b{color:var(--mute);font-weight:600;font-size:12px;align-self:center}
+.big{font-size:20px;font-weight:800}
+.b{display:inline-block;border:1px solid var(--line);border-radius:7px;padding:6px 14px;font-size:13px;font-weight:700;margin-right:6px}.b.p{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+.msg{color:var(--rose);font-size:12.5px;margin-top:8px}
+.note{color:var(--mute);font-size:11.5px;margin-top:6px}
+/* 대기 화면 — 모두가 보는 모니터 */
+.tv{height:100%;background:#111318;color:#fff;padding:22px 34px;display:flex;flex-direction:column;gap:14px}
+.tv .h{display:flex;justify-content:space-between;align-items:center}.tv h1{font-size:26px}.tv .t{color:#9CA3AF;font-size:14px}
+.tv .cols{display:grid;grid-template-columns:1.25fr 1fr;gap:18px;flex:1;min-height:0}
+.tv .card{background:#1B1E26;border-radius:14px;padding:14px 20px;overflow:hidden}
+.tv h2{margin:0 0 10px;font-size:15px;color:#A5B4FC;font-weight:700}
+.call{display:grid;grid-template-columns:110px 150px 1fr;align-items:center;font-size:34px;font-weight:800;padding:8px 0;border-bottom:1px solid #2A2E38}
+.call .c{color:#34D399;font-size:28px;text-align:right}
+.wait{display:grid;grid-template-columns:90px 1fr;font-size:26px;font-weight:700;padding:6px 0;color:#D1D5DB}
+.tv .foot{color:#6B7280;font-size:13px}
+/* 지점장 */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.st{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px}.st .l{font-size:12px;color:var(--ink2)}.st .n{font-size:30px;font-weight:800;margin-top:2px}.st.warn .n{color:#B45309}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:12px;padding:20px;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700}
+</style></head><body>
+<div id="root"></div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const shell=(on,body)=>`<div class="app"><div class="side"><div class="logo"><i></i>두둑은행 넉넉지점</div><div class="nav"><div>방문 예약</div><div class="${on==='q'?'on':''}">창구 호출</div><div class="${on==='m'?'on':''}">지점 현황</div><div>민원</div><div>내부 점검표</div></div></div><div class="main">${body}</div></div>`;
+const head=(t,s,who)=>`<div class="top"><div><h1>${t}</h1><div class="sub">${s}</div></div><span class="who">사용자: ${who} ▾</span></div>`;
+let html='';
+if(state==='ok'){
+ html=shell('q',head('창구 1 · 예금','예약 고객은 예약 시각 앞뒤 10분 안에 오면 먼저 · 호출 뒤 3분이 지나면 보류 · 상세는 내가 호출한 고객만','한창구 (창구 1)')+
+ `<div class="row"><div class="box"><h3>내 창구 대기 줄 — 부를 순서 · 이름은 가림</h3><table><tr><th>번호</th><th>이름</th><th>구분</th><th>도착</th></tr>
+  <tr><td>105</td><td>최*약</td><td><span class="chip pri">예약 우선</span></td><td>10:10 (예약 10:00)</td></tr>
+  <tr><td>101</td><td>김*수</td><td><span class="chip gen">현장</span></td><td>09:00</td></tr>
+  <tr><td>102</td><td>이*</td><td><span class="chip gen">현장</span></td><td>09:05</td></tr>
+  <tr><td>106</td><td>정*약</td><td><span class="chip gen">일반 — 11분 늦음</span></td><td>10:11 (예약 10:00)</td></tr></table></div>
+ <div class="box"><h3>지금 호출 중 — 내가 부른 고객만 상세</h3><div class="d"><b>번호</b><span class="big">107</span><b>이름</b><span class="big">강예약</span><b>전화번호</b><span>010-0000-0007</span><b>계좌</b><span>끝 4자리 3007 (전체는 안 나옴)</span><b>호출</b><span>10:20 호출 · 2분 지남</span></div>
+  <span class="b p">완료</span><span class="b">다음 호출</span><div class="msg">호출 뒤 3분이 지나야 다음 번호를 부를 수 있습니다</div></div></div>`);
+}else if(state==='board'){
+ html=`<div class="tv"><div class="h"><h1>두둑은행 넉넉지점 대기 화면</h1><span class="t">모두가 보는 모니터 · 번호와 가린 이름만</span></div>
+  <div class="cols"><div class="card"><h2>지금 호출</h2>
+   <div class="call"><span>107</span><span>강*약</span><span class="c">창구 1</span></div>
+   <div class="call"><span>105</span><span>최*약</span><span class="c">창구 2</span></div>
+   <div class="call"><span>103</span><span>남**수</span><span class="c">창구 3</span></div>
+   <div class="call"><span>104</span><span>박*늘</span><span class="c">창구 4</span></div></div>
+  <div class="card"><h2>대기</h2>
+   <div class="wait"><span>101</span><span>김*수</span></div><div class="wait"><span>102</span><span>이*</span></div><div class="wait"><span>106</span><span>정*약</span></div><div class="wait"><span>108</span><span>조*약</span></div></div></div>
+  <div class="foot">전화번호 · 계좌번호 · 이름 전체 · 업무 종류는 화면에도, 이 화면이 받는 응답에도 없다</div></div>`;
+}else if(state==='manager'){
+ html=shell('m',head('지점 현황','숫자만 본다 — 지점장도 고객 상세는 403','오지점 (지점장)')+
+ `<div class="stats"><div class="st"><div class="l">예금 대기</div><div class="n">3</div></div><div class="st"><div class="l">대출 대기</div><div class="n">1</div></div><div class="st"><div class="l">외환 대기</div><div class="n">0</div></div><div class="st warn"><div class="l">보류 (호출 뒤 안 옴)</div><div class="n">2</div></div><div class="st"><div class="l">완료</div><div class="n">14</div></div></div>
+ <div class="box" style="flex:1"><h3>창구별 호출 번호 — 고객 이름 없음</h3><table><tr><th>창구</th><th>업무</th><th>호출 중</th></tr><tr><td>창구 1</td><td>예금</td><td>107</td></tr><tr><td>창구 2</td><td>예금</td><td>105</td></tr><tr><td>창구 3</td><td>대출</td><td>103</td></tr><tr><td>창구 4</td><td>외환</td><td>104</td></tr></table></div>`);
+}else{
+ html=shell('q',head('창구 1 · 예금','예약 고객은 예약 시각 앞뒤 10분 안에 오면 먼저 · 호출 뒤 3분이 지나면 보류','한창구 (창구 1)')+
+ `<div class="err"><div><b>불러오지 못했습니다.</b> 대기 API 가 응답하지 않습니다 — 호출하지 않고 기다립니다.</div><button>다시 시도</button></div>
+ <div class="box" style="flex:1"></div>`);
+}
+document.getElementById('root').innerHTML=html;
+</script></body></html>

@@ -1,0 +1,17 @@
+<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>지점장</title><link rel=stylesheet href=/static/common.css>
+<header><h2>지점장 대시보드</h2><a href=/>처음으로</a></header>
+<main><div class=grid id=stats></div>
+<div class=card><h3>업무별 현황</h3><table id=svc></table></div>
+<div class=card><h3>현재 대기</h3><table id=wait></table></div>
+<div class=card><h3>노쇼 (개인정보 마스킹)</h3><table id=ns></table></div></main>
+<script src=/static/common.js></script><script>
+const tbl=(id,head,rows)=>$(id).replaceChildren(el('tr',{},...head.map(h=>el('th',{},h))),...rows.map(r=>el('tr',{},...r.map(v=>el('td',{},String(v))))));
+async function load(){try{const s=await api('/api/manager/summary');
+  const st=[['대기',s.waiting_total+'명'],['최장 대기',s.oldest_wait_min+'분'],['평균 대기(완료)',s.avg_wait_min+'분'],['처리 완료',s.done],['미도착 예약',s.reserved_pending],['노쇼',s.noshow_count+'건 ('+s.noshow_rate+'%)']];
+  $('#stats').replaceChildren(...st.map(([k,v])=>el('div',{className:'card stat'},k,el('b',{},String(v)))));
+  tbl('#svc',['업무','대기','완료'],Object.entries(s.by_service).map(([k,v])=>[k,v.waiting,v.done]));
+  tbl('#wait',['번호','업무','구분','고객','대기(분)'],s.waiting.map(w=>[w.number,w.service,w.kind,w.name,w.waited_min]));
+  tbl('#ns',['번호','업무','구분','예약시각','이름','전화','계좌'],s.noshows.map(n=>[n.number,n.service,n.kind,(n.slot_at||'-').slice(0,16),n.name,n.phone,n.account]))}
+  catch(e){if(e.status===401){sessionStorage.removeItem('tok');if(await login('manager'))load()}}}
+load();setInterval(load,5000);
+</script>

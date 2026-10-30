@@ -1,0 +1,7 @@
+채점 A4 ... 1/9 라우트 밖: ['/api/checkin', '/api/counter/{n}', '/api/counter/{n}/complete', '/api/counter/{n}/next', '/api/counter/{n}/noshow', '/api/counter/{n}/recall', '/api/counters', '/api/login', '/api/reservations', '/api/slots'] 테스트 수정: None
+채점 A5 ... 1/9 라우트 밖: ['/api/checkin', '/api/counters', '/api/display', '/api/login', '/api/reservations', '/api/slots', '/api/teller/call', '/api/teller/state', '/api/teller/{tid}/action', '/api/walkin'] 테스트 수정: None
+채점 A6 ... 1/9 라우트 밖: ['/api/checkin', '/api/display', '/api/manager/stats', '/api/reservations', '/api/slots', '/api/teller/call', '/api/teller/complete', '/api/teller/noshow', '/api/teller/start', '/api/teller/state', '/api/ticket/lookup', '/api/walkin'] 테스트 수정: None
+채점 D4 ... 0/9 라우트 밖: ['/api/checkin', '/api/display', '/api/login', '/api/manager/stats', '/api/reservations', '/api/teller/call-next', '/api/teller/done', '/api/teller/me', '/api/teller/serve'] 테스트 수정: None
+채점 D5 ... 1/9 라우트 밖: ['/api/checkin', '/api/display', '/api/login', '/api/reservations', '/api/teller/call-next', '/api/teller/finish', '/api/teller/requeue/{vid}', '/api/teller/start', '/api/teller/state'] 테스트 수정: None
+채점 D6 ... 1/9 라우트 밖: ['/api/display', '/api/login', '/api/reservations', '/api/reservations/checkin', '/api/teller/call-next', '/api/teller/state', '/api/teller/{tid}/complete', '/api/teller/{tid}/recall', '/api/teller/{tid}/start'] 테스트 수정: None
+→ results.json

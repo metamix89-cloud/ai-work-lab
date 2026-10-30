@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>대기 현황</title><link rel="stylesheet" href="/style.css">
+<style>
+ body { background:#0f2a1f; color:#fff; }
+ .wrap { padding:24px 32px; }
+ h1 { margin:0 0 20px; font-size:30px; display:flex; justify-content:space-between; }
+ .cols { display:grid; grid-template-columns:1.2fr 1fr; gap:28px; }
+ .counter { display:flex; justify-content:space-between; align-items:center; background:#17402e; border-radius:12px; padding:16px 26px; margin-bottom:14px; }
+ .counter .c { font-size:28px; } .counter .t { font-size:64px; font-weight:800; letter-spacing:2px; }
+ .counter.called { background:#d98a00; animation:blink 1s infinite; } .counter.serving { background:#1b6b4a; }
+ .counter.idle .t { color:#6f9a85; font-size:36px; }
+ @keyframes blink { 50% { opacity:.65; } }
+ .q { background:#17402e; border-radius:12px; padding:18px 24px; }
+ .q h2 { margin:0 0 10px; font-size:26px; }
+ .row { display:flex; justify-content:space-between; font-size:30px; padding:8px 0; border-bottom:1px solid #2b5e46; }
+ .row small { font-size:18px; color:#9fc6b2; }
+ .pri { color:#8fb4ff; font-size:16px; }
+ .foot { margin-top:16px; font-size:18px; color:#9fc6b2; }
+</style></head>
+<body><div class="wrap">
+  <h1><span>두둑은행 대기 현황</span><span id="clock"></span></h1>
+  <div class="cols"><div id="counters"></div><div class="q"><h2>대기 순서 <span id="total"></span></h2><div id="list"></div>
+    <div class="foot">예약 고객은 우선 호출됩니다 · 번호가 호출되면 해당 창구로 와 주세요.</div></div></div>
+</div>
+<script src="/common.js"></script>
+<script>
+async function tick() {
+  document.getElementById("clock").textContent = new Date().toLocaleTimeString("ko-KR", { hour12: false });
+  try {
+    const d = await api("/api/display");
+    const cs = document.getElementById("counters"); cs.replaceChildren();
+    for (const c of d.counters) {
+      const row = el("div", null, "counter " + c.status);
+      row.append(el("span", c.counter + "번 창구", "c"),
+        el("span", c.ticket_no || "대기 가능", "t"));
+      cs.append(row);
+    }
+    document.getElementById("total").textContent = "(" + d.waiting_total + "명)";
+    const l = document.getElementById("list"); l.replaceChildren();
+    d.waiting.forEach((w, i) => {
+      const r = el("div", null, "row");
+      r.append(el("span", (i + 1) + ". " + w.ticket_no), el("small", w.service + (w.kind === "reservation" ? " · 예약" : "")));
+      l.append(r);
+    });
+    if (!d.waiting.length) l.append(el("div", "대기 고객이 없습니다", "row"));
+  } catch (e) {}
+}
+tick(); setInterval(tick, 3000);
+</script></body></html>

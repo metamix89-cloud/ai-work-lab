@@ -1,0 +1,69 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>두둑은행 방문 예약</title><link rel="stylesheet" href="/static/style.css"></head><body>
+<header class="top"><h1>🏦 두둑은행 지점 방문 예약 · 번호표</h1><nav><a href="/board">대기 화면</a><a href="/counter">창구</a><a href="/manager">지점장</a></nav></header>
+<main>
+<div class="tabs"><button class="on" data-t="res">방문 예약</button><button data-t="walk">현장 번호표</button><button data-t="in">예약 도착 확인</button></div>
+
+<form id="f" class="card">
+  <h2 id="ttl">방문 예약</h2>
+  <div id="nm"><label>이름</label><input name="name" maxlength="20" required autocomplete="off"></div>
+  <label>휴대전화</label><input name="phone" inputmode="tel" placeholder="010-0000-4878" required>
+  <div id="acct"><label>계좌번호</label><input name="account" inputmode="numeric" placeholder="숫자와 - 만 입력" autocomplete="off" required>
+  <label>업무 종류</label>
+  <div class="seg"><label><input type="radio" name="service" value="예금" checked><span>💰 예금</span></label>
+  <label><input type="radio" name="service" value="대출"><span>🏠 대출</span></label>
+  <label><input type="radio" name="service" value="외환"><span>💱 외환</span></label></div></div>
+  <div id="resbox"><label>방문 날짜 (평일, 7일 이내)</label><input type="date" name="date" id="date" required>
+  <label>방문 시간</label><div class="slots" id="slots"></div></div>
+  <div style="margin-top:18px"><button id="go">예약하기</button></div>
+  <div class="priv">입력하신 정보는 상담 준비에만 사용되며, 대기 화면에는 번호표만 표시됩니다.</div>
+  <div id="out"></div>
+</form>
+</main>
+<script src="/static/common.js"></script>
+<script>
+let mode="res";
+const f=$("#f");
+const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+$("#date").min=iso(new Date());$("#date").value=iso(new Date());
+$("#date").max=iso(new Date(Date.now()+7*864e5));
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x==b));
+  mode=b.dataset.t;
+  $("#ttl").textContent={res:"방문 예약",walk:"현장 번호표 뽑기",in:"예약 도착 확인"}[mode];
+  $("#go").textContent={res:"예약하기",walk:"번호표 뽑기",in:"도착 확인"}[mode];
+  $("#resbox").classList.toggle("hide",mode!="res");
+  $("#acct").classList.toggle("hide",mode=="in");
+  $("#nm").classList.toggle("hide",mode=="in");
+  f.name.required=f.account.required=mode!="in";
+  $("#date").required=mode=="res";
+  $("#out").innerHTML="";
+});
+async function loadSlots(){
+  const j=await api("/api/slots?date="+$("#date").value);
+  const el=$("#slots");
+  if(j.closed){el.innerHTML=`<div class="muted">${esc(j.reason)}</div>`;return}
+  el.innerHTML=j.slots.map(s=>`<label><input type="radio" name="time" value="${esc(s.time)}" ${s.remaining?'':'disabled'}><span>${esc(s.time)}<small>${s.remaining?'잔여 '+s.remaining:'마감'}</small></span></label>`).join("");
+}
+$("#date").onchange=loadSlots;loadSlots();
+f.onsubmit=async e=>{
+  e.preventDefault();const out=$("#out");out.innerHTML="";
+  const v=Object.fromEntries(new FormData(f));
+  try{
+    let j,html;
+    if(mode=="res"){
+      if(!v.time) throw new Error("방문 시간을 선택해 주세요");
+      j=await api("/api/reservations",{method:"POST",body:{name:v.name,phone:v.phone,account:v.account,service:v.service,date:v.date,time:v.time}});
+      html=`<div class="ticket"><div class="muted">예약 번호</div><div class="no">${esc(j.ticket_no)}</div><div>${esc(j.date)} ${esc(j.time)} · ${esc(j.service)}</div></div><div class="msg ok">${esc(j.message)}</div>`;
+      loadSlots();
+    }else if(mode=="walk"){
+      j=await api("/api/tickets",{method:"POST",body:{name:v.name,phone:v.phone,account:v.account,service:v.service}});
+      html=`<div class="ticket"><div class="muted">대기번호</div><div class="no">${esc(j.ticket_no)}</div><div>${esc(j.service)} · 전체 ${j.position}번째 (같은 업무 앞 대기 ${j.ahead_same_service}명)</div></div><div class="msg ok">대기 화면에서 번호를 확인해 주세요.</div>`;
+    }else{
+      j=await api("/api/checkin",{method:"POST",body:{phone:v.phone}});
+      html=`<div class="ticket"><div class="muted">예약 고객 우선 대기번호</div><div class="no">${esc(j.ticket_no)}</div><div>${esc(j.service)} · 예약 ${hm(j.reserved_at)} · 전체 ${j.position}번째</div></div><div class="msg ok">도착 확인되었습니다. 대기 화면에서 번호를 확인해 주세요.</div>`;
+    }
+    out.innerHTML=html;
+  }catch(err){out.innerHTML=`<div class="msg err">${esc(err.message)}</div>`}
+};
+</script></body></html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>지점장 현황</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<header class="top"><h1>지점장 대시보드</h1><nav><a href="/">고객 화면</a><a href="/display.html">대기 화면</a></nav></header>
+<main>
+  <section class="card" id="login">
+    <h2>지점장 로그인</h2>
+    <label>PIN</label><input id="pin" type="password" autocomplete="off" style="max-width:240px">
+    <button id="go">확인</button><div class="msg" id="lmsg"></div>
+  </section>
+  <div id="dash" hidden>
+    <div class="grid" id="stats"></div>
+    <div class="grid" style="margin-top:16px">
+      <section class="card"><h2>창구 현황</h2><table id="t-counters"></table></section>
+      <section class="card"><h2>업무별 현황</h2><table id="t-svc"></table></section>
+    </div>
+    <section class="card"><h2>대기열</h2><table id="t-queue"></table></section>
+    <section class="card"><h2>노쇼 목록</h2><table id="t-noshow"></table>
+      <p class="hint">개인정보 보호를 위해 이름·전화번호는 일부만 표시됩니다.</p></section>
+    <section class="card"><h2>도착 예정 예약</h2><table id="t-up"></table></section>
+  </div>
+</main>
+<script src="/common.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+let pin = sessionStorage.getItem("mpin") || "", timer = null;
+
+function fill(id, head, rows, empty) {
+  const t = $(id); t.replaceChildren();
+  const h = el("tr"); head.forEach(x => h.append(el("th", x))); t.append(h);
+  if (!rows.length) { const r = el("tr"); const c = el("td", empty); c.colSpan = head.length; r.append(c); t.append(r); }
+  for (const row of rows) {
+    const r = el("tr");
+    row.forEach(v => { const c = el("td"); v instanceof Node ? c.append(v) : (c.textContent = v); r.append(c); });
+    t.append(r);
+  }
+}
+const stat = (label, val, warn) => { const d = el("div", null, "card stat" + (warn ? " warn" : "")); d.append(el("b", val), el("span", label)); return d; };
+
+async function refresh() {
+  try {
+    const s = await api("/api/manager/stats", {}, pin);
+    $("login").hidden = true; $("dash").hidden = false;
+    const c = s.counts;
+    $("stats").replaceChildren(
+      stat("대기 중", c.waiting), stat("상담 중/호출", c.serving + c.called), stat("처리 완료", c.done),
+      stat("노쇼", s.noshow_count, s.noshow_count > 0), stat("예약 노쇼율", s.noshow_rate + "%", s.noshow_rate >= 20),
+      stat("평균 대기(분)", s.avg_wait_min ?? "-"), stat("최장 대기(분)", s.longest_wait_min ?? "-", (s.longest_wait_min || 0) >= 30));
+    fill("t-counters", ["창구", "상태", "번호"], s.counters.map(x => [x.counter + "번", x.status === "idle" ? "비어 있음" : STATUS[x.status], x.ticket_no || "-"]), "");
+    fill("t-svc", ["업무", "대기", "완료", "노쇼"], Object.entries(s.by_service).map(([k, v]) => [k, v.waiting, v.done, v.noshow]), "");
+    fill("t-queue", ["번호", "구분", "업무", "고객", "도착"], s.queue.map(q => [q.ticket_no, kindBadge(q.kind), q.service, q.name, hhmm(q.checked_in_at)]), "대기 고객 없음");
+    fill("t-noshow", ["번호", "구분", "업무", "고객", "전화", "예약시간"], s.noshows.map(n => [n.ticket_no, KIND[n.kind], n.service, n.name, n.phone, hhmm(n.reserved_at)]), "노쇼 없음");
+    fill("t-up", ["번호", "업무", "고객", "예약시간"], s.upcoming.map(u => [u.ticket_no, u.service, u.name, hhmm(u.reserved_at)]), "예정 없음");
+  } catch (e) {
+    if (e.status === 401) { clearInterval(timer); sessionStorage.removeItem("mpin"); $("dash").hidden = true; $("login").hidden = false; showMsg($("lmsg"), e.message, false); }
+  }
+}
+$("go").onclick = () => { pin = $("pin").value; sessionStorage.setItem("mpin", pin); refresh(); clearInterval(timer); timer = setInterval(refresh, 5000); };
+if (pin) { refresh(); timer = setInterval(refresh, 5000); }
+</script></body></html>

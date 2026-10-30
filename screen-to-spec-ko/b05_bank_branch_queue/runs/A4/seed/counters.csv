@@ -1,0 +1,5 @@
+counter_id,name,service
+C1,창구 1,deposit
+C2,창구 2,deposit
+C3,창구 3,loan
+C4,창구 4,fx

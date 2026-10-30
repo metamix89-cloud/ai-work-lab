@@ -1,0 +1,54 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>창구</title>
+<link rel="stylesheet" href="common.css"><header id="hd">창구 직원</header>
+<main>
+<div class="card" id="login"><label>창구</label><select id="cn"><option>1</option><option>2</option><option>3</option><option>4</option></select>
+<label>PIN</label><input id="pin" type="password"><button id="go">로그인</button><div id="lm"></div></div>
+<div id="app" hidden>
+<div class="card" id="cur"></div>
+<div class="card"><b>대기 (내 업무)</b><table id="wt"></table></div>
+<div class="card" id="hcard" hidden><b>보류</b><table id="ht"></table></div>
+<div id="am"></div>
+</div></main>
+<script src="common.js"></script>
+<script>
+const K = 'counter';
+$('#go').onclick = async () => {
+  try {
+    const r = await api('/api/login', { method: 'POST', body: { role: 'counter', counter: +$('#cn').value, pin: $('#pin').value } });
+    sessionStorage.setItem('tok:' + K, r.token); start();
+  } catch (e) { say($('#lm'), e.message, 1); }
+};
+const act = async p => {
+  try { await api('/api/counter/' + p, { method: 'POST', auth: K }); load(); }
+  catch (e) { say($('#am'), e.message, 1); }
+};
+async function load() {
+  try {
+    const s = await api('/api/counter/state', { auth: K });
+    $('#am').replaceChildren();
+    $('#hd').textContent = `창구 ${s.counter} · ${s.service}`;
+    const c = s.current;
+    if (!c) {
+      $('#cur').replaceChildren(h('div', { class: 'muted' }, '응대 중인 고객 없음'), h('button', { onclick: () => act('call-next') }, '다음 고객 호출'));
+    } else {
+      const kind = c.kind === 'reserved' ? `예약 ${c.reserved_at.replace('T', ' ')}` + (c.priority ? ' (우선)' : ' (일반 순서)') : '현장 번호표';
+      const left = c.seconds_left;
+      $('#cur').replaceChildren(h('div', { class: 'big' }, c.number),
+        h('table', {}, [['이름', c.name], ['전화번호', c.phone], ['계좌번호', c.account], ['업무', c.service], ['구분', kind]]
+          .map(([a, b]) => h('tr', {}, h('th', {}, a), h('td', {}, b)))),
+        c.status === 'called' ? h('div', { class: 'msg' }, `호출됨 — 남은 시간 ${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')} (초과 시 보류 후 다음 번호 호출)`) : '',
+        c.status === 'called' ? h('button', { onclick: () => act('start') }, '고객 도착 · 응대 시작') : h('button', { onclick: () => act('finish') }, '응대 완료'));
+    }
+    $('#wt').replaceChildren(...s.waiting.map(w => h('tr', {}, h('td', {}, w.number), h('td', {}, w.name),
+      h('td', {}, w.priority ? h('span', { class: 'badge' }, '예약 우선') : ''))));
+    $('#hcard').hidden = !s.hold.length;
+    $('#ht').replaceChildren(...s.hold.map(w => h('tr', {}, h('td', {}, w.number), h('td', {}, w.name),
+      h('td', {}, h('button', { class: 'sub', onclick: async () => { await api('/api/counter/requeue/' + w.id, { method: 'POST', auth: K }); load(); } }, '다시 줄 세우기')))));
+  } catch (e) {
+    if (e.status === 401) { sessionStorage.removeItem('tok:' + K); location.reload(); }
+    else say($('#am'), e.message, 1);
+  }
+}
+function start() { $('#login').hidden = true; $('#app').hidden = false; load(); setInterval(load, 3000); }
+if (sessionStorage.getItem('tok:' + K)) start();
+</script>

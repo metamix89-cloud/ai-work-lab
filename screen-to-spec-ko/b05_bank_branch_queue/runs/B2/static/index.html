@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>두둑은행 넉넉지점 — 직원 화면</title>
+<style>
+body{font-family:"Malgun Gothic",sans-serif;margin:0;background:#f4f6f9;color:#1d2733}
+header{background:#1f4e8c;color:#fff;padding:16px 24px;font-size:20px}
+main{padding:24px;max-width:900px}
+.card{background:#fff;border-radius:8px;padding:16px 20px;margin-bottom:16px;box-shadow:0 1px 3px #0002}
+h2{margin-top:0;font-size:18px}
+select,button{font-size:16px;padding:6px 12px}
+.ticket{padding:8px 0;border-bottom:1px solid #e3e7ec}
+.pri{color:#c0392b;font-weight:bold}
+[data-testid=message]{min-height:1.4em;color:#c0392b}
+#error{display:none}
+</style>
+</head>
+<body>
+<header>두둑은행 넉넉지점 — 방문 예약 · 대기 관리 (<a href="/board" style="color:#fff">대기 현황판</a>)</header>
+<main>
+<div class="card">사용자 선택: <select data-testid="user" id="user"></select></div>
+<div data-testid="message" id="message"></div>
+<div id="error" class="card"><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+
+<div id="teller" style="display:none">
+  <div class="card">
+    <h2>내 창구 대기 줄</h2>
+    <div id="queue"></div>
+    <p><button data-testid="next" id="next">다음 번호 호출</button></p>
+  </div>
+  <div class="card" id="detailBox" style="display:none">
+    <h2>호출한 고객</h2>
+    <p>이름: <span data-testid="detail-name" id="dname"></span></p>
+    <p>전화번호: <span data-testid="detail-phone" id="dphone"></span></p>
+    <p>계좌: <span data-testid="detail-account" id="dacct"></span></p>
+    <button data-testid="complete" id="complete">완료</button>
+  </div>
+</div>
+
+<div id="manager" style="display:none">
+  <div class="card" data-testid="summary" id="summary"></div>
+</div>
+</main>
+<script>
+const SERVICE = {deposit: "예금", loan: "대출", fx: "외환"};
+let users = [];
+let current = null;      // selected user
+let calledId = {};       // counter_id -> ticket_id being served (this session)
+
+const $ = function (id) { return document.getElementById(id); };
+function setMessage(t) { $("message").textContent = t || ""; }
+
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  let data = null;
+  try { data = await r.json(); } catch (e) {}
+  if (!r.ok) {
+    const err = new Error((data && data.detail) || "오류");
+    err.rejected = true;
+    throw err;
+  }
+  return data;
+}
+function post(path, body) {
+  return api(path, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+}
+function showError(on) {
+  $("error").style.display = on ? "block" : "none";
+  if (on) { $("teller").style.display = "none"; $("manager").style.display = "none"; }
+}
+
+async function init() {
+  try {
+    users = await api("/api/users");
+    const sel = $("user");
+    sel.textContent = "";
+    users.forEach(function (u) {
+      const o = document.createElement("option");
+      o.value = u.user_id;
+      o.textContent = u.name + " (" + (u.role === "manager" ? "지점장" : "창구 직원") + ")";
+      sel.appendChild(o);
+    });
+    showError(false);
+    await render();
+  } catch (e) { showError(true); }
+}
+
+async function render() {
+  current = users.find(function (u) { return u.user_id === $("user").value; });
+  setMessage("");
+  if (!current) return;
+  try {
+    if (current.role === "manager") {
+      $("teller").style.display = "none";
+      $("manager").style.display = "block";
+      await renderSummary();
+    } else {
+      $("manager").style.display = "none";
+      $("teller").style.display = "block";
+      await renderQueue();
+      await renderDetail();
+    }
+    showError(false);
+  } catch (e) { showError(true); }
+}
+
+async function renderSummary() {
+  const s = await api("/api/manager/summary?viewer=" + encodeURIComponent(current.user_id));
+  const box = $("summary");
+  box.textContent = "";
+  const add = function (tag, text) { const el = document.createElement(tag); el.textContent = text; box.appendChild(el); };
+  add("h2", "지점 현황");
+  Object.keys(SERVICE).forEach(function (k) { add("p", SERVICE[k] + " 대기: " + s.waiting[k] + "명"); });
+  add("p", "보류: " + s.held + "명");
+  add("p", "완료: " + s.done + "명");
+  add("h2", "창구별 호출 번호");
+  s.counters.forEach(function (c) {
+    add("p", c.counter_id + " (" + SERVICE[c.service] + "): " + (c.number === null ? "호출 없음" : c.number + "번"));
+  });
+}
+
+async function renderQueue() {
+  const rows = await api("/api/counters/" + current.counter_id + "/queue?viewer=" + encodeURIComponent(current.user_id));
+  const box = $("queue");
+  box.textContent = "";
+  if (!rows.length) { box.textContent = "대기 고객이 없습니다"; return; }
+  rows.forEach(function (t) {
+    const d = document.createElement("div");
+    d.className = "ticket";
+    d.setAttribute("data-testid", "ticket");
+    d.setAttribute("data-id", t.ticket_id);
+    d.textContent = t.number + "번  " + t.masked_name + "  · " + (SERVICE[t.service] || t.service);
+    if (t.priority) {
+      const p = document.createElement("span");
+      p.className = "pri";
+      p.textContent = "  [예약 우선]";
+      d.appendChild(p);
+    }
+    box.appendChild(d);
+  });
+}
+
+async function renderDetail() {
+  const id = calledId[current.counter_id];
+  if (!id) { $("detailBox").style.display = "none"; return; }
+  try {
+    const t = await api("/api/tickets/" + id + "?viewer=" + encodeURIComponent(current.user_id));
+    if (t.status !== "called") { delete calledId[current.counter_id]; $("detailBox").style.display = "none"; return; }
+    $("dname").textContent = t.name;
+    $("dphone").textContent = t.phone;
+    $("dacct").textContent = "**** " + t.account_last4;
+    $("detailBox").style.display = "block";
+  } catch (e) {
+    if (!e.rejected) throw e;
+    delete calledId[current.counter_id];
+    $("detailBox").style.display = "none";
+  }
+}
+
+$("user").onchange = render;
+$("retry").onclick = init;
+
+$("next").onclick = async function () {
+  setMessage("");
+  try {
+    const r = await post("/api/counters/" + current.counter_id + "/next", {user: current.user_id});
+    if (r.called) calledId[current.counter_id] = r.called.ticket_id;
+    else delete calledId[current.counter_id];
+    if (!r.called) setMessage("대기 고객이 없습니다");
+    await renderQueue();
+    await renderDetail();
+  } catch (e) {
+    if (e.rejected) setMessage(e.message); else showError(true);
+  }
+};
+
+$("complete").onclick = async function () {
+  setMessage("");
+  const id = calledId[current.counter_id];
+  if (!id) return;
+  try {
+    await post("/api/tickets/" + id + "/complete", {user: current.user_id});
+    delete calledId[current.counter_id];
+    $("detailBox").style.display = "none";
+    setMessage("완료 처리했습니다");
+    await renderQueue();
+  } catch (e) {
+    if (e.rejected) setMessage(e.message); else showError(true);
+  }
+};
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>두둑은행 방문 예약</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<header class="top"><h1>두둑은행 지점 방문 서비스</h1>
+  <nav><a href="/display.html">대기 화면</a><a href="/teller.html">창구</a><a href="/manager.html">지점장</a></nav></header>
+<main>
+  <div class="tabs">
+    <button class="on" data-tab="resv">방문 예약</button>
+    <button class="sec" data-tab="walk">번호표 뽑기</button>
+    <button class="sec" data-tab="arrive">예약 도착 확인</button>
+    <button class="sec" data-tab="status">내 순서 확인</button>
+  </div>
+
+  <section id="tab-resv" class="card">
+    <h2>방문 예약</h2>
+    <p class="hint">예약 고객은 도착 확인 후 현장 고객보다 먼저 호출됩니다. 예약 시간 15분이 지나도 도착 확인이 없으면 노쇼로 처리됩니다.</p>
+    <form id="f-resv" class="person"></form>
+    <div class="msg" id="m-resv"></div>
+  </section>
+
+  <section id="tab-walk" class="card" hidden>
+    <h2>현장 번호표</h2>
+    <form id="f-walk" class="person"></form>
+    <div class="msg" id="m-walk"></div>
+    <div id="ticket-walk"></div>
+  </section>
+
+  <section id="tab-arrive" class="card" hidden>
+    <h2>예약 도착 확인</h2>
+    <form id="f-arrive">
+      <div class="grid">
+        <div><label>예약번호 (예: D012)</label><input name="ticket_no" required></div>
+        <div><label>전화번호</label><input name="phone" required inputmode="tel" placeholder="010-0000-4878"></div>
+      </div>
+      <button>도착 확인</button>
+    </form>
+    <div class="msg" id="m-arrive"></div><div id="ticket-arrive"></div>
+  </section>
+
+  <section id="tab-status" class="card" hidden>
+    <h2>내 순서 확인</h2>
+    <form id="f-status">
+      <div class="grid">
+        <div><label>번호표</label><input name="ticket_no" required></div>
+        <div><label>전화번호</label><input name="phone" required inputmode="tel"></div>
+      </div>
+      <button>조회</button>
+    </form>
+    <div class="msg" id="m-status"></div><div id="ticket-status"></div>
+  </section>
+</main>
+<script src="/common.js"></script>
+<script>
+const personFields = `
+  <div class="grid">
+    <div><label>이름</label><input name="name" required maxlength="20" autocomplete="off"></div>
+    <div><label>전화번호</label><input name="phone" required inputmode="tel" placeholder="010-0000-4878"></div>
+    <div><label>계좌번호</label><input name="account" required inputmode="numeric" placeholder="숫자 10~16자리" autocomplete="off"></div>
+    <div><label>업무 종류</label><select name="service"><option>예금</option><option>대출</option><option>외환</option></select></div>
+  </div>`;
+document.querySelectorAll("form.person").forEach(f => f.insertAdjacentHTML("afterbegin", personFields));
+
+document.getElementById("f-resv").insertAdjacentHTML("beforeend",
+  `<div class="grid"><div><label>방문 날짜 (평일, 7일 이내)</label><input type="date" name="date" required></div>
+   <div><label>방문 시간</label><select name="time" required></select></div></div><button>예약하기</button>`);
+document.getElementById("f-walk").insertAdjacentHTML("beforeend", "<button>번호표 받기</button>");
+
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".tabs button").forEach(x => x.className = "sec");
+  b.className = "on";
+  for (const s of ["resv", "walk", "arrive", "status"]) document.getElementById("tab-" + s).hidden = s !== b.dataset.tab;
+});
+
+const fd = f => Object.fromEntries(new FormData(f));
+const dateInput = document.querySelector("#f-resv [name=date]");
+const timeSel = document.querySelector("#f-resv [name=time]");
+const pad = n => String(n).padStart(2, "0");
+const d0 = new Date();
+dateInput.min = `${d0.getFullYear()}-${pad(d0.getMonth() + 1)}-${pad(d0.getDate())}`;
+dateInput.value = dateInput.min;
+
+async function loadSlots() {
+  timeSel.replaceChildren();
+  if (!dateInput.value) return;
+  const { slots } = await api("/api/slots?date=" + dateInput.value);
+  if (!slots.length) timeSel.append(new Option("예약 가능한 시간이 없습니다", ""));
+  for (const s of slots) {
+    const o = new Option(s.time + (s.available ? "" : " (마감)"), s.time);
+    o.disabled = !s.available;
+    timeSel.append(o);
+  }
+}
+dateInput.onchange = loadSlots; loadSlots();
+
+function renderTicket(box, t) {
+  box.replaceChildren();
+  const wrap = el("div"); wrap.style.marginTop = "14px";
+  wrap.append(el("div", t.ticket_no, "big"));
+  const p = el("p");
+  p.append(kindBadge(t.kind), " ", t.service + " · " + (STATUS[t.status] || t.status));
+  wrap.append(p);
+  if (t.position) wrap.append(el("p", "현재 대기 순서: " + t.position + "번째"));
+  if (t.counter && (t.status === "called" || t.status === "serving")) wrap.append(el("p", t.counter + "번 창구로 오세요.", "big"));
+  if (t.status === "reserved") wrap.append(el("p", "예약 시간 " + hhmm(t.reserved_at) + " — 도착 후 '예약 도착 확인'을 눌러 주세요."));
+  box.append(wrap);
+}
+
+function wire(formId, msgId, boxId, path, after) {
+  document.getElementById(formId).onsubmit = async e => {
+    e.preventDefault();
+    const m = document.getElementById(msgId);
+    try {
+      const r = await api(path, { method: "POST", body: JSON.stringify(fd(e.target)) });
+      m.className = "msg"; m.textContent = "";
+      after(r, m, boxId, e.target);
+    } catch (err) { showMsg(m, err.message, false); }
+  };
+}
+wire("f-resv", "m-resv", null, "/api/reservations", (r, m, b, f) => { showMsg(m, r.message + " (예약번호 " + r.ticket_no + ", " + r.reserved_at.replace("T", " ").slice(0, 16) + ")", true); f.reset(); dateInput.value = dateInput.min; loadSlots(); });
+wire("f-walk", "m-walk", "ticket-walk", "/api/walkin", (r, m, b, f) => { renderTicket(document.getElementById(b), r); f.reset(); });
+wire("f-arrive", "m-arrive", "ticket-arrive", "/api/checkin", (r, m, b) => renderTicket(document.getElementById(b), r));
+wire("f-status", "m-status", "ticket-status", "/api/ticket/lookup", (r, m, b) => renderTicket(document.getElementById(b), r));
+</script></body></html>

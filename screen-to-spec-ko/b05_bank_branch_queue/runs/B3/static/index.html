@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>두둑은행 넉넉지점 · 대기 관리</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f4f6f8; color: #1d2733; }
+  header { background: #1f4e79; color: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  header h1 { margin: 0; font-size: 20px; }
+  header a { color: #cfe3f7; margin-left: 12px; }
+  main { padding: 24px; max-width: 900px; }
+  .card { background: #fff; border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+  h2 { margin-top: 0; font-size: 18px; }
+  button { padding: 8px 16px; border: 0; border-radius: 4px; background: #1f4e79; color: #fff; cursor: pointer; font-size: 15px; }
+  .ticket { padding: 8px 0; border-bottom: 1px solid #e3e8ee; }
+  .badge { background: #e8f3e8; color: #2a7a2a; border-radius: 10px; padding: 1px 8px; font-size: 12px; margin-left: 6px; }
+  [data-testid="message"] { min-height: 22px; color: #b3261e; margin-bottom: 12px; }
+  #error { display: none; padding: 16px; background: #fdecea; border-radius: 8px; margin-bottom: 16px; }
+  table { border-collapse: collapse; margin-bottom: 12px; }
+  td, th { border: 1px solid #d5dbe2; padding: 6px 14px; text-align: left; }
+</style>
+</head>
+<body>
+<header>
+  <h1>두둑은행 넉넉지점 · 대기 관리</h1>
+  <div>
+    <label>사용자 <select data-testid="user"></select></label>
+    <a href="/board" target="_blank">대기 화면 보기</a>
+  </div>
+</header>
+<main>
+  <div data-testid="message"></div>
+  <div id="error"><span>불러오지 못했습니다</span> <button id="retry" type="button">다시 시도</button></div>
+  <div id="view"></div>
+</main>
+<script>
+const SERVICE = { deposit: "예금", loan: "대출", fx: "외환" };
+const $ = (s) => document.querySelector(s);
+const sel = $('[data-testid="user"]');
+const msg = $('[data-testid="message"]');
+let users = [];
+// 사용자별로 호출 중인 고객 ticket_id 를 기억 (새로 고침해도 유지)
+const calledKey = (uid) => "called:" + uid;
+
+function el(tag, attrs, text) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) e.setAttribute(k, v);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+function setMessage(t) { msg.textContent = t || ""; }
+
+async function api(path, opts) {
+  const res = await fetch(path, opts);
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok) {
+    const err = new Error((data && data.detail) || String(res.status));
+    err.server = true;
+    throw err;
+  }
+  return data;
+}
+const post = (path, body) => api(path, {
+  method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
+});
+
+function showLoadError() { $("#error").style.display = "block"; $("#view").textContent = ""; }
+
+async function refresh() {
+  $("#error").style.display = "none";
+  const user = users.find((u) => u.user_id === sel.value);
+  if (!user) return;
+  try {
+    if (user.role === "manager") await renderManager(user);
+    else await renderTeller(user);
+  } catch (e) {
+    showLoadError();
+  }
+}
+
+async function renderManager(user) {
+  const s = await api("/api/manager/summary?viewer=" + encodeURIComponent(user.user_id));
+  const view = $("#view");
+  view.textContent = "";
+  const box = el("div", { class: "card", "data-testid": "summary" });
+  box.appendChild(el("h2", {}, "지점 현황"));
+  const t = el("table");
+  const rows = [];
+  for (const k of ["deposit", "loan", "fx"]) rows.push([SERVICE[k] + " 대기", s.waiting[k] + "명"]);
+  rows.push(["보류", s.held + "명"], ["완료", s.done + "명"]);
+  for (const r of rows) {
+    const tr = el("tr");
+    tr.appendChild(el("th", {}, r[0]));
+    tr.appendChild(el("td", {}, r[1]));
+    t.appendChild(tr);
+  }
+  box.appendChild(t);
+  box.appendChild(el("h2", {}, "창구별 호출 번호"));
+  const t2 = el("table");
+  for (const c of s.counters) {
+    const tr = el("tr");
+    tr.appendChild(el("th", {}, c.counter_id + " (" + SERVICE[c.service] + ")"));
+    tr.appendChild(el("td", {}, c.number === null ? "-" : String(c.number)));
+    t2.appendChild(tr);
+  }
+  box.appendChild(t2);
+  view.appendChild(box);
+}
+
+async function renderTeller(user) {
+  const q = await api("/api/counters/" + user.counter_id + "/queue?viewer=" + encodeURIComponent(user.user_id));
+  const calledId = sessionStorage.getItem(calledKey(user.user_id));
+  let detail = null;
+  if (calledId) {
+    try {
+      detail = await api("/api/tickets/" + calledId + "?viewer=" + encodeURIComponent(user.user_id));
+      if (detail.status !== "called") detail = null;
+    } catch (e) { detail = null; }
+    if (!detail) sessionStorage.removeItem(calledKey(user.user_id));
+  }
+  const view = $("#view");
+  view.textContent = "";
+
+  const qc = el("div", { class: "card" });
+  qc.appendChild(el("h2", {}, user.counter_id + " 창구 대기 줄 (" + q.length + "명)"));
+  if (!q.length) qc.appendChild(el("p", {}, "대기 중인 고객이 없습니다"));
+  for (const t of q) {
+    const row = el("div", { class: "ticket", "data-testid": "ticket", "data-id": t.ticket_id },
+      t.number + " · " + t.masked_name + " · " + SERVICE[t.service]);
+    if (t.priority) row.appendChild(el("span", { class: "badge" }, "예약 우선"));
+    qc.appendChild(row);
+  }
+  const next = el("button", { type: "button", "data-testid": "next" }, "다음 번호 호출");
+  next.addEventListener("click", () => doNext(user));
+  qc.appendChild(next);
+  view.appendChild(qc);
+
+  if (detail) {
+    const dc = el("div", { class: "card" });
+    dc.appendChild(el("h2", {}, "호출한 고객 (" + detail.number + "번 · " + SERVICE[detail.service] + ")"));
+    dc.appendChild(el("p", { "data-testid": "detail-name" }, detail.name));
+    dc.appendChild(el("p", { "data-testid": "detail-phone" }, detail.phone));
+    dc.appendChild(el("p", { "data-testid": "detail-account" }, "계좌 끝 4자리 " + detail.account_last4));
+    const done = el("button", { type: "button", "data-testid": "complete" }, "완료");
+    done.addEventListener("click", () => doComplete(user, detail.ticket_id));
+    dc.appendChild(done);
+    view.appendChild(dc);
+  }
+}
+
+async function doNext(user) {
+  setMessage("");
+  try {
+    const r = await post("/api/counters/" + user.counter_id + "/next", { user: user.user_id });
+    if (r.called) sessionStorage.setItem(calledKey(user.user_id), r.called.ticket_id);
+    else {
+      sessionStorage.removeItem(calledKey(user.user_id));
+      setMessage("대기 중인 고객이 없습니다");
+    }
+  } catch (e) {
+    if (!e.server) return showLoadError();
+    setMessage(e.message);
+    return;
+  }
+  await refresh();
+}
+
+async function doComplete(user, id) {
+  setMessage("");
+  try {
+    await post("/api/tickets/" + id + "/complete", { user: user.user_id });
+    sessionStorage.removeItem(calledKey(user.user_id));
+  } catch (e) {
+    if (!e.server) return showLoadError();
+    setMessage(e.message);
+    return;
+  }
+  await refresh();
+}
+
+async function init() {
+  $("#error").style.display = "none";
+  try {
+    users = await api("/api/users");
+  } catch (e) {
+    return showLoadError();
+  }
+  const prev = sel.value;
+  sel.textContent = "";
+  for (const u of users) {
+    sel.appendChild(el("option", { value: u.user_id }, u.name + " (" + (u.role === "manager" ? "지점장" : "창구 직원") + ")"));
+  }
+  if (prev) sel.value = prev;
+  await refresh();
+}
+
+sel.addEventListener("change", () => { setMessage(""); refresh(); });
+$("#retry").addEventListener("click", () => (users.length ? refresh() : init()));
+init();
+</script>
+</body>
+</html>

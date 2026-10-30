@@ -1,0 +1,12 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><title>대기 현황</title>
+<link rel="stylesheet" href="style.css"><style>body{background:#0b1f15;color:#fff}.p{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:24px}
+h2{color:#8fe3b2}.c{background:#12402a;border-radius:12px;padding:14px 20px;margin:10px 0;font-size:32px;display:flex;justify-content:space-between}
+.w{font-size:24px;padding:8px 0;border-bottom:1px solid #1d4a34;display:flex;justify-content:space-between}</style>
+<div class="p"><section><h2>호출 중</h2><div id="called"></div></section><section><h2>대기 순서</h2><div id="waiting"></div></section></div>
+<script src="common.js"></script><script>
+function div(cls,...t){const d=document.createElement('div');d.className=cls;t.forEach(x=>{const s=document.createElement('span');s.textContent=x;d.append(s)});return d}
+async function tick(){try{const d=await api('/api/display');
+  $('#called').replaceChildren(...d.called.map(r=>div('c',`${r.ticket_no}  ${r.name}`,`창구 ${r.window}`)));
+  $('#waiting').replaceChildren(...d.waiting.map((r,i)=>div('w',`${i+1}. ${r.ticket_no}`,r.name)));}catch(e){}}
+tick();setInterval(tick,3000);
+</script></html>

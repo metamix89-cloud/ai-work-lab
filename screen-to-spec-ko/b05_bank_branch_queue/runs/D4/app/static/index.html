@@ -1,0 +1,30 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>두둑은행 방문 예약</title><link rel="stylesheet" href="style.css">
+<header><b>두둑은행 지점</b><a href="/">고객</a><a href="/display.html">대기 화면</a><a href="/teller.html">창구</a><a href="/manager.html">지점장</a></header>
+<main>
+<div class="card"><h3>번호표 / 방문 예약</h3>
+<label>이름</label><input id="name" maxlength="10">
+<label>휴대전화</label><input id="phone" placeholder="010-0000-0000" maxlength="13">
+<label>계좌번호 (숫자 10~16자리)</label><input id="account" inputmode="numeric" maxlength="20">
+<label>업무</label><select id="service"><option value="deposit">예금</option><option value="loan">대출</option><option value="fx">외환</option></select>
+<label>예약 시각 (현장 번호표는 비워 두세요)</label><input id="when" type="datetime-local">
+<button id="go">제출</button><div id="out" class="msg"></div></div>
+<div class="card"><h3>예약 고객 도착 확인</h3>
+<label>예약번호</label><input id="code" maxlength="12"><label>전화번호 끝 4자리</label><input id="l4" maxlength="4" inputmode="numeric">
+<button id="chk" class="alt">도착 확인 · 번호표 받기</button><div id="out2" class="msg"></div></div>
+</main><script src="common.js"></script><script>
+$('#go').onclick=async()=>{
+  const b={name:$('#name').value,phone:$('#phone').value,account:$('#account').value,service:$('#service').value};
+  try{
+    if($('#when').value){const r=await api('/api/reservations',{method:'POST',body:{...b,reserved_at:$('#when').value}});
+      say($('#out'),`예약 완료 · 예약번호 ${r.code} (${r.service}, ${r.reserved_at.replace('T',' ')}). 도착 시 아래에서 확인하세요.`,1);}
+    else{const r=await api('/api/tickets',{method:'POST',body:b});
+      say($('#out'),`번호표 ${r.ticket_no} · 앞에 ${r.ahead}명`,1);}
+  }catch(e){say($('#out'),e.message)}
+};
+$('#chk').onclick=async()=>{
+  try{const r=await api('/api/checkin',{method:'POST',body:{code:$('#code').value,phone_last4:$('#l4').value}});
+    say($('#out2'),`번호표 ${r.ticket_no} ${r.priority?'(예약 우선) ':''}· 앞에 ${r.ahead}명`,1);}
+  catch(e){say($('#out2'),e.message)}
+};
+</script></html>

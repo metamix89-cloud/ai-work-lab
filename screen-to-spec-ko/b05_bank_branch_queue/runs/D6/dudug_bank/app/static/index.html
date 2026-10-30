@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>두둑은행 방문 예약 · 번호표</title><link rel="stylesheet" href="/static/style.css"></head>
+<body>
+<header>두둑은행 지점 <nav style="display:inline"><a href="/display">대기 화면</a><a href="/teller">창구</a><a href="/manager">지점장</a></nav></header>
+<main>
+  <section>
+    <h2>방문 예약</h2>
+    <form id="reserve">
+      <div class="row"><div><label>이름</label><input name="name" required></div>
+      <div><label>전화번호</label><input name="phone" placeholder="010-0000-0000" required></div></div>
+      <label>계좌번호</label><input name="account" inputmode="numeric" placeholder="숫자 10~16자리" required>
+      <div class="row"><div><label>업무</label><select name="work_type">
+        <option value="deposit">예금</option><option value="loan">대출</option><option value="fx">외환</option></select></div>
+      <div><label>방문 일시 (09:00~16:00)</label><input type="datetime-local" name="reserved_at" step="600" required></div></div>
+      <button>예약하기</button>
+    </form>
+    <div id="reserve-out"></div>
+  </section>
+
+  <section>
+    <h2>예약 고객 도착 확인</h2>
+    <form id="checkin">
+      <div class="row"><div><label>예약 번호 (6자리)</label><input name="code" required></div>
+      <div><label>전화번호 끝 4자리</label><input name="phone_last4" maxlength="4" required></div></div>
+      <button>도착 확인 · 번호표 받기</button>
+    </form>
+    <p class="muted">예약 시각 앞뒤 10분 안에 도착하면 일반 고객보다 먼저 호출됩니다.</p>
+    <div id="checkin-out"></div>
+  </section>
+
+  <section>
+    <h2>현장 번호표</h2>
+    <form id="walkin">
+      <div class="row"><div><label>이름</label><input name="name" required></div>
+      <div><label>전화번호</label><input name="phone" required></div></div>
+      <label>계좌번호</label><input name="account" inputmode="numeric" required>
+      <label>업무</label><select name="work_type">
+        <option value="deposit">예금</option><option value="loan">대출</option><option value="fx">외환</option></select>
+      <button>번호표 뽑기</button>
+    </form>
+    <div id="walkin-out"></div>
+  </section>
+</main>
+<script src="/static/common.js"></script>
+<script>
+const pad = n => String(n).padStart(2, "0");
+const d = new Date(Date.now() + 3600e3);
+document.querySelector("[name=reserved_at]").value =
+  `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:00`;
+
+function wire(formId, outId, path, render) {
+  const form = document.getElementById(formId), out = document.getElementById(outId);
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const btn = form.querySelector("button"); btn.disabled = true;
+    try {
+      const r = await api(path, { method: "POST", body: Object.fromEntries(new FormData(form)) });
+      fill(out, h("div", { class: "msg" }, render(r)));
+      form.reset();
+    } catch (err) { fill(out, h("div", { class: "msg err" }, err.message)); }
+    btn.disabled = false;
+  });
+}
+const ticket = r => [h("div", { class: "big" }, r.number),
+  `내 앞 대기 ${r.ahead}명` + (r.priority ? " · 예약 우선 고객으로 접수되었습니다" : "")];
+wire("reserve", "reserve-out", "/api/reservations", r =>
+  [h("div", { class: "big" }, r.code), `예약 번호입니다. ${r.reserved_at.replace("T", " ")} 에 방문해 주세요. 도착 시 예약 번호가 필요합니다.`]);
+wire("checkin", "checkin-out", "/api/reservations/checkin", ticket);
+wire("walkin", "walkin-out", "/api/tickets", ticket);
+</script></body></html>

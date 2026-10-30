@@ -1,0 +1,27 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>고객 - 두둑은행</title><link rel="stylesheet" href="/style.css"></head><body>
+<header>두둑은행 · 고객</header><main>
+<div class="card"><h2>번호표 뽑기 / 방문 예약</h2>
+<form id="f"><label>이름</label><input id="name" required maxlength="20">
+<label>전화번호</label><input id="phone" required placeholder="010-0000-4878" inputmode="tel">
+<label>계좌번호 (숫자)</label><input id="account" required inputmode="numeric" autocomplete="off">
+<label>업무</label><select id="service"><option value="deposit">예금</option><option value="loan">대출</option><option value="fx">외환</option></select>
+<label>예약 일시 (비워 두면 지금 번호표 발급)</label><input id="when" type="datetime-local" step="300">
+<button id="go">확인</button></form><div id="out" class="msg" hidden></div></div>
+<div class="card"><h2>예약 고객 도착 확인</h2>
+<label>예약 코드 (8자리)</label><input id="code" maxlength="8" style="text-transform:uppercase">
+<button class="sub" id="ci">도착 확인 · 번호표 받기</button><div id="out2" class="msg" hidden></div>
+<p class="muted">예약 시각 앞뒤 10분 안에 도착 확인하면 우선 호출됩니다.</p></div></main>
+<script src="/common.js"></script><script>
+const pad=n=>String(n).padStart(2,"0");
+const nowL=new Date();$("when").min=`${nowL.getFullYear()}-${pad(nowL.getMonth()+1)}-${pad(nowL.getDate())}T${pad(nowL.getHours())}:${pad(nowL.getMinutes())}`;
+$("f").onsubmit=async e=>{e.preventDefault();
+ const b={name:$("name").value,phone:$("phone").value,account:$("account").value,service:$("service").value};
+ try{
+  if($("when").value){b.reserved_at=$("when").value;const r=await api("/api/reservations",{method:"POST",body:JSON.stringify(b)});
+   say("out",`예약 완료: ${r.reserved_at.replace("T"," ")} (${r.service}). 예약 코드 ${r.code} — 방문 시 입력하세요.`)}
+  else{const r=await api("/api/tickets",{method:"POST",body:JSON.stringify(b)});say("out",`번호표 ${r.ticket} · 앞 대기 ${r.ahead}명`)}
+ }catch(x){say("out",x.message,1)}};
+$("ci").onclick=async()=>{try{const r=await api("/api/check-in",{method:"POST",body:JSON.stringify({code:$("code").value.trim().toUpperCase()})});
+ say("out2",`${r.name}님 번호표 ${r.ticket} · ${r.priority?"예약 우선 호출 대상입니다":"예약 시간 범위 밖이라 일반 순서로 호출됩니다"}`)}catch(x){say("out2",x.message,1)}};
+</script></body></html>

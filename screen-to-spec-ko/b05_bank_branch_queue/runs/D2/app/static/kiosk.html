@@ -1,0 +1,49 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>키오스크</title>
+<link rel="stylesheet" href="common.css"><header>두둑은행 · 고객 키오스크</header>
+<main><div class="tabs"><button data-m="walkin" class="on">번호표 뽑기</button><button data-m="reserve">방문 예약</button><button data-m="checkin">예약 도착 체크인</button></div>
+<div class="card"><form id="f"></form><div id="out"></div></div></main>
+<script src="common.js"></script>
+<script>
+const svc = () => h('select', { name: 'service' }, ['예금', '대출', '외환'].map(s => h('option', { value: s }, s)));
+const fld = (l, n, ph, t = 'text') => [h('label', {}, l), h('input', { name: n, placeholder: ph, type: t, required: '' })];
+function defaultTime() {
+  const d = new Date(Date.now() + 3600e3);
+  d.setMinutes(Math.ceil(d.getMinutes() / 10) * 10, 0, 0);
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().slice(0, 16);
+}
+const person = () => [...fld('이름', 'name', '홍길동'), ...fld('전화번호', 'phone', '010-0000-4878', 'tel'),
+  ...fld('계좌번호', 'account', '110-123-456789'), h('label', {}, '업무 종류'), svc()];
+const forms = {
+  walkin: { url: '/api/walkin', btn: '번호표 뽑기', fields: person },
+  reserve: { url: '/api/reservations', btn: '예약하기', fields: () => [...person(), h('label', {}, '방문 시각 (9시~16시)'),
+    h('input', { name: 'reserved_at', type: 'datetime-local', required: '', value: defaultTime() })] },
+  checkin: { url: '/api/checkin', btn: '체크인', fields: () => [...fld('예약한 전화번호', 'phone', '010-0000-4878', 'tel'),
+    ...fld('계좌번호 끝 4자리', 'account_last4', '1234')] },
+};
+let mode = 'walkin';
+function render() {
+  $('#f').replaceChildren(...forms[mode].fields(), h('button', { type: 'submit' }, forms[mode].btn));
+  $('#out').replaceChildren();
+  document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.m === mode));
+}
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => { mode = b.dataset.m; render(); });
+$('#f').onsubmit = async e => {
+  e.preventDefault();
+  const body = Object.fromEntries(new FormData(e.target));
+  const out = $('#out');
+  try {
+    const r = await api(forms[mode].url, { method: 'POST', body });
+    if (mode === 'reserve') {
+      render();
+      say($('#out'), `${r.name}님, ${r.service} 방문 예약 완료: ${r.reserved_at.replace('T', ' ')}. 예약 시각 앞뒤 10분 안에 도착해 체크인하면 먼저 안내해 드려요.`);
+    } else {
+      const box = h('div', { class: 'msg' }, h('div', {}, (r.name ? r.name + '님 ' : '') + '대기번호'), h('div', { class: 'big' }, r.number),
+        h('div', {}, `앞에 ${r.ahead}명 · 창구 ${r.counters.join('·')}` + (r.priority ? ' · 예약 우선' : '')));
+      render();
+      $('#out').replaceChildren(box);
+    }
+  } catch (x) { say(out, x.message, 1); }
+};
+render();
+</script>

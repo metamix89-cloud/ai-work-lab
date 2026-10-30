@@ -1,0 +1,48 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>창구</title><link rel="stylesheet" href="/static/common.css"></head><body>
+<header><span id="title">창구 로그인</span><span><a href="/">고객</a><a href="#" id="out">로그아웃</a></span></header>
+<main>
+<div class="card" id="login"><h2>창구 직원 로그인</h2>
+ <label>창구</label><select id="win"><option>1</option><option>2</option><option>3</option><option>4</option></select>
+ <label>PIN</label><input id="pin" type="password" autocomplete="off"><button id="go">로그인</button><div class="err" id="lerr"></div></div>
+<div id="panel" hidden>
+ <div class="row"><div class="card stat"><div class="v" id="nw">-</div><div class="l">대기</div></div>
+  <div class="card stat"><div class="v" id="nd">-</div><div class="l">처리 완료</div></div></div>
+ <div class="card"><h2>현재 고객</h2><div id="cur"></div><div class="err" id="err"></div>
+  <button id="next">다음 고객 호출</button> <button id="start" class="sec">응대 시작 (창구 도착)</button>
+  <button id="fin" class="sec">응대 완료</button></div>
+ <div class="card"><h2>보류 (3분 내 미도착)</h2><div id="held"></div></div>
+</div></main>
+<script src="/static/common.js"></script>
+<script>
+const $ = id => document.getElementById(id); let st = null, left = null, timer, poll;
+function sync() { clearInterval(timer); timer = setInterval(() => { if (left > 0) { left--; paint(); } }, 1000); }
+function paint() {
+  if (!st) return;
+  $('title').textContent = `창구 ${st.window} · ${st.service}`;
+  $('nw').textContent = st.waiting; $('nd').textContent = st.done;
+  const c = st.current;
+  $('cur').replaceChildren(...(c ? [
+    el('div', {class: 'big'}, c.ticket_no + ' ' + c.name),
+    el('table', {}, ...[['업무', c.service], ['전화번호', c.phone], ['계좌번호', '**** ' + c.account_tail + ' (끝 4자리)'],
+       ['구분', c.kind === 'reserved' ? `예약 ${fmtTime(c.reserved_at)}` + (c.priority ? ' · 우선' : ' · 일반 순서') : '현장 발급'],
+       ['상태', c.status === 'called' ? `호출됨 — ${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')} 내 미도착 시 보류` : '응대 중']]
+       .map(([k, v]) => el('tr', {}, el('th', {}, k), el('td', {}, v))))]
+    : [el('div', {class: 'err'}, '진행 중인 고객이 없습니다.')]));
+  $('next').disabled = !!c || st.waiting === 0; $('start').disabled = !(c && c.status === 'called'); $('fin').disabled = !(c && c.status === 'serving');
+  $('held').replaceChildren(...(st.held.length ? st.held.map(h => el('div', {}, `${h.ticket_no} ${h.name} `,
+    el('button', {class: 'sec', onclick: () => act('/api/teller/requeue/' + h.id)}, '다시 대기'))) : ['없음']));
+}
+function setState(d) { st = d; left = d.current ? d.current.seconds_left : null; paint(); sync(); }
+async function load() { try { setState(await api('/api/teller/state')); } catch (e) { if (e.status === 401 || e.status === 403) logout(); } }
+async function act(p) { try { setState(await api(p, {method: 'POST', body: {}})); $('err').textContent = ''; } catch (e) { $('err').textContent = e.message; load(); } }
+function logout() { sessionStorage.clear(); location.reload(); }
+function enter() { $('login').hidden = true; $('panel').hidden = false; load(); poll = setInterval(load, 2000); }
+$('go').onclick = async () => {
+  try { const d = await api('/api/login', {body: {role: 'teller', window: +$('win').value, pin: $('pin').value}});
+    sessionStorage.setItem('token', d.token); enter(); } catch (e) { $('lerr').textContent = e.message; }
+};
+$('next').onclick = () => act('/api/teller/call-next'); $('start').onclick = () => act('/api/teller/start');
+$('fin').onclick = () => act('/api/teller/finish'); $('out').onclick = logout;
+if (sessionStorage.getItem('token')) enter();
+</script></body></html>

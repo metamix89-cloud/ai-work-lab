@@ -1,0 +1,41 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>두둑은행 대기 현황</title><link rel="stylesheet" href="common.css">
+<style>
+body{background:#0d2a1f;color:#fff;overflow:hidden}
+.top{display:flex;justify-content:space-between;align-items:center;padding:18px 40px;background:#0a7a4b;font-size:28px;font-weight:bold}
+.wrap{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;padding:28px 40px;height:calc(100vh - 80px)}
+h3{font-size:24px;margin:0 0 16px;color:#9fd9bd}
+.ctr{display:flex;align-items:center;justify-content:space-between;background:#12392a;border-radius:16px;padding:22px 32px;margin-bottom:16px;font-size:34px}
+.ctr .no{font-size:72px;font-weight:bold;letter-spacing:2px}.ctr.idle .no{color:#4d6b5c;font-size:44px}
+.ctr.flash{animation:fl 1s 4;background:#c9a100}@keyframes fl{50%{background:#12392a}}
+.q{overflow:hidden}.qi{display:flex;justify-content:space-between;background:#12392a;border-radius:12px;padding:12px 22px;margin-bottom:10px;font-size:30px}
+.qi.p{border-left:10px solid #f5c542}.qi small{font-size:20px;color:#9fd9bd}.more{font-size:22px;color:#9fd9bd}
+</style></head><body>
+<div class="top"><span>두둑은행 · 대기 현황</span><span id="clock"></span></div>
+<div class="wrap"><section><h3>호출 창구</h3><div id="ctrs"></div></section>
+<section><h3>대기 순서 (<span id="tot">0</span>명) <small style="font-size:16px">★ 예약 우선</small></h3><div class="q" id="q"></div></section></div>
+<script src="common.js"></script>
+<script>
+const last = {}; let first = true;
+const label = {called: '호출 중', serving: '상담 중', idle: '대기 없음'};
+async function tick() {
+  try {
+    const b = await api('/api/board');
+    $('#clock').textContent = b.now.slice(11, 19);
+    $('#tot').textContent = b.waiting_total;
+    $('#ctrs').replaceChildren(...b.counters.map(c => {
+      const flash = !first && c.status === 'called' && last[c.counter] !== c.ticket_no;
+      last[c.counter] = c.ticket_no;
+      return h('div', {class: 'ctr ' + (c.status === 'idle' ? 'idle' : '') + (flash ? ' flash' : '')},
+        h('span', {}, `${c.counter}번 창구`), h('span', {class: 'no'}, c.ticket_no || '—'), h('span', {}, label[c.status]));
+    }));
+    first = false;
+    const max = Math.max(4, Math.floor((innerHeight - 190) / 68));
+    const items = b.waiting.slice(0, max).map(w => h('div', {class: 'qi' + (w.priority ? ' p' : '')},
+      h('span', {}, (w.priority ? '★ ' : '') + w.ticket_no), h('small', {}, w.service)));
+    if (b.waiting.length > max) items.push(h('div', {class: 'more'}, `외 ${b.waiting.length - max}명 대기`));
+    $('#q').replaceChildren(...items);
+  } catch (e) {}
+}
+tick(); setInterval(tick, 3000);
+</script></body></html>

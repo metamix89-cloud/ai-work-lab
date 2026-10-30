@@ -1,0 +1,1980 @@
+{
+ "A1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: {'detail': 'Not Found'}\nassert (404 == 200)",
+   "T3": "AssertionError: ('대기 화면 응답에 업무 종류', ['예금', '대출', '외환'])\nassert not ['예금', '대출', '외환']",
+   "T4": "AssertionError: ('도착', 'K-05', '10:10', '기대', True, 405, ...)\nassert (405 == 200)",
+   "T5": "AssertionError: ('예금 줄: 우선(도착 순) → 일반(도착 순)', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T6": "AssertionError: ('호출 뒤 2분은 409', 405, {'detail': 'Method Not Allowed'})\nassert 405 == 409",
+   "T7": "AssertionError: ('호출한 창구 직원은 상세', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T8": "AssertionError: ('지점장 현황', 401, {'detail': 'PIN이 올바르지 않습니다.'})\nassert 401 == 200",
+   "T9": "AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nassert '김*수' in '{\"detail\":\"Not Found\"}'"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": ", {'detail': 'Not Found'})\nE       assert (404 == 200)\n\n_grader\\test_dod.py:309: AssertionError\n______________________ test_T8_manager_and_reject_order _______________________\n\nsrv = <test_dod.Server object at 0x000001E1262CEBA0>\n\n    def test_T8_manager_and_reject_order(srv):\n        st, s, raw = get(srv, \"/api/manager/summary?viewer=m1\")\n>       assert st == 200, (\"지점장 현황\", st, s)\nE       AssertionError: ('지점장 현황', 401, {'detail': 'PIN이 올바르지 않습니다.'})\nE       assert 401 == 200\n\n_grader\\test_dod.py:328: AssertionError\n_______________________________ test_T9_screens _______________________________\n\nsrv = <test_dod.Server object at 0x000001E1262CEBA0>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screens(srv, pw):\n        pg, responses = open_page(pw, srv, \"/board\")\n        text = pg.inner_text(\"body\")\n        assert not pii_in(text), (\"대기 화면 글자에 개인정보\", pii_in(text))\n>       assert \"김*수\" in text, (\"가린 이름이 보여야 한다 (호출 중인 K-01)\", text[:300])\nE       AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nE       assert '김*수' in '{\"detail\":\"Not Found\"}'\n\n_grader\\test_dod.py:355: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: {'detail': 'No...\nFAILED _grader/test_dod.py::test_T3_board_hides - AssertionError: ('대기 화면...\nFAILED _grader/test_dod.py::test_T4_reservation_window - AssertionError: ('도...\nFAILED _grader/test_dod.py::test_T5_order_and_counters - AssertionError: ('예...\nFAILED _grader/test_dod.py::test_T6_hold_and_complete - AssertionError: ('호...\nFAILED _grader/test_dod.py::test_T7_roles - AssertionError: ('호출한 창구 직...\nFAILED _grader/test_dod.py::test_T8_manager_and_reject_order - AssertionError...\nFAILED _grader/test_dod.py::test_T9_screens - AssertionError: ('가린 이름이 ...\n8 failed, 1 passed in 9.23s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/board",
+   "/api/checkin",
+   "/api/manager/summary",
+   "/api/reservations",
+   "/api/slots",
+   "/api/teller/call",
+   "/api/teller/state",
+   "/api/teller/{vid}/done",
+   "/api/teller/{vid}/noshow",
+   "/api/teller/{vid}/recall",
+   "/api/teller/{vid}/start",
+   "/api/tickets"
+  ],
+  "extra_routes": [
+   "/api/checkin",
+   "/api/reservations",
+   "/api/slots",
+   "/api/teller/call",
+   "/api/teller/state",
+   "/api/teller/{vid}/done",
+   "/api/teller/{vid}/noshow",
+   "/api/teller/{vid}/recall",
+   "/api/teller/{vid}/start"
+  ],
+  "tests_modified": null,
+  "files": [
+   "README.md",
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv",
+   "server.log",
+   "static/board.html",
+   "static/common.css",
+   "static/common.js",
+   "static/index.html",
+   "static/manager.html",
+   "static/teller.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 두둑은행 지점 '방문 예약 · 대기 현황판' 웹앱을 만들어 줘. 고객은 이름 · 전화번호 · 계좌번호 · 업무 종류(예금 · 대출 · 외환)를 적어 방문 예약을 하거나 현장에서 번호표를 뽑아. 지점 대기 화면(고객들이 같이 보는 모니터)에 대기 순서와 호출 창구가 뜨고, 창구 직원은 다음 고객을 호출해서 상세를 보고, 지점장은 대기 현황과 노쇼를 봐. 예약 고객은 우선으로. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 234264,
+   "num_turns": 19,
+   "total_cost_usd": 0.6330121,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 22,
+    "cache_creation_input_tokens": 58293,
+    "cache_read_input_tokens": 557261,
+    "output_tokens": 34407,
+    "output_tokens_details": {
+     "thinking_tokens": 3452
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 58293,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1575,
+      "cache_read_input_tokens": 70829,
+      "cache_creation_input_tokens": 497,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 497
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "두둑은행 방문 예약·대기 현황판이 만들어졌고, 가상 데이터까지 들어 있어 바로 실행됩니다. 서버를 띄워 API를 직접 호출해 확인했습니다. 번호표 발급, 중복 방지, 입력 검증, 예약 우선 호출, 창구 상태 전환, 예약 고객 도착 확인이 모두 기대대로 동작했습니다. 브라우저에서 화면을 눈으로 보고 확인하지는 못했습니다.\n\n## 실행\n```\ncd <작업 폴더>/A1\npip install -r requirements.txt\npython main.py        # http://localhost:8000\n```\n테스트하려고 띄운 서버가 아직 떠 있을 수 있습니다. 포트 8000이 이미 사용 중이라는 오류가 나면 그 프로세스를 먼저 종료하세요.\n\n## 화면\n| 화면 | 주소 | 내용 |\n|---|---|---|\n| 고객 키오스크 | `/` | 현장 번호표, 예약 고객 도착 확인, 방문 예약(날짜·30분 단위 시간 선택) |\n| 대기 화면 | `/board.html` | 창구별 호출 번호와 대기 순서. 3초마다 갱신되고 새로 호출되면 깜빡입니다. 예약 고객은 ★로 표시합니다. |\n| 창구 직원 | `/teller.html` (PIN 1234) | 다음 고객 호출 → 상담 시작 → 완료. 재호출과 노쇼 처리도 가능하고, 호출된 고객의 상세(이름·전화·계좌·업무)를 봅니다. |\n| 지점장 | `/manager.html` (PIN 9999) | 대기 인원, 업무별 대기, 평균·최장 대기시간, 창구 현황, 노쇼 내역과 예약 노쇼율, 도착 예정 예약 |\n\n## 운영 규칙 (제가 정한 부분)\n- **우선 호출**: 도착 확인(체크인)을 한 예약 고객이 먼저이고, 그다음 현장 고객을 도착순으로 부릅니다. 예약만 해 두고 아직 도착하지 않은 고객은 대기열에 들어가지 않습니다.\n- **노쇼**: 예약 시간 15분 뒤까지 도착 확인이 없으면 자동으로 노쇼 처리됩니다. 호출했는데 오지 않는 경우는 창구에서 노쇼를 누릅니다. 이후 그 고객은 현장 번호표를 새로 뽑아야 합니다.\n- **개인정보**: 대기 화면에는 번호표와 업무만 나옵니다. 지점장 화면의 이름·전화는 마스킹합니다. 계좌번호 전체는 창구 직원이 호출한 고객에게서만 볼 수 있습니다.\n- **예약 한도**: 시간대당 3팀, 오늘부터 7일 이내입니다. 이 숫자와 PIN은 `main.py` 상단이나 환경변수 `TELLER_PIN`, `MANAGER_PIN`으로 바꿉니다.\n- **번호표**: 업무별 글자(예금 D, 대출 L, 외환 F)에 일련번호를 붙이고, 매일 001부터 시작합니다.\n- **PIN**: 단순한 데모용이라 실제 운영 전에는 제대로 된 인증으로 바꿔야 합니다.\n\n## 가상 데이터\n`duduk.db`는 첫 실행 때 현재 시각을 기준으로 만들어집니다. 완료 8건, 노쇼 4건, 상담 중과 호출 중 각 1건, 대기 7건, 오늘 남은 예약 5건, 내일 예약 3건이 들어 있습니다. 처음부터 다시 만들려면 `duduk.db`를 지우고 다시 실행하세요.\n\n## 한계\n- 예약 고객이 계속 오면 현장 고객이 계속 밀릴 수 있습니다. 필요하면 \"예약 N명 뒤 현장 1명\" 같은 규칙을 넣을 수 있습니다.\n- 창구는 업무 구분 없이 아무 업무나 처리하고, 호출 알림에는 소리가 없습니다.\n\n코드는 `main.py`(서버)와 `static/`(화면 4개), `README.md`에 있습니다.",
+   "wall_s": 274.4
+  }
+ },
+ "A2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: {'detail': 'Not Found'}\nassert (404 == 200)",
+   "T3": "AssertionError: ('GET /api/board', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T4": "AssertionError: ('도착', 'K-05', '10:10', '기대', True, 404, ...)\nassert (404 == 200)",
+   "T5": "AssertionError: ('예금 줄: 우선(도착 순) → 일반(도착 순)', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T6": "AssertionError: ('호출 뒤 2분은 409', 404, {'detail': 'Not Found'})\nassert 404 == 409",
+   "T7": "AssertionError: ('호출한 창구 직원은 상세', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T8": "AssertionError: ('지점장 현황', 401, {'detail': '로그인이 필요합니다'})\nassert 401 == 200",
+   "T9": "AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nassert '김*수' in '{\"detail\":\"Not Found\"}'"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "4, {'detail': 'Not Found'})\nE       assert (404 == 200)\n\n_grader\\test_dod.py:309: AssertionError\n______________________ test_T8_manager_and_reject_order _______________________\n\nsrv = <test_dod.Server object at 0x0000023BFFDC2BA0>\n\n    def test_T8_manager_and_reject_order(srv):\n        st, s, raw = get(srv, \"/api/manager/summary?viewer=m1\")\n>       assert st == 200, (\"지점장 현황\", st, s)\nE       AssertionError: ('지점장 현황', 401, {'detail': '로그인이 필요합니다'})\nE       assert 401 == 200\n\n_grader\\test_dod.py:328: AssertionError\n_______________________________ test_T9_screens _______________________________\n\nsrv = <test_dod.Server object at 0x0000023BFFDC2BA0>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screens(srv, pw):\n        pg, responses = open_page(pw, srv, \"/board\")\n        text = pg.inner_text(\"body\")\n        assert not pii_in(text), (\"대기 화면 글자에 개인정보\", pii_in(text))\n>       assert \"김*수\" in text, (\"가린 이름이 보여야 한다 (호출 중인 K-01)\", text[:300])\nE       AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nE       assert '김*수' in '{\"detail\":\"Not Found\"}'\n\n_grader\\test_dod.py:355: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: {'detail': 'No...\nFAILED _grader/test_dod.py::test_T3_board_hides - AssertionError: ('GET /api/...\nFAILED _grader/test_dod.py::test_T4_reservation_window - AssertionError: ('도...\nFAILED _grader/test_dod.py::test_T5_order_and_counters - AssertionError: ('예...\nFAILED _grader/test_dod.py::test_T6_hold_and_complete - AssertionError: ('호...\nFAILED _grader/test_dod.py::test_T7_roles - AssertionError: ('호출한 창구 직...\nFAILED _grader/test_dod.py::test_T8_manager_and_reject_order - AssertionError...\nFAILED _grader/test_dod.py::test_T9_screens - AssertionError: ('가린 이름이 ...\n8 failed, 1 passed in 7.72s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/checkin",
+   "/api/display",
+   "/api/login",
+   "/api/manager/summary",
+   "/api/reservations",
+   "/api/slots",
+   "/api/teller/call",
+   "/api/teller/finish",
+   "/api/teller/noshow",
+   "/api/teller/state",
+   "/api/walkin",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/checkin",
+   "/api/display",
+   "/api/login",
+   "/api/reservations",
+   "/api/slots",
+   "/api/teller/call",
+   "/api/teller/finish",
+   "/api/teller/noshow",
+   "/api/teller/state",
+   "/api/walkin"
+  ],
+  "tests_modified": null,
+  "files": [
+   "README.md",
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv",
+   "static/common.css",
+   "static/common.js",
+   "static/display.html",
+   "static/index.html",
+   "static/manager.html",
+   "static/teller.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 두둑은행 지점 '방문 예약 · 대기 현황판' 웹앱을 만들어 줘. 고객은 이름 · 전화번호 · 계좌번호 · 업무 종류(예금 · 대출 · 외환)를 적어 방문 예약을 하거나 현장에서 번호표를 뽑아. 지점 대기 화면(고객들이 같이 보는 모니터)에 대기 순서와 호출 창구가 뜨고, 창구 직원은 다음 고객을 호출해서 상세를 보고, 지점장은 대기 현황과 노쇼를 봐. 예약 고객은 우선으로. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 273907,
+   "num_turns": 21,
+   "total_cost_usd": 0.7517466,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 26,
+    "cache_creation_input_tokens": 65225,
+    "cache_read_input_tokens": 737746,
+    "output_tokens": 41702,
+    "output_tokens_details": {
+     "thinking_tokens": 3783
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 65225,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1661,
+      "cache_read_input_tokens": 78111,
+      "cache_creation_input_tokens": 147,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 147
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "두둑은행 방문 예약·대기 현황판을 만들었고, 가상 데이터가 들어 있어 바로 실행됩니다. 서버를 띄워 API를 `curl`과 Python으로 호출해 확인했습니다. 브라우저 화면은 열어 보지 못했습니다.\n\n확인한 동작은 이렇습니다.\n- 현장 번호표 발급과 예약 접수가 됩니다.\n- 입력값 검증이 되고, 같은 전화번호로 중복 발급하면 거부됩니다.\n- 창구 호출이 되고, 응대 중인 고객이 있으면 다음 호출이 막힙니다.\n- 로그인 없이 지점장 화면 API를 부르면 401이 나옵니다.\n- 예약 고객이 도착 확인을 하면 현장 고객보다 앞 순서에 들어갑니다.\n\n테스트가 끝난 뒤 서버를 종료했고, 테스트로 만든 `queue.db`는 지웠습니다. 다시 실행하면 가상 데이터로 새로 만들어집니다.\n\n## 실행\n```\ncd <작업 폴더>/A2\npip install -r requirements.txt\npython -m uvicorn main:app --port 8000\n```\nhttp://localhost:8000 으로 접속합니다. 첫 실행 때 `queue.db`와 가상 데이터(대기·호출 중·완료·노쇼·도착 전 예약 21건)가 자동으로 생깁니다.\n\n## 화면\n| 화면 | 주소 | 내용 |\n|---|---|---|\n| 고객 | `/static/index.html` | 방문 예약, 현장 번호표, 예약 도착 확인 |\n| 대기 모니터 | `/static/display.html` | 창구별 호출 번호와 대기 순서, 3초마다 갱신 |\n| 창구 직원 | `/static/teller.html` | 로그인(PIN 1111) 후 다음 고객 호출, 고객 상세 확인, 완료/노쇼 처리 |\n| 지점장 | `/static/manager.html` | 로그인(PIN 9999) 후 대기·평균 대기시간·노쇼율·창구별 처리 건수·노쇼 명단 |\n\n## 직접 정한 부분\n요청에 없어서 제가 정한 것들입니다. 바꿔야 하면 말씀해 주세요.\n- **예약 우선 방식**: 예약 고객은 도착 확인(예약번호 + 전화번호 뒤 4자리)을 한 뒤에 대기열에 들어가고, 예약 시각 순으로 현장 고객보다 먼저 호출됩니다. 예약을 하고 도착하지 않은 고객이 앞 순서를 막지 않게 하려는 것입니다.\n- **노쇼 기준**: 예약 시각 후 15분 안에 도착하지 않으면 자동으로 노쇼가 됩니다. 호출했는데 응답하지 않은 고객은 창구에서 직접 노쇼 처리합니다.\n- **개인정보**: 모두가 보는 대기 모니터에는 이름 일부(예: 김*수)와 번호표만 나옵니다. 전화번호와 계좌번호는 호출된 창구 직원에게만 보입니다. 지점장 노쇼 명단에는 연락용으로 전화번호를 보여 주고 계좌번호는 끝 4자리만 보여 줍니다.\n- **예약 슬롯**: 10분 간격으로 슬롯마다 최대 3명까지 받습니다. 영업시간 기본값은 09:00~16:00이고, `BANK_OPEN`·`BANK_CLOSE` 환경변수로 바꿉니다. 지금 시각이 영업시간 밖이면 오늘 예약 가능한 시간이 비어 보입니다.\n- **번호표 접두사**: 예약은 R, 현장은 업무별로 예금 D, 대출 L, 외환 F입니다. 창구는 4개입니다.\n- **PIN**: 창구와 지점장 PIN은 데모용 고정값이고 `TELLER_PIN`·`MANAGER_PIN`으로 바꿉니다. 실제로 운영하려면 제대로 된 인증, HTTPS, 개인정보 암호화가 필요합니다.\n\n위 내용은 `README.md`에도 적어 두었습니다.\n\n한 가지 알려 드립니다. 이 작업은 아이디어 정리 단계(브레인스토밍)를 거치지 않고, 요청이 구체적이라 바로 구현했습니다. 위 \"직접 정한 부분\" 중 맞지 않는 것이 있으면 고치겠습니다.",
+   "wall_s": 310.5
+  }
+ },
+ "A3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: {'detail': 'Not Found'}\nassert (404 == 200)",
+   "T3": "AssertionError: ('대기 화면 응답에 업무 종류', ['예금', '대출', '외환'])\nassert not ['예금', '대출', '외환']",
+   "T4": "AssertionError: ('도착', 'K-05', '10:10', '기대', True, 404, ...)\nassert (404 == 200)",
+   "T5": "AssertionError: ('예금 줄: 우선(도착 순) → 일반(도착 순)', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T6": "AssertionError: ('호출 뒤 2분은 409', 404, {'detail': 'Not Found'})\nassert 404 == 409",
+   "T7": "AssertionError: ('호출한 창구 직원은 상세', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T8": "AssertionError: ('지점장 현황', 401, {'detail': '로그인이 필요합니다'})\nassert 401 == 200",
+   "T9": "AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '두둑은행 대기 현황\n  19:54:19\n  1번 창구\n  D005\n  예금\n  2번 창구\n  -\n  예금\n  3번 창구\n  -\n  대출\n  4번 창구\n  -\n  외환\n  대기 순서 (7명)\n  D009F005D006L005D007F004D008\n  \n  노란색 = 예약 고객(우선 호출) · 번호표만 표시됩니다')\nassert '김*수' in '두둑은행 대기 현황\\n19:54:19\\n1번 창구\\nD005\\n예금\\n2번 창구\\n-\\n예금\\n3번 창구\\n-\\n대출\\n4번 창구\\n-\\n외환\\n대기 순서 (7명)\\nD009F005D006L005D007F004D008\\n\\n노란색 = 예약 고객(우선 호출) · 번호표만 표시됩니다'"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "현황', 401, {'detail': '로그인이 필요합니다'})\nE       assert 401 == 200\n\n_grader\\test_dod.py:328: AssertionError\n_______________________________ test_T9_screens _______________________________\n\nsrv = <test_dod.Server object at 0x00000242D1EEABA0>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screens(srv, pw):\n        pg, responses = open_page(pw, srv, \"/board\")\n        text = pg.inner_text(\"body\")\n        assert not pii_in(text), (\"대기 화면 글자에 개인정보\", pii_in(text))\n>       assert \"김*수\" in text, (\"가린 이름이 보여야 한다 (호출 중인 K-01)\", text[:300])\nE       AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '두둑은행 대기 현황\nE         19:54:19\nE         1번 창구\nE         D005\nE         예금\nE         2번 창구\nE         -\nE         예금\nE         3번 창구\nE         -\nE         대출\nE         4번 창구\nE         -\nE         외환\nE         대기 순서 (7명)\nE         D009F005D006L005D007F004D008\nE         \nE         노란색 = 예약 고객(우선 호출) · 번호표만 표시됩니다')\nE       assert '김*수' in '두둑은행 대기 현황\\n19:54:19\\n1번 창구\\nD005\\n예금\\n2번 창구\\n-\\n예금\\n3번 창구\\n-\\n대출\\n4번 창구\\n-\\n외환\\n대기 순서 (7명)\\nD009F005D006L005D007F004D008\\n\\n노란색 = 예약 고객(우선 호출) · 번호표만 표시됩니다'\n\n_grader\\test_dod.py:355: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: {'detail': 'No...\nFAILED _grader/test_dod.py::test_T3_board_hides - AssertionError: ('대기 화면...\nFAILED _grader/test_dod.py::test_T4_reservation_window - AssertionError: ('도...\nFAILED _grader/test_dod.py::test_T5_order_and_counters - AssertionError: ('예...\nFAILED _grader/test_dod.py::test_T6_hold_and_complete - AssertionError: ('호...\nFAILED _grader/test_dod.py::test_T7_roles - AssertionError: ('호출한 창구 직...\nFAILED _grader/test_dod.py::test_T8_manager_and_reject_order - AssertionError...\nFAILED _grader/test_dod.py::test_T9_screens - AssertionError: ('가린 이름이 ...\n8 failed, 1 passed in 5.73s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/board",
+   "/api/checkin",
+   "/api/login",
+   "/api/manager/summary",
+   "/api/reservations",
+   "/api/slots",
+   "/api/teller/{counter}",
+   "/api/teller/{counter}/call",
+   "/api/teller/{counter}/finish",
+   "/api/walkin",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/checkin",
+   "/api/login",
+   "/api/reservations",
+   "/api/slots",
+   "/api/teller/{counter}",
+   "/api/teller/{counter}/call",
+   "/api/teller/{counter}/finish",
+   "/api/walkin"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "run.log",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv",
+   "static/board.html",
+   "static/common.css",
+   "static/common.js",
+   "static/index.html",
+   "static/kiosk.html",
+   "static/manager.html",
+   "static/teller.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 두둑은행 지점 '방문 예약 · 대기 현황판' 웹앱을 만들어 줘. 고객은 이름 · 전화번호 · 계좌번호 · 업무 종류(예금 · 대출 · 외환)를 적어 방문 예약을 하거나 현장에서 번호표를 뽑아. 지점 대기 화면(고객들이 같이 보는 모니터)에 대기 순서와 호출 창구가 뜨고, 창구 직원은 다음 고객을 호출해서 상세를 보고, 지점장은 대기 현황과 노쇼를 봐. 예약 고객은 우선으로. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 185486,
+   "num_turns": 15,
+   "total_cost_usd": 0.4854224,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 18,
+    "cache_creation_input_tokens": 46328,
+    "cache_read_input_tokens": 379644,
+    "output_tokens": 26211,
+    "output_tokens_details": {
+     "thinking_tokens": 2580
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 46328,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1715,
+      "cache_read_input_tokens": 57797,
+      "cache_creation_input_tokens": 1564,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 1564
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "두둑은행 방문 예약 · 대기 현황판을 만들어 `http://127.0.0.1:8000`에서 실행 중입니다. 가상 데이터까지 들어 있어 바로 쓸 수 있습니다. API는 직접 호출해서 확인했습니다. 호출 우선순위, 입력 검증, 마스킹, 로그인은 정상이었습니다. 브라우저 화면은 열어서 눈으로 확인하지 못했습니다.\n\n**실행**\n```\ncd <작업 폴더>/A3\npython -m uvicorn main:app --port 8000\n```\n첫 실행 때 `duduk.db`가 만들어지고 가상 데이터가 들어갑니다. 이 파일을 지우면 데이터가 초기화됩니다.\n\n**화면**\n| 주소 | 대상 | 기능 |\n|---|---|---|\n| `/` | 전체 | 각 화면으로 가는 안내 |\n| `/kiosk` | 고객 | 방문 예약, 현장 번호표, 예약 확인 코드로 도착 접수 |\n| `/board` | 공용 모니터 | 창구별 호출 번호와 대기 순서, 3초마다 갱신. 호출이 바뀌면 음성 안내가 나옵니다. |\n| `/teller` | 창구 직원 | 다음 고객 호출, 고객 상세 확인, 처리 완료, 호출했으나 미응답 시 노쇼 처리 |\n| `/manager` | 지점장 | 대기 인원, 최장·평균 대기 시간, 업무별 현황, 노쇼 건수와 비율, 노쇼 목록 |\n\n**동작 규칙**\n- **예약 우선**: 도착 접수를 마친 예약 고객이 항상 현장 고객보다 먼저 호출됩니다. 같은 종류끼리는 예약 시각 순, 도착 순으로 호출합니다.\n- **예약**: 평일 09:00~16:00, 30분 단위이고 슬롯당 4명까지 받습니다. 예약하면 6자리 확인 코드가 나옵니다. 예약 30분 전부터 키오스크에서 그 코드로 도착 접수를 할 수 있습니다.\n- **자동 노쇼**: 예약 시각 후 15분이 지나도 접수하지 않으면 노쇼로 바뀝니다.\n- **창구 배정**: 1·2번 창구는 예금, 3번은 대출, 4번은 외환을 맡습니다.\n\n**개인정보 처리**\n- 공용 대기 화면에는 번호표와 창구만 나가고, 이름·전화·계좌는 서버가 아예 보내지 않습니다.\n- 지점장 화면에는 이름·전화·계좌를 마스킹해서 보여 줍니다. 예: `김*수`, `010-****-1234`, `********5678`.\n- 전체 정보는 창구 직원이 자기 창구에서 호출한 고객에 대해서만 봅니다.\n- 입력값은 서버에서 형식을 검사하고, 화면에는 텍스트로만 넣어 스크립트가 실행되지 않게 했습니다.\n\n**데모 계정과 가상 데이터**\n- 창구 PIN은 `1111`, 지점장 PIN은 `9999`입니다. 운영하려면 환경변수 `TELLER_PIN`, `MANAGER_PIN`으로 바꾸세요. 지점장은 창구 기능도 쓸 수 있습니다.\n- 가상 데이터는 처리 완료 8건, 과거 노쇼 3건, 응대 중 1건, 대기 7건(현장 5, 접수한 예약 2)입니다. 아직 도착하지 않은 예약 3건도 있습니다. 이 3건의 확인 코드는 서버 콘솔에 출력되니 `/kiosk`의 도착 접수 테스트에 쓰세요.\n- 전화번호와 계좌번호는 무작위로 만든 값입니다.\n\n데모용으로 단순하게 만든 부분도 있습니다. 로그인 토큰은 서버 메모리에만 있어 재시작하면 다시 로그인해야 합니다. 키오스크는 이름·전화·계좌를 따로 확인하지 않습니다. 실제 운영에는 HTTPS, 계좌번호 암호화 저장, 접근 로그가 필요합니다.",
+   "wall_s": 197.2
+  }
+ },
+ "B1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "fail"
+  },
+  "detail": {
+   "T9": "AssertionError: 지점장에게 호출 버튼이 보인다\nassert <JSHandle preview=JSHandle@node> is None\n +  where <JSHandle preview=JSHandle@node> = query_selector('[data-testid=\"next\"]')\n +    where query_selector = <Page url='http://127.0.0.1:9106/'>.query_selector"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "C94ACABA0>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screens(srv, pw):\n        pg, responses = open_page(pw, srv, \"/board\")\n        text = pg.inner_text(\"body\")\n        assert not pii_in(text), (\"대기 화면 글자에 개인정보\", pii_in(text))\n        assert \"김*수\" in text, (\"가린 이름이 보여야 한다 (호출 중인 K-01)\", text[:300])\n        for tid in (\"serving\", \"waiting\"):\n            assert pg.query_selector('[data-testid=\"%s\"]' % tid) is not None, \"대기 화면에 %s 가 없다\" % tid\n        leaks = sorted({x for r in responses for x in pii_in(r)})\n        assert not leaks, (\"대기 화면이 받은 응답에 개인정보\", leaks)\n        pg.close()\n        pg, _ = open_page(pw, srv, \"/\")\n        pg.select_option('[data-testid=\"user\"]', \"t4\")\n        pg.wait_for_timeout(1000)\n        row = pg.query_selector('[data-testid=\"ticket\"][data-id=\"K-04\"]')\n        assert row is not None, \"C4 대기 줄에 K-04 가 없다\"\n        pg.click('[data-testid=\"next\"]')\n        pg.wait_for_timeout(1200)\n        nm = pg.query_selector('[data-testid=\"detail-name\"]')\n        assert nm is not None and \"박하늘\" in nm.inner_text(), (\"호출한 고객 상세에 이름 전체\", nm.inner_text() if nm else None)\n        assert pg.query_selector('[data-testid=\"complete\"]') is not None, \"완료 버튼이 없다\"\n        pg.select_option('[data-testid=\"user\"]', \"m1\")\n        pg.wait_for_timeout(1000)\n>       assert pg.query_selector('[data-testid=\"next\"]') is None, \"지점장에게 호출 버튼이 보인다\"\nE       AssertionError: 지점장에게 호출 버튼이 보인다\nE       assert <JSHandle preview=JSHandle@node> is None\nE        +  where <JSHandle preview=JSHandle@node> = query_selector('[data-testid=\"next\"]')\nE        +    where query_selector = <Page url='http://127.0.0.1:9106/'>.query_selector\n\n_grader\\test_dod.py:373: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T9_screens - AssertionError: 지점장에게 호출...\n1 failed, 8 passed in 12.65s\n",
+  "passed": 8,
+  "routes": [
+   "/",
+   "/api/board",
+   "/api/counters/{counter_id}/next",
+   "/api/counters/{counter_id}/queue",
+   "/api/manager/summary",
+   "/api/tickets",
+   "/api/tickets/{ticket_id}",
+   "/api/tickets/{ticket_id}/checkin",
+   "/api/tickets/{ticket_id}/complete",
+   "/api/users",
+   "/board"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv",
+   "static/board.html",
+   "static/index.html",
+   "tests/test_smoke.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 127410,
+   "num_turns": 10,
+   "total_cost_usd": 0.3735785,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 43420,
+    "cache_read_input_tokens": 351265,
+    "output_tokens": 16474,
+    "output_tokens_details": {
+     "thinking_tokens": 3196
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 43420,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1011,
+      "cache_read_input_tokens": 56195,
+      "cache_creation_input_tokens": 258,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 258
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD의 9개 API, 업무 규칙 R1~R9, 화면 두 개(`/board`, `/`)를 만들었습니다. 브라우저에서 화면을 직접 열어 보지는 못했습니다. API는 `fastapi.testclient`로 확인했고, 직접 짠 스모크 테스트 5개가 통과했습니다. `tests/test_dod.py`는 폴더에 없어서 PRD의 완료 기준(T1~T9)과 대조하지는 못했습니다.\n\n스모크 테스트로 확인한 것:\n- 예약 우선 경계: 10:10과 09:50은 우선, 10:11과 09:49는 일반입니다.\n- 보류: 호출 2분 뒤 `next`는 409, 3분 뒤에는 앞 고객이 보류되고 다음 번호가 호출됩니다.\n- 권한: 다른 창구 직원과 지점장의 상세 열람·호출은 403입니다.\n- 대기 화면 응답에는 이름 전체, 전화번호, 업무 종류가 없습니다.\n- 가린 이름(`남**수` 등)은 서버가 만듭니다.\n- 이미 보류한 건을 다시 `complete`하면 409입니다.\n\nUI 쪽은 `data-testid`를 PRD대로 붙였고, 페이지가 200으로 열리고 \"대기\"가 들어 있는 것까지만 확인했습니다. 직원의 호출 → 상세 표시, 지점장의 현황 상자(호출 버튼 없음), 오류 상태(\"불러오지 못했습니다\" + 다시 시도)는 아직 눈으로 보지 못했습니다.\n\n실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000`입니다. 서버를 시작할 때마다 `seed/`의 CSV로 `bank.db`를 새로 만듭니다.\n\n- **직접 띄워 보지 못함:** 서버를 띄워 curl로 확인하려 했는데 Bash 명령이 허용되지 않았습니다. 그래서 TestClient로 대체했습니다.\n- **임의로 정한 부분:** `/board`의 \"호출 중\"과 \"대기 중\"은 번호표 하나하나가 아니라 목록 전체를 감싸는 요소에 `data-testid`를 달았습니다. PRD가 이 부분은 명확히 정하지 않아 그렇게 했습니다.\n- **추가한 열:** `bk_tickets`에 `priority` 열을 하나 더 두었습니다. 우선 여부를 도착 처리 때 저장해 두려는 것입니다.\n\n만든 파일은 `main.py`, `seed/`(CSV 3개), `static/index.html`, `static/board.html`, `tests/test_smoke.py`입니다.",
+   "wall_s": 133.5
+  }
+ },
+ "B2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "fail"
+  },
+  "detail": {
+   "T9": "AssertionError: 지점장에게 호출 버튼이 보인다\nassert <JSHandle preview=JSHandle@node> is None\n +  where <JSHandle preview=JSHandle@node> = query_selector('[data-testid=\"next\"]')\n +    where query_selector = <Page url='http://127.0.0.1:9108/'>.query_selector"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "FFD86ABA0>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screens(srv, pw):\n        pg, responses = open_page(pw, srv, \"/board\")\n        text = pg.inner_text(\"body\")\n        assert not pii_in(text), (\"대기 화면 글자에 개인정보\", pii_in(text))\n        assert \"김*수\" in text, (\"가린 이름이 보여야 한다 (호출 중인 K-01)\", text[:300])\n        for tid in (\"serving\", \"waiting\"):\n            assert pg.query_selector('[data-testid=\"%s\"]' % tid) is not None, \"대기 화면에 %s 가 없다\" % tid\n        leaks = sorted({x for r in responses for x in pii_in(r)})\n        assert not leaks, (\"대기 화면이 받은 응답에 개인정보\", leaks)\n        pg.close()\n        pg, _ = open_page(pw, srv, \"/\")\n        pg.select_option('[data-testid=\"user\"]', \"t4\")\n        pg.wait_for_timeout(1000)\n        row = pg.query_selector('[data-testid=\"ticket\"][data-id=\"K-04\"]')\n        assert row is not None, \"C4 대기 줄에 K-04 가 없다\"\n        pg.click('[data-testid=\"next\"]')\n        pg.wait_for_timeout(1200)\n        nm = pg.query_selector('[data-testid=\"detail-name\"]')\n        assert nm is not None and \"박하늘\" in nm.inner_text(), (\"호출한 고객 상세에 이름 전체\", nm.inner_text() if nm else None)\n        assert pg.query_selector('[data-testid=\"complete\"]') is not None, \"완료 버튼이 없다\"\n        pg.select_option('[data-testid=\"user\"]', \"m1\")\n        pg.wait_for_timeout(1000)\n>       assert pg.query_selector('[data-testid=\"next\"]') is None, \"지점장에게 호출 버튼이 보인다\"\nE       AssertionError: 지점장에게 호출 버튼이 보인다\nE       assert <JSHandle preview=JSHandle@node> is None\nE        +  where <JSHandle preview=JSHandle@node> = query_selector('[data-testid=\"next\"]')\nE        +    where query_selector = <Page url='http://127.0.0.1:9108/'>.query_selector\n\n_grader\\test_dod.py:373: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T9_screens - AssertionError: 지점장에게 호출...\n1 failed, 8 passed in 12.89s\n",
+  "passed": 8,
+  "routes": [
+   "/",
+   "/api/board",
+   "/api/counters/{counter_id}/next",
+   "/api/counters/{counter_id}/queue",
+   "/api/manager/summary",
+   "/api/tickets",
+   "/api/tickets/{ticket_id}",
+   "/api/tickets/{ticket_id}/checkin",
+   "/api/tickets/{ticket_id}/complete",
+   "/api/users",
+   "/board"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv",
+   "static/board.html",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 130268,
+   "num_turns": 12,
+   "total_cost_usd": 0.4250225999999999,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 18,
+    "cache_creation_input_tokens": 46974,
+    "cache_read_input_tokens": 399006,
+    "output_tokens": 19719,
+    "output_tokens_details": {
+     "thinking_tokens": 2576
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 46974,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1291,
+      "cache_read_input_tokens": 59822,
+      "cache_creation_input_tokens": 185,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 185
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD.md대로 웹앱을 만들었습니다. API는 스모크 테스트로 확인했지만 화면은 브라우저로 열어 보지 못했고, `tests/test_dod.py`는 폴더에 없어서 돌리지 못했습니다.\n\n**확인한 것**\n- `/`와 `/board`가 200으로 열립니다.\n- 규칙 R1~R9를 확인했습니다. 코드는 PRD의 거부 순서(400 → 404 → 403 → 409)대로 만들었습니다.\n  - 예약 우선: 10:11 도착은 일반으로 나왔습니다.\n  - 이미 도착 처리한 예약에 다시 체크인하면 409가 나왔습니다.\n  - 2분 뒤 `next`는 409, 3분 뒤에는 앞 고객이 보류되고 다음 번호가 호출됐습니다.\n  - 다른 창구 직원이 대기 줄을 보면 403이 나왔습니다.\n  - 지점장이 고객 상세를 보면 403이 나왔습니다.\n  - 완료한 건을 다시 완료하면 409가 나왔습니다.\n  - 지점장이 아닌 사용자가 현황을 보면 403, 사용자 없음은 400, 없는 창구는 404였습니다.\n- 한글 응답은 터미널 인코딩 때문에 깨져 보였습니다. 그래서 문구가 PRD와 정확히 같은지는 눈으로 확인하지 못했습니다.\n\n**정리하지 못한 것**\n- 테스트용으로 띄운 서버(포트 8765)가 아직 떠 있을 수 있습니다. 프로세스를 종료하는 명령이 허용되지 않아서 끄지 못했습니다. 포트가 막히면 직접 종료해 주세요.\n- 이 서버로 테스트하면서 `bank.db`에 번호표 하나(K-111)와 호출·완료 기록이 쌓였습니다. 서버를 다시 시작하면 시드 CSV에서 새로 만들어집니다.\n\n**구성**\n- `main.py`: FastAPI 앱입니다. 시작할 때마다 `seed/` CSV로 SQLite(`bank.db`, 테이블 `bk_*`)를 새로 만듭니다. 이름 가리기는 서버에서 합니다.\n- `static/board.html`: `/board` 화면입니다. 가린 이름과 번호만 보여 주고 5초마다 다시 읽습니다.\n- `static/index.html`: `/` 화면입니다. 직원 화면과 지점장 화면이 사용자 선택 상자로 바뀝니다. 서버가 거부하면 `detail`을 메시지 줄에 그대로 보여 주고, API가 실패하면 \"불러오지 못했습니다\"와 다시 시도 버튼이 뜹니다.\n- `seed/`: 사용자 5명, 창구 4개, 번호표 10개입니다. 번호표에는 예약·현장·대기·호출·완료·보류가 섞여 있고, 이름 마스킹 예시로 `김*수`, `이*`, `남**수`도 넣었습니다.\n\n실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000` 입니다.\n\n**화면 동작**\n- 창구 직원이 호출한 고객은 이 브라우저 화면에서 기억합니다. 페이지를 새로고침하면 호출 중인 고객의 상세와 완료 버튼은 사라집니다. 그 번호표는 서버에는 `called`로 남아 있습니다.\n- 상세의 계좌는 끝 4자리만 `**** 1234` 형태로 보여 줍니다.",
+   "wall_s": 138.7
+  }
+ },
+ "B3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 24.04s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/board",
+   "/api/counters/{counter_id}/next",
+   "/api/counters/{counter_id}/queue",
+   "/api/manager/summary",
+   "/api/tickets",
+   "/api/tickets/{ticket_id}",
+   "/api/tickets/{ticket_id}/checkin",
+   "/api/tickets/{ticket_id}/complete",
+   "/api/users",
+   "/board"
+  ],
+  "extra_routes": [],
+  "tests_modified": null,
+  "files": [
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv",
+   "static/board.html",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 182411,
+   "num_turns": 14,
+   "total_cost_usd": 0.5194143999999999,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 24,
+    "cache_creation_input_tokens": 53569,
+    "cache_read_input_tokens": 610304,
+    "output_tokens": 24406,
+    "output_tokens_details": {
+     "thinking_tokens": 4587
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 53569,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 990,
+      "cache_read_input_tokens": 66368,
+      "cache_creation_input_tokens": 234,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 234
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "PRD대로 웹앱을 만들었습니다. API 9개와 `/board`, `/` 화면은 모두 구현했습니다.\n\n`tests/test_dod.py`는 폴더에 없어서 T1~T9를 돌리지 못했고, 브라우저로 화면을 열어 보지도 않았습니다. 대신 서버를 띄워 API를 직접 호출했습니다. 확인한 결과는 아래와 같습니다.\n- **번호표·예약:** 번호표는 201로 최댓값+1 번호를 받고, 예약은 `reserved` 상태입니다. 업무 종류·전화번호가 틀리면 400입니다.\n- **대기 화면 응답:** `김*수`, `이*`, `남**수`처럼 가린 이름만 나가고 업무 종류는 없습니다.\n- **예약 우선:** 10:00 예약을 10:11에 도착 처리하면 일반으로 줄을 서고, 다시 도착 처리하면 409입니다.\n- **호출 순서:** 예약 우선 고객이 대기 줄 맨 앞에 옵니다.\n- **보류:** 호출 후 2분은 409, 3분이면 앞 고객이 보류되고 다음 번호가 호출됩니다.\n- **권한:** 호출한 창구 직원만 고객 상세를 볼 수 있습니다. 다른 창구 직원과 지점장은 403입니다. 상세 응답에는 계좌 끝 4자리만 있습니다.\n- **지점장 현황:** 지점장만 볼 수 있고, 직원은 403입니다.\n- **화면:** `/`와 `/board`는 둘 다 200으로 열립니다.\n\n파일은 이 폴더에 있습니다.\n- `main.py`: FastAPI 서버. 시작할 때마다 `seed/` CSV로 `bank.db`를 새로 만듭니다.\n- `seed/`: 직원 4명, 지점장 1명, 창구 4개, 번호표 10개.\n- `static/index.html`, `static/board.html`: 순수 HTML/JS 화면 두 개.\n\n실행은 이 폴더에서 `python -m uvicorn main:app --port 8000`입니다.\n\n`/board`의 `serving`·`waiting`은 PRD에 항목 단위인지 영역 단위인지 적혀 있지 않아, 영역 전체를 감싸는 요소로 만들었습니다. 테스트가 항목마다 하나씩 찾는다면 이 부분을 바꿔야 합니다.\n\n`/`에서는 호출한 고객을 새로 고침 뒤에도 기억하려고 브라우저 `sessionStorage`에 저장합니다. 서버 응답에는 이 정보가 없기 때문입니다.\n\n확인용으로 띄운 서버(8765 포트)는 끝낸 상태입니다.",
+   "wall_s": 191.7
+  }
+ },
+ "C1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 12.08s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/board",
+   "/api/counters/{counter_id}/next",
+   "/api/counters/{counter_id}/queue",
+   "/api/manager/summary",
+   "/api/tickets",
+   "/api/tickets/{ticket_id}",
+   "/api/tickets/{ticket_id}/checkin",
+   "/api/tickets/{ticket_id}/complete",
+   "/api/users",
+   "/board"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv",
+   "static/board.html",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 142570,
+   "num_turns": 16,
+   "total_cost_usd": 0.5196531000000001,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 18,
+    "cache_creation_input_tokens": 61746,
+    "cache_read_input_tokens": 480231,
+    "output_tokens": 22461,
+    "output_tokens_details": {
+     "thinking_tokens": 3684
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 61746,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 700,
+      "cache_read_input_tokens": 74241,
+      "cache_creation_input_tokens": 538,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 538
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, static/board.html, seed/users.csv, seed/counters.csv, seed/tickets.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음. 추가한 API 경로도 없다. `bank.db` 는 서버가 시작할 때마다 새로 만들어지는 파일이다.\nPRD 가 정하지 않아 직접 정한 것:\n- 시각 형식이 틀린 `at` · `reserved_at` 은 400 이다(`시각을 확인하세요` / `예약 시각을 확인하세요`).\n- 없는 사용자 id 는 404 `사용자를 찾을 수 없습니다`, 없는 창구는 404 `창구를 찾을 수 없습니다`, 없는 번호표는 404 `번호표를 찾을 수 없습니다`.\n- 한 글자 이름은 `*` 로 가린다.\n- 우선 여부는 DB 칸을 늘리지 않고 `reserved_at` 과 `arrived_at` 으로 그때그때 계산한다.\n- 새 번호표의 `ticket_id` 는 `K-` 뒤에 기존 최대 번호 + 1 로 붙인다.\n- 직원 화면은 호출한 고객의 상세를 브라우저 메모리에만 기억한다. 새로고침하면 상세 상자가 사라진다.\n- 지점장 화면에서는 직원용 영역이 숨겨지는 게 아니라 문서에서 빠진다(테스트가 요소 부재를 확인한다).\n- 화면의 호출 · 완료 버튼은 `at` 없이 요청하므로 서버 시각을 쓴다.\n- `seed/` 기본 데이터는 직원 4명 · 지점장 1명, 창구 4개, 번호표 8개(대기 · 예약 · 완료 · 보류 섞음)로 만들었다. 날짜는 2026-10-30 으로 고정했다.",
+   "wall_s": 181.2
+  }
+ },
+ "C2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 13.33s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/board",
+   "/api/counters/{counter_id}/next",
+   "/api/counters/{counter_id}/queue",
+   "/api/manager/summary",
+   "/api/tickets",
+   "/api/tickets/{ticket_id}",
+   "/api/tickets/{ticket_id}/checkin",
+   "/api/tickets/{ticket_id}/complete",
+   "/api/users",
+   "/board"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv",
+   "static/board.html",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 143174,
+   "num_turns": 14,
+   "total_cost_usd": 0.4950172,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 18,
+    "cache_creation_input_tokens": 59100,
+    "cache_read_input_tokens": 469012,
+    "output_tokens": 21168,
+    "output_tokens_details": {
+     "thinking_tokens": 3756
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 59100,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 846,
+      "cache_read_input_tokens": 71761,
+      "cache_creation_input_tokens": 372,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 372
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "```\nDoD: 9/9\n만든 파일: main.py, static/index.html, static/board.html, seed/users.csv, seed/counters.csv, seed/tickets.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (PRD 에 없는 API · 칸 · 화면 요소 추가 없음)\nPRD 가 정하지 않아 직접 정한 것:\n- 한 글자 이름의 가린 이름은 `*`.\n- `at` 이나 `reserved_at` 이 `YYYY-MM-DD HH:MM` 형식이 아니면 400 (`시각을 확인하세요` / `예약 시각을 확인하세요`).\n- 없는 사용자 · 창구 · 번호표의 404 사유는 각각 `사용자를 찾을 수 없습니다` · `창구를 찾을 수 없습니다` · `번호표를 찾을 수 없습니다`.\n- 새 `ticket_id` 는 기존 `K-숫자` 중 최댓값 + 1 (`K-11` 꼴).\n- 우선 여부(`priority`)는 도착 처리 때 계산해 DB 에 저장한다. CSV 로 읽은 대기 고객은 예약 시각과 도착 시각으로 시작할 때 계산한다.\n- 호출 중인 고객이 있고 대기 줄이 비어 있어도 3분이 지나면 앞 고객은 보류된다 (`called` 는 null, `held` 는 그 고객).\n- 호출한 고객 상세는 브라우저가 가진 것만 보여 준다. 새로고침하거나 사용자를 바꾸면 사라진다. 현재 호출 중인 고객을 찾는 API 가 PRD 에 없다.\n- `/` 화면은 5초마다 대기 줄 · 현황을 다시 읽고, `/board` 도 5초마다 다시 읽는다.\n- 화면에서 호출 · 완료할 때는 `at` 없이 서버 시각을 쓴다.\n- 직접 만든 seed 는 날짜가 2026-10-30 이고 번호표 8개(대기 4 · 예약 2 · 완료 1 · 보류 1)다. 테스트는 이 seed 를 자기 데이터로 바꿔 끼웠다가 되돌린다.\n```\n\n`python -m pytest tests -q` 를 돌려 9개가 모두 통과했습니다.",
+   "wall_s": 159.5
+  }
+ },
+ "C3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": ".........                                                                [100%]\n9 passed in 15.40s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/board",
+   "/api/counters/{counter_id}/next",
+   "/api/counters/{counter_id}/queue",
+   "/api/manager/summary",
+   "/api/tickets",
+   "/api/tickets/{ticket_id}",
+   "/api/tickets/{ticket_id}/checkin",
+   "/api/tickets/{ticket_id}/complete",
+   "/api/users",
+   "/board"
+  ],
+  "extra_routes": [],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv",
+   "static/board.html",
+   "static/index.html",
+   "tests/test_dod.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 124484,
+   "num_turns": 11,
+   "total_cost_usd": 0.45820989999999995,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 57088,
+    "cache_read_input_tokens": 289539,
+    "output_tokens": 20088,
+    "output_tokens_details": {
+     "thinking_tokens": 2620
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 57088,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 908,
+      "cache_read_input_tokens": 69844,
+      "cache_creation_input_tokens": 277,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 277
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "방문 예약·대기 현황판을 만들었고, `python -m pytest tests -q` 가 9/9 통과했습니다. 테스트가 끝난 뒤 `seed/` 가 제 CSV 로 되돌아온 것도 확인했습니다.\n\n```\nDoD: 9/9\n만든 파일: main.py, static/index.html, static/board.html, seed/users.csv, seed/counters.csv, seed/tickets.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (API 는 PRD 의 9개뿐이고, PRD 에 없는 칸이나 화면 요소도 추가하지 않았습니다)\nPRD 가 정하지 않아 직접 정한 것:\n- `bk_tickets` 에 `priority` 칸을 하나 더 두었습니다 (DB 안에서만 쓰고 CSV 칸은 그대로입니다). 도착 처리 때 R1 로 정해서 저장하고, CSV 에서 `waiting` 이면서 예약 시각이 있는 건은 읽을 때 같은 규칙으로 계산합니다.\n- 한 글자 이름의 가린 이름은 `*` 입니다.\n- `at` 형식이 틀리면 400 `시각을 확인하세요` 를 돌려줍니다. 틀린 `reserved_at` 은 400 `예약 시각을 확인하세요` 입니다.\n- 번호표 `ticket_id` 는 `K-NN` 꼴로 새로 붙입니다.\n- 없는 `user`(사용자) 는 404 `사용자를 찾을 수 없습니다` 입니다. 없는 창구와 번호표도 같은 꼴의 404 입니다.\n- 호출한 고객 상세 화면은 브라우저가 기억하는 값으로 띄웁니다. 그래서 새로고침하면 사라집니다. 호출 직후 자동으로 불러오고, 계좌는 `****끝4자리` 로 보여 줍니다.\n- 화면의 업무 종류는 한글 (예금·대출·외환) 로 보여 줍니다.\n- 대기 화면은 5초마다 다시 읽습니다.\n```\n\n한 가지 알아 두세요. 제가 만든 `seed/tickets.csv` 의 시각은 `2026-10-30` 으로 고정했습니다. 테스트는 이 파일을 자기 데이터로 바꿔 끼우기 때문에 통과에는 영향이 없습니다.",
+   "wall_s": 140.5
+  }
+ },
+ "D1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: {'detail': 'Not Found'}\nassert (404 == 200)",
+   "T3": "AssertionError: ('GET /api/board', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T4": "AssertionError: ('도착', 'K-05', '10:10', '기대', True, 405, ...)\nassert (405 == 200)",
+   "T5": "AssertionError: ('예금 줄: 우선(도착 순) → 일반(도착 순)', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T6": "AssertionError: ('호출 뒤 2분은 409', 405, {'detail': 'Method Not Allowed'})\nassert 405 == 409",
+   "T7": "AssertionError: ('호출한 창구 직원은 상세', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T8": "AssertionError: ('지점장 현황', 404, {'detail': 'Not Found'})\nassert 404 == 200",
+   "T9": "AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nassert '김*수' in '{\"detail\":\"Not Found\"}'"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "04, {'detail': 'Not Found'})\nE       assert (404 == 200)\n\n_grader\\test_dod.py:309: AssertionError\n______________________ test_T8_manager_and_reject_order _______________________\n\nsrv = <test_dod.Server object at 0x000001902FE92BA0>\n\n    def test_T8_manager_and_reject_order(srv):\n        st, s, raw = get(srv, \"/api/manager/summary?viewer=m1\")\n>       assert st == 200, (\"지점장 현황\", st, s)\nE       AssertionError: ('지점장 현황', 404, {'detail': 'Not Found'})\nE       assert 404 == 200\n\n_grader\\test_dod.py:328: AssertionError\n_______________________________ test_T9_screens _______________________________\n\nsrv = <test_dod.Server object at 0x000001902FE92BA0>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screens(srv, pw):\n        pg, responses = open_page(pw, srv, \"/board\")\n        text = pg.inner_text(\"body\")\n        assert not pii_in(text), (\"대기 화면 글자에 개인정보\", pii_in(text))\n>       assert \"김*수\" in text, (\"가린 이름이 보여야 한다 (호출 중인 K-01)\", text[:300])\nE       AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nE       assert '김*수' in '{\"detail\":\"Not Found\"}'\n\n_grader\\test_dod.py:355: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: {'detail': 'No...\nFAILED _grader/test_dod.py::test_T3_board_hides - AssertionError: ('GET /api/...\nFAILED _grader/test_dod.py::test_T4_reservation_window - AssertionError: ('도...\nFAILED _grader/test_dod.py::test_T5_order_and_counters - AssertionError: ('예...\nFAILED _grader/test_dod.py::test_T6_hold_and_complete - AssertionError: ('호...\nFAILED _grader/test_dod.py::test_T7_roles - AssertionError: ('호출한 창구 직...\nFAILED _grader/test_dod.py::test_T8_manager_and_reject_order - AssertionError...\nFAILED _grader/test_dod.py::test_T9_screens - AssertionError: ('가린 이름이 ...\n8 failed, 1 passed in 7.32s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/checkin",
+   "/api/display",
+   "/api/manager/login",
+   "/api/manager/stats",
+   "/api/reserve",
+   "/api/staff/call-next",
+   "/api/staff/finish",
+   "/api/staff/login",
+   "/api/staff/me",
+   "/api/staff/requeue/{vid}",
+   "/api/staff/start",
+   "/api/walkin"
+  ],
+  "extra_routes": [
+   "/api/checkin",
+   "/api/display",
+   "/api/manager/login",
+   "/api/manager/stats",
+   "/api/reserve",
+   "/api/staff/call-next",
+   "/api/staff/finish",
+   "/api/staff/login",
+   "/api/staff/me",
+   "/api/staff/requeue/{vid}",
+   "/api/staff/start",
+   "/api/walkin"
+  ],
+  "tests_modified": null,
+  "files": [
+   "README.md",
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed.py",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv",
+   "static/common.js",
+   "static/display.html",
+   "static/index.html",
+   "static/manager.html",
+   "static/staff.html",
+   "static/style.css"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 두둑은행 지점 '방문 예약 · 대기 현황판' 웹앱을 만들어 줘. 고객은 이름 · 전화번호 · 계좌번호 · 업무 종류(예금 · 대출 · 외환)를 적어 방문 예약을 하거나 현장에서 번호표를 뽑아. 지점 대기 화면(고객들이 같이 보는 모니터)에 대기 순서와 호출 창구가 뜨고, 창구 직원은 다음 고객을 호출해서 상세를 보고, 지점장은 대기 현황과 노쇼를 봐. 예약 고객은 우선으로. 가상 데이터도 넣어서 바로 실행되게.\n\n우리 지점 규칙은 이거야:\n- 예약 고객은 예약 시각 앞뒤 10분 안에 도착하면 일반 고객보다 먼저. 그 밖이면 일반 순서.\n- 호출 뒤 3분 안에 안 오면 보류 처리하고 다음 번호를 부른다.\n- 창구 배정: 창구 1 · 2 는 예금, 창구 3 은 대출, 창구 4 는 외환. 창구는 자기 업무 고객만 부른다.\n- 대기 화면엔 번호 · 가린 이름(김*수) · 창구 번호만. 이름 전체 · 전화번호 · 계좌번호는 안 보여 준다.\n- 창구 직원은 자기 창구 고객만 상세를 본다. 계좌는 끝 4자리만. 지점장은 현황 숫자만 보고 고객 상세는 못 본다.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 165802,
+   "num_turns": 14,
+   "total_cost_usd": 0.40594050000000004,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 41472,
+    "cache_read_input_tokens": 285345,
+    "output_tokens": 21149,
+    "output_tokens_details": {
+     "thinking_tokens": 4099
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 41472,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1452,
+      "cache_read_input_tokens": 53942,
+      "cache_creation_input_tokens": 563,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 563
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "웹앱을 만들어서 실행 테스트까지 마쳤습니다. 지금은 사용법을 정리하는 단계입니다. 서버 실행과 브라우저 화면 확인은 아직 안 했습니다.\n\n**실행 방법** (폴더: `D1`)\n```\npip install -r requirements.txt\nuvicorn main:app\n```\n접속 주소는 http://127.0.0.1:8000 입니다. 첫 실행 때 가상 데이터가 자동으로 들어갑니다. 초기화하려면 `duduk.db`를 지우면 됩니다.\n\n| 화면 | 주소 | 로그인(데모 PIN) |\n|---|---|---|\n| 고객(예약·번호표·도착 확인) | `/` | 없음 |\n| 대기 화면(모니터) | `/display.html` | 없음 |\n| 창구 직원 | `/staff.html` | 창구 1~4 = 1111 / 2222 / 3333 / 4444 |\n| 지점장 | `/manager.html` | 9999 |\n\nPIN은 환경변수 `DUDUK_STAFF_PINS`(쉼표로 구분)와 `DUDUK_MANAGER_PIN`으로 바꿀 수 있습니다. 데모 예약번호는 100001~100004이고, 100003은 곧 도착 가능한 예약입니다.\n\n**규칙 반영**\n- **예약 우선**: 예약 시각 앞뒤 10분 안에 도착 확인하면 우선 순서입니다. 그 밖이면 일반 순서로 들어갑니다. 예약 시각 +10분이 지나도 안 오면 노쇼로 처리됩니다.\n- **3분 보류**: 호출 후 3분 안에 도착 확인이 없으면 보류 처리하고 그 창구가 다음 번호를 자동 호출합니다. 보류 고객은 담당 창구에서 일반 대기열 맨 뒤로 복귀시킬 수 있습니다.\n- **창구 배정**: 창구 1·2는 예금, 3은 대출, 4는 외환 고객만 호출합니다.\n- **대기 화면**: 번호, 가린 이름(김*수), 창구 번호만 내려줍니다. 서버 응답에 다른 개인정보가 들어가지 않습니다.\n- **창구 직원**: 자기 창구가 호출한 고객의 상세만 봅니다. 계좌는 `****끝4자리`로만 보입니다.\n- **지점장**: 상태별·업무별 숫자와 노쇼율만 봅니다. 고객 상세에 접근하는 경로 자체가 없습니다.\n\n**테스트로 확인한 것**\n- 시드 데이터로 우선순위 확인: 예약 시각 안에 도착한 정다은이 먼저, 30분 늦게 온 오하준은 일반 순서였습니다.\n- 창구 1이 예금 고객, 창구 3이 대출 고객을 각각 호출했습니다.\n- 호출 후 4분이 지난 상태로 만들었을 때 보류로 바뀌고 다음 번호가 호출됐습니다.\n- 지점장 토큰으로 창구 API를, 창구 토큰으로 지점장 API를 호출하면 둘 다 401이 나왔습니다.\n\n**제가 정한 부분**\n- 계좌번호는 입력받되 DB에는 끝 4자리만 저장합니다. 전체 번호를 보관할 이유가 없어서입니다. 전체 저장이 필요하면 알려 주세요.\n- 대기 번호는 업무 구분 없이 하루 단위 일련번호입니다.\n- 예약은 09:00~16:00, 14일 이내만 받습니다. 이 범위도 임의로 정했습니다.\n- PIN은 데모 값이라 실제로 쓰기 전에 꼭 바꿔야 합니다. PIN을 5번 틀리면 1분간 잠깁니다.\n- 서버는 `127.0.0.1`에서만 열립니다. 지점 모니터나 직원 PC에서 접속하게 하려면 호스트 설정과 HTTPS를 따로 잡아야 합니다.",
+   "wall_s": 172.3
+  }
+ },
+ "D2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: {'detail': 'Not Found'}\nassert (404 == 200)",
+   "T3": "AssertionError: ('GET /api/board', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T4": "AssertionError: ('도착', 'K-05', '10:10', '기대', True, 405, ...)\nassert (405 == 200)",
+   "T5": "AssertionError: ('예금 줄: 우선(도착 순) → 일반(도착 순)', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T6": "AssertionError: ('호출 뒤 2분은 409', 405, {'detail': 'Method Not Allowed'})\nassert 405 == 409",
+   "T7": "AssertionError: ('호출한 창구 직원은 상세', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T8": "AssertionError: ('지점장 현황', 404, {'detail': 'Not Found'})\nassert 404 == 200",
+   "T9": "AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nassert '김*수' in '{\"detail\":\"Not Found\"}'"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "04, {'detail': 'Not Found'})\nE       assert (404 == 200)\n\n_grader\\test_dod.py:309: AssertionError\n______________________ test_T8_manager_and_reject_order _______________________\n\nsrv = <test_dod.Server object at 0x000001FFC4A1ABA0>\n\n    def test_T8_manager_and_reject_order(srv):\n        st, s, raw = get(srv, \"/api/manager/summary?viewer=m1\")\n>       assert st == 200, (\"지점장 현황\", st, s)\nE       AssertionError: ('지점장 현황', 404, {'detail': 'Not Found'})\nE       assert 404 == 200\n\n_grader\\test_dod.py:328: AssertionError\n_______________________________ test_T9_screens _______________________________\n\nsrv = <test_dod.Server object at 0x000001FFC4A1ABA0>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screens(srv, pw):\n        pg, responses = open_page(pw, srv, \"/board\")\n        text = pg.inner_text(\"body\")\n        assert not pii_in(text), (\"대기 화면 글자에 개인정보\", pii_in(text))\n>       assert \"김*수\" in text, (\"가린 이름이 보여야 한다 (호출 중인 K-01)\", text[:300])\nE       AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nE       assert '김*수' in '{\"detail\":\"Not Found\"}'\n\n_grader\\test_dod.py:355: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: {'detail': 'No...\nFAILED _grader/test_dod.py::test_T3_board_hides - AssertionError: ('GET /api/...\nFAILED _grader/test_dod.py::test_T4_reservation_window - AssertionError: ('도...\nFAILED _grader/test_dod.py::test_T5_order_and_counters - AssertionError: ('예...\nFAILED _grader/test_dod.py::test_T6_hold_and_complete - AssertionError: ('호...\nFAILED _grader/test_dod.py::test_T7_roles - AssertionError: ('호출한 창구 직...\nFAILED _grader/test_dod.py::test_T8_manager_and_reject_order - AssertionError...\nFAILED _grader/test_dod.py::test_T9_screens - AssertionError: ('가린 이름이 ...\n8 failed, 1 passed in 5.68s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/checkin",
+   "/api/counter/call-next",
+   "/api/counter/finish",
+   "/api/counter/requeue/{ticket_id}",
+   "/api/counter/start",
+   "/api/counter/state",
+   "/api/display",
+   "/api/login",
+   "/api/manager/stats",
+   "/api/reservations",
+   "/api/walkin"
+  ],
+  "extra_routes": [
+   "/api/checkin",
+   "/api/counter/call-next",
+   "/api/counter/finish",
+   "/api/counter/requeue/{ticket_id}",
+   "/api/counter/start",
+   "/api/counter/state",
+   "/api/display",
+   "/api/login",
+   "/api/manager/stats",
+   "/api/reservations",
+   "/api/walkin"
+  ],
+  "tests_modified": null,
+  "files": [
+   "README.md",
+   "app/__init__.py",
+   "app/main.py",
+   "app/seed.py",
+   "app/static/common.css",
+   "app/static/common.js",
+   "app/static/counter.html",
+   "app/static/display.html",
+   "app/static/index.html",
+   "app/static/kiosk.html",
+   "app/static/manager.html",
+   "build.json",
+   "requirements.txt",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv",
+   "tests/test_rules.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 두둑은행 지점 '방문 예약 · 대기 현황판' 웹앱을 만들어 줘. 고객은 이름 · 전화번호 · 계좌번호 · 업무 종류(예금 · 대출 · 외환)를 적어 방문 예약을 하거나 현장에서 번호표를 뽑아. 지점 대기 화면(고객들이 같이 보는 모니터)에 대기 순서와 호출 창구가 뜨고, 창구 직원은 다음 고객을 호출해서 상세를 보고, 지점장은 대기 현황과 노쇼를 봐. 예약 고객은 우선으로. 가상 데이터도 넣어서 바로 실행되게.\n\n우리 지점 규칙은 이거야:\n- 예약 고객은 예약 시각 앞뒤 10분 안에 도착하면 일반 고객보다 먼저. 그 밖이면 일반 순서.\n- 호출 뒤 3분 안에 안 오면 보류 처리하고 다음 번호를 부른다.\n- 창구 배정: 창구 1 · 2 는 예금, 창구 3 은 대출, 창구 4 는 외환. 창구는 자기 업무 고객만 부른다.\n- 대기 화면엔 번호 · 가린 이름(김*수) · 창구 번호만. 이름 전체 · 전화번호 · 계좌번호는 안 보여 준다.\n- 창구 직원은 자기 창구 고객만 상세를 본다. 계좌는 끝 4자리만. 지점장은 현황 숫자만 보고 고객 상세는 못 본다.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 290664,
+   "num_turns": 22,
+   "total_cost_usd": 0.6680484,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 24,
+    "cache_creation_input_tokens": 60709,
+    "cache_read_input_tokens": 638044,
+    "output_tokens": 36136,
+    "output_tokens_details": {
+     "thinking_tokens": 8422
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 60709,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1603,
+      "cache_read_input_tokens": 73259,
+      "cache_creation_input_tokens": 483,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 483
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "웹앱을 만들었고 테스트 8개가 통과합니다. 서버를 띄워 대기 화면 API와 키오스크 페이지 응답은 확인했습니다. 브라우저 화면은 직접 열어 보지 못했습니다.\n\n종료하려던 서버(포트 8000)는 제가 정리하지 못했고 아직 떠 있을 수 있습니다. 직접 종료하시거나 다른 포트를 쓰세요.\n\n## 실행\n\n```\ncd <작업 폴더>/D2\npip install -r requirements.txt\npython -m uvicorn app.main:app --port 8000\n```\n\nhttp://localhost:8000 에서 시작합니다. 첫 실행 때 가상 고객 20명이 들어갑니다. 현재 시각 기준으로 만들어서 언제 켜도 화면이 채워져 있고, `duduk.db`를 지우면 초기화됩니다.\n\n| 화면 | 주소 | 용도 |\n|---|---|---|\n| 키오스크 | `/kiosk.html` | 번호표 뽑기, 방문 예약, 예약 도착 체크인 |\n| 대기 화면 | `/display.html` | 고객용 모니터 (3초마다 갱신) |\n| 창구 | `/counter.html` | 호출, 상세 조회, 응대 시작·완료 |\n| 지점장 | `/manager.html` | 현황 숫자 |\n\n데모 PIN은 창구 1~4가 1111, 2222, 3333, 4444이고 지점장은 9999입니다.\n\n## 규칙을 구현한 방식\n\n- **예약 우선:** 체크인한 시각이 예약 시각 ±10분이면 우선이고, 우선 고객끼리는 예약 시각순입니다. 일찍 오거나 늦게 오면 일반 순서입니다.\n- **3분 보류:** 호출 후 3분이 지나면 보류가 되고 그 창구가 다음 번호를 자동 호출합니다. 보류 고객이 뒤늦게 오면 직원이 \"다시 줄 세우기\"로 일반 고객처럼 줄 세웁니다.\n- **창구 배정:** 창구 1·2는 예금, 3은 대출, 4는 외환 고객만 부릅니다.\n- **대기 화면:** 번호, 가린 이름(김*수), 창구 번호만 내려보냅니다. 서버가 보내는 값 자체에 다른 정보가 없고, 테스트로도 확인했습니다.\n- **창구 직원:** 자기 창구가 호출한 고객만 상세를 봅니다. 계좌는 `****1234`처럼 끝 4자리만 나갑니다. 다른 창구 고객은 조회할 방법이 없습니다.\n- **지점장:** 지점장 계정에는 고객 상세를 내려주는 API가 없고, 숫자 현황만 봅니다. 서버가 역할별로 접근을 막아서 지점장이 창구 API를 호출하면 403이 나옵니다.\n\n## 제가 임의로 정한 것 (바꿀 부분 알려 주세요)\n\n1. **노쇼:** 예약 시각 +30분까지 안 오면 노쇼입니다. 요청에 기준이 없어서 정했습니다. 예약 시각 +10분 뒤에 도착하면 일반 고객이니 노쇼가 아닙니다.\n2. **예약 가능 시간:** 9~16시, 오늘부터 7일 이내입니다.\n3. **예약 체크인:** 예약 때 적은 전화번호와 계좌 끝 4자리가 맞아야 번호표가 나옵니다. 남의 예약을 대신 체크인하지 못하게 하려는 장치입니다.\n4. **번호표:** 예금은 A, 대출은 B, 외환은 C로 시작하고 하루마다 001부터 다시 셉니다.\n5. **PIN 로그인:** 단순한 PIN 방식입니다. 실제 지점에 쓰려면 직원 인증을 제대로 붙이고, 전화번호와 계좌번호는 DB에 암호화해서 저장해야 합니다. 지금은 평문으로 저장합니다.\n\n가상 데이터에는 우선 고객이 일반 고객 앞에 서는 경우(서지후, 임수아), 예약 시각보다 늦게 와서 일반 순서가 된 경우(오하늘), 보류 1건, 노쇼 2건이 들어 있어서 바로 규칙을 확인할 수 있습니다.",
+   "wall_s": 304.3
+  }
+ },
+ "D3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: {'detail': 'Not Found'}\nassert (404 == 200)",
+   "T3": "AssertionError: ('GET /api/board', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T4": "AssertionError: ('도착', 'K-05', '10:10', '기대', True, 405, ...)\nassert (405 == 200)",
+   "T5": "AssertionError: ('예금 줄: 우선(도착 순) → 일반(도착 순)', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T6": "AssertionError: ('호출 뒤 2분은 409', 405, {'detail': 'Method Not Allowed'})\nassert 405 == 409",
+   "T7": "AssertionError: ('호출한 창구 직원은 상세', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T8": "AssertionError: ('지점장 현황', 401, {'detail': '로그인이 필요합니다'})\nassert 401 == 200",
+   "T9": "AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nassert '김*수' in '{\"detail\":\"Not Found\"}'"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": ", {'detail': 'Not Found'})\nE       assert (404 == 200)\n\n_grader\\test_dod.py:309: AssertionError\n______________________ test_T8_manager_and_reject_order _______________________\n\nsrv = <test_dod.Server object at 0x0000019D9E4DABA0>\n\n    def test_T8_manager_and_reject_order(srv):\n        st, s, raw = get(srv, \"/api/manager/summary?viewer=m1\")\n>       assert st == 200, (\"지점장 현황\", st, s)\nE       AssertionError: ('지점장 현황', 401, {'detail': '로그인이 필요합니다'})\nE       assert 401 == 200\n\n_grader\\test_dod.py:328: AssertionError\n_______________________________ test_T9_screens _______________________________\n\nsrv = <test_dod.Server object at 0x0000019D9E4DABA0>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screens(srv, pw):\n        pg, responses = open_page(pw, srv, \"/board\")\n        text = pg.inner_text(\"body\")\n        assert not pii_in(text), (\"대기 화면 글자에 개인정보\", pii_in(text))\n>       assert \"김*수\" in text, (\"가린 이름이 보여야 한다 (호출 중인 K-01)\", text[:300])\nE       AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nE       assert '김*수' in '{\"detail\":\"Not Found\"}'\n\n_grader\\test_dod.py:355: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: {'detail': 'No...\nFAILED _grader/test_dod.py::test_T3_board_hides - AssertionError: ('GET /api/...\nFAILED _grader/test_dod.py::test_T4_reservation_window - AssertionError: ('도...\nFAILED _grader/test_dod.py::test_T5_order_and_counters - AssertionError: ('예...\nFAILED _grader/test_dod.py::test_T6_hold_and_complete - AssertionError: ('호...\nFAILED _grader/test_dod.py::test_T7_roles - AssertionError: ('호출한 창구 직...\nFAILED _grader/test_dod.py::test_T8_manager_and_reject_order - AssertionError...\nFAILED _grader/test_dod.py::test_T9_screens - AssertionError: ('가린 이름이 ...\n8 failed, 1 passed in 13.71s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/check-in",
+   "/api/display",
+   "/api/login",
+   "/api/manager/summary",
+   "/api/reservations",
+   "/api/teller/call-next",
+   "/api/teller/finish",
+   "/api/teller/start",
+   "/api/teller/state",
+   "/api/tickets"
+  ],
+  "extra_routes": [
+   "/api/check-in",
+   "/api/display",
+   "/api/login",
+   "/api/reservations",
+   "/api/teller/call-next",
+   "/api/teller/finish",
+   "/api/teller/start",
+   "/api/teller/state"
+  ],
+  "tests_modified": null,
+  "files": [
+   "app/__init__.py",
+   "app/core.py",
+   "app/main.py",
+   "app/seed.py",
+   "build.json",
+   "requirements.txt",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv",
+   "static/common.js",
+   "static/customer.html",
+   "static/display.html",
+   "static/index.html",
+   "static/manager.html",
+   "static/style.css",
+   "static/teller.html",
+   "tests/test_rules.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 두둑은행 지점 '방문 예약 · 대기 현황판' 웹앱을 만들어 줘. 고객은 이름 · 전화번호 · 계좌번호 · 업무 종류(예금 · 대출 · 외환)를 적어 방문 예약을 하거나 현장에서 번호표를 뽑아. 지점 대기 화면(고객들이 같이 보는 모니터)에 대기 순서와 호출 창구가 뜨고, 창구 직원은 다음 고객을 호출해서 상세를 보고, 지점장은 대기 현황과 노쇼를 봐. 예약 고객은 우선으로. 가상 데이터도 넣어서 바로 실행되게.\n\n우리 지점 규칙은 이거야:\n- 예약 고객은 예약 시각 앞뒤 10분 안에 도착하면 일반 고객보다 먼저. 그 밖이면 일반 순서.\n- 호출 뒤 3분 안에 안 오면 보류 처리하고 다음 번호를 부른다.\n- 창구 배정: 창구 1 · 2 는 예금, 창구 3 은 대출, 창구 4 는 외환. 창구는 자기 업무 고객만 부른다.\n- 대기 화면엔 번호 · 가린 이름(김*수) · 창구 번호만. 이름 전체 · 전화번호 · 계좌번호는 안 보여 준다.\n- 창구 직원은 자기 창구 고객만 상세를 본다. 계좌는 끝 4자리만. 지점장은 현황 숫자만 보고 고객 상세는 못 본다.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 236559,
+   "num_turns": 23,
+   "total_cost_usd": 0.6231337000000001,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 26,
+    "cache_creation_input_tokens": 55687,
+    "cache_read_input_tokens": 662837,
+    "output_tokens": 33405,
+    "output_tokens_details": {
+     "thinking_tokens": 5391
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 55687,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1439,
+      "cache_read_input_tokens": 68378,
+      "cache_creation_input_tokens": 342,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 342
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "두둑은행 방문 예약 · 대기 현황판을 만들었고, 가상 데이터까지 넣어서 바로 실행됩니다. 테스트 11개가 모두 통과했고, 서버를 띄워서 대기 화면 API와 페이지 응답도 확인했습니다. 브라우저 화면은 직접 열어 보지 못했습니다.\n\n**실행** (프로젝트 폴더에서)\n```\npip install -r requirements.txt\npython -m uvicorn app.main:app --port 8000\n```\n`http://localhost:8000` 에서 고객, 대기 화면, 창구, 지점장 화면으로 들어갑니다. 첫 실행 때 가상 데이터가 현재 시각 기준으로 들어갑니다. 날이 바뀌면 `duduk.db` 를 지우고 다시 실행하세요.\n\n**데모 PIN**\n- 창구 1~4: 1111 / 2222 / 3333 / 4444\n- 지점장: 9999\n- 환경변수 `DUDUK_PIN_W1`~`W4`, `DUDUK_PIN_MANAGER` 로 바꿀 수 있습니다.\n\n**규칙 반영**\n- **예약 우선**:\n  - 도착 확인한 시각이 예약 시각 앞뒤 10분 이내(딱 10분 포함)면 우선입니다.\n  - 우선 고객끼리는 예약 시각 순입니다.\n  - 그 밖이면 일반 고객과 같이 도착 순서입니다.\n  - 예약 고객은 방문 때 예약 코드 8자리로 도착 확인을 해야 번호표를 받습니다.\n- **3분 보류**: 호출 후 3분이 지나면 보류(노쇼)로 바꾸고, 그 창구가 다음 번호를 자동으로 부릅니다. 서버가 5초마다 확인합니다.\n- **창구 배정**:\n  - 창구 1·2는 예금, 3은 대출, 4는 외환 고객만 부릅니다.\n  - 번호표는 예금 A, 대출 B, 외환 C 로 시작합니다.\n  - 창구마다 한 번에 한 명만 호출·응대합니다.\n- **대기 화면**: 번호, 가린 이름(김*수), 창구 번호만 내려줍니다. 서버에서 가려서 보내므로 화면에서 더 볼 방법이 없습니다.\n- **창구 직원**:\n  - 자기 창구에서 호출한 고객의 상세만 봅니다. 창구 번호는 로그인 정보에서만 읽습니다.\n  - 상세에는 이름, 전화번호, 계좌 끝 4자리(`****1234`)가 나옵니다.\n  - 대기 목록은 가린 이름만 보입니다.\n- **지점장**: 응답에 숫자만 있습니다. 대기, 호출, 응대, 완료, 보류, 예약 노쇼, 최장 대기 시간 등이고 고객 정보는 없습니다. 창구 직원과 지점장은 서로의 화면 API를 쓸 수 없습니다.\n\n**제가 정한 부분** (달라야 하면 알려 주세요)\n- 계좌번호는 입력받아도 끝 4자리만 저장합니다. 전체를 저장하지 않으려는 선택입니다.\n- 예약은 평일 09:00~16:30, 14일 이내만 받습니다.\n- 지점장 화면의 노쇼는 두 가지로 나눴습니다. 호출 후 보류 건수와, 예약 시각 +10분이 지나도록 오지 않은 예약 건수입니다.\n- 보류된 고객을 다시 부르는 기능은 없습니다. 필요하면 추가할 수 있습니다.\n- 고객 화면은 인증이 없는 공개 화면입니다. 실제 운영에서는 키오스크나 지점 내부망으로만 열어야 합니다.\n\n코드는 `app/core.py`(규칙), `app/main.py`(API·인증), `app/seed.py`(가상 데이터), `static/`(화면 5개), `tests/`에 있습니다.",
+   "wall_s": 253.9
+  }
+ },
+ "A4": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: {'detail': 'Not Found'}\nassert (404 == 200)",
+   "T3": "AssertionError: ('대기 화면 응답에 업무 종류', ['예금', '대출', '외환'])\nassert not ['예금', '대출', '외환']",
+   "T4": "AssertionError: ('도착', 'K-05', '10:10', '기대', True, 404, ...)\nassert (404 == 200)",
+   "T5": "AssertionError: ('예금 줄: 우선(도착 순) → 일반(도착 순)', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T6": "AssertionError: ('호출 뒤 2분은 409', 404, {'detail': 'Not Found'})\nassert 404 == 409",
+   "T7": "AssertionError: ('호출한 창구 직원은 상세', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T8": "AssertionError: ('지점장 현황', 401, {'detail': '로그인이 필요합니다'})\nassert 401 == 200",
+   "T9": "AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '🏦 두둑은행 · 대기 현황\n  20:21\n  호출 창구\n  1번 창구\n  RD002\n  예금\n  2번 창구\n  대기\n  예금\n  3번 창구\n  L002\n  대출\n  4번 창구\\...003\n  대출\n  예약\n  3\n  D003\n  예금\n  4\n  F002\n  외환\n  5\n  L003\n  대출\n  6\n  D004\n  예금\n  7\n  F003\n  외환\n  예약 고객은 우선 호출됩니다 · 번호가 호출되면 해당 창구로 와 주세요')\nassert '김*수' in '🏦 두둑은행 · 대기 현황\\n20:21\\n호출 창구\\n1번 창구\\nRD002\\n예금\\n2번 창구\\n대기\\n예금\\n3번 창구\\nL002\\n대출\\n4번 창구\\n대기\\n외환\\n5번 창구\\n대기\\n예금 · 대출 · 외...L003\\n대출\\n예약\\n3\\nD003\\n예금\\n4\\nF002\\n외환\\n5\\nL003\\n대출\\n6\\nD004\\n예금\\n7\\nF003\\n외환\\n예약 고객은 우선 호출됩니다 · 번호가 호출되면 해당 창구로 와 주세요'"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "r type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screens(srv, pw):\n        pg, responses = open_page(pw, srv, \"/board\")\n        text = pg.inner_text(\"body\")\n        assert not pii_in(text), (\"대기 화면 글자에 개인정보\", pii_in(text))\n>       assert \"김*수\" in text, (\"가린 이름이 보여야 한다 (호출 중인 K-01)\", text[:300])\nE       AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '🏦 두둑은행 · 대기 현황\nE         20:21\nE         호출 창구\nE         1번 창구\nE         RD002\nE         예금\nE         2번 창구\nE         대기\nE         예금\nE         3번 창구\nE         L002\nE         대출\nE         4번 창구\\...003\nE         대출\nE         예약\nE         3\nE         D003\nE         예금\nE         4\nE         F002\nE         외환\nE         5\nE         L003\nE         대출\nE         6\nE         D004\nE         예금\nE         7\nE         F003\nE         외환\nE         예약 고객은 우선 호출됩니다 · 번호가 호출되면 해당 창구로 와 주세요')\nE       assert '김*수' in '🏦 두둑은행 · 대기 현황\\n20:21\\n호출 창구\\n1번 창구\\nRD002\\n예금\\n2번 창구\\n대기\\n예금\\n3번 창구\\nL002\\n대출\\n4번 창구\\n대기\\n외환\\n5번 창구\\n대기\\n예금 · 대출 · 외...L003\\n대출\\n예약\\n3\\nD003\\n예금\\n4\\nF002\\n외환\\n5\\nL003\\n대출\\n6\\nD004\\n예금\\n7\\nF003\\n외환\\n예약 고객은 우선 호출됩니다 · 번호가 호출되면 해당 창구로 와 주세요'\n\n_grader\\test_dod.py:355: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: {'detail': 'No...\nFAILED _grader/test_dod.py::test_T3_board_hides - AssertionError: ('대기 화면...\nFAILED _grader/test_dod.py::test_T4_reservation_window - AssertionError: ('도...\nFAILED _grader/test_dod.py::test_T5_order_and_counters - AssertionError: ('예...\nFAILED _grader/test_dod.py::test_T6_hold_and_complete - AssertionError: ('호...\nFAILED _grader/test_dod.py::test_T7_roles - AssertionError: ('호출한 창구 직...\nFAILED _grader/test_dod.py::test_T8_manager_and_reject_order - AssertionError...\nFAILED _grader/test_dod.py::test_T9_screens - AssertionError: ('가린 이름이 ...\n8 failed, 1 passed in 5.73s\n",
+  "passed": 1,
+  "routes": [
+   "/api/board",
+   "/api/checkin",
+   "/api/counter/{n}",
+   "/api/counter/{n}/complete",
+   "/api/counter/{n}/next",
+   "/api/counter/{n}/noshow",
+   "/api/counter/{n}/recall",
+   "/api/counters",
+   "/api/login",
+   "/api/manager/summary",
+   "/api/reservations",
+   "/api/slots",
+   "/api/tickets",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/checkin",
+   "/api/counter/{n}",
+   "/api/counter/{n}/complete",
+   "/api/counter/{n}/next",
+   "/api/counter/{n}/noshow",
+   "/api/counter/{n}/recall",
+   "/api/counters",
+   "/api/login",
+   "/api/reservations",
+   "/api/slots"
+  ],
+  "tests_modified": null,
+  "files": [
+   "README.md",
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv",
+   "static/board.html",
+   "static/common.js",
+   "static/counter.html",
+   "static/index.html",
+   "static/manager.html",
+   "static/style.css"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 두둑은행 지점 '방문 예약 · 대기 현황판' 웹앱을 만들어 줘. 고객은 이름 · 전화번호 · 계좌번호 · 업무 종류(예금 · 대출 · 외환)를 적어 방문 예약을 하거나 현장에서 번호표를 뽑아. 지점 대기 화면(고객들이 같이 보는 모니터)에 대기 순서와 호출 창구가 뜨고, 창구 직원은 다음 고객을 호출해서 상세를 보고, 지점장은 대기 현황과 노쇼를 봐. 예약 고객은 우선으로. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 243314,
+   "num_turns": 14,
+   "total_cost_usd": 0.6456403,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 20,
+    "cache_creation_input_tokens": 57726,
+    "cache_read_input_tokens": 489663,
+    "output_tokens": 36573,
+    "output_tokens_details": {
+     "thinking_tokens": 5372
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 57726,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1449,
+      "cache_read_input_tokens": 70103,
+      "cache_creation_input_tokens": 656,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 656
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "두둑은행 방문 예약·대기 현황판을 만들었고, 가상 데이터가 들어 있어 바로 실행됩니다. 백엔드 API는 FastAPI 테스트 클라이언트로 확인했습니다. 브라우저에서 화면을 직접 열어 보지는 못했습니다.\n\n실행은 `A4` 폴더에서 아래처럼 하면 됩니다. 첫 실행 때 `duduk.db`가 자동으로 만들어지고, 이 파일을 지우면 초기화됩니다.\n```\npip install -r requirements.txt\nuvicorn main:app --reload\n```\n\n| 화면 | 주소 | 접근 |\n|---|---|---|\n| 고객: 방문 예약, 현장 번호표, 예약 도착 확인 | `/` | 로그인 없음 |\n| 지점 대기 모니터 | `/board` | 로그인 없음 |\n| 창구 직원 | `/counter` | PIN 1111 |\n| 지점장 | `/manager` | PIN 9999 |\n\nPIN은 환경변수 `STAFF_PIN`, `MANAGER_PIN`으로 바꿀 수 있습니다.\n\n**동작 방식**\n- **예약**: 날짜(평일, 7일 이내)와 30분 단위 시간(09:00~15:30)을 고릅니다. 시간대마다 4건까지 받습니다. 예약 번호는 `RD001`처럼 앞에 R이 붙습니다.\n- **우선 호출**: 예약 고객은 방문해서 도착 확인(전화번호 입력)을 하면 대기열 맨 앞쪽에 들어갑니다. 예약 시각순이고, 그 뒤에 현장 번호표 고객이 도착순으로 이어집니다.\n- **노쇼**: 예약 시각 +15분까지 도착 확인이 없으면 자동으로 노쇼가 됩니다. 창구에서 호출했는데 오지 않은 경우는 직원이 노쇼로 처리합니다.\n- **창구**: 1·2번은 예금, 3번은 대출, 4번은 외환, 5번은 전체를 맡습니다. 직원은 \"다음 고객 호출\"로 호출하고, 호출된 고객의 이름·전화·계좌번호·업무를 보며 완료·재호출·노쇼 처리를 합니다.\n- **지점장**: 대기 인원, 평균·최장 대기시간, 창구 현황, 오늘과 7일 노쇼율, 노쇼 목록(미도착인지 호출 불응인지 구분), 7일 추이를 봅니다.\n- **대기 모니터**: 3초마다 새로 고쳐지고, 새로 호출된 창구는 깜빡이며 소리가 납니다.\n- **가상 데이터**: 오늘 기준 처리 완료 6건, 호출 중 2건, 대기 7건(예약 2건 포함), 노쇼 2건, 방문 예정 예약 3건을 넣었습니다. 지난 6일 이력과 다음 영업일 예약 2건도 있습니다. 시각은 실행 시점 기준으로 만들어집니다.\n\n**개인정보**: 여러 고객이 같이 보는 대기 모니터에는 번호표와 업무만 나옵니다. 대기 목록과 지점장 화면은 이름·전화·계좌번호를 마스킹해서 보여주고, 호출한 고객 한 명의 상세만 창구에서 전부 보입니다.\n\n**한계**\n- 로그인은 PIN만 쓰고, 5번 틀리면 1분간 막습니다.\n- 세션은 서버 메모리에 있어서 서버를 다시 켜면 다시 로그인해야 합니다.\n- 실제 은행 운영용 인증은 아닙니다. 운영에 쓰려면 직원별 계정과 HTTPS, DB 저장 시 암호화가 필요합니다.\n- 영업시간 밖에는 번호표를 뽑지 못하게 막지 않았습니다. 데모를 아무 때나 돌리려는 목적입니다.\n\n전체 설명은 `README.md`에 있습니다.",
+   "wall_s": 253.7
+  }
+ },
+ "A5": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: {'detail': 'Not Found'}\nassert (404 == 200)",
+   "T3": "AssertionError: ('GET /api/board', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T4": "AssertionError: ('도착', 'K-05', '10:10', '기대', True, 404, ...)\nassert (404 == 200)",
+   "T5": "AssertionError: ('예금 줄: 우선(도착 순) → 일반(도착 순)', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T6": "AssertionError: ('호출 뒤 2분은 409', 404, {'detail': 'Not Found'})\nassert 404 == 409",
+   "T7": "AssertionError: ('호출한 창구 직원은 상세', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T8": "AssertionError: ('지점장 현황', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 200",
+   "T9": "AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nassert '김*수' in '{\"detail\":\"Not Found\"}'"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": ", {'detail': 'Not Found'})\nE       assert (404 == 200)\n\n_grader\\test_dod.py:309: AssertionError\n______________________ test_T8_manager_and_reject_order _______________________\n\nsrv = <test_dod.Server object at 0x000001C8B3FDABA0>\n\n    def test_T8_manager_and_reject_order(srv):\n        st, s, raw = get(srv, \"/api/manager/summary?viewer=m1\")\n>       assert st == 200, (\"지점장 현황\", st, s)\nE       AssertionError: ('지점장 현황', 401, {'detail': '로그인이 필요합니다.'})\nE       assert 401 == 200\n\n_grader\\test_dod.py:328: AssertionError\n_______________________________ test_T9_screens _______________________________\n\nsrv = <test_dod.Server object at 0x000001C8B3FDABA0>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screens(srv, pw):\n        pg, responses = open_page(pw, srv, \"/board\")\n        text = pg.inner_text(\"body\")\n        assert not pii_in(text), (\"대기 화면 글자에 개인정보\", pii_in(text))\n>       assert \"김*수\" in text, (\"가린 이름이 보여야 한다 (호출 중인 K-01)\", text[:300])\nE       AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nE       assert '김*수' in '{\"detail\":\"Not Found\"}'\n\n_grader\\test_dod.py:355: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: {'detail': 'No...\nFAILED _grader/test_dod.py::test_T3_board_hides - AssertionError: ('GET /api/...\nFAILED _grader/test_dod.py::test_T4_reservation_window - AssertionError: ('도...\nFAILED _grader/test_dod.py::test_T5_order_and_counters - AssertionError: ('예...\nFAILED _grader/test_dod.py::test_T6_hold_and_complete - AssertionError: ('호...\nFAILED _grader/test_dod.py::test_T7_roles - AssertionError: ('호출한 창구 직...\nFAILED _grader/test_dod.py::test_T8_manager_and_reject_order - AssertionError...\nFAILED _grader/test_dod.py::test_T9_screens - AssertionError: ('가린 이름이 ...\n8 failed, 1 passed in 7.27s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/checkin",
+   "/api/counters",
+   "/api/display",
+   "/api/login",
+   "/api/manager/summary",
+   "/api/reservations",
+   "/api/slots",
+   "/api/teller/call",
+   "/api/teller/state",
+   "/api/teller/{tid}/action",
+   "/api/walkin",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/checkin",
+   "/api/counters",
+   "/api/display",
+   "/api/login",
+   "/api/reservations",
+   "/api/slots",
+   "/api/teller/call",
+   "/api/teller/state",
+   "/api/teller/{tid}/action",
+   "/api/walkin"
+  ],
+  "tests_modified": null,
+  "files": [
+   "README.md",
+   "build.json",
+   "main.py",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv",
+   "static/common.js",
+   "static/display.html",
+   "static/index.html",
+   "static/manager.html",
+   "static/style.css",
+   "static/teller.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 두둑은행 지점 '방문 예약 · 대기 현황판' 웹앱을 만들어 줘. 고객은 이름 · 전화번호 · 계좌번호 · 업무 종류(예금 · 대출 · 외환)를 적어 방문 예약을 하거나 현장에서 번호표를 뽑아. 지점 대기 화면(고객들이 같이 보는 모니터)에 대기 순서와 호출 창구가 뜨고, 창구 직원은 다음 고객을 호출해서 상세를 보고, 지점장은 대기 현황과 노쇼를 봐. 예약 고객은 우선으로. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 224340,
+   "num_turns": 17,
+   "total_cost_usd": 0.635304,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 22,
+    "cache_creation_input_tokens": 59549,
+    "cache_read_input_tokens": 553740,
+    "output_tokens": 34169,
+    "output_tokens_details": {
+     "thinking_tokens": 3342
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 59549,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1408,
+      "cache_read_input_tokens": 71534,
+      "cache_creation_input_tokens": 1048,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 1048
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "두둑은행 방문 예약·대기 현황판을 만들었습니다. 서버를 띄워서 API 흐름은 확인했습니다. 브라우저 화면은 직접 열어 보지 못했습니다.\n\n## 실행\n```\npip install -r requirements.txt\npython -m uvicorn main:app --port 8000\n```\n처음 실행하면 `duduk.db`가 만들어지고 가상 데이터 16건이 들어갑니다. 데이터 시각이 현재 시각 기준이라 언제 실행해도 대기·호출·노쇼가 채워져 보입니다. 초기화하려면 `duduk.db`를 지우고 다시 실행하세요.\n\n## 화면\n| 화면 | 주소 | 내용 |\n|---|---|---|\n| 고객 | `/` | 방문 예약, 현장 번호표, 예약 도착 확인 |\n| 대기 화면 | `/static/display.html` | 호출 번호와 창구, 대기 순서, 예약 표시. 3초마다 갱신 |\n| 창구 | `/static/teller.html` | 다음 고객 호출 후 이름·전화·계좌 상세 확인, 상담 시작·완료·노쇼 처리 |\n| 지점장 | `/static/manager.html` | 업무별 대기, 최장·평균 대기, 창구별 처리 건수, 노쇼 내역과 노쇼율 |\n\n## 확인한 동작\n- **예약 우선**: 도착 확인한 예약 고객은 현장 번호표 고객보다 먼저 호출됩니다. 예약 고객끼리는 예약 시각 순입니다.\n- **노쇼**: 예약 시각 15분이 지나도 도착 확인이 없으면 자동으로 노쇼가 됩니다. 호출했는데 응대가 없으면 창구에서 노쇼 처리합니다. 지점장 화면에서 두 경우가 구분됩니다.\n- **권한**: PIN 없이 지점장 API를 호출하면 401이 나옵니다. 창구 PIN으로 지점장 API를 호출해도 401입니다.\n- **중복·오류 방지**: 같은 전화번호로 중복 예약·대기를 막고, 한 창구에는 한 명만 호출할 수 있고, 전화·계좌 형식이 틀리면 거절합니다.\n\n## 제가 정한 것들 (바꿀 수 있음)\n- **공용 모니터에는 개인정보를 내보내지 않습니다.** 번호표, 업무, 창구만 표시합니다.\n- **지점장 화면은 이름·전화·계좌를 마스킹합니다.** 전체 계좌번호는 호출된 고객을 보는 창구 화면에만 나옵니다.\n- **PIN은 창구 `1111`, 지점장 `9999`입니다.** 환경변수 `TELLER_PIN`, `MANAGER_PIN`으로 바꿀 수 있습니다. 실제 운영 전에는 반드시 바꾸세요.\n- **창구별 업무**는 1번 예금, 2번 예금·대출, 3번 대출, 4번 외환·예금으로 정했습니다. `main.py`의 `COUNTERS`에서 고칩니다.\n- **예약 규칙**: 09:00~16:00에 30분 단위로 시간당 3팀입니다. 예약 30분 전부터 도착 확인이 가능합니다.\n\n## 한계\n- 영업시간 밖에 실행하면 오늘 예약 가능한 시간이 없습니다. 방금 테스트도 저녁이라 예약 접수는 확인하지 못했고, 예약 도착 확인은 DB의 예약 시각을 바꿔서 확인했습니다.\n- 로그인 토큰은 서버 메모리에 있어서 서버를 재시작하면 다시 로그인해야 합니다.\n- 호출 시 음성 안내는 없고, 화면에서 번호가 반짝이는 효과만 있습니다.\n\nREADME.md에 같은 안내를 적어 두었습니다.",
+   "wall_s": 237.0
+  }
+ },
+ "A6": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: {'detail': 'Not Found'}\nassert (404 == 200)",
+   "T3": "AssertionError: ('GET /api/board', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T4": "AssertionError: ('도착', 'K-05', '10:10', '기대', True, 405, ...)\nassert (405 == 200)",
+   "T5": "AssertionError: ('예금 줄: 우선(도착 순) → 일반(도착 순)', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T6": "AssertionError: ('호출 뒤 2분은 409', 405, {'detail': 'Method Not Allowed'})\nassert 405 == 409",
+   "T7": "AssertionError: ('호출한 창구 직원은 상세', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T8": "AssertionError: ('지점장 현황', 404, {'detail': 'Not Found'})\nassert 404 == 200",
+   "T9": "AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nassert '김*수' in '{\"detail\":\"Not Found\"}'"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "04, {'detail': 'Not Found'})\nE       assert (404 == 200)\n\n_grader\\test_dod.py:309: AssertionError\n______________________ test_T8_manager_and_reject_order _______________________\n\nsrv = <test_dod.Server object at 0x0000012233DCABA0>\n\n    def test_T8_manager_and_reject_order(srv):\n        st, s, raw = get(srv, \"/api/manager/summary?viewer=m1\")\n>       assert st == 200, (\"지점장 현황\", st, s)\nE       AssertionError: ('지점장 현황', 404, {'detail': 'Not Found'})\nE       assert 404 == 200\n\n_grader\\test_dod.py:328: AssertionError\n_______________________________ test_T9_screens _______________________________\n\nsrv = <test_dod.Server object at 0x0000012233DCABA0>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screens(srv, pw):\n        pg, responses = open_page(pw, srv, \"/board\")\n        text = pg.inner_text(\"body\")\n        assert not pii_in(text), (\"대기 화면 글자에 개인정보\", pii_in(text))\n>       assert \"김*수\" in text, (\"가린 이름이 보여야 한다 (호출 중인 K-01)\", text[:300])\nE       AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nE       assert '김*수' in '{\"detail\":\"Not Found\"}'\n\n_grader\\test_dod.py:355: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: {'detail': 'No...\nFAILED _grader/test_dod.py::test_T3_board_hides - AssertionError: ('GET /api/...\nFAILED _grader/test_dod.py::test_T4_reservation_window - AssertionError: ('도...\nFAILED _grader/test_dod.py::test_T5_order_and_counters - AssertionError: ('예...\nFAILED _grader/test_dod.py::test_T6_hold_and_complete - AssertionError: ('호...\nFAILED _grader/test_dod.py::test_T7_roles - AssertionError: ('호출한 창구 직...\nFAILED _grader/test_dod.py::test_T8_manager_and_reject_order - AssertionError...\nFAILED _grader/test_dod.py::test_T9_screens - AssertionError: ('가린 이름이 ...\n8 failed, 1 passed in 7.75s\n",
+  "passed": 1,
+  "routes": [
+   "/",
+   "/api/checkin",
+   "/api/display",
+   "/api/manager/stats",
+   "/api/reservations",
+   "/api/slots",
+   "/api/teller/call",
+   "/api/teller/complete",
+   "/api/teller/noshow",
+   "/api/teller/start",
+   "/api/teller/state",
+   "/api/ticket/lookup",
+   "/api/walkin"
+  ],
+  "extra_routes": [
+   "/api/checkin",
+   "/api/display",
+   "/api/manager/stats",
+   "/api/reservations",
+   "/api/slots",
+   "/api/teller/call",
+   "/api/teller/complete",
+   "/api/teller/noshow",
+   "/api/teller/start",
+   "/api/teller/state",
+   "/api/ticket/lookup",
+   "/api/walkin"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "db.py",
+   "main.py",
+   "requirements.txt",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv",
+   "server.log",
+   "static/common.js",
+   "static/display.html",
+   "static/index.html",
+   "static/manager.html",
+   "static/style.css",
+   "static/teller.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 두둑은행 지점 '방문 예약 · 대기 현황판' 웹앱을 만들어 줘. 고객은 이름 · 전화번호 · 계좌번호 · 업무 종류(예금 · 대출 · 외환)를 적어 방문 예약을 하거나 현장에서 번호표를 뽑아. 지점 대기 화면(고객들이 같이 보는 모니터)에 대기 순서와 호출 창구가 뜨고, 창구 직원은 다음 고객을 호출해서 상세를 보고, 지점장은 대기 현황과 노쇼를 봐. 예약 고객은 우선으로. 가상 데이터도 넣어서 바로 실행되게.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 251828,
+   "num_turns": 19,
+   "total_cost_usd": 0.6523321999999999,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 26,
+    "cache_creation_input_tokens": 58950,
+    "cache_read_input_tokens": 659002,
+    "output_tokens": 35058,
+    "output_tokens_details": {
+     "thinking_tokens": 4279
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 58950,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1822,
+      "cache_read_input_tokens": 71143,
+      "cache_creation_input_tokens": 840,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 840
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "`<작업 폴더>/A6`에 웹앱을 만들었고, 서버를 띄워서 API로 주요 흐름을 시험했습니다. 시험한 것은 예약 우선 호출, 노쇼 자동 처리, 중복 호출 거절, PIN 거절, 입력 검증, 예약 중복·시간 검증입니다. 브라우저 화면은 열어 보지 못했고, 화면 코드는 서버에서 파일이 내려오는 것만 확인했습니다. 지금 서버가 8000번 포트에서 켜져 있습니다.\n\n실행은 프로젝트 폴더에서 `pip install -r requirements.txt` 후 `python -m uvicorn main:app --port 8000`입니다. 처음 켜면 가상 데이터가 들어갑니다. `duduk.db`를 지우고 다시 켜면 현재 시각 기준으로 데이터가 새로 만들어집니다.\n\n| 화면 | 주소 | 용도 |\n|---|---|---|\n| 고객 | `/` | 방문 예약, 번호표 뽑기, 예약 도착 확인, 내 순서 조회 |\n| 대기 화면 | `/display.html` | 지점 모니터용입니다. 창구별 호출 번호와 대기 순서를 3초마다 갱신합니다. |\n| 창구 | `/teller.html` | 창구 번호와 직원 PIN으로 로그인합니다. 다음 고객을 호출하고 상세를 본 뒤 상담 시작, 완료, 노쇼 처리를 합니다. |\n| 지점장 | `/manager.html` | 업무별 대기, 평균·최장 대기, 노쇼 목록과 노쇼율, 도착 예정 예약, 창구 상태를 봅니다. |\n\n## 제가 정한 규칙 (바꾸고 싶으면 알려 주세요)\n- **우선순위**: 예약 고객이 도착 확인을 하면 예약 시각 순으로 먼저 호출되고, 그다음 현장 고객이 도착 순으로 호출됩니다. 예약 고객이 계속 오면 현장 고객이 오래 기다릴 수 있습니다. 그래서 지점장 화면에 최장 대기 시간을 넣었습니다.\n- **노쇼**: 예약 시각에서 15분이 지나도 도착 확인이 없으면 자동으로 노쇼가 됩니다. 호출했는데 오지 않는 고객은 창구에서 직접 노쇼로 처리합니다.\n- **도착 확인**: 예약 30분 전부터 예약번호와 전화번호로 할 수 있습니다.\n- **예약 가능 범위**: 평일 7일 이내, 30분 단위이고, 시간대당 3건까지입니다.\n- **창구**: 업무 종류와 상관없이 4개 창구가 아무 고객이나 호출합니다.\n\n## 개인정보 처리\n- **대기 화면**: 번호표, 업무 종류, 예약 여부만 보여 줍니다. 이름·전화번호·계좌번호는 아예 보내지 않습니다.\n- **지점장 화면**: 이름과 전화번호를 일부 가려서 보여 주고, 계좌번호는 보여 주지 않습니다.\n- **창구 화면**: 호출한 고객 한 명의 전체 정보만 보여 줍니다.\n- **고객 화면**: 본인 번호표를 조회할 때 번호표와 전화번호가 둘 다 맞아야 합니다.\n\n기본 PIN은 직원 `1111`, 지점장 `9999`이고, 환경변수 `DUDUK_TELLER_PIN`과 `DUDUK_MANAGER_PIN`으로 바꿉니다.\n\n## 한계\n- 계좌번호와 전화번호가 DB에 평문으로 저장됩니다. 실제 은행에서 쓰려면 암호화와 본격적인 직원 인증이 필요합니다.\n- PIN 방식은 데모 수준입니다.\n- 예약번호(예: `L001`)는 날짜별로 새로 매겨서 다른 날과 겹칠 수 있습니다. 조회와 도착 확인은 전화번호까지 같이 맞춰 보기 때문에 동작에는 문제가 없습니다.",
+   "wall_s": 261.5
+  }
+ },
+ "D4": {
+  "tests": {
+   "T1": "error",
+   "T2": "error",
+   "T3": "error",
+   "T4": "error",
+   "T5": "error",
+   "T6": "error",
+   "T7": "error",
+   "T8": "error",
+   "T9": "error"
+  },
+  "detail": {
+   "T1": "failed on setup with \"Failed: 서버가 30초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [8740]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"C:\\Python314\\Lib\\contextlib.py\", line 214, in __aenter__\r\n    return await anext(self.gen)\r\n           ^^^^^^^^^^^^^^^^^^^^^\r\n  File \"runs\\D4\\a",
+   "T2": "failed on setup with \"Failed: 서버가 30초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [8740]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"C:\\Python314\\Lib\\contextlib.py\", line 214, in __aenter__\r\n    return await anext(self.gen)\r\n           ^^^^^^^^^^^^^^^^^^^^^\r\n  File \"runs\\D4\\a",
+   "T3": "failed on setup with \"Failed: 서버가 30초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [8740]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"C:\\Python314\\Lib\\contextlib.py\", line 214, in __aenter__\r\n    return await anext(self.gen)\r\n           ^^^^^^^^^^^^^^^^^^^^^\r\n  File \"runs\\D4\\a",
+   "T4": "failed on setup with \"Failed: 서버가 30초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [8740]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"C:\\Python314\\Lib\\contextlib.py\", line 214, in __aenter__\r\n    return await anext(self.gen)\r\n           ^^^^^^^^^^^^^^^^^^^^^\r\n  File \"runs\\D4\\a",
+   "T5": "failed on setup with \"Failed: 서버가 30초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [8740]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"C:\\Python314\\Lib\\contextlib.py\", line 214, in __aenter__\r\n    return await anext(self.gen)\r\n           ^^^^^^^^^^^^^^^^^^^^^\r\n  File \"runs\\D4\\a",
+   "T6": "failed on setup with \"Failed: 서버가 30초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [8740]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"C:\\Python314\\Lib\\contextlib.py\", line 214, in __aenter__\r\n    return await anext(self.gen)\r\n           ^^^^^^^^^^^^^^^^^^^^^\r\n  File \"runs\\D4\\a",
+   "T7": "failed on setup with \"Failed: 서버가 30초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [8740]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"C:\\Python314\\Lib\\contextlib.py\", line 214, in __aenter__\r\n    return await anext(self.gen)\r\n           ^^^^^^^^^^^^^^^^^^^^^\r\n  File \"runs\\D4\\a",
+   "T8": "failed on setup with \"Failed: 서버가 30초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [8740]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"C:\\Python314\\Lib\\contextlib.py\", line 214, in __aenter__\r\n    return await anext(self.gen)\r\n           ^^^^^^^^^^^^^^^^^^^^^\r\n  File \"runs\\D4\\a",
+   "T9": "failed on setup with \"Failed: 서버가 30초 안에 뜨지 않음: app.main:app\nINFO:     Started server process [8740]\r\nINFO:     Waiting for application startup.\r\nERROR:    Traceback (most recent call last):\r\n  File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\r\n    async with self.lifespan_context(app) as maybe_state:\r\n               ~~~~~~~~~~~~~~~~~~~~~^^^^^\r\n  File \"C:\\Python314\\Lib\\contextlib.py\", line 214, in __aenter__\r\n    return await anext(self.gen)\r\n           ^^^^^^^^^^^^^^^^^^^^^\r\n  File \"runs\\D4\\a"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "t.urlopen(self.base + \"/\", timeout=1)\n                return self\n            except urllib.error.HTTPError:\n                return self\n            except Exception:\n                time.sleep(0.5)\n        self.stop()\n>       pytest.fail(\"서버가 30초 안에 뜨지 않음: %s\\n%s\" % (self.target, self.log[-1500:]))\nE       Failed: 서버가 30초 안에 뜨지 않음: app.main:app\nE       INFO:     Started server process [8740]\n\nE       INFO:     Waiting for application startup.\n\nE       ERROR:    Traceback (most recent call last):\n\nE         File \"<사용자 폴더>\\AppData\\Roaming\\Python\\Python314\\site-packages\\starlette\\routing.py\", line 648, in lifespan\n\nE           async with self.lifespan_context(app) as maybe_state:\n\nE                      ~~~~~~~~~~~~~~~~~~~~~^^^^^\n\nE         File \"C:\\Python314\\Lib\\contextlib.py\", line 214, in __aenter__\n\nE           return await anext(self.gen)\n\nE                  ^^^^^^^^^^^^^^^^^^^^^\n\nE         File \"runs\\D4\\app\\main.py\", line 227, in lifespan\n\nE           seed.run(db, issue_number, iso, now)\n\nE           ^^^^^^^^\n\nE       AttributeError: module 'seed' has no attribute 'run'\n\nE       \n\nE       ERROR:    Application startup failed. Exiting.\n\n_grader\\test_dod.py:147: Failed\n=========================== short test summary info ===========================\nERROR _grader/test_dod.py::test_T1_page_loads - Failed: 서버가 30초 안에 뜨지...\nERROR _grader/test_dod.py::test_T2_contract - Failed: 서버가 30초 안에 뜨지 ...\nERROR _grader/test_dod.py::test_T3_board_hides - Failed: 서버가 30초 안에 뜨...\nERROR _grader/test_dod.py::test_T4_reservation_window - Failed: 서버가 30초 ...\nERROR _grader/test_dod.py::test_T5_order_and_counters - Failed: 서버가 30초 ...\nERROR _grader/test_dod.py::test_T6_hold_and_complete - Failed: 서버가 30초 안...\nERROR _grader/test_dod.py::test_T7_roles - Failed: 서버가 30초 안에 뜨지 않음...\nERROR _grader/test_dod.py::test_T8_manager_and_reject_order - Failed: 서버가 ...\nERROR _grader/test_dod.py::test_T9_screens - Failed: 서버가 30초 안에 뜨지 않...\n9 errors in 1.83s\n",
+  "passed": 0,
+  "routes": [
+   "/",
+   "/api/checkin",
+   "/api/display",
+   "/api/login",
+   "/api/manager/stats",
+   "/api/reservations",
+   "/api/teller/call-next",
+   "/api/teller/done",
+   "/api/teller/me",
+   "/api/teller/serve",
+   "/api/tickets"
+  ],
+  "extra_routes": [
+   "/api/checkin",
+   "/api/display",
+   "/api/login",
+   "/api/manager/stats",
+   "/api/reservations",
+   "/api/teller/call-next",
+   "/api/teller/done",
+   "/api/teller/me",
+   "/api/teller/serve"
+  ],
+  "tests_modified": null,
+  "files": [
+   "app/main.py",
+   "app/seed.py",
+   "app/static/common.js",
+   "app/static/display.html",
+   "app/static/index.html",
+   "app/static/manager.html",
+   "app/static/style.css",
+   "app/static/teller.html",
+   "build.json",
+   "run.py",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv",
+   "server.log"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 두둑은행 지점 '방문 예약 · 대기 현황판' 웹앱을 만들어 줘. 고객은 이름 · 전화번호 · 계좌번호 · 업무 종류(예금 · 대출 · 외환)를 적어 방문 예약을 하거나 현장에서 번호표를 뽑아. 지점 대기 화면(고객들이 같이 보는 모니터)에 대기 순서와 호출 창구가 뜨고, 창구 직원은 다음 고객을 호출해서 상세를 보고, 지점장은 대기 현황과 노쇼를 봐. 예약 고객은 우선으로. 가상 데이터도 넣어서 바로 실행되게.\n\n우리 지점 규칙은 이거야:\n- 예약 고객은 예약 시각 앞뒤 10분 안에 도착하면 일반 고객보다 먼저. 그 밖이면 일반 순서.\n- 호출 뒤 3분 안에 안 오면 보류 처리하고 다음 번호를 부른다.\n- 창구 배정: 창구 1 · 2 는 예금, 창구 3 은 대출, 창구 4 는 외환. 창구는 자기 업무 고객만 부른다.\n- 대기 화면엔 번호 · 가린 이름(김*수) · 창구 번호만. 이름 전체 · 전화번호 · 계좌번호는 안 보여 준다.\n- 창구 직원은 자기 창구 고객만 상세를 본다. 계좌는 끝 4자리만. 지점장은 현황 숫자만 보고 고객 상세는 못 본다.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 201296,
+   "num_turns": 18,
+   "total_cost_usd": 0.5080307000000001,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 22,
+    "cache_creation_input_tokens": 47357,
+    "cache_read_input_tokens": 506687,
+    "output_tokens": 26789,
+    "output_tokens_details": {
+     "thinking_tokens": 4861
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 47357,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1454,
+      "cache_read_input_tokens": 59705,
+      "cache_creation_input_tokens": 685,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 685
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "두둑은행 대기 현황판이 만들어졌고, 지금 http://127.0.0.1:8000 에서 가상 데이터로 실행 중입니다. 우선순위 정렬, 3분 보류 후 자동 호출, 권한 분리, 이름 마스킹은 실제로 돌려서 확인했습니다. 화면(브라우저) 쪽은 직접 열어 보지 못했습니다.\n\n다시 켜려면 프로젝트 폴더에서 `python run.py`를 실행하세요. 가상 데이터는 DB가 비어 있을 때 현재 시각 기준으로 한 번 들어갑니다.\n\n| 화면 | 주소 | 로그인 |\n|---|---|---|\n| 고객 (번호표·예약·도착 확인) | `/` | 없음 |\n| 대기 화면 | `/display.html` | 없음 |\n| 창구 직원 | `/teller.html` | 창구 1~4, PIN 1111~1114 |\n| 지점장 | `/manager.html` | PIN 9999 |\n\nPIN은 환경변수 `TELLER1_PIN`~`TELLER4_PIN`, `MANAGER_PIN`으로 바꿀 수 있습니다. 창구 PIN은 `1110 + 창구번호`입니다.\n\n**규칙별로 구현한 내용**\n- **예약 우선**: 도착 시각이 예약 시각 앞뒤 10분 안이면 일반 고객보다 먼저 호출됩니다. 그 밖이면 도착 순서입니다. 가상 데이터에 이 경우를 모두 넣어 두었고, 한소희 님이 오세훈 님·최지훈 님보다 먼저 호출되는 것을 확인했습니다. 예약 시각 30분 전에 도착한 오세훈 님은 일반 순서였습니다.\n- **3분 보류**: 호출 후 3분이 지나면 보류 처리하고, 그 창구가 다음 번호를 자동으로 부릅니다. 정수진 님이 보류되고 창구 1이 최지훈 님을 호출했습니다.\n- **창구 배정**: 창구 1·2는 예금, 3은 대출, 4는 외환 고객만 부릅니다.\n- **대기 화면**: 번호, 가린 이름(김*수), 창구 번호만 내려보냅니다. 서버가 처음부터 이 값만 보냅니다.\n- **창구 직원**: 자기 창구에 배정된 고객의 상세만 볼 수 있고, 계좌는 끝 4자리만 보입니다. 다른 창구나 지점장 토큰으로는 접근이 막힙니다(403).\n- **지점장**: 상태별·업무별 숫자, 노쇼율, 평균 대기 시간만 봅니다. 고객 정보를 내려주는 경로 자체가 없습니다.\n\n**제가 임의로 정한 부분**\n- 예약 고객이 오지 않아 예약 시각 +10분이 지나면 노쇼로 집계합니다. 노쇼 뒤에 늦게 도착하면 일반 순서로 번호표를 받습니다.\n- 예약 고객은 현장에서 예약번호와 전화번호 끝 4자리로 도착을 확인하고 번호표를 받습니다.\n- 창구 직원 화면의 전화번호는 끝 4자리만 보이게 했습니다. 전체 번호가 필요하면 말씀해 주세요.\n- 계좌번호는 DB에 전체를 저장하지만, 화면과 API로는 끝 4자리만 나갑니다.\n- 보류된 고객을 다시 부르는 기능은 넣지 않았습니다.\n- PIN 로그인은 5번 틀리면 1분간 잠깁니다. 로컬(127.0.0.1)에서만 열리므로 지점 PC에서 쓰려면 호스트 설정과 HTTPS를 따로 잡아야 합니다.",
+   "wall_s": 330.3
+  }
+ },
+ "D5": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: {'detail': 'Not Found'}\nassert (404 == 200)",
+   "T3": "AssertionError: ('GET /api/board', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T4": "AssertionError: ('도착', 'K-05', '10:10', '기대', True, 404, ...)\nassert (404 == 200)",
+   "T5": "AssertionError: ('예금 줄: 우선(도착 순) → 일반(도착 순)', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T6": "AssertionError: ('호출 뒤 2분은 409', 404, {'detail': 'Not Found'})\nassert 404 == 409",
+   "T7": "AssertionError: ('호출한 창구 직원은 상세', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T8": "AssertionError: ('지점장 현황', 401, {'detail': '로그인이 필요합니다.'})\nassert 401 == 200",
+   "T9": "AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nassert '김*수' in '{\"detail\":\"Not Found\"}'"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": ", {'detail': 'Not Found'})\nE       assert (404 == 200)\n\n_grader\\test_dod.py:309: AssertionError\n______________________ test_T8_manager_and_reject_order _______________________\n\nsrv = <test_dod.Server object at 0x0000022D3F9B2BA0>\n\n    def test_T8_manager_and_reject_order(srv):\n        st, s, raw = get(srv, \"/api/manager/summary?viewer=m1\")\n>       assert st == 200, (\"지점장 현황\", st, s)\nE       AssertionError: ('지점장 현황', 401, {'detail': '로그인이 필요합니다.'})\nE       assert 401 == 200\n\n_grader\\test_dod.py:328: AssertionError\n_______________________________ test_T9_screens _______________________________\n\nsrv = <test_dod.Server object at 0x0000022D3F9B2BA0>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screens(srv, pw):\n        pg, responses = open_page(pw, srv, \"/board\")\n        text = pg.inner_text(\"body\")\n        assert not pii_in(text), (\"대기 화면 글자에 개인정보\", pii_in(text))\n>       assert \"김*수\" in text, (\"가린 이름이 보여야 한다 (호출 중인 K-01)\", text[:300])\nE       AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nE       assert '김*수' in '{\"detail\":\"Not Found\"}'\n\n_grader\\test_dod.py:355: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: {'detail': 'No...\nFAILED _grader/test_dod.py::test_T3_board_hides - AssertionError: ('GET /api/...\nFAILED _grader/test_dod.py::test_T4_reservation_window - AssertionError: ('도...\nFAILED _grader/test_dod.py::test_T5_order_and_counters - AssertionError: ('예...\nFAILED _grader/test_dod.py::test_T6_hold_and_complete - AssertionError: ('호...\nFAILED _grader/test_dod.py::test_T7_roles - AssertionError: ('호출한 창구 직...\nFAILED _grader/test_dod.py::test_T8_manager_and_reject_order - AssertionError...\nFAILED _grader/test_dod.py::test_T9_screens - AssertionError: ('가린 이름이 ...\n8 failed, 1 passed in 5.75s\n",
+  "passed": 1,
+  "routes": [
+   "/api/checkin",
+   "/api/display",
+   "/api/login",
+   "/api/manager/summary",
+   "/api/reservations",
+   "/api/teller/call-next",
+   "/api/teller/finish",
+   "/api/teller/requeue/{vid}",
+   "/api/teller/start",
+   "/api/teller/state",
+   "/api/tickets",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/checkin",
+   "/api/display",
+   "/api/login",
+   "/api/reservations",
+   "/api/teller/call-next",
+   "/api/teller/finish",
+   "/api/teller/requeue/{vid}",
+   "/api/teller/start",
+   "/api/teller/state"
+  ],
+  "tests_modified": null,
+  "files": [
+   "README.md",
+   "build.json",
+   "main.py",
+   "requirements.txt",
+   "seed.py",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv",
+   "static/common.css",
+   "static/common.js",
+   "static/display.html",
+   "static/index.html",
+   "static/manager.html",
+   "static/teller.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 두둑은행 지점 '방문 예약 · 대기 현황판' 웹앱을 만들어 줘. 고객은 이름 · 전화번호 · 계좌번호 · 업무 종류(예금 · 대출 · 외환)를 적어 방문 예약을 하거나 현장에서 번호표를 뽑아. 지점 대기 화면(고객들이 같이 보는 모니터)에 대기 순서와 호출 창구가 뜨고, 창구 직원은 다음 고객을 호출해서 상세를 보고, 지점장은 대기 현황과 노쇼를 봐. 예약 고객은 우선으로. 가상 데이터도 넣어서 바로 실행되게.\n\n우리 지점 규칙은 이거야:\n- 예약 고객은 예약 시각 앞뒤 10분 안에 도착하면 일반 고객보다 먼저. 그 밖이면 일반 순서.\n- 호출 뒤 3분 안에 안 오면 보류 처리하고 다음 번호를 부른다.\n- 창구 배정: 창구 1 · 2 는 예금, 창구 3 은 대출, 창구 4 는 외환. 창구는 자기 업무 고객만 부른다.\n- 대기 화면엔 번호 · 가린 이름(김*수) · 창구 번호만. 이름 전체 · 전화번호 · 계좌번호는 안 보여 준다.\n- 창구 직원은 자기 창구 고객만 상세를 본다. 계좌는 끝 4자리만. 지점장은 현황 숫자만 보고 고객 상세는 못 본다.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 299762,
+   "num_turns": 19,
+   "total_cost_usd": 0.7193838,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 26,
+    "cache_creation_input_tokens": 61326,
+    "cache_read_input_tokens": 728478,
+    "output_tokens": 40118,
+    "output_tokens_details": {
+     "thinking_tokens": 11782
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 61326,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1626,
+      "cache_read_input_tokens": 73910,
+      "cache_creation_input_tokens": 449,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 449
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "두둑은행 방문 예약 · 대기 현황판을 만들었고, 가상 데이터가 들어 있어서 바로 실행됩니다. 화면은 브라우저로 열어 보지 않았습니다. API 시나리오 테스트는 통과했고, 서버에서 각 화면 주소가 응답하는 것까지만 확인했습니다.\n\n## 실행\n```\ncd <작업 폴더>/D5\npip install -r requirements.txt\npython -m uvicorn main:app --port 8000\n```\n\n| 화면 | 주소 | 로그인 |\n|---|---|---|\n| 고객: 예약, 번호표, 도착 접수 | `/` | 없음 |\n| 대기 화면(공용 모니터) | `/display` | 없음 |\n| 창구 직원 | `/teller` | 창구 1~4, PIN `1111` `2222` `3333` `4444` |\n| 지점장 | `/manager` | PIN `9999` |\n\n데모 예약은 `DEMO01`, `DEMO02`, `DEMO03`으로 도착 접수해 볼 수 있습니다. 전화번호는 `README.md`에 있습니다. PIN은 데모용 기본값이라 운영 전에 `TELLER_PINS`, `MANAGER_PIN` 환경변수로 바꿔야 합니다.\n\n## 규칙 반영\n- **예약 우선**: 도착 접수 시각이 예약 시각 ±10분이면 우선 고객이 되고, 일반 고객보다 먼저 호출됩니다. 그 밖이면 일반 접수 순서입니다.\n- **3분 보류**: 호출 후 3분 안에 직원이 \"응대 시작\"을 누르지 않으면 서버가 2초마다 확인해 보류 처리합니다. 그 창구가 바로 다음 번호를 호출합니다. 보류 고객은 직원이 \"다시 대기\"로 일반 순서에 되돌릴 수 있습니다.\n- **창구 배정**: 창구 1·2는 예금, 3은 대출, 4는 외환입니다. 서버가 창구 업무와 같은 고객만 호출합니다.\n- **대기 화면**: 번호, 가린 이름(김*수), 창구 번호만 내려보냅니다. 이 API 응답에는 전화번호와 계좌번호가 아예 없습니다.\n- **창구 상세**: 직원은 자기 창구에서 호출·응대 중인 고객과 보류 고객만 봅니다. 계좌는 끝 4자리만 보이고, 계좌번호 전체는 DB에 저장하지 않습니다. 직원이 다른 창구 고객을 조회하는 API는 없습니다.\n- **지점장**: 숫자 집계만 보이고 고객 정보는 API에 없습니다. 지점장 토큰으로 창구 API를 부르면 403이 나옵니다.\n\n## 테스트로 확인한 것\n- 우선 예약 고객(이서연)이 먼저 도착한 일반 고객(김민수)보다 앞에 섭니다.\n- 늦게 도착한 예약 고객은 일반 순서로 접수됩니다.\n- 3분 초과 시 보류되고 다음 번호가 자동 호출됩니다.\n- 대기 화면과 지점장 응답에는 이름 전체, 전화번호, 계좌번호가 없습니다.\n- 지점장 토큰으로 창구 API를 부르면 403, 토큰 없이 부르면 401이 납니다.\n\n## 임의로 정한 부분\n- **노쇼**: 예약 시각 +10분이 지나도 도착 접수가 없는 예약으로 정의했습니다. 늦게 와도 일반 순서로는 접수됩니다. 호출 후 미도착은 \"보류\"로 따로 집계합니다. 다른 정의를 원하시면 알려 주세요.\n- **창구 직원의 전화번호**: 전체를 보여 줍니다. 전화번호는 마스킹 규칙이 없어서 그렇게 했고, 가리려면 한 줄이면 됩니다.\n- **도착 접수**: 예약번호와 전화번호가 둘 다 맞아야 하고, 예약 당일에만 됩니다.\n\n## 한계\n- 로그인 세션은 서버 메모리에 있어서 서버를 재시작하면 다시 로그인해야 합니다.\n- 고객 화면의 예약·번호표 발급에는 요청 횟수 제한이 없습니다.\n- 대기 화면은 인증 없이 열리고 2초마다 갱신됩니다.",
+   "wall_s": 315.9
+  }
+ },
+ "D6": {
+  "tests": {
+   "T1": "pass",
+   "T2": "fail",
+   "T3": "fail",
+   "T4": "fail",
+   "T5": "fail",
+   "T6": "fail",
+   "T7": "fail",
+   "T8": "fail",
+   "T9": "fail"
+  },
+  "detail": {
+   "T2": "AssertionError: {'detail': 'Not Found'}\nassert (404 == 200)",
+   "T3": "AssertionError: ('GET /api/board', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T4": "AssertionError: ('도착', 'K-05', '10:10', '기대', True, 404, ...)\nassert (404 == 200)",
+   "T5": "AssertionError: ('예금 줄: 우선(도착 순) → 일반(도착 순)', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T6": "AssertionError: ('호출 뒤 2분은 409', 404, {'detail': 'Not Found'})\nassert 404 == 409",
+   "T7": "AssertionError: ('호출한 창구 직원은 상세', 404, {'detail': 'Not Found'})\nassert (404 == 200)",
+   "T8": "AssertionError: ('지점장 현황', 401, {'detail': '로그인이 필요합니다'})\nassert 401 == 200",
+   "T9": "AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nassert '김*수' in '{\"detail\":\"Not Found\"}'"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "4, {'detail': 'Not Found'})\nE       assert (404 == 200)\n\n_grader\\test_dod.py:309: AssertionError\n______________________ test_T8_manager_and_reject_order _______________________\n\nsrv = <test_dod.Server object at 0x000002606847ABA0>\n\n    def test_T8_manager_and_reject_order(srv):\n        st, s, raw = get(srv, \"/api/manager/summary?viewer=m1\")\n>       assert st == 200, (\"지점장 현황\", st, s)\nE       AssertionError: ('지점장 현황', 401, {'detail': '로그인이 필요합니다'})\nE       assert 401 == 200\n\n_grader\\test_dod.py:328: AssertionError\n_______________________________ test_T9_screens _______________________________\n\nsrv = <test_dod.Server object at 0x000002606847ABA0>\npw = <Browser type=<BrowserType name=chromium executable_path=<사용자 폴더>\\AppData\\Local\\ms-playwright\\chromium-1248\\chrome-win64\\chrome.exe> version=156.0.8078.4>\n\n    def test_T9_screens(srv, pw):\n        pg, responses = open_page(pw, srv, \"/board\")\n        text = pg.inner_text(\"body\")\n        assert not pii_in(text), (\"대기 화면 글자에 개인정보\", pii_in(text))\n>       assert \"김*수\" in text, (\"가린 이름이 보여야 한다 (호출 중인 K-01)\", text[:300])\nE       AssertionError: ('가린 이름이 보여야 한다 (호출 중인 K-01)', '{\"detail\":\"Not Found\"}')\nE       assert '김*수' in '{\"detail\":\"Not Found\"}'\n\n_grader\\test_dod.py:355: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_dod.py::test_T2_contract - AssertionError: {'detail': 'No...\nFAILED _grader/test_dod.py::test_T3_board_hides - AssertionError: ('GET /api/...\nFAILED _grader/test_dod.py::test_T4_reservation_window - AssertionError: ('도...\nFAILED _grader/test_dod.py::test_T5_order_and_counters - AssertionError: ('예...\nFAILED _grader/test_dod.py::test_T6_hold_and_complete - AssertionError: ('호...\nFAILED _grader/test_dod.py::test_T7_roles - AssertionError: ('호출한 창구 직...\nFAILED _grader/test_dod.py::test_T8_manager_and_reject_order - AssertionError...\nFAILED _grader/test_dod.py::test_T9_screens - AssertionError: ('가린 이름이 ...\n8 failed, 1 passed in 5.71s\n",
+  "passed": 1,
+  "routes": [
+   "/api/display",
+   "/api/login",
+   "/api/manager/summary",
+   "/api/reservations",
+   "/api/reservations/checkin",
+   "/api/teller/call-next",
+   "/api/teller/state",
+   "/api/teller/{tid}/complete",
+   "/api/teller/{tid}/recall",
+   "/api/teller/{tid}/start",
+   "/api/tickets",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/display",
+   "/api/login",
+   "/api/reservations",
+   "/api/reservations/checkin",
+   "/api/teller/call-next",
+   "/api/teller/state",
+   "/api/teller/{tid}/complete",
+   "/api/teller/{tid}/recall",
+   "/api/teller/{tid}/start"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "dudug_bank/README.md",
+   "dudug_bank/app/__init__.py",
+   "dudug_bank/app/main.py",
+   "dudug_bank/app/static/common.js",
+   "dudug_bank/app/static/display.html",
+   "dudug_bank/app/static/index.html",
+   "dudug_bank/app/static/manager.html",
+   "dudug_bank/app/static/style.css",
+   "dudug_bank/app/static/teller.html",
+   "dudug_bank/requirements.txt",
+   "dudug_bank/tests/test_rules.py",
+   "seed/counters.csv",
+   "seed/tickets.csv",
+   "seed/users.csv"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "FastAPI + HTML/JS + SQLite 로 두둑은행 지점 '방문 예약 · 대기 현황판' 웹앱을 만들어 줘. 고객은 이름 · 전화번호 · 계좌번호 · 업무 종류(예금 · 대출 · 외환)를 적어 방문 예약을 하거나 현장에서 번호표를 뽑아. 지점 대기 화면(고객들이 같이 보는 모니터)에 대기 순서와 호출 창구가 뜨고, 창구 직원은 다음 고객을 호출해서 상세를 보고, 지점장은 대기 현황과 노쇼를 봐. 예약 고객은 우선으로. 가상 데이터도 넣어서 바로 실행되게.\n\n우리 지점 규칙은 이거야:\n- 예약 고객은 예약 시각 앞뒤 10분 안에 도착하면 일반 고객보다 먼저. 그 밖이면 일반 순서.\n- 호출 뒤 3분 안에 안 오면 보류 처리하고 다음 번호를 부른다.\n- 창구 배정: 창구 1 · 2 는 예금, 창구 3 은 대출, 창구 4 는 외환. 창구는 자기 업무 고객만 부른다.\n- 대기 화면엔 번호 · 가린 이름(김*수) · 창구 번호만. 이름 전체 · 전화번호 · 계좌번호는 안 보여 준다.\n- 창구 직원은 자기 창구 고객만 상세를 본다. 계좌는 끝 4자리만. 지점장은 현황 숫자만 보고 고객 상세는 못 본다.",
+   "max_turns": 80,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 230900,
+   "num_turns": 16,
+   "total_cost_usd": 0.5871721999999999,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "usage": {
+    "input_tokens": 20,
+    "cache_creation_input_tokens": 56083,
+    "cache_read_input_tokens": 512902,
+    "output_tokens": 31151,
+    "output_tokens_details": {
+     "thinking_tokens": 8470
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 56083,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1475,
+      "cache_read_input_tokens": 68958,
+      "cache_creation_input_tokens": 158,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 158
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "두둑은행 '방문 예약 · 대기 현황판' 웹앱을 `dudug_bank/` 폴더에 만들었습니다. 규칙 테스트 13개가 통과했고, 서버를 직접 띄워 화면과 API, 가상 데이터도 확인했습니다. 브라우저에서 화면을 눈으로 확인한 것은 아닙니다.\n\n**실행**\n```\ncd dudug_bank\npip install -r requirements.txt\npython -m uvicorn app.main:app --port 8000\n```\n처음 실행하면 가상 데이터가 자동으로 들어갑니다. 초기화하려면 `dudug.db`를 지우고 다시 실행하세요.\n\n| 화면 | 주소 | 로그인 |\n|---|---|---|\n| 고객: 예약, 도착 확인, 현장 번호표 | `/` | 없음 |\n| 대기 화면 | `/display` | 없음 |\n| 창구 직원 | `/teller` | 창구 1~4의 PIN은 각각 1111, 2222, 3333, 4444 |\n| 지점장 | `/manager` | PIN 9999 |\n\nPIN은 데모용입니다. 운영 전에 환경변수 `DUDUG_TELLER_PINS`와 `DUDUG_MANAGER_PIN`으로 바꾸세요.\n\n**규칙 구현**\n- **예약 우선:** 예약 고객이 \"도착 확인\"에서 예약 번호와 전화번호 끝 4자리를 입력하면 도착 시각이 기록됩니다. 예약 시각과 10분 이내 차이면 우선, 그 밖이면 일반 순서입니다.\n- **3분 보류:** 호출 후 3분 안에 직원이 \"응대 시작\"을 누르지 않으면 보류 처리하고, 같은 창구의 다음 번호를 자동으로 호출합니다. 직원이 보류 고객을 다시 호출할 수도 있습니다.\n- **창구 배정:** 창구 1·2는 예금, 3은 대출, 4는 외환 고객만 호출합니다. 번호표는 예금 A, 대출 B, 외환 C로 시작합니다.\n- **대기 화면:** 번호, 가린 이름(김*수), 창구 번호만 서버에서 내려줍니다. 이름 전체, 전화번호, 계좌번호는 애초에 보내지 않습니다.\n- **창구 직원:** 자기 창구에서 지금 호출했거나 응대 중인 고객의 상세만 봅니다. 다른 창구 고객은 조회도 조작도 안 됩니다.\n- **지점장:** 대기, 응대, 완료 숫자, 업무별 최장 대기 시간, 노쇼 숫자만 봅니다. 고객 정보는 응답에 들어 있지 않습니다. 노쇼는 두 가지로 셉니다. 예약 시각 10분이 지나도 안 온 경우와, 호출 후 보류된 경우입니다.\n\n**제가 정한 부분 (바꾸길 원하면 말씀해 주세요)**\n- 계좌번호는 입력받은 뒤 끝 4자리만 저장합니다. 전체 번호를 보관할 필요가 없다고 봤습니다. 전체 보관이 필요하면 알려 주세요.\n- 직원 화면의 전화번호는 `010-****-6666`처럼 가려서 보여줍니다. 규칙에 따로 없어서 최소한만 보이게 했습니다.\n- 예약은 오늘부터 7일 이내, 09:00~16:00만 받습니다.\n- PIN 로그인은 IP당 1분에 5번 틀리면 잠깁니다. 세션은 서버 메모리에 있어서 서버를 재시작하면 다시 로그인해야 합니다.\n\n가상 데이터에는 우선 고객이 일반 고객보다 앞서는 대기 줄, 호출 후 시간이 줄어드는 고객, 보류 1건, 예약 노쇼 1건이 들어 있습니다. 지점장 화면의 노쇼 숫자는 시드된 예약 시각(실행 시각 기준 30~45분 전)이 지난 뒤에 올라갑니다.",
+   "wall_s": 244.4
+  }
+ }
+}

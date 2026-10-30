@@ -1,0 +1,33 @@
+<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>키오스크</title>
+<link rel=stylesheet href=/static/common.css>
+<header><h2>고객 키오스크</h2><a href=/>처음으로</a></header>
+<main>
+<div class=card><h3>1. 정보 입력</h3>
+<label>이름</label><input id=name autocomplete=off>
+<label>휴대전화</label><input id=phone placeholder="010-0000-4878" inputmode=tel>
+<label>계좌번호 (숫자 10~14자리)</label><input id=account inputmode=numeric autocomplete=off>
+<label>업무 종류</label><select id=service><option value=deposit>예금</option><option value=loan>대출</option><option value=fx>외환</option></select>
+<small>입력하신 정보는 상담 목적으로만 사용되며 대기 화면에는 표시되지 않습니다.</small></div>
+<div class=card><h3>2-A. 방문 예약</h3>
+<label>날짜</label><input type=date id=date><label>시간</label><select id=slot></select>
+<button id=reserve>예약하기</button></div>
+<div class=card><h3>2-B. 현장 번호표</h3><button id=walkin>번호표 뽑기</button></div>
+<div class=card><h3>2-C. 예약 고객 접수</h3><label>예약 확인 코드 (6자리)</label><input id=code inputmode=numeric maxlength=6>
+<button id=checkin class=sec>도착 접수</button></div>
+<div class=msg id=msg></div></main>
+<script src=/static/common.js></script><script>
+const person=()=>({name:$('#name').value,phone:$('#phone').value,account:$('#account').value,service:$('#service').value});
+const d=new Date(),pad=n=>String(n).padStart(2,'0');
+$('#date').value=`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+async function loadSlots(){const s=await api('/api/slots?date='+$('#date').value);const sel=$('#slot');sel.replaceChildren();
+  s.forEach(x=>sel.append(el('option',{value:x.slot,disabled:!x.available},x.slot.slice(11)+(x.available?'':' (마감)'))));
+  const f=[...sel.options].find(o=>!o.disabled);if(f)sel.value=f.value}
+$('#date').onchange=loadSlots;loadSlots();
+async function run(fn,btn){btn.disabled=true;try{await fn()}catch(e){say($('#msg'),e.message,false)}finally{btn.disabled=false}}
+$('#reserve').onclick=e=>run(async()=>{const r=await api('/api/reservations',{method:'POST',body:{...person(),slot:$('#slot').value}});
+  say($('#msg'),`예약 완료: ${r.slot.slice(0,16)} · 번호 ${r.number} · 확인 코드 ${r.code} (방문 시 키오스크에 입력하세요)`,true);loadSlots()},e.target);
+$('#walkin').onclick=e=>run(async()=>{const r=await api('/api/walkin',{method:'POST',body:person()});
+  say($('#msg'),`번호표 ${r.number} · 앞 대기 ${r.ahead}명 (예약 고객이 먼저 호출될 수 있습니다)`,true)},e.target);
+$('#checkin').onclick=e=>run(async()=>{const r=await api('/api/checkin',{method:'POST',body:{code:$('#code').value}});
+  say($('#msg'),`접수 완료: 번호 ${r.number} (${r.service}) — 예약 고객 우선 호출됩니다`,true)},e.target);
+</script>

@@ -1,0 +1,36 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>두둑은행 방문 예약</title><link rel="stylesheet" href="/style.css"></head><body>
+<header>두둑은행 지점 <nav style="display:inline"><a href="/display.html">대기 화면</a><a href="/staff.html">창구</a><a href="/manager.html">지점장</a></nav></header>
+<main>
+<div class="card"><h2>방문 예약 / 현장 번호표</h2>
+<form id="f">
+<div class="row"><div><label>이름</label><input name="name" required maxlength="20"></div>
+<div><label>전화번호</label><input name="phone" required placeholder="010-0000-4878"></div></div>
+<div class="row"><div><label>계좌번호</label><input name="account" required placeholder="숫자 8~20자리 (끝 4자리만 저장)" inputmode="numeric"></div>
+<div><label>업무</label><select name="service"><option>예금</option><option>대출</option><option>외환</option></select></div></div>
+<label>예약 시각 (예약할 때만)</label><input type="datetime-local" name="reserved_at">
+<div class="row"><button type="button" id="bRes">방문 예약</button><button type="button" id="bWalk" class="sec">지금 번호표 뽑기</button></div>
+</form><div id="m1"></div></div>
+<div class="card"><h2>예약 고객 도착 확인</h2>
+<label>예약 번호 6자리</label><input id="code" maxlength="6" inputmode="numeric">
+<button id="bIn">도착 확인 · 번호표 받기</button><div id="m2"></div>
+<p style="font-size:12px;color:#567">예약 시각 앞뒤 10분 안에 도착하면 우선 호출됩니다. 그 밖이면 일반 순서입니다. 예약 +10분까지 도착하지 않으면 노쇼 처리됩니다.</p></div>
+</main>
+<script src="/common.js"></script><script>
+const f = document.getElementById("f");
+const data = () => Object.fromEntries(new FormData(f));
+bRes.onclick = async () => { try {
+  const d = data(); if (!d.reserved_at) throw new Error("예약 시각을 선택하세요.");
+  const r = await api("/api/reserve", "POST", d);
+  say(m1, "예약 완료! 예약 번호 " + r.code + " (도착 시 입력)", true);
+} catch (e) { say(m1, e.message) } };
+bWalk.onclick = async () => { try {
+  const d = data(); delete d.reserved_at;
+  const r = await api("/api/walkin", "POST", d);
+  say(m1, "대기번호 " + r.ticket_no + "번 — 대기 화면을 확인하세요.", true);
+} catch (e) { say(m1, e.message) } };
+bIn.onclick = async () => { try {
+  const r = await api("/api/checkin", "POST", {code: code.value.trim()});
+  say(m2, "대기번호 " + r.ticket_no + "번", true);
+} catch (e) { say(m2, e.message) } };
+</script></body></html>

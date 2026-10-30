@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>지점장 현황</title><link rel="stylesheet" href="/static/style.css"></head>
+<body>
+<header>지점장 현황 <nav style="display:inline"><a href="/">고객</a><a href="/display">대기 화면</a></nav></header>
+<main>
+  <section id="login"><h2>지점장 로그인</h2><label>PIN</label><input id="pin" type="password" autocomplete="off">
+    <button id="go">로그인</button><div id="login-msg"></div></section>
+  <div id="app" hidden>
+    <div class="tiles" id="top"></div>
+    <section style="margin-top:16px"><h2>업무별</h2>
+      <table><thead><tr><th>업무</th><th>대기</th><th>완료</th><th>최장 대기(분)</th></tr></thead><tbody id="types"></tbody></table></section>
+    <div class="tiles" id="noshow"></div>
+    <p class="muted" id="ts"></p>
+  </div>
+</main>
+<script src="/static/common.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const tile = (label, v, warn) => h("div", { class: "tile" + (warn ? " warn" : "") }, h("b", {}, String(v)), h("span", {}, label));
+
+async function refresh() {
+  if (!sessionStorage.getItem("token")) return;
+  try {
+    const s = await api("/api/manager/summary");
+    $("login").hidden = true; $("app").hidden = false;
+    fill($("top"), tile("대기", s.waiting), tile("응대 중", s.in_service), tile("완료", s.done), tile("오늘 예약", s.reservations_today));
+    fill($("types"), Object.values(s.per_type).map(t =>
+      h("tr", {}, h("td", {}, t.label), h("td", {}, String(t.waiting)), h("td", {}, String(t.done)), h("td", {}, String(t.longest_wait_min)))));
+    fill($("noshow"), tile("예약 미방문(노쇼)", s.noshow_reservation, s.noshow_reservation > 0),
+      tile("호출 후 미응답(누적)", s.noshow_after_call, s.noshow_after_call > 0), tile("현재 보류", s.on_hold_now));
+    $("ts").textContent = "갱신 " + s.generated_at.replace("T", " ");
+  } catch (e) {
+    if (e.status === 401) { sessionStorage.removeItem("token"); $("login").hidden = false; $("app").hidden = true; }
+  }
+}
+$("go").onclick = async () => {
+  try {
+    const r = await api("/api/login", { method: "POST", body: { role: "manager", pin: $("pin").value } });
+    sessionStorage.setItem("token", r.token); $("pin").value = ""; fill($("login-msg")); refresh();
+  } catch (e) { fill($("login-msg"), h("div", { class: "msg err" }, e.message)); }
+};
+refresh(); setInterval(refresh, 5000);
+</script></body></html>

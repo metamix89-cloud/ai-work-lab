@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 130268,
+ "num_turns": 12,
+ "total_cost_usd": 0.4250225999999999,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 18,
+  "cache_creation_input_tokens": 46974,
+  "cache_read_input_tokens": 399006,
+  "output_tokens": 19719,
+  "output_tokens_details": {
+   "thinking_tokens": 2576
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 46974,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1291,
+    "cache_read_input_tokens": 59822,
+    "cache_creation_input_tokens": 185,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 185
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD.md대로 웹앱을 만들었습니다. API는 스모크 테스트로 확인했지만 화면은 브라우저로 열어 보지 못했고, `tests/test_dod.py`는 폴더에 없어서 돌리지 못했습니다.\n\n**확인한 것**\n- `/`와 `/board`가 200으로 열립니다.\n- 규칙 R1~R9를 확인했습니다. 코드는 PRD의 거부 순서(400 → 404 → 403 → 409)대로 만들었습니다.\n  - 예약 우선: 10:11 도착은 일반으로 나왔습니다.\n  - 이미 도착 처리한 예약에 다시 체크인하면 409가 나왔습니다.\n  - 2분 뒤 `next`는 409, 3분 뒤에는 앞 고객이 보류되고 다음 번호가 호출됐습니다.\n  - 다른 창구 직원이 대기 줄을 보면 403이 나왔습니다.\n  - 지점장이 고객 상세를 보면 403이 나왔습니다.\n  - 완료한 건을 다시 완료하면 409가 나왔습니다.\n  - 지점장이 아닌 사용자가 현황을 보면 403, 사용자 없음은 400, 없는 창구는 404였습니다.\n- 한글 응답은 터미널 인코딩 때문에 깨져 보였습니다. 그래서 문구가 PRD와 정확히 같은지는 눈으로 확인하지 못했습니다.\n\n**정리하지 못한 것**\n- 테스트용으로 띄운 서버(포트 8765)가 아직 떠 있을 수 있습니다. 프로세스를 종료하는 명령이 허용되지 않아서 끄지 못했습니다. 포트가 막히면 직접 종료해 주세요.\n- 이 서버로 테스트하면서 `bank.db`에 번호표 하나(K-111)와 호출·완료 기록이 쌓였습니다. 서버를 다시 시작하면 시드 CSV에서 새로 만들어집니다.\n\n**구성**\n- `main.py`: FastAPI 앱입니다. 시작할 때마다 `seed/` CSV로 SQLite(`bank.db`, 테이블 `bk_*`)를 새로 만듭니다. 이름 가리기는 서버에서 합니다.\n- `static/board.html`: `/board` 화면입니다. 가린 이름과 번호만 보여 주고 5초마다 다시 읽습니다.\n- `static/index.html`: `/` 화면입니다. 직원 화면과 지점장 화면이 사용자 선택 상자로 바뀝니다. 서버가 거부하면 `detail`을 메시지 줄에 그대로 보여 주고, API가 실패하면 \"불러오지 못했습니다\"와 다시 시도 버튼이 뜹니다.\n- `seed/`: 사용자 5명, 창구 4개, 번호표 10개입니다. 번호표에는 예약·현장·대기·호출·완료·보류가 섞여 있고, 이름 마스킹 예시로 `김*수`, `이*`, `남**수`도 넣었습니다.\n\n실행은 프로젝트 루트에서 `python -m uvicorn main:app --port 8000` 입니다.\n\n**화면 동작**\n- 창구 직원이 호출한 고객은 이 브라우저 화면에서 기억합니다. 페이지를 새로고침하면 호출 중인 고객의 상세와 완료 버튼은 사라집니다. 그 번호표는 서버에는 `called`로 남아 있습니다.\n- 상세의 계좌는 끝 4자리만 `**** 1234` 형태로 보여 줍니다.",
+ "wall_s": 138.7
+}

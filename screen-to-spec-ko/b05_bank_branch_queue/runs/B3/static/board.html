@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>두둑은행 넉넉지점 대기 화면</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f4f6f8; color: #1d2733; }
+  header { background: #1f4e79; color: #fff; padding: 16px 24px; }
+  header h1 { margin: 0; font-size: 22px; }
+  main { display: flex; gap: 24px; padding: 24px; flex-wrap: wrap; }
+  section { flex: 1 1 320px; background: #fff; border-radius: 8px; padding: 16px 20px; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+  h2 { margin-top: 0; font-size: 18px; }
+  ul { list-style: none; padding: 0; margin: 0; }
+  li { padding: 10px 0; border-bottom: 1px solid #e3e8ee; font-size: 20px; }
+  .num { font-weight: bold; margin-right: 12px; }
+  .counter { float: right; color: #1f4e79; font-weight: bold; }
+  .empty { color: #7a8794; font-size: 16px; }
+  #error { display: none; margin: 24px; padding: 16px; background: #fdecea; border-radius: 8px; }
+</style>
+</head>
+<body>
+<header><h1>두둑은행 넉넉지점 · 대기 현황</h1></header>
+<div id="error"><span>불러오지 못했습니다</span> <button id="retry" type="button">다시 시도</button></div>
+<main>
+  <section>
+    <h2>호출 중</h2>
+    <div data-testid="serving"></div>
+  </section>
+  <section>
+    <h2>대기 중</h2>
+    <div data-testid="waiting"></div>
+  </section>
+</main>
+<script>
+function render(el, items, withCounter) {
+  el.textContent = "";
+  if (!items.length) {
+    const p = document.createElement("p");
+    p.className = "empty";
+    p.textContent = "없음";
+    el.appendChild(p);
+    return;
+  }
+  const ul = document.createElement("ul");
+  for (const it of items) {
+    const li = document.createElement("li");
+    const n = document.createElement("span");
+    n.className = "num";
+    n.textContent = it.number;
+    li.appendChild(n);
+    li.appendChild(document.createTextNode(it.masked_name));
+    if (withCounter) {
+      const c = document.createElement("span");
+      c.className = "counter";
+      c.textContent = it.counter_id + " 창구";
+      li.appendChild(c);
+    }
+    ul.appendChild(li);
+  }
+  el.appendChild(ul);
+}
+async function load() {
+  try {
+    const res = await fetch("/api/board");
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    document.getElementById("error").style.display = "none";
+    render(document.querySelector('[data-testid="serving"]'), data.serving, true);
+    render(document.querySelector('[data-testid="waiting"]'), data.waiting, false);
+  } catch (e) {
+    document.getElementById("error").style.display = "block";
+  }
+}
+document.getElementById("retry").addEventListener("click", load);
+load();
+setInterval(load, 5000);
+</script>
+</body>
+</html>

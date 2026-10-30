@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>창구 직원</title><link rel="stylesheet" href="/static/style.css"></head>
+<body>
+<header>창구 업무 <nav style="display:inline"><a href="/">고객</a><a href="/display">대기 화면</a></nav></header>
+<main>
+  <section id="login">
+    <h2>창구 로그인</h2>
+    <label>창구</label>
+    <select id="win"><option value="1">창구 1 (예금)</option><option value="2">창구 2 (예금)</option>
+      <option value="3">창구 3 (대출)</option><option value="4">창구 4 (외환)</option></select>
+    <label>PIN</label><input id="pin" type="password" autocomplete="off">
+    <button id="go">로그인</button><div id="login-msg"></div>
+  </section>
+  <div id="app" hidden>
+    <section><h2 id="title"></h2><div id="cur"></div><div id="msg"></div></section>
+    <section><h2>대기 (내 업무)</h2><ul class="q" id="wait"></ul></section>
+    <section id="holdbox"><h2>보류</h2><ul class="q" id="hold"></ul></section>
+  </div>
+</main>
+<script src="/static/common.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+let busy = false;
+
+async function post(path) {
+  try { await api(path, { method: "POST" }); fill($("msg")); }
+  catch (e) { fill($("msg"), h("div", { class: "msg err" }, e.message)); }
+  refresh();
+}
+
+async function refresh() {
+  if (!sessionStorage.getItem("token")) return;
+  try {
+    const s = await api("/api/teller/state");
+    $("login").hidden = true; $("app").hidden = false;
+    $("title").textContent = `창구 ${s.window} · ${s.work_type}`;
+    const c = s.current;
+    if (!c) {
+      fill($("cur"), h("p", { class: "muted" }, "응대 중인 고객이 없습니다."),
+        h("button", { onclick: () => post("/api/teller/call-next") }, "다음 고객 호출"));
+    } else {
+      fill($("cur"),
+        h("div", { class: "big" }, c.number),
+        h("table", {},
+          [["이름", c.name], ["전화번호", c.phone], ["계좌번호", "끝 4자리 " + c.account_last4],
+           ["업무", c.work_type], ["구분", (c.reserved ? "예약" : "현장") + (c.priority ? " · 우선" : "")]]
+            .map(([k, v]) => h("tr", {}, h("th", {}, k), h("td", {}, v)))),
+        c.status === "called"
+          ? [h("p", { class: "msg" }, `호출됨 — ${Math.floor(c.seconds_left / 60)}분 ${c.seconds_left % 60}초 안에 도착하지 않으면 보류됩니다.`),
+             h("button", { onclick: () => post(`/api/teller/${c.id}/start`) }, "고객 도착 · 응대 시작")]
+          : h("button", { onclick: () => post(`/api/teller/${c.id}/complete`) }, "응대 완료"));
+    }
+    fill($("wait"), s.waiting.length ? s.waiting.map(t => h("li", {}, `${t.number}  ${t.name}`)) : h("li", { class: "muted" }, "없음"));
+    fill($("hold"), s.hold.length ? s.hold.map(t => h("li", {}, `${t.number}  ${t.name} `,
+      h("button", { class: "sub", style: "width:auto;margin:0 0 0 8px;padding:4px 10px", onclick: () => post(`/api/teller/${t.id}/recall`) }, "재호출"))) : h("li", { class: "muted" }, "없음"));
+  } catch (e) {
+    if (e.status === 401) { sessionStorage.removeItem("token"); $("login").hidden = false; $("app").hidden = true; }
+  }
+}
+
+$("go").onclick = async () => {
+  try {
+    const r = await api("/api/login", { method: "POST", body: { role: "teller", window: +$("win").value, pin: $("pin").value } });
+    sessionStorage.setItem("token", r.token); $("pin").value = ""; fill($("login-msg")); refresh();
+  } catch (e) { fill($("login-msg"), h("div", { class: "msg err" }, e.message)); }
+};
+refresh(); setInterval(refresh, 2000);
+</script></body></html>

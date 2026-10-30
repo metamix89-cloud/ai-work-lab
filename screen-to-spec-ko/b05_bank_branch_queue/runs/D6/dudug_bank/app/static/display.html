@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>두둑은행 대기 현황</title>
+<style>
+body { margin:0; background:#0c1f19; color:#fff; font-family:"Malgun Gothic",system-ui,sans-serif; }
+h1 { margin:0; padding:18px 28px; font-size:28px; background:#0b6b4f; }
+.wrap { display:grid; grid-template-columns:3fr 2fr; gap:24px; padding:24px 28px; }
+h2 { margin:0 0 14px; font-size:22px; color:#9fd8c3; }
+.wins { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.win { background:#14362b; border-radius:14px; padding:18px; min-height:150px; }
+.win .w { font-size:22px; color:#9fd8c3; } .win .n { font-size:64px; font-weight:800; line-height:1.1; }
+.win .nm { font-size:26px; } .win.idle .n { color:#4b6b5f; }
+.wait { background:#14362b; border-radius:14px; padding:18px; }
+.wait div { display:flex; justify-content:space-between; font-size:28px; padding:8px 0; border-bottom:1px solid #1f4a3b; }
+.wait div:first-of-type { color:#ffe58a; font-weight:700; }
+</style></head>
+<body>
+<h1>두둑은행 · 대기 현황</h1>
+<div class="wrap">
+  <div><h2>호출 창구</h2><div class="wins" id="wins"></div></div>
+  <div><h2>대기 순서</h2><div class="wait" id="wait"></div></div>
+</div>
+<script src="/static/common.js"></script>
+<script>
+async function tick() {
+  try {
+    const d = await api("/api/display");
+    fill(document.getElementById("wins"), d.windows.map(w =>
+      h("div", { class: "win" + (w.number ? "" : " idle") },
+        h("div", { class: "w" }, `창구 ${w.window}`),
+        h("div", { class: "n" }, w.number || "—"),
+        h("div", { class: "nm" }, w.name || ""))));
+    fill(document.getElementById("wait"), d.waiting.length
+      ? d.waiting.map(t => h("div", {}, h("span", {}, t.number), h("span", {}, t.name)))
+      : h("div", {}, "대기 고객이 없습니다"));
+  } catch (e) {}
+}
+tick(); setInterval(tick, 2000);
+</script></body></html>

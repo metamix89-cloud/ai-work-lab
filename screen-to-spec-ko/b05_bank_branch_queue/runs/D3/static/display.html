@@ -1,0 +1,16 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>대기 화면</title><link rel="stylesheet" href="/style.css">
+<style>body{background:#06241a;color:#fff}header{font-size:28px}.row{display:flex;gap:24px;padding:24px}.col{flex:1}
+h2{font-size:24px;color:#9fe0bd}.call{display:flex;justify-content:space-between;background:#0b6b3a;border-radius:12px;padding:16px 24px;margin-bottom:12px;font-size:36px;font-weight:800}
+.call.serving{background:#2c4a3d;font-size:28px}.w{background:#14392b;border-radius:10px;padding:10px 20px;margin-bottom:8px;font-size:28px;display:flex;justify-content:space-between}</style></head><body>
+<header>두둑은행 대기 현황</header><div class="row"><div class="col"><h2>호출 중</h2><div id="c"></div></div>
+<div class="col"><h2>대기 순서</h2><div id="w"></div></div></div>
+<script src="/common.js"></script><script>
+async function tick(){try{const d=await api("/api/display");
+ const c=$("c"),w=$("w");c.replaceChildren();w.replaceChildren();
+ d.calling.forEach(x=>{const r=el("div","","call"+(x.state==="serving"?" serving":""));r.append(el("span",x.ticket+"  "+x.name),el("span","창구 "+x.window));c.append(r)});
+ if(!d.calling.length)c.append(el("div","호출 중인 번호가 없습니다","muted"));
+ d.waiting.forEach(x=>{const r=el("div","","w");r.append(el("span",x.ticket),el("span",x.name));w.append(r)});
+ if(!d.waiting.length)w.append(el("div","대기 고객이 없습니다","muted"))}catch(e){}}
+tick();setInterval(tick,3000);
+</script></body></html>

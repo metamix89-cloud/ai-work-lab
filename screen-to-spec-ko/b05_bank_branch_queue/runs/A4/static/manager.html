@@ -1,0 +1,39 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>지점장 현황</title><link rel="stylesheet" href="/static/style.css"></head><body>
+<header class="top"><h1>📊 지점장 대기 · 노쇼 현황</h1><nav><a href="/">고객 화면</a><a href="/board">대기 화면</a><a href="/counter">창구</a></nav></header>
+<main>
+<form id="lg" class="card hide"><h2>지점장 로그인</h2><label>PIN</label><input type="password" id="pin" inputmode="numeric" autocomplete="off"><div style="margin-top:14px"><button>로그인</button></div><div id="lerr"></div></form>
+<div id="app" class="hide">
+  <div class="row" style="margin-bottom:12px"><span class="muted" id="now"></span><span style="flex:1"></span><button class="sec" id="out">로그아웃</button></div>
+  <div class="grid g4" id="stats"></div>
+  <div class="card" style="margin-top:16px"><h2>창구 현황</h2><div id="cs" class="grid g4"></div></div>
+  <div class="card"><h2>노쇼 현황</h2><div id="ns"></div></div>
+  <div class="card"><h2>최근 7일 추이</h2><div id="daily"></div></div>
+  <div class="card"><h2>현재 대기 <span class="muted" style="font-size:14px">(개인정보 마스킹)</span></h2><div id="wl"></div></div>
+</div></main>
+<script src="/static/common.js"></script>
+<script>
+function show(a){$("#lg").classList.toggle("hide",a);$("#app").classList.toggle("hide",!a)}
+$("#lg").onsubmit=async e=>{e.preventDefault();try{await login("manager",$("#pin").value);load()}catch(x){$("#lerr").innerHTML=`<div class="msg err">${esc(x.message)}</div>`}};
+$("#out").onclick=()=>{sessionStorage.clear();show(false)};
+const S=(v,l,cls="")=>`<div class="stat"><b class="${cls}">${v}</b><span>${l}</span></div>`;
+async function load(){
+  let j;
+  try{j=await api("/api/manager/summary")}catch(e){show(false);if(e.status==403)$("#lerr").innerHTML=`<div class="msg err">${esc(e.message)}</div>`;return}
+  show(true);
+  const t=j.today,w=j.waiting_by_service;
+  $("#now").textContent="기준 "+j.now;
+  $("#stats").innerHTML=S(t.waiting,"현재 대기")+S(t.called,"호출·응대 중")+S(t.done,"오늘 처리 완료")+S(t.avg_wait_min+"분","평균 대기시간")
+    +S(t.longest_wait_min+"분","최장 대기(현재)",t.longest_wait_min>=20?"warn":"")+S(t.reserved_pending,"방문 예정 예약")
+    +S(t.noshow,"오늘 노쇼","warn")+S(j.noshow_week.rate+"%","7일 예약 노쇼율")
+    +S(w["예금"],"대기 · 예금")+S(w["대출"],"대기 · 대출")+S(w["외환"],"대기 · 외환");
+  $("#cs").innerHTML=j.counters.map(c=>`<div class="stat"><b>${c.ticket_no?esc(c.ticket_no):'—'}</b><span>${c.counter}번 · ${esc(c.services.join('·'))} · ${c.ticket_no?'호출 '+hm(c.called_at):'비어 있음'}</span></div>`).join("");
+  $("#ns").innerHTML=`<p>오늘 예약 노쇼율 <b>${j.noshow_today.rate}%</b> (${j.noshow_today.noshow}/${j.noshow_today.total}) · 최근 7일 <b>${j.noshow_week.rate}%</b> (${j.noshow_week.noshow}/${j.noshow_week.total})</p>`+
+    (j.noshows.length?`<table><tr><th>일자</th><th>번호</th><th>구분</th><th>업무</th><th>이름</th><th>전화</th><th>예약시각</th><th>유형</th></tr>${j.noshows.map(n=>`<tr><td>${esc(n.day)}</td><td><b>${esc(n.ticket_no)}</b></td><td>${n.kind=='reservation'?'예약':'현장'}</td><td>${esc(n.service)}</td><td>${esc(n.name)}</td><td>${esc(n.phone)}</td><td>${hm(n.reserved_at)}</td><td><span class="pill bad">${esc(n.stage)}</span></td></tr>`).join("")}</table>`:'<div class="muted">노쇼 없음</div>');
+  const mx=Math.max(1,...j.daily.map(d=>d.tickets));
+  $("#daily").innerHTML=`<table><tr><th>일자</th><th>접수</th><th></th><th>노쇼</th></tr>${j.daily.map(d=>`<tr><td>${esc(d.day)}</td><td>${d.tickets}</td><td style="width:50%"><div style="background:var(--g);height:10px;border-radius:5px;width:${Math.round(d.tickets/mx*100)}%"></div></td><td>${d.noshow}</td></tr>`).join("")}</table>`;
+  $("#wl").innerHTML=j.waiting.length?`<table><tr><th>순서</th><th>번호</th><th>업무</th><th>이름</th><th>도착</th><th></th></tr>${j.waiting.map(x=>`<tr><td>${x.order}</td><td><b>${esc(x.ticket_no)}</b></td><td>${esc(x.service)}</td><td>${esc(x.name)}</td><td>${hm(x.arrived_at)}</td><td>${TAG(x)}</td></tr>`).join("")}</table>`:'<div class="muted">대기 없음</div>';
+}
+sessionStorage.getItem("role")=="manager"?load():show(false);
+setInterval(()=>{if(!$("#app").classList.contains("hide"))load()},5000);
+</script></body></html>

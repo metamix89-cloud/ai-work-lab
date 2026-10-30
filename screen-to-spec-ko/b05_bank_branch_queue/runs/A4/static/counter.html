@@ -1,0 +1,48 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>창구 직원</title><link rel="stylesheet" href="/static/style.css"></head><body>
+<header class="top"><h1>🧑‍💼 창구 직원</h1><nav><a href="/">고객 화면</a><a href="/board">대기 화면</a><a href="/manager">지점장</a></nav></header>
+<main>
+<form id="lg" class="card hide"><h2>직원 로그인</h2><label>PIN</label><input type="password" id="pin" inputmode="numeric" autocomplete="off"><div style="margin-top:14px"><button>로그인</button></div><div id="lerr"></div></form>
+<div id="app" class="hide">
+  <div class="card row"><b>창구 선택</b><select id="sel" style="width:auto"></select><span id="svc" class="muted"></span><span style="flex:1"></span><button class="sec" id="out">로그아웃</button></div>
+  <div class="card"><h2>현재 고객</h2><div id="cur"></div><div id="err"></div></div>
+  <div class="card"><h2>대기 순서 <span class="muted" id="qt" style="font-size:14px"></span></h2><div id="q"></div><div class="priv">대기 목록의 개인정보는 마스킹되어 있으며, 호출한 고객의 상세만 전체 표시됩니다.</div></div>
+</div></main>
+<script src="/static/common.js"></script>
+<script>
+let n=+sessionStorage.getItem("counter")||1,state=null;
+const SV={예금:"💰",대출:"🏠",외환:"💱"};
+function show(auth){$("#lg").classList.toggle("hide",auth);$("#app").classList.toggle("hide",!auth)}
+$("#lg").onsubmit=async e=>{e.preventDefault();try{await login("staff",$("#pin").value);init()}catch(x){$("#lerr").innerHTML=`<div class="msg err">${esc(x.message)}</div>`}};
+$("#out").onclick=()=>{sessionStorage.clear();show(false)};
+$("#sel").onchange=()=>{n=+$("#sel").value;sessionStorage.setItem("counter",n);refresh()};
+async function init(){
+  try{
+    const cs=await api("/api/counters");
+    $("#sel").innerHTML=cs.map(c=>`<option value="${c.counter}" ${c.counter==n?'selected':''}>${c.counter}번 창구 (${esc(c.services.join('·'))})</option>`).join("");
+    show(true);refresh();
+  }catch(e){show(false)}
+}
+async function act(path){
+  $("#err").innerHTML="";
+  try{state=await api(`/api/counter/${n}/${path}`,{method:"POST"});render()}
+  catch(e){if(e.status==401){show(false)}else $("#err").innerHTML=`<div class="msg err">${esc(e.message)}</div>`}
+}
+async function refresh(){
+  try{state=await api(`/api/counter/${n}`);render()}catch(e){if(e.status==401)show(false)}
+}
+function render(){
+  $("#svc").textContent="처리 업무: "+state.services.join(", ");
+  const c=state.current;
+  $("#cur").innerHTML=c?`
+    <div class="row"><div class="no" style="font-size:48px;font-weight:800;color:var(--g)">${esc(c.ticket_no)}</div>
+      <div><span class="pill">${SV[c.service]||''} ${esc(c.service)}</span> ${c.kind=='reservation'?'<span class="pill pri">예약 고객 (예약 '+hm(c.reserved_at)+')</span>':'<span class="pill">현장 접수</span>'}<div class="muted" style="margin-top:4px">호출 ${hm(c.called_at)} · 도착 ${hm(c.arrived_at)}</div></div></div>
+    <table style="margin-top:12px"><tr><th>이름</th><td>${esc(c.name)}</td></tr><tr><th>휴대전화</th><td>${esc(c.phone)}</td></tr><tr><th>계좌번호</th><td>${esc(c.account)}</td></tr><tr><th>업무</th><td>${esc(c.service)}</td></tr></table>
+    <div class="row" style="margin-top:14px"><button onclick="act('complete')">처리 완료</button><button class="sec" onclick="act('recall')">재호출</button><button class="warn" onclick="if(confirm('호출에 응하지 않아 노쇼 처리할까요?'))act('noshow')">노쇼 처리</button></div>`
+  :`<div class="muted">호출한 고객이 없습니다.</div><div style="margin-top:12px"><button onclick="act('next')" ${state.queue_total?'':'disabled'}>다음 고객 호출</button></div>`;
+  $("#qt").textContent=`(${state.queue_total}명)`;
+  $("#q").innerHTML=state.queue.length?`<table><tr><th>순서</th><th>번호</th><th>업무</th><th>이름</th><th>도착</th><th></th></tr>${state.queue.map(t=>`<tr><td>${t.order}</td><td><b>${esc(t.ticket_no)}</b></td><td>${esc(t.service)}</td><td>${esc(t.name)}</td><td>${hm(t.arrived_at)}</td><td>${TAG(t)}</td></tr>`).join("")}</table>`:'<div class="muted">대기 고객이 없습니다.</div>';
+}
+sessionStorage.getItem("token")?init():show(false);
+setInterval(()=>{if(!$("#app").classList.contains("hide"))refresh()},4000);
+</script></body></html>

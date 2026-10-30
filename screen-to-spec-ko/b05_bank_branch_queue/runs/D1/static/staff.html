@@ -1,0 +1,38 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>창구 직원</title><link rel="stylesheet" href="/style.css"></head><body>
+<header>창구 직원 <nav style="display:inline"><a href="/">처음</a></nav></header><main>
+<div class="card" id="login"><h2>로그인</h2><div class="row">
+<div><label>창구</label><select id="ctr"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+<div><label>PIN</label><input id="pin" type="password"></div></div><button id="bLogin">로그인</button><div id="m0"></div></div>
+<div id="work" hidden>
+<div class="card"><h2 id="title"></h2><div id="cnt"></div><button id="bCall">다음 고객 호출</button><div id="m1"></div></div>
+<div class="card"><h2>현재 고객</h2><div id="cur">없음</div>
+<div class="row"><button id="bStart" class="sec">도착 확인 · 응대 시작</button><button id="bFin">응대 완료</button></div></div>
+<div class="card"><h2>보류 (3분 내 미도착)</h2><div id="holds"></div></div></div></main>
+<script src="/common.js"></script><script>
+let tok = sessionStorage.getItem("st");
+bLogin.onclick = async () => { try {
+  const r = await api("/api/staff/login", "POST", {counter: +ctr.value, pin: pin.value});
+  tok = r.token; sessionStorage.setItem("st", tok); pin.value = ""; start();
+} catch (e) { say(m0, e.message) } };
+async function act(path, m) { try { await api(path, "POST", null, tok); say(m1, "", true); } catch (e) { say(m1, e.message) } refresh(); }
+bCall.onclick = () => act("/api/staff/call-next"); bStart.onclick = () => act("/api/staff/start"); bFin.onclick = () => act("/api/staff/finish");
+async function refresh() { try {
+  const d = await api("/api/staff/me", "GET", null, tok);
+  title.textContent = "창구 " + d.counter + " (" + d.services.join("·") + ")";
+  cnt.textContent = "대기 " + d.waiting_count + "명";
+  cur.replaceChildren();
+  const c = d.current;
+  if (c) {
+    cur.append(el("div", "번호 " + c.ticket_no + (c.state === "called" ? "  (호출됨 — 3분 내 도착 확인)" : "  (응대중)"), "big"));
+    const t = el("table"); for (const [k, v] of [["이름", c.name], ["전화번호", c.phone], ["계좌", c.account], ["업무", c.service], ["구분", c.kind === "reservation" ? "예약 " + c.reserved_at.replace("T", " ") : "현장"]]) {
+      const tr = el("tr"); tr.append(el("th", k), el("td", v)); t.append(tr); }
+    cur.append(t);
+  } else cur.textContent = "없음";
+  bCall.disabled = !!c; bStart.disabled = !c || c.state !== "called"; bFin.disabled = !c || c.state !== "serving";
+  holds.replaceChildren(...d.holds.map(h => { const b = el("button", h.ticket_no + " " + h.name + " — 대기열 복귀", "sec"); b.onclick = () => act("/api/staff/requeue/" + h.id); return b; }));
+  if (!d.holds.length) holds.textContent = "없음";
+} catch (e) { if (e.status === 401) { sessionStorage.removeItem("st"); login.hidden = false; work.hidden = true; } } }
+function start() { login.hidden = true; work.hidden = false; refresh(); }
+if (tok) start(); setInterval(() => tok && refresh(), 4000);
+</script></body></html>

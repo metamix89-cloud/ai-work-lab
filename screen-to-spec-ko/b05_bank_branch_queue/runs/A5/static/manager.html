@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>지점장 현황</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header><h1>지점장 · 대기 / 노쇼 현황</h1><nav><a href="index.html">고객 화면</a><a href="teller.html">창구</a></nav></header>
+<main>
+<div class="card" id="login"><h2></h2>
+  <form><label>PIN</label><input id="pin" type="password" autocomplete="off"><p><button>로그인</button></p><div class="err"></div></form></div>
+<div id="app" hidden>
+  <div class="grid" id="stats"></div>
+  <div class="card" style="margin-top:16px"><h3>현재 대기열</h3><table id="queue"></table></div>
+  <div class="card"><h3>노쇼 내역 <small style="color:var(--mute)">(개인정보 마스킹)</small></h3><table id="noshow"></table></div>
+</div>
+</main>
+<script src="common.js"></script>
+<script>
+const stat = (v, l) => h("div", { class: "stat" }, h("b", {}, v), h("span", {}, l));
+const head = (...c) => h("tr", {}, c.map(x => h("th", {}, x)));
+const body = (rows, cols) => rows.length ? rows.map(r => h("tr", {}, cols(r).map(c => h("td", {}, c))))
+  : [h("tr", {}, h("td", { colspan: 9, style: "color:var(--mute)" }, "없음"))];
+async function load() {
+  let d;
+  try { d = await api("/manager/summary", { role: "manager" }); }
+  catch (e) { if (e.status === 401) location.reload(); return; }
+  const s = d.waiting_by_service;
+  $("#stats").replaceChildren(
+    stat(d.waiting_total + "명", `대기 (예약 ${d.waiting_reserved})`),
+    stat(`예${s.예금} 대${s.대출} 외${s.외환}`, "업무별 대기"),
+    stat(d.longest_wait_min + "분", "최장 대기"),
+    stat(d.avg_wait_min + "분", "평균 대기 (완료 건)"),
+    stat(d.done + "건", "처리 완료"),
+    stat(d.noshow_total + "건", `노쇼 (예약 노쇼율 ${d.noshow_rate}%)`),
+    stat(Object.entries(d.per_counter).map(([c, n]) => `${c}:${n}`).join(" "), "창구별 처리"));
+  $("#queue").replaceChildren(head("순번", "번호표", "업무", "구분", "대기(분)"),
+    ...body(d.queue, r => [r.order, r.number, r.service, r.kind, r.waited_min]));
+  $("#noshow").replaceChildren(head("번호표", "업무", "구분", "예약시각", "이름", "전화", "계좌"),
+    ...body(d.noshows, r => [r.number, r.service, r.kind, r.slot || "-", r.name, r.phone, r.account]));
+}
+loginGate("manager", "지점장", () => { load(); setInterval(load, 5000); });
+</script></body></html>

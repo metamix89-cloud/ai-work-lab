@@ -1,0 +1,29 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>지점장</title><link rel="stylesheet" href="common.css"></head><body>
+<header><h1>📊 지점장 현황</h1><span id="nav"></span></header><main id="m"></main>
+<script src="common.js"></script>
+<script>
+document.getElementById('nav').replaceWith(NAV());
+const m = document.getElementById('m'); let timer;
+const stat = (v, l, warn) => h('div', { class: 'card stat' }, h('b', { style: warn ? 'color:var(--warn)' : '' }, v), h('span', {}, l));
+const head = cols => h('thead', {}, h('tr', {}, cols.map(x => h('th', {}, x))));
+function start() { clearInterval(timer); refresh(); timer = setInterval(refresh, 5000); }
+async function refresh() {
+  try {
+    const d = await api('/api/manager/summary'), c = d.counts;
+    const tb1 = h('tbody'), tb2 = h('tbody'), tb3 = h('tbody');
+    fillTable(tb1, d.waiting.map(w => [w.pos, w.ticket_no, KIND(w.kind), w.service, w.name, w.waited_min + '분']));
+    fillTable(tb2, d.noshows.length ? d.noshows.map(n => [n.ticket_no, KIND(n.kind), n.name, n.phone, n.account, n.service, n.reserved_at ? hhmm(n.reserved_at) : '-', n.reason]) : [['노쇼 없음']]);
+    fillTable(tb3, d.counters.map(x => [x.counter + '번 창구', x.ticket_no || '대기', x.done + '건 처리']));
+    m.replaceChildren(
+      h('div', { class: 'grid g4' }, stat(c.waiting, '대기'), stat(c.called, '응대 중'), stat(c.done, '처리 완료'), stat(c.noshow, '노쇼', c.noshow > 0)),
+      h('div', { class: 'grid g4' }, stat(d.avg_wait_min + '분', '평균 대기(호출 기준)'), stat(d.max_wait_now_min + '분', '현재 최장 대기', d.max_wait_now_min >= 20),
+        stat(c.reserved_upcoming, '도착 전 예약'), stat(d.reservation_noshow_rate + '%', `예약 노쇼율 (예약 ${d.reservation_total}건)`)),
+      h('div', { class: 'card' }, h('h3', {}, '업무별'), h('p', {}, Object.entries(d.by_service).map(([k, v]) => `${k}: 대기 ${v.waiting} / 완료 ${v.done}`).join('    '))),
+      h('div', { class: 'card' }, h('h3', {}, '창구별'), h('table', {}, tb3)),
+      h('div', { class: 'card' }, h('h3', {}, '대기 목록 (호출 순서)'), h('table', {}, head(['순서', '번호', '구분', '업무', '고객', '대기']), tb1)),
+      h('div', { class: 'card' }, h('h3', {}, '노쇼 내역'), h('table', {}, head(['번호', '구분', '이름', '연락처', '계좌', '업무', '예약시각', '사유']), tb2)));
+  } catch (e) { if (e.status === 401) { clearInterval(timer); sessionStorage.removeItem('tok'); m.replaceChildren(loginBox('manager', start)); } }
+}
+if (sessionStorage.getItem('tok')) start(); else m.replaceChildren(loginBox('manager', start));
+</script></body></html>

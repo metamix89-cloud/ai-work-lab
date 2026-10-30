@@ -1,0 +1,24 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>대기 현황</title><link rel="stylesheet" href="/style.css">
+<style>body{background:#0e1a24;color:#fff}main{max-width:1200px}.call{display:flex;gap:16px;flex-wrap:wrap}
+.c{background:#16314a;border-radius:12px;padding:16px 24px;min-width:230px;text-align:center}
+.c .n{font-size:64px;font-weight:800;color:#ffd84d}.c.calling{animation:b 1s infinite}.c.idle .n{color:#567}
+@keyframes b{50%{background:#2a5a80}}.w{display:flex;flex-wrap:wrap;gap:10px}.w div{background:#1d2c3a;border-radius:8px;padding:10px 16px;font-size:24px}
+h2{color:#9cc}</style></head><body>
+<header>두둑은행 대기 현황</header><main>
+<h2>호출 창구</h2><div class="call" id="call"></div>
+<h2>대기 순서</h2><div class="w" id="wait"></div></main>
+<script src="/common.js"></script><script>
+async function tick() { try {
+  const d = await api("/api/display");
+  call.replaceChildren(...[1,2,3,4].map(n => {
+    const r = d.calling.find(x => x.counter === n);
+    const c = el("div", null, "c " + (r ? (r.state === "called" ? "calling" : "") : "idle"));
+    c.append(el("div", "창구 " + n), el("div", r ? String(r.ticket_no).padStart(3, "0") : "-", "n"),
+             el("div", r ? r.name + (r.state === "called" ? " 님 호출" : " 응대중") : "대기"));
+    return c; }));
+  wait.replaceChildren(...d.waiting.map(r => el("div", String(r.ticket_no).padStart(3, "0") + "  " + r.name)));
+  if (!d.waiting.length) wait.textContent = "대기 고객이 없습니다";
+} catch (e) {} }
+tick(); setInterval(tick, 3000);
+</script></body></html>

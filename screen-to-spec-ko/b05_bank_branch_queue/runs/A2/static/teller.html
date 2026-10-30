@@ -1,0 +1,43 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>창구 직원</title><link rel="stylesheet" href="common.css"></head><body>
+<header><h1>🧑‍💼 창구 직원</h1><span id="nav"></span></header><main id="m"></main>
+<script src="common.js"></script>
+<script>
+document.getElementById('nav').replaceWith(NAV());
+const m = document.getElementById('m');
+let counter = +(sessionStorage.getItem('counter') || 1), timer, box;
+function start() { clearInterval(timer); view(); timer = setInterval(refresh, 3000); }
+function view() {
+  const sel = h('select', { onchange: e => { counter = +e.target.value; sessionStorage.setItem('counter', counter); refresh(); } },
+    [1, 2, 3, 4].map(n => h('option', n === counter ? { value: n, selected: '' } : { value: n }, `${n}번 창구`)));
+  box = h('div');
+  m.replaceChildren(h('div', { class: 'card' }, h('label', {}, '담당 창구'), sel), box);
+  refresh();
+}
+function relogin() { clearInterval(timer); sessionStorage.removeItem('tok'); m.replaceChildren(loginBox('teller', start)); }
+async function act(path) {
+  try { await api(path, { body: { counter } }); }
+  catch (e) { if (e.status === 401) return relogin(); alert(e.message); }
+  refresh();
+}
+async function refresh() {
+  try {
+    const s = await api('/api/teller/state?counter=' + counter), c = s.current, kids = [];
+    if (c) {
+      const rows = [['이름', c.name], ['휴대전화', c.phone], ['계좌번호', c.account], ['업무', c.service],
+        ['예약시각', c.reserved_at ? hhmm(c.reserved_at) : '-'], ['호출시각', hhmm(c.called_at)]];
+      kids.push(h('div', { class: 'card' }, h('h2', {}, `${c.ticket_no} `, KIND(c.kind)),
+        h('table', {}, h('tbody', {}, rows.map(r => h('tr', {}, h('th', {}, r[0]), h('td', {}, r[1]))))),
+        h('div', { class: 'grid g2' }, h('button', { onclick: () => act('/api/teller/finish') }, '응대 완료'),
+          h('button', { class: 'bad', onclick: () => act('/api/teller/noshow') }, '노쇼 처리'))));
+    } else {
+      kids.push(h('div', { class: 'card' }, h('p', {}, '응대 중인 고객이 없습니다.'),
+        h('button', s.waiting_count ? { onclick: () => act('/api/teller/call') } : { disabled: '' }, '다음 고객 호출')));
+    }
+    kids.push(h('div', { class: 'card' }, h('b', {}, `대기 ${s.waiting_count}명 — 다음 순서`),
+      h('p', {}, s.next.length ? s.next.map(n => `${n.ticket_no}(${n.service}${n.kind === 'reservation' ? '·예약' : ''})`).join('  →  ') : '없음')));
+    box.replaceChildren(...kids);
+  } catch (e) { if (e.status === 401) relogin(); }
+}
+if (sessionStorage.getItem('tok')) start(); else m.replaceChildren(loginBox('teller', start));
+</script></body></html>

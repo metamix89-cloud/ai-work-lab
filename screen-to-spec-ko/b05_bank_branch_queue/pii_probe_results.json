@@ -1,0 +1,1832 @@
+{
+ "ref_app": {
+  "target": "main:app",
+  "setup": [
+   "POST /api/tickets → 201",
+   "POST /api/tickets → 201",
+   "POST /api/counters/C4/next → 200",
+   "POST /api/tickets/K-04/complete → 200",
+   "POST /api/counters/C4/next → 200"
+  ],
+  "notes": [],
+  "display": {
+   "path": "/board",
+   "status": 200,
+   "final_url": "/board",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "가림",
+  "screen_service": [],
+  "screen_has_marks": true,
+  "response_pii": [],
+  "response_service": [],
+  "response_urls": [],
+  "display_api": [
+   "/api/board"
+  ],
+  "crawl": {
+   "called": 13,
+   "routes": [
+    "/",
+    "/api/board",
+    "/api/counters/{counter_id}/queue",
+    "/api/manager/summary",
+    "/api/tickets/{ticket_id}",
+    "/api/users",
+    "/board"
+   ],
+   "open_200": [
+    "/",
+    "/api/board",
+    "/api/users",
+    "/board"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구 직원의 상세(열려야 함)",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"ticket_id\":\"K-112\",\"number\":112,\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account_last4\":\"9111\",\"service\":\"fx\",\"status\":\"called\",\"counter_id\":\"C4\"}"
+   },
+   {
+    "name": "다른 창구 직원이 상세",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장이 상세",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "호출 전 고객 상세",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "사용자 없이 상세",
+    "status": 400,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 19:12"
+ },
+ "trap_app": {
+  "target": "main:app",
+  "setup": [
+   "POST /api/tickets → 201",
+   "POST /api/tickets → 201",
+   "POST /api/counters/C4/next → 200",
+   "POST /api/tickets/K-04/complete → 200",
+   "POST /api/counters/C4/next → 200"
+  ],
+  "notes": [],
+  "display": {
+   "path": "/board",
+   "status": 200,
+   "final_url": "/board",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "가림",
+  "screen_service": [],
+  "screen_has_marks": true,
+  "response_pii": [
+   "계좌번호",
+   "이름 전체",
+   "전화번호"
+  ],
+  "response_service": [
+   "loan",
+   "\"fx\""
+  ],
+  "response_urls": [
+   "/api/board"
+  ],
+  "display_api": [
+   "/api/board"
+  ],
+  "crawl": {
+   "called": 13,
+   "routes": [
+    "/",
+    "/api/board",
+    "/api/counters/{counter_id}/queue",
+    "/api/manager/summary",
+    "/api/tickets/{ticket_id}",
+    "/api/users",
+    "/board"
+   ],
+   "open_200": [
+    "/",
+    "/api/board",
+    "/api/users",
+    "/board"
+   ]
+  },
+  "crawl_leaks": [
+   "/api/board"
+  ],
+  "crawl_leak_detail": [
+   {
+    "route": "/api/board",
+    "path": "/api/board",
+    "pii": [
+     "계좌번호",
+     "이름 전체",
+     "전화번호"
+    ]
+   }
+  ],
+  "checks": [
+   {
+    "name": "호출한 창구 직원의 상세(열려야 함)",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"ticket_id\":\"K-112\",\"number\":112,\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account_last4\":\"9111\",\"service\":\"fx\",\"status\":\"called\",\"counter_id\":\"C4\"}"
+   },
+   {
+    "name": "다른 창구 직원이 상세",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"ticket_id\":\"K-112\",\"number\":112,\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account_last4\":\"9111\",\"service\":\"fx\",\"status\":\"called\",\"counter_id\":\"C4\"}"
+   },
+   {
+    "name": "지점장이 상세",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"ticket_id\":\"K-112\",\"number\":112,\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account_last4\":\"9111\",\"service\":\"fx\",\"status\":\"called\",\"counter_id\":\"C4\"}"
+   },
+   {
+    "name": "호출 전 고객 상세",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"ticket_id\":\"K-111\",\"number\":111,\"name\":\"탐침수\",\"phone\":\"010-0000-7777\",\"account_last4\":\"9000\",\"service\":\"loan\",\"status\":\"waiting\",\"counter_id\":\"\"}"
+   },
+   {
+    "name": "사용자 없이 상세",
+    "status": 400,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 19:13"
+ },
+ "A1": {
+  "target": "main:app",
+  "setup": [
+   "POST /api/tickets → 200",
+   "POST /api/tickets → 200",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/{vid}/noshow → 200",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/{vid}/noshow → 200",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/{vid}/noshow → 200",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/{vid}/noshow → 200",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/{vid}/noshow → 200",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/{vid}/noshow → 200",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/{vid}/noshow → 200",
+   "POST /api/teller/call → 200",
+   "(준비) 호출 고객 노쇼 → 200"
+  ],
+  "notes": [],
+  "q_called": true,
+  "display": {
+   "path": "/board.html",
+   "status": 200,
+   "final_url": "/board.html",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "없음",
+  "screen_service": [
+   "대출"
+  ],
+  "screen_has_marks": false,
+  "response_pii": [],
+  "response_service": [
+   "대출"
+  ],
+  "response_urls": [],
+  "display_api": [
+   "/api/board"
+  ],
+  "crawl": {
+   "called": 5,
+   "routes": [
+    "/",
+    "/api/board",
+    "/api/manager/summary",
+    "/api/slots",
+    "/api/teller/state"
+   ],
+   "open_200": [
+    "/",
+    "/api/board"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "계좌번호",
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"current\":{\"id\":30,\"ticket_no\":\"F006\",\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account\":\"777-888-999111\",\"service\":\"외환\",\"kind\":\"walkin\",\"slot_at\":null,\"checkin_at\":\"2026-10-30T19:40:00\",\"status\":\"called\",\"called_at\":\"2026-10-30T19:40:00\",\"counter\":3},\"waiting\":[{\"ticket_no\":\"L008\",\"service\":\"대출\",\"prio"
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "계좌번호",
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"current\":{\"id\":30,\"ticket_no\":\"F006\",\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account\":\"777-888-999111\",\"service\":\"외환\",\"kind\":\"walkin\",\"slot_at\":null,\"checkin_at\":\"2026-10-30T19:40:00\",\"status\":\"called\",\"called_at\":\"2026-10-30T19:40:00\",\"counter\":3},\"waiting\":[{\"ticket_no\":\"L008\",\"service\":\"대출\",\"prio"
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 401,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 19:40"
+ },
+ "A2": {
+  "target": "main:app",
+  "setup": [
+   "POST /api/login → 200",
+   "POST /api/login → 200",
+   "POST /api/walkin → 200",
+   "POST /api/walkin → 200",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/noshow → 200",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/noshow → 200",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/noshow → 200",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/noshow → 200",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/noshow → 200",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/noshow → 200",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/noshow → 200",
+   "POST /api/teller/call → 200",
+   "(준비) 호출 고객 노쇼 → 200"
+  ],
+  "notes": [],
+  "q_called": true,
+  "display": {
+   "path": "/static/display.html",
+   "status": 200,
+   "final_url": "/static/display.html",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "가림",
+  "screen_service": [
+   "대출",
+   "외환"
+  ],
+  "screen_has_marks": true,
+  "response_pii": [],
+  "response_service": [
+   "대출",
+   "외환"
+  ],
+  "response_urls": [],
+  "display_api": [
+   "/api/display"
+  ],
+  "crawl": {
+   "called": 5,
+   "routes": [
+    "/",
+    "/api/display",
+    "/api/manager/summary",
+    "/api/slots",
+    "/api/teller/state"
+   ],
+   "open_200": [
+    "/",
+    "/api/display",
+    "/api/slots"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "계좌번호",
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"current\":{\"ticket_no\":\"F004\",\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account\":\"777-888-999111\",\"service\":\"외환\",\"kind\":\"walkin\",\"reserved_at\":null,\"arrived_at\":\"2026-10-30T19:40:05\",\"called_at\":\"2026-10-30T19:40:06\"},\"waiting_count\":1,\"next\":[{\"ticket_no\":\"L002\",\"service\":\"대출\",\"kind\":\"walkin\"}]}"
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "계좌번호",
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"current\":{\"ticket_no\":\"F004\",\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account\":\"777-888-999111\",\"service\":\"외환\",\"kind\":\"walkin\",\"reserved_at\":null,\"arrived_at\":\"2026-10-30T19:40:05\",\"called_at\":\"2026-10-30T19:40:06\"},\"waiting_count\":1,\"next\":[{\"ticket_no\":\"L002\",\"service\":\"대출\",\"kind\":\"walkin\"}]}"
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "계좌번호",
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"current\":{\"ticket_no\":\"F004\",\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account\":\"777-888-999111\",\"service\":\"외환\",\"kind\":\"walkin\",\"reserved_at\":null,\"arrived_at\":\"2026-10-30T19:40:05\",\"called_at\":\"2026-10-30T19:40:06\"},\"waiting_count\":1,\"next\":[{\"ticket_no\":\"L002\",\"service\":\"대출\",\"kind\":\"walkin\"}]}"
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"counts\":{\"waiting\":1,\"called\":3,\"done\":5,\"noshow\":11,\"reserved_upcoming\":3},\"avg_wait_min\":10.9,\"max_wait_now_min\":0.1,\"reservation_total\":10,\"reservation_noshow_rate\":40.0,\"by_service\":{\"예금\":{\"waiting\":0,\"done\":3},\"대출\":{\"waiting\":1,\"done\":1},\"외환\":{\"waiting\":0,\"done\":1}},\"counters\":[{\"counter\":1,\""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 19:40"
+ },
+ "A3": {
+  "target": "main:app",
+  "setup": [
+   "POST /api/login → 200",
+   "POST /api/login → 200",
+   "POST /api/walkin → 201",
+   "POST /api/walkin → 201",
+   "POST /api/teller/4/call → 200",
+   "POST /api/teller/4/finish?outcome=noshow → 200",
+   "POST /api/teller/4/call → 200",
+   "POST /api/teller/4/finish?outcome=noshow → 200",
+   "POST /api/teller/4/call → 200",
+   "(준비) 호출 고객 노쇼 → 200"
+  ],
+  "notes": [],
+  "q_called": true,
+  "display": {
+   "path": "/board",
+   "status": 200,
+   "final_url": "/board",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "없음",
+  "screen_service": [
+   "대출",
+   "외환"
+  ],
+  "screen_has_marks": false,
+  "response_pii": [],
+  "response_service": [
+   "대출",
+   "외환"
+  ],
+  "response_urls": [],
+  "display_api": [
+   "/api/board"
+  ],
+  "crawl": {
+   "called": 5,
+   "routes": [
+    "/",
+    "/api/board",
+    "/api/manager/summary",
+    "/api/slots",
+    "/api/teller/{counter}"
+   ],
+   "open_200": [
+    "/",
+    "/api/board",
+    "/api/slots"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "계좌번호",
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"counter\":4,\"services\":[\"외환\"],\"current\":{\"id\":23,\"number\":\"F007\",\"service\":\"외환\",\"kind\":\"현장\",\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account\":\"777888999111\",\"slot_at\":null,\"arrived_at\":\"2026-10-30 19:40:10\",\"called_at\":\"2026-10-30 19:40:10\"},\"waiting\":[]}"
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "계좌번호",
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"counter\":4,\"services\":[\"외환\"],\"current\":{\"id\":23,\"number\":\"F007\",\"service\":\"외환\",\"kind\":\"현장\",\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account\":\"777888999111\",\"slot_at\":null,\"arrived_at\":\"2026-10-30 19:40:10\",\"called_at\":\"2026-10-30 19:40:10\"},\"waiting\":[]}"
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "계좌번호",
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"counter\":4,\"services\":[\"외환\"],\"current\":{\"id\":23,\"number\":\"F007\",\"service\":\"외환\",\"kind\":\"현장\",\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account\":\"777888999111\",\"slot_at\":null,\"arrived_at\":\"2026-10-30 19:40:10\",\"called_at\":\"2026-10-30 19:40:10\"},\"waiting\":[]}"
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 19:40"
+ },
+ "D1": {
+  "target": "main:app",
+  "setup": [
+   "POST /api/staff/login → 200",
+   "POST /api/staff/login → 200",
+   "POST /api/manager/login → 200",
+   "POST /api/walkin → 200",
+   "POST /api/walkin → 200",
+   "POST /api/staff/call-next → 200",
+   "GET /api/staff/me → 200",
+   "POST /api/staff/start → 200",
+   "POST /api/staff/finish → 200",
+   "POST /api/staff/call-next → 200",
+   "GET /api/staff/me → 200"
+  ],
+  "notes": [],
+  "q_called": true,
+  "display": {
+   "path": "/display.html",
+   "status": 200,
+   "final_url": "/display.html",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "가림",
+  "screen_service": [],
+  "screen_has_marks": true,
+  "response_pii": [],
+  "response_service": [],
+  "response_urls": [],
+  "display_api": [
+   "/api/display"
+  ],
+  "crawl": {
+   "called": 4,
+   "routes": [
+    "/",
+    "/api/display",
+    "/api/manager/stats",
+    "/api/staff/me"
+   ],
+   "open_200": [
+    "/",
+    "/api/display"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"counter\":4,\"services\":[\"외환\"],\"waiting_count\":0,\"current\":{\"id\":13,\"ticket_no\":9,\"name\":\"곁눈질\",\"phone\":\"010-0000-2825\",\"account\":\"****9111\",\"service\":\"외환\",\"state\":\"called\",\"kind\":\"walkin\",\"reserved_at\":null,\"called_at\":\"2026-10-30T19:40:16\"},\"holds\":[]}"
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 401,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 19:40"
+ },
+ "D2": {
+  "target": "app.main:app",
+  "setup": [
+   "POST /api/login → 200",
+   "POST /api/login → 200",
+   "POST /api/login → 200",
+   "POST /api/walkin → 200",
+   "POST /api/walkin → 200",
+   "POST /api/counter/call-next → 200",
+   "GET /api/counter/state → 200",
+   "POST /api/counter/start → 200",
+   "POST /api/counter/finish → 200",
+   "POST /api/counter/call-next → 200",
+   "GET /api/counter/state → 200",
+   "POST /api/counter/start → 200",
+   "POST /api/counter/finish → 200",
+   "POST /api/counter/call-next → 200",
+   "GET /api/counter/state → 200"
+  ],
+  "notes": [],
+  "q_called": true,
+  "display": {
+   "path": "/display.html",
+   "status": 200,
+   "final_url": "/display.html",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "가림",
+  "screen_service": [],
+  "screen_has_marks": true,
+  "response_pii": [],
+  "response_service": [],
+  "response_urls": [],
+  "display_api": [
+   "/api/display"
+  ],
+  "crawl": {
+   "called": 3,
+   "routes": [
+    "/api/counter/state",
+    "/api/display",
+    "/api/manager/stats"
+   ],
+   "open_200": [
+    "/api/display"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"counter\":4,\"service\":\"외환\",\"current\":{\"id\":21,\"number\":\"C004\",\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account\":\"****9111\",\"service\":\"외환\",\"kind\":\"walkin\",\"reserved_at\":null,\"priority\":false,\"status\":\"called\",\"seconds_left\":176},\"waiting\":[],\"hold\":[]}"
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 19:40"
+ },
+ "D3": {
+  "target": "app.main:app",
+  "setup": [
+   "POST /api/login → 200",
+   "POST /api/login → 200",
+   "POST /api/login → 200",
+   "POST /api/tickets → 200",
+   "POST /api/tickets → 200",
+   "POST /api/teller/call-next → 200",
+   "GET /api/teller/state → 200",
+   "POST /api/teller/finish → 200",
+   "POST /api/teller/call-next → 200"
+  ],
+  "notes": [],
+  "q_called": true,
+  "display": {
+   "path": "/display.html",
+   "status": 200,
+   "final_url": "/display.html",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "가림",
+  "screen_service": [],
+  "screen_has_marks": true,
+  "response_pii": [],
+  "response_service": [],
+  "response_urls": [],
+  "display_api": [
+   "/api/display"
+  ],
+  "crawl": {
+   "called": 4,
+   "routes": [
+    "/",
+    "/api/display",
+    "/api/manager/summary",
+    "/api/teller/state"
+   ],
+   "open_200": [
+    "/",
+    "/api/display"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"window\":4,\"service\":\"외환\",\"current\":{\"ticket\":\"C003\",\"name\":\"곁눈질\",\"phone\":\"010-0000-2825\",\"account\":\"****9111\",\"service\":\"외환\",\"kind\":\"walkin\",\"reserved_at\":null,\"priority\":false,\"status\":\"called\",\"seconds_left\":177},\"waiting\":[]}"
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 19:40"
+ },
+ "B1": {
+  "target": "main:app",
+  "setup": [
+   "POST /api/tickets → 201",
+   "POST /api/tickets → 201",
+   "POST /api/counters/C4/next → 200",
+   "POST /api/tickets/K-04/complete → 200",
+   "POST /api/counters/C4/next → 200"
+  ],
+  "notes": [],
+  "display": {
+   "path": "/board",
+   "status": 200,
+   "final_url": "/board",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "가림",
+  "screen_service": [],
+  "screen_has_marks": true,
+  "response_pii": [],
+  "response_service": [],
+  "response_urls": [],
+  "display_api": [
+   "/api/board"
+  ],
+  "crawl": {
+   "called": 13,
+   "routes": [
+    "/",
+    "/api/board",
+    "/api/counters/{counter_id}/queue",
+    "/api/manager/summary",
+    "/api/tickets/{ticket_id}",
+    "/api/users",
+    "/board"
+   ],
+   "open_200": [
+    "/",
+    "/api/board",
+    "/api/users",
+    "/board"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"ticket_id\":\"K-11\",\"number\":111,\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account_last4\":\"9111\",\"service\":\"fx\",\"status\":\"called\",\"counter_id\":\"C4\"}"
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 19:54"
+ },
+ "B2": {
+  "target": "main:app",
+  "setup": [
+   "POST /api/tickets → 201",
+   "POST /api/tickets → 201",
+   "POST /api/counters/C4/next → 200",
+   "POST /api/tickets/K-04/complete → 200",
+   "POST /api/counters/C4/next → 200"
+  ],
+  "notes": [],
+  "display": {
+   "path": "/board",
+   "status": 200,
+   "final_url": "/board",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "가림",
+  "screen_service": [],
+  "screen_has_marks": true,
+  "response_pii": [],
+  "response_service": [],
+  "response_urls": [],
+  "display_api": [
+   "/api/board"
+  ],
+  "crawl": {
+   "called": 13,
+   "routes": [
+    "/",
+    "/api/board",
+    "/api/counters/{counter_id}/queue",
+    "/api/manager/summary",
+    "/api/tickets/{ticket_id}",
+    "/api/users",
+    "/board"
+   ],
+   "open_200": [
+    "/",
+    "/api/board",
+    "/api/users",
+    "/board"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"ticket_id\":\"K-111\",\"number\":111,\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account_last4\":\"9111\",\"service\":\"fx\",\"status\":\"called\",\"counter_id\":\"C4\"}"
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 19:54"
+ },
+ "B3": {
+  "target": "main:app",
+  "setup": [
+   "POST /api/tickets → 201",
+   "POST /api/tickets → 201",
+   "POST /api/counters/C4/next → 200",
+   "POST /api/tickets/K-04/complete → 200",
+   "POST /api/counters/C4/next → 200"
+  ],
+  "notes": [],
+  "display": {
+   "path": "/board",
+   "status": 200,
+   "final_url": "/board",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "가림",
+  "screen_service": [],
+  "screen_has_marks": true,
+  "response_pii": [],
+  "response_service": [],
+  "response_urls": [],
+  "display_api": [
+   "/api/board"
+  ],
+  "crawl": {
+   "called": 13,
+   "routes": [
+    "/",
+    "/api/board",
+    "/api/counters/{counter_id}/queue",
+    "/api/manager/summary",
+    "/api/tickets/{ticket_id}",
+    "/api/users",
+    "/board"
+   ],
+   "open_200": [
+    "/",
+    "/api/board",
+    "/api/users",
+    "/board"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"ticket_id\":\"K-11\",\"number\":111,\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account_last4\":\"9111\",\"service\":\"fx\",\"status\":\"called\",\"counter_id\":\"C4\"}"
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 19:54"
+ },
+ "C1": {
+  "target": "main:app",
+  "setup": [
+   "POST /api/tickets → 201",
+   "POST /api/tickets → 201",
+   "POST /api/counters/C4/next → 200",
+   "POST /api/tickets/K-04/complete → 200",
+   "POST /api/counters/C4/next → 200"
+  ],
+  "notes": [],
+  "display": {
+   "path": "/board",
+   "status": 200,
+   "final_url": "/board",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "가림",
+  "screen_service": [],
+  "screen_has_marks": true,
+  "response_pii": [],
+  "response_service": [],
+  "response_urls": [],
+  "display_api": [
+   "/api/board"
+  ],
+  "crawl": {
+   "called": 13,
+   "routes": [
+    "/",
+    "/api/board",
+    "/api/counters/{counter_id}/queue",
+    "/api/manager/summary",
+    "/api/tickets/{ticket_id}",
+    "/api/users",
+    "/board"
+   ],
+   "open_200": [
+    "/",
+    "/api/board",
+    "/api/users",
+    "/board"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"ticket_id\":\"K-11\",\"number\":111,\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account_last4\":\"9111\",\"service\":\"fx\",\"status\":\"called\",\"counter_id\":\"C4\"}"
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 19:54"
+ },
+ "C2": {
+  "target": "main:app",
+  "setup": [
+   "POST /api/tickets → 201",
+   "POST /api/tickets → 201",
+   "POST /api/counters/C4/next → 200",
+   "POST /api/tickets/K-04/complete → 200",
+   "POST /api/counters/C4/next → 200"
+  ],
+  "notes": [],
+  "display": {
+   "path": "/board",
+   "status": 200,
+   "final_url": "/board",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "가림",
+  "screen_service": [],
+  "screen_has_marks": true,
+  "response_pii": [],
+  "response_service": [],
+  "response_urls": [],
+  "display_api": [
+   "/api/board"
+  ],
+  "crawl": {
+   "called": 13,
+   "routes": [
+    "/",
+    "/api/board",
+    "/api/counters/{counter_id}/queue",
+    "/api/manager/summary",
+    "/api/tickets/{ticket_id}",
+    "/api/users",
+    "/board"
+   ],
+   "open_200": [
+    "/",
+    "/api/board",
+    "/api/users",
+    "/board"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"ticket_id\":\"K-11\",\"number\":111,\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account_last4\":\"9111\",\"service\":\"fx\",\"status\":\"called\",\"counter_id\":\"C4\"}"
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 19:54"
+ },
+ "C3": {
+  "target": "main:app",
+  "setup": [
+   "POST /api/tickets → 201",
+   "POST /api/tickets → 201",
+   "POST /api/counters/C4/next → 200",
+   "POST /api/tickets/K-04/complete → 200",
+   "POST /api/counters/C4/next → 200"
+  ],
+  "notes": [],
+  "display": {
+   "path": "/board",
+   "status": 200,
+   "final_url": "/board",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "가림",
+  "screen_service": [],
+  "screen_has_marks": true,
+  "response_pii": [],
+  "response_service": [],
+  "response_urls": [],
+  "display_api": [
+   "/api/board"
+  ],
+  "crawl": {
+   "called": 13,
+   "routes": [
+    "/",
+    "/api/board",
+    "/api/counters/{counter_id}/queue",
+    "/api/manager/summary",
+    "/api/tickets/{ticket_id}",
+    "/api/users",
+    "/board"
+   ],
+   "open_200": [
+    "/",
+    "/api/board",
+    "/api/users",
+    "/board"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"ticket_id\":\"K-11\",\"number\":111,\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account_last4\":\"9111\",\"service\":\"fx\",\"status\":\"called\",\"counter_id\":\"C4\"}"
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 19:54"
+ },
+ "A4": {
+  "target": "main:app",
+  "setup": [
+   "POST /api/login → 200",
+   "POST /api/login → 200",
+   "POST /api/tickets → 200",
+   "POST /api/tickets → 200",
+   "POST /api/counter/4/next → 200",
+   "POST /api/counter/4/noshow → 200",
+   "POST /api/counter/4/next → 200",
+   "POST /api/counter/4/noshow → 200",
+   "POST /api/counter/4/next → 200",
+   "(준비) 호출 고객 노쇼 → 200"
+  ],
+  "notes": [],
+  "q_called": true,
+  "display": {
+   "path": "/board",
+   "status": 200,
+   "final_url": "/board",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "없음",
+  "screen_service": [
+   "대출",
+   "외환"
+  ],
+  "screen_has_marks": false,
+  "response_pii": [],
+  "response_service": [
+   "대출",
+   "외환"
+  ],
+  "response_urls": [],
+  "display_api": [
+   "/api/board"
+  ],
+  "crawl": {
+   "called": 5,
+   "routes": [
+    "/api/board",
+    "/api/counter/{n}",
+    "/api/counters",
+    "/api/manager/summary",
+    "/api/slots"
+   ],
+   "open_200": [
+    "/api/board"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "계좌번호",
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"counter\":4,\"services\":[\"외환\"],\"current\":{\"id\":55,\"ticket_no\":\"F004\",\"kind\":\"walkin\",\"service\":\"외환\",\"status\":\"called\",\"counter\":4,\"reserved_at\":null,\"arrived_at\":\"2026-10-30 20:23:08\",\"called_at\":\"2026-10-30 20:23:08\",\"finished_at\":null,\"day\":\"2026-10-30\",\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"accoun"
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "계좌번호",
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"counter\":4,\"services\":[\"외환\"],\"current\":{\"id\":55,\"ticket_no\":\"F004\",\"kind\":\"walkin\",\"service\":\"외환\",\"status\":\"called\",\"counter\":4,\"reserved_at\":null,\"arrived_at\":\"2026-10-30 20:23:08\",\"called_at\":\"2026-10-30 20:23:08\",\"finished_at\":null,\"day\":\"2026-10-30\",\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"accoun"
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "계좌번호",
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"counter\":4,\"services\":[\"외환\"],\"current\":{\"id\":55,\"ticket_no\":\"F004\",\"kind\":\"walkin\",\"service\":\"외환\",\"status\":\"called\",\"counter\":4,\"reserved_at\":null,\"arrived_at\":\"2026-10-30 20:23:08\",\"called_at\":\"2026-10-30 20:23:08\",\"finished_at\":null,\"day\":\"2026-10-30\",\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"accoun"
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 20:23"
+ },
+ "A5": {
+  "target": "main:app",
+  "setup": [
+   "POST /api/login → 200",
+   "POST /api/login → 200",
+   "POST /api/walkin → 200",
+   "POST /api/walkin → 200",
+   "POST /api/teller/call → 200",
+   "GET /api/teller/state?counter=4 → 200",
+   "POST /api/teller/{tid}/action → 200",
+   "POST /api/teller/{tid}/action → 409",
+   "POST /api/teller/call → 200",
+   "GET /api/teller/state?counter=4 → 200",
+   "POST /api/teller/{tid}/action → 200",
+   "POST /api/teller/{tid}/action → 409",
+   "POST /api/teller/call → 200",
+   "GET /api/teller/state?counter=4 → 200",
+   "POST /api/teller/{tid}/action → 200",
+   "POST /api/teller/{tid}/action → 409",
+   "POST /api/teller/call → 200",
+   "GET /api/teller/state?counter=4 → 200",
+   "POST /api/teller/{tid}/action → 200",
+   "POST /api/teller/{tid}/action → 409",
+   "POST /api/teller/call → 200",
+   "GET /api/teller/state?counter=4 → 200",
+   "POST /api/teller/{tid}/action → 200",
+   "POST /api/teller/{tid}/action → 409",
+   "POST /api/teller/call → 200",
+   "(준비) 호출 고객 노쇼 → 409"
+  ],
+  "notes": [],
+  "q_called": true,
+  "display": {
+   "path": "/static/display.html",
+   "status": 200,
+   "final_url": "/static/display.html",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "없음",
+  "screen_service": [
+   "대출",
+   "외환"
+  ],
+  "screen_has_marks": false,
+  "response_pii": [],
+  "response_service": [
+   "대출",
+   "외환"
+  ],
+  "response_urls": [],
+  "display_api": [
+   "/api/display"
+  ],
+  "crawl": {
+   "called": 6,
+   "routes": [
+    "/",
+    "/api/counters",
+    "/api/display",
+    "/api/manager/summary",
+    "/api/slots",
+    "/api/teller/state"
+   ],
+   "open_200": [
+    "/",
+    "/api/counters",
+    "/api/display",
+    "/api/slots"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "계좌번호",
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"current\":{\"id\":17,\"number\":\"F004\",\"kind\":\"walkin\",\"service\":\"외환\",\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account\":\"777888999111\",\"slot\":null,\"status\":\"called\",\"counter\":4,\"arrived_at\":\"2026-10-30 20:23:13\",\"called_at\":\"2026-10-30 20:23:13\",\"started_at\":null},\"waiting\":0,\"next\":null}"
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "계좌번호",
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"current\":{\"id\":17,\"number\":\"F004\",\"kind\":\"walkin\",\"service\":\"외환\",\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account\":\"777888999111\",\"slot\":null,\"status\":\"called\",\"counter\":4,\"arrived_at\":\"2026-10-30 20:23:13\",\"called_at\":\"2026-10-30 20:23:13\",\"started_at\":null},\"waiting\":0,\"next\":null}"
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 401,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 20:23"
+ },
+ "A6": {
+  "target": "main:app",
+  "setup": [
+   "POST /api/walkin → 200",
+   "POST /api/walkin → 200",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/noshow → 200",
+   "POST /api/teller/complete → 409",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/noshow → 200",
+   "POST /api/teller/complete → 409",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/noshow → 200",
+   "POST /api/teller/complete → 409",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/noshow → 200",
+   "POST /api/teller/complete → 409",
+   "POST /api/teller/call → 200",
+   "POST /api/teller/noshow → 200",
+   "POST /api/teller/complete → 409",
+   "POST /api/teller/call → 200",
+   "(준비) 호출 고객 노쇼 → 200"
+  ],
+  "notes": [],
+  "q_called": true,
+  "display": {
+   "path": "/display.html",
+   "status": 200,
+   "final_url": "/display.html",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "없음",
+  "screen_service": [
+   "대출"
+  ],
+  "screen_has_marks": false,
+  "response_pii": [],
+  "response_service": [
+   "대출"
+  ],
+  "response_urls": [],
+  "display_api": [
+   "/api/display"
+  ],
+  "crawl": {
+   "called": 4,
+   "routes": [
+    "/api/display",
+    "/api/manager/stats",
+    "/api/slots",
+    "/api/teller/state"
+   ],
+   "open_200": [
+    "/api/display"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "계좌번호",
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"current\":{\"ticket_no\":\"F004\",\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account\":\"777-888-999111\",\"service\":\"외환\",\"kind\":\"walkin\",\"status\":\"called\",\"reserved_at\":null,\"checked_in_at\":\"2026-10-30T20:23:18\",\"called_at\":\"2026-10-30T20:23:18\",\"started_at\":null,\"counter\":4},\"waiting_total\":1,\"next_preview\":["
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "계좌번호",
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"current\":{\"ticket_no\":\"F004\",\"name\":\"곁눈질\",\"phone\":\"010-0000-8888\",\"account\":\"777-888-999111\",\"service\":\"외환\",\"kind\":\"walkin\",\"status\":\"called\",\"reserved_at\":null,\"checked_in_at\":\"2026-10-30T20:23:18\",\"called_at\":\"2026-10-30T20:23:18\",\"started_at\":null,\"counter\":4},\"waiting_total\":1,\"next_preview\":["
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 401,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 20:23"
+ },
+ "D4": {
+  "target": "main:app",
+  "setup": [
+   "POST /api/login → 200",
+   "POST /api/login → 200",
+   "POST /api/login → 200",
+   "POST /api/tickets → 200",
+   "POST /api/tickets → 200",
+   "POST /api/teller/call-next → 200",
+   "GET /api/teller/me → 200",
+   "POST /api/teller/serve → 200",
+   "POST /api/teller/done → 200",
+   "POST /api/teller/call-next → 200",
+   "GET /api/teller/me → 200",
+   "POST /api/teller/serve → 200",
+   "POST /api/teller/done → 200",
+   "POST /api/teller/call-next → 200"
+  ],
+  "notes": [],
+  "q_called": true,
+  "display": {
+   "path": "/display.html",
+   "status": 200,
+   "final_url": "/display.html",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "가림",
+  "screen_service": [],
+  "screen_has_marks": true,
+  "response_pii": [],
+  "response_service": [],
+  "response_urls": [],
+  "display_api": [
+   "/api/display"
+  ],
+  "crawl": {
+   "called": 3,
+   "routes": [
+    "/api/display",
+    "/api/manager/stats",
+    "/api/teller/me"
+   ],
+   "open_200": [
+    "/api/display"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체"
+    ],
+    "body": "{\"window\":4,\"service\":\"외환\",\"waiting_count\":0,\"current\":{\"ticket_no\":\"C004\",\"status\":\"called\",\"name\":\"곁눈질\",\"phone\":\"***-****-8888\",\"account\":\"****-9111\",\"service\":\"외환\",\"reservation\":false,\"priority\":false,\"call_deadline\":\"2026-10-30T20:26:23\"}}"
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 20:23"
+ },
+ "D5": {
+  "target": "main:app",
+  "setup": [
+   "POST /api/login → 200",
+   "POST /api/login → 200",
+   "POST /api/login → 200",
+   "POST /api/tickets → 200",
+   "POST /api/tickets → 200",
+   "POST /api/teller/call-next → 200",
+   "GET /api/teller/state → 200",
+   "POST /api/teller/start → 200",
+   "POST /api/teller/finish → 200",
+   "POST /api/teller/call-next → 200",
+   "GET /api/teller/state → 200",
+   "POST /api/teller/start → 200",
+   "POST /api/teller/finish → 200",
+   "POST /api/teller/call-next → 200"
+  ],
+  "notes": [],
+  "q_called": true,
+  "display": {
+   "path": "/display",
+   "status": 200,
+   "final_url": "/display",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "가림",
+  "screen_service": [],
+  "screen_has_marks": true,
+  "response_pii": [],
+  "response_service": [],
+  "response_urls": [],
+  "display_api": [
+   "/api/display",
+   "/api/display"
+  ],
+  "crawl": {
+   "called": 3,
+   "routes": [
+    "/api/display",
+    "/api/manager/summary",
+    "/api/teller/state"
+   ],
+   "open_200": [
+    "/api/display"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체",
+     "전화번호"
+    ],
+    "body": "{\"window\":4,\"service\":\"외환\",\"waiting\":0,\"done\":2,\"current\":{\"id\":15,\"ticket_no\":\"C003\",\"status\":\"called\",\"name\":\"곁눈질\",\"phone\":\"010-0000-2825\",\"account_tail\":\"9111\",\"service\":\"외환\",\"kind\":\"walkin\",\"reserved_at\":null,\"priority\":false,\"seconds_left\":177},\"held\":[]}"
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 403,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 20:23"
+ },
+ "D6": {
+  "target": "dudug_bank.app.main:app",
+  "setup": [
+   "POST /api/login → 200",
+   "POST /api/login → 200",
+   "POST /api/login → 200",
+   "POST /api/tickets → 200",
+   "POST /api/tickets → 200",
+   "POST /api/teller/call-next → 200",
+   "GET /api/teller/state → 200",
+   "POST /api/teller/{tid}/start → 200",
+   "POST /api/teller/{tid}/complete → 200",
+   "POST /api/teller/call-next → 200",
+   "GET /api/teller/state → 200"
+  ],
+  "notes": [],
+  "q_called": true,
+  "display": {
+   "path": "/display",
+   "status": 200,
+   "final_url": "/display",
+   "error": null
+  },
+  "screen_pii": [],
+  "screen_name_form": "가림",
+  "screen_service": [],
+  "screen_has_marks": true,
+  "response_pii": [],
+  "response_service": [],
+  "response_urls": [],
+  "display_api": [
+   "/api/display",
+   "/api/display"
+  ],
+  "crawl": {
+   "called": 3,
+   "routes": [
+    "/api/display",
+    "/api/manager/summary",
+    "/api/teller/state"
+   ],
+   "open_200": [
+    "/api/display"
+   ]
+  },
+  "crawl_leaks": [],
+  "crawl_leak_detail": [],
+  "checks": [
+   {
+    "name": "호출한 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [
+     "이름 전체"
+    ],
+    "body": "{\"window\":4,\"work_type\":\"외환\",\"current\":{\"id\":13,\"number\":\"C004\",\"status\":\"called\",\"name\":\"곁눈질\",\"phone\":\"010-****-8888\",\"account_last4\":\"9111\",\"work_type\":\"외환\",\"reserved\":false,\"priority\":false,\"seconds_left\":177},\"waiting\":[],\"hold\":[{\"id\":12,\"number\":\"C003\",\"name\":\"조*재\"}]}"
+   },
+   {
+    "name": "다른 창구의 직원",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장이 고객 상세",
+    "status": 401,
+    "blocked": true,
+    "pii": [],
+    "body": ""
+   },
+   {
+    "name": "지점장 현황",
+    "status": 200,
+    "blocked": false,
+    "pii": [],
+    "body": ""
+   }
+  ],
+  "server_tail": "",
+  "at": "2026-10-30 20:23"
+ }
+}

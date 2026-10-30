@@ -1,0 +1,33 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>대기 현황</title><link rel="stylesheet" href="/static/common.css">
+<style>body{background:#0a1226;color:#fff}.t{font-size:34px;font-weight:800;padding:18px 28px;display:flex;justify-content:space-between}
+.grid{display:grid;grid-template-columns:1.2fr 1fr;gap:20px;padding:0 28px 28px}
+.panel{background:#131d3b;border-radius:16px;padding:20px}.panel h2{font-size:26px;color:#8fb4ff}
+.call{display:flex;justify-content:space-between;align-items:center;font-size:44px;font-weight:800;padding:14px 18px;margin:10px 0;border-radius:12px;background:#1f3a8a}
+.call small{font-size:30px;color:#cfe0ff;font-weight:600}.call .w{color:#ffd54a}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.cols h3{margin:0 0 8px;font-size:20px;color:#ffd54a}
+.q{font-size:24px;padding:6px 0;border-bottom:1px solid #26335c;display:flex;justify-content:space-between}.more{color:#8fa0c8;font-size:18px;margin-top:6px}
+.empty{color:#8fa0c8;font-size:22px}</style></head><body>
+<div class="t"><span>두둑은행 대기 현황</span><span id="clock"></span></div>
+<div class="grid"><div class="panel"><h2>호출 중</h2><div id="called"></div></div>
+<div class="panel"><h2>대기 순서</h2><div class="cols" id="waiting"></div></div></div>
+<script src="/static/common.js"></script>
+<script>
+let prev = '';
+async function refresh() {
+  try {
+    const d = await api('/api/display');
+    const sig = JSON.stringify(d); if (sig === prev) return; prev = sig;
+    document.getElementById('called').replaceChildren(...(d.called.length ? d.called.map(c =>
+      el('div', {class: 'call'}, el('span', {}, c.ticket, ' ', el('small', {}, c.name)), el('span', {class: 'w'}, `창구 ${c.window}`)))
+      : [el('div', {class: 'empty'}, '호출 중인 번호가 없습니다')]));
+    document.getElementById('waiting').replaceChildren(...d.waiting.map(g => el('div', {},
+      el('h3', {}, g.label),
+      ...(g.items.length ? g.items.map(i => el('div', {class: 'q'}, el('span', {}, i.ticket), el('span', {}, i.name)))
+                         : [el('div', {class: 'empty'}, '대기 없음')]),
+      g.more ? el('div', {class: 'more'}, `외 ${g.more}명`) : '')));
+  } catch (e) {}
+}
+setInterval(refresh, 2000); refresh();
+setInterval(() => document.getElementById('clock').textContent = new Date().toLocaleTimeString('ko-KR'), 1000);
+</script></body></html>

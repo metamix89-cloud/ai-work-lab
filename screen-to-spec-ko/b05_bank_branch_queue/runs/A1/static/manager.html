@@ -1,0 +1,34 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>지점장 현황</title><link rel="stylesheet" href="common.css">
+<style>.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.kpi div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}.kpi b{display:block;font-size:28px;margin-top:4px}
+.kpi span{font-size:13px;color:var(--mut)}.kpi .w b{color:var(--warn)}</style></head><body>
+<header><h1>지점장 · 대기 현황 / 노쇼</h1><span id="d"></span><a href="/">홈</a></header>
+<main>
+<div class="msg" id="m"></div>
+<div class="kpi" id="kpi"></div>
+<div class="row"><div class="card"><h2>업무별 대기</h2><table id="svc"></table></div>
+<div class="card"><h2>창구 현황</h2><table id="ctr"></table></div></div>
+<div class="card"><h2>노쇼 내역 (개인정보 마스킹)</h2><table><thead><tr><th>번호표</th><th>고객</th><th>연락처</th><th>업무</th><th>구분</th><th>사유</th><th>시각</th></tr></thead><tbody id="ns"></tbody></table></div>
+<div class="card"><h2>도착 예정 예약</h2><table><thead><tr><th>시간</th><th>고객</th><th>업무</th></tr></thead><tbody id="up"></tbody></table></div>
+</main>
+<script src="common.js"></script>
+<script>
+let pin = pinFor('mpin', '지점장');
+const kpi = (l, v, w) => h('div', {class: w ? 'w' : ''}, h('span', {}, l), h('b', {}, v));
+const st = {called: '호출 중', serving: '상담 중', idle: '대기'};
+async function refresh() {
+  try {
+    const s = await api('/api/manager/summary', {}, pin); $('#m').className = 'msg'; $('#d').textContent = s.date;
+    $('#kpi').replaceChildren(kpi('대기', s.waiting + '명'), kpi('(그중 예약 우선)', s.waiting_priority + '명'), kpi('진행 중', s.in_progress + '명'),
+      kpi('처리 완료', s.done + '건'), kpi('평균 대기', s.avg_wait_min + '분'), kpi('최장 대기', s.longest_wait_min + '분', s.longest_wait_min >= 20),
+      kpi('평균 상담', s.avg_service_min + '분'), kpi('노쇼', s.no_show_count + '건', s.no_show_count > 0), kpi('예약 노쇼율', s.reservation_no_show_rate + '%'));
+    $('#svc').replaceChildren(...Object.entries(s.waiting_by_service).map(([k, v]) => h('tr', {}, h('th', {}, k), h('td', {}, v + '명'))));
+    $('#ctr').replaceChildren(...s.counters.map(c => h('tr', {}, h('th', {}, c.counter + '번 창구'), h('td', {}, st[c.status] + (c.ticket_no ? ' ' + c.ticket_no : '')), h('td', {}, '처리 ' + c.done + '건'))));
+    $('#ns').replaceChildren(...s.no_shows.map(n => h('tr', {}, h('td', {}, n.ticket_no || '-'), h('td', {}, n.name), h('td', {}, n.phone), h('td', {}, n.service),
+      h('td', {}, n.kind === 'reservation' ? '예약' : '현장'), h('td', {}, n.reason), h('td', {}, hhmm(n.when)))));
+    $('#up').replaceChildren(...s.upcoming.map(u => h('tr', {}, h('td', {}, u.slot_at.slice(5, 16).replace('T', ' ')), h('td', {}, u.name), h('td', {}, u.service))));
+  } catch (e) { if (e.status === 401) { sessionStorage.removeItem('mpin'); pin = pinFor('mpin', '지점장'); } msg($('#m'), e.message); }
+}
+refresh(); setInterval(refresh, 5000);
+</script></body></html>

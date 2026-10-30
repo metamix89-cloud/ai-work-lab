@@ -1,0 +1,41 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>창구 직원</title><link rel="stylesheet" href="common.css"></head><body>
+<header><h1>창구 직원 화면</h1><a href="/">홈</a></header>
+<main>
+<div class="card row" style="align-items:end"><div><label>내 창구</label><select id="ctr"><option>1</option><option>2</option><option>3</option></select></div>
+<div><button id="call" style="width:100%;padding:14px;font-size:18px">다음 고객 호출</button></div></div>
+<div class="msg" id="m"></div>
+<div class="card" id="cur"></div>
+<div class="card"><h2>대기 순서</h2><table><thead><tr><th>순번</th><th>번호표</th><th>업무</th><th>구분</th></tr></thead><tbody id="q"></tbody></table></div>
+</main>
+<script src="common.js"></script>
+<script>
+let pin = pinFor('tpin', '창구 직원'), cur = null;
+const ctr = () => +$('#ctr').value;
+const fail = e => { if (e.status === 401) { sessionStorage.removeItem('tpin'); pin = pinFor('tpin', '창구 직원'); } msg($('#m'), e.message); };
+async function act(path, body) { try { await api(path, {method: 'POST', body}, pin); $('#m').className = 'msg'; } catch (e) { fail(e); } refresh(); }
+async function refresh() {
+  try {
+    const s = await api('/api/teller/state?counter=' + ctr(), {}, pin); cur = s.current;
+    const box = $('#cur'); box.replaceChildren(h('h2', {}, '현재 고객'));
+    if (!cur) box.append(h('p', {style: 'color:var(--mut)'}, '처리 중인 고객이 없습니다.'));
+    else {
+      const rows = [['번호표', cur.ticket_no], ['이름', cur.name], ['휴대전화', cur.phone], ['계좌번호', cur.account], ['업무', cur.service],
+        ['구분', cur.kind === 'reservation' ? '예약 고객 (' + cur.slot_at.slice(11, 16) + ')' : '현장 발급'], ['도착', hhmm(cur.checkin_at)],
+        ['상태', cur.status === 'called' ? '호출됨 (창구 도착 대기)' : '상담 중']];
+      box.append(h('table', {}, rows.map(r => h('tr', {}, h('th', {}, r[0]), h('td', {}, r[1])))));
+      const b = {counter: ctr()}, base = `/api/teller/${cur.id}/`;
+      box.append(h('p', {class: 'row'},
+        cur.status === 'called' ? [h('button', {onclick: () => act(base + 'start', b)}, '상담 시작'),
+          h('button', {class: 'sec', onclick: () => act(base + 'recall', b)}, '재호출'),
+          h('button', {class: 'red', onclick: () => confirm('노쇼 처리할까요?') && act(base + 'noshow', b)}, '노쇼')] :
+          h('button', {onclick: () => act(base + 'done', b)}, '처리 완료')));
+    }
+    $('#call').disabled = !!cur;
+    $('#q').replaceChildren(...s.waiting.map((w, i) => h('tr', {}, h('td', {}, i + 1), h('td', {}, w.ticket_no), h('td', {}, w.service),
+      h('td', {}, h('span', {class: 'badge' + (w.priority ? ' p' : '')}, w.priority ? '예약 우선' : '현장')))));
+  } catch (e) { fail(e); }
+}
+$('#call').onclick = () => act('/api/teller/call', {counter: ctr()});
+$('#ctr').onchange = refresh; refresh(); setInterval(refresh, 4000);
+</script></body></html>

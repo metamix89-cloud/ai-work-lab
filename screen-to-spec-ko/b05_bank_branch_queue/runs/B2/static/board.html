@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>두둑은행 넉넉지점 대기 현황판</title>
+<style>
+body{font-family:"Malgun Gothic",sans-serif;margin:0;background:#f4f6f9;color:#1d2733}
+header{background:#1f4e8c;color:#fff;padding:16px 24px;font-size:22px}
+main{display:flex;gap:24px;padding:24px;flex-wrap:wrap}
+section{background:#fff;border-radius:8px;padding:16px 20px;flex:1;min-width:300px;box-shadow:0 1px 3px #0002}
+h2{margin-top:0}
+ul{list-style:none;padding:0;margin:0}
+li{font-size:24px;padding:8px 0;border-bottom:1px solid #e3e7ec}
+.empty{color:#888;font-size:16px}
+#error{display:none;padding:24px}
+</style>
+</head>
+<body>
+<header>두둑은행 넉넉지점 — 방문 예약 · 대기 현황판</header>
+<div id="error"><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+<main id="content">
+<section><h2>호출 중</h2><ul data-testid="serving" id="serving"></ul></section>
+<section><h2>대기 중</h2><ul data-testid="waiting" id="waiting"></ul></section>
+</main>
+<script>
+function fill(ul, items, fmt) {
+  ul.textContent = "";
+  if (!items.length) {
+    const li = document.createElement("li");
+    li.className = "empty";
+    li.textContent = "없음";
+    ul.appendChild(li);
+    return;
+  }
+  items.forEach(function (it) {
+    const li = document.createElement("li");
+    li.textContent = fmt(it);
+    ul.appendChild(li);
+  });
+}
+async function load() {
+  try {
+    const r = await fetch("/api/board");
+    if (!r.ok) throw new Error();
+    const d = await r.json();
+    fill(document.getElementById("serving"), d.serving, function (t) {
+      return t.number + "번  " + t.masked_name + "  → 창구 " + t.counter_id.replace(/^C/, "");
+    });
+    fill(document.getElementById("waiting"), d.waiting, function (t) {
+      return t.number + "번  " + t.masked_name;
+    });
+    document.getElementById("error").style.display = "none";
+    document.getElementById("content").style.display = "";
+  } catch (e) {
+    document.getElementById("error").style.display = "block";
+    document.getElementById("content").style.display = "none";
+  }
+}
+document.getElementById("retry").onclick = load;
+load();
+setInterval(load, 5000);
+</script>
+</body>
+</html>

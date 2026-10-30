@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>대기 현황판 — 두둑은행 넉넉지점</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; padding: 24px; background: #f5f7fa; color: #1c2733; }
+  h1 { margin: 0 0 16px; font-size: 24px; }
+  h2 { font-size: 18px; margin: 0 0 8px; }
+  .cols { display: flex; gap: 24px; flex-wrap: wrap; }
+  .panel { flex: 1; min-width: 280px; background: #fff; border: 1px solid #d5dbe3; border-radius: 8px; padding: 16px; }
+  .row { font-size: 22px; padding: 6px 0; border-bottom: 1px solid #eef0f3; }
+  .row b { display: inline-block; min-width: 64px; }
+  .empty { color: #6b7684; }
+  #err { color: #b00020; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+<h1>대기 현황판</h1>
+<div id="err" hidden><span>불러오지 못했습니다</span> <button type="button" id="retry">다시 시도</button></div>
+<div class="cols">
+  <section class="panel"><h2>호출 중</h2><div data-testid="serving" id="serving"></div></section>
+  <section class="panel"><h2>대기 중</h2><div data-testid="waiting" id="waiting"></div></section>
+</div>
+<script>
+function fill(el, items, fmt) {
+  el.textContent = "";
+  if (!items.length) {
+    const d = document.createElement("div");
+    d.className = "row empty";
+    d.textContent = "없음";
+    el.appendChild(d);
+    return;
+  }
+  items.forEach(function (it) {
+    const d = document.createElement("div");
+    d.className = "row";
+    d.textContent = fmt(it);
+    el.appendChild(d);
+  });
+}
+async function load() {
+  try {
+    const r = await fetch("/api/board");
+    if (!r.ok) throw new Error(r.status);
+    const b = await r.json();
+    fill(document.getElementById("serving"), b.serving, function (s) { return s.number + "  " + s.masked_name + "  → " + s.counter_id; });
+    fill(document.getElementById("waiting"), b.waiting, function (w) { return w.number + "  " + w.masked_name; });
+    document.getElementById("err").hidden = true;
+  } catch (e) {
+    document.getElementById("err").hidden = false;
+  }
+}
+document.getElementById("retry").addEventListener("click", load);
+load();
+setInterval(load, 5000);
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>넉넉지점 대기 화면</title></head><body>
+<h1>넉넉지점 대기 화면</h1>
+<h2>호출 중</h2><div data-testid="serving" id="s"></div>
+<h2>대기 중</h2><div data-testid="waiting" id="w"></div>
+<script>
+fetch('/api/board').then(r=>r.json()).then(b=>{
+ document.getElementById('s').innerHTML=b.serving.map(x=>`<div>${x.number} ${x.masked_name} → ${x.counter_id}</div>`).join('');
+ document.getElementById('w').innerHTML=b.waiting.map(x=>`<div>${x.number} ${x.masked_name}</div>`).join('');
+});
+</script></body></html>

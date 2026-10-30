@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>두둑은행 방문 예약</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header><h1>두둑은행 · 방문 예약 / 번호표</h1>
+<nav><a href="display.html" target="_blank">대기 화면</a><a href="teller.html">창구</a><a href="manager.html">지점장</a></nav></header>
+<main>
+<div class="tabs">
+  <button data-t="rsv" class="on">방문 예약</button>
+  <button data-t="walk">현장 번호표</button>
+  <button data-t="chk">예약 도착 확인</button>
+</div>
+
+<div class="card" id="form">
+  <div id="cust">
+    <div id="nameBox"><label>이름</label><input id="name" maxlength="20" autocomplete="off"></div>
+    <label>전화번호</label><input id="phone" placeholder="010-0000-0000" inputmode="tel" autocomplete="off">
+    <div id="acctBox"><label>계좌번호 (숫자 10~14자리)</label><input id="account" inputmode="numeric" autocomplete="off"></div>
+    <div id="svcBox"><label>업무 종류</label>
+      <select id="service"><option>예금</option><option>대출</option><option>외환</option></select></div>
+  </div>
+  <div id="slotBox"><label>예약 시간 (오늘, 시간당 3팀)</label><div class="slots" id="slots"></div></div>
+  <p><button id="go">예약하기</button></p>
+  <div class="err" id="err"></div>
+  <div class="msg" id="ok" hidden></div>
+</div>
+<p style="color:var(--mute);font-size:13px">예약 고객은 현장 번호표 고객보다 먼저 호출됩니다. 예약 시간 15분이 지나도 도착 확인이 없으면 노쇼로 처리됩니다.</p>
+</main>
+<script src="common.js"></script>
+<script>
+let tab = "rsv", slot = null;
+const CFG = {
+  rsv:  { btn: "예약하기", url: "/reservations" },
+  walk: { btn: "번호표 뽑기", url: "/walkin" },
+  chk:  { btn: "도착 확인", url: "/checkin" },
+};
+function render() {
+  const chk = tab === "chk";
+  $("#nameBox").hidden = $("#acctBox").hidden = $("#svcBox").hidden = chk;
+  $("#slotBox").hidden = tab !== "rsv";
+  $("#go").textContent = CFG[tab].btn;
+  document.querySelectorAll(".tabs button").forEach(b => b.classList.toggle("on", b.dataset.t === tab));
+  $("#err").textContent = ""; $("#ok").hidden = true;
+  if (tab === "rsv") loadSlots();
+}
+async function loadSlots() {
+  const list = await api("/slots");
+  $("#slots").replaceChildren(...list.map(s => {
+    const b = h("button", { type: "button", onclick: () => { slot = s.time; loadSlots(); } },
+      s.time + (s.available ? ` (${s.left})` : " 마감"));
+    b.disabled = !s.available;
+    if (s.time === slot) b.classList.add("on");
+    return b;
+  }));
+}
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => { tab = b.dataset.t; render(); });
+$("#go").onclick = async () => {
+  $("#err").textContent = ""; $("#ok").hidden = true;
+  const body = { phone: $("#phone").value };
+  if (tab !== "chk") Object.assign(body, { name: $("#name").value, account: $("#account").value, service: $("#service").value });
+  if (tab === "rsv") { if (!slot) { $("#err").textContent = "예약 시간을 선택해 주세요."; return; } body.slot = slot; }
+  try {
+    const r = await api(CFG[tab].url, { method: "POST", body });
+    $("#ok").textContent = r.message; $("#ok").hidden = false;
+    if (tab === "rsv") { slot = null; loadSlots(); }
+  } catch (e) { $("#err").textContent = e.message; }
+};
+render();
+</script></body></html>

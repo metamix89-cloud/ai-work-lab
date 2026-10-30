@@ -1,0 +1,6 @@
+user_id,name,role,counter_id
+t1,한창구,teller,C1
+t2,이예금,teller,C2
+t3,박대출,teller,C3
+t4,최외환,teller,C4
+m1,정지점,manager,
