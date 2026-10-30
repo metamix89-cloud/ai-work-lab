@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 79511,
+ "num_turns": 12,
+ "total_cost_usd": 0.3346958,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 44898,
+  "cache_read_input_tokens": 288958,
+  "output_tokens": 12618,
+  "output_tokens_details": {
+   "thinking_tokens": 972
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 44898,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 371,
+    "cache_read_input_tokens": 57728,
+    "cache_creation_input_tokens": 203,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 203
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (users · products · orders · order_lines)\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (추가한 API 경로도 없음)\nPRD 가 정하지 않아 직접 정한 것: 404 의 `detail` 문구는 \"주문을 찾을 수 없습니다\" · \"사용자를 찾을 수 없습니다\" · \"알 수 없는 동작입니다\" 로 정함. 같은 상품이 한 주문에 두 줄이면 수량을 합쳐 재고를 확인함. 가상 데이터는 주문 8개(상태 다섯 가지 모두 포함)로 직접 만듦. 사용자 선택 상자에는 이름과 역할을 함께 보여 줌.",
+ "wall_s": 95.4
+}

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 주문 · 재고 백오피스</title>
+<style>
+:root {
+  --color-bg: #f5f6f8;
+  --color-surface: #ffffff;
+  --color-text: #1f2933;
+  --color-muted: #616e7c;
+  --color-border: #cbd2d9;
+  --color-accent: #1b5fc1;
+  --color-danger: #b42318;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--color-bg); color: var(--color-text);
+  font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; }
+header, main { padding: var(--space-3); }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3);
+  background: var(--color-surface); border-bottom: 1px solid var(--color-border); }
+h1 { font-size: 1.2rem; margin: 0; }
+h2 { font-size: 1.05rem; margin: 0 0 var(--space-2); }
+main { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1fr); gap: var(--space-3); }
+section { background: var(--color-surface); border: 1px solid var(--color-border);
+  padding: var(--space-3); min-width: 0; overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border-bottom: 1px solid var(--color-border); padding: var(--space-2); text-align: left;
+  vertical-align: top; }
+ul { margin: 0; padding-left: var(--space-3); }
+button, select { font: inherit; padding: var(--space-1) var(--space-2); }
+button { border: 1px solid var(--color-accent); background: var(--color-surface);
+  color: var(--color-accent); cursor: pointer; margin-right: var(--space-1); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+.status { font-weight: bold; }
+.message { min-height: 1.5em; margin: 0; padding: var(--space-2) var(--space-3);
+  color: var(--color-danger); font-weight: bold; }
+.error { color: var(--color-danger); }
+@media (max-width: 800px) { main { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body>
+<header>
+  <h1>주문 · 재고 백오피스</h1>
+  <label>사용자 <select data-testid="user" aria-label="사용자 선택"></select></label>
+</header>
+<p class="message" data-testid="message" role="status"></p>
+<div id="error" class="error" hidden>
+  <p>불러오지 못했습니다</p>
+  <button type="button" id="retry" aria-label="다시 시도">다시 시도</button>
+</div>
+<main id="content">
+  <section aria-label="주문 목록">
+    <h2>주문</h2>
+    <table>
+      <thead><tr><th>주문 번호</th><th>손님</th><th>주문 시각</th><th>상품 · 수량</th>
+        <th>상태</th><th>동작</th></tr></thead>
+      <tbody id="orders"></tbody>
+    </table>
+  </section>
+  <section aria-label="재고 패널">
+    <h2>재고</h2>
+    <table>
+      <thead><tr><th>상품</th><th>재고</th></tr></thead>
+      <tbody id="stocks"></tbody>
+    </table>
+  </section>
+</main>
+<script>
+(() => {
+  const STATUS_LABEL = { placed: "접수", confirmed: "확정", shipped: "출고",
+    cancelled: "취소", refunded: "환불" };
+  const ACTION_LABEL = { confirm: "확정", ship: "출고", cancel: "취소", refund: "환불" };
+  // 상태별로 보여 줄 버튼(안내일 뿐, 막는 건 서버)
+  const ACTIONS_BY_STATUS = { placed: ["confirm", "cancel"], confirmed: ["ship", "cancel"],
+    shipped: ["refund"], cancelled: [], refunded: [] };
+
+  const state = { orders: [], products: [], busy: false };
+  const userSelect = document.querySelector('[data-testid="user"]');
+  const messageEl = document.querySelector('[data-testid="message"]');
+  const errorEl = document.getElementById("error");
+  const contentEl = document.getElementById("content");
+
+  const el = (tag, text, attrs = {}) => {
+    const node = document.createElement(tag);
+    if (text !== undefined) node.textContent = text;
+    Object.entries(attrs).forEach(([k, v]) => node.setAttribute(k, v));
+    return node;
+  };
+
+  async function request(url, options) {
+    const res = await fetch(url, options);
+    const body = await res.json().catch(() => null);
+    if (!res.ok) throw new Error((body && body.detail) || "요청에 실패했습니다");
+    return body;
+  }
+
+  function renderStocks() {
+    const tbody = document.getElementById("stocks");
+    tbody.replaceChildren(...state.products.map((p) => {
+      const tr = el("tr");
+      tr.append(el("td", p.name),
+        el("td", String(p.stock), { "data-testid": "stock", "data-id": p.product_id }));
+      return tr;
+    }));
+  }
+
+  function renderOrder(order) {
+    const tr = el("tr", undefined,
+      { "data-testid": "order", "data-id": order.order_id, "data-status": order.status });
+    const lines = el("ul");
+    order.lines.forEach((l) => lines.append(el("li", `${l.name} × ${l.qty}`)));
+    const linesTd = el("td");
+    linesTd.append(lines);
+    const actionsTd = el("td");
+    ACTIONS_BY_STATUS[order.status].forEach((action) => {
+      const btn = el("button", ACTION_LABEL[action], { type: "button",
+        "data-testid": `act-${action}`,
+        "aria-label": `${order.order_id} ${ACTION_LABEL[action]}` });
+      btn.disabled = state.busy;
+      btn.addEventListener("click", () => runAction(order.order_id, action));
+      actionsTd.append(btn);
+    });
+    tr.append(el("td", order.order_id), el("td", order.customer), el("td", order.ordered_at),
+      linesTd, el("td", STATUS_LABEL[order.status], { class: "status" }), actionsTd);
+    return tr;
+  }
+
+  function render() {
+    document.getElementById("orders").replaceChildren(...state.orders.map(renderOrder));
+    renderStocks();
+  }
+
+  function setBusy(isBusy) {
+    state.busy = isBusy;
+    document.querySelectorAll('#orders button').forEach((b) => { b.disabled = isBusy; });
+  }
+
+  async function runAction(orderId, action) {
+    if (state.busy) return;
+    setBusy(true);
+    messageEl.textContent = "";
+    try {
+      const result = await request(`/api/orders/${encodeURIComponent(orderId)}/${action}`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user: userSelect.value }) });
+      state.orders = state.orders.map((o) => (o.order_id === orderId ? result.order : o));
+      state.products = result.products;
+    } catch (err) {
+      messageEl.textContent = err.message;
+    } finally {
+      state.busy = false;
+      render();
+    }
+  }
+
+  async function load() {
+    errorEl.hidden = true;
+    try {
+      const [users, products, orders] = await Promise.all([
+        request("/api/users"), request("/api/products"), request("/api/orders")]);
+      const selected = userSelect.value;
+      userSelect.replaceChildren(...users.map((u) => el("option",
+        `${u.name} (${u.role === "manager" ? "관리자" : "직원"})`, { value: u.user_id })));
+      if (selected) userSelect.value = selected;
+      state.products = products;
+      state.orders = orders;
+      contentEl.hidden = false;
+      render();
+    } catch (err) {
+      contentEl.hidden = true;
+      errorEl.hidden = false;
+    }
+  }
+
+  document.getElementById("retry").addEventListener("click", load);
+  load();
+})();
+</script>
+</body>
+</html>

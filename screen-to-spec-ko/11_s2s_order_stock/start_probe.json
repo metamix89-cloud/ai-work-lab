@@ -1,0 +1,155 @@
+{
+ "N1": {
+  "그대로": {
+   "up": true,
+   "confirm": null,
+   "error": ""
+  },
+  "같은 상품 두 줄": {
+   "up": true,
+   "confirm": 409,
+   "error": ""
+  },
+  "없는 상품 줄": {
+   "up": true,
+   "confirm": 200,
+   "error": ""
+  }
+ },
+ "N2": {
+  "그대로": {
+   "up": true,
+   "confirm": null,
+   "error": ""
+  },
+  "같은 상품 두 줄": {
+   "up": true,
+   "confirm": 409,
+   "error": ""
+  },
+  "없는 상품 줄": {
+   "up": true,
+   "confirm": 409,
+   "error": ""
+  }
+ },
+ "N3": {
+  "그대로": {
+   "up": true,
+   "confirm": null,
+   "error": ""
+  },
+  "같은 상품 두 줄": {
+   "up": true,
+   "confirm": 409,
+   "error": ""
+  },
+  "없는 상품 줄": {
+   "up": true,
+   "confirm": 409,
+   "error": ""
+  }
+ },
+ "S1": {
+  "그대로": {
+   "up": true,
+   "confirm": null,
+   "error": ""
+  },
+  "같은 상품 두 줄": {
+   "up": true,
+   "confirm": 409,
+   "error": ""
+  },
+  "없는 상품 줄": {
+   "up": true,
+   "confirm": 200,
+   "error": ""
+  }
+ },
+ "S2": {
+  "그대로": {
+   "up": true,
+   "confirm": null,
+   "error": ""
+  },
+  "같은 상품 두 줄": {
+   "up": true,
+   "confirm": 409,
+   "error": ""
+  },
+  "없는 상품 줄": {
+   "up": true,
+   "confirm": 200,
+   "error": ""
+  }
+ },
+ "S3": {
+  "그대로": {
+   "up": true,
+   "confirm": null,
+   "error": ""
+  },
+  "같은 상품 두 줄": {
+   "up": true,
+   "confirm": 409,
+   "error": ""
+  },
+  "없는 상품 줄": {
+   "up": true,
+   "confirm": 200,
+   "error": ""
+  }
+ },
+ "L1": {
+  "그대로": {
+   "up": true,
+   "confirm": null,
+   "error": ""
+  },
+  "같은 상품 두 줄": {
+   "up": true,
+   "confirm": 500,
+   "error": ""
+  },
+  "없는 상품 줄": {
+   "up": false,
+   "confirm": null,
+   "error": "sqlite3.IntegrityError: FOREIGN KEY constraint failed"
+  }
+ },
+ "L2": {
+  "그대로": {
+   "up": true,
+   "confirm": null,
+   "error": ""
+  },
+  "같은 상품 두 줄": {
+   "up": true,
+   "confirm": 409,
+   "error": ""
+  },
+  "없는 상품 줄": {
+   "up": false,
+   "confirm": null,
+   "error": "sqlite3.IntegrityError: FOREIGN KEY constraint failed"
+  }
+ },
+ "L3": {
+  "그대로": {
+   "up": true,
+   "confirm": null,
+   "error": ""
+  },
+  "같은 상품 두 줄": {
+   "up": true,
+   "confirm": 409,
+   "error": ""
+  },
+  "없는 상품 줄": {
+   "up": false,
+   "confirm": null,
+   "error": "sqlite3.IntegrityError: FOREIGN KEY constraint failed"
+  }
+ }
+}

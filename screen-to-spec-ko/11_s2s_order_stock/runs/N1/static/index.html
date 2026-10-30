@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>가나다식품 주문 · 재고 백오피스</title>
+<style>
+body{font-family:"Malgun Gothic",sans-serif;margin:0;color:#222;background:#f5f6f8}
+header{background:#2b5d3a;color:#fff;padding:12px 20px;display:flex;align-items:center;gap:16px}
+header h1{font-size:18px;margin:0;flex:1}
+main{display:flex;gap:20px;padding:20px;align-items:flex-start}
+section{background:#fff;border-radius:8px;padding:16px;box-shadow:0 1px 3px #0002}
+#orders{flex:3}#inventory{flex:1;min-width:220px}
+h2{font-size:16px;margin:0 0 10px}
+table{border-collapse:collapse;width:100%}
+th,td{border-bottom:1px solid #e3e3e3;padding:8px;text-align:left;font-size:14px;vertical-align:top}
+button{margin-right:4px;padding:4px 10px;cursor:pointer}
+#message{min-height:20px;padding:8px 20px;color:#b00020;font-weight:bold}
+.stock-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee}
+.stock-num{font-weight:bold}
+#error{padding:20px;color:#b00020}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <h1>가나다식품 주문 · 재고 백오피스</h1>
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+</header>
+<div data-testid="message" id="message"></div>
+<div id="error" hidden><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+<main id="main">
+  <section id="orders"><h2>주문</h2>
+    <table><thead><tr><th>주문 번호</th><th>손님</th><th>주문 시각</th><th>상품 · 수량</th><th>상태</th><th>동작</th></tr></thead>
+    <tbody id="order-body"></tbody></table>
+  </section>
+  <section id="inventory"><h2>재고</h2><div id="stock-list"></div></section>
+</main>
+<script>
+const LABEL={placed:"접수",confirmed:"확정",shipped:"출고",cancelled:"취소",refunded:"환불"};
+const BUTTONS={placed:[["confirm","확정"],["cancel","취소"]],confirmed:[["ship","출고"],["cancel","취소"]],
+  shipped:[["refund","환불"]],cancelled:[],refunded:[]};
+let orders=[],products=[];
+const $=id=>document.getElementById(id);
+function el(tag,props,...kids){const e=document.createElement(tag);Object.assign(e,props||{});kids.forEach(k=>e.append(k));return e}
+async function getJson(url,opt){const r=await fetch(url,opt);const b=await r.json().catch(()=>null);return {ok:r.ok,status:r.status,body:b}}
+function renderStock(){
+  const box=$("stock-list");box.replaceChildren();
+  products.forEach(p=>{
+    const num=el("span",{className:"stock-num",textContent:String(p.stock)});
+    num.dataset.testid="stock";num.dataset.id=p.product_id;
+    box.append(el("div",{className:"stock-row"},el("span",{textContent:p.name}),num));
+  });
+}
+function renderOrders(){
+  const body=$("order-body");body.replaceChildren();
+  orders.forEach(o=>{
+    const tr=el("tr");tr.dataset.testid="order";tr.dataset.id=o.order_id;tr.dataset.status=o.status;
+    const acts=el("td");
+    BUTTONS[o.status].forEach(([a,t])=>{
+      const b=el("button",{textContent:t});b.dataset.testid="act-"+a;
+      b.onclick=()=>act(o.order_id,a);acts.append(b);
+    });
+    tr.append(el("td",{textContent:o.order_id}),el("td",{textContent:o.customer}),el("td",{textContent:o.ordered_at}),
+      el("td",{textContent:o.lines.map(l=>l.name+" × "+l.qty).join(", ")}),
+      el("td",{textContent:LABEL[o.status]}),acts);
+    body.append(tr);
+  });
+}
+async function load(){
+  try{
+    const [u,p,o]=await Promise.all([getJson("/api/users"),getJson("/api/products"),getJson("/api/orders")]);
+    if(!u.ok||!p.ok||!o.ok)throw new Error("fail");
+    const sel=$("user"),cur=sel.value;sel.replaceChildren();
+    u.body.forEach(x=>sel.append(el("option",{value:x.user_id,textContent:x.name+" ("+(x.role==="manager"?"관리자":"직원")+")"})));
+    if(cur)sel.value=cur;
+    products=p.body;orders=o.body;
+    $("error").hidden=true;$("main").hidden=false;
+    renderStock();renderOrders();
+  }catch(e){$("error").hidden=false;$("main").hidden=true}
+}
+async function act(id,action){
+  const r=await getJson("/api/orders/"+encodeURIComponent(id)+"/"+action,{method:"POST",
+    headers:{"Content-Type":"application/json"},body:JSON.stringify({user:$("user").value})});
+  if(!r.ok){$("message").textContent=(r.body&&r.body.detail)||"요청에 실패했습니다";return}
+  $("message").textContent="";
+  orders=orders.map(o=>o.order_id===r.body.order.order_id?r.body.order:o);
+  products=r.body.products;renderStock();renderOrders();
+}
+$("retry").onclick=load;
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>가나다식품 주문 · 재고 백오피스</title>
+<style>
+body { font-family: sans-serif; margin: 16px; color: #222; }
+header { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; }
+#message { min-height: 1.4em; color: #b00020; margin-bottom: 8px; }
+#main { display: flex; gap: 24px; align-items: flex-start; }
+#orders-pane { flex: 3; }
+#stock-pane { flex: 1; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; vertical-align: top; }
+th { background: #f3f3f3; }
+button { margin-right: 4px; }
+#error { color: #b00020; }
+</style>
+</head>
+<body>
+<header>
+  <h1>주문 · 재고</h1>
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+</header>
+<div id="message" data-testid="message"></div>
+<div id="error" hidden><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+<div id="main">
+  <section id="orders-pane">
+    <h2>주문</h2>
+    <table>
+      <thead><tr><th>주문 번호</th><th>손님</th><th>주문 시각</th><th>줄</th><th>상태</th><th>동작</th></tr></thead>
+      <tbody id="orders"></tbody>
+    </table>
+  </section>
+  <section id="stock-pane">
+    <h2>재고</h2>
+    <table>
+      <thead><tr><th>상품</th><th>재고</th></tr></thead>
+      <tbody id="stocks"></tbody>
+    </table>
+  </section>
+</div>
+<script>
+const LABEL = { placed: "접수", confirmed: "확정", shipped: "출고", cancelled: "취소", refunded: "환불" };
+const ACTS = {
+  placed: [["confirm", "확정"], ["cancel", "취소"]],
+  confirmed: [["ship", "출고"], ["cancel", "취소"]],
+  shipped: [["refund", "환불"]],
+  cancelled: [], refunded: []
+};
+const $ = id => document.getElementById(id);
+let orders = [], products = [];
+
+function el(tag, text, attrs) {
+  const e = document.createElement(tag);
+  if (text != null) e.textContent = text;
+  for (const k in (attrs || {})) e.setAttribute(k, attrs[k]);
+  return e;
+}
+
+async function api(method, url, body) {
+  const r = await fetch(url, {
+    method, headers: body ? { "Content-Type": "application/json" } : {},
+    body: body ? JSON.stringify(body) : undefined
+  });
+  const data = await r.json().catch(() => null);
+  if (!r.ok) { const err = new Error((data && data.detail) || "요청에 실패했습니다"); err.rejected = true; throw err; }
+  return data;
+}
+
+function renderStocks() {
+  const tb = $("stocks"); tb.replaceChildren();
+  for (const p of products) {
+    const tr = el("tr");
+    tr.append(el("td", p.name));
+    tr.append(el("td", String(p.stock), { "data-testid": "stock", "data-id": p.product_id }));
+    tb.append(tr);
+  }
+}
+
+function orderRow(o) {
+  const tr = el("tr", null, { "data-testid": "order", "data-id": o.order_id, "data-status": o.status });
+  tr.append(el("td", o.order_id), el("td", o.customer), el("td", o.ordered_at));
+  tr.append(el("td", o.lines.map(l => l.name + " × " + l.qty).join(", ")));
+  tr.append(el("td", LABEL[o.status]));
+  const td = el("td");
+  for (const [a, text] of ACTS[o.status]) {
+    const b = el("button", text, { "data-testid": "act-" + a });
+    b.onclick = () => run(o.order_id, a);
+    td.append(b);
+  }
+  tr.append(td);
+  return tr;
+}
+
+function renderOrders() {
+  const tb = $("orders"); tb.replaceChildren();
+  for (const o of orders) tb.append(orderRow(o));
+}
+
+async function load() {
+  try {
+    const [u, p, o] = await Promise.all([api("GET", "/api/users"), api("GET", "/api/products"), api("GET", "/api/orders")]);
+    if (!$("user").options.length) {
+      for (const x of u) $("user").append(el("option", x.name + " (" + (x.role === "manager" ? "관리자" : "직원") + ")", { value: x.user_id }));
+    }
+    products = p; orders = o;
+    $("error").hidden = true; $("main").hidden = false;
+    renderStocks(); renderOrders();
+  } catch (e) {
+    $("error").hidden = false; $("main").hidden = true;
+  }
+}
+
+async function run(id, action) {
+  $("message").textContent = "";
+  try {
+    const r = await api("POST", "/api/orders/" + encodeURIComponent(id) + "/" + action, { user: $("user").value });
+    orders = orders.map(o => o.order_id === r.order.order_id ? r.order : o);
+    products = r.products;
+    renderStocks(); renderOrders();
+  } catch (e) {
+    if (e.rejected) $("message").textContent = e.message;
+    else { $("error").hidden = false; $("main").hidden = true; }
+  }
+}
+
+$("retry").onclick = load;
+load();
+</script>
+</body>
+</html>

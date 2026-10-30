@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>가나다식품 주문 · 재고 백오피스</title>
+<style>
+  body { font-family: sans-serif; margin: 20px; color: #222; }
+  header { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+  h1 { font-size: 20px; margin: 0; }
+  #wrap { display: flex; gap: 24px; align-items: flex-start; }
+  #orders { flex: 3; } #stocks { flex: 1; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: #f3f3f3; }
+  [data-testid="message"] { min-height: 1.4em; color: #b00020; margin: 8px 0; }
+  button { margin-right: 4px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>주문 · 재고 백오피스</h1>
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+</header>
+<div data-testid="message" id="message"></div>
+<div id="error" hidden>불러오지 못했습니다 <button id="retry">다시 시도</button></div>
+<div id="wrap">
+  <section id="orders">
+    <h2>주문</h2>
+    <table>
+      <thead><tr><th>주문 번호</th><th>손님</th><th>주문 시각</th><th>줄</th><th>상태</th><th>동작</th></tr></thead>
+      <tbody id="order-body"></tbody>
+    </table>
+  </section>
+  <section id="stocks">
+    <h2>재고</h2>
+    <table>
+      <thead><tr><th>상품</th><th>재고</th></tr></thead>
+      <tbody id="stock-body"></tbody>
+    </table>
+  </section>
+</div>
+<script>
+const LABEL = {placed: '접수', confirmed: '확정', shipped: '출고', cancelled: '취소', refunded: '환불'};
+const ACTIONS = {placed: ['confirm', 'cancel'], confirmed: ['ship', 'cancel'], shipped: ['refund'], cancelled: [], refunded: []};
+const ACTION_LABEL = {confirm: '확정', ship: '출고', cancel: '취소', refund: '환불'};
+let orders = [], products = [];
+const $ = id => document.getElementById(id);
+
+function el(tag, attrs, text) {
+  const e = document.createElement(tag);
+  for (const k in (attrs || {})) e.setAttribute(k, attrs[k]);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+async function getJson(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(url);
+  return r.json();
+}
+
+function render() {
+  const ob = $('order-body');
+  ob.replaceChildren();
+  for (const o of orders) {
+    const tr = el('tr', {'data-testid': 'order', 'data-id': o.order_id, 'data-status': o.status});
+    tr.append(el('td', {}, o.order_id), el('td', {}, o.customer), el('td', {}, o.ordered_at));
+    tr.append(el('td', {}, o.lines.map(l => l.name + ' × ' + l.qty).join(', ')));
+    tr.append(el('td', {}, LABEL[o.status]));
+    const td = el('td');
+    for (const a of ACTIONS[o.status]) {
+      const b = el('button', {'data-testid': 'act-' + a}, ACTION_LABEL[a]);
+      b.onclick = () => act(o.order_id, a);
+      td.append(b);
+    }
+    tr.append(td);
+    ob.append(tr);
+  }
+  const sb = $('stock-body');
+  sb.replaceChildren();
+  for (const p of products) {
+    const tr = el('tr');
+    tr.append(el('td', {}, p.name), el('td', {'data-testid': 'stock', 'data-id': p.product_id}, String(p.stock)));
+    sb.append(tr);
+  }
+}
+
+async function load() {
+  try {
+    const [users, p, o] = await Promise.all([getJson('/api/users'), getJson('/api/products'), getJson('/api/orders')]);
+    const sel = $('user');
+    if (!sel.options.length) {
+      for (const u of users) sel.append(el('option', {value: u.user_id}, u.name + ' (' + (u.role === 'manager' ? '관리자' : '직원') + ')'));
+    }
+    products = p; orders = o;
+    $('error').hidden = true;
+    render();
+  } catch (e) {
+    $('error').hidden = false;
+  }
+}
+
+async function act(orderId, action) {
+  try {
+    const r = await fetch('/api/orders/' + encodeURIComponent(orderId) + '/' + action, {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({user: $('user').value})
+    });
+    const data = await r.json();
+    if (!r.ok) { $('message').textContent = data.detail; return; }
+    $('message').textContent = '';
+    orders = orders.map(o => o.order_id === data.order.order_id ? data.order : o);
+    products = data.products;
+    render();
+  } catch (e) {
+    $('error').hidden = false;
+  }
+}
+
+$('retry').onclick = load;
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 주문 · 재고 백오피스</title>
+<style>
+:root {
+  --color-bg: #f5f6f8;
+  --color-surface: #ffffff;
+  --color-text: #1f2430;
+  --color-muted: #5f6677;
+  --color-border: #d5d9e2;
+  --color-accent: #1d5fd1;
+  --color-error: #b3261e;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--color-bg); color: var(--color-text);
+  font-family: "Malgun Gothic", sans-serif; }
+header, main { padding: var(--space-3); }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3);
+  background: var(--color-surface); border-bottom: 1px solid var(--color-border); }
+h1 { margin: 0; font-size: 1.2rem; }
+h2 { margin: 0 0 var(--space-2); font-size: 1rem; }
+main { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+  gap: var(--space-3); }
+section { background: var(--color-surface); border: 1px solid var(--color-border);
+  padding: var(--space-3); overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: var(--space-2); border-bottom: 1px solid var(--color-border);
+  text-align: left; vertical-align: top; }
+button { padding: var(--space-1) var(--space-2); margin-right: var(--space-1);
+  border: 1px solid var(--color-accent); background: var(--color-surface);
+  color: var(--color-accent); cursor: pointer; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+.status { font-weight: bold; }
+.message { min-height: 1.5em; margin: 0; padding: var(--space-2) var(--space-3);
+  color: var(--color-error); font-weight: bold; }
+.load-error { padding: var(--space-3); color: var(--color-error); }
+.stock-count { font-weight: bold; }
+@media (max-width: 800px) { main { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body>
+<header>
+  <h1>가나다식품 주문 · 재고 백오피스</h1>
+  <label>사용자 <select data-testid="user" id="user" aria-label="사용자 선택"></select></label>
+</header>
+<p class="message" data-testid="message" role="status" id="message"></p>
+<div class="load-error" id="load-error" hidden>
+  <span>불러오지 못했습니다</span>
+  <button type="button" id="retry" aria-label="다시 시도">다시 시도</button>
+</div>
+<main id="content">
+  <section aria-labelledby="orders-title">
+    <h2 id="orders-title">주문</h2>
+    <table>
+      <thead><tr><th>주문 번호</th><th>손님</th><th>주문 시각</th><th>상품 × 수량</th>
+        <th>상태</th><th>동작</th></tr></thead>
+      <tbody id="orders"></tbody>
+    </table>
+  </section>
+  <aside>
+    <section aria-labelledby="stock-title">
+      <h2 id="stock-title">재고</h2>
+      <table>
+        <thead><tr><th>상품</th><th>재고</th></tr></thead>
+        <tbody id="stocks"></tbody>
+      </table>
+    </section>
+  </aside>
+</main>
+<script>
+"use strict";
+const STATUS_LABEL = { placed: "접수", confirmed: "확정", shipped: "출고",
+  cancelled: "취소", refunded: "환불" };
+const ACTION_LABEL = { confirm: "확정", ship: "출고", cancel: "취소", refund: "환불" };
+// 상태별로 보여 줄 버튼 — 안내일 뿐이고 실제로 막는 건 서버다
+const STATUS_ACTIONS = { placed: ["confirm", "cancel"], confirmed: ["ship", "cancel"],
+  shipped: ["refund"], cancelled: [], refunded: [] };
+
+const state = { orders: [], products: [], busy: false };
+
+const byId = (id) => document.getElementById(id);
+
+function el(tag, text, attrs) {
+  const node = document.createElement(tag);
+  if (text !== undefined) node.textContent = text;
+  Object.entries(attrs || {}).forEach(([k, v]) => node.setAttribute(k, v));
+  return node;
+}
+
+async function api(path, options) {
+  const res = await fetch(path, options);
+  const body = await res.json();
+  if (!res.ok) throw new Error(body.detail || "요청에 실패했습니다");
+  return body;
+}
+
+function setBusy(isBusy) {
+  state.busy = isBusy;
+  document.querySelectorAll("button").forEach((b) => { b.disabled = isBusy; });
+}
+
+function showMessage(text) { byId("message").textContent = text; }
+
+function renderStocks() {
+  const body = byId("stocks");
+  body.replaceChildren(...state.products.map((p) => {
+    const row = el("tr");
+    row.append(el("td", p.name),
+      el("td", String(p.stock), { "data-testid": "stock", "data-id": p.product_id,
+        class: "stock-count" }));
+    return row;
+  }));
+}
+
+function actionButton(order, action) {
+  const label = ACTION_LABEL[action];
+  const btn = el("button", label, { type: "button", "data-testid": `act-${action}`,
+    "aria-label": `${order.order_id} ${label}` });
+  btn.addEventListener("click", () => runAction(order.order_id, action));
+  return btn;
+}
+
+function orderRow(order) {
+  const row = el("tr", undefined, { "data-testid": "order", "data-id": order.order_id,
+    "data-status": order.status });
+  const lines = order.lines.map((l) => `${l.name} × ${l.qty}`).join(", ");
+  const actions = el("td");
+  actions.append(...STATUS_ACTIONS[order.status].map((a) => actionButton(order, a)));
+  row.append(el("td", order.order_id), el("td", order.customer), el("td", order.ordered_at),
+    el("td", lines), el("td", STATUS_LABEL[order.status], { class: "status" }), actions);
+  return row;
+}
+
+function renderOrders() {
+  byId("orders").replaceChildren(...state.orders.map(orderRow));
+}
+
+function render() {
+  renderOrders();
+  renderStocks();
+  setBusy(state.busy);
+}
+
+async function runAction(orderId, action) {
+  if (state.busy) return;
+  setBusy(true);
+  showMessage("");
+  try {
+    const result = await api(`/api/orders/${encodeURIComponent(orderId)}/${action}`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user: byId("user").value }) });
+    state.orders = state.orders.map((o) => (o.order_id === orderId ? result.order : o));
+    state.products = result.products;
+  } catch (err) {
+    showMessage(err.message);
+  }
+  state.busy = false;
+  render();
+}
+
+async function load() {
+  setBusy(true);
+  byId("load-error").hidden = true;
+  try {
+    const [users, products, orders] = await Promise.all(
+      ["users", "products", "orders"].map((name) => api(`/api/${name}`)));
+    const select = byId("user");
+    const previous = select.value;
+    select.replaceChildren(...users.map((u) => el("option",
+      `${u.name} (${u.role === "manager" ? "관리자" : "직원"})`, { value: u.user_id })));
+    if (previous) select.value = previous;
+    state.products = products;
+    state.orders = orders;
+    byId("content").hidden = false;
+  } catch (err) {
+    byId("content").hidden = true;
+    byId("load-error").hidden = false;
+  }
+  state.busy = false;
+  render();
+}
+
+byId("retry").addEventListener("click", load);
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 93234,
+ "num_turns": 13,
+ "total_cost_usd": 0.39568349999999997,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 18,
+  "cache_creation_input_tokens": 50747,
+  "cache_read_input_tokens": 433495,
+  "output_tokens": 14931,
+  "output_tokens_details": {
+   "thinking_tokens": 972
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 50747,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 226,
+    "cache_read_input_tokens": 63486,
+    "cache_creation_input_tokens": 294,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 294
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (추가한 API 경로 없음)\nPRD 가 정하지 않아 직접 정한 것: 없음 외에 다음 셋. 거부 사유 문구는 404 `찾을 수 없습니다`로 했다. 환불 버튼은 직원에게도 보이고(상태 기준 안내) 서버가 403으로 막는다. 쓰기는 프로세스 안 락과 `BEGIN IMMEDIATE`로 직렬화했다.",
+ "wall_s": 107.1
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>가나다식품 주문 · 재고 백오피스</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; padding: 16px 24px; color: #222; }
+  header { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+  h1 { font-size: 20px; margin: 0; }
+  h2 { font-size: 16px; margin: 0 0 8px; }
+  #message { min-height: 24px; padding: 6px 10px; margin-bottom: 12px; background: #fff4e5; border-radius: 4px; }
+  #message:empty { background: none; }
+  main { display: flex; gap: 24px; align-items: flex-start; }
+  #orders { flex: 3; } #stocks { flex: 1; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border-bottom: 1px solid #ddd; padding: 6px 8px; text-align: left; font-size: 14px; }
+  th { background: #f4f4f4; }
+  button { margin-right: 4px; cursor: pointer; }
+  #error { padding: 16px; background: #fdecea; border-radius: 4px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>주문 · 재고 백오피스</h1>
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+</header>
+<div data-testid="message" id="message"></div>
+<div id="error" hidden><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+<main id="content">
+  <section id="orders">
+    <h2>주문</h2>
+    <table><thead><tr><th>주문 번호</th><th>손님</th><th>주문 시각</th><th>줄(상품 × 수량)</th><th>상태</th><th>동작</th></tr></thead>
+    <tbody id="order-rows"></tbody></table>
+  </section>
+  <section id="stocks">
+    <h2>재고</h2>
+    <table><thead><tr><th>상품</th><th>재고</th></tr></thead><tbody id="stock-rows"></tbody></table>
+  </section>
+</main>
+<script>
+const LABEL = {placed: "접수", confirmed: "확정", shipped: "출고", cancelled: "취소", refunded: "환불"};
+const ACTS = {
+  placed: [["confirm", "확정"], ["cancel", "취소"]],
+  confirmed: [["ship", "출고"], ["cancel", "취소"]],
+  shipped: [["refund", "환불"]],
+  cancelled: [], refunded: []
+};
+let orders = [], products = [];
+
+function el(tag, attrs, text) {
+  const e = document.createElement(tag);
+  for (const k in (attrs || {})) e.setAttribute(k, attrs[k]);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+function setMessage(t) { document.getElementById("message").textContent = t || ""; }
+
+async function api(method, url, body) {
+  const r = await fetch(url, {method, headers: {"Content-Type": "application/json"},
+                              body: body ? JSON.stringify(body) : undefined});
+  const data = await r.json().catch(() => null);
+  return {ok: r.ok, data};
+}
+
+function render() {
+  const tb = document.getElementById("order-rows");
+  tb.replaceChildren();
+  for (const o of orders) {
+    const tr = el("tr", {"data-testid": "order", "data-id": o.order_id, "data-status": o.status});
+    tr.append(el("td", {}, o.order_id), el("td", {}, o.customer), el("td", {}, o.ordered_at),
+              el("td", {}, o.lines.map(l => `${l.name} × ${l.qty}`).join(", ")),
+              el("td", {}, LABEL[o.status] || o.status));
+    const td = el("td");
+    for (const [a, t] of ACTS[o.status] || []) {
+      const b = el("button", {"data-testid": "act-" + a}, t);
+      b.onclick = () => act(o.order_id, a);
+      td.append(b);
+    }
+    tr.append(td);
+    tb.append(tr);
+  }
+  const sb = document.getElementById("stock-rows");
+  sb.replaceChildren();
+  for (const p of products) {
+    const tr = el("tr");
+    tr.append(el("td", {}, p.name), el("td", {"data-testid": "stock", "data-id": p.product_id}, String(p.stock)));
+    sb.append(tr);
+  }
+}
+
+async function act(id, action) {
+  try {
+    const r = await api("POST", `/api/orders/${encodeURIComponent(id)}/${action}`,
+                        {user: document.getElementById("user").value});
+    if (!r.ok) { setMessage((r.data && r.data.detail) || "요청에 실패했습니다"); return; }
+    setMessage("");
+    const i = orders.findIndex(o => o.order_id === r.data.order.order_id);
+    if (i >= 0) orders[i] = r.data.order;
+    products = r.data.products;
+    render();
+  } catch (e) { setMessage("요청에 실패했습니다"); }
+}
+
+async function load() {
+  const err = document.getElementById("error"), content = document.getElementById("content");
+  try {
+    const [u, p, o] = await Promise.all([api("GET", "/api/users"), api("GET", "/api/products"), api("GET", "/api/orders")]);
+    if (!u.ok || !p.ok || !o.ok) throw new Error("load");
+    const sel = document.getElementById("user");
+    const prev = sel.value;
+    sel.replaceChildren();
+    for (const x of u.data) sel.append(el("option", {value: x.user_id}, `${x.name} (${x.role === "manager" ? "관리자" : "직원"})`));
+    if (prev) sel.value = prev;
+    products = p.data; orders = o.data;
+    err.hidden = true; content.hidden = false;
+    render();
+  } catch (e) {
+    err.hidden = false; content.hidden = true;
+  }
+}
+document.getElementById("retry").onclick = load;
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 80407,
+ "num_turns": 10,
+ "total_cost_usd": 0.3358971,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 16,
+  "cache_creation_input_tokens": 46754,
+  "cache_read_input_tokens": 370491,
+  "output_tokens": 11180,
+  "output_tokens_details": {
+   "thinking_tokens": 1565
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 46754,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 529,
+    "cache_read_input_tokens": 59620,
+    "cache_creation_input_tokens": 167,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 167
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "DoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (users · products · orders · order_lines)\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (PRD 의 API 4개만 구현, 추가한 API 경로 없음)\nPRD 가 정하지 않아 직접 정한 것: 거부 사유 문구 두 가지는 PRD 에 문구가 없어서 정했습니다. 없는 주문 · 사용자 · 동작의 404 는 `찾을 수 없습니다`, 화면에서 불러오기에 실패했을 때는 `불러오지 못했습니다` 와 `다시 시도` 버튼입니다. 동시 확정은 핸들러를 모두 `async` 로 두고 안에서 `await` 를 하지 않게 해서, 요청이 한 번에 하나씩 처리되게 했습니다. 또 CLAUDE.md 의 문서 규칙에 따라 `README.md` 를 추가했습니다.\n\n테스트가 끝난 뒤 `seed/` 가 비어 있었습니다. 제 셸이 `seed/` 안에 있어서 테스트의 복원이 꼬인 것으로 보입니다. 백업에서 CSV 를 되돌리고 다시 돌렸더니 9/9 가 통과했고, 이번에는 `seed/` 가 그대로 남았습니다. 임시 파일(`backoffice.db`, 캐시)도 지웠습니다.",
+ "wall_s": 108.6
+}

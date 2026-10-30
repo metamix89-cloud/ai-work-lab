@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가나다식품 주문 · 재고 백오피스</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f5f6f8; color: #222; }
+  header { background: #2f4858; color: #fff; padding: 12px 20px; display: flex; align-items: center; gap: 16px; }
+  header h1 { font-size: 18px; margin: 0; flex: 1; }
+  select, button { font: inherit; padding: 4px 10px; }
+  main { display: flex; gap: 20px; padding: 20px; align-items: flex-start; }
+  section { background: #fff; border: 1px solid #dde; border-radius: 6px; padding: 14px; }
+  #orders-box { flex: 1; }
+  #stock-box { width: 260px; }
+  h2 { font-size: 16px; margin: 0 0 10px; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border-bottom: 1px solid #eee; padding: 6px 8px; text-align: left; vertical-align: top; font-size: 14px; }
+  .st { font-weight: bold; }
+  [data-status="placed"] .st { color: #888; }
+  [data-status="confirmed"] .st { color: #1a6fd1; }
+  [data-status="shipped"] .st { color: #1a8a4a; }
+  [data-status="cancelled"] .st { color: #b33; }
+  [data-status="refunded"] .st { color: #a60; }
+  #message { min-height: 22px; padding: 8px 20px 0; color: #b00020; font-weight: bold; }
+  #message.ok { color: #1a6fd1; }
+  #error { padding: 20px; text-align: center; }
+  .stock-num { font-weight: bold; }
+  td button { margin-right: 4px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>가나다식품 주문 · 재고 백오피스</h1>
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+</header>
+<div id="message" data-testid="message"></div>
+<div id="error" hidden><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+<main id="main">
+  <section id="orders-box">
+    <h2>주문</h2>
+    <table>
+      <thead><tr><th>주문 번호</th><th>손님</th><th>주문 시각</th><th>상품 · 수량</th><th>상태</th><th>동작</th></tr></thead>
+      <tbody id="orders"></tbody>
+    </table>
+  </section>
+  <section id="stock-box">
+    <h2>재고</h2>
+    <table><tbody id="stocks"></tbody></table>
+  </section>
+</main>
+<script>
+const STATUS_KO = { placed: "접수", confirmed: "확정", shipped: "출고", cancelled: "취소", refunded: "환불" };
+const ACTION_KO = { confirm: "확정", ship: "출고", cancel: "취소", refund: "환불" };
+// 안내용 — 실제로 막는 건 서버
+const ACTIONS_BY_STATUS = {
+  placed: ["confirm", "cancel"], confirmed: ["ship", "cancel"], shipped: ["refund"], cancelled: [], refunded: []
+};
+let orders = [], products = [];
+const $ = id => document.getElementById(id);
+
+function el(tag, attrs, text) {
+  const e = document.createElement(tag);
+  for (const k in (attrs || {})) e.setAttribute(k, attrs[k]);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+function setMessage(text, ok) {
+  const m = $("message");
+  m.textContent = text || "";
+  m.className = ok ? "ok" : "";
+}
+
+async function getJson(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(url);
+  return r.json();
+}
+
+function render() {
+  const tb = $("orders");
+  tb.replaceChildren();
+  for (const o of orders) {
+    const tr = el("tr", { "data-testid": "order", "data-id": o.order_id, "data-status": o.status });
+    tr.append(el("td", {}, o.order_id), el("td", {}, o.customer), el("td", {}, o.ordered_at),
+      el("td", {}, o.lines.map(l => l.name + " × " + l.qty).join(", ")),
+      el("td", { class: "st" }, STATUS_KO[o.status] || o.status));
+    const td = el("td");
+    for (const a of ACTIONS_BY_STATUS[o.status] || []) {
+      const b = el("button", { "data-testid": "act-" + a }, ACTION_KO[a]);
+      b.onclick = () => act(o.order_id, a);
+      td.append(b);
+    }
+    tr.append(td);
+    tb.append(tr);
+  }
+  const sb = $("stocks");
+  sb.replaceChildren();
+  for (const p of products) {
+    const tr = el("tr");
+    tr.append(el("td", {}, p.name), el("td", { "data-testid": "stock", "data-id": p.product_id, class: "stock-num" }, String(p.stock)));
+    sb.append(tr);
+  }
+}
+
+async function act(orderId, action) {
+  try {
+    const r = await fetch("/api/orders/" + encodeURIComponent(orderId) + "/" + action, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user: $("user").value })
+    });
+    const data = await r.json();
+    if (!r.ok) { setMessage(data.detail || "실패했습니다"); return; }
+    orders = orders.map(o => o.order_id === data.order.order_id ? data.order : o);
+    products = data.products;
+    setMessage(orderId + " " + ACTION_KO[action] + " 완료", true);
+    render();
+  } catch (e) {
+    setMessage("서버에 연결하지 못했습니다");
+  }
+}
+
+async function load() {
+  $("error").hidden = true;
+  try {
+    const [users, prods, ords] = await Promise.all([getJson("/api/users"), getJson("/api/products"), getJson("/api/orders")]);
+    const sel = $("user"), keep = sel.value;
+    sel.replaceChildren(...users.map(u => el("option", { value: u.user_id }, u.name + " (" + (u.role === "manager" ? "관리자" : "직원") + ")")));
+    if (keep && users.some(u => u.user_id === keep)) sel.value = keep;
+    products = prods; orders = ords;
+    $("main").hidden = false;
+    render();
+  } catch (e) {
+    $("main").hidden = true;
+    $("error").hidden = false;
+  }
+}
+
+$("retry").onclick = load;
+load();
+</script>
+</body>
+</html>
