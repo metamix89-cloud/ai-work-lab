@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 55949,
+ "num_turns": 8,
+ "total_cost_usd": 0.23310369999999997,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 32546,
+  "cache_read_input_tokens": 234657,
+  "output_tokens": 7943,
+  "output_tokens_details": {
+   "thinking_tokens": 348
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 32546,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1146,
+    "cache_read_input_tokens": 49083,
+    "cache_creation_input_tokens": 241,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 241
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD의 Phase 1(F-01~F-04, R-01~R-08)대로 웹앱을 만들었고, 서버 로직은 테스트로 확인했습니다. 브라우저 화면은 열어 보지 못했습니다.\n\n**실행 방법**\n```\ncd <작업 폴더>/P1_3\nuvicorn main:app\n```\n그다음 브라우저에서 http://127.0.0.1:8000 으로 접속하면 됩니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버입니다.\n  - SQLite 표 `rr_user`, `rr_room`, `rr_reservation`과 부분 유니크 인덱스를 만듭니다.\n  - 처음 시작할 때 가상 사용자 5명, 회의실 3개, 오늘 날짜 데모 예약 6건을 넣습니다.\n  - API는 `GET /api/users`, `GET /api/timetable`, `POST /api/reservations`, `DELETE /api/reservations/{id}?user_id=` 네 개입니다.\n- `index.html`: 순수 HTML/JS 단일 페이지입니다. 빈 칸 클릭 예약, 내 예약 클릭 시 확인창 후 취소, 사용자 선택은 localStorage에 저장합니다. 지난 시간은 빗금으로, 내 예약은 파란색으로 표시합니다.\n- `requirements.txt`: `fastapi`, `uvicorn`만 적었습니다.\n\n**확인한 항목**\nFastAPI의 TestClient로 API를 호출해 아래 완료 기준을 확인했습니다.\n\n| 기준 | 결과 |\n|---|---|\n| T-04 예약 | 201로 성공 |\n| T-05 중복 예약 | 409, \"이미 예약된 시간입니다\" |\n| T-06 범위 밖 시각 (08:30, 18:00, 09:15) | 모두 400 |\n| T-07 지난 칸 예약 | 400 |\n| T-08 같은 칸 동시 요청 | 한 건만 성공 (201, 409) |\n| T-09 내 예약 취소 | 200 |\n| T-10 남의 예약 취소 | 403 |\n| T-11 시작된 칸 취소 | 400 |\n| T-12 취소 후 같은 칸 재예약 | 성공, DB에 `cancelled` 행이 남음 |\n\n시간표가 회의실 3개, 18칸으로 내려오는 것도 확인했습니다.\n\n**확인하지 못한 항목**\n화면과 관련된 T-01~T-03, T-13, T-14와 T-17은 브라우저에서 직접 확인하지 못했습니다. 실행해 보시고 이상이 있으면 알려 주세요.\n\n테스트 중 생긴 예약 데이터는 `reservations.db`를 지워 초기화했습니다. 서버를 처음 띄울 때 시드 데이터로 새로 만들어집니다.\n\n데모 예약은 오늘 날짜로 들어가므로 일부는 이미 지난 시간일 수 있습니다. PRD에 따라 날짜 이동, 내 예약 목록, 연속 예약, 제목 입력은 넣지 않았습니다.",
+ "wall_s": 62.2
+}

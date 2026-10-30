@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 109575,
+ "num_turns": 10,
+ "total_cost_usd": 0.3979401,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 16,
+  "cache_creation_input_tokens": 46604,
+  "cache_read_input_tokens": 387021,
+  "output_tokens": 17279,
+  "output_tokens_details": {
+   "thinking_tokens": 1182
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 46604,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1334,
+    "cache_read_input_tokens": 62762,
+    "cache_creation_input_tokens": 620,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 620
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD의 Phase 1(F-01~F-06)에 맞춰 회의실 예약 웹앱을 만들었습니다. 브라우저에서 화면을 직접 눌러 보지는 못했습니다.\n\n실제 서버를 띄워 확인한 것은 `/`가 200으로 열리고, 첫 실행 때 시드 3건이 들어간 시간표가 오는 것까지입니다. 확인 후 서버를 내리고 `meeting.db`는 지웠습니다. 그래서 처음 실행하면 DB가 새로 만들어집니다. API 규칙은 `tests/test_api.py`로 확인했습니다. 시계를 2026-10-30 10:00으로 고정해 돌렸고, 두 테스트 함수 모두 통과했습니다.\n\n**실행 방법**\n```\npip install -r requirements.txt\nuvicorn main:app\n```\n그다음 http://localhost:8000 을 열면 됩니다. 처음 실행하면 `meeting.db`가 만들어지고 시드가 들어갑니다. 다시 실행해도 시드가 중복으로 들어가지 않습니다.\n\n**파일**\n- `main.py`: FastAPI 서버, SQLite 초기화·시드, 5개 API가 들어 있습니다.\n- `static/index.html`: 프레임워크 없는 순수 HTML/JS 단일 화면입니다.\n- `tests/test_api.py`: 예약·취소 규칙 검증 스크립트입니다. pytest가 설치돼 있지 않아 파이썬으로 직접 함수를 호출해 돌렸습니다.\n\n**테스트로 확인한 PRD 항목**\n- 지난 시간 예약, 오늘이 아닌 날짜, 잘못된 `slot_start`, 없는 회의실·사용자는 PRD 4.4 표의 상태 코드와 문구로 거절됩니다.\n- 같은 칸 중복 예약은 409입니다. 사전 확인을 통과한 뒤 DB 유니크 인덱스에서 걸리는 경우도 500이 아니라 409로 바꿔 돌려줍니다.\n- 인접한 칸이나 다른 회의실의 같은 시각은 예약할 수 있습니다.\n- 다른 사람 예약 취소는 403, 시작된 칸 취소는 400, 취소한 예약을 다시 취소하면 409, 없는 번호는 404입니다.\n- 취소한 칸은 다시 예약할 수 있고, 취소된 행은 `CANCELLED`와 `cancelled_at`으로 남습니다.\n\n**화면 동작**\n화면 동작은 코드로 구현했지만 눌러서 확인하지는 못했습니다.\n- 사용자 선택은 브라우저에 저장됩니다.\n- 사용자를 고르지 않았을 때와 서버 오류 때의 메시지를 PRD대로 넣었습니다.\n- 취소할 때는 `confirm` 확인창을 거칩니다.\n- 거절을 받은 뒤에는 시간표를 서버에서 다시 받아 그립니다.\n- 4.5의 빈 상태 안내도 넣었습니다.\n\nPRD가 정하지 않아서 제가 정한 부분이 두 가지 있습니다.\n- 예약 요청 본문에 `booking_date`(또는 `date`)를 선택적으로 받아, 오늘이 아니면 400으로 거절합니다. T-08의 \"오늘이 아닌 날짜로 예약\" 검증을 위한 것입니다.\n- 취소 검사 순서는 사용자 확인, 404, 403, 409, 400 순입니다. 그래서 남의 취소된 예약을 취소하려 하면 403이 나옵니다.\n\nF-07~F-11(Should·Could)은 PRD대로 넣지 않았습니다.",
+ "wall_s": 123.6
+}

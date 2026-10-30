@@ -1,0 +1,48 @@
+{
+ "model": "sonnet",
+ "prompt": "다온소프트 사내 '회의실 예약' 웹앱의 PRD.md 를 이 폴더에 써 줘. 요청은 이거야: 회의실 3개의 하루 시간표(9시~18시, 30분 단위)가 보이고, 빈 칸을 눌러 예약하고, 내 예약은 취소할 수 있으면 돼.\n목차: 1.개요 2.사용자 3.기능 요구사항(F-번호 · MoSCoW · Phase) 4.화면 구성 5.데이터 구조(표 이름은 [접두어]_ 로 시작) 6.업무 규칙(R-번호) 7.제약 조건 8.범위 밖 9.개발 단계 10.완료 기준(T-번호, 체크박스)\n기술: Python FastAPI + 순수 HTML/JS + SQLite. 가상 데이터만. Must 가 아닌 기능은 Phase 1 에 넣지 마.\nPRD.md 하나만 쓰고 코드는 만들지 마.",
+ "rc": 0,
+ "num_turns": 2,
+ "total_cost_usd": 0.1927839,
+ "is_error": false,
+ "usage": {
+  "input_tokens": 4,
+  "cache_creation_input_tokens": 26974,
+  "cache_read_input_tokens": 52699,
+  "output_tokens": 7961,
+  "output_tokens_details": {
+   "thinking_tokens": 925
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 26974,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 690,
+    "cache_read_input_tokens": 35921,
+    "cache_creation_input_tokens": 7831,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 7831
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "`PRD.md`를 이 폴더에 썼습니다. 코드는 만들지 않았고, 파일 하나만 있습니다.\n\n요청하신 10개 목차 순서대로 썼고, 표 이름 접두어는 `mr_`입니다(`mr_rooms`, `mr_users`, `mr_bookings`).\n\n**Phase 1(Must)**\n- 기능은 F-01~F-06입니다. 오늘 시간표 보기, 빈 칸 클릭 예약, 내 예약 취소, 사용자 선택, 중복 예약 방지, 가상 시드 데이터입니다.\n- Should(F-07~F-09)는 Phase 2에, Could(F-10, F-11)는 Phase 3에 뒀습니다. 마지막 완료 기준 T-16이 이 기능들이 Phase 1에 섞이지 않았는지 확인합니다.\n\n**제가 임의로 정한 부분(바꾸실 수 있습니다)**\n- \"내 예약\"을 가리려면 사용자 구분이 필요해서, 비밀번호 없이 상단 목록에서 가상 사용자를 고르는 방식으로 했습니다. 인증이 아니라 간이 식별이라는 점을 7장 제약 조건에 적었습니다.\n- Phase 1은 오늘 날짜만 다룹니다. 날짜 이동은 Should라서 Phase 2로 미뤘습니다.\n- 한 번 클릭은 30분 한 칸만 예약합니다. 여러 칸 연속 예약도 Phase 2입니다.\n- 취소는 행을 삭제하지 않고 `status`를 `CANCELLED`로 바꾸는 방식입니다. 취소한 칸은 다시 예약할 수 있습니다.\n- 이미 시작된 칸은 예약도 취소도 못 하게 했습니다(R-04, R-05).\n\n완료 기준은 T-01~T-16, 업무 규칙은 R-01~R-11입니다.",
+ "wall_s": 63.2,
+ "files": [
+  "PRD.md"
+ ],
+ "prd_chars": 7193
+}

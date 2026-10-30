@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>다온소프트 회의실 예약</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 24px; color: #222; }
+  header { display: flex; align-items: center; gap: 24px; margin-bottom: 16px; }
+  h1 { font-size: 20px; margin: 0; }
+  table { border-collapse: collapse; }
+  th, td { border: 1px solid #ccc; width: 190px; height: 34px; padding: 2px 6px; font-size: 13px; }
+  th { background: #f3f3f3; }
+  th.time, td.time { width: 60px; text-align: center; background: #f3f3f3; }
+  td.free { background: #fff; cursor: pointer; color: #999; }
+  td.free:hover { background: #eef5ff; }
+  td.mine { background: #2f6fed; color: #fff; cursor: pointer; font-weight: bold; }
+  td.other { background: #ddd; color: #444; }
+  td.past { background: #fafafa; color: #bbb; opacity: .6; }
+  td.cont { border-top-style: dashed; }
+  dialog { border: 1px solid #888; border-radius: 6px; padding: 18px; min-width: 300px; }
+  dialog label { display: block; margin: 8px 0; }
+  dialog input[type=text], dialog select { width: 100%; box-sizing: border-box; }
+  .err { color: #c00; min-height: 1.3em; margin: 8px 0; font-size: 13px; }
+  .btns { display: flex; gap: 8px; justify-content: flex-end; }
+</style>
+</head>
+<body>
+<header>
+  <h1>회의실 예약</h1>
+  <div>날짜: <b id="date"></b></div>
+  <label>나: <select id="me"></select></label>
+</header>
+<table id="grid"></table>
+
+<dialog id="rsvDlg">
+  <h3>예약</h3>
+  <div>회의실: <b id="rRoom"></b></div>
+  <div>날짜: <b id="rDate"></b></div>
+  <div>시작: <b id="rStart"></b></div>
+  <label>종료 <select id="rEnd"></select></label>
+  <label>제목 <input type="text" id="rTitle" maxlength="50"></label>
+  <div class="err" id="rErr"></div>
+  <div class="btns"><button id="rOk">예약</button><button id="rClose">닫기</button></div>
+</dialog>
+
+<dialog id="cnlDlg">
+  <h3>예약 취소</h3>
+  <div>회의실: <b id="cRoom"></b></div>
+  <div>시간: <b id="cTime"></b></div>
+  <div>제목: <b id="cTitle"></b></div>
+  <div class="err" id="cErr"></div>
+  <div class="btns"><button id="cOk">예약 취소</button><button id="cClose">닫기</button></div>
+</dialog>
+
+<script>
+const $ = id => document.getElementById(id);
+const toMin = t => +t.slice(0, 2) * 60 + +t.slice(3);
+const fmt = m => String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0");
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+let data = null, users = [], cur = null;
+
+async function api(path, opts) {
+  const res = await fetch(path, opts);
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const d = body.detail;
+    throw new Error(typeof d === "string" ? d : "요청을 처리할 수 없습니다.");
+  }
+  return body;
+}
+
+async function load() {
+  data = await api("/api/schedule");
+  $("date").textContent = data.date;
+  render();
+}
+
+function render() {
+  const me = +$("me").value, now = toMin(data.now);
+  let h = "<tr><th class='time'>시간</th>" + data.rooms.map(r => `<th>${r.name}</th>`).join("") + "</tr>";
+  for (let m = 540; m < 1080; m += 30) {
+    h += `<tr><td class="time">${fmt(m)}</td>`;
+    for (const room of data.rooms) {
+      const r = data.reservations.find(x => x.room_id === room.room_id && toMin(x.start_time) <= m && m < toMin(x.end_time));
+      const cont = r && toMin(r.start_time) !== m;
+      let cls, txt = "", attr = `data-room="${room.room_id}" data-start="${fmt(m)}"`;
+      if (r) {
+        const mine = r.user_id === me;
+        cls = mine ? "mine" : "other";
+        if (!cont) txt = mine ? `[내 예약] ${esc(r.title)}` : `${esc(r.user_name)} · ${esc(r.title)}`;
+        else txt = "↑";
+        attr += ` data-rsv="${r.reservation_id}"`;
+      } else if (m < now) { cls = "past"; txt = "지난 시간"; }
+      else { cls = "free"; txt = "빈 칸"; }
+      h += `<td class="${cls}${cont ? " cont" : ""}" ${attr}>${txt}</td>`;
+    }
+    h += "</tr>";
+  }
+  $("grid").innerHTML = h;
+}
+
+const roomName = id => data.rooms.find(r => r.room_id === id).name;
+
+$("grid").addEventListener("click", ev => {
+  const td = ev.target.closest("td[data-room]");
+  if (!td) return;
+  if (td.classList.contains("free")) openReserve(+td.dataset.room, td.dataset.start);
+  else if (td.classList.contains("mine")) openCancel(+td.dataset.rsv);
+});
+
+function openReserve(room, start) {
+  cur = { room, start };
+  $("rRoom").textContent = roomName(room);
+  $("rDate").textContent = data.date;
+  $("rStart").textContent = start;
+  $("rEnd").innerHTML = "";
+  for (let m = toMin(start) + 30; m <= 1080; m += 30)
+    $("rEnd").innerHTML += `<option>${fmt(m)}</option>`;
+  $("rEnd").value = fmt(Math.min(toMin(start) + 60, 1080));
+  $("rTitle").value = ""; $("rErr").textContent = "";
+  $("rsvDlg").showModal(); $("rTitle").focus();
+}
+
+$("rOk").onclick = async () => {
+  try {
+    await api("/api/reservations", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ room_id: cur.room, user_id: +$("me").value,
+        start_time: cur.start, end_time: $("rEnd").value, title: $("rTitle").value })
+    });
+    $("rsvDlg").close(); await load();
+  } catch (e) { $("rErr").textContent = e.message; load().catch(() => {}); }
+};
+$("rClose").onclick = () => $("rsvDlg").close();
+
+function openCancel(id) {
+  const r = data.reservations.find(x => x.reservation_id === id);
+  cur = { id };
+  $("cRoom").textContent = roomName(r.room_id);
+  $("cTime").textContent = `${r.start_time} ~ ${r.end_time}`;
+  $("cTitle").textContent = r.title; $("cErr").textContent = "";
+  $("cnlDlg").showModal();
+}
+$("cOk").onclick = async () => {
+  try {
+    await api(`/api/reservations/${cur.id}?user_id=${$("me").value}`, { method: "DELETE" });
+    $("cnlDlg").close(); await load();
+  } catch (e) { $("cErr").textContent = e.message; }
+};
+$("cClose").onclick = () => $("cnlDlg").close();
+
+$("me").onchange = () => { localStorage.setItem("mr_me", $("me").value); render(); };
+
+(async () => {
+  users = await api("/api/users");
+  $("me").innerHTML = users.map(u => `<option value="${u.user_id}">${esc(u.name)}</option>`).join("");
+  const saved = localStorage.getItem("mr_me");
+  if (saved && users.some(u => String(u.user_id) === saved)) $("me").value = saved;
+  await load();
+  setInterval(() => load().catch(() => {}), 60000);
+})();
+</script>
+</body>
+</html>

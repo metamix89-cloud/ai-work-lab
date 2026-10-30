@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 93450,
+ "num_turns": 13,
+ "total_cost_usd": 0.3558605000000001,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 20,
+  "cache_creation_input_tokens": 41552,
+  "cache_read_input_tokens": 460425,
+  "output_tokens": 14357,
+  "output_tokens_details": {
+   "thinking_tokens": 910
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 41552,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 991,
+    "cache_read_input_tokens": 57784,
+    "cache_creation_input_tokens": 546,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 546
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD의 Phase 1(F-01~F-04)을 만들었습니다. 서버를 띄워 화면(HTML)과 시간표 API가 응답하는 것까지 확인했습니다. 브라우저에서 직접 클릭해 보지는 않았고, 예약 창과 취소 창은 화면에서 검증하지 못했습니다.\n\n**실행 방법**\n```\npip install -r requirements.txt\npython -m uvicorn app:app --port 8000\n```\n브라우저에서 `http://localhost:8000`을 열면 됩니다.\n\n**파일**\n- `app.py`: FastAPI 서버와 SQLite 설정입니다. 표 이름은 `rsv_user`, `rsv_room`, `rsv_booking`이고, 처음 실행하면 `reservation.db`가 생기면서 가상 사용자 5명, 회의실 3개, 예시 예약 6건이 들어갑니다.\n- `static/index.html`: 프레임워크 없는 단일 페이지입니다. 시간표, 사용자 선택, 예약 창, 취소 창, 메시지 영역이 들어 있습니다.\n- `test_api.py`: API 규칙을 확인하는 스크립트입니다.\n\n**업무 규칙 확인**\n`python test_api.py`를 실행하면 임시 DB로 아래 항목을 확인하고 `OK`가 나옵니다.\n- 겹치는 예약 거부(R-02)\n- 제목이 비었거나 30자 초과일 때 거부(R-05)\n- 09:00~18:00을 벗어난 시간과 4시간 초과 거부(R-01, R-03)\n- 지난 시간 예약 거부(R-04)\n- 남의 예약 취소 거부(R-06)\n- 이미 시작한 예약 취소 거부(R-07)\n- 취소 후 같은 시간 재예약(R-08)\n\n중복 검사는 서버에서 하고, 취소는 행을 지우지 않고 `CANCELED`로 바꿉니다. 요청한 사용자는 요청 본문의 `user_id`로 구분합니다(PRD에 인증이 없어서입니다). 날짜 이동과 내 예약 목록 같은 Must 외 기능은 넣지 않았습니다.\n\n**제가 정한 부분**\n- 예시 예약은 DB가 비어 있을 때만 \"그날\"의 날짜로 한 번 들어갑니다. 날짜 이동이 Phase 2라서 다음 날 쓰려면 `reservation.db`를 지우고 다시 시작해야 새 예시가 생깁니다.\n- 예약 창의 종료 시각은 다음 예약 직전까지, 최대 4시간까지만 고를 수 있게 했습니다.\n- 화면은 1분마다 자동으로 새로고침해 지난 칸을 회색으로 바꿉니다.",
+ "wall_s": 106.5
+}

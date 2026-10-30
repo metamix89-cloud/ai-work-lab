@@ -1,0 +1,42 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Malgun Gothic", "Segoe UI", sans-serif; color: #222; background: #f4f6f9; }
+
+.topbar { display: flex; align-items: center; gap: 16px; padding: 12px 24px; background: #1f3a5f; color: #fff; }
+.topbar h1 { margin: 0; font-size: 20px; }
+.today { opacity: .85; flex: 1; }
+.user-pick select { margin-left: 6px; padding: 5px 8px; font-size: 14px; }
+
+.notice { margin: 0; padding: 10px 24px; background: #fff4d6; color: #7a5a00; border-bottom: 1px solid #f0d98a; }
+main { padding: 16px 24px; }
+
+.legend { display: flex; gap: 16px; margin-bottom: 10px; font-size: 13px; }
+.sw { display: inline-block; width: 14px; height: 14px; margin-right: 5px; vertical-align: -2px; border: 1px solid #c5ccd6; }
+
+.grid { border-collapse: separate; border-spacing: 0; width: 100%; max-width: 900px; table-layout: fixed; background: #fff; }
+.grid th, .grid td { border: 1px solid #dde2ea; height: 34px; padding: 0 8px; font-size: 13px; }
+.grid thead th { position: sticky; top: 0; background: #e8edf4; z-index: 1; }
+.grid .time { width: 70px; text-align: right; background: #f0f3f8; color: #555; position: sticky; left: 0; }
+.grid td { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+.free, td.free { background: #fff; cursor: pointer; }
+td.free:hover { background: #e6f2ff; }
+.booked, td.booked { background: #f7d9d4; color: #6b2a20; cursor: pointer; }
+.mine, td.mine { background: #2f7de1; color: #fff; cursor: pointer; }
+.past, td.past { background: #e3e5e8; color: #8a8f98; cursor: not-allowed; }
+td.booked, td.mine { border-top-color: transparent; }
+td.booked.first, td.mine.first { border-top-color: #dde2ea; font-weight: 600; }
+td.booked:not(.last), td.mine:not(.last) { border-bottom-color: transparent; }
+
+.backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.4); display: flex; align-items: center; justify-content: center; }
+.backdrop[hidden] { display: none; }
+.dialog { background: #fff; width: 360px; padding: 20px 24px; border-radius: 8px; }
+.dialog h2 { margin: 0 0 12px; font-size: 18px; }
+.dialog dl { margin: 0; display: grid; grid-template-columns: 70px 1fr; row-gap: 8px; }
+.dialog dt { color: #666; }
+.dialog dd { margin: 0; }
+.dialog input[type=text], .dialog select { width: 100%; padding: 6px 8px; font-size: 14px; }
+.error { color: #d12a1c; margin: 10px 0 0; font-size: 13px; }
+.buttons { margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px; }
+button { padding: 7px 16px; font-size: 14px; border: 1px solid #b8c0cc; background: #fff; border-radius: 4px; cursor: pointer; }
+button.primary { background: #2f7de1; border-color: #2f7de1; color: #fff; }
+button.danger { background: #d12a1c; border-color: #d12a1c; color: #fff; }

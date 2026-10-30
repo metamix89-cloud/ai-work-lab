@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 119300,
+ "num_turns": 13,
+ "total_cost_usd": 0.4089169,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 20,
+  "cache_creation_input_tokens": 43277,
+  "cache_read_input_tokens": 465789,
+  "output_tokens": 18919,
+  "output_tokens_details": {
+   "thinking_tokens": 1220
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 43277,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 982,
+    "cache_read_input_tokens": 59665,
+    "cache_creation_input_tokens": 390,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 390
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD.md의 Phase 1(F-01~F-07)을 만들었습니다. API는 임시 DB에 테스트 요청을 보내 확인했고, 브라우저 화면은 열어서 눌러 보지 않았습니다. 처음 서버를 켜면 `meeting.db`가 자동으로 생기고 가상 데이터가 들어갑니다.\n\n**실행 방법**\n```\ncd <작업 폴더>/P1_5\nuvicorn main:app\n```\n그다음 http://127.0.0.1:8000 으로 접속하면 됩니다.\n\n**파일 구성**\n- `main.py`: FastAPI 백엔드입니다. DB 테이블 생성과 가상 데이터 적재, 조회·예약·취소 API, 업무 규칙 검사가 들어 있습니다.\n- `static/index.html`: 순수 HTML과 JS로 만든 시간표 화면과 두 대화상자입니다.\n- `requirements.txt`: `fastapi`와 `uvicorn`만 적었습니다.\n\n**테스트 결과**\n서버 API에 직접 요청을 보내 확인했습니다. 확인한 것은 아래와 같습니다.\n- **예약 거절:** 지난 시간, 제목이 공백인 경우, 30분 미만·2시간 초과, 30분 단위가 아닌 시각은 거절됩니다. 겹치는 예약도 거절되고, 맞닿는 예약은 성공합니다.\n- **동시 요청:** 같은 칸에 5건을 동시에 보냈더니 1건만 저장됐고 나머지 4건은 409로 거절됐습니다.\n- **취소:** 타인 예약 취소는 거절됩니다. 종료된 예약도 취소되지 않습니다. 내 예약은 취소됩니다.\n- **영속성:** 예약은 SQLite 파일에 저장됩니다. 서버를 껐다 켜는 시험은 하지 않았습니다.\n\n**참고**\n- 가상 사용자는 5명, 회의실은 A·B·C 3개, 예약 6건입니다. 예약은 서버를 처음 켠 날짜 기준 \"오늘\" 날짜로 들어갑니다. 다른 날 켜면 시드 예약은 그 전날 것이라 보이지 않습니다. 새로 보려면 `meeting.db`를 지우고 다시 켜세요.\n- PRD의 \"확정이 필요한 가정\"(최대 2시간, 제목 50자, 종료된 예약 취소 불가)은 그대로 적용했습니다.\n- \"나\" 선택은 브라우저에 저장해 새로고침해도 유지됩니다. 화면은 1분마다 자동으로 다시 불러옵니다.",
+ "wall_s": 128.1
+}

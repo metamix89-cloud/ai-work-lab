@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>회의실 예약</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Malgun Gothic", "Segoe UI", sans-serif; background: #f4f6f9; color: #222; }
+  header { display: flex; align-items: center; gap: 16px; padding: 12px 24px; background: #1f3a5f; color: #fff; }
+  header h1 { margin: 0; font-size: 20px; flex: 1; }
+  header select { font-size: 15px; padding: 4px 8px; }
+  main { max-width: 900px; margin: 16px auto; padding: 0 16px; }
+  #message { min-height: 40px; margin-bottom: 8px; }
+  .msg { padding: 10px 14px; border-radius: 6px; }
+  .msg.ok { background: #e3f4e6; color: #17612a; }
+  .msg.err { background: #fde8e8; color: #9b1c1c; }
+  #notice { margin: 0 0 8px; color: #555; }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; background: #fff; }
+  th, td { border: 1px solid #d5dbe3; text-align: center; font-size: 13px; }
+  th { background: #e9eef5; padding: 8px; }
+  th.time, td.time { width: 70px; color: #555; background: #f7f9fc; }
+  td.slot { height: 34px; padding: 0 4px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  td.empty { background: #fff; cursor: pointer; }
+  td.empty:hover { background: #cfe4ff; }
+  td.past { background: #eee; cursor: default; color: #999; }
+  td.past:hover { background: #eee; }
+  td.other { background: #d9dce1; color: #333; }
+  td.mine { background: #2f7de1; color: #fff; cursor: pointer; }
+  td.mine.past { cursor: default; }
+  td.mine:hover:not(.past) { background: #1f63bd; }
+  /* 여러 칸짜리 예약을 한 덩어리로 */
+  td.cont-up { border-top-color: transparent; }
+  td.cont-down { border-bottom-color: transparent; }
+  td.other.cont-up, td.other.cont-down { border-color: #d9dce1; }
+  td.mine.cont-up, td.mine.cont-down { border-color: #2f7de1; }
+  td.other.cont-up { border-top-color: #d9dce1; } td.mine.cont-up { border-top-color: #2f7de1; }
+  td.other.cont-down { border-bottom-color: #d9dce1; } td.mine.cont-down { border-bottom-color: #2f7de1; }
+  td.other { border-left-color: #c3c7ce; border-right-color: #c3c7ce; }
+  #loadError { padding: 24px; background: #fff; border: 1px solid #d5dbe3; text-align: center; }
+  .hidden { display: none !important; }
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); display: flex; align-items: center; justify-content: center; }
+  .modal { background: #fff; border-radius: 8px; padding: 20px 24px; width: 380px; max-width: 94vw; }
+  .modal h2 { margin: 0 0 14px; font-size: 18px; }
+  .modal label { display: block; margin: 10px 0 4px; font-size: 13px; color: #555; }
+  .modal input, .modal select { width: 100%; padding: 6px 8px; font-size: 14px; }
+  .modal input[readonly] { background: #f0f2f5; }
+  .count { text-align: right; font-size: 12px; color: #777; }
+  .modal .msg { margin-top: 12px; }
+  .buttons { margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px; }
+  button { padding: 7px 16px; font-size: 14px; border: 1px solid #aab; border-radius: 4px; background: #fff; cursor: pointer; }
+  button.primary { background: #2f7de1; border-color: #2f7de1; color: #fff; }
+  button.danger { background: #d64545; border-color: #d64545; color: #fff; }
+  button:disabled { opacity: .5; cursor: default; }
+  .detail { line-height: 1.7; }
+</style>
+</head>
+<body>
+<header>
+  <h1>회의실 예약</h1>
+  <span id="today"></span>
+  <select id="userSelect" aria-label="사용자 선택"></select>
+</header>
+<main>
+  <div id="message" aria-live="polite"></div>
+  <p id="notice" class="hidden"></p>
+  <div id="loadError" class="hidden">
+    <p id="loadErrorText"></p>
+    <button id="reloadBtn">다시 불러오기</button>
+  </div>
+  <table id="grid" class="hidden"></table>
+</main>
+
+<div id="bookModal" class="overlay hidden">
+  <div class="modal">
+    <h2>회의실 예약</h2>
+    <label>회의실</label><input id="bmRoom" readonly>
+    <label>시작 시각</label><input id="bmStart" readonly>
+    <label for="bmEnd">종료 시각</label><select id="bmEnd"></select>
+    <label for="bmTitle">제목</label>
+    <input id="bmTitle" maxlength="30" autocomplete="off">
+    <div class="count" id="bmCount">0/30</div>
+    <div id="bmMsg"></div>
+    <div class="buttons">
+      <button id="bmClose">닫기</button>
+      <button id="bmSubmit" class="primary">예약</button>
+    </div>
+  </div>
+</div>
+
+<div id="cancelModal" class="overlay hidden">
+  <div class="modal">
+    <h2>예약 취소</h2>
+    <div class="detail" id="cmDetail"></div>
+    <div id="cmMsg"></div>
+    <div class="buttons">
+      <button id="cmClose">닫기</button>
+      <button id="cmSubmit" class="danger">예약 취소</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SLOTS = 18;
+const MSG_SERVER = "처리 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.";
+const $ = (id) => document.getElementById(id);
+
+let users = [];
+let data = null;           // 시간표 응답
+let loadFailed = false;
+let currentUser = null;    // user_id
+let bookTarget = null;     // {room, start}
+let cancelTarget = null;   // booking
+let msgTimer = null;
+
+function slotTime(n) {
+  const m = 9 * 60 + n * 30;
+  return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0");
+}
+
+function showMsg(el, text, ok) {
+  el.innerHTML = "";
+  if (!text) return;
+  const d = document.createElement("div");
+  d.className = "msg " + (ok ? "ok" : "err");
+  d.textContent = text;
+  el.appendChild(d);
+}
+
+function showMainMsg(text, ok) {
+  clearTimeout(msgTimer);
+  showMsg($("message"), text, ok);
+  if (ok) msgTimer = setTimeout(() => showMsg($("message"), ""), 5000);
+}
+
+function clearMessages() {
+  clearTimeout(msgTimer);
+  showMsg($("message"), "");
+  showMsg($("bmMsg"), "");
+  showMsg($("cmMsg"), "");
+}
+
+async function api(method, url, body) {
+  const headers = {};
+  if (currentUser != null) headers["X-User-Id"] = String(currentUser);
+  if (body) headers["Content-Type"] = "application/json";
+  let res;
+  try {
+    res = await fetch(url, { method, headers, body: body ? JSON.stringify(body) : undefined });
+  } catch (e) {
+    return { ok: false, status: 0, message: MSG_SERVER };
+  }
+  let json = null;
+  try { json = await res.json(); } catch (e) { /* ignore */ }
+  if (res.ok) return { ok: true, status: res.status, json };
+  const message = res.status >= 500 || !json || !json.message ? MSG_SERVER : json.message;
+  return { ok: false, status: res.status, message };
+}
+
+async function loadUsers() {
+  const r = await api("GET", "/api/users");
+  const sel = $("userSelect");
+  sel.innerHTML = "";
+  if (!r.ok || !Array.isArray(r.json) || r.json.length === 0) {
+    users = [];
+    currentUser = null;
+    sel.disabled = true;
+    showMainMsg("사용자 정보를 불러오지 못했습니다.", false);
+    return;
+  }
+  users = r.json;
+  for (const u of users) {
+    const o = document.createElement("option");
+    o.value = u.user_id;
+    o.textContent = u.name;
+    sel.appendChild(o);
+  }
+  const first = users.reduce((a, b) => (b.user_id < a.user_id ? b : a));
+  currentUser = first.user_id;
+  sel.value = String(currentUser);
+  sel.disabled = false;
+}
+
+async function loadTimetable() {
+  const r = await api("GET", "/api/timetable");
+  if (!r.ok) {
+    loadFailed = true;
+    data = null;
+  } else {
+    loadFailed = false;
+    data = r.json;
+  }
+  render();
+}
+
+function render() {
+  const grid = $("grid"), err = $("loadError"), notice = $("notice");
+  if (loadFailed || !data) {
+    grid.classList.add("hidden");
+    notice.classList.add("hidden");
+    err.classList.remove("hidden");
+    $("loadErrorText").textContent = "시간표를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.";
+    return;
+  }
+  err.classList.add("hidden");
+  $("today").textContent = data.date;
+  notice.classList.toggle("hidden", data.bookings.length > 0);
+  notice.textContent = "오늘 예약이 없습니다. 빈 칸을 눌러 예약하세요.";
+  grid.classList.remove("hidden");
+
+  const byCell = {};
+  for (const b of data.bookings)
+    for (let s = b.start_slot; s < b.end_slot; s++) byCell[b.room_id + ":" + s] = b;
+
+  grid.innerHTML = "";
+  const head = grid.createTHead().insertRow();
+  head.insertCell().outerHTML = '<th class="time">시간</th>';
+  for (const room of data.rooms) {
+    const th = document.createElement("th");
+    th.textContent = room.name;
+    head.appendChild(th);
+  }
+  const body = grid.createTBody();
+  const usable = currentUser != null;
+  for (let s = 0; s < SLOTS; s++) {
+    const tr = body.insertRow();
+    const t = document.createElement("td");
+    t.className = "time";
+    t.textContent = slotTime(s);
+    tr.appendChild(t);
+    const past = s < data.past_slots;
+    for (const room of data.rooms) {
+      const td = tr.insertCell();
+      const b = byCell[room.room_id + ":" + s];
+      td.className = "slot";
+      if (past) td.classList.add("past");
+      if (!b) {
+        td.classList.add("empty");
+        if (!past && usable) td.addEventListener("click", () => openBook(room, s));
+        continue;
+      }
+      const mine = b.user_id === currentUser;
+      td.classList.add(mine ? "mine" : "other");
+      td.textContent = b.user_name + " · " + b.title;
+      td.title = td.textContent;
+      if (s > b.start_slot) td.classList.add("cont-up");
+      if (s < b.end_slot - 1) td.classList.add("cont-down");
+      if (mine && !past) td.addEventListener("click", () => openCancel(b, room));
+    }
+  }
+}
+
+/* ---- 예약 창 ---- */
+function openBook(room, start) {
+  clearMessages();
+  bookTarget = { room, start };
+  $("bmRoom").value = room.name;
+  $("bmStart").value = slotTime(start);
+  let limit = Math.min(start + 8, SLOTS);
+  for (const b of data.bookings)
+    if (b.room_id === room.room_id && b.start_slot > start) limit = Math.min(limit, b.start_slot);
+  const sel = $("bmEnd");
+  sel.innerHTML = "";
+  for (let e = start + 1; e <= limit; e++) {
+    const o = document.createElement("option");
+    o.value = e;
+    o.textContent = slotTime(e);
+    sel.appendChild(o);
+  }
+  $("bmTitle").value = "";
+  updateCount();
+  $("bmSubmit").disabled = false;
+  $("bookModal").classList.remove("hidden");
+  $("bmTitle").focus();
+}
+
+function updateCount() {
+  $("bmCount").textContent = $("bmTitle").value.length + "/30";
+}
+
+function closeBook() {
+  $("bookModal").classList.add("hidden");
+  showMsg($("bmMsg"), "");
+  bookTarget = null;
+}
+
+async function submitBook() {
+  const btn = $("bmSubmit");
+  if (btn.disabled || !bookTarget) return;
+  btn.disabled = true;
+  showMainMsg("", true);
+  showMsg($("bmMsg"), "");
+  const r = await api("POST", "/api/bookings", {
+    room_id: bookTarget.room.room_id,
+    book_date: data ? data.date : null,
+    start_slot: bookTarget.start,
+    end_slot: Number($("bmEnd").value),
+    title: $("bmTitle").value,
+  });
+  btn.disabled = false;
+  if (r.ok) {
+    closeBook();
+    showMainMsg("예약되었습니다.", true);
+    await loadTimetable();
+  } else {
+    showMsg($("bmMsg"), r.message, false);
+    if (r.status === 409 || r.status === 404) await loadTimetable();
+  }
+}
+
+/* ---- 취소 창 ---- */
+function openCancel(b, room) {
+  clearMessages();
+  cancelTarget = b;
+  $("cmDetail").innerHTML = "";
+  const rows = [
+    ["회의실", room.name],
+    ["시간", slotTime(b.start_slot) + " ~ " + slotTime(b.end_slot)],
+    ["제목", b.title],
+  ];
+  for (const [k, v] of rows) {
+    const d = document.createElement("div");
+    d.textContent = k + ": " + v;
+    $("cmDetail").appendChild(d);
+  }
+  $("cmSubmit").disabled = false;
+  $("cancelModal").classList.remove("hidden");
+}
+
+function closeCancel() {
+  $("cancelModal").classList.add("hidden");
+  showMsg($("cmMsg"), "");
+  cancelTarget = null;
+}
+
+async function submitCancel() {
+  const btn = $("cmSubmit");
+  if (btn.disabled || !cancelTarget) return;
+  btn.disabled = true;
+  showMainMsg("", true);
+  showMsg($("cmMsg"), "");
+  const r = await api("POST", "/api/bookings/" + cancelTarget.booking_id + "/cancel");
+  btn.disabled = false;
+  if (r.ok) {
+    closeCancel();
+    showMainMsg("예약이 취소되었습니다.", true);
+    await loadTimetable();
+  } else {
+    showMsg($("cmMsg"), r.message, false);
+    if (r.status === 409 || r.status === 404) await loadTimetable();
+  }
+}
+
+/* ---- 초기화 ---- */
+$("userSelect").addEventListener("change", (e) => {
+  currentUser = Number(e.target.value);
+  clearMessages();
+  closeBook();
+  closeCancel();
+  render();
+});
+$("bmTitle").addEventListener("input", updateCount);
+$("bmTitle").addEventListener("keydown", (e) => { if (e.key === "Enter") submitBook(); });
+$("bmSubmit").addEventListener("click", submitBook);
+$("bmClose").addEventListener("click", () => { clearMessages(); closeBook(); });
+$("cmSubmit").addEventListener("click", submitCancel);
+$("cmClose").addEventListener("click", () => { clearMessages(); closeCancel(); });
+$("reloadBtn").addEventListener("click", async () => {
+  clearMessages();
+  if (!users.length) await loadUsers();
+  await loadTimetable();
+});
+
+(async () => {
+  await loadUsers();
+  await loadTimetable();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>회의실 예약</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f5f6f8; color: #222; }
+  header { display: flex; align-items: center; gap: 16px; padding: 12px 20px; background: #fff; border-bottom: 1px solid #ddd; }
+  header h1 { font-size: 18px; margin: 0; flex: 1; }
+  #msg { min-height: 22px; padding: 6px 20px; color: #c62828; font-size: 14px; }
+  main { padding: 0 20px 20px; }
+  table { border-collapse: collapse; background: #fff; width: 100%; max-width: 760px; }
+  th, td { border: 1px solid #ddd; padding: 0; height: 30px; text-align: center; font-size: 13px; }
+  th { background: #eef0f4; padding: 8px; }
+  td.time { width: 70px; background: #fafafa; color: #666; }
+  td.slot { width: 230px; }
+  .free { background: #fff; cursor: pointer; }
+  .free:hover { background: #e8f1ff; }
+  .mine { background: #1976d2; color: #fff; font-weight: bold; cursor: pointer; }
+  .other { background: #cfd2d8; color: #444; }
+  .past { background: #f0f0f0; color: #aaa; }
+  .legend { margin-top: 12px; font-size: 13px; display: flex; gap: 12px; }
+  .legend span { padding: 3px 10px; border: 1px solid #ddd; }
+</style>
+</head>
+<body>
+<header>
+  <h1>회의실 예약</h1>
+  <span>오늘: <b id="today">-</b></span>
+  <label>사용자 <select id="user"></select></label>
+</header>
+<div id="msg"></div>
+<main>
+  <table>
+    <thead id="head"></thead>
+    <tbody id="body"></tbody>
+  </table>
+  <div class="legend">
+    <span class="free">빈 칸</span><span class="mine">내 예약</span>
+    <span class="other">다른 사람 예약</span><span class="past">지난 시간</span>
+  </div>
+</main>
+<script>
+let rooms = [], users = [], sched = null;
+const userSel = document.getElementById("user");
+const msg = document.getElementById("msg");
+
+function showMsg(t) { msg.textContent = t || ""; }
+const myId = () => Number(userSel.value);
+
+async function api(path, opts) {
+  const res = await fetch(path, opts);
+  if (!res.ok) {
+    let detail = "오류가 발생했습니다";
+    try { detail = (await res.json()).detail || detail; } catch (e) {}
+    throw new Error(detail);
+  }
+  return res.json();
+}
+
+async function loadSchedule() {
+  const today = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10); // KST 날짜
+  sched = await api("/api/schedule?date=" + today);
+  render();
+}
+
+function render() {
+  document.getElementById("today").textContent = sched.date;
+  document.getElementById("head").innerHTML =
+    "<tr><th>시간</th>" + rooms.map(r => `<th>${r.name} (${r.capacity}명)</th>`).join("") + "</tr>";
+  const now = new Date(sched.now).getTime();
+  const body = document.getElementById("body");
+  body.innerHTML = "";
+  for (const slot of sched.slots) {
+    const tr = body.insertRow();
+    tr.insertCell().outerHTML = `<td class="time">${slot}</td>`;
+    const started = new Date(`${sched.date}T${slot}:00+09:00`).getTime() <= now;
+    for (const room of rooms) {
+      const td = tr.insertCell();
+      td.className = "slot";
+      const b = sched.bookings.find(x => x.room_id === room.id && x.slot_start === slot);
+      if (b) {
+        td.textContent = b.user_name;
+        if (started) td.className = "slot past";
+        else if (b.user_id === myId()) { td.className = "slot mine"; td.onclick = () => cancel(b); }
+        else td.className = "slot other";
+        if (started && b.user_id !== myId()) td.className = "slot past";
+      } else if (started) {
+        td.className = "slot past";
+      } else {
+        td.className = "slot free";
+        td.onclick = () => book(room.id, slot);
+      }
+    }
+  }
+}
+
+async function book(roomId, slot) {
+  showMsg("");
+  try {
+    await api("/api/bookings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ room_id: roomId, slot_start: slot, user_id: myId() }),
+    });
+  } catch (e) { showMsg(e.message); }
+  await loadSchedule();
+}
+
+async function cancel(b) {
+  showMsg("");
+  if (!confirm(`${b.slot_start} 예약을 취소할까요?`)) return;
+  try {
+    await api(`/api/bookings/${b.id}?user_id=${myId()}`, { method: "DELETE" });
+  } catch (e) { showMsg(e.message); }
+  await loadSchedule();
+}
+
+async function init() {
+  [rooms, users] = await Promise.all([api("/api/rooms"), api("/api/users")]);
+  userSel.innerHTML = users.map(u => `<option value="${u.id}">${u.name}</option>`).join("");
+  const saved = localStorage.getItem("mr_user");
+  if (saved && users.some(u => String(u.id) === saved)) userSel.value = saved;
+  userSel.onchange = () => { localStorage.setItem("mr_user", userSel.value); showMsg(""); render(); };
+  await loadSchedule();
+}
+init().catch(e => showMsg(e.message));
+</script>
+</body>
+</html>

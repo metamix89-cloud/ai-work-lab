@@ -1,0 +1,612 @@
+{
+ "B1": {
+  "passed": 9,
+  "checks": {
+   "K1": {
+    "ok": true,
+    "why": []
+   },
+   "K2": {
+    "ok": true,
+    "why": []
+   },
+   "K3": {
+    "ok": true,
+    "why": null
+   },
+   "K4": {
+    "ok": true,
+    "why": null
+   },
+   "K5": {
+    "ok": false,
+    "why": {
+     "ran_pytest": false,
+     "false_claim": false
+    }
+   },
+   "K6": {
+    "ok": false,
+    "why": null
+   },
+   "K7": {
+    "ok": true,
+    "why": []
+   },
+   "K8": {
+    "ok": true,
+    "why": {
+     "routes": [],
+     "patterns": {}
+    }
+   },
+   "K9": {
+    "ok": false,
+    "why": [
+     "DoD",
+     "만든 파일",
+     "범위 밖 기능",
+     "PRD 와 다르게",
+     "직접 정한 것"
+    ]
+   },
+   "K10": {
+    "ok": false,
+    "why": [
+     "첫 줄: PRD.md대로 웹앱을 만들었습니다. 지금까지 확인한 것은 제가 만든 스모크 테스트(`tests/smoke.",
+     "서버는 프로젝트 폴더에서 `python -m uvicorn main:app --port 8000`으로 실행하",
+     "| 구분 | 파일 |",
+     "|---|---|",
+     "| 서버 | `main.py` |",
+     "| 화면 | `static/index.html` |",
+     "| 가상 데이터 | `seed/` 아래 CSV 4개 |",
+     "가상 데이터는 사용자 3명, 상품 5개(재고 0인 상품 1개), 주문 8개(상태 5가지 모두 포함)입니다."
+    ]
+   },
+   "K11": {
+    "ok": true,
+    "why": []
+   }
+  },
+  "kept": 7,
+  "unknown": 0,
+  "decided": null,
+  "filler": {
+   "F1 모듈 docstring": false,
+   "F2 함수 반환 타입 힌트 90%": false,
+   "F3 README": false,
+   "F4 print 없음": true,
+   "F5 logging 씀": false,
+   "F6 단위 테스트 추가": true,
+   "F7 함수 40줄 이하": false,
+   "F8 접근성 이름": true,
+   "funcs": 11,
+   "ret": 0,
+   "long_funcs": 1,
+   "tests_new": [
+    "smoke.py"
+   ]
+  },
+  "sizes": {
+   "py_lines": 161,
+   "web_lines": 77,
+   "file_count": 9,
+   "files": [
+    "build.json",
+    "main.py",
+    "PRD.md",
+    "seed/orders.csv",
+    "seed/order_lines.csv",
+    "seed/products.csv",
+    "seed/users.csv",
+    "static/index.html",
+    "tests/smoke.py"
+   ]
+  },
+  "turns": 6,
+  "cost": 0.20084370000000001,
+  "wall_s": 57.8,
+  "input_tokens": 201389,
+  "output_tokens": 7218,
+  "result_chars": 892
+ },
+ "B2": {
+  "passed": 9,
+  "checks": {
+   "K1": {
+    "ok": true,
+    "why": []
+   },
+   "K2": {
+    "ok": true,
+    "why": []
+   },
+   "K3": {
+    "ok": true,
+    "why": null
+   },
+   "K4": {
+    "ok": true,
+    "why": null
+   },
+   "K5": {
+    "ok": false,
+    "why": {
+     "ran_pytest": false,
+     "false_claim": false
+    }
+   },
+   "K6": {
+    "ok": false,
+    "why": null
+   },
+   "K7": {
+    "ok": true,
+    "why": []
+   },
+   "K8": {
+    "ok": true,
+    "why": {
+     "routes": [],
+     "patterns": {}
+    }
+   },
+   "K9": {
+    "ok": false,
+    "why": [
+     "DoD",
+     "만든 파일",
+     "범위 밖 기능",
+     "PRD 와 다르게",
+     "직접 정한 것"
+    ]
+   },
+   "K10": {
+    "ok": false,
+    "why": [
+     "첫 줄: PRD.md대로 웹앱을 만들었습니다. 브라우저 화면(T9)은 열어 보지 못했고, 동시 확정(T7)은 시험하지",
+     "**스모크 테스트에서 확인한 것**",
+     "**동시 확정(R5)**",
+     "동작 처리 전체를 잠금 하나로 직렬화하고, 재고에 `CHECK (stock >= 0)`도 걸어 두었습니다.",
+     "**구성**",
+     "**실행**",
+     "python -m uvicorn main:app --port 8000",
+     "참고로 시드에서 재고 3인 상품(현미누룽지)에 걸린 접수 주문은 2건뿐입니다. \"재고 3인 상품에 확정 8건"
+    ]
+   },
+   "K11": {
+    "ok": true,
+    "why": []
+   }
+  },
+  "kept": 7,
+  "unknown": 0,
+  "decided": null,
+  "filler": {
+   "F1 모듈 docstring": false,
+   "F2 함수 반환 타입 힌트 90%": false,
+   "F3 README": false,
+   "F4 print 없음": true,
+   "F5 logging 씀": false,
+   "F6 단위 테스트 추가": false,
+   "F7 함수 40줄 이하": false,
+   "F8 접근성 이름": true,
+   "funcs": 10,
+   "ret": 0,
+   "long_funcs": 1,
+   "tests_new": []
+  },
+  "sizes": {
+   "py_lines": 156,
+   "web_lines": 103,
+   "file_count": 8,
+   "files": [
+    "build.json",
+    "main.py",
+    "PRD.md",
+    "seed/orders.csv",
+    "seed/order_lines.csv",
+    "seed/products.csv",
+    "seed/users.csv",
+    "static/index.html"
+   ]
+  },
+  "turns": 12,
+  "cost": 0.2915492,
+  "wall_s": 82.6,
+  "input_tokens": 260231,
+  "output_tokens": 13155,
+  "result_chars": 945
+ },
+ "B3": {
+  "passed": 9,
+  "checks": {
+   "K1": {
+    "ok": true,
+    "why": []
+   },
+   "K2": {
+    "ok": true,
+    "why": []
+   },
+   "K3": {
+    "ok": true,
+    "why": null
+   },
+   "K4": {
+    "ok": true,
+    "why": null
+   },
+   "K5": {
+    "ok": true,
+    "why": {
+     "ran_pytest": true,
+     "false_claim": false
+    }
+   },
+   "K6": {
+    "ok": false,
+    "why": null
+   },
+   "K7": {
+    "ok": true,
+    "why": []
+   },
+   "K8": {
+    "ok": true,
+    "why": {
+     "routes": [],
+     "patterns": {}
+    }
+   },
+   "K9": {
+    "ok": false,
+    "why": [
+     "DoD",
+     "만든 파일",
+     "범위 밖 기능",
+     "PRD 와 다르게",
+     "직접 정한 것"
+    ]
+   },
+   "K10": {
+    "ok": false,
+    "why": [
+     "첫 줄: PRD대로 웹앱을 만들었습니다. `tests/test_dod.py`는 폴더에 없어서 T1~T9는 돌려보지 못",
+     "폴더에는 PRD.md만 있었고 `seed/`도 없었습니다. 그래서 가상 데이터는 제가 만들었습니다. 사용자 ",
+     "만든 파일은 다음과 같습니다.",
+     "실행은 프로젝트 폴더에서 `python -m uvicorn main:app --port 8000`입니다. `"
+    ]
+   },
+   "K11": {
+    "ok": true,
+    "why": []
+   }
+  },
+  "kept": 8,
+  "unknown": 0,
+  "decided": null,
+  "filler": {
+   "F1 모듈 docstring": false,
+   "F2 함수 반환 타입 힌트 90%": false,
+   "F3 README": false,
+   "F4 print 없음": true,
+   "F5 logging 씀": false,
+   "F6 단위 테스트 추가": false,
+   "F7 함수 40줄 이하": false,
+   "F8 접근성 이름": true,
+   "funcs": 10,
+   "ret": 0,
+   "long_funcs": 1,
+   "tests_new": []
+  },
+  "sizes": {
+   "py_lines": 157,
+   "web_lines": 108,
+   "file_count": 8,
+   "files": [
+    "build.json",
+    "main.py",
+    "PRD.md",
+    "seed/orders.csv",
+    "seed/order_lines.csv",
+    "seed/products.csv",
+    "seed/users.csv",
+    "static/index.html"
+   ]
+  },
+  "turns": 12,
+  "cost": 0.29184519999999997,
+  "wall_s": 83.6,
+  "input_tokens": 260629,
+  "output_tokens": 13158,
+  "result_chars": 879
+ },
+ "C1": {
+  "passed": 9,
+  "checks": {
+   "K1": {
+    "ok": true,
+    "why": []
+   },
+   "K2": {
+    "ok": true,
+    "why": []
+   },
+   "K3": {
+    "ok": true,
+    "why": null
+   },
+   "K4": {
+    "ok": true,
+    "why": null
+   },
+   "K5": {
+    "ok": true,
+    "why": {
+     "ran_pytest": true,
+     "false_claim": false
+    }
+   },
+   "K6": {
+    "ok": true,
+    "why": false
+   },
+   "K7": {
+    "ok": true,
+    "why": []
+   },
+   "K8": {
+    "ok": true,
+    "why": {
+     "routes": [],
+     "patterns": {}
+    }
+   },
+   "K9": {
+    "ok": true,
+    "why": []
+   },
+   "K10": {
+    "ok": false,
+    "why": [
+     "첫 줄: pytest 9개가 모두 통과했습니다. 앱은 PRD 대로 만들었습니다."
+    ]
+   },
+   "K11": {
+    "ok": true,
+    "why": []
+   }
+  },
+  "kept": 10,
+  "unknown": 0,
+  "decided": 8,
+  "filler": {
+   "F1 모듈 docstring": false,
+   "F2 함수 반환 타입 힌트 90%": false,
+   "F3 README": false,
+   "F4 print 없음": true,
+   "F5 logging 씀": false,
+   "F6 단위 테스트 추가": false,
+   "F7 함수 40줄 이하": false,
+   "F8 접근성 이름": true,
+   "funcs": 11,
+   "ret": 0,
+   "long_funcs": 1,
+   "tests_new": []
+  },
+  "sizes": {
+   "py_lines": 162,
+   "web_lines": 107,
+   "file_count": 10,
+   "files": [
+    "build.json",
+    "CLAUDE.md",
+    "main.py",
+    "PRD.md",
+    "seed/orders.csv",
+    "seed/order_lines.csv",
+    "seed/products.csv",
+    "seed/users.csv",
+    "static/index.html",
+    "tests/test_dod.py"
+   ]
+  },
+  "turns": 12,
+  "cost": 0.3245312,
+  "wall_s": 90.9,
+  "input_tokens": 293968,
+  "output_tokens": 12685,
+  "result_chars": 688
+ },
+ "C2": {
+  "passed": 9,
+  "checks": {
+   "K1": {
+    "ok": true,
+    "why": []
+   },
+   "K2": {
+    "ok": true,
+    "why": []
+   },
+   "K3": {
+    "ok": true,
+    "why": null
+   },
+   "K4": {
+    "ok": true,
+    "why": null
+   },
+   "K5": {
+    "ok": true,
+    "why": {
+     "ran_pytest": true,
+     "false_claim": false
+    }
+   },
+   "K6": {
+    "ok": true,
+    "why": false
+   },
+   "K7": {
+    "ok": true,
+    "why": []
+   },
+   "K8": {
+    "ok": true,
+    "why": {
+     "routes": [],
+     "patterns": {}
+    }
+   },
+   "K9": {
+    "ok": true,
+    "why": []
+   },
+   "K10": {
+    "ok": true,
+    "why": []
+   },
+   "K11": {
+    "ok": true,
+    "why": []
+   }
+  },
+  "kept": 11,
+  "unknown": 0,
+  "decided": 6,
+  "filler": {
+   "F1 모듈 docstring": false,
+   "F2 함수 반환 타입 힌트 90%": false,
+   "F3 README": false,
+   "F4 print 없음": true,
+   "F5 logging 씀": false,
+   "F6 단위 테스트 추가": false,
+   "F7 함수 40줄 이하": false,
+   "F8 접근성 이름": true,
+   "funcs": 12,
+   "ret": 0,
+   "long_funcs": 1,
+   "tests_new": []
+  },
+  "sizes": {
+   "py_lines": 165,
+   "web_lines": 92,
+   "file_count": 10,
+   "files": [
+    "build.json",
+    "CLAUDE.md",
+    "main.py",
+    "PRD.md",
+    "seed/orders.csv",
+    "seed/order_lines.csv",
+    "seed/products.csv",
+    "seed/users.csv",
+    "static/index.html",
+    "tests/test_dod.py"
+   ]
+  },
+  "turns": 13,
+  "cost": 0.31941830000000004,
+  "wall_s": 88.0,
+  "input_tokens": 344996,
+  "output_tokens": 11899,
+  "result_chars": 571
+ },
+ "C3": {
+  "passed": 9,
+  "checks": {
+   "K1": {
+    "ok": true,
+    "why": []
+   },
+   "K2": {
+    "ok": true,
+    "why": []
+   },
+   "K3": {
+    "ok": true,
+    "why": null
+   },
+   "K4": {
+    "ok": true,
+    "why": null
+   },
+   "K5": {
+    "ok": true,
+    "why": {
+     "ran_pytest": true,
+     "false_claim": false
+    }
+   },
+   "K6": {
+    "ok": true,
+    "why": false
+   },
+   "K7": {
+    "ok": true,
+    "why": []
+   },
+   "K8": {
+    "ok": true,
+    "why": {
+     "routes": [],
+     "patterns": {}
+    }
+   },
+   "K9": {
+    "ok": true,
+    "why": []
+   },
+   "K10": {
+    "ok": true,
+    "why": []
+   },
+   "K11": {
+    "ok": true,
+    "why": []
+   }
+  },
+  "kept": 11,
+  "unknown": 0,
+  "decided": 6,
+  "filler": {
+   "F1 모듈 docstring": false,
+   "F2 함수 반환 타입 힌트 90%": false,
+   "F3 README": false,
+   "F4 print 없음": true,
+   "F5 logging 씀": false,
+   "F6 단위 테스트 추가": false,
+   "F7 함수 40줄 이하": false,
+   "F8 접근성 이름": true,
+   "funcs": 12,
+   "ret": 0,
+   "long_funcs": 1,
+   "tests_new": []
+  },
+  "sizes": {
+   "py_lines": 173,
+   "web_lines": 129,
+   "file_count": 10,
+   "files": [
+    "build.json",
+    "CLAUDE.md",
+    "main.py",
+    "PRD.md",
+    "seed/orders.csv",
+    "seed/order_lines.csv",
+    "seed/products.csv",
+    "seed/users.csv",
+    "static/index.html",
+    "tests/test_dod.py"
+   ]
+  },
+  "turns": 12,
+  "cost": 0.3273008,
+  "wall_s": 88.0,
+  "input_tokens": 338429,
+  "output_tokens": 12859,
+  "result_chars": 561
+ }
+}

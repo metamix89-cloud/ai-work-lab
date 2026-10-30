@@ -1,0 +1,25 @@
+body { font-family: "Malgun Gothic", sans-serif; margin: 0; padding: 16px 24px; color: #222; }
+header { display: flex; align-items: center; gap: 24px; margin-bottom: 12px; }
+header h1 { font-size: 20px; margin: 0; flex: 1; }
+select { font-size: 14px; padding: 4px; }
+#error { background: #fdecea; color: #b71c1c; border: 1px solid #f5c6cb; padding: 8px 12px; margin-bottom: 12px; border-radius: 4px; }
+table { border-collapse: collapse; width: 100%; max-width: 760px; }
+th, td { border: 1px solid #ccc; text-align: center; height: 30px; font-size: 14px; }
+th { background: #f3f4f6; }
+td.time { width: 70px; background: #f9fafb; color: #555; }
+td.empty { background: #fff; cursor: pointer; }
+td.empty:hover { background: #eef6ff; }
+td.mine { background: #1976d2; color: #fff; font-weight: bold; cursor: pointer; }
+td.other { background: #d0d0d0; color: #333; }
+td.past { opacity: 0.4; cursor: default; }
+.legend { list-style: none; display: flex; gap: 16px; padding: 0; font-size: 13px; }
+.legend i { display: inline-block; width: 14px; height: 14px; border: 1px solid #ccc; margin-right: 4px; vertical-align: middle; }
+.legend i.empty { background: #fff; }
+.legend i.mine { background: #1976d2; }
+.legend i.other { background: #d0d0d0; }
+.legend i.past { background: #fff; opacity: 0.4; }
+dialog { border: 1px solid #999; border-radius: 6px; padding: 20px 24px; }
+dialog::backdrop { background: rgba(0, 0, 0, .3); }
+.actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+button { padding: 6px 14px; font-size: 14px; border: 0; border-radius: 4px; background: #1976d2; color: #fff; cursor: pointer; }
+button.secondary { background: #e0e0e0; color: #222; }

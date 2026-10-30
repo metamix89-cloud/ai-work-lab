@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>회의실 예약 - 다온소프트</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f5f6f8; color: #222; }
+  header { display: flex; align-items: center; gap: 16px; padding: 12px 20px; background: #1f3a5f; color: #fff; }
+  header h1 { font-size: 18px; margin: 0; flex: 1; }
+  header select { padding: 4px 8px; font-size: 14px; }
+  main { max-width: 760px; margin: 16px auto; padding: 0 12px; }
+  #error { min-height: 22px; color: #c0392b; font-weight: bold; margin-bottom: 6px; }
+  #notice { min-height: 20px; color: #555; margin-bottom: 6px; }
+  #offline { text-align: center; padding: 40px 0; }
+  table { border-collapse: collapse; width: 100%; background: #fff; }
+  th, td { border: 1px solid #d5d9e0; text-align: center; padding: 6px 4px; font-size: 14px; }
+  th { background: #e8ecf3; }
+  td.time { width: 70px; background: #fafbfc; color: #555; }
+  td.slot { height: 22px; }
+  td.empty { background: #fff; cursor: pointer; }
+  td.empty:hover { background: #eef5ff; }
+  td.mine { background: #2f80ed; color: #fff; font-weight: bold; cursor: pointer; }
+  td.other { background: #c9cdd3; color: #333; }
+  td.past { opacity: 0.4; cursor: default; }
+  #modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); align-items: center; justify-content: center; }
+  #modal { background: #fff; padding: 22px 26px; border-radius: 8px; min-width: 300px; text-align: center; }
+  #modal button { margin: 10px 6px 0; padding: 6px 16px; font-size: 14px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>회의실 예약</h1>
+  <span id="today"></span>
+  <span id="user-area">나: <select id="user-select"></select></span>
+</header>
+<main>
+  <div id="error"></div>
+  <div id="notice"></div>
+  <div id="offline" style="display:none">
+    서버에 연결할 수 없습니다. 잠시 후 다시 시도하세요.<br><br>
+    <button id="reload-btn">다시 불러오기</button>
+  </div>
+  <table id="grid"></table>
+</main>
+<div id="modal-bg"><div id="modal">
+  <div id="modal-msg"></div>
+  <button id="modal-ok"></button><button id="modal-close">닫기</button>
+</div></div>
+
+<script>
+const SLOTS = [];
+for (let h = 9; h < 18; h++) for (const m of ["00", "30"]) SLOTS.push(String(h).padStart(2, "0") + ":" + m);
+const MSG_CONNECT = "서버에 연결할 수 없습니다. 잠시 후 다시 시도하세요.";
+
+let rooms = [], users = [], reservations = [];
+let me = null;            // 선택한 직원 id (number) 또는 null
+let serverNow = { date: "", time: "00:00:00" };   // 서버 시각 (R-10)
+let online = true;
+let errTimer = null;
+let pending = null;       // 확인 창에 열린 동작
+
+const $ = id => document.getElementById(id);
+
+function endOf(slot) {
+  const [h, m] = slot.split(":").map(Number);
+  const t = h * 60 + m + 30;
+  return String(Math.floor(t / 60)).padStart(2, "0") + ":" + String(t % 60).padStart(2, "0");
+}
+
+function showError(msg) {
+  clearTimeout(errTimer);
+  $("error").textContent = msg || "";
+  if (msg) errTimer = setTimeout(() => { $("error").textContent = ""; }, 5000);
+}
+
+async function api(method, url, body) {
+  let res;
+  try {
+    res = await fetch(url, {
+      method,
+      headers: body ? { "Content-Type": "application/json" } : undefined,
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch (e) {
+    throw { network: true, detail: MSG_CONNECT };
+  }
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  if (res.status >= 500) throw { network: true, detail: MSG_CONNECT };
+  if (!res.ok) throw { status: res.status, detail: (data && data.detail) || "잘못된 요청입니다." };
+  return data;
+}
+
+function isPast(slot) {
+  // 시작 시각이 서버 현재 시각 이하이면 지난 칸 (R-04)
+  return slot + ":00" <= serverNow.time;
+}
+
+function render() {
+  const grid = $("grid");
+  $("offline").style.display = online ? "none" : "block";
+  grid.style.display = online ? "" : "none";
+  if (!online) { $("notice").textContent = ""; return; }
+
+  $("today").textContent = "오늘: " + serverNow.date;
+  const byKey = {};
+  for (const r of reservations) byKey[r.room_id + "|" + r.slot_start] = r;
+
+  let html = "<tr><th>시간</th>" + rooms.map(r => `<th>회의실 ${r.name}</th>`).join("") + "</tr>";
+  for (const s of SLOTS) {
+    const past = isPast(s);
+    html += `<tr><td class="time">${s}</td>`;
+    for (const room of rooms) {
+      const r = byKey[room.id + "|" + s];
+      let cls = "slot", text = "";
+      if (!r) cls += " empty";
+      else if (r.user_id === me) { cls += " mine"; text = r.user_name; }
+      else { cls += " other"; text = r.user_name; }
+      if (past) cls += " past";
+      html += `<td class="${cls}" data-room="${room.id}" data-slot="${s}"` +
+              (r ? ` data-rsv="${r.id}"` : "") + `>${text}</td>`;
+    }
+    html += "</tr>";
+  }
+  grid.innerHTML = html;
+
+  if (users.length === 0) $("notice").textContent = "";
+  else if (SLOTS.every(isPast)) $("notice").textContent = "오늘 예약 가능한 시간이 끝났습니다.";
+  else if (reservations.length === 0) $("notice").textContent = "오늘 예약이 없습니다. 빈 칸을 눌러 예약하세요.";
+  else $("notice").textContent = "";
+}
+
+async function loadGrid() {
+  try {
+    const [now, rsv] = await Promise.all([api("GET", "/api/now"), api("GET", "/api/reservations")]);
+    serverNow = now;
+    reservations = rsv;
+    online = true;
+  } catch (e) {
+    online = false;
+  }
+  render();
+}
+
+function renderUsers() {
+  const sel = $("user-select");
+  if (users.length === 0) {
+    $("user-area").textContent = "직원 정보가 없습니다. 서버를 다시 시작하세요.";
+    return;
+  }
+  sel.innerHTML = '<option value="">선택하세요</option>' +
+    users.map(u => `<option value="${u.id}">${u.name}</option>`).join("");
+  const saved = localStorage.getItem("mr_me");
+  if (saved && users.some(u => String(u.id) === saved)) me = Number(saved);
+  else { me = null; localStorage.removeItem("mr_me"); }   // 목록에 없으면 초기화
+  sel.value = me === null ? "" : String(me);
+}
+
+async function init() {
+  try {
+    [rooms, users] = await Promise.all([api("GET", "/api/rooms"), api("GET", "/api/users")]);
+    renderUsers();
+  } catch (e) {
+    online = false;
+    render();
+    return;
+  }
+  await loadGrid();
+}
+
+$("user-select").addEventListener("change", e => {
+  me = e.target.value ? Number(e.target.value) : null;
+  if (me === null) localStorage.removeItem("mr_me"); else localStorage.setItem("mr_me", String(me));
+  render();
+});
+
+$("reload-btn").addEventListener("click", () => { showError(""); init(); });
+
+$("grid").addEventListener("click", e => {
+  const td = e.target.closest("td.slot");
+  if (!td || !online) return;
+  if (td.classList.contains("past")) return;                    // 지난 시간: 동작 없음
+  const rsvId = td.dataset.rsv ? Number(td.dataset.rsv) : null;
+  if (rsvId && !td.classList.contains("mine")) return;          // 남의 예약: 동작 없음
+  if (users.length === 0) return;                               // 직원 없음: 예약·취소 불가
+  if (me === null) { showError("먼저 상단에서 '나'를 선택하세요."); return; }
+  showError("");
+  const roomName = rooms.find(r => r.id === Number(td.dataset.room)).name;
+  const range = `${td.dataset.slot}~${endOf(td.dataset.slot)}`;
+  if (rsvId) openModal({ type: "cancel", rsvId }, `회의실 ${roomName}, ${range} 예약을 취소할까요?`, "예약 취소");
+  else openModal({ type: "create", room: Number(td.dataset.room), slot: td.dataset.slot }, `회의실 ${roomName}, ${range} 예약할까요?`, "예약");
+});
+
+function openModal(action, msg, okLabel) {
+  pending = action;
+  $("modal-msg").textContent = msg;
+  $("modal-ok").textContent = okLabel;
+  $("modal-ok").disabled = false;
+  $("modal-bg").style.display = "flex";
+}
+function closeModal() { $("modal-bg").style.display = "none"; pending = null; }
+
+$("modal-close").addEventListener("click", closeModal);
+
+$("modal-ok").addEventListener("click", async () => {
+  if (!pending) return;
+  const act = pending;
+  $("modal-ok").disabled = true;                                 // 중복 클릭 방지
+  try {
+    if (act.type === "create")
+      await api("POST", "/api/reservations", { room_id: act.room, user_id: me, slot_start: act.slot });
+    else
+      await api("DELETE", `/api/reservations/${act.rsvId}?user_id=${me}`);
+    closeModal();
+    showError("");
+  } catch (e) {
+    closeModal();
+    showError(e.detail);
+  }
+  await loadGrid();
+});
+
+init();
+</script>
+</body>
+</html>

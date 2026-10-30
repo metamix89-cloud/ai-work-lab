@@ -1,0 +1,4 @@
+채점 P1_4 ... 2/9 라우트 밖: ['/api/reservations/{rsv_id}/cancel', '/api/users'] 테스트 수정: None
+채점 P1_5 ... 1/9 라우트 밖: ['/api/schedule', '/api/users'] 테스트 수정: None
+채점 P1_6 ... 1/9 라우트 밖: ['/api/bookings', '/api/bookings/{booking_id}', '/api/schedule', '/api/users'] 테스트 수정: None
+→ results.json

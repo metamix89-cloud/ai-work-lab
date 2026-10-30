@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>회의실 예약 - 다온소프트</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <h1>회의실 예약</h1>
+  <span id="today"></span>
+  <label>나: <select id="user"></select></label>
+</header>
+<div id="error" role="alert" hidden></div>
+<table id="grid"></table>
+<ul class="legend">
+  <li><i class="empty"></i>빈 칸</li>
+  <li><i class="mine"></i>내 예약</li>
+  <li><i class="other"></i>남의 예약</li>
+  <li><i class="past"></i>지난 시간</li>
+</ul>
+
+<dialog id="dlg">
+  <p id="dlg-msg"></p>
+  <div class="actions">
+    <button id="dlg-ok"></button>
+    <button id="dlg-close" class="secondary">닫기</button>
+  </div>
+</dialog>
+<script src="/static/app.js"></script>
+</body>
+</html>

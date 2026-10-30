@@ -1,0 +1,48 @@
+{
+ "model": "sonnet",
+ "prompt": "다온소프트 사내 '회의실 예약' 웹앱의 PRD.md 를 이 폴더에 써 줘. 요청은 이거야: 회의실 3개의 하루 시간표(9시~18시, 30분 단위)가 보이고, 빈 칸을 눌러 예약하고, 내 예약은 취소할 수 있으면 돼.\n목차: 1.개요 2.사용자 3.기능 요구사항(F-번호 · MoSCoW · Phase) 4.화면 구성 5.데이터 구조(표 이름은 [접두어]_ 로 시작) 6.업무 규칙(R-번호) 7.제약 조건 8.범위 밖 9.개발 단계 10.완료 기준(T-번호, 체크박스)\n기술: Python FastAPI + 순수 HTML/JS + SQLite. 가상 데이터만. Must 가 아닌 기능은 Phase 1 에 넣지 마.\nPRD.md 하나만 쓰고 코드는 만들지 마.",
+ "rc": 0,
+ "num_turns": 2,
+ "total_cost_usd": 0.18474290000000002,
+ "is_error": false,
+ "usage": {
+  "input_tokens": 4,
+  "cache_creation_input_tokens": 26394,
+  "cache_read_input_tokens": 52689,
+  "output_tokens": 7389,
+  "output_tokens_details": {
+   "thinking_tokens": 1224
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 26394,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 683,
+    "cache_read_input_tokens": 35911,
+    "cache_creation_input_tokens": 7261,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 7261
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "이 폴더에 `PRD.md` 하나를 썼습니다. 코드는 만들지 않았고 실행이나 검증도 하지 않았습니다. 목차는 1~10장 그대로입니다.\n\n- **Phase 1 범위:** Must인 F-01~F-06만 넣었습니다. 시간표 조회, 예약 현황 표시, 사용자 선택, 빈 칸 클릭 예약, 중복 방지, 내 예약 취소입니다. 날짜 이동과 내 예약 목록은 Should라 Phase 2로, 예약 수정과 자동 새로고침은 Could라 Phase 3으로 보냈습니다. 반복 예약과 알림은 Won't입니다.\n- **오늘만 다룸:** Phase 1은 오늘 날짜만 다룹니다. 날짜 이동이 Should라서 Phase 1에서 뺐기 때문입니다.\n- **표 이름:** 접두어는 `mr_`로 했고 표는 `mr_users`, `mr_rooms`, `mr_reservations` 세 개입니다. 취소는 행을 지우지 않고 `status='cancelled'`로 바꿉니다.\n- **업무 규칙·완료 기준:** 업무 규칙은 R-01~R-09, 완료 기준은 T-01~T-16 체크박스입니다.\n\n확인이 필요한 부분이 두 가지 있습니다.\n\n1. **R-08 (최대 2시간):** 요청에 없던 내용이라 제가 가정으로 넣었습니다. 필요 없으면 빼면 됩니다.\n2. **\"내 예약\" 판별:** 로그인 대신 화면에서 이름을 고르는 방식으로 잡았습니다. 이 방식으로는 다른 사람인 척하는 것을 막지 못합니다. 이 한계를 7장에 적어 두었고, 가상 데이터 데모 범위에서는 허용하는 것으로 했습니다.",
+ "wall_s": 65.1,
+ "files": [
+  "PRD.md"
+ ],
+ "prd_chars": 6151
+}

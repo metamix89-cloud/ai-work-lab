@@ -42,7 +42,7 @@ for name, p, fails, routes, hits, turns, cost, out_tok, tm in rows:
     print("| %s | %d/9 | %s | %s | %s | %s | $%.2f | %s | %s |" % (name, p, " ".join(fails) or "—", " ".join(routes) or "—",
                                                                  ", ".join(hits) or "—", turns, cost, out_tok, tm))
 print()
-for cond in "ABC":
+for cond in ["A", "B", "C", "P1_", "P2_", "N", "S", "L"]:
     sel = [x for x in rows if x[0].startswith(cond)]
     if sel:
         print("%s: DoD %s · 평균 %.1f/9 · 턴 %s · 비용 합 $%.2f" % (cond, "/".join(str(x[1]) for x in sel), sum(x[1] for x in sel) / len(sel),

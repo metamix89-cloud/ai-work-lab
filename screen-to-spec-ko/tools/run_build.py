@@ -82,9 +82,16 @@ def prepare(lab, cond, run_dir):
     os.makedirs(run_dir)
     if cond in ("B", "C"):
         shutil.copy(os.path.join(lab, "PRD.md"), run_dir)
+    if cond in ("P1", "P2"):   # ep088: AI 가 쓴 PRD(lab/ai_prd/<P1_1>.md)를 PRD.md 로
+        shutil.copy(os.path.join(lab, "ai_prd", os.path.basename(run_dir) + ".md"), os.path.join(run_dir, "PRD.md"))
     if cond == "C":
         shutil.copy(os.path.join(lab, "CLAUDE.md"), run_dir)
         shutil.copytree(os.path.join(lab, "tests"), os.path.join(run_dir, "tests"))
+    if cond in ("N", "S", "L"):   # ep089: PRD · tests 는 같고 CLAUDE.md 만 다르다(N 없음 · S 15줄 · L 150줄, lab/claudemd/)
+        shutil.copy(os.path.join(lab, "PRD.md"), run_dir)
+        shutil.copytree(os.path.join(lab, "tests"), os.path.join(run_dir, "tests"))
+        if cond != "N":
+            shutil.copy(os.path.join(lab, "claudemd", cond + ".md"), os.path.join(run_dir, "CLAUDE.md"))
 
 
 def build(claude, run_dir, prompt, model, max_turns, timeout):
@@ -93,6 +100,10 @@ def build(claude, run_dir, prompt, model, max_turns, timeout):
         env.pop(k, None)
     cmd = [claude, "-p", prompt, "--output-format", "json", "--dangerously-skip-permissions",
            "--model", model, "--max-turns", str(max_turns)]
+    if os.environ.get("S2S_GUARD_PYTHON"):
+        # 같은 PC 에서 렌더(python.exe)가 돌 때: 빌더의 '이름으로 python 전부 죽이기' 만 막는다. PID 로 끄는 것은 그대로 된다.
+        cmd += ["--disallowedTools", "Bash(taskkill /F /IM python*)", "Bash(taskkill //F //IM python*)", "Bash(taskkill /IM python*)",
+                "Bash(pkill python*)", "Bash(killall python*)", "Bash(Stop-Process -Name python*)"]
     t0 = time.time()
     info = {"model": model, "prompt": prompt, "max_turns": max_turns}
     try:
@@ -104,7 +115,7 @@ def build(claude, run_dir, prompt, model, max_turns, timeout):
             j = json.loads(pr.stdout)
             info.update({k: j.get(k) for k in ("duration_api_ms", "num_turns", "total_cost_usd", "stop_reason", "terminal_reason", "is_error")})
             info["usage"] = j.get("usage")
-            info["result"] = (j.get("result") or "")[-3000:]
+            info["result"] = (j.get("result") or "")[-8000:]
         except Exception:
             info["stdout_tail"] = (pr.stdout or "")[-3000:]
     except subprocess.TimeoutExpired:
@@ -134,7 +145,7 @@ def main():
     print("claude:", os.path.basename(claude), "| model:", model, "| 작업 폴더:", work_root)
     for cond in conds:
         for k in range(1, trials + 1):
-            name = "%s%d" % (cond, k)
+            name = ("%s_%d" if cond[-1].isdigit() else "%s%d") % (cond, k)
             if only and name not in only:
                 continue
             work = os.path.join(work_root, name)

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>회의실 예약</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 20px; color: #222; }
+  header { display: flex; align-items: center; gap: 16px; }
+  h1 { font-size: 20px; margin: 0; }
+  #msg { min-height: 22px; margin: 8px 0; color: #b00020; }
+  #msg.info { color: #555; }
+  table { border-collapse: collapse; }
+  th, td { border: 1px solid #ccc; width: 120px; height: 28px; text-align: center; font-size: 13px; }
+  th { background: #f3f3f3; }
+  td.time { width: 70px; background: #fafafa; }
+  td.free { background: #fff; cursor: pointer; }
+  td.free:hover { background: #eef6ff; }
+  td.mine { background: #1a73e8; color: #fff; cursor: pointer; }
+  td.other { background: #ddd; color: #333; }
+  td.past { background: #f0f0f0; color: #aaa; cursor: default; }
+  td.past.mine, td.past.other { opacity: .55; }
+  .legend { margin-top: 10px; font-size: 12px; }
+  .legend span { display: inline-block; padding: 2px 8px; border: 1px solid #ccc; margin-right: 6px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>회의실 예약</h1>
+  <span>오늘: <span id="today">-</span></span>
+  <select id="user"></select>
+</header>
+<div id="msg"></div>
+<div id="grid"></div>
+<div class="legend">범례:
+  <span style="background:#fff">빈 칸</span>
+  <span style="background:#1a73e8;color:#fff">내 예약</span>
+  <span style="background:#ddd">다른 사람 예약</span>
+  <span style="background:#f0f0f0;color:#aaa">지난 시간</span>
+</div>
+<script>
+const SLOTS = Array.from({length: 18}, (_, i) => String(9 + (i >> 1)).padStart(2, "0") + ":" + (i % 2 ? "30" : "00"));
+const NET_ERR = "서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요";
+const $ = id => document.getElementById(id);
+let rooms = [], users = [], bookings = [], today = "", loaded = false;
+
+function msg(text, info) { const m = $("msg"); m.textContent = text || ""; m.className = info ? "info" : ""; }
+
+// 화면의 날짜·시각 판단은 보조일 뿐, 최종 판정은 서버가 한다 (KST 기준)
+function kstNow() { return new Date(Date.now() + 9 * 3600e3); }
+function isPast(slot) { return new Date(today + "T" + slot + ":00Z").getTime() <= kstNow().getTime(); }
+function endOf(slot) { const i = SLOTS.indexOf(slot) + 1; return i < 18 ? SLOTS[i] : "18:00"; }
+
+async function api(method, url, body) {
+  let res;
+  try {
+    res = await fetch(url, { method, headers: body ? {"Content-Type": "application/json"} : {}, body: body ? JSON.stringify(body) : undefined });
+  } catch (e) { throw {detail: NET_ERR}; }
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok) throw {detail: res.status >= 500 || !(data && data.detail) ? NET_ERR : data.detail};
+  return data;
+}
+
+function currentUser() { const v = $("user").value; return v ? Number(v) : null; }
+
+async function refresh() {
+  try {
+    if (!loaded) {
+      [rooms, users] = await Promise.all([api("GET", "/api/rooms"), api("GET", "/api/users")]);
+      today = kstNow().toISOString().slice(0, 10);
+      $("today").textContent = today;
+      fillUsers();
+      loaded = true;
+    }
+    bookings = await api("GET", "/api/schedule?date=" + today);
+  } catch (e) {
+    if (!$("grid").firstChild) $("grid").textContent = e.detail;
+    msg(e.detail);
+    return false;
+  }
+  render();
+  return true;
+}
+
+function fillUsers() {
+  const sel = $("user");
+  sel.innerHTML = '<option value="">사용자 선택</option>' + users.map(u => `<option value="${u.id}">${u.name}</option>`).join("");
+  const saved = localStorage.getItem("mr_user");
+  if (saved && users.some(u => String(u.id) === saved)) sel.value = saved;
+  else if (saved) { localStorage.removeItem("mr_user"); msg("사용자를 선택해 주세요"); }
+}
+
+function render() {
+  const grid = $("grid");
+  if (!rooms.length) { grid.textContent = "회의실 정보가 없습니다"; return; }
+  const map = {};
+  bookings.forEach(b => map[b.room_id + "|" + b.slot_start] = b);
+  const me = currentUser();
+  let h = "<table><tr><th>시간</th>" + rooms.map(r => `<th>${r.name}</th>`).join("") + "</tr>";
+  for (const s of SLOTS) {
+    h += `<tr><td class="time">${s}</td>`;
+    for (const r of rooms) {
+      const b = map[r.id + "|" + s];
+      const past = isPast(s);
+      let cls, label = "";
+      if (b) {
+        const u = users.find(x => x.id === b.user_id);
+        label = u ? u.name : "?";
+        cls = (me !== null && b.user_id === me) ? "mine" : "other";
+        if (past) cls += " past";
+      } else cls = past ? "past" : "free";
+      h += `<td class="${cls}" data-room="${r.id}" data-slot="${s}"${b ? ` data-booking="${b.id}"` : ""}>${label}</td>`;
+    }
+    h += "</tr>";
+  }
+  grid.innerHTML = h + "</table>";
+  if (!$("msg").textContent) {
+    if (!bookings.length) msg("오늘 예약이 없습니다. 빈 칸을 눌러 예약해 보세요", true);
+    else if (SLOTS.every(isPast)) msg("오늘 예약 가능한 시간이 끝났습니다", true);
+  }
+}
+
+async function onCell(td) {
+  if (td.classList.contains("past") || td.classList.contains("other")) return;
+  const slot = td.dataset.slot, roomId = Number(td.dataset.room);
+  const me = currentUser();
+  if (me === null) { msg("사용자를 선택해 주세요"); return; }
+  msg("");
+  try {
+    if (td.classList.contains("free")) {
+      await api("POST", "/api/bookings", {room_id: roomId, slot_start: slot, user_id: me});
+    } else if (td.classList.contains("mine")) {
+      const room = rooms.find(r => r.id === roomId);
+      if (!confirm(`${room.name} ${slot}~${endOf(slot)} 예약을 취소할까요?`)) return;
+      await api("DELETE", `/api/bookings/${td.dataset.booking}?user_id=${me}`);
+    }
+  } catch (e) {
+    msg(e.detail);
+    await refresh();
+    return;
+  }
+  await refresh();
+}
+
+$("grid").addEventListener("click", e => { const td = e.target.closest("td[data-slot]"); if (td) onCell(td); });
+$("user").addEventListener("change", () => {
+  const v = $("user").value;
+  if (v) localStorage.setItem("mr_user", v); else localStorage.removeItem("mr_user");
+  msg("");
+  render();
+});
+refresh();
+</script>
+</body>
+</html>

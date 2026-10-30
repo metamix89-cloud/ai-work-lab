@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>다온소프트 회의실 예약</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; padding: 16px 24px; color: #222; }
+  header { display: flex; align-items: center; gap: 24px; border-bottom: 2px solid #333; padding-bottom: 8px; }
+  header h1 { font-size: 20px; margin: 0; flex: 1; }
+  #msg { min-height: 24px; margin: 10px 0; font-weight: bold; color: #b00020; }
+  #msg.ok { color: #1b6e2d; }
+  table { border-collapse: collapse; width: 100%; max-width: 720px; }
+  th, td { border: 1px solid #bbb; height: 28px; text-align: center; font-size: 13px; }
+  th { background: #eee; }
+  td.time { width: 70px; background: #f7f7f7; }
+  td.cell { cursor: pointer; background: #fff; }
+  td.cell.empty:hover { background: #e8f1ff; }
+  td.cell.other { background: #f4b6b6; }
+  td.cell.mine { background: #4a90e2; color: #fff; font-weight: bold; }
+  td.cell.past { background: #ddd; color: #777; cursor: default; }
+  .legend { margin-top: 12px; font-size: 13px; display: flex; gap: 16px; }
+  .legend i { display: inline-block; width: 14px; height: 14px; border: 1px solid #999; vertical-align: -2px; margin-right: 4px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>다온소프트 회의실 예약</h1>
+  <span>오늘: <span id="today">-</span></span>
+  <label>나: <select id="user"></select></label>
+</header>
+<div id="msg"></div>
+<table>
+  <thead><tr id="head"><th>시간</th></tr></thead>
+  <tbody id="body"></tbody>
+</table>
+<div class="legend">
+  <span><i style="background:#fff"></i>빈 칸</span>
+  <span><i style="background:#f4b6b6"></i>다른 사람 예약</span>
+  <span><i style="background:#4a90e2"></i>내 예약</span>
+  <span><i style="background:#ddd"></i>지난 시간</span>
+</div>
+
+<script>
+const MSG_NET = "서버에 연결할 수 없습니다";
+const MSG_500 = "서버 오류가 발생했습니다. 잠시 후 다시 시도하세요";
+const $ = id => document.getElementById(id);
+let users = [];
+let me = null;       // 현재 선택한 user_id (없으면 null)
+let data = null;     // 마지막으로 받은 시간표
+
+function setMsg(text, ok) {
+  $("msg").textContent = text || "";
+  $("msg").className = ok ? "ok" : "";
+}
+
+// 공통 요청: {ok, status, body} 반환. 네트워크 오류는 status 0.
+async function api(method, url, payload) {
+  try {
+    const res = await fetch(url, {
+      method,
+      headers: payload ? { "Content-Type": "application/json" } : {},
+      body: payload ? JSON.stringify(payload) : undefined,
+    });
+    let body = null;
+    try { body = await res.json(); } catch (e) {}
+    return { ok: res.ok, status: res.status, body };
+  } catch (e) {
+    return { ok: false, status: 0, body: null };
+  }
+}
+
+function errText(r) {
+  if (r.status === 0) return MSG_NET;
+  if (r.body && r.body.detail && typeof r.body.detail === "string") return r.body.detail;
+  return MSG_500;
+}
+
+async function loadUsers() {
+  const r = await api("GET", "/api/users");
+  const sel = $("user");
+  sel.innerHTML = "";
+  if (!r.ok || !Array.isArray(r.body) || r.body.length === 0) {
+    users = [];
+    me = null;
+    const o = document.createElement("option");
+    o.textContent = "사용자 없음";
+    sel.appendChild(o);
+    sel.disabled = true;
+    setMsg(r.status === 0 ? MSG_NET : "사용자 정보를 불러오지 못했습니다");
+    return;
+  }
+  users = r.body;
+  sel.disabled = false;
+  for (const u of users) {
+    const o = document.createElement("option");
+    o.value = u.user_id;
+    o.textContent = u.name;
+    sel.appendChild(o);
+  }
+  const saved = Number(localStorage.getItem("rr_user_id"));
+  me = users.some(u => u.user_id === saved) ? saved : users[0].user_id;
+  sel.value = me;
+}
+
+// 시간표를 다시 불러온다. 실패하면 마지막 격자를 그대로 두고 오류 문구를 표시한다.
+async function loadTimetable() {
+  const r = await api("GET", "/api/timetable");
+  if (!r.ok) {
+    setMsg(errText(r));
+    if (data) render();
+    return false;
+  }
+  data = r.body;
+  render();
+  return true;
+}
+
+function render() {
+  $("today").textContent = data.date;
+  const head = $("head");
+  head.innerHTML = "<th>시간</th>";
+  for (const room of data.rooms) {
+    const th = document.createElement("th");
+    th.textContent = room.name;
+    head.appendChild(th);
+  }
+  const body = $("body");
+  body.innerHTML = "";
+  for (const slot of data.slots) {
+    const tr = document.createElement("tr");
+    const t = document.createElement("td");
+    t.className = "time";
+    t.textContent = slot;
+    tr.appendChild(t);
+    for (const room of data.rooms) {
+      const rsv = room.reservations.find(x => x.slot_start === slot);
+      const past = slot <= data.now;
+      const td = document.createElement("td");
+      let cls = "empty";
+      if (rsv) cls = rsv.user_id === me ? "mine" : "other";
+      td.className = "cell " + cls + (past ? " past" : "");
+      td.textContent = rsv ? rsv.name : "";
+      td.onclick = () => onCell(room, slot, rsv, past);
+      tr.appendChild(td);
+    }
+    body.appendChild(tr);
+  }
+}
+
+// 모든 칸이 지난 시간이면 안내 (다른 안내가 없을 때만)
+function noteIfAllPast() {
+  if (data && !$("msg").textContent && data.slots.every(s => s <= data.now)) {
+    setMsg("오늘 예약 가능한 시간이 끝났습니다");
+  }
+}
+
+async function onCell(room, slot, rsv, past) {
+  if (me === null) { setMsg("사용자 정보를 불러오지 못했습니다"); return; }
+  setMsg("");
+  if (past) { setMsg("지난 시간은 예약할 수 없습니다"); return; }
+  if (rsv && rsv.user_id !== me) { setMsg("다른 사람의 예약은 취소할 수 없습니다"); return; }
+
+  if (rsv) {
+    if (!confirm("예약을 취소할까요?")) return;
+    const r = await api("DELETE", "/api/reservations/" + rsv.reservation_id + "?user_id=" + me);
+    await finish(r, "예약이 취소되었습니다", [404, 409]);
+  } else {
+    const r = await api("POST", "/api/reservations",
+      { room_id: room.room_id, slot_start: slot, user_id: me });
+    await finish(r, "예약되었습니다", [409, 422]);
+  }
+}
+
+// 요청이 끝나면(성공이든 실패든) 시간표를 다시 불러오되, 안내 문구는 유지한다.
+async function finish(r, okText, reloadStatuses) {
+  if (r.ok) setMsg(okText, true);
+  else setMsg(errText(r));
+  if (r.status === 0 || r.status >= 500) return;       // 격자는 마지막 상태 유지
+  if (r.ok || reloadStatuses.includes(r.status)) {
+    const text = $("msg").textContent, ok = $("msg").className === "ok";
+    if (!(await loadTimetable())) return;
+    setMsg(text, ok);
+  }
+}
+
+$("user").onchange = async () => {
+  me = Number($("user").value);
+  localStorage.setItem("rr_user_id", me);
+  setMsg("");
+  if (await loadTimetable()) noteIfAllPast();
+};
+
+(async function init() {
+  await loadUsers();
+  if (await loadTimetable()) noteIfAllPast();
+})();
+</script>
+</body>
+</html>

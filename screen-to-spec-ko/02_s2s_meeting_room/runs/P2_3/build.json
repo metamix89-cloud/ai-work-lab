@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 83253,
+ "num_turns": 10,
+ "total_cost_usd": 0.34028070000000005,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 46134,
+  "cache_read_input_tokens": 336767,
+  "output_tokens": 12204,
+  "output_tokens_details": {
+   "thinking_tokens": 1404
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 46134,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 952,
+    "cache_read_input_tokens": 62723,
+    "cache_creation_input_tokens": 189,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 189
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD의 Phase 1(F-01~F-04)을 만들었습니다. 서버 API는 테스트로 확인했지만, 화면은 브라우저에서 열어 보지 못했습니다.\n\n**실행 방법** (이 폴더에서)\n```\nuvicorn main:app\n```\n그다음 브라우저에서 http://127.0.0.1:8000 으로 접속하면 됩니다. 처음 실행할 때 `rr.db`가 만들어지고 가상 사용자 5명, 회의실 3개, 데모 예약 7건이 들어갑니다.\n\n**만든 파일**\n- `main.py`: FastAPI 서버, SQLite 스키마와 시드, API 4개(`/api/users`, `/api/timetable`, `POST`·`DELETE /api/reservations`)가 들어 있습니다. 규칙 R-01~R-09와 오류 E-01~E-10의 상태 코드·문구는 PRD 그대로입니다.\n- `index.html`: 단일 페이지입니다. 프레임워크와 외부 CDN 없이 순수 JS로 짰고, 시간표 격자, 사용자 선택(localStorage 저장), 안내 메시지, 범례를 넣었습니다. 지난 칸과 남의 예약 칸은 서버 요청 없이 안내 문구만 띄우고, 네트워크 오류가 나도 격자는 비우지 않습니다.\n- `requirements.txt`\n\n**검증**\n- 서버 시각을 10:00으로 고정하고 API를 호출해 봤습니다. T-05~T-12, T-19~T-23은 모두 통과했습니다.\n- 통과한 항목에는 시작 시각과 같은 칸 거절, 17:30 허용·18:00 거절, 맞닿는 칸 예약, 같은 칸 동시 요청(201과 409 한 건씩), 취소 후 재예약이 들어 있습니다.\n- DB 표 이름은 모두 `rr_`로 시작합니다.\n- 화면 관련 항목(T-01~T-04, T-09, T-13, T-14, T-18, T-24)은 코드만 작성했고 브라우저에서 확인하지 않았습니다. 한 번 눌러서 확인해 보세요.\n\n**알아 둘 점**\n- 환경 변수 `RR_FAKE_NOW=\"YYYY-MM-DD HH:MM:SS\"`를 주면 서버 시각을 고정할 수 있습니다. 시간 경계 테스트용이고, 설정하지 않으면 실제 KST를 씁니다.\n- Phase 2·3 기능(날짜 이동, 내 예약 목록, 연속 예약, 제목 입력)은 PRD대로 넣지 않았습니다.",
+ "wall_s": 89.9
+}

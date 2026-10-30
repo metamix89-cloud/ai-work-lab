@@ -1,0 +1,48 @@
+{
+ "model": "sonnet",
+ "prompt": "다온소프트 사내 '회의실 예약' 웹앱의 PRD.md 를 이 폴더에 써 줘. 요청은 이거야: 회의실 3개의 하루 시간표(9시~18시, 30분 단위)가 보이고, 빈 칸을 눌러 예약하고, 내 예약은 취소할 수 있으면 돼.\n목차: 1.개요 2.사용자 3.기능 요구사항(F-번호 · MoSCoW · Phase) 4.화면 구성 5.데이터 구조(표 이름은 [접두어]_ 로 시작) 6.업무 규칙(R-번호) 7.제약 조건 8.범위 밖 9.개발 단계 10.완료 기준(T-번호, 체크박스)\n기술: Python FastAPI + 순수 HTML/JS + SQLite. 가상 데이터만. Must 가 아닌 기능은 Phase 1 에 넣지 마.\nPRD.md 하나만 쓰고 코드는 만들지 마.",
+ "rc": 0,
+ "num_turns": 2,
+ "total_cost_usd": 0.16545890000000002,
+ "is_error": false,
+ "usage": {
+  "input_tokens": 4,
+  "cache_creation_input_tokens": 24978,
+  "cache_read_input_tokens": 52689,
+  "output_tokens": 6027,
+  "output_tokens_details": {
+   "thinking_tokens": 698
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 24978,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 737,
+    "cache_read_input_tokens": 35911,
+    "cache_creation_input_tokens": 5845,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 5845
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "이 폴더에 `PRD.md` 한 개를 썼습니다. 코드는 만들지 않았습니다.\n\n목차는 요청하신 1~10장 그대로입니다. 몇 가지는 제가 정했으니 확인해 주세요.\n\n- **Phase 1:** Must 4개(F-01 시간표, F-02 빈 칸 예약, F-03 내 예약 취소, F-04 사용자 선택)만 넣었습니다. F-04는 \"내 예약\"을 가리려면 필요해서 Must로 잡았습니다. 로그인은 없고, 가상 사용자 5명 중 한 명을 고르는 방식입니다.\n- **Phase 2·3:** 날짜 이동(F-05)과 내 예약 목록(F-06)은 Should로 Phase 2에 뒀습니다. 예약 수정, 반복 예약, 알림은 Could로 Phase 3에 뒀습니다.\n- **표 이름:** 접두어는 `rsv_`로 했고, 표는 `rsv_user`, `rsv_room`, `rsv_booking` 세 개입니다.\n- **취소 처리:** 취소하면 예약을 지우지 않고 상태만 `CANCELED`로 바꿉니다.\n- **예약 규칙:**\n  - 같은 회의실의 시간이 겹치면 서버가 거부합니다(R-02).\n  - 예약 길이는 30분~4시간입니다(R-03).\n  - 지난 시간은 예약할 수 없습니다(R-04).\n  - 취소는 본인만 할 수 있고, 이미 시작한 예약은 취소할 수 없습니다(R-06, R-07).\n- **완료 기준:** T-01~T-14는 Phase 1용이고, T-15·T-16은 Phase 2 착수 시 점검용입니다. 전부 체크박스입니다.\n\n예약 길이 상한 4시간, 제목 30자 제한, 한 사람이 같은 시간에 여러 회의실을 잡는 것을 막지 않는 점은 임의로 정한 값입니다. 다르게 원하시면 알려주세요.",
+ "wall_s": 49.8,
+ "files": [
+  "PRD.md"
+ ],
+ "prd_chars": 5023
+}

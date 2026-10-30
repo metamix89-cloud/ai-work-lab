@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 120052,
+ "num_turns": 14,
+ "total_cost_usd": 0.4634091,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 20,
+  "cache_creation_input_tokens": 53854,
+  "cache_read_input_tokens": 521331,
+  "output_tokens": 19582,
+  "output_tokens_details": {
+   "thinking_tokens": 1010
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 53854,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 803,
+    "cache_read_input_tokens": 70246,
+    "cache_creation_input_tokens": 386,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 386
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD의 Phase 1(F-01~F-06)을 만들었습니다. API는 테스트를 통과했고, 화면은 브라우저에서 직접 눌러 보지 못했습니다.\n\n**실행**\n```\npip install -r requirements.txt\npython -m uvicorn main:app --port 8000\n```\n브라우저에서 `http://localhost:8000`에 접속하면 됩니다. 처음 실행하면 DB 파일 `meeting_rooms.db`가 만들어지고, 회의실 A/B/C와 가상 직원 8명이 들어갑니다.\n\n**파일**\n- `main.py`: FastAPI 서버, SQLite 표 3개(`mr_` 접두사), API와 업무 규칙(충돌 409, 지난 시간 422, 타인 취소 403, 이미 취소됨 409)\n- `static/index.html`: 단일 화면. 시간표, \"나\" 선택, 확인 창, 오류 줄\n- `test_api.py`: API 검증 28건\n\n**검증**\n- `python test_api.py`: 28건 모두 통과했습니다. 대상은 T-03, 05, 07, 08, 10~14, 22, 25~29입니다.\n- 서버를 실제로 띄워 `/`가 200으로 열리고 `/api/now`, `/api/users`가 응답하는 것까지 확인했습니다.\n- 확인하지 못한 것은 시간표 화면 동작(T-01, 02, 04, 06, 23, 24)과 두 브라우저 동시 예약(T-09)입니다. 후자는 DB의 부분 유니크 인덱스가 막는 구조입니다.\n\n**PRD에 없지만 추가한 것**\n- `GET /api/now`: R-10(서버 시각 기준)에 맞춰, 화면이 브라우저 시계 대신 서버 시각으로 지난 칸을 판정하게 하려고 넣었습니다.\n- 지난 칸 표시는 페이지를 불러올 때와 예약·취소 뒤에만 갱신됩니다. 열어 둔 채 시간이 지나도 저절로 바뀌지 않으니, 새로고침하세요. 서버는 매 요청마다 현재 시각으로 다시 판정합니다.\n\nPhase 2·3은 9장에 따라 만들지 않았습니다.",
+ "wall_s": 132.9
+}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>다온소프트 회의실 예약</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f5f6f8; color: #222; }
+  header { display: flex; align-items: center; gap: 24px; padding: 14px 24px; background: #1f3a68; color: #fff; }
+  header h1 { font-size: 18px; margin: 0; flex: 1; }
+  header select { font-size: 14px; padding: 3px 6px; }
+  main { max-width: 720px; margin: 20px auto; padding: 0 16px; }
+  #msg { min-height: 22px; margin-bottom: 8px; color: #c0392b; font-size: 14px; }
+  table { border-collapse: collapse; width: 100%; background: #fff; table-layout: fixed; }
+  th, td { border: 1px solid #d5d9e0; text-align: center; height: 30px; font-size: 13px; }
+  th { background: #e8ecf3; }
+  th:first-child, td:first-child { width: 70px; background: #f0f2f6; }
+  td.free { cursor: pointer; background: #fff; }
+  td.free:hover { background: #e3f0ff; }
+  td.other { background: #b8bec9; color: #333; cursor: not-allowed; }
+  td.mine { background: #2f80ed; color: #fff; font-weight: bold; cursor: pointer; }
+  td.past { background: repeating-linear-gradient(45deg, #eee, #eee 4px, #e2e2e2 4px, #e2e2e2 8px); color: #888; cursor: not-allowed; }
+  .legend { margin-top: 10px; font-size: 13px; display: flex; gap: 16px; }
+  .legend i { display: inline-block; width: 14px; height: 14px; vertical-align: -2px; border: 1px solid #aaa; margin-right: 4px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>다온소프트 회의실 예약</h1>
+  <span>오늘: <span id="today">-</span></span>
+  <label>나: <select id="user"></select></label>
+</header>
+<main>
+  <div id="msg"></div>
+  <table>
+    <thead><tr id="head"></tr></thead>
+    <tbody id="body"></tbody>
+  </table>
+  <div class="legend">
+    <span><i style="background:#fff"></i>빈 칸</span>
+    <span><i style="background:#b8bec9"></i>다른 사람 예약</span>
+    <span><i style="background:#2f80ed"></i>내 예약</span>
+    <span><i style="background:#e2e2e2"></i>지난 시간</span>
+  </div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+let userId = null;
+
+function showMsg(t) { $("msg").textContent = t || ""; }
+
+async function api(method, url, body) {
+  const res = await fetch(url, {
+    method, headers: body ? { "Content-Type": "application/json" } : {},
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(typeof data.detail === "string" ? data.detail : "요청에 실패했습니다");
+  return data;
+}
+
+async function loadUsers() {
+  const users = await api("GET", "/api/users");
+  const sel = $("user");
+  users.forEach(u => sel.add(new Option(u.name, u.user_id)));
+  const saved = localStorage.getItem("rr_user_id");
+  userId = users.some(u => String(u.user_id) === saved) ? Number(saved) : users[0].user_id;
+  sel.value = userId;
+  sel.onchange = () => {
+    userId = Number(sel.value);
+    localStorage.setItem("rr_user_id", userId);
+    showMsg("");
+    render();
+  };
+}
+
+async function render() {
+  const t = await api("GET", "/api/timetable");
+  $("today").textContent = t.date;
+  $("head").innerHTML = "<th>시간</th>" + t.rooms.map(r => `<th>${r.name}</th>`).join("");
+  const body = $("body");
+  body.innerHTML = "";
+  t.rooms[0].slots.forEach((_, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${t.rooms[0].slots[i].slot_start}</td>`;
+    t.rooms.forEach(room => {
+      const s = room.slots[i];
+      const td = document.createElement("td");
+      if (s.user_id !== null) {
+        const mine = s.user_id === userId;
+        td.textContent = mine ? `${s.user_name} (내 예약)` : s.user_name;
+        td.className = mine ? "mine" : "other";
+        if (s.past) td.classList.add("past");
+        td.onclick = mine ? () => cancel(s) : () => showMsg("다른 사람의 예약은 취소할 수 없습니다");
+      } else if (s.past) {
+        td.textContent = "지난 시간";
+        td.className = "past";
+        td.onclick = () => showMsg("이미 지난 시간은 예약할 수 없습니다");
+      } else {
+        td.className = "free";
+        td.onclick = () => reserve(room.room_id, s.slot_start);
+      }
+      tr.appendChild(td);
+    });
+    body.appendChild(tr);
+  });
+}
+
+async function reserve(roomId, slot) {
+  try {
+    await api("POST", "/api/reservations", { room_id: roomId, slot_start: slot, user_id: userId });
+    showMsg("");
+  } catch (e) { showMsg(e.message); }
+  render();
+}
+
+async function cancel(s) {
+  if (s.past) { showMsg("이미 시작된 시간의 예약은 취소할 수 없습니다"); return; }
+  if (!confirm("예약을 취소할까요?")) return;
+  try {
+    await api("DELETE", `/api/reservations/${s.reservation_id}?user_id=${userId}`);
+    showMsg("");
+  } catch (e) { showMsg(e.message); }
+  render();
+}
+
+(async () => { await loadUsers(); await render(); })();
+</script>
+</body>
+</html>

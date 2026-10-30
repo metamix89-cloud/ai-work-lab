@@ -1,0 +1,20 @@
+{
+ "A1": {"style": "range_str", "path": "api/reservations", "start_key": "start", "end_key": "end", "date_key": "day", "title": true, "user_in_body": false, "user_header": "X-User", "header_quote": true, "user_a": "박지호", "user_b": "최유진", "cancel": "delete_header"},
+ "A2": {"style": "range_str", "path": "api/reservations", "start_key": "start", "end_key": "end", "date_key": "day", "title": true, "user_key": "user", "user_a": "테스트갑", "user_b": "테스트을", "rooms": [2, 3], "cancel": "delete_query"},
+ "A3": {"style": "slot_count", "path": "api/bookings", "date_key": "day", "title": true, "user_a": 3, "user_b": 2, "cancel": "delete_query"},
+ "B1": {"style": "range_str", "path": "api/reservations", "start_key": "start", "end_key": "end", "date_key": "date", "user_key": "user", "user_a": "김민수", "user_b": "박지연", "rooms": ["A", "B", "C"], "id_key": "res_id", "cancel": "delete_query"},
+ "B2": {"style": "range_str", "path": "api/reservations", "start_key": "start", "end_key": "end", "date_key": "date", "user_key": "user", "user_a": "김민수", "user_b": "박지연", "rooms": ["A", "B", "C"], "id_key": "res_id", "cancel": "delete_query"},
+ "B3": {"style": "range_str", "path": "api/reservations", "start_key": "start", "end_key": "end", "date_key": "date", "user_key": "user", "user_a": "김민수", "user_b": "박지연", "rooms": ["A", "B", "C"], "id_key": "res_id", "cancel": "delete_query"},
+ "P1_1": {"style": "slot_str", "path": "api/reservations", "cancel": "post_body", "cancel_path": "api/reservations/{id}/cancel"},
+ "P1_2": {"style": "slot_int", "path": "api/bookings", "title": true, "cancel": "post_body", "cancel_path": "api/bookings/{id}/cancel"},
+ "P1_3": {"style": "slot_str", "path": "api/reservations", "cancel": "delete_query"},
+ "P1_4": {"style": "range_str", "path": "api/reservations", "date_key": "rsv_date", "title": true, "cancel": "post_body", "cancel_path": "api/reservations/{id}/cancel"},
+ "P1_5": {"style": "range_str", "path": "api/reservations", "title": true, "cancel": "delete_query"},
+ "P1_6": {"style": "slot_str", "path": "api/bookings", "cancel": "delete_query"},
+ "P2_1": {"style": "slot_str", "path": "api/reservations", "cancel": "delete_query"},
+ "P2_2": {"style": "slot_int", "path": "api/bookings", "date_key": "book_date", "title": true, "user_in_body": false, "user_header": "X-User-Id", "cancel": "post_header", "cancel_path": "api/bookings/{id}/cancel"},
+ "P2_3": {"style": "slot_str", "path": "api/reservations", "cancel": "delete_query", "user_a": 4, "user_b": 5, "rooms": [1, 2]},
+ "P2_4": {"style": "range_str", "path": "api/reservations", "date_key": "rsv_date", "title": true, "cancel": "post_body", "cancel_path": "api/reservations/{id}/cancel"},
+ "P2_5": {"style": "range_str", "path": "api/reservations", "date_key": "rsv_date", "title": true, "cancel": "delete_query"},
+ "P2_6": {"style": "slot_str", "path": "api/bookings", "date_key": "booking_date", "cancel": "delete_query"}
+}

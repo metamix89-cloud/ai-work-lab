@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 140475,
+ "num_turns": 12,
+ "total_cost_usd": 0.4699212,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 20,
+  "cache_creation_input_tokens": 50736,
+  "cache_read_input_tokens": 518672,
+  "output_tokens": 21507,
+  "output_tokens_details": {
+   "thinking_tokens": 1970
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 50736,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1461,
+    "cache_read_input_tokens": 67267,
+    "cache_creation_input_tokens": 247,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 247
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD의 Phase 1(F-01~F-04)대로 회의실 예약 웹앱을 만들었습니다. 서버 API 테스트 12개는 모두 통과했습니다. 브라우저 화면은 열어 보지 못해서 클릭·모달·메시지 동작은 직접 확인하지 못했습니다.\n\n**실행:** 이 폴더에서 `pip install -r requirements.txt` 후 `python -m uvicorn main:app --port 8000`을 실행하고 http://localhost:8000 을 열면 됩니다. 처음 실행할 때 `reservations.db`가 만들어지고 가상 사용자 5명, 회의실 3개, 오늘 날짜 예시 예약 4건(지난 것 2건, 앞으로 2건)이 들어갑니다.\n\n**파일**\n- `main.py`: FastAPI 백엔드와 SQLite. 표 이름은 모두 `rsv_`로 시작합니다.\n- `static/index.html`: 순수 HTML/JS 화면 한 장입니다.\n- `test_api.py`: API 테스트 12개입니다.\n- `requirements.txt`: 필요한 패키지 목록입니다.\n\n**서버에서 지키는 규칙**\n- **R-02 겹침 방지:** 겹침 검사와 저장을 한 트랜잭션에서 처리합니다. 8개 요청을 동시에 보낸 테스트에서 하나만 201, 나머지는 409였습니다.\n- **R-06 본인 예약만 취소:** `X-User-Id`와 예약자가 다르면 403입니다. 예약자는 헤더 값으로만 저장되고 요청 본문 값은 무시합니다.\n- **오류 문구:** 6.2장의 문구와 검사 순서를 그대로 따릅니다.\n- **시각 판단:** \"지금\"과 지난 칸 판단은 서버 KST 시계로만 합니다. 서버가 화면에 `past_slots` 값을 내려주고, 화면은 그 값으로 지난 칸을 표시합니다.\n- **취소 처리:** 행을 지우지 않고 `status`를 `CANCELED`로 바꿉니다.\n\n**테스트가 확인한 범위:** 테스트는 서버 시계를 10:10으로 고정해 경계값을 확인했습니다. 시작 시각이 현재와 같은 칸은 거부되고 다음 칸은 허용됩니다. 4시간(8칸)은 되고 9칸은 거부됩니다. 17:30~18:00은 되고 18:00을 넘으면 거부됩니다. 제목은 정확히 30자까지 됩니다. 딱 붙는 예약은 되고 겹치면 409입니다. 취소된 자리는 다시 예약되고, 이미 시작한 예약이나 이미 취소된 예약을 취소하면 409입니다. 서버를 실제로 띄워 시간표 조회와 첫 화면 응답(200)도 확인했습니다.\n\n**화면에서 구현한 것**\n- 사용자 선택 드롭다운과 18칸×3열 시간표\n- 남의 예약(회색), 내 예약(파랑), 지난 칸(비활성) 구분\n- 여러 칸짜리 예약을 한 덩어리로 표시\n- 종료 시각 목록(4시간 제한, 18:00 제한, 다음 예약 직전까지)\n- 제목 글자 수 `n/30` 표시\n- 실패 시 창을 유지하고 409/404면 시간표 자동 새로고침\n- 성공 메시지 5초 뒤 사라짐\n- 예약이 없을 때 안내 문구, 서버 오류 때 \"다시 불러오기\"\n- 요청 중 버튼 비활성화\n\n**알아둘 점**\n- 예시 예약은 DB를 처음 만들 때의 시각 기준입니다. 만든 뒤 다른 날 실행하면 그날은 예약이 비어 보입니다. 다시 채우려면 `reservations.db`를 지우고 서버를 다시 시작하면 됩니다.\n- Phase 2 이후 기능(날짜 이동, 내 예약 목록 등)은 넣지 않았습니다.",
+ "wall_s": 151.9
+}

@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 51704,
+ "num_turns": 8,
+ "total_cost_usd": 0.2283876,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 33234,
+  "cache_read_input_tokens": 188016,
+  "output_tokens": 7663,
+  "output_tokens_details": {
+   "thinking_tokens": 437
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 33234,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 865,
+    "cache_read_input_tokens": 49172,
+    "cache_creation_input_tokens": 840,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 840
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "Phase 1 웹앱을 PRD대로 만들었습니다. API 동작은 테스트로 확인했습니다. 브라우저에서 화면을 직접 띄워 보지는 못했고, 확인창(`confirm`)의 승인·거절 동작은 테스트하지 못했습니다.\n\n**파일**\n- `main.py`: FastAPI 서버입니다. SQLite 테이블 3개(`mr_rooms`, `mr_users`, `mr_bookings`)와 시드 데이터를 만들고, API 5개를 제공합니다.\n- `index.html`: 순수 HTML/JS 한 페이지입니다. 시간표, 사용자 선택, 클릭 예약·취소를 담당합니다.\n- `requirements.txt`: fastapi, uvicorn.\n\n**실행**\n```\npip install -r requirements.txt\nuvicorn main:app --reload\n```\n브라우저에서 http://127.0.0.1:8000 으로 접속하면 됩니다. 처음 실행할 때 `meeting_room.db`가 자동으로 만들어집니다.\n\n**확인한 내용 (TestClient로 API 호출)**\n- 회의실 3개, 사용자 5명, 시간표 18칸(마지막 칸 17:30), 시드 예약 4건이 들어 있습니다.\n- 같은 칸을 두 번 예약하면 두 번째는 \"이미 예약된 시간입니다\"로 거절됩니다. 서버의 사전 확인과 DB 부분 유니크 인덱스를 함께 씁니다.\n- 이미 시작된 칸 예약, 오늘이 아닌 날짜 조회는 400으로 거절됩니다.\n- 다른 사람 예약을 취소하면 403, 이미 취소된 예약을 다시 취소하면 409입니다.\n- 본인이 취소하면 200이고, 취소한 칸은 다시 예약할 수 있습니다.\n\n**구현 시 정한 부분**\n- 취소는 행을 지우지 않고 `status='CANCELLED'`와 `cancelled_at`을 기록합니다.\n- Phase 2·3 기능(F-07~F-11)은 넣지 않았습니다.\n- 시드 예약은 DB를 처음 만든 날짜 기준입니다. 다음 날 시드 예약을 다시 보려면 `meeting_room.db`를 지우고 서버를 다시 시작하세요.\n- 테스트로 생긴 DB는 삭제해 두었습니다.",
+ "wall_s": 58.1
+}

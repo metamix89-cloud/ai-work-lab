@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 134217,
+ "num_turns": 18,
+ "total_cost_usd": 0.4826368000000001,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 18,
+  "cache_creation_input_tokens": 58245,
+  "cache_read_input_tokens": 475008,
+  "output_tokens": 20212,
+  "output_tokens_details": {
+   "thinking_tokens": 2757
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 58245,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 888,
+    "cache_read_input_tokens": 74871,
+    "cache_creation_input_tokens": 152,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 152
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "Phase 1 (오늘 하루: 보기 → 예약 → 취소)을 만들었습니다. API 테스트 11개는 통과했고, 서버를 실제로 띄워 `/`, 정적 파일, 예약 조회 API가 200으로 응답하는 것도 확인했습니다. 브라우저에서 화면을 눌러 보는 확인은 하지 못했습니다. 시간표 표시와 예약·취소 창은 직접 한 번 확인해 주세요.\n\n**실행:** `pip install -r requirements.txt` 후 `python -m uvicorn main:app --port 8000`, 그다음 브라우저에서 `http://localhost:8000`을 엽니다. DB 파일 `meeting_rooms.db`는 처음 실행할 때 가상 직원 5명, 회의실 3개, 오늘 예약 5건과 함께 만들어집니다.\n\n**파일**\n- `main.py`: FastAPI 서버, SQLite 표(전부 `mr_` 접두어), 업무 규칙 R-01~R-11, 오류 문구\n- `static/index.html`, `style.css`, `app.js`: 시간표, 예약 창, 취소 창, 사용자 선택(localStorage), 빈 상태와 오류 상태 화면\n- `test_api.py`: 테스트. 겹침·맞닿음, 동시 요청, 지난 시간, 제목·길이 경계, 소유자 확인, 이중 취소를 확인합니다. `python -m pytest test_api.py`로 실행합니다.\n\n**PRD에 없어서 제가 정한 것**\n- `GET /api/now` 추가: 화면이 서버 시각 기준으로 지난 시간을 회색 처리하고 오늘 날짜를 표시하려고 만들었습니다.\n- 환경변수 `MR_FAKE_NOW`: 시각을 고정해서 시간 관련 테스트를 하려고 넣었습니다. 설정하지 않으면 실제 서버 시각을 씁니다.\n- 시각 비교는 분 단위로 합니다. 10:00:20에도 10:00 시작 예약이 되고, 이것이 \"시작 = 현재 시각이면 허용\"에 해당한다고 해석했습니다.\n- 예약 중간에 현재 시각이 걸치는 경우: 종료 시각이 지난 예약만 회색 톤으로 표시합니다.\n\nF-07 이후(날짜 이동, 내 예약 목록, 수정, 자동 새로고침)는 PRD대로 넣지 않았습니다.",
+ "wall_s": 152.4
+}

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>회의실 예약 - 다온소프트</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f4f5f7; color: #222; }
+  header { display: flex; align-items: center; gap: 24px; padding: 12px 24px; background: #1f3a5f; color: #fff; }
+  header h1 { font-size: 18px; margin: 0; }
+  header .spacer { flex: 1; }
+  header select { font-size: 14px; padding: 4px 8px; }
+  main { padding: 16px 24px; }
+  table { border-collapse: collapse; width: 100%; max-width: 900px; table-layout: fixed; background: #fff; }
+  th, td { border: 1px solid #d0d4da; padding: 0; height: 34px; font-size: 12px; text-align: center; overflow: hidden; }
+  th { background: #e8ecf1; height: 36px; font-size: 13px; }
+  th.time, td.time { width: 64px; background: #f0f2f5; font-size: 12px; }
+  td.empty { background: #fff; cursor: pointer; }
+  td.empty:hover { background: #eaf3ff; }
+  td.mine { background: #2b7de9; color: #fff; cursor: pointer; font-weight: bold; }
+  td.other { background: #cfd2d6; color: #444; }
+  td.past { background: #f7f7f7; color: #aaa; }
+  td .cell { padding: 2px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #message { padding: 16px 0; font-size: 14px; }
+  #message button { margin-left: 8px; }
+  .legend { margin-top: 12px; font-size: 12px; color: #555; }
+  dialog { border: 1px solid #888; border-radius: 6px; padding: 20px; min-width: 320px; }
+  dialog::backdrop { background: rgba(0,0,0,.3); }
+  dialog h2 { font-size: 16px; margin: 0 0 12px; }
+  dialog dl { display: grid; grid-template-columns: 70px 1fr; gap: 6px 8px; margin: 0 0 12px; font-size: 14px; }
+  dialog dt { color: #666; } dialog dd { margin: 0; }
+  dialog input[type=text], dialog select { width: 100%; box-sizing: border-box; padding: 4px; font-size: 14px; }
+  .error { color: #c62828; font-size: 13px; min-height: 18px; margin: 8px 0; }
+  .buttons { display: flex; justify-content: flex-end; gap: 8px; }
+  .buttons button { padding: 6px 14px; font-size: 14px; cursor: pointer; }
+  .danger { background: #c62828; color: #fff; border: 0; border-radius: 3px; }
+  .primary { background: #1f3a5f; color: #fff; border: 0; border-radius: 3px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>회의실 예약</h1>
+  <div id="today"></div>
+  <div class="spacer"></div>
+  <label>나: <select id="me"></select></label>
+</header>
+<main>
+  <div id="message"></div>
+  <div id="board"></div>
+  <div class="legend">빈 칸: 클릭하여 예약 · 파랑: 내 예약(클릭하여 취소) · 회색: 타인 예약 · 흐림: 지난 시간</div>
+</main>
+
+<dialog id="reserveDialog">
+  <h2>예약하기</h2>
+  <dl>
+    <dt>회의실</dt><dd id="rRoom"></dd>
+    <dt>날짜</dt><dd id="rDate"></dd>
+    <dt>시작</dt><dd id="rStart"></dd>
+    <dt>종료</dt><dd><select id="rEnd"></select></dd>
+    <dt>제목</dt><dd><input type="text" id="rTitle" maxlength="50" placeholder="최대 50자"></dd>
+  </dl>
+  <div class="error" id="rError" role="alert"></div>
+  <div class="buttons">
+    <button type="button" id="rClose">닫기</button>
+    <button type="button" class="primary" id="rSubmit">예약</button>
+  </div>
+</dialog>
+
+<dialog id="cancelDialog">
+  <h2>예약을 취소할까요?</h2>
+  <dl>
+    <dt>회의실</dt><dd id="cRoom"></dd>
+    <dt>시간</dt><dd id="cTime"></dd>
+    <dt>제목</dt><dd id="cTitle"></dd>
+  </dl>
+  <div class="error" id="cError" role="alert"></div>
+  <div class="buttons">
+    <button type="button" id="cClose">닫기</button>
+    <button type="button" class="danger" id="cSubmit">예약 취소</button>
+  </div>
+</dialog>
+
+<script>
+const DAY_START = 9 * 60, DAY_END = 18 * 60, STEP = 30;
+const state = { data: null, me: null, loaded: false, offsetMs: 0, fetchedAt: 0, serverMinutes: 0 };
+let pending = null; // 대화상자에서 다루는 칸/예약
+
+const $ = (id) => document.getElementById(id);
+const hhmm = (m) => String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0");
+const toMin = (s) => Number(s.slice(0, 2)) * 60 + Number(s.slice(3, 5));
+
+// 서버가 알려 준 현재 시각 + 조회 후 경과 시간으로 "지금"(분)을 추정. 최종 판정은 항상 서버가 한다.
+function nowMinutes() {
+  const elapsed = Math.floor((performance.now() - state.fetchedAt) / 60000);
+  return state.serverMinutes + elapsed;
+}
+
+async function load() {
+  try {
+    const res = await fetch("/api/timetable");
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    state.data = data;
+    state.loaded = true;
+    state.fetchedAt = performance.now();
+    state.serverMinutes = toMin(data.now.slice(11));
+    fillUsers();
+  } catch (e) {
+    state.loaded = false;
+  }
+  render();
+}
+
+function fillUsers() {
+  const sel = $("me");
+  const users = state.data.users;
+  if (sel.options.length !== users.length) {
+    sel.innerHTML = users.map((u) => `<option value="${u.user_id}">${esc(u.name)}</option>`).join("");
+    const saved = Number(localStorage.getItem("mr_me"));
+    state.me = users.some((u) => u.user_id === saved) ? saved : users[0]?.user_id ?? null;
+    sel.value = state.me;
+  }
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+function render() {
+  const msg = $("message"), board = $("board");
+  board.innerHTML = "";
+  msg.innerHTML = "";
+  if (!state.loaded) {
+    msg.innerHTML = '시간표를 불러오지 못했습니다. 잠시 후 다시 시도하세요. <button id="retry">다시 불러오기</button>';
+    $("retry").onclick = load;
+    return;
+  }
+  const { rooms, users, reservations, date } = state.data;
+  $("today").textContent = date + " (오늘)";
+  if (!rooms.length || !users.length) {
+    msg.textContent = "회의실 또는 사용자 데이터가 없습니다. 서버 초기 데이터를 확인하세요.";
+    return;
+  }
+  const cur = nowMinutes();
+  let html = '<table><thead><tr><th class="time">시간</th>' +
+    rooms.map((r) => `<th>${esc(r.name)}</th>`).join("") + "</tr></thead><tbody>";
+  for (let t = DAY_START; t < DAY_END; t += STEP) {
+    html += `<tr><td class="time">${hhmm(t)}</td>`;
+    for (const room of rooms) {
+      const r = reservations.find((x) => x.room_id === room.room_id && toMin(x.start_time) <= t && t < toMin(x.end_time));
+      if (r) {
+        const first = toMin(r.start_time) === t;
+        if (r.user_id === state.me) {
+          html += `<td class="mine" data-rid="${r.reservation_id}"><div class="cell">${first ? "내 예약 · " + esc(r.title) : "↑ " + esc(r.title)}</div></td>`;
+        } else {
+          html += `<td class="other"><div class="cell">${first ? esc(r.user_name) + " · " + esc(r.title) : "↑ " + esc(r.user_name)}</div></td>`;
+        }
+      } else if (t < cur) {
+        html += '<td class="past"><div class="cell">지난 시간</div></td>';
+      } else {
+        html += `<td class="empty" data-room="${room.room_id}" data-start="${t}"><div class="cell">&nbsp;</div></td>`;
+      }
+    }
+    html += "</tr>";
+  }
+  board.innerHTML = html + "</tbody></table>";
+}
+
+$("board").addEventListener("click", (e) => {
+  const td = e.target.closest("td");
+  if (!td || !state.loaded) return;
+  if (td.classList.contains("empty")) openReserve(Number(td.dataset.room), Number(td.dataset.start));
+  else if (td.classList.contains("mine")) openCancel(Number(td.dataset.rid));
+});
+
+$("me").addEventListener("change", (e) => {
+  state.me = Number(e.target.value);
+  localStorage.setItem("mr_me", state.me);
+  render();
+});
+
+function roomName(id) { return state.data.rooms.find((r) => r.room_id === id).name; }
+
+function openReserve(roomId, start) {
+  pending = { roomId, start };
+  $("rRoom").textContent = roomName(roomId);
+  $("rDate").textContent = state.data.date;
+  $("rStart").textContent = hhmm(start);
+  const maxEnd = Math.min(start + 120, DAY_END);
+  let opts = "";
+  for (let t = start + STEP; t <= maxEnd; t += STEP) opts += `<option value="${hhmm(t)}">${hhmm(t)}</option>`;
+  $("rEnd").innerHTML = opts;
+  $("rTitle").value = "";
+  $("rError").textContent = "";
+  $("reserveDialog").showModal();
+  $("rTitle").focus();
+}
+
+function openCancel(rid) {
+  const r = state.data.reservations.find((x) => x.reservation_id === rid);
+  if (!r) return;
+  pending = { rid };
+  $("cRoom").textContent = roomName(r.room_id);
+  $("cTime").textContent = r.start_time + " ~ " + r.end_time;
+  $("cTitle").textContent = r.title;
+  $("cError").textContent = "";
+  $("cancelDialog").showModal();
+}
+
+// 오류 시 대화상자는 유지하고 사유만 표시. 409/404는 최신 상태로 시간표를 다시 불러온다.
+async function send(url, options, errEl, dialog) {
+  errEl.textContent = "";
+  try {
+    const res = await fetch(url, options);
+    if (res.ok) { dialog.close(); await load(); return; }
+    let detail = "처리 중 오류가 발생했습니다. 잠시 후 다시 시도하세요.";
+    try { detail = (await res.json()).detail || detail; } catch (_) {}
+    errEl.textContent = detail;
+    if (res.status === 409 || res.status === 404) await refreshQuietly();
+  } catch (e) {
+    errEl.textContent = "처리 중 오류가 발생했습니다. 잠시 후 다시 시도하세요.";
+  }
+}
+
+// 대화상자가 열린 채로 뒤쪽 시간표만 갱신
+async function refreshQuietly() { await load(); }
+
+$("rSubmit").onclick = () => {
+  send("/api/reservations", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user_id: state.me,
+      room_id: pending.roomId,
+      rsv_date: state.data.date,
+      start_time: hhmm(pending.start),
+      end_time: $("rEnd").value,
+      title: $("rTitle").value,
+    }),
+  }, $("rError"), $("reserveDialog"));
+};
+$("cSubmit").onclick = () => {
+  send(`/api/reservations/${pending.rid}?user_id=${state.me}`, { method: "DELETE" }, $("cError"), $("cancelDialog"));
+};
+$("rClose").onclick = () => $("reserveDialog").close();
+$("cClose").onclick = () => $("cancelDialog").close();
+
+load();
+setInterval(render, 30000); // "지난 시간" 표시 갱신
+</script>
+</body>
+</html>

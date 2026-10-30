@@ -1,0 +1,49 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 129433,
+ "num_turns": 11,
+ "total_cost_usd": 0.4488795,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "usage": {
+  "input_tokens": 18,
+  "cache_creation_input_tokens": 49915,
+  "cache_read_input_tokens": 434635,
+  "output_tokens": 20572,
+  "output_tokens_details": {
+   "thinking_tokens": 1823
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 49915,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1035,
+    "cache_read_input_tokens": 65738,
+    "cache_creation_input_tokens": 955,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 955
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD의 Phase 1(F-01~F-07)을 웹앱으로 만들었습니다. API 테스트 22개는 통과했고, 실제 서버를 띄워 시간표 조회와 페이지 응답(200)도 확인했습니다. 브라우저 화면(클릭, 대화상자, 색상)은 열어 보지 못해 직접 확인하지 못했습니다.\n\n**실행 방법**\n```\npip install fastapi uvicorn\npython -m uvicorn main:app --port 8000\n```\n브라우저에서 http://localhost:8000 을 열면 됩니다. 처음 실행하면 `meetingroom.db`가 만들어지고 가상 데이터(사용자 5명, 회의실 3개, 예약 5건)가 들어갑니다. 다시 실행해도 중복 적재되지 않습니다.\n\n**파일**\n- `main.py`: 서버와 SQLite 처리입니다. 규칙 검사는 R-12 순서대로 하고, 문구와 상태 코드는 6.3 표 그대로입니다. 검사와 저장은 `BEGIN IMMEDIATE` 트랜잭션 하나로 묶었습니다(R-08).\n- `static/index.html`: 순수 HTML/JS 화면입니다. 시간표 3실 × 18칸, 4가지 칸 상태(글자로도 구분), \"나\" 선택, 예약·취소 대화상자를 넣었습니다. 4.4의 오류 처리(대화상자 유지, 409/404일 때 시간표 재조회)와 4.5의 빈 상태·불러오기 실패 화면도 구현했습니다.\n- `tests/test_api.py`: 시계를 바꿔 가며 확인하는 테스트입니다. 대상은 겹침과 맞닿음, 경계값(제목 50자·30분·2시간·18:00 종료), 지난 시간과 시작 시각이 현재와 같은 경우, 취소 권한과 종료 여부, 8개 스레드 동시 예약입니다.\n\n**알아둘 점**\n- **\"나\" 기본값:** 처음에는 첫 번째 사용자(김하늘)로 선택됩니다. 선택값은 브라우저 localStorage에 저장됩니다.\n- **시드 날짜:** 초기 예약은 최초 실행한 날짜로 들어갑니다. DB 파일을 지우지 않고 다음 날 실행하면 예약이 없는 상태가 됩니다. 이 경우 `meetingroom.db`를 지우면 됩니다.\n- **지난 시간 표시:** 화면은 서버가 알려 준 현재 시각을 기준으로 추정합니다. 브라우저 시계는 쓰지 않습니다. 최종 판정은 항상 서버가 합니다.\n- **미구현:** PRD에 따라 날짜 이동, 내 예약 목록, 예약 수정, 반복 예약(Phase 2 이후)은 넣지 않았습니다.",
+ "wall_s": 142.7
+}

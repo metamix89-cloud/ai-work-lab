@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>회의실 예약</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>회의실 예약</h1>
+    <span id="today" class="today"></span>
+    <label class="user-pick">
+      내 이름
+      <select id="user-select"></select>
+    </label>
+  </header>
+  <p id="notice" class="notice" hidden>상단에서 “내 이름”을 먼저 선택해 주세요. 선택 전에는 예약·취소를 할 수 없습니다.</p>
+
+  <main>
+    <div class="legend">
+      <span><i class="sw free"></i>빈 칸</span>
+      <span><i class="sw booked"></i>예약됨</span>
+      <span><i class="sw mine"></i>내 예약</span>
+      <span><i class="sw past"></i>지난 시간</span>
+    </div>
+    <table id="grid" class="grid"></table>
+  </main>
+
+  <div id="modal" class="backdrop" hidden>
+    <div class="dialog" role="dialog" aria-modal="true">
+      <h2 id="modal-title"></h2>
+      <div id="modal-body"></div>
+      <p id="modal-error" class="error" hidden></p>
+      <div class="buttons" id="modal-buttons"></div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

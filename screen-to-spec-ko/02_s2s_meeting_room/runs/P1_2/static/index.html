@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>회의실 예약</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f4f5f7; color: #222; }
+  header { display: flex; align-items: center; gap: 16px; padding: 12px 20px; background: #1f3a5f; color: #fff; }
+  header h1 { font-size: 18px; margin: 0; flex: 1; }
+  header select { padding: 4px 8px; font-size: 14px; }
+  #msg { min-height: 22px; margin: 10px 20px 0; padding: 6px 10px; border-radius: 4px; font-size: 14px; }
+  #msg.ok { background: #e1f4e4; color: #1b6b2b; }
+  #msg.err { background: #fde4e4; color: #a12020; }
+  table { border-collapse: collapse; margin: 10px 20px; background: #fff; }
+  th, td { border: 1px solid #d0d4da; width: 170px; height: 30px; text-align: center; font-size: 12px; }
+  th { background: #e8ecf2; }
+  th.time { width: 70px; }
+  td.free { cursor: pointer; }
+  td.free:hover { background: #cfe4ff; }
+  td.past { background: #ececec; color: #aaa; cursor: not-allowed; }
+  td.other { background: #b8bcc4; }
+  td.mine { background: #2f7de1; color: #fff; cursor: pointer; }
+  .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.4); display: none; align-items: center; justify-content: center; }
+  .modal-bg.show { display: flex; }
+  .modal { background: #fff; padding: 20px; border-radius: 8px; min-width: 300px; }
+  .modal h2 { margin-top: 0; font-size: 16px; }
+  .modal label { display: block; margin: 8px 0 2px; font-size: 13px; }
+  .modal input, .modal select { width: 100%; box-sizing: border-box; padding: 5px; font-size: 14px; }
+  .btns { margin-top: 14px; text-align: right; }
+  .btns button { padding: 6px 14px; margin-left: 6px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>회의실 예약</h1>
+  <span id="today"></span>
+  <label>사용자 <select id="user"></select></label>
+</header>
+<div id="msg"></div>
+<table id="grid"></table>
+
+<div class="modal-bg" id="bookModal"><div class="modal">
+  <h2>예약</h2>
+  <div>회의실: <b id="bRoom"></b></div>
+  <div>시작 시각: <b id="bStart"></b></div>
+  <label for="bEnd">종료 시각</label><select id="bEnd"></select>
+  <label for="bTitle">제목 (1~30자)</label><input id="bTitle" maxlength="30">
+  <div class="btns"><button id="bOk">예약</button><button id="bClose">닫기</button></div>
+</div></div>
+
+<div class="modal-bg" id="cancelModal"><div class="modal">
+  <h2>예약 취소</h2>
+  <div id="cInfo"></div>
+  <div class="btns"><button id="cOk">예약 취소</button><button id="cClose">닫기</button></div>
+</div></div>
+
+<script>
+const SLOTS = 18, MAX = 8;
+const $ = id => document.getElementById(id);
+const hhmm = s => { const m = 540 + s * 30; return String(m / 60 | 0).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
+const esc = t => t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+let data = null, userId = null, pending = null;
+
+function msg(text, ok) { const el = $("msg"); el.textContent = text; el.className = ok ? "ok" : "err"; }
+
+async function api(url, body) {
+  const r = await fetch(url, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {});
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(typeof j.detail === "string" ? j.detail : "요청을 처리할 수 없습니다.");
+  return j;
+}
+
+async function load() {
+  data = await api("/api/schedule");
+  $("today").textContent = data.date;
+  if (!$("user").options.length) {
+    $("user").innerHTML = data.users.map(u => `<option value="${u.user_id}">${esc(u.name)}</option>`).join("");
+    userId = data.users[0].user_id;
+  }
+  render();
+}
+
+function render() {
+  const cell = {};
+  data.bookings.forEach(b => { for (let s = b.start_slot; s < b.end_slot; s++) cell[b.room_id + "_" + s] = b; });
+  let h = "<tr><th class='time'>시간</th>" + data.rooms.map(r => `<th>${esc(r.name)}</th>`).join("") + "</tr>";
+  for (let s = 0; s < SLOTS; s++) {
+    h += `<tr><th class="time">${hhmm(s)}</th>`;
+    for (const r of data.rooms) {
+      const b = cell[r.room_id + "_" + s];
+      if (b) {
+        const mine = b.user_id === userId;
+        const label = s === b.start_slot ? `${b.user_name} · ${b.title}` : "〃";
+        h += `<td class="${mine ? "mine" : "other"}" data-b="${b.booking_id}" title="${esc(b.user_name + " · " + b.title)}">${esc(label)}</td>`;
+      } else if (s * 30 < data.minutes) {
+        h += `<td class="past"></td>`;
+      } else {
+        h += `<td class="free" data-r="${r.room_id}" data-s="${s}"></td>`;
+      }
+    }
+    h += "</tr>";
+  }
+  $("grid").innerHTML = h;
+}
+
+$("grid").addEventListener("click", e => {
+  const td = e.target.closest("td"); if (!td) return;
+  if (td.classList.contains("free")) openBook(+td.dataset.r, +td.dataset.s);
+  else if (td.classList.contains("mine")) openCancel(+td.dataset.b);
+});
+
+$("user").onchange = e => { userId = +e.target.value; render(); };
+
+function openBook(roomId, s) {
+  const room = data.rooms.find(r => r.room_id === roomId);
+  // 다음 예약 전까지, 최대 4시간까지만 종료 시각 선택 가능
+  let limit = Math.min(SLOTS, s + MAX);
+  data.bookings.filter(b => b.room_id === roomId && b.start_slot > s).forEach(b => limit = Math.min(limit, b.start_slot));
+  let opts = "";
+  for (let e = s + 1; e <= limit; e++) opts += `<option value="${e}">${hhmm(e)}</option>`;
+  pending = { roomId, s };
+  $("bRoom").textContent = room.name; $("bStart").textContent = hhmm(s);
+  $("bEnd").innerHTML = opts; $("bTitle").value = "";
+  $("bookModal").classList.add("show"); $("bTitle").focus();
+}
+
+$("bOk").onclick = async () => {
+  try {
+    await api("/api/bookings", { user_id: userId, room_id: pending.roomId, start_slot: pending.s, end_slot: +$("bEnd").value, title: $("bTitle").value });
+    $("bookModal").classList.remove("show"); msg("예약되었습니다.", true);
+  } catch (err) { $("bookModal").classList.remove("show"); msg(err.message, false); }
+  await load();
+};
+$("bClose").onclick = () => $("bookModal").classList.remove("show");
+
+function openCancel(id) {
+  const b = data.bookings.find(x => x.booking_id === id);
+  const room = data.rooms.find(r => r.room_id === b.room_id);
+  pending = { id };
+  $("cInfo").textContent = `${room.name} · ${hhmm(b.start_slot)}~${hhmm(b.end_slot)} · ${b.title}`;
+  $("cancelModal").classList.add("show");
+}
+
+$("cOk").onclick = async () => {
+  try {
+    await api(`/api/bookings/${pending.id}/cancel`, { user_id: userId });
+    msg("예약이 취소되었습니다.", true);
+  } catch (err) { msg(err.message, false); }
+  $("cancelModal").classList.remove("show");
+  await load();
+};
+$("cClose").onclick = () => $("cancelModal").classList.remove("show");
+
+load();
+setInterval(load, 60000);  // 지난 칸 갱신
+</script>
+</body>
+</html>

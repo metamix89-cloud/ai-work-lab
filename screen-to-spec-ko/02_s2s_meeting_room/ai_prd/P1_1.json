@@ -1,0 +1,48 @@
+{
+ "model": "sonnet",
+ "prompt": "다온소프트 사내 '회의실 예약' 웹앱의 PRD.md 를 이 폴더에 써 줘. 요청은 이거야: 회의실 3개의 하루 시간표(9시~18시, 30분 단위)가 보이고, 빈 칸을 눌러 예약하고, 내 예약은 취소할 수 있으면 돼.\n목차: 1.개요 2.사용자 3.기능 요구사항(F-번호 · MoSCoW · Phase) 4.화면 구성 5.데이터 구조(표 이름은 [접두어]_ 로 시작) 6.업무 규칙(R-번호) 7.제약 조건 8.범위 밖 9.개발 단계 10.완료 기준(T-번호, 체크박스)\n기술: Python FastAPI + 순수 HTML/JS + SQLite. 가상 데이터만. Must 가 아닌 기능은 Phase 1 에 넣지 마.\nPRD.md 하나만 쓰고 코드는 만들지 마.",
+ "rc": 0,
+ "num_turns": 2,
+ "total_cost_usd": 0.1968388,
+ "is_error": false,
+ "usage": {
+  "input_tokens": 4,
+  "cache_creation_input_tokens": 27101,
+  "cache_read_input_tokens": 49968,
+  "output_tokens": 8343,
+  "output_tokens_details": {
+   "thinking_tokens": 1485
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 27101,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 810,
+    "cache_read_input_tokens": 33190,
+    "cache_creation_input_tokens": 10689,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 10689
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "이 폴더에 `PRD.md`를 썼습니다. 코드는 만들지 않았고 파일도 이것 하나뿐입니다. 요청하신 10개 목차를 그 순서대로 담았습니다.\n\n- **Phase 1 (Must만):** 하루 시간표 보기(3실 × 18칸), 사용자 선택, 빈 칸 클릭 예약, 내 예약 취소, 중복 예약 방지, 가상 시드 데이터. 모두 F-01~F-06이고 오늘 하루만 다룹니다.\n- **Phase 2:** 날짜 이동, 연속 시간 예약, 회의 제목 입력(Should).\n- **Phase 3:** 내 예약 목록, 자동 새로고침(Could).\n- **표 이름:** 접두어는 `mr_`로 정했고, 표는 `mr_rooms`, `mr_users`, `mr_reservations` 세 개입니다. 같은 방·날짜·시간의 활성 예약이 하나뿐이도록 DB 제약을 둡니다.\n- **규칙과 완료 기준:** 업무 규칙은 R-01~R-10, 완료 기준은 T-01~T-21입니다. Phase 1은 T-01~T-16이고, 체크박스로 적었습니다.\n\n요청에 없어서 제가 정한 부분은 아래와 같습니다. 의도와 다르면 알려 주세요.\n- **본인 구분:** \"내 예약\"을 구분하려면 사용자 식별이 필요합니다. 로그인은 범위 밖으로 두고, 화면에서 가상 직원 중 \"나\"를 고르는 방식으로 했습니다. 인증이 아니라 단순 구분입니다.\n- **날짜 이동:** Should라서 Phase 1에서는 뺐습니다. 대신 Phase 2에서 쓸 `rsv_date` 컬럼은 미리 넣어 두었습니다.\n- **예약 단위:** 예약 한 건은 30분 한 칸입니다.\n- **지난 예약:** 지난 시간 칸은 예약할 수 없고, 이미 시작했거나 지난 예약은 취소할 수 없습니다.\n- **취소 처리:** 취소하면 행을 지우지 않고 `status`만 `cancelled`로 바꿉니다.",
+ "wall_s": 67.0,
+ "files": [
+  "PRD.md"
+ ],
+ "prd_chars": 6846
+}
