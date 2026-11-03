@@ -15,7 +15,8 @@
   check: step + {"name": "...", "expect": "blocked"}  (4xx 면 막음, 200 이면서 PII 면 샘)
 출력: <lab>/pii_probe_results.json + 표
 사용: python _scratch/s2s/tools/pii_probe.py <lab> [--only=A1,D2] [--selftest] [--port=9400]
-앱은 임시 폴더로 복사해 띄운다. 원본 runs/ 는 건드리지 않는다. 모두 127.0.0.1 안에서만, 값은 가짜(010-0000-…)."""
+앱은 임시 폴더로 복사해 띄운다. 원본 runs/ 는 건드리지 않는다. 모두 127.0.0.1 안에서만, 값은 가짜(010-0000-…).
+포트는 앱마다 10칸을 예약해 잡는다(port_block) — 빌드 · 채점과 같이 돌려도 안 겹친다. --port 는 찾기 시작할 자리."""
 import glob
 import http.cookiejar
 import importlib.util
@@ -30,6 +31,9 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from port_block import STEP, PortBlock  # noqa: E402
 
 sys.stdout.reconfigure(encoding="utf-8")
 
@@ -324,8 +328,9 @@ def main():
             else:
                 print(n, "설정 없음 — 건너뜀")
     for name, src, cfg in targets:
-        r = probe(lab, name, src, cfg, port)
-        port += 1
+        with PortBlock(port) as pb:
+            r = probe(lab, name, src, cfg, pb.port)
+        port = pb.port + STEP
         r["at"] = time.strftime("%Y-%m-%d %H:%M")
         results[name] = r
         print("==", name, "화면 이름:", r.get("screen_name_form"), "| 화면 PII:", r.get("screen_pii"), "| 응답 PII:", r.get("response_pii"), r.get("response_urls"),

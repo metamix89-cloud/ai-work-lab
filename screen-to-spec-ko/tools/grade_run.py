@@ -2,8 +2,10 @@
 """생성된 앱 폴더에 DoD 테스트(원본 사본)를 돌려 T번호별 통과 · 실패를 적는다.
 빌더가 받은 tests/ 를 고쳤을 수 있으니 채점은 항상 lab 의 원본 tests/ 를 _grader/ 로 복사해 돈다.
 
-사용: python _scratch/s2s/tools/grade_run.py <lab_dir> [--only=A1,B2]  → <lab_dir>/results.json 갱신
-      (lab_dir/runs/<cond><n>/ 마다 채점. 결과: tests{T1:pass|fail|error}, extra_routes, tests_modified, files)"""
+사용: python _scratch/s2s/tools/grade_run.py <lab_dir> [--only=A1,B2] [--workers=3] [--port=9100]  → <lab_dir>/results.json 갱신
+      (lab_dir/runs/<cond><n>/ 마다 채점. 결과: tests{T1:pass|fail|error}, extra_routes, tests_modified, files)
+      앱마다 포트 10칸을 예약해(port_block) 동시에 채점한다. --port 는 찾기 시작할 자리."""
+import concurrent.futures
 import glob
 import hashlib
 import json
@@ -12,7 +14,11 @@ import re
 import shutil
 import subprocess
 import sys
+import threading
 import xml.etree.ElementTree as ET
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from port_block import PortBlock  # noqa: E402
 
 sys.stdout.reconfigure(encoding="utf-8")
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -95,31 +101,36 @@ def grade_dir(app_dir, tests_src, port=8765, timeout=420, allowed=None):
 
 def main():
     lab = os.path.abspath(sys.argv[1])
-    only, port = None, 8765
+    only, port, workers = None, 9100, 3   # 8000~8999 밖에서 시작 (빌드 전 서버 정리에 안 걸리게)
     for a in sys.argv[2:]:
         if a.startswith("--only="):
             only = set(a.split("=", 1)[1].split(","))
         elif a.startswith("--port="):
             port = int(a.split("=", 1)[1])
+        elif a.startswith("--workers="):
+            workers = int(a.split("=", 1)[1])
     tests_src = os.path.join(lab, "tests")
     allowed = load_grading(lab).get("allowed_routes", [])
     out_path = os.path.join(lab, "results.json")
     results = json.load(open(out_path, encoding="utf-8")) if os.path.exists(out_path) else {}
     runs = sorted(d for d in glob.glob(os.path.join(lab, "runs", "*")) if os.path.isdir(d))
-    # 기본 8765. 빌드와 같이 돌릴 땐 --port=9100 처럼 8000~8999 밖으로 (빌드 전 서버 정리에 안 걸리게)
-    for d in runs:
+    lock = threading.Lock()
+
+    def one(d):
         name = os.path.basename(d)
-        if only and name not in only:
-            continue
-        print("채점", name, "...", end=" ", flush=True)
-        r = grade_dir(d, tests_src, port=port, allowed=allowed)
-        port += 2
+        with PortBlock(port) as pb:   # 앱이 지워지기 전에 서버가 남아도 다음 앱은 다른 칸을 잡는다
+            r = grade_dir(d, tests_src, port=pb.port, allowed=allowed)
         b = os.path.join(d, "build.json")
         if os.path.exists(b):
             r["build"] = json.load(open(b, encoding="utf-8"))
-        results[name] = r
-        print("%d/9" % r["passed"], "라우트 밖:", r["extra_routes"], "테스트 수정:", r["tests_modified"])
-        json.dump(results, open(out_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        with lock:
+            results[name] = r
+            print("채점 %s ... %d/9 라우트 밖: %s 테스트 수정: %s" % (name, r["passed"], r["extra_routes"], r["tests_modified"]), flush=True)
+            json.dump(dict(sorted(results.items())), open(out_path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as ex:
+        for f in [ex.submit(one, d) for d in runs if not only or os.path.basename(d) in only]:
+            f.result()
     print("→", out_path)
 
 

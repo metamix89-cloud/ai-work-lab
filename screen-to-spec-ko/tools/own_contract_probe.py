@@ -5,7 +5,8 @@
 입력: <lab_dir>/own_contract.json  {"P2_1": {"style": ..., ...}}  → 출력: <lab_dir>/own_contract_results.json (앱별 5항목)
 항목: 겹침 거절 · 맞닿음 허용 · 시간대 밖 거절 · 남의 예약 취소 거절 · 본인 취소 허용
 시각: 오늘 17:00 · 17:30 칸을 쓴다(지난 시간을 막는 앱이 많아 그 전에 돌려야 한다).
-앱은 임시 폴더로 복사해 띄우고 DB 는 지운다. 원본 runs/ 는 건드리지 않는다."""
+앱은 임시 폴더로 복사해 띄우고 DB 는 지운다. 원본 runs/ 는 건드리지 않는다.
+포트는 앱마다 10칸을 예약해 잡는다(port_block) — 빌드 · 채점과 같이 돌려도 안 겹친다. --port 는 찾기 시작할 자리."""
 import datetime
 import glob
 import json
@@ -19,6 +20,9 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from port_block import STEP, PortBlock  # noqa: E402
 
 sys.stdout.reconfigure(encoding="utf-8")
 SLOT_A, SLOT_B = "17:30", "17:00"   # A = 처음 잡는 칸, B = 바로 앞에 맞닿는 칸
@@ -189,8 +193,9 @@ def main():
     for name, cfg in cfgs.items():
         if only and name not in only:
             continue
-        r = probe(name, os.path.join(lab, "runs", name), cfg, port)
-        port += 1
+        with PortBlock(port) as pb:
+            r = probe(name, os.path.join(lab, "runs", name), cfg, pb.port)
+        port = pb.port + STEP
         r["at"] = time.strftime("%Y-%m-%d %H:%M")
         results[name] = r
         ok = sum(1 for v in r["checks"].values() if v[1])
