@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>뚝딱건설 위험 작업 허가서</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:"Malgun Gothic",sans-serif;background:#f3f4f6;color:#1f2937}
+header{background:#1f2937;color:#fff;padding:12px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+header h1{font-size:18px;margin:0;flex:1}
+select,button,input,textarea{font:inherit}
+header select{padding:6px}
+main{max-width:1100px;margin:16px auto;padding:0 12px}
+.card{background:#fff;border-radius:8px;padding:14px;margin-bottom:12px;box-shadow:0 1px 2px #0002}
+h2{font-size:16px;margin:0 0 10px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row>label{flex:1;min-width:160px;display:flex;flex-direction:column;font-size:13px;gap:4px}
+input[type=text],select,textarea{padding:7px;border:1px solid #cbd5e1;border-radius:6px}
+button{padding:6px 12px;border:0;border-radius:6px;background:#2563eb;color:#fff;cursor:pointer}
+button.sec{background:#64748b}button.red{background:#dc2626}button.green{background:#16a34a}
+button:disabled{opacity:.4;cursor:not-allowed}
+.chk{display:block;margin:4px 0;font-size:14px}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;color:#fff}
+.requested{background:#64748b}.reviewed{background:#d97706}.approved{background:#2563eb}
+.in_progress{background:#16a34a}.ended{background:#475569}.rejected{background:#dc2626}.expired{background:#7c3aed}
+.t{font-size:12px;color:#64748b}
+.permit{border:1px solid #e2e8f0;border-radius:8px;padding:10px;margin-bottom:8px}
+.permit .top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.permit .acts{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+.zone{border:2px solid #e2e8f0;border-radius:8px;padding:10px;background:#fff}
+.zone.hot{border-color:#dc2626}
+.zone h3{margin:0 0 6px;font-size:15px}
+.warn{color:#b91c1c;font-size:12px;font-weight:bold}
+#msg{position:fixed;top:10px;left:50%;transform:translateX(-50%);padding:10px 16px;border-radius:8px;color:#fff;display:none;z-index:9;max-width:90%}
+nav button{background:#374151;margin-right:4px}nav button.on{background:#2563eb}
+</style>
+</head>
+<body>
+<div id="msg"></div>
+<header>
+  <h1>🏗 뚝딱건설 위험 작업 허가서</h1>
+  <label>접속자: <select id="who"></select></label>
+</header>
+<main>
+  <nav id="nav" style="margin-bottom:12px"></nav>
+  <div id="view"></div>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const TYPE_ICON={고소:"🪜",화기:"🔥",밀폐:"🕳"};
+const ST={requested:"검토 대기",reviewed:"승인 대기",approved:"승인(시작 가능)",in_progress:"작업 중",ended:"종료",rejected:"반려",expired:"만료"};
+let me=null,meta=null,users=[],tab=null;
+
+function esc(s){const d=document.createElement("div");d.textContent=s??"";return d.innerHTML}
+function fmt(s){return s?s.replace("T"," ").slice(5,16):"-"}
+function toast(t,ok){const m=$("#msg");m.textContent=t;m.style.background=ok?"#16a34a":"#dc2626";m.style.display="block";clearTimeout(m._t);m._t=setTimeout(()=>m.style.display="none",4000)}
+
+async function api(path,method="GET",body){
+  const r=await fetch("/api"+path,{method,headers:{"Content-Type":"application/json","X-User-Id":me?me.id:""},body:body?JSON.stringify(body):undefined});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok){const d=j.detail;throw new Error(typeof d==="string"?d:JSON.stringify(d)||r.statusText)}
+  return j;
+}
+
+async function init(){
+  [meta,users]=await Promise.all([api("/meta"),api("/users")]);
+  const sel=$("#who");
+  sel.innerHTML=users.map(u=>`<option value="${u.id}">${esc(u.name)} (${esc(u.role_name)})</option>`).join("");
+  me=users[0];
+  sel.onchange=()=>{me=users.find(u=>u.id==sel.value);tab=null;render()};
+  render();
+  setInterval(()=>{if(!document.activeElement||!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))render(true)},15000);
+}
+
+function tabsFor(){
+  if(me.role==="foreman")return[["mine","내 허가"],["new","허가 신청"]];
+  if(me.role==="safety")return[["queue","검토 대기"],["board","구역 현황판"],["all","전체 허가"]];
+  return[["board","구역 현황판"],["queue","승인 대기"],["all","전체 허가"]];
+}
+function render(silent){
+  const tabs=tabsFor();
+  if(!tab||!tabs.some(t=>t[0]===tab))tab=tabs[0][0];
+  $("#nav").innerHTML=tabs.map(([k,l])=>`<button class="${k===tab?"on":""}" data-k="${k}">${l}</button>`).join("");
+  $("#nav").querySelectorAll("button").forEach(b=>b.onclick=()=>{tab=b.dataset.k;render()});
+  if(tab==="new")return renderForm();
+  if(tab==="board")return renderBoard();
+  renderList();
+}
+
+function permitCard(p){
+  const st=p.effective_status;
+  const chk=p.checklist.map(c=>`<div class="t">✔ ${esc(c.item)}</div>`).join("");
+  let acts="";
+  const mineReq=p.requester_id===me.id;
+  if(me.role==="foreman"&&mineReq){
+    if(st==="approved")acts+=`<button class="green" data-a="start" data-id="${p.id}">작업 시작</button>`;
+    if(st==="in_progress")acts+=`<button class="red" data-a="end" data-id="${p.id}">작업 종료</button>`;
+  }
+  if(me.role==="safety"&&st==="requested")acts+=`<button data-a="review" data-id="${p.id}">검토 완료</button><button class="red" data-a="reject" data-id="${p.id}">반려</button>`;
+  if(me.role==="manager"&&st==="reviewed"){
+    acts+=mineReq?`<span class="warn">본인이 신청한 허가는 승인할 수 없음</span>`
+      :`<button class="green" data-a="approve" data-id="${p.id}">승인</button>`;
+    acts+=`<button class="red" data-a="reject" data-id="${p.id}">반려</button>`;
+  }
+  let times=`신청 ${fmt(p.created_at)}`;
+  if(p.reviewed_at)times+=` · 검토 ${fmt(p.reviewed_at)} (${esc(p.reviewer_name)})`;
+  if(p.approved_at)times+=` · 승인 ${fmt(p.approved_at)} (${esc(p.approver_name)}) · 유효 ~${fmt(p.expires_at)}`;
+  if(p.started_at)times+=` · 시작 ${fmt(p.started_at)}`;
+  if(p.ended_at)times+=` · 종료 ${fmt(p.ended_at)}`;
+  return `<div class="permit"><div class="top">
+    <b>#${p.id} ${TYPE_ICON[p.type]} ${esc(p.type)}</b><span>${esc(p.zone)}</span>
+    <span class="badge ${st}">${ST[st]}</span>${p.overdue?'<span class="warn">⚠ 유효시간 초과 — 종료 필요</span>':""}
+    <span class="t">신청자 ${esc(p.requester_name)}</span></div>
+    <div>${esc(p.description)}</div><div class="t">${times}</div>
+    ${p.reject_reason?`<div class="warn">반려 사유: ${esc(p.reject_reason)}</div>`:""}
+    ${st==="expired"?'<div class="warn">만료됨 — 연장 불가, 새 허가를 신청하세요</div>':""}
+    <details><summary class="t">점검 항목</summary>${chk}</details>
+    <div class="acts">${acts}</div></div>`;
+}
+
+async function renderList(){
+  let ps=await api("/permits");
+  let title="내 허가";
+  if(tab==="queue"){
+    const want=me.role==="safety"?"requested":"reviewed";
+    ps=ps.filter(p=>p.status===want);title=me.role==="safety"?"검토 대기 허가":"승인 대기 허가";
+  }else if(tab==="all")title="전체 허가";
+  $("#view").innerHTML=`<div class="card"><h2>${title} (${ps.length})</h2>${ps.map(permitCard).join("")||'<div class="t">없음</div>'}</div>`;
+  $("#view").querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>act(b.dataset.a,b.dataset.id));
+}
+
+async function act(a,id){
+  try{
+    let body;
+    if(a==="reject"){const r=prompt("반려 사유");if(r===null)return;body={reason:r}}
+    if(a==="review")body={reason:""};
+    await api(`/permits/${id}/${a}`,"POST",body);
+    toast("처리되었습니다",true);
+  }catch(e){toast(e.message,false)}
+  render();
+}
+
+function renderForm(){
+  const types=Object.keys(meta.checklists);
+  $("#view").innerHTML=`<div class="card"><h2>허가 신청</h2>
+  <div class="row">
+   <label>작업 종류<select id="f-type">${types.map(t=>`<option>${t}</option>`).join("")}</select></label>
+   <label>구역<select id="f-zone">${meta.zones.map(z=>`<option>${esc(z)}</option>`).join("")}</select></label>
+  </div>
+  <label style="display:block;margin:10px 0;font-size:13px">작업 내용<input type="text" id="f-desc" style="width:100%"></label>
+  <div id="f-checks"></div>
+  <p class="t">허가는 승인 시각부터 ${meta.valid_hours}시간(당일 23:59까지) 유효하며 연장되지 않습니다.</p>
+  <button id="f-submit">신청</button></div>`;
+  const draw=()=>{$("#f-checks").innerHTML="<b style='font-size:13px'>필수 점검 항목 (모두 체크)</b>"+
+    meta.checklists[$("#f-type").value].map(i=>`<label class="chk"><input type="checkbox" class="ck"> ${esc(i)}</label>`).join("")};
+  $("#f-type").onchange=draw;draw();
+  $("#f-submit").onclick=async()=>{
+    try{
+      await api("/permits","POST",{type:$("#f-type").value,zone:$("#f-zone").value,description:$("#f-desc").value,
+        checked:[...document.querySelectorAll(".ck")].map(c=>c.checked)});
+      toast("신청되었습니다",true);tab="mine";render();
+    }catch(e){toast(e.message,false)}
+  };
+}
+
+async function renderBoard(){
+  const b=await api("/board");
+  const html=Object.entries(b.zones).map(([z,ps])=>{
+    const active=ps.filter(p=>["approved","in_progress"].includes(p.effective_status));
+    const hasF=active.some(p=>p.type==="화기"),hasS=active.some(p=>p.type==="밀폐");
+    const rows=ps.map(p=>`<div style="margin:4px 0"><span class="badge ${p.effective_status}">${ST[p.effective_status]}</span>
+      ${TYPE_ICON[p.type]} <b>#${p.id} ${esc(p.type)}</b> ${esc(p.description)}
+      <div class="t">${esc(p.requester_name)} · 유효 ${p.expires_at?"~"+fmt(p.expires_at):"-"}</div></div>`).join("");
+    return `<div class="zone ${hasF&&hasS?"hot":""}"><h3>${esc(z)} <span class="t">활성 ${active.length}건</span></h3>
+      ${hasF&&hasS?'<div class="warn">⚠ 화기·밀폐 동시 활성</div>':""}${rows||'<div class="t">오늘 허가 없음</div>'}</div>`;
+  }).join("");
+  $("#view").innerHTML=`<div class="card"><h2>오늘(${b.date}) 구역별 허가 현황</h2><div class="grid">${html}</div></div>`;
+}
+init();
+</script>
+</body>
+</html>

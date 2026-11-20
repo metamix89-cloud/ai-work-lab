@@ -1,0 +1,11 @@
+{
+ "_설명": "label_ai_tests.py 의 자동 라벨(이름 · 소스 글자)을 사람이 읽고 고친 것. other = 심은 실수 6개와 무관한 검사. 2026-11-06 Fable.",
+ "prd_1": {"test_f2_book_from_screen": "other", "test_t8_deleted_slot_can_be_booked_again": "other", "test_r6_switching_user_changes_mine": "M5"},
+ "prd_2": {"test_F1_rows_follow_rooms_csv_and_columns_are_30min_from_0900": "other", "test_F2_click_free_slot_and_book": "other", "test_F4_other_date_shows_only_free_slots": "other", "test_R5_cancelled_slot_can_be_booked_again": "other"},
+ "prd_3": {"test_f4_date_param_changes_the_timetable": "other", "test_cancelled_slot_can_be_booked_again": "other"},
+ "both_1": {"test_date_query_shows_other_day_empty": "other", "test_deleted_slot_can_be_booked_again": "other", "test_exactly_2_hours_is_201": "other"},
+ "both_2": {"test_page_reflects_new_reservation": "M5"},
+ "both_3": {"test_ui_booked_slots_for_other_user": "M5", "test_cancelled_slot_can_be_booked_again": "other", "test_ui_date_param_shows_other_day": "other", "test_r4_exactly_two_hours_is_201": "other"},
+ "code_1": {"test_deleted_slot_can_be_rebooked": "other"},
+ "code_2": {"test_ui_slot_headers_cover_business_hours": "other"}
+}

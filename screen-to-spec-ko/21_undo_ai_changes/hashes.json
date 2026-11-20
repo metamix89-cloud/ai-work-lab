@@ -1,0 +1,32 @@
+{
+ "PRD.md": {
+  "sha1": "825b3f31c6a243b2a601241e6cc5be2c6fe865b0",
+  "bytes": 6712,
+  "crlf": 0
+ },
+ "main.py": {
+  "sha1": "495a9117053ef7ebb2e1134e295f087a82da36ad",
+  "bytes": 2831,
+  "crlf": 0
+ },
+ "seed/inquiries.csv": {
+  "sha1": "010a719788d7aae55c9477656066002415d891ef",
+  "bytes": 269,
+  "crlf": 0
+ },
+ "seed/orders.csv": {
+  "sha1": "76dc825f9d5966bdf80a02dfd130cd5614acce0e",
+  "bytes": 758,
+  "crlf": 0
+ },
+ "seed/stock.csv": {
+  "sha1": "0eca515bdba4ea721f3b5e33e2e4819cab67a0dd",
+  "bytes": 196,
+  "crlf": 0
+ },
+ "static/index.html": {
+  "sha1": "38fff8c2b111106330eb0dca168dc7b9611ba081",
+  "bytes": 3770,
+  "crlf": 0
+ }
+}

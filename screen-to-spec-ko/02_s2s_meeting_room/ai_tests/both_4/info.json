@@ -1,0 +1,62 @@
+{
+ "model": "sonnet",
+ "cond": "both",
+ "prompt": "이 폴더는 다온소프트 회의실 예약 웹앱이야(main.py · seed/). PRD.md 가 요구사항 문서야. 이 앱의 pytest 테스트를 써 줘. 앱 코드(main.py)는 고치지 마.\n테스트 틀은 tests/conftest.py 에 있어. srv 픽스처가 서버를 띄우고(srv.base 가 주소) seed/ 를 고정 데이터(DATE · ROOMS · USERS · RES 상수)로 바꿔 끼워. http(method, url, body) 는 (상태 코드, 응답) 을 돌려주고, pw 는 Playwright 브라우저야. conftest.py 는 바꾸지 말고 그 틀로 tests/test_app.py 에 테스트를 써 줘. 끝나면 무슨 테스트를 몇 개 썼는지 짧게 보고해.",
+ "port": 9620,
+ "job": true,
+ "rc": 0,
+ "wall_s": 234.7,
+ "num_turns": 6,
+ "total_cost_usd": 0.35402750000000005,
+ "is_error": false,
+ "session_id": "a8154ba6-822c-4b6e-b7bd-d49495a88bb4",
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 44266,
+  "cache_read_input_tokens": 209635,
+  "output_tokens": 15598,
+  "output_tokens_details": {
+   "thinking_tokens": 2071
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 44266,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1327,
+    "cache_read_input_tokens": 59603,
+    "cache_creation_input_tokens": 1488,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1488
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "`tests/test_app.py`에 테스트 49개를 썼습니다. `main.py`와 `conftest.py`는 건드리지 않았습니다. 지금 앱으로 돌리면 35개 실패, 14개 통과입니다. 실패는 앱이 PRD를 아직 다 구현하지 못했기 때문입니다. 정상 구현 앱으로는 돌려보지 못해서, 테스트 쪽 오류가 있는지는 확인하지 못했습니다.\n\n**API (28개)**\n- **조회:** `/api/rooms`, 날짜별 예약 조회, 다른 날짜는 빈 목록.\n- **생성:** 201 응답 본문, 다른 날짜의 같은 칸은 겹침이 아님.\n- **R1:** 30분 단위가 아닌 예약 3가지 → 400과 사유 문구.\n- **R2:** 시간대 밖 4가지, 끝 ≤ 시작 2가지 → 400. 경계(09:00 시작, 18:00 끝)는 허용.\n- **R3:**\n  - 겹침 5가지(동일, 앞·뒤 걸침, 포함, 덮음) → 409.\n  - 붙여 예약은 201.\n  - 새로 만든 예약과 겹치는 경우도 409.\n- **R4:** 2시간 정확히는 201, 2시간 30분 이상 2가지는 400.\n- **R7:** 다른 방의 같은 시각은 서로 막지 않음.\n- **빈 값:** user, room_id, start, end, date 각각 비우면 400.\n- **R5:** 남의 예약 취소와 `user` 없는 취소는 403이고 예약이 남음. 본인 취소는 204이고 사라지며 그 칸을 다시 예약할 수 있음. 없는 id는 404.\n\n**화면 (14개)**\n- 제목과 `/` 200, 칸 54개와 방·시작 시각 속성, 방 순서 A·B·C.\n- 사용자 선택 상자 옵션, 날짜 표시와 `?date=` 변경, 예약 없는 날은 전부 `free`.\n- 시드 예약은 `booked`이고 끝나는 시각의 칸은 `free`, `booked` 칸에 예약자 이름 표시.\n- 김민수를 고르면 `mine`, 사용자를 바꾸면 `mine`도 바뀜.\n- 취소 버튼은 `mine` 칸에만 있고 `booked`·`free` 칸에는 없음.\n- 화면에서 취소하면 예약이 사라짐.\n- API가 실패하면 \"불러오지 못했습니다\"가 보임.\n- 메시지 줄(`data-testid=\"message\"`)이 존재함.\n\n**실패 원인**\n- **API 규칙:** `/api/rooms`가 없고, R1·R2·R4·빈 값 검사와 403·404 처리가 없고, 겹침 판정이 맞닿는 경우까지 거부합니다.\n- **화면:** `data-testid`가 하나도 없고 칸 상태 표시도 없어서, 화면 테스트 대부분이 칸을 찾지 못하고 실패합니다.\n- **연쇄 실패:** 서버가 모듈 안에서 상태를 공유합니다. 앱이 잘못 받아들인 예약이 남아 R3 붙여 예약, R7, 본인 취소 테스트도 같이 깨졌습니다. 규칙이 구현되면 이 연쇄 실패는 사라질 겁니다.\n\nPRD에 빠져 있다고 적힌 `GET /api/users`는 테스트하지 않았습니다. 예약 폼 입력과 거부 메시지가 `message` 줄에 뜨는 흐름도 폼용 `data-testid`가 정해져 있지 않아서 뺐습니다.",
+ "test_files": [
+  "tests/test_app.py"
+ ],
+ "all_files": [
+  "PRD.md",
+  "main.py",
+  "seed/reservations.csv",
+  "seed/rooms.csv",
+  "seed/users.csv",
+  "tests/conftest.py",
+  "tests/test_app.py"
+ ],
+ "conftest_modified": false,
+ "app_modified": false
+}

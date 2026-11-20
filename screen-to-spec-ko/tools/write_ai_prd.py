@@ -15,7 +15,7 @@ import sys
 import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from run_build import NO_WINDOW, find_claude, neutral_root  # noqa: E402
+from run_build import ISOLATE, NO_WINDOW, find_claude, neutral_root  # noqa: E402
 
 
 def main():
@@ -51,7 +51,7 @@ def main():
                 sys.exit("P1 PRD 없음: " + src)
             shutil.copy(src, os.path.join(work, "PRD.md"))
         cmd = [claude, "-p", prompt, "--output-format", "json", "--dangerously-skip-permissions",
-               "--model", model, "--max-turns", "12"]
+               "--model", model, "--max-turns", "12"] + ISOLATE
         t0 = time.time()
         info = {"model": model, "prompt": prompt}
         print(name, "쓰는 중 ...", end=" ", flush=True)

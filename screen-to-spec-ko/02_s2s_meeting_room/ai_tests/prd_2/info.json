@@ -1,0 +1,57 @@
+{
+ "model": "sonnet",
+ "cond": "prd",
+ "prompt": "이 폴더의 PRD.md 는 다온소프트 회의실 예약 웹앱의 요구사항 문서야. 앱 코드는 아직 없어. 이 PRD 의 완료 기준과 업무 규칙이 지켜졌는지 검증하는 pytest 테스트를 써 줘.\n테스트 틀은 tests/conftest.py 에 있어. srv 픽스처가 서버를 띄우고(srv.base 가 주소) seed/ 를 고정 데이터(DATE · ROOMS · USERS · RES 상수)로 바꿔 끼워. http(method, url, body) 는 (상태 코드, 응답) 을 돌려주고, pw 는 Playwright 브라우저야. conftest.py 는 바꾸지 말고 그 틀로 tests/test_app.py 에 테스트를 써 줘. 끝나면 무슨 테스트를 몇 개 썼는지 짧게 보고해.",
+ "port": 9610,
+ "job": true,
+ "rc": 0,
+ "wall_s": 97.6,
+ "num_turns": 6,
+ "total_cost_usd": 0.3106446,
+ "is_error": false,
+ "session_id": "71bff58c-c016-43e5-95b8-e020ecfd3699",
+ "usage": {
+  "input_tokens": 6,
+  "cache_creation_input_tokens": 40123,
+  "cache_read_input_tokens": 97906,
+  "output_tokens": 14035,
+  "output_tokens_details": {
+   "thinking_tokens": 3694
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 40123,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1538,
+    "cache_read_input_tokens": 44442,
+    "cache_creation_input_tokens": 12506,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 12506
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "`tests/test_app.py`를 썼고, pytest가 65개를 문제없이 수집했습니다. 앱 코드가 아직 없어서 실행은 못 했고, 실제 통과 여부는 앱을 만든 뒤에야 알 수 있습니다. `conftest.py`는 건드리지 않았습니다.\n\n**쓴 테스트 (65개)**\n- **화면 (조회·상태)**\n  - T1: 페이지가 열리고 '회의실'이 보이는지.\n  - T2·F1: 칸이 54개인지, 회의실 A·B·C 순서와 09:00~17:30 열 순서가 맞는지, 칸 상태가 세 가지 안에 드는지.\n  - F4: `?date=` 값이 화면에 보이는지, 날짜를 안 주면 오늘이 보이는지, 다른 날짜는 전부 빈 칸인지.\n  - 사용자 선택 상자 옵션이 users.csv와 같은지.\n  - T3·R6: 고정 예약 12칸의 상태와 예약자 이름, 사용자를 바꾸면 `mine`이 바뀌는지(김민수 6칸, 최유나 4칸, 박지연 1칸).\n  - T9: 취소 버튼이 `mine` 칸에만 있고 `booked`·`free` 칸에는 없는지.\n- **화면 (동작)**\n  - F3: 취소 버튼으로 내 예약이 사라지는지.\n  - F2: 빈 칸을 눌러 예약하는지.\n  - F6: 겹침 거부 사유가 메시지 줄에 나오는지.\n  - API가 실패하면 '불러오지 못했습니다'와 다시 시도 버튼이 나오고, 누르면 복구되는지.\n- **API 조회:** `GET /api/rooms`, 날짜별 `GET /api/reservations`.\n- **R1~R4 (거부와 경계값)**\n  - 겹침(T4): 5가지 겹침 유형이 409이고 예약 수가 그대로인지, 실행 중에 만든 예약과도 겹침이 막히는지.\n  - 붙여 예약(T5): 앞뒤로 붙인 예약이 201인지.\n  - R7: 다른 회의실, 다른 날짜는 무관한지.\n  - 30분 단위(R1): 5가지 입력이 400인지.\n  - 시간대(R2): 6가지 입력이 400이고, 09:00·18:00 경계는 201인지.\n  - 최대 2시간(R4): 초과 3가지는 400, 2시간 3가지는 201인지.\n  - 빈 값: 5개 필드를 각각 비우면 400인지.\n  - 거부 응답은 상태 코드와 PRD가 정한 `detail` 문구까지 확인합니다.\n- **POST/DELETE (T8·R5):** 201 응답 본문과 `res_id` 중복 여부, 남의 예약 삭제는 403(예약 유지), 본인은 204(사라짐), 없는 id와 두 번째 삭제는 404, 취소한 칸을 다시 예약할 수 있는지.\n\n**알아 둘 점**\n- 고정 데이터 날짜(2026-11-03)는 바꾸지 않습니다. 예약을 만드는 테스트는 테스트마다 새 날짜를 쓰고, 고정 날짜를 건드리는 두 개는 만든 뒤 지웁니다.\n- 예약 폼(끝 선택, 예약 버튼)에는 PRD에 `data-testid`가 없습니다. F2와 F6 테스트는 \"사용자 선택 상자가 아닌 `select`\"와 \"예약·확인·저장이 들어간 버튼\"으로 찾기 때문에, 구현과 맞지 않으면 이 두 테스트만 선택자를 고치면 됩니다.\n- PRD는 빈 값이 400이라고 했는데 FastAPI는 기본이 422입니다. 구현에서 따로 400으로 바꿔야 통과합니다.\n- PRD에 빠진 `GET /api/users`는 직접 테스트하지 않았습니다. 선택 상자 옵션이 users.csv와 같은지만 화면에서 확인합니다.",
+ "test_files": [
+  "tests/test_app.py"
+ ],
+ "all_files": [
+  "PRD.md",
+  "tests/conftest.py",
+  "tests/test_app.py"
+ ],
+ "conftest_modified": false
+}

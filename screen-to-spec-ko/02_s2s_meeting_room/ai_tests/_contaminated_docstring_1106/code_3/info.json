@@ -1,0 +1,61 @@
+{
+ "model": "sonnet",
+ "cond": "code",
+ "prompt": "이 폴더는 우리 회사 회의실 예약 웹앱이야(main.py · seed/). 이 앱의 pytest 테스트를 써 줘. 앱 코드(main.py)는 고치지 마.\n테스트 틀은 tests/conftest.py 에 있어. srv 픽스처가 서버를 띄우고(srv.base 가 주소) seed/ 를 고정 데이터(DATE · ROOMS · USERS · RES 상수)로 바꿔 끼워. http(method, url, body) 는 (상태 코드, 응답) 을 돌려주고, pw 는 Playwright 브라우저야. conftest.py 는 바꾸지 말고 그 틀로 tests/test_app.py 에 테스트를 써 줘. 끝나면 무슨 테스트를 몇 개 썼는지 짧게 보고해.",
+ "port": 9620,
+ "job": true,
+ "rc": 0,
+ "wall_s": 55.8,
+ "num_turns": 5,
+ "total_cost_usd": 0.2033165,
+ "is_error": false,
+ "session_id": "92a73083-59eb-48f4-a74c-98a87d0cbb9a",
+ "usage": {
+  "input_tokens": 8,
+  "cache_creation_input_tokens": 31617,
+  "cache_read_input_tokens": 141825,
+  "output_tokens": 6265,
+  "output_tokens_details": {
+   "thinking_tokens": 823
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 31617,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 893,
+    "cache_read_input_tokens": 46877,
+    "cache_creation_input_tokens": 1565,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1565
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "`tests/test_app.py`에 테스트 29개를 썼고, 실행하면 21개 통과, 8개 실패야. `main.py`와 `conftest.py`는 건드리지 않았어.\n\n실패 8개는 테스트가 틀려서가 아니라 앱이 규칙을 지키지 않아서 나온 거야. 규칙은 내가 일반적인 회의실 예약 기준으로 잡았어: 09~18시, 30분 단위, 최대 2시간, 붙여 예약 허용, 본인만 취소.\n\n**쓴 테스트**\n- **조회 (2개):** 고정 데이터 날짜의 예약 목록, 예약이 없는 날짜는 빈 목록.\n- **예약 생성 (15개):**\n  - 정상 생성\n  - 겹침 거부 (일부 겹침, 포함)\n  - 다른 방·다른 날짜의 같은 시간대 허용\n  - 앞뒤로 붙여 예약 허용\n  - 09:00 이전·18:00 이후 거부, 경계 시각 허용\n  - 30분 단위가 아닌 시간 거부\n  - 2시간 허용, 2시간 초과 거부\n  - 종료가 시작보다 이르거나 같은 경우 거부\n  - 필드 누락 거부\n  - 거부된 예약이 저장되지 않는지\n- **취소 (5개):** 본인 취소, 타인 취소 403, user 없이 취소 거부, 없는 예약 404, 취소 후 같은 시간대 재예약.\n- **화면, Playwright (7개):** 제목과 헤더, 방 표시, 칸 54개(3개 방 × 18칸), 예약자 이름 표시, 빈 날짜 화면, 사용자 select 목록.\n\n**실패 8개 (앱 결함)**\n- 붙여 예약이 409로 거부돼 (앞·뒤 2개). 겹침 검사가 `<=`라서 그래.\n- 30분 단위가 아닌 시간이 통과해.\n- 2시간 초과 예약이 통과해.\n- 종료가 시작보다 이르거나 같은 예약이 통과해.\n- 타인이 취소해도 204로 취소돼.\n- user 없이 취소해도 204로 취소돼.\n- 없는 예약을 취소해도 404 대신 204가 와.\n\n테스트 하나가 만든 예약이 같은 서버를 쓰는 다음 테스트에 영향을 주지 않도록 새로 만드는 예약은 대부분 고정 데이터와 다른 날짜로 잡았어.",
+ "test_files": [
+  "tests/test_app.py"
+ ],
+ "all_files": [
+  "main.py",
+  "seed/reservations.csv",
+  "seed/rooms.csv",
+  "seed/users.csv",
+  "tests/conftest.py",
+  "tests/test_app.py"
+ ],
+ "conftest_modified": false,
+ "app_modified": false
+}

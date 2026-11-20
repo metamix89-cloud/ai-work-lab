@@ -1,0 +1,62 @@
+{
+ "model": "sonnet",
+ "cond": "both",
+ "prompt": "이 폴더는 다온소프트 회의실 예약 웹앱이야(main.py · seed/). PRD.md 가 요구사항 문서야. 이 앱의 pytest 테스트를 써 줘. 앱 코드(main.py)는 고치지 마.\n테스트 틀은 tests/conftest.py 에 있어. srv 픽스처가 서버를 띄우고(srv.base 가 주소) seed/ 를 고정 데이터(DATE · ROOMS · USERS · RES 상수)로 바꿔 끼워. http(method, url, body) 는 (상태 코드, 응답) 을 돌려주고, pw 는 Playwright 브라우저야. conftest.py 는 바꾸지 말고 그 틀로 tests/test_app.py 에 테스트를 써 줘. 끝나면 무슨 테스트를 몇 개 썼는지 짧게 보고해.",
+ "port": 9610,
+ "job": true,
+ "rc": 0,
+ "wall_s": 474.5,
+ "num_turns": 3,
+ "total_cost_usd": 0.3524836,
+ "is_error": false,
+ "session_id": "4bb60562-517d-4f84-8af7-92dcceed4313",
+ "usage": {
+  "input_tokens": 8,
+  "cache_creation_input_tokens": 4903,
+  "cache_read_input_tokens": 175968,
+  "output_tokens": 2500,
+  "output_tokens_details": {
+   "thinking_tokens": 106
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 4903,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1461,
+    "cache_read_input_tokens": 60360,
+    "cache_creation_input_tokens": 2052,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 2052
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "`tests/test_app.py`에 테스트 46개를 썼습니다. 지금 `main.py`로 돌리면 통과 18개, 실패 28개입니다.\n\n실패는 모두 `main.py`가 PRD와 다르게 동작해서 나는 것입니다. `main.py`는 고치지 않았습니다. 이 `main.py`는 PRD 규칙 몇 개를 일부러 빼 둔 함정 앱 같습니다.\n\n- **API 테스트 32개:** 16개 통과, 16개 실패입니다. 실패는 이렇습니다.\n  - `GET /api/rooms`가 404입니다.\n  - R1(30분 단위), R2(09:00~18:00), R4(최대 2시간) 검사가 없고, 빈 값도 201로 받아 줍니다.\n  - 붙여 예약(10:00~10:30 뒤에 10:30~11:00)이 409로 거부됩니다.\n  - 남의 예약도 `DELETE`가 204로 지워지고(R5), 없는 id에도 204가 나옵니다.\n- **화면 테스트 14개:** 2개 통과, 12개 실패입니다. 실패한 12개는 `data-testid`와 `data-*` 속성이 화면에 없어서입니다. 오류 상태 문구(\"불러오지 못했습니다\")도 없습니다.\n- **마지막 실행 범위:** 화면 테스트는 실패할 때마다 30초씩 기다려서 전체를 돌리면 약 6분 40초가 걸립니다. 그래서 마지막 재실행은 화면 테스트 14개를 빼고 했습니다. 화면 테스트를 다시 돌리지는 않았고, 처음 전체 실행에서 12개 실패와 2개 통과를 확인했습니다.\n- **테스트 코드 오류 수정:** 처음 실행에서 한글 `user=` 쿼리를 URL 인코딩하지 않아 `UnicodeEncodeError`가 났습니다. 헬퍼 함수 `delete()`와 `quote()`로 고쳤습니다.\n\n**쓴 테스트**\n- **조회·생성 API:**\n  - 회의실 목록\n  - 시드 예약 조회와 다른 날짜의 빈 결과\n  - 생성 201\n  - R1: 시작·끝이 30분 단위가 아닐 때\n  - R2: 5가지 범위 위반과 경계값 허용\n  - R3: 겹침 5가지 모양, 끝=시작인 붙여 예약, 시드 예약에 붙여 예약\n  - R4: 2시간 초과·정확히 2시간\n  - R7: 다른 회의실·다른 날짜는 무관\n  - 빈 값 400\n- **취소 API:**\n  - 남의 예약 403과 예약 유지\n  - `user` 없는 요청 거부\n  - 본인 취소 204\n  - 취소 후 같은 시간 재예약\n  - 없는 id 404\n- **화면:**\n  - 페이지 열기와 제목\n  - 칸 54개와 회의실·시간 구성\n  - 사용자 선택 상자 옵션\n  - `date` 표시와 `?date=` 반영\n  - `booked`·`free` 상태와 예약자 이름\n  - `mine` 상태와 사용자 전환 시 변화\n  - 취소 버튼이 `mine` 칸에만 있는지\n  - 화면에서 취소하면 `free`로 바뀌는지\n  - API로 만든 예약이 화면에 보이는지\n  - 메시지 줄이 있는지\n  - API 실패 시 오류 상태\n\n예약 폼으로 직접 예약하는 화면 테스트는 PRD에 폼의 `data-testid`가 없어서 쓰지 않았습니다. 거부 사유가 화면 메시지 줄에 나오는지(F6)도 같은 이유로 못 봤습니다.\n\n서버 상태가 테스트끼리 섞이지 않게 변경이 필요한 테스트는 시드에 없는 새 날짜를 씁니다. 시드 날짜를 건드린 테스트(`test_r3_adjacent_to_seed_allowed`)는 만든 예약을 직접 지웁니다.",
+ "test_files": [
+  "tests/test_app.py"
+ ],
+ "all_files": [
+  "PRD.md",
+  "main.py",
+  "seed/reservations.csv",
+  "seed/rooms.csv",
+  "seed/users.csv",
+  "tests/conftest.py",
+  "tests/test_app.py"
+ ],
+ "conftest_modified": false,
+ "app_modified": false
+}

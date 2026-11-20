@@ -1,0 +1,11 @@
+permit_id,work_type,zone_id,requester_id,start_at,end_at,status,checked,reviewed_by,approved_by,approved_at,started_at,closed_at
+WP-0101,height,Z1,w1,2026-11-06 11:03,2026-11-06 15:03,requested,H1|H2|H3,,,,,
+WP-0102,hot,Z2,m2,2026-11-06 12:03,2026-11-06 14:03,reviewed,F1|F2|F3,s1,,,,
+WP-0103,hot,Z3,w2,2026-11-06 12:03,2026-11-06 14:03,reviewed,F1|F2|F3,s1,,,,
+WP-0104,hot,Z2,w2,2026-11-06 16:03,2026-11-06 18:03,reviewed,F1|F2|F3,s1,,,,
+WP-0105,confined,Z2,w1,2026-11-06 11:03,2026-11-06 15:03,approved,C1|C2|C3,s1,m1,2026-11-06 11:33,,
+WP-0106,height,Z1,w1,2026-11-06 02:03,2026-11-06 10:03,approved,H1|H2|H3,s1,m1,2026-11-06 03:03,,
+WP-0107,height,Z3,w2,2026-11-06 09:03,2026-11-06 13:03,started,H1|H2|H3,s1,m1,2026-11-06 10:03,2026-11-06 10:33,
+WP-0108,hot,Z1,w1,2026-11-06 06:03,2026-11-06 07:03,closed,F1|F2|F3,s1,m2,2026-11-06 06:03,2026-11-06 06:03,2026-11-06 07:03
+WP-0109,confined,Z3,w2,2026-11-06 13:03,2026-11-06 15:03,requested,C1|C2|C3,,,,,
+WP-0110,height,Z1,w1,2026-11-06 10:03,2026-11-06 14:03,started,H1|H2|H3,s1,m1,2026-11-06 11:03,2026-11-06 11:33,

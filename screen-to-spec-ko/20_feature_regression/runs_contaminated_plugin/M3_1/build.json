@@ -1,0 +1,59 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 가 v2 로 바뀌었어. [v2] 표시가 붙은 내용대로 앱을 고쳐 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "port": 9600,
+ "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9600, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+ "job": true,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 50960,
+ "num_turns": 12,
+ "total_cost_usd": 0.31352959999999996,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "session_id": "57dd4f23-02b9-44f9-9d4a-fc6d0597652d",
+ "usage": {
+  "input_tokens": 16,
+  "cache_creation_input_tokens": 47555,
+  "cache_read_input_tokens": 406876,
+  "output_tokens": 8259,
+  "output_tokens_details": {
+   "thinking_tokens": 1370
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 47555,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 822,
+    "cache_read_input_tokens": 63315,
+    "cache_creation_input_tokens": 657,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 657
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "기존 DoD: 9/9 — 고치기 전과 후에 `pytest` 를 돌렸고 둘 다 `tests/test_dod.py` 의 T1~T9 가 모두 통과했다. `tests/test_recur.py` 까지 합치면 13개가 전부 통과한다.\n새 기준: T10 · T11 · T12 모두 확인함 — `tests/test_recur.py` 가 실제 서버를 띄워 API 로 T10~T12 를 검사하고, 화면의 반복 선택 상자와 남은 전부 취소 버튼도 브라우저로 눌러 보았다.\n바꾼 파일:\n- `main.py`\n  - `mr_reservations` 에 `series_id` 칸을 더했다. 시드를 넣는 INSERT 는 칸 이름을 적도록 바꿨다.\n  - 예약 목록 응답에 `series_id` 를 더했다.\n  - `POST` 에 `repeat_weeks`(R10 · R12)를 더했다.\n  - `DELETE` 에 `scope=one|following`(R11)을 더했다.\n- `static/index.html`: `repeat-select` 와 반복 예약 `mine` 칸의 `cancel-following-btn` 을 더했다. 예약 요청에 `repeat_weeks` 를, 취소 요청에 `scope` 를 실어 보낸다.\n- `tests/test_recur.py`: 새로 만들었다. T10~T12 와 화면 확인이 들어 있다.\n- `PRD.md`: 변경 이력의 마지막 줄을 채웠다.\n\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음\nPRD 가 안 정해서 직접 정한 것:\n- `repeat_weeks` 가 `null` 이면 없는 것으로 보고 v1 처럼 동작한다.\n- 반복 예약인데 `date` 가 날짜 형식이 아니면 400 `모든 값을 입력해 주세요` 를 준다.\n- `scope` 가 `one` 도 `following` 도 아니면 400 `scope 는 one 또는 following 이어야 합니다` 를 준다.\n- 반복 묶음은 별도 표 없이 `mr_reservations` 의 `series_id` 칸에 저장한다.\n\n테스트가 만든 `rooms.db` 는 지웠다.",
+ "wall_s": 132.5,
+ "isolation": {
+  "transcript": true,
+  "foreign_ports": [],
+  "kill_by_name": [],
+  "outside_refs": []
+ }
+}

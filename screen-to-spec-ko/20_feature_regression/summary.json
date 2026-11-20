@@ -1,0 +1,1036 @@
+{
+ "M1_1": {
+  "old_pass": 9,
+  "regressions": 0,
+  "old_failed": [],
+  "new_pass_strict": 0,
+  "new_detail": {
+   "T10": "AssertionError: 2번째 주(2026-11-10)에 한 건이 있어야 한다\nassert 0 == 1\n +  where 0 = len([])\n +    where [] = on(<test_recur.QuietServer object at 0x0000016887BDAF90>, '2026-11-10', 'B', '16:00', '박지연')\n +      where '2026-11-10' = day(1)",
+   "T11": "AssertionError: 4주에 한 건씩 있어야 한다: [1, 0, 0, 0]\nassert False\n +  where False = all(<generator object test_T11_cancel_one_or_following_owner_only.<locals>.<genexpr> at 0x0000016888C43CA0>)",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 8, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "testid_removed": [],
+  "testid_added": [
+   "repeat"
+  ],
+  "routes_removed": [],
+  "routes_added": [],
+  "seed_changed": {},
+  "seed_removed": [],
+  "single_contract": {
+   "post_status": 201,
+   "post_keys": [
+    "date",
+    "dates",
+    "end",
+    "res_id",
+    "res_ids",
+    "room_id",
+    "series_id",
+    "start",
+    "user"
+   ],
+   "get_status": 200,
+   "get_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "series_id",
+    "start",
+    "user"
+   ],
+   "users_shape": "str"
+  },
+  "single_keys_missing": [],
+  "single_keys_extra": [
+   "dates",
+   "res_ids",
+   "series_id"
+  ],
+  "tests_modified": null,
+  "cost": 0.11702670000000001,
+  "turns": 8,
+  "wall_s": 47.0,
+  "rc": 0,
+  "report_mentions_test": true,
+  "changed": [
+   "main.py",
+   "static/index.html"
+  ],
+  "added": [],
+  "removed": [],
+  "lines_added": 43,
+  "lines_removed": 15,
+  "pytest_runs": 0,
+  "server_runs": 2,
+  "wrote_tests": [],
+  "transcript": true,
+  "unasked": 0,
+  "behavior_status_changed": [
+   "날짜가 글자(내일)",
+   "없는 날짜(13월 45일)",
+   "날짜 형식 다름(2026/11/03)"
+  ],
+  "behavior_shape_changed": [
+   "한 번 예약",
+   "그 날 목록",
+   "명단에 없는 사람"
+  ],
+  "behavior_text_changed": [],
+  "new_pass_own": 3,
+  "own_passed": [
+   "T10",
+   "T11",
+   "T12"
+  ],
+  "own_detail": {},
+  "own_adapter": {
+   "weeks_field": "weekly_count",
+   "weeks_mode": "count",
+   "cancel_one": "/api/reservations/{res_id}?user={user}",
+   "cancel_following": "/api/reservations/{res_id}?user={user}&series=true",
+   "following_is_all": false,
+   "bad_weeks": [
+    0,
+    13,
+    "abc"
+   ],
+   "ok_weeks": 12,
+   "strict": false
+  }
+ },
+ "M1_2": {
+  "old_pass": 9,
+  "regressions": 0,
+  "old_failed": [],
+  "new_pass_strict": 0,
+  "new_detail": {
+   "T10": "AssertionError: 2번째 주(2026-11-10)에 한 건이 있어야 한다\nassert 0 == 1\n +  where 0 = len([])\n +    where [] = on(<test_recur.QuietServer object at 0x0000016CD62CAF90>, '2026-11-10', 'B', '16:00', '박지연')\n +      where '2026-11-10' = day(1)",
+   "T11": "AssertionError: 4주에 한 건씩 있어야 한다: [1, 0, 0, 0]\nassert False\n +  where False = all(<generator object test_T11_cancel_one_or_following_owner_only.<locals>.<genexpr> at 0x0000016CD7333CA0>)",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 8, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "testid_removed": [],
+  "testid_added": [
+   "weeks"
+  ],
+  "routes_removed": [],
+  "routes_added": [],
+  "seed_changed": {},
+  "seed_removed": [],
+  "single_contract": {
+   "post_status": 201,
+   "post_keys": [
+    "date",
+    "dates",
+    "end",
+    "res_id",
+    "res_ids",
+    "room_id",
+    "series_id",
+    "start",
+    "user",
+    "weeks"
+   ],
+   "get_status": 200,
+   "get_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "series_id",
+    "start",
+    "user"
+   ],
+   "users_shape": "str"
+  },
+  "single_keys_missing": [],
+  "single_keys_extra": [
+   "dates",
+   "res_ids",
+   "series_id",
+   "weeks"
+  ],
+  "tests_modified": null,
+  "cost": 0.1022121,
+  "turns": 7,
+  "wall_s": 28.5,
+  "rc": 0,
+  "report_mentions_test": true,
+  "changed": [
+   "main.py",
+   "static/index.html"
+  ],
+  "added": [],
+  "removed": [],
+  "lines_added": 37,
+  "lines_removed": 12,
+  "pytest_runs": 0,
+  "server_runs": 0,
+  "wrote_tests": [],
+  "transcript": true,
+  "unasked": 0,
+  "behavior_status_changed": [],
+  "behavior_shape_changed": [
+   "한 번 예약",
+   "그 날 목록",
+   "날짜가 글자(내일)",
+   "없는 날짜(13월 45일)",
+   "날짜 형식 다름(2026/11/03)",
+   "명단에 없는 사람"
+  ],
+  "behavior_text_changed": [],
+  "new_pass_own": 2,
+  "own_passed": [
+   "T10",
+   "T12"
+  ],
+  "own_detail": {
+   "T11": "Failed: 이 앱에는 'following' 취소가 없다"
+  },
+  "own_adapter": {
+   "weeks_field": "weeks",
+   "weeks_mode": "count",
+   "cancel_one": "/api/reservations/{res_id}?user={user}",
+   "cancel_following": null,
+   "following_is_all": false,
+   "bad_weeks": [
+    0,
+    13,
+    "abc"
+   ],
+   "ok_weeks": 12,
+   "strict": false
+  }
+ },
+ "M1_3": {
+  "old_pass": 9,
+  "regressions": 0,
+  "old_failed": [],
+  "new_pass_strict": 1,
+  "new_detail": {
+   "T11": "AssertionError: 남은 전부 취소 뒤 남은 실행이 기대와 다르다\nassert [1, 0, 0, 1] == [1, 0, 0, 0]\n  \n  At index 3 diff: 1 != 0\n  Use -v to get more diff",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 14, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "testid_removed": [],
+  "testid_added": [
+   "cancel-series-btn",
+   "repeat-weeks"
+  ],
+  "routes_removed": [],
+  "routes_added": [],
+  "seed_changed": {},
+  "seed_removed": [],
+  "single_contract": {
+   "post_status": 201,
+   "post_keys": [
+    "date",
+    "dates",
+    "end",
+    "res_id",
+    "res_ids",
+    "room_id",
+    "series_id",
+    "start",
+    "user"
+   ],
+   "get_status": 200,
+   "get_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "series_id",
+    "start",
+    "user"
+   ],
+   "users_shape": "str"
+  },
+  "single_keys_missing": [],
+  "single_keys_extra": [
+   "dates",
+   "res_ids",
+   "series_id"
+  ],
+  "tests_modified": null,
+  "cost": 0.1116614,
+  "turns": 7,
+  "wall_s": 30.5,
+  "rc": 0,
+  "report_mentions_test": true,
+  "changed": [
+   "main.py",
+   "static/index.html"
+  ],
+  "added": [],
+  "removed": [],
+  "lines_added": 42,
+  "lines_removed": 16,
+  "pytest_runs": 0,
+  "server_runs": 0,
+  "wrote_tests": [],
+  "transcript": true,
+  "unasked": 0,
+  "behavior_status_changed": [
+   "날짜가 글자(내일)",
+   "없는 날짜(13월 45일)",
+   "날짜 형식 다름(2026/11/03)"
+  ],
+  "behavior_shape_changed": [
+   "한 번 예약",
+   "그 날 목록",
+   "명단에 없는 사람"
+  ],
+  "behavior_text_changed": [],
+  "new_pass_own": 3,
+  "own_passed": [
+   "T10",
+   "T11",
+   "T12"
+  ],
+  "own_detail": {},
+  "own_adapter": {
+   "weeks_field": "repeat_weeks",
+   "weeks_mode": "count",
+   "cancel_one": "/api/reservations/{res_id}?user={user}",
+   "cancel_following": "/api/reservations/{res_id}?user={user}&series=true",
+   "following_is_all": false,
+   "bad_weeks": [
+    0,
+    13,
+    "abc"
+   ],
+   "ok_weeks": 12,
+   "strict": false
+  }
+ },
+ "M1_4": {
+  "old_pass": 9,
+  "regressions": 0,
+  "old_failed": [],
+  "new_pass_strict": 0,
+  "new_detail": {
+   "T10": "AssertionError: 2번째 주(2026-11-10)에 한 건이 있어야 한다\nassert 0 == 1\n +  where 0 = len([])\n +    where [] = on(<test_recur.QuietServer object at 0x0000024E6940AF90>, '2026-11-10', 'B', '16:00', '박지연')\n +      where '2026-11-10' = day(1)",
+   "T11": "AssertionError: 4주에 한 건씩 있어야 한다: [1, 0, 0, 0]\nassert False\n +  where False = all(<generator object test_T11_cancel_one_or_following_owner_only.<locals>.<genexpr> at 0x0000024E6A5B7CA0>)",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 8, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "testid_removed": [],
+  "testid_added": [
+   "cancel-series-btn",
+   "weeks"
+  ],
+  "routes_removed": [],
+  "routes_added": [],
+  "seed_changed": {},
+  "seed_removed": [],
+  "single_contract": {
+   "post_status": 201,
+   "post_keys": [
+    "date",
+    "dates",
+    "end",
+    "res_id",
+    "res_ids",
+    "room_id",
+    "series_id",
+    "start",
+    "user"
+   ],
+   "get_status": 200,
+   "get_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "series_id",
+    "start",
+    "user"
+   ],
+   "users_shape": "str"
+  },
+  "single_keys_missing": [],
+  "single_keys_extra": [
+   "dates",
+   "res_ids",
+   "series_id"
+  ],
+  "tests_modified": null,
+  "cost": 0.13033440000000002,
+  "turns": 8,
+  "wall_s": 41.0,
+  "rc": 0,
+  "report_mentions_test": false,
+  "changed": [
+   "main.py",
+   "static/index.html"
+  ],
+  "added": [],
+  "removed": [],
+  "lines_added": 46,
+  "lines_removed": 18,
+  "pytest_runs": 0,
+  "server_runs": 2,
+  "wrote_tests": [],
+  "transcript": true,
+  "unasked": 0,
+  "behavior_status_changed": [
+   "날짜가 글자(내일)",
+   "없는 날짜(13월 45일)",
+   "날짜 형식 다름(2026/11/03)"
+  ],
+  "behavior_shape_changed": [
+   "한 번 예약",
+   "그 날 목록",
+   "명단에 없는 사람"
+  ],
+  "behavior_text_changed": [],
+  "new_pass_own": 3,
+  "own_passed": [
+   "T10",
+   "T11",
+   "T12"
+  ],
+  "own_detail": {},
+  "own_adapter": {
+   "weeks_field": "weeks",
+   "weeks_mode": "count",
+   "cancel_one": "/api/reservations/{res_id}?user={user}",
+   "cancel_following": "/api/reservations/{res_id}?user={user}&series=true",
+   "following_is_all": false,
+   "bad_weeks": [
+    0,
+    13,
+    "abc"
+   ],
+   "ok_weeks": 12,
+   "strict": false
+  }
+ },
+ "M1_5": {
+  "old_pass": 9,
+  "regressions": 0,
+  "old_failed": [],
+  "new_pass_strict": 1,
+  "new_detail": {
+   "T11": "AssertionError: 남은 전부 취소 뒤 남은 실행이 기대와 다르다\nassert [1, 0, 0, 1] == [1, 0, 0, 0]\n  \n  At index 3 diff: 1 != 0\n  Use -v to get more diff",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 14, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "testid_removed": [],
+  "testid_added": [
+   "repeat-weeks"
+  ],
+  "routes_removed": [],
+  "routes_added": [],
+  "seed_changed": {},
+  "seed_removed": [],
+  "single_contract": {
+   "post_status": 201,
+   "post_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "start",
+    "user"
+   ],
+   "get_status": 200,
+   "get_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "start",
+    "user"
+   ],
+   "users_shape": "str"
+  },
+  "single_keys_missing": [],
+  "single_keys_extra": [],
+  "tests_modified": null,
+  "cost": 0.1339557,
+  "turns": 14,
+  "wall_s": 35.0,
+  "rc": 0,
+  "report_mentions_test": true,
+  "changed": [
+   "main.py",
+   "static/index.html"
+  ],
+  "added": [],
+  "removed": [],
+  "lines_added": 36,
+  "lines_removed": 9,
+  "pytest_runs": 0,
+  "server_runs": 0,
+  "wrote_tests": [],
+  "transcript": true,
+  "unasked": 0,
+  "behavior_status_changed": [],
+  "behavior_shape_changed": [],
+  "behavior_text_changed": [],
+  "new_pass_own": 2,
+  "own_passed": [
+   "T10",
+   "T12"
+  ],
+  "own_detail": {
+   "T11": "Failed: 이 앱에는 'following' 취소가 없다"
+  },
+  "own_adapter": {
+   "weeks_field": "repeat_weeks",
+   "weeks_mode": "count",
+   "cancel_one": "/api/reservations/{res_id}?user={user}",
+   "cancel_following": null,
+   "following_is_all": false,
+   "bad_weeks": [
+    0,
+    13,
+    "abc"
+   ],
+   "ok_weeks": 12,
+   "strict": false
+  }
+ },
+ "M1_6": {
+  "old_pass": 9,
+  "regressions": 0,
+  "old_failed": [],
+  "new_pass_strict": 1,
+  "new_detail": {
+   "T11": "AssertionError: 남은 전부 취소 뒤 남은 실행이 기대와 다르다\nassert [1, 0, 0, 1] == [1, 0, 0, 0]\n  \n  At index 3 diff: 1 != 0\n  Use -v to get more diff",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 14, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "testid_removed": [],
+  "testid_added": [
+   "repeat-weeks"
+  ],
+  "routes_removed": [],
+  "routes_added": [],
+  "seed_changed": {},
+  "seed_removed": [],
+  "single_contract": {
+   "post_status": 201,
+   "post_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "start",
+    "user"
+   ],
+   "get_status": 200,
+   "get_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "start",
+    "user"
+   ],
+   "users_shape": "str"
+  },
+  "single_keys_missing": [],
+  "single_keys_extra": [],
+  "tests_modified": null,
+  "cost": 0.1265016,
+  "turns": 14,
+  "wall_s": 30.9,
+  "rc": 0,
+  "report_mentions_test": true,
+  "changed": [
+   "main.py",
+   "static/index.html"
+  ],
+  "added": [],
+  "removed": [],
+  "lines_added": 36,
+  "lines_removed": 10,
+  "pytest_runs": 0,
+  "server_runs": 0,
+  "wrote_tests": [],
+  "transcript": true,
+  "unasked": 0,
+  "behavior_status_changed": [
+   "날짜가 글자(내일)",
+   "없는 날짜(13월 45일)",
+   "날짜 형식 다름(2026/11/03)"
+  ],
+  "behavior_shape_changed": [],
+  "behavior_text_changed": [],
+  "new_pass_own": 2,
+  "own_passed": [
+   "T10",
+   "T12"
+  ],
+  "own_detail": {
+   "T11": "Failed: 이 앱에는 'following' 취소가 없다"
+  },
+  "own_adapter": {
+   "weeks_field": "repeat_weeks",
+   "weeks_mode": "count",
+   "cancel_one": "/api/reservations/{res_id}?user={user}",
+   "cancel_following": null,
+   "following_is_all": false,
+   "bad_weeks": [
+    0,
+    13,
+    "abc"
+   ],
+   "ok_weeks": 12,
+   "strict": false
+  }
+ },
+ "M2_1": {
+  "old_pass": 9,
+  "regressions": 0,
+  "old_failed": [],
+  "new_pass_strict": 0,
+  "new_detail": {
+   "T10": "AssertionError: 2번째 주(2026-11-10)에 한 건이 있어야 한다\nassert 0 == 1\n +  where 0 = len([])\n +    where [] = on(<test_recur.QuietServer object at 0x00000204C7E4AF90>, '2026-11-10', 'B', '16:00', '박지연')\n +      where '2026-11-10' = day(1)",
+   "T11": "AssertionError: 4주에 한 건씩 있어야 한다: [1, 0, 0, 0]\nassert False\n +  where False = all(<generator object test_T11_cancel_one_or_following_owner_only.<locals>.<genexpr> at 0x00000204C8EA7CA0>)",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 8, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "testid_removed": [],
+  "testid_added": [
+   "weeks"
+  ],
+  "routes_removed": [],
+  "routes_added": [],
+  "seed_changed": {},
+  "seed_removed": [],
+  "single_contract": {
+   "post_status": 201,
+   "post_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "start",
+    "user"
+   ],
+   "get_status": 200,
+   "get_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "start",
+    "user"
+   ],
+   "users_shape": "str"
+  },
+  "single_keys_missing": [],
+  "single_keys_extra": [],
+  "tests_modified": null,
+  "cost": 0.14502420000000002,
+  "turns": 15,
+  "wall_s": 35.7,
+  "rc": 0,
+  "report_mentions_test": true,
+  "changed": [
+   "main.py",
+   "static/index.html"
+  ],
+  "added": [],
+  "removed": [],
+  "lines_added": 40,
+  "lines_removed": 11,
+  "pytest_runs": 0,
+  "server_runs": 0,
+  "wrote_tests": [],
+  "transcript": true,
+  "unasked": 0,
+  "behavior_status_changed": [],
+  "behavior_shape_changed": [],
+  "behavior_text_changed": [],
+  "new_pass_own": 2,
+  "own_passed": [
+   "T10",
+   "T12"
+  ],
+  "own_detail": {
+   "T11": "Failed: 이 앱에는 'following' 취소가 없다"
+  },
+  "own_adapter": {
+   "weeks_field": "weeks",
+   "weeks_mode": "count",
+   "cancel_one": "/api/reservations/{res_id}?user={user}",
+   "cancel_following": null,
+   "following_is_all": false,
+   "bad_weeks": [
+    0,
+    13,
+    "abc"
+   ],
+   "ok_weeks": 12,
+   "strict": false
+  }
+ },
+ "M2_2": {
+  "old_pass": 9,
+  "regressions": 0,
+  "old_failed": [],
+  "new_pass_strict": 0,
+  "new_detail": {
+   "T10": "AssertionError: 2번째 주(2026-11-10)에 한 건이 있어야 한다\nassert 0 == 1\n +  where 0 = len([])\n +    where [] = on(<test_recur.QuietServer object at 0x0000017E1735AF90>, '2026-11-10', 'B', '16:00', '박지연')\n +      where '2026-11-10' = day(1)",
+   "T11": "AssertionError: 4주에 한 건씩 있어야 한다: [1, 0, 0, 0]\nassert False\n +  where False = all(<generator object test_T11_cancel_one_or_following_owner_only.<locals>.<genexpr> at 0x0000017E183B3CA0>)",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 8, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "testid_removed": [],
+  "testid_added": [
+   "weeks"
+  ],
+  "routes_removed": [],
+  "routes_added": [],
+  "seed_changed": {},
+  "seed_removed": [],
+  "single_contract": {
+   "post_status": 201,
+   "post_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "start",
+    "user"
+   ],
+   "get_status": 200,
+   "get_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "series_id",
+    "start",
+    "user"
+   ],
+   "users_shape": "str"
+  },
+  "single_keys_missing": [],
+  "single_keys_extra": [],
+  "tests_modified": null,
+  "cost": 0.1516606,
+  "turns": 8,
+  "wall_s": 53.1,
+  "rc": 0,
+  "report_mentions_test": true,
+  "changed": [
+   "main.py",
+   "static/index.html"
+  ],
+  "added": [],
+  "removed": [],
+  "lines_added": 47,
+  "lines_removed": 17,
+  "pytest_runs": 0,
+  "server_runs": 3,
+  "wrote_tests": [],
+  "transcript": true,
+  "unasked": 0,
+  "behavior_status_changed": [],
+  "behavior_shape_changed": [
+   "그 날 목록"
+  ],
+  "behavior_text_changed": [],
+  "new_pass_own": 3,
+  "own_passed": [
+   "T10",
+   "T11",
+   "T12"
+  ],
+  "own_detail": {},
+  "own_adapter": {
+   "weeks_field": "weeks",
+   "weeks_mode": "count",
+   "cancel_one": "/api/reservations/{res_id}?user={user}",
+   "cancel_following": "/api/reservations/{res_id}?user={user}&series=true",
+   "following_is_all": false,
+   "bad_weeks": [
+    0,
+    13,
+    "abc"
+   ],
+   "ok_weeks": 12,
+   "strict": false
+  }
+ },
+ "M2_3": {
+  "old_pass": 9,
+  "regressions": 0,
+  "old_failed": [],
+  "new_pass_strict": 1,
+  "new_detail": {
+   "T11": "AssertionError: 남은 전부 취소 뒤 남은 실행이 기대와 다르다\nassert [1, 0, 0, 1] == [1, 0, 0, 0]\n  \n  At index 3 diff: 1 != 0\n  Use -v to get more diff",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 14, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "testid_removed": [],
+  "testid_added": [
+   "repeat"
+  ],
+  "routes_removed": [],
+  "routes_added": [],
+  "seed_changed": {},
+  "seed_removed": [],
+  "single_contract": {
+   "post_status": 201,
+   "post_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "start",
+    "user"
+   ],
+   "get_status": 200,
+   "get_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "start",
+    "user"
+   ],
+   "users_shape": "str"
+  },
+  "single_keys_missing": [],
+  "single_keys_extra": [],
+  "tests_modified": null,
+  "cost": 0.11413100000000001,
+  "turns": 13,
+  "wall_s": 30.1,
+  "rc": 0,
+  "report_mentions_test": true,
+  "changed": [
+   "main.py",
+   "static/index.html"
+  ],
+  "added": [],
+  "removed": [],
+  "lines_added": 36,
+  "lines_removed": 9,
+  "pytest_runs": 0,
+  "server_runs": 0,
+  "wrote_tests": [],
+  "transcript": true,
+  "unasked": 0,
+  "behavior_status_changed": [],
+  "behavior_shape_changed": [],
+  "behavior_text_changed": [],
+  "new_pass_own": 2,
+  "own_passed": [
+   "T10",
+   "T12"
+  ],
+  "own_detail": {
+   "T11": "Failed: 이 앱에는 'following' 취소가 없다"
+  },
+  "own_adapter": {
+   "weeks_field": "repeat_weeks",
+   "weeks_mode": "count",
+   "cancel_one": "/api/reservations/{res_id}?user={user}",
+   "cancel_following": null,
+   "following_is_all": false,
+   "bad_weeks": [
+    0,
+    13,
+    "abc"
+   ],
+   "ok_weeks": 12,
+   "strict": false
+  }
+ },
+ "M3_1": {
+  "old_pass": 9,
+  "regressions": 0,
+  "old_failed": [],
+  "new_pass_strict": 3,
+  "new_detail": {},
+  "testid_removed": [],
+  "testid_added": [
+   "cancel-following-btn",
+   "repeat-select"
+  ],
+  "routes_removed": [],
+  "routes_added": [],
+  "seed_changed": {},
+  "seed_removed": [],
+  "single_contract": {
+   "post_status": 201,
+   "post_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "start",
+    "user"
+   ],
+   "get_status": 200,
+   "get_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "series_id",
+    "start",
+    "user"
+   ],
+   "users_shape": "str"
+  },
+  "single_keys_missing": [],
+  "single_keys_extra": [],
+  "tests_modified": false,
+  "cost": 0.19623900000000002,
+  "turns": 10,
+  "wall_s": 165.9,
+  "rc": 0,
+  "report_mentions_test": true,
+  "changed": [
+   "main.py",
+   "static/index.html"
+  ],
+  "added": [],
+  "removed": [],
+  "lines_added": 45,
+  "lines_removed": 9,
+  "pytest_runs": 4,
+  "server_runs": 1,
+  "wrote_tests": [],
+  "transcript": true,
+  "unasked": 0,
+  "behavior_status_changed": [],
+  "behavior_shape_changed": [
+   "그 날 목록"
+  ],
+  "behavior_text_changed": []
+ },
+ "M3_2": {
+  "old_pass": 9,
+  "regressions": 0,
+  "old_failed": [],
+  "new_pass_strict": 3,
+  "new_detail": {},
+  "testid_removed": [],
+  "testid_added": [
+   "cancel-following-btn",
+   "repeat-select"
+  ],
+  "routes_removed": [],
+  "routes_added": [],
+  "seed_changed": {},
+  "seed_removed": [],
+  "single_contract": {
+   "post_status": 201,
+   "post_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "start",
+    "user"
+   ],
+   "get_status": 200,
+   "get_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "series_id",
+    "start",
+    "user"
+   ],
+   "users_shape": "str"
+  },
+  "single_keys_missing": [],
+  "single_keys_extra": [],
+  "tests_modified": false,
+  "cost": 0.4307681,
+  "turns": 23,
+  "wall_s": 439.4,
+  "rc": 0,
+  "report_mentions_test": true,
+  "changed": [
+   "main.py",
+   "static/index.html"
+  ],
+  "added": [],
+  "removed": [],
+  "lines_added": 48,
+  "lines_removed": 10,
+  "pytest_runs": 16,
+  "server_runs": 4,
+  "wrote_tests": [],
+  "transcript": true,
+  "unasked": 0,
+  "behavior_status_changed": [],
+  "behavior_shape_changed": [
+   "그 날 목록"
+  ],
+  "behavior_text_changed": []
+ },
+ "M3_3": {
+  "old_pass": 9,
+  "regressions": 0,
+  "old_failed": [],
+  "new_pass_strict": 3,
+  "new_detail": {},
+  "testid_removed": [],
+  "testid_added": [
+   "cancel-following-btn",
+   "repeat-select"
+  ],
+  "routes_removed": [],
+  "routes_added": [],
+  "seed_changed": {},
+  "seed_removed": [],
+  "single_contract": {
+   "post_status": 201,
+   "post_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "start",
+    "user"
+   ],
+   "get_status": 200,
+   "get_keys": [
+    "date",
+    "end",
+    "res_id",
+    "room_id",
+    "series_id",
+    "start",
+    "user"
+   ],
+   "users_shape": "str"
+  },
+  "single_keys_missing": [],
+  "single_keys_extra": [],
+  "tests_modified": false,
+  "cost": 0.29756050000000006,
+  "turns": 23,
+  "wall_s": 157.6,
+  "rc": 0,
+  "report_mentions_test": true,
+  "changed": [
+   "main.py",
+   "static/index.html"
+  ],
+  "added": [],
+  "removed": [],
+  "lines_added": 43,
+  "lines_removed": 12,
+  "pytest_runs": 5,
+  "server_runs": 1,
+  "wrote_tests": [
+   "test_recur.py"
+  ],
+  "transcript": true,
+  "unasked": 0,
+  "behavior_status_changed": [],
+  "behavior_shape_changed": [
+   "그 날 목록"
+  ],
+  "behavior_text_changed": []
+ }
+}

@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>위험 작업 허가서 — 뚝딱건설 해뜰현장</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f4f5f7; color: #222; }
+  header { background: #1f3a5f; color: #fff; padding: 10px 16px; display: flex; gap: 16px; align-items: center; }
+  header h1 { font-size: 18px; margin: 0; }
+  main { display: flex; gap: 16px; padding: 16px; align-items: flex-start; }
+  section { background: #fff; border: 1px solid #d5d9e0; border-radius: 6px; padding: 12px; }
+  #left { width: 440px; } #right { flex: 1; min-height: 200px; }
+  h2 { font-size: 15px; margin: 0 0 8px; }
+  .permit { border: 1px solid #d5d9e0; border-radius: 4px; padding: 6px 8px; margin-bottom: 6px; cursor: pointer; font-size: 13px; }
+  .permit.sel { border-color: #1f3a5f; background: #eef3fa; }
+  .permit .st { float: right; font-weight: bold; }
+  #message { margin: 8px 16px 0; min-height: 20px; font-weight: bold; color: #b3261e; }
+  #message.ok { color: #1b6e3c; }
+  #errbox { margin: 8px 16px; padding: 8px; background: #fde7e7; border: 1px solid #b3261e; }
+  button { padding: 5px 12px; margin-right: 6px; cursor: pointer; }
+  label.row { display: block; margin: 6px 0; font-size: 13px; }
+  .chk { display: block; font-size: 13px; }
+  table.grid { border-collapse: collapse; font-size: 11px; }
+  table.grid td, table.grid th { border: 1px solid #ccd; width: 46px; height: 26px; text-align: center; }
+  table.grid th.z { width: 120px; text-align: left; padding-left: 4px; }
+  .c-height { background: #8ec5ff; } .c-hot { background: #ff9f7a; } .c-confined { background: #c9a6ee; }
+  .conflict { margin: 6px 0; padding: 6px 8px; background: #fff0d6; border: 1px solid #e08a00; color: #8a4b00; font-weight: bold; }
+  dl { margin: 0; font-size: 13px; display: grid; grid-template-columns: 110px 1fr; row-gap: 4px; }
+  dt { color: #667; } dd { margin: 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>위험 작업 허가서 · 해뜰현장</h1>
+  <label>사용자
+    <select data-testid="user" id="user"></select>
+  </label>
+</header>
+<div id="message" data-testid="message"></div>
+<div id="errbox" hidden>불러오지 못했습니다 <button id="retry">다시 시도</button></div>
+<main>
+  <div id="left">
+    <section>
+      <h2>허가 목록</h2>
+      <div id="list"></div>
+    </section>
+    <section style="margin-top:16px">
+      <h2>허가 신청</h2>
+      <label class="row">작업 종류 <select data-testid="work-type" id="wt"></select></label>
+      <div id="items"></div>
+      <label class="row">구역 <select data-testid="zone" id="zone"></select></label>
+      <label class="row">시작 <input data-testid="start-at" id="sa" placeholder="YYYY-MM-DD HH:MM" size="18"></label>
+      <label class="row">종료 <input data-testid="end-at" id="ea" placeholder="YYYY-MM-DD HH:MM" size="18"></label>
+      <button data-testid="submit" id="submit">신청</button>
+    </section>
+  </div>
+  <section id="right"><h2>허가 상세</h2><div id="detail">왼쪽에서 허가를 고르세요.</div></section>
+</main>
+<div id="gridbox" style="padding:0 16px 16px"></div>
+
+<script>
+const STATUS = {requested:"신청", reviewed:"검토 완료", approved:"승인", started:"작업 중", closed:"종료", expired:"만료"};
+let users = [], workTypes = [], zones = [], permits = [], selected = null;
+
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2, "0");
+const fmt = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+function el(tag, attrs, text) {
+  const e = document.createElement(tag);
+  for (const k in (attrs || {})) e.setAttribute(k, attrs[k]);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+function say(text, ok) { const m = $("message"); m.textContent = text || ""; m.className = ok ? "ok" : ""; }
+const viewer = () => $("user").value;
+const role = () => (users.find(u => u.user_id === viewer()) || {}).role;
+
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  let b = null;
+  try { b = await r.json(); } catch (e) {}
+  if (!r.ok) { const err = new Error((b && b.detail) || "요청 실패"); err.server = true; throw err; }
+  return b;
+}
+const post = (path, body) => api(path, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+
+async function loadBase() {
+  [users, workTypes, zones] = await Promise.all([api("/api/users"), api("/api/work-types"), api("/api/zones")]);
+  const us = $("user"); us.innerHTML = "";
+  users.forEach(u => { const o = el("option", {value: u.user_id}, u.name); us.appendChild(o); });
+  const wt = $("wt"); wt.innerHTML = "";
+  workTypes.forEach(w => wt.appendChild(el("option", {value: w.work_type}, w.name)));
+  const zs = $("zone"); zs.innerHTML = "";
+  zones.forEach(z => zs.appendChild(el("option", {value: z.zone_id}, z.name)));
+  renderItems();
+  const now = new Date();
+  $("sa").value = fmt(new Date(now.getTime() + 3600e3));
+  $("ea").value = fmt(new Date(now.getTime() + 3 * 3600e3));
+}
+
+function renderItems() {
+  const w = workTypes.find(x => x.work_type === $("wt").value);
+  const box = $("items"); box.innerHTML = "";
+  (w ? w.items : []).forEach(i => {
+    const l = el("label", {class: "chk"});
+    const c = el("input", {type: "checkbox", "data-testid": "check-item", "data-id": i.item_id});
+    l.appendChild(c); l.appendChild(document.createTextNode(" " + i.name));
+    box.appendChild(l);
+  });
+}
+
+async function refresh(keepMessage) {
+  $("errbox").hidden = true;
+  try {
+    if (!users.length) await loadBase();
+    if (!keepMessage) say("");
+    permits = await api("/api/permits?viewer=" + encodeURIComponent(viewer()));
+    renderList();
+    if (selected && permits.find(p => p.permit_id === selected)) renderDetail(permits.find(p => p.permit_id === selected));
+    else { selected = null; $("detail").textContent = "왼쪽에서 허가를 고르세요."; }
+    await renderGrid();
+  } catch (e) {
+    $("errbox").hidden = false;
+  }
+}
+
+function renderList() {
+  const box = $("list"); box.innerHTML = "";
+  permits.forEach(p => {
+    const d = el("div", {class: "permit" + (p.permit_id === selected ? " sel" : ""), "data-testid": "permit", "data-id": p.permit_id, "data-status": p.status});
+    d.appendChild(el("span", {class: "st"}, STATUS[p.status] || p.status));
+    d.appendChild(el("b", {}, p.permit_id));
+    d.appendChild(document.createTextNode(` ${p.work_type_name} · ${p.zone_name}`));
+    d.appendChild(el("div", {}, `${p.start_at} ~ ${p.end_at}`));
+    d.onclick = () => { selected = p.permit_id; renderList(); showDetail(p.permit_id); };
+    box.appendChild(d);
+  });
+  if (!permits.length) box.textContent = "허가가 없습니다.";
+}
+
+async function showDetail(id) {
+  try { renderDetail(await api(`/api/permits/${id}?viewer=${encodeURIComponent(viewer())}`)); }
+  catch (e) { e.server ? say(e.message) : ($("errbox").hidden = false); }
+}
+
+function renderDetail(p) {
+  const box = $("detail"); box.innerHTML = "";
+  const dl = el("dl");
+  const rows = [["허가 번호", p.permit_id], ["작업 종류", p.work_type_name], ["구역", p.zone_name], ["신청자", p.requester_name],
+    ["작업 시간", `${p.start_at} ~ ${p.end_at}`], ["상태", STATUS[p.status] || p.status], ["점검 항목", p.checked.join(", ")],
+    ["검토", p.reviewed_by || "-"], ["승인", p.approved_by ? `${p.approved_by} (${p.approved_at})` : "-"],
+    ["유효 시각", p.valid_until || "-"], ["작업 시작", p.started_at || "-"], ["종료", p.closed_at || "-"]];
+  rows.forEach(([k, v]) => { dl.appendChild(el("dt", {}, k)); dl.appendChild(el("dd", {}, v)); });
+  box.appendChild(dl);
+  const bar = el("div", {style: "margin-top:12px"});
+  const me = viewer(), r = role();
+  const add = (tid, label, what) => {
+    const b = el("button", {"data-testid": tid}, label);
+    b.onclick = () => act(p.permit_id, what);
+    bar.appendChild(b);
+  };
+  if (r === "safety" && p.status === "requested") add("review", "검토", "review");
+  if (r === "manager" && p.status === "reviewed") add("approve", "승인", "approve");
+  if (p.requester_id === me && p.status === "approved") add("start", "작업 시작", "start");
+  // 만료 표시여도 이미 시작된 건(started_at 있음)은 종료할 수 있다 — 허용 여부는 서버가 정한다
+  const running = p.status === "started" || (p.status === "expired" && p.started_at);
+  if ((p.requester_id === me || p.approved_by === me) && running) add("close", "종료", "close");
+  box.appendChild(bar);
+}
+
+async function act(id, what) {
+  try {
+    await post(`/api/permits/${id}/${what}`, {user: viewer()});
+    say({review: "검토했습니다", approve: "승인했습니다", start: "작업을 시작했습니다", close: "종료했습니다"}[what], true);
+    await refresh(true);
+  } catch (e) {
+    if (e.server) { say(e.message); await refresh(true); } else $("errbox").hidden = false;
+  }
+}
+
+async function renderGrid() {
+  const box = $("gridbox"); box.innerHTML = "";
+  if (role() !== "safety" && role() !== "manager") return;
+  const d = await api("/api/dashboard?viewer=" + encodeURIComponent(viewer()));
+  const g = el("div", {"data-testid": "grid"});
+  g.appendChild(el("h2", {}, "현황판 " + d.date));
+  d.conflicts.forEach(c => {
+    const zn = (d.zones.find(z => z.zone_id === c.zone_id) || {}).name || c.zone_id;
+    g.appendChild(el("div", {class: "conflict", "data-testid": "conflict"}, `상충 경고 (${zn}): ${c.permit_ids[0]} · ${c.permit_ids[1]}`));
+  });
+  const t = el("table", {class: "grid"});
+  const hr = el("tr"); hr.appendChild(el("th", {}, "구역"));
+  d.hours.forEach(h => hr.appendChild(el("th", {}, pad(h) + "시")));
+  t.appendChild(hr);
+  d.zones.forEach(z => {
+    const tr = el("tr"); tr.appendChild(el("th", {class: "z"}, z.name));
+    d.hours.forEach(h => {
+      const a = new Date(d.date.replace(/-/g, "/") + " " + pad(h) + ":00"), b = new Date(a.getTime() + 3600e3);
+      const hit = z.permits.filter(p => new Date(p.start_at.replace(/-/g, "/")) < b && new Date(p.end_at.replace(/-/g, "/")) > a);
+      const td = el("td", {"data-testid": "cell", "data-zone": z.zone_id, "data-hour": h, class: hit.length ? "c-" + hit[0].work_type : ""},
+        hit.map(p => p.permit_id.slice(-4)).join(","));
+      if (hit.length) td.title = hit.map(p => `${p.permit_id} ${STATUS[p.status] || p.status} ${p.requester_name}`).join("\n");
+      tr.appendChild(td);
+    });
+    t.appendChild(tr);
+  });
+  g.appendChild(t);
+  box.appendChild(g);
+}
+
+$("wt").onchange = renderItems;
+$("user").onchange = () => { selected = null; refresh(); };
+$("retry").onclick = () => refresh();
+$("submit").onclick = async () => {
+  const checked = [...document.querySelectorAll('[data-testid="check-item"]')].filter(c => c.checked).map(c => c.dataset.id);
+  try {
+    const p = await post("/api/permits", {user: viewer(), work_type: $("wt").value, zone_id: $("zone").value,
+      start_at: $("sa").value.trim().replace("T", " "), end_at: $("ea").value.trim().replace("T", " "), checked});
+    selected = p.permit_id;
+    say(`${p.permit_id} 를 신청했습니다`, true);
+    renderItems();
+    await refresh(true);
+  } catch (e) {
+    if (e.server) say(e.message); else $("errbox").hidden = false;
+  }
+};
+
+refresh();
+</script>
+</body>
+</html>

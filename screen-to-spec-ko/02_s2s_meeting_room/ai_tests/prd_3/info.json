@@ -1,0 +1,57 @@
+{
+ "model": "sonnet",
+ "cond": "prd",
+ "prompt": "이 폴더의 PRD.md 는 다온소프트 회의실 예약 웹앱의 요구사항 문서야. 앱 코드는 아직 없어. 이 PRD 의 완료 기준과 업무 규칙이 지켜졌는지 검증하는 pytest 테스트를 써 줘.\n테스트 틀은 tests/conftest.py 에 있어. srv 픽스처가 서버를 띄우고(srv.base 가 주소) seed/ 를 고정 데이터(DATE · ROOMS · USERS · RES 상수)로 바꿔 끼워. http(method, url, body) 는 (상태 코드, 응답) 을 돌려주고, pw 는 Playwright 브라우저야. conftest.py 는 바꾸지 말고 그 틀로 tests/test_app.py 에 테스트를 써 줘. 끝나면 무슨 테스트를 몇 개 썼는지 짧게 보고해.",
+ "port": 9620,
+ "job": true,
+ "rc": 0,
+ "wall_s": 78.3,
+ "num_turns": 6,
+ "total_cost_usd": 0.275915,
+ "is_error": false,
+ "session_id": "45bb55e1-1b15-43b9-8caa-f1fec5a0dbc8",
+ "usage": {
+  "input_tokens": 8,
+  "cache_creation_input_tokens": 37450,
+  "cache_read_input_tokens": 151190,
+  "output_tokens": 11098,
+  "output_tokens_details": {
+   "thinking_tokens": 2122
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 37450,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 1396,
+    "cache_read_input_tokens": 53273,
+    "cache_creation_input_tokens": 1002,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1002
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "`tests/test_app.py`를 썼고, pytest가 테스트 40개(파라미터 확장 후)를 수집했습니다. 앱 코드가 없어서 실제로 돌려 보지는 못했습니다. 문법 검사와 수집만 했고, 실행 결과는 앱이 생긴 뒤에야 알 수 있습니다. `conftest.py`는 건드리지 않았습니다.\n\n**완료 기준 T1~T9 (전부 포함)**\n- 화면 (Playwright):\n  - T1: `/`가 열리고 '회의실'이 보입니다.\n  - T2: 시간표 칸이 54개이고, 회의실 3개 × 18칸 조합이 하나씩 있습니다.\n  - T3: A 10:00·10:30은 `booked`, 사용자를 김민수로 고르면 `mine`입니다.\n  - T9: `mine` 칸에만 취소 버튼이 있고, 남의 `booked` 칸에는 없습니다.\n- API:\n  - T4: 겹치면 409이고 예약 수는 그대로입니다.\n  - T5: 끝 시각과 시작 시각이 같으면 201입니다.\n  - T6: `10:15` 시작과 `17:30~18:30`은 400입니다.\n  - T7: 2시간 30분은 400, 2시간은 201입니다.\n  - T8: 남의 예약 취소는 403이고 예약이 남습니다. 본인 취소는 204이고 예약이 사라집니다.\n\n**업무 규칙 보강**\n- R1~R4 (각각 파라미터화): 사유 문구를 정확히 확인합니다.\n  - 15분·45분 같은 단위 위반\n  - 09:00 이전, 18:00 초과, 길이 0, 끝이 시작보다 앞인 경우\n  - 09:00과 17:30 경계는 허용되는지\n  - 2시간 초과(2시간 30분)\n  - 겹침 5가지 모양: 동일, 앞 걸침, 뒤 걸침, 포함, 감쌈\n- R5: 취소 시 403 문구, 없는 예약은 404\n- R6: 사용자를 바꾸면 `mine`이 바뀝니다.\n- R7: 다른 회의실, 다른 날짜는 서로 막지 않습니다.\n\n**기능 요구사항**\n- F3: 화면 취소 버튼으로 칸이 비는지 확인합니다.\n- F4: `?date=`로 시간표와 목록이 바뀌는지 확인합니다.\n- F5: `GET /api/rooms`와 `GET /api/reservations`가 고정 데이터와 같은지, `POST`가 201과 만든 예약을 돌려주는지 확인합니다.\n- 오류 상태: API를 차단하면 `불러오지 못했습니다`와 다시 시도 버튼이 보이는지 확인합니다.\n\n**주의할 점**\n- 서버 상태가 모듈 안에서 공유되므로, 예약을 만드는 테스트는 `fresh_date()`로 매번 새 날짜를 씁니다.\n- 고정 예약 자체를 지우는 테스트는 넣지 않았습니다. 다른 테스트가 고정 데이터에 기대기 때문입니다.\n- F6의 예약 폼에서 거부 사유가 메시지 줄에 뜨는지는 검증하지 않았습니다. 예약 폼과 제출 버튼에 PRD가 정한 `data-testid`가 없어서 믿을 만한 선택자를 잡을 수 없었습니다. 폼에 `data-testid`를 추가하면 테스트를 넣을 수 있습니다.\n- 취소 버튼에 확인창이 뜰 수 있어서 대화상자는 자동으로 수락합니다.\n- `GET /api/users`는 PRD가 의도적으로 비워 둔 곳이라 검증하지 않았습니다. 대신 사용자 선택 상자의 옵션이 `USERS`와 같은지는 확인합니다.",
+ "test_files": [
+  "tests/test_app.py"
+ ],
+ "all_files": [
+  "PRD.md",
+  "tests/conftest.py",
+  "tests/test_app.py"
+ ],
+ "conftest_modified": false
+}

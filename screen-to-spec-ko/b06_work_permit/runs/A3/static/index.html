@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>뚝딱건설 위험 작업 허가서</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--ink:#1d2430;--mute:#6b7585;--line:#dfe3ea;--pri:#e8590c;
+--requested:#b7791f;--reviewed:#2b6cb0;--approved:#2f855a;--in_progress:#c53030;--completed:#718096;--rejected:#805ad5}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:15px}
+header{background:#1d2430;color:#fff;padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+header h1{font-size:17px;margin:0;flex:1}header h1 b{color:#ffa94d}
+select,input,textarea,button{font:inherit}
+header select{padding:6px;border-radius:6px}
+nav{display:flex;gap:4px;padding:10px 16px 0;flex-wrap:wrap}
+nav button{border:0;background:#e3e7ee;padding:9px 16px;border-radius:8px 8px 0 0;cursor:pointer}
+nav button.on{background:var(--card);font-weight:700;color:var(--pri)}
+main{background:var(--card);margin:0 16px 16px;padding:16px;border-radius:0 8px 8px 8px;min-height:60vh}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.card{border:1px solid var(--line);border-radius:10px;padding:12px;background:#fff}
+.card h3{margin:0 0 6px;font-size:15px}
+.mute{color:var(--mute);font-size:13px}
+.badge{display:inline-block;color:#fff;border-radius:12px;padding:2px 10px;font-size:12px;font-weight:700}
+.b-requested{background:var(--requested)}.b-reviewed{background:var(--reviewed)}.b-approved{background:var(--approved)}
+.b-in_progress{background:var(--in_progress)}.b-completed{background:var(--completed)}.b-rejected{background:var(--rejected)}
+.type{font-size:12px;border:1px solid var(--line);border-radius:4px;padding:1px 6px;margin-right:4px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+button.btn{border:0;border-radius:8px;padding:9px 14px;cursor:pointer;background:var(--pri);color:#fff;font-weight:700}
+button.btn.sec{background:#e3e7ee;color:var(--ink)}button.btn.red{background:#c53030}button.btn.grn{background:#2f855a}
+button.btn:disabled{background:#cfd4dc;color:#8a93a1;cursor:not-allowed}
+.hint{color:#c53030;font-size:12px;margin-top:4px}
+label{display:block;margin:10px 0 4px;font-weight:700;font-size:13px}
+input,select.f,textarea{width:100%;padding:8px;border:1px solid var(--line);border-radius:6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.zone{border:2px solid var(--line);border-radius:10px;padding:10px;background:#fafbfc}
+.zone.hot{border-color:var(--in_progress);background:#fff5f5}
+.zone h3{display:flex;justify-content:space-between;margin:0 0 6px}
+.zone .p{border-top:1px dashed var(--line);padding:6px 0;font-size:13px}
+.kpis{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.kpi{border-radius:8px;padding:8px 14px;color:#fff;min-width:96px}.kpi b{font-size:22px;display:block}
+.modal{position:fixed;inset:0;background:#0007;display:flex;align-items:center;justify-content:center;padding:12px;z-index:9}
+.modal>div{background:#fff;border-radius:12px;padding:18px;width:min(520px,100%);max-height:92vh;overflow:auto}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#1d2430;color:#fff;padding:10px 18px;border-radius:8px;z-index:20}
+.toast.err{background:#c53030}
+ul.ev{padding-left:18px;font-size:13px;margin:6px 0}
+.chk{display:flex;gap:8px;align-items:center;margin:6px 0;font-weight:400}.chk input{width:auto}
+</style>
+</head>
+<body>
+<header>
+  <h1><b>뚝딱건설</b> 위험 작업 허가서</h1>
+  <span id="today" class="mute" style="color:#cbd2dc"></span>
+  <select id="who" aria-label="사용자 선택"></select>
+</header>
+<nav id="tabs"></nav>
+<main id="view"></main>
+<script>
+let META, ME, TAB;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hm = t => t ? t.slice(11, 16) : "";
+
+async function api(path, opt = {}) {
+  const r = await fetch("/api" + path, {
+    method: opt.method || "GET",
+    headers: {"Content-Type": "application/json", "X-User-Id": ME ? ME.id : ""},
+    body: opt.body ? JSON.stringify(opt.body) : undefined
+  });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(typeof j.detail === "string" ? j.detail : "요청이 올바르지 않습니다");
+  return j;
+}
+function toast(msg, err) {
+  const t = document.createElement("div");
+  t.className = "toast" + (err ? " err" : ""); t.textContent = msg;
+  document.body.appendChild(t); setTimeout(() => t.remove(), 3000);
+}
+async function act(fn, ok) {
+  try { await fn(); if (ok) toast(ok); closeModal(); render(); } catch (e) { toast(e.message, true); }
+}
+function modal(html) {
+  closeModal();
+  const m = document.createElement("div"); m.className = "modal"; m.id = "modal";
+  m.innerHTML = `<div>${html}</div>`;
+  m.addEventListener("click", e => { if (e.target === m) closeModal(); });
+  document.body.appendChild(m);
+}
+const closeModal = () => $("#modal")?.remove();
+
+const TABS = {
+  foreman: [["mine", "내 허가서"], ["new", "허가 신청"]],
+  safety: [["review", "검토 대기"], ["board", "구역별 현황판"], ["all", "전체 허가서"]],
+  manager: [["board", "구역별 현황판"], ["approve", "승인 대기"], ["all", "전체 허가서"]],
+};
+
+function badge(p) { return `<span class="badge b-${p.status}">${esc(p.status_ko)}</span>`; }
+
+function permitCard(p, actions = "") {
+  return `<div class="card">
+    <h3><span class="type">${esc(p.type_ko)}</span>${esc(p.zone)}</h3>
+    <div>${badge(p)} <span class="mute">${esc(p.work_date)} ${esc(p.start_time)}~${esc(p.end_time)} · ${p.workers}명</span></div>
+    <div style="margin:6px 0">${esc(p.description)}</div>
+    <div class="mute">신청: ${esc(p.foreman)}(${esc(p.team)})${p.reviewer ? " · 검토: " + esc(p.reviewer) : ""}${p.approver && p.status !== "rejected" ? " · 승인: " + esc(p.approver) : ""}</div>
+    ${p.status === "rejected" && p.review_note ? `<div class="hint">반려 사유: ${esc(p.review_note)}</div>` : ""}
+    ${p.started_at ? `<div class="mute">시작 ${hm(p.started_at)}${p.ended_at ? " · 종료 " + hm(p.ended_at) : ""}</div>` : ""}
+    <div class="row">${actions}<button class="btn sec" onclick="showDetail(${p.id})">상세·이력</button></div>
+  </div>`;
+}
+
+async function showDetail(id) {
+  try {
+    const p = await api("/permits/" + id);
+    modal(`<h3>${esc(p.type_ko)} · ${esc(p.zone)} ${badge(p)}</h3>
+      <p>${esc(p.description)}<br><span class="mute">${esc(p.work_date)} ${esc(p.start_time)}~${esc(p.end_time)} · ${p.workers}명 · ${esc(p.foreman)}</span></p>
+      <b>안전 점검</b>${p.checklist.map(c => `<div>${c.checked ? "✅" : "⬜"} ${esc(c.item)}</div>`).join("")}
+      <b style="display:block;margin-top:10px">처리 이력</b>
+      <ul class="ev">${p.events.map(e => `<li>${esc(e.at.replace("T", " ").slice(5, 16))} ${esc(e.user)} - ${esc(e.action)}${e.note ? " (" + esc(e.note) + ")" : ""}</li>`).join("")}</ul>
+      <div class="row"><button class="btn sec" onclick="closeModal()">닫기</button></div>`);
+  } catch (e) { toast(e.message, true); }
+}
+
+// ---------- 작업반장 ----------
+function foremanActions(p) {
+  let hint = "";
+  const canStart = p.status === "approved" && p.work_date === META.today;
+  if (p.status === "requested") hint = "안전담당 검토 대기 중 - 작업 시작 불가";
+  else if (p.status === "reviewed") hint = "현장책임자 승인 대기 중 - 작업 시작 불가";
+  else if (p.status === "rejected") hint = "반려됨 - 작업 시작 불가";
+  else if (p.status === "approved" && !canStart) hint = "허가 날짜에만 시작할 수 있음";
+  let h = "";
+  if (["requested", "reviewed", "approved", "rejected"].includes(p.status))
+    h += `<button class="btn grn" ${canStart ? "" : "disabled"} onclick="doStart(${p.id})">작업 시작</button>`;
+  if (p.status === "in_progress") h += `<button class="btn red" onclick="doFinish(${p.id})">작업 종료</button>`;
+  return h + (hint ? `<div class="hint" style="width:100%">${hint}</div>` : "");
+}
+const doStart = id => act(() => api(`/permits/${id}/start`, {method: "POST"}), "작업을 시작했습니다");
+const doFinish = id => act(() => api(`/permits/${id}/finish`, {method: "POST"}), "작업을 종료했습니다");
+
+async function viewMine() {
+  const ps = await api("/permits");
+  return ps.length ? `<div class="grid">${ps.map(p => permitCard(p, foremanActions(p))).join("")}</div>`
+    : `<p class="mute">신청한 허가서가 없습니다. '허가 신청' 탭에서 신청하세요.</p>`;
+}
+
+function viewNew() {
+  return `<form id="nf" style="max-width:520px">
+    <label>작업 종류</label><select class="f" name="type">${Object.entries(META.types).map(([k, v]) => `<option value="${k}">${v}</option>`).join("")}</select>
+    <label>작업 구역</label><select class="f" name="zone_id">${META.zones.map(z => `<option value="${z.id}">${esc(z.name)}</option>`).join("")}</select>
+    <label>작업 날짜</label><input type="date" name="work_date" value="${META.today}" min="${META.today}" required>
+    <div class="two"><div><label>시작 시간</label><input type="time" name="start_time" value="09:00" required></div>
+    <div><label>종료 시간</label><input type="time" name="end_time" value="12:00" required></div></div>
+    <label>투입 인원</label><input type="number" name="workers" value="3" min="1" max="200" required>
+    <label>작업 내용</label><textarea name="description" rows="3" required minlength="2" maxlength="300" placeholder="예: B동 옥상 방수층 시공"></textarea>
+    <div class="row"><button class="btn">신청</button></div></form>`;
+}
+function bindNew() {
+  $("#nf").onsubmit = e => {
+    e.preventDefault();
+    const f = Object.fromEntries(new FormData(e.target));
+    f.zone_id = +f.zone_id; f.workers = +f.workers;
+    act(async () => { await api("/permits", {method: "POST", body: f}); TAB = "mine"; }, "허가를 신청했습니다");
+  };
+}
+
+// ---------- 안전담당 ----------
+async function viewReview() {
+  const ps = await api("/permits?status=requested");
+  return ps.length ? `<div class="grid">${ps.map(p => permitCard(p, `<button class="btn" onclick="openReview(${p.id})">검토</button>`)).join("")}</div>`
+    : `<p class="mute">검토 대기 중인 허가서가 없습니다.</p>`;
+}
+async function openReview(id) {
+  const p = await api("/permits/" + id);
+  modal(`<h3>안전 검토 - ${esc(p.type_ko)} · ${esc(p.zone)}</h3>
+    <p>${esc(p.description)}<br><span class="mute">${esc(p.work_date)} ${esc(p.start_time)}~${esc(p.end_time)} · ${p.workers}명 · ${esc(p.foreman)}</span></p>
+    ${p.checklist.map((c, i) => `<label class="chk"><input type="checkbox" class="ck"> ${esc(c.item)}</label>`).join("")}
+    <label>의견 / 반려 사유</label><textarea id="note" rows="2"></textarea>
+    <div class="row"><button class="btn grn" id="ok">검토 완료</button><button class="btn red" id="no">반려</button><button class="btn sec" onclick="closeModal()">취소</button></div>`);
+  const body = ap => ({approve: ap, note: $("#note").value, checklist: [...document.querySelectorAll(".ck")].map(c => c.checked)});
+  $("#ok").onclick = () => act(() => api(`/permits/${id}/review`, {method: "POST", body: body(true)}), "검토 완료 - 현장책임자 승인 대기");
+  $("#no").onclick = () => act(() => api(`/permits/${id}/review`, {method: "POST", body: body(false)}), "반려했습니다");
+}
+
+// ---------- 현장책임자 ----------
+async function viewApprove() {
+  const ps = await api("/permits?status=reviewed");
+  return ps.length ? `<div class="grid">${ps.map(p => permitCard(p,
+    `<button class="btn grn" onclick="decide(${p.id},true)">승인</button><button class="btn red" onclick="decide(${p.id},false)">반려</button>`)).join("")}</div>`
+    : `<p class="mute">승인 대기 중인 허가서가 없습니다.</p>`;
+}
+function decide(id, ok) {
+  if (ok) return act(() => api(`/permits/${id}/decide`, {method: "POST", body: {approve: true}}), "승인했습니다");
+  modal(`<h3>반려 사유</h3><textarea id="note" rows="3" style="width:100%"></textarea>
+    <div class="row"><button class="btn red" id="go">반려</button><button class="btn sec" onclick="closeModal()">취소</button></div>`);
+  $("#go").onclick = () => act(() => api(`/permits/${id}/decide`, {method: "POST", body: {approve: false, note: $("#note").value}}), "반려했습니다");
+}
+
+let BOARD_DAY = null;
+async function viewBoard() {
+  const b = await api("/board" + (BOARD_DAY ? "?day=" + BOARD_DAY : ""));
+  const order = ["in_progress", "approved", "reviewed", "requested", "completed", "rejected"];
+  const kpis = order.map(s => `<div class="kpi b-${s}"><b>${b.counts[s] || 0}</b>${esc(META.status[s])}</div>`).join("");
+  const zones = b.zones.map(z => `<div class="zone ${z.in_progress ? "hot" : ""}">
+    <h3><span>${esc(z.name)}</span><span class="mute">${z.in_progress ? `🔴 작업중 ${z.in_progress}건 · ${z.active_workers}명` : "작업 없음"}</span></h3>
+    ${z.pending ? `<div class="hint" style="color:#b7791f">승인 절차 진행 중 ${z.pending}건</div>` : ""}
+    ${z.permits.length ? z.permits.map(p => `<div class="p">${badge(p)} <span class="type">${esc(p.type_ko)}</span>${esc(p.start_time)}~${esc(p.end_time)} ${esc(p.foreman)} · ${p.workers}명<br>${esc(p.description)}</div>`).join("") : `<div class="mute">허가 없음</div>`}
+  </div>`).join("");
+  return `<div class="row" style="margin:0 0 12px"><b>${esc(b.day)} 허가 현황</b>
+    <input type="date" value="${esc(b.day)}" style="width:auto" onchange="BOARD_DAY=this.value;render()">
+    <button class="btn sec" onclick="render()">새로고침</button></div>
+    <div class="kpis">${kpis}</div><div class="grid">${zones}</div>`;
+}
+
+async function viewAll() {
+  const ps = await api("/permits");
+  return `<div class="grid">${ps.map(p => permitCard(p)).join("")}</div>`;
+}
+
+const VIEWS = {mine: viewMine, new: async () => viewNew(), review: viewReview, board: viewBoard, approve: viewApprove, all: viewAll};
+
+async function render() {
+  const tabs = TABS[ME.role];
+  if (!tabs.some(t => t[0] === TAB)) TAB = tabs[0][0];
+  $("#tabs").innerHTML = tabs.map(([k, n]) => `<button class="${k === TAB ? "on" : ""}" onclick="TAB='${k}';render()">${n}</button>`).join("");
+  try {
+    $("#view").innerHTML = await VIEWS[TAB]();
+    if (TAB === "new") bindNew();
+  } catch (e) { $("#view").innerHTML = `<p class="hint">${esc(e.message)}</p>`; }
+}
+
+(async function init() {
+  META = await (await fetch("/api/meta")).json();
+  $("#today").textContent = META.today;
+  const sel = $("#who");
+  sel.innerHTML = META.users.map(u => `<option value="${u.id}">${esc(META.roles[u.role])} · ${esc(u.name)}</option>`).join("");
+  const saved = +localStorage.getItem("uid") || META.users[0].id;
+  sel.value = META.users.some(u => u.id === saved) ? saved : META.users[0].id;
+  const pick = () => { ME = META.users.find(u => u.id == sel.value); localStorage.setItem("uid", ME.id); TAB = null; render(); };
+  sel.onchange = pick; pick();
+  setInterval(() => { if (!$("#modal") && TAB !== "new") render(); }, 15000);
+})();
+</script>
+</body>
+</html>

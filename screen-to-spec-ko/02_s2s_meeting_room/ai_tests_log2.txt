@@ -1,0 +1,12 @@
+both_3 쓰는 중 ... (포트 9600)
+both_1 쓰는 중 ... (포트 9610)
+both_2 쓰는 중 ... (포트 9620)
+both_2 rc=0 턴=11 420초 $0.33 파일 ['tests/test_app.py'] 틀 수정 False 앱 수정 False
+code_1 쓰는 중 ... (포트 9620)
+both_1 rc=0 턴=3 474초 $0.35 파일 ['tests/test_app.py'] 틀 수정 False 앱 수정 False
+code_2 쓰는 중 ... (포트 9610)
+code_1 rc=0 턴=5 71초 $0.24 파일 ['tests/test_app.py'] 틀 수정 False 앱 수정 False
+code_3 쓰는 중 ... (포트 9620)
+code_2 rc=0 턴=7 71초 $0.24 파일 ['tests/test_app.py'] 틀 수정 False 앱 수정 False
+code_3 rc=0 턴=5 56초 $0.20 파일 ['tests/test_app.py'] 틀 수정 False 앱 수정 False
+both_3 rc=0 턴=4 667초 $0.42 파일 ['tests/test_app.py'] 틀 수정 True 앱 수정 False

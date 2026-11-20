@@ -1,0 +1,59 @@
+{
+ "model": "sonnet",
+ "prompt": "방금 바꾼 거 전부 원래대로 되돌려 줘.",
+ "max_turns": 80,
+ "port": 9600,
+ "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9600, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+ "job": true,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 28003,
+ "num_turns": 6,
+ "total_cost_usd": 0.13870820000000003,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "session_id": "a42c071a-dc1d-4c3d-aff9-0901527061ef",
+ "usage": {
+  "input_tokens": 6,
+  "cache_creation_input_tokens": 1867,
+  "cache_read_input_tokens": 67306,
+  "output_tokens": 1699,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 1867,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 271,
+    "cache_read_input_tokens": 33653,
+    "cache_creation_input_tokens": 1867,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1867
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "바꾼 내용을 전부 원래대로 되돌렸습니다. 되돌린 파일은 `main.py`, `static/index.html`, `PRD.md`입니다.\n\n- **`main.py`**: 막대는 다시 오늘 포함 최근 7일이고 취소 주문은 제외합니다. `today_orders`는 오늘 주문 수로 돌아갔습니다.\n- **`index.html`**: 카드 라벨이 다시 `오늘 주문`입니다.\n- **`PRD.md`**: R1과 R4가 원래 문장 그대로입니다.\n\ngit 저장소가 아니라서 처음 내용을 기억해 둔 대로 손으로 되돌렸습니다. 서버를 띄워 동작을 확인하지는 않았습니다.",
+ "wall_s": 11.2,
+ "isolation": {
+  "transcript": true,
+  "foreign_ports": [],
+  "kill_by_name": [],
+  "outside_refs": []
+ }
+}

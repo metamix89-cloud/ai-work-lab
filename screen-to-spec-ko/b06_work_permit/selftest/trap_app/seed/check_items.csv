@@ -1,0 +1,10 @@
+work_type,item_id,name
+height,H1,안전대 착용
+height,H2,작업 발판 점검
+height,H3,추락 방지망 설치
+hot,F1,소화기 비치
+hot,F2,화기 감시자 배치
+hot,F3,가연물 제거
+confined,C1,산소 농도 측정
+confined,C2,환기 장치 가동
+confined,C3,외부 감시자 배치

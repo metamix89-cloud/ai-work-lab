@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>뚝딱건설 위험 작업 허가서</title>
+<style>
+  :root { --bg:#f4f5f7; --card:#fff; --line:#d9dce1; --txt:#1c2330; --sub:#5d6675; --pri:#1f5fbf; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.5 "Malgun Gothic","Apple SD Gothic Neo",sans-serif; background:var(--bg); color:var(--txt); }
+  header { background:#1c2330; color:#fff; padding:10px 20px; display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  header h1 { font-size:18px; margin:0; flex:1; }
+  header select { font-size:14px; padding:4px 6px; }
+  nav { display:flex; gap:4px; padding:10px 20px 0; border-bottom:1px solid var(--line); background:#fff; }
+  nav button { border:0; background:none; padding:10px 16px; font-size:15px; cursor:pointer; border-bottom:3px solid transparent; color:var(--sub); }
+  nav button.on { color:var(--pri); border-color:var(--pri); font-weight:bold; }
+  main { padding:20px; max-width:1100px; margin:0 auto; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:14px 16px; margin-bottom:12px; }
+  .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .grow { flex:1; }
+  .sub { color:var(--sub); font-size:13px; }
+  .chip { display:inline-block; padding:1px 9px; border-radius:10px; font-size:12px; font-weight:bold; color:#fff; background:#7d8590; }
+  .st-requested{background:#7d8590} .st-reviewed{background:#7a52c7} .st-approved{background:#1f7a3d}
+  .st-in_progress{background:#d9730d} .st-completed{background:#4b5563} .st-rejected{background:#c0392b} .st-expired{background:#8a6d1d}
+  .ty { font-weight:bold; }
+  button.act { padding:6px 14px; font-size:14px; border-radius:6px; border:1px solid var(--pri); background:var(--pri); color:#fff; cursor:pointer; }
+  button.act.no { background:#fff; color:#c0392b; border-color:#c0392b; }
+  button.act:disabled { opacity:.5; cursor:default; }
+  .warn { background:#fff3cd; border:1px solid #f0d36b; padding:6px 10px; border-radius:6px; font-size:13px; margin-top:8px; }
+  .bad { background:#fdecea; border-color:#f1aeb5; }
+  form label { display:block; margin:10px 0 4px; font-weight:bold; }
+  form input, form select, form textarea { font:inherit; padding:6px 8px; width:100%; max-width:420px; }
+  .chk { display:flex; gap:8px; align-items:center; margin:4px 0; font-weight:normal; }
+  .chk input { width:auto; }
+  .zones { display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:12px; }
+  .zone h3 { margin:0 0 8px; font-size:16px; display:flex; justify-content:space-between; }
+  .zp { border-top:1px solid var(--line); padding:6px 0; font-size:14px; }
+  .zp.dim { opacity:.55; }
+  #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#1c2330; color:#fff; padding:10px 18px; border-radius:8px; display:none; max-width:90%; z-index:9; }
+  #toast.err { background:#c0392b; }
+  .empty { color:var(--sub); padding:30px; text-align:center; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🦺 뚝딱건설 위험 작업 허가서</h1>
+  <span class="sub" id="clock" style="color:#b9c1cf"></span>
+  <label>사용자 <select id="who"></select></label>
+</header>
+<nav id="tabs"></nav>
+<main id="view"></main>
+<div id="toast"></div>
+
+<script>
+const ROLE = {foreman:"작업반장", safety:"안전 담당", manager:"현장 책임자"};
+let META, ME, TAB, TIMER;
+
+// ---- 작은 DOM 헬퍼 (textContent 만 써서 XSS 방지)
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (k === "class") e.className = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else if (v !== false && v != null) e.setAttribute(k, v === true ? "" : v);
+  }
+  for (const k of kids.flat()) if (k != null && k !== false) e.append(k.nodeType ? k : document.createTextNode(k));
+  return e;
+}
+const hm = s => s ? s.slice(11, 16) : "-";
+const when = p => `${hm(p.planned_start)} ~ ${hm(p.planned_end)}`;
+
+function toast(msg, err) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.className = err ? "err" : ""; t.style.display = "block";
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.style.display = "none", err ? 5000 : 2200);
+}
+
+async function api(path, opt = {}) {
+  const res = await fetch("/api" + path, {
+    method: opt.method || "GET",
+    headers: {"Content-Type": "application/json", "X-User-Id": ME ? ME.id : ""},
+    body: opt.body ? JSON.stringify(opt.body) : undefined,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const d = data.detail;
+    let msg = typeof d === "string" ? d : d && d.message ? d.message + ": " + d.missing.join(", ")
+      : Array.isArray(d) ? d.map(x => x.msg).join(", ") : "오류 " + res.status;
+    const e = new Error(msg); e.status = res.status; throw e;
+  }
+  return data;
+}
+
+async function act(path, body) {
+  try { await api(path, {method: "POST", body}); toast("처리됨"); }
+  catch (e) { toast(e.message, true); }
+  render();
+}
+
+// ---- 허가 카드
+function permitCard(p) {
+  const meta = [`${p.zone_name}`, `작업 예정 ${when(p)}`, `신청 ${p.requester_name}`];
+  const lines = [];
+  if (p.reviewer_name && p.reviewed_at) lines.push(`검토 ${p.reviewer_name} ${hm(p.reviewed_at)}`);
+  if (p.approved_at) lines.push(`승인 ${p.approver_name} ${hm(p.approved_at)} · 유효 ${hm(p.valid_until)}까지`);
+  if (p.started_at) lines.push(`시작 ${hm(p.started_at)}`);
+  if (p.ended_at) lines.push(`종료 ${hm(p.ended_at)}`);
+  const btns = [];
+  if (p.actions.includes("review")) {
+    btns.push(h("button", {class: "act", onclick: () => act(`/permits/${p.id}/review`, {decision: "ok"})}, "검토 완료"));
+    btns.push(h("button", {class: "act no", onclick: () => { const n = prompt("반려 사유"); if (n) act(`/permits/${p.id}/review`, {decision: "reject", note: n}); }}, "반려"));
+  }
+  if (p.actions.includes("approve")) {
+    btns.push(h("button", {class: "act", onclick: () => act(`/permits/${p.id}/approve`, {decision: "ok"})}, "승인"));
+    btns.push(h("button", {class: "act no", onclick: () => { const n = prompt("반려 사유"); if (n) act(`/permits/${p.id}/approve`, {decision: "reject", note: n}); }}, "반려"));
+  }
+  if (p.actions.includes("start")) btns.push(h("button", {class: "act", onclick: () => act(`/permits/${p.id}/start`)}, "작업 시작"));
+  if (p.actions.includes("end")) btns.push(h("button", {class: "act", onclick: () => act(`/permits/${p.id}/end`)}, "작업 종료"));
+  return h("div", {class: "card"},
+    h("div", {class: "row"},
+      h("span", {class: "sub"}, "#" + p.id),
+      h("span", {class: "ty"}, p.type_label),
+      h("span", {class: "chip st-" + p.status}, p.status_label),
+      h("span", {class: "grow"}),
+      btns),
+    h("div", {}, p.description || "(내용 없음)"),
+    h("div", {class: "sub"}, meta.join(" · ")),
+    lines.length ? h("div", {class: "sub"}, lines.join(" · ")) : null,
+    p.status === "rejected" ? h("div", {class: "warn bad"}, "반려 사유: " + p.reject_reason) : null,
+    p.status === "expired" ? h("div", {class: "warn bad"}, "만료된 허가 — 작업을 시작할 수 없음. 연장은 없으며 새 허가를 신청해야 함") : null,
+    p.overdue ? h("div", {class: "warn"}, "유효시간이 지났음 — 작업을 마무리하고 종료 처리할 것") : null,
+    p.status === "approved" ? h("div", {class: "sub"}, "작업 시작 전 상태 — 유효시간 안에 시작해야 함") : null,
+    p.notice ? h("div", {class: "warn"}, p.notice) : null,
+    p.conflicts.length ? h("div", {class: "warn bad"},
+      "같은 구역·시간이 겹치는 " + p.conflicts.map(c => `${META.types[c.type].label} #${c.id}`).join(", ") + " 이(가) 승인되어 있어 지금은 승인할 수 없음") : null);
+}
+
+// ---- 화면
+const VIEWS = {
+  async mine(box) {
+    const list = await api("/permits?scope=mine");
+    box.append(h("h2", {}, "내 허가"));
+    if (!list.length) box.append(h("div", {class: "empty"}, "신청한 허가가 없음"));
+    list.forEach(p => box.append(permitCard(p)));
+  },
+  async queue(box) {
+    const list = await api("/permits?scope=queue");
+    box.append(h("h2", {}, ME.role === "safety" ? "검토 대기" : "승인 대기"));
+    if (!list.length) box.append(h("div", {class: "empty"}, "처리할 허가가 없음"));
+    list.forEach(p => box.append(permitCard(p)));
+  },
+  async board(box) {
+    const b = await api("/board");
+    box.append(h("h2", {}, `${b.date} 구역별 허가 현황`));
+    const grid = h("div", {class: "zones"});
+    b.zones.forEach(z => {
+      const counts = Object.entries(z.counts).map(([s, n]) => h("span", {class: "chip st-" + s, title: META.status_label[s]}, `${META.status_label[s]} ${n}`));
+      const card = h("div", {class: "card zone"}, h("h3", {}, z.zone_name), h("div", {class: "row", style: "gap:4px"}, counts));
+      if (!z.permits.length) card.append(h("div", {class: "sub", style: "margin-top:8px"}, "오늘 허가 없음"));
+      z.permits.forEach(p => card.append(h("div", {class: "zp" + (["rejected", "completed", "expired"].includes(p.status) ? " dim" : "")},
+        h("div", {class: "row"}, h("b", {}, p.type_label), h("span", {class: "chip st-" + p.status}, p.status_label), h("span", {class: "sub grow"}, `#${p.id} ${when(p)}`)),
+        h("div", {class: "sub"}, p.requester_name + (p.valid_until && ["approved", "in_progress"].includes(p.status) ? ` · 유효 ${hm(p.valid_until)}까지` : "")),
+        p.conflicts.length ? h("div", {class: "warn bad"}, "화기·밀폐 시간 겹침 — 동시 승인 불가") : null)));
+      grid.append(card);
+    });
+    box.append(grid);
+  },
+  async apply(box) {
+    box.append(h("h2", {}, "허가 신청"));
+    const today = META.now.slice(0, 10);
+    const f = h("form", {class: "card"});
+    const type = h("select", {name: "type"}, Object.entries(META.types).map(([k, v]) => h("option", {value: k}, v.label)));
+    const zone = h("select", {name: "zone"}, META.zones.map(z => h("option", {value: z.id}, z.name)));
+    const ps = h("input", {type: "time", value: "09:00", required: true});
+    const pe = h("input", {type: "time", value: "17:00", required: true});
+    const desc = h("textarea", {rows: 2, maxlength: 500, placeholder: "작업 내용"});
+    const checks = h("div");
+    const drawChecks = () => { checks.replaceChildren(...META.types[type.value].checklist.map(i =>
+      h("label", {class: "chk"}, h("input", {type: "checkbox", "data-key": i.key}), i.label))); };
+    type.addEventListener("change", drawChecks); drawChecks();
+    f.append(h("label", {}, "작업 종류"), type, h("label", {}, "구역"), zone,
+      h("label", {}, `작업 예정 시간 (${today})`), h("div", {class: "row"}, ps, "~", pe),
+      h("label", {}, "작업 내용"), desc,
+      h("label", {}, "필수 점검 항목 (모두 체크해야 신청 가능)"), checks,
+      h("div", {style: "margin-top:14px"}, h("button", {class: "act", type: "submit"}, "신청")));
+    f.addEventListener("submit", async ev => {
+      ev.preventDefault();
+      const c = {}; checks.querySelectorAll("input").forEach(i => c[i.dataset.key] = i.checked);
+      try {
+        await api("/permits", {method: "POST", body: {type: type.value, zone_id: +zone.value, description: desc.value,
+          planned_start: `${today}T${ps.value}:00`, planned_end: `${today}T${pe.value}:00`, checks: c}});
+        toast("신청되었음"); setTab("mine");
+      } catch (e) { toast(e.message, true); }
+    });
+    box.append(f);
+  },
+};
+
+function tabsFor(role) {
+  const t = [];
+  if (role !== "safety") t.push(["mine", "내 허가"], ["apply", "허가 신청"]);
+  if (role !== "foreman") t.push(["queue", role === "safety" ? "검토 대기" : "승인 대기"]);
+  t.push(["board", "구역별 현황판"]);
+  return t;
+}
+
+function setTab(t) { TAB = t; render(); }
+
+async function render() {
+  clearInterval(TIMER);
+  const tabs = tabsFor(ME.role);
+  if (!tabs.some(x => x[0] === TAB)) TAB = ME.role === "manager" ? "board" : tabs[0][0];
+  document.getElementById("tabs").replaceChildren(...tabs.map(([k, label]) =>
+    h("button", {class: k === TAB ? "on" : "", onclick: () => setTab(k)}, label)));
+  const box = h("div");
+  try { await VIEWS[TAB](box); } catch (e) { box.append(h("div", {class: "warn bad"}, e.message)); }
+  document.getElementById("view").replaceChildren(box);
+  if (TAB !== "apply") TIMER = setInterval(render, 30000);
+}
+
+async function boot() {
+  META = await (await fetch("/api/meta")).json();
+  const sel = document.getElementById("who");
+  META.users.forEach(u => sel.append(h("option", {value: u.id}, `${u.name} (${ROLE[u.role]})`)));
+  const saved = localStorage.getItem("uid");
+  sel.value = META.users.some(u => String(u.id) === saved) ? saved : META.users[0].id;
+  const pick = () => { ME = META.users.find(u => String(u.id) === sel.value); localStorage.setItem("uid", ME.id); TAB = null; render(); };
+  sel.addEventListener("change", pick); pick();
+  setInterval(() => { document.getElementById("clock").textContent = new Date().toLocaleString("ko-KR"); }, 1000);
+}
+boot();
+</script>
+</body>
+</html>

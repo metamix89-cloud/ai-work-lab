@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>뚝딱건설 해뜰현장 위험 작업 허가서</title>
+<style>
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;margin:0;background:#F4F5F9;color:#111318}
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 24px;background:#fff;border-bottom:1px solid #E6E8EF}
+h1{font-size:20px;margin:0}.row{display:grid;grid-template-columns:1fr 1.2fr;gap:14px;padding:16px 24px}
+.box{background:#fff;border:1px solid #E6E8EF;border-radius:12px;padding:12px 16px}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:6px;border-bottom:1px solid #E6E8EF}
+tr[data-testid=permit]{cursor:pointer}tr.sel td{background:#F5F6FF}
+.msg{color:#EF4444;min-height:20px;font-size:14px}.sub{color:#8A94A6;font-size:13px}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;padding:12px;border-radius:10px;margin:16px 24px}
+button{border:1px solid #E6E8EF;border-radius:8px;padding:6px 12px;background:#fff;cursor:pointer}button.p{background:#6366F1;color:#fff;border-color:#6366F1}
+.grid{display:grid;grid-template-columns:140px repeat(13,1fr);gap:2px;font-size:12px;margin-top:8px}.grid .h{color:#8A94A6;text-align:center}.grid .z{font-weight:700}
+.cell{min-height:28px;background:#F4F5F9;border-radius:4px;padding:2px}.cell span{display:block;border-radius:3px;padding:1px 3px;color:#fff;font-size:11px}
+.height{background:#6366F1}.hot{background:#EF4444}.confined{background:#F59E0B}.expired{opacity:.4}
+.conflict{color:#B45309;background:#FFF7E6;border-radius:8px;padding:6px 10px;margin-top:8px;font-size:13px}
+form label{display:block;margin:4px 0}
+</style></head><body>
+<div class="top"><h1>위험 작업 허가서 · 뚝딱건설 해뜰현장</h1><label>사용자 <select data-testid="user" id="user"></select></label></div>
+<div id="err"></div>
+<div class="row"><div class="box"><h3>허가 목록</h3><table><thead><tr><th>번호</th><th>작업</th><th>구역</th><th>시간</th><th>상태</th></tr></thead><tbody id="list"></tbody></table>
+<h3>새 허가 신청</h3><form id="f" onsubmit="return submitPermit()"><label>작업 종류 <select data-testid="work-type" id="wt"></select></label><div id="items"></div>
+<label>구역 <select data-testid="zone" id="zone"></select></label><label>시작 <input data-testid="start-at" id="sa" placeholder="YYYY-MM-DD HH:MM"></label><label>종료 <input data-testid="end-at" id="ea" placeholder="YYYY-MM-DD HH:MM"></label>
+<button class="p" data-testid="submit" type="submit">신청</button></form></div>
+<div><div class="box" id="right"><div class="sub">왼쪽에서 허가를 고르세요</div></div><div id="dash"></div></div></div>
+<script>
+const KO={requested:"신청",reviewed:"검토 완료",approved:"승인",started:"작업 중",closed:"종료",expired:"만료"};
+let users=[],me=null,permits=[],cur=null,types=[],zones=[];
+const $=s=>document.querySelector(s);
+async function api(m,p,b){const r=await fetch(p,{method:m,headers:{"Content-Type":"application/json"},body:b?JSON.stringify(b):undefined});let j=null;try{j=await r.json()}catch(e){}return [r.status,j]}
+function fail(){$("#err").innerHTML='<div class="err"><b>불러오지 못했습니다.</b> 허가 API 가 응답하지 않습니다 — 허가 상태를 모르면 작업을 시작하지 않습니다. <button onclick="location.reload()">다시 시도</button></div>'}
+async function boot(){const [s1,u]=await api("GET","/api/users");const [s2,t]=await api("GET","/api/work-types");const [s3,z]=await api("GET","/api/zones");if(s1!==200||s2!==200||s3!==200){fail();return}
+ users=u;types=t;zones=z;$("#user").innerHTML=users.map(x=>`<option value="${x.user_id}">${x.name} (${{worker:"작업자",safety:"안전 담당",manager:"현장 책임자"}[x.role]})</option>`).join("");
+ $("#wt").innerHTML=types.map(x=>`<option value="${x.work_type}">${x.name}</option>`).join("");$("#zone").innerHTML=zones.map(x=>`<option value="${x.zone_id}">${x.name}</option>`).join("");renderItems();me=users[0];await loadList()}
+function renderItems(){const t=types.find(x=>x.work_type===$("#wt").value);$("#items").innerHTML=t?t.items.map(i=>`<label><input type="checkbox" data-testid="check-item" data-id="${i.item_id}"> ${i.name}</label>`).join(""):""}
+$("#wt").onchange=renderItems;
+async function loadList(){const [st,j]=await api("GET","/api/permits?viewer="+me.user_id);if(st!==200){fail();return}permits=j;
+ $("#list").innerHTML=permits.map(p=>`<tr data-testid="permit" data-id="${p.permit_id}" data-status="${p.status}" class="${cur&&cur.permit_id===p.permit_id?"sel":""}"><td>${p.permit_id}</td><td>${p.work_type_name}</td><td>${p.zone_name}</td><td>${p.start_at.slice(11)}~${p.end_at.slice(11)}</td><td>${KO[p.status]||p.status}</td></tr>`).join("");
+ document.querySelectorAll('[data-testid=permit]').forEach(tr=>tr.onclick=()=>pick(tr.dataset.id));await loadDash()}
+async function loadDash(){if(me.role==="worker"){$("#dash").innerHTML="";return}const [st,d]=await api("GET","/api/dashboard?viewer="+me.user_id);if(st!==200){$("#dash").innerHTML="";return}
+ let h=`<div class="box" style="margin-top:14px"><h3>오늘의 허가 현황판 · ${d.date}</h3><div class="grid" data-testid="grid"><div></div>${d.hours.map(x=>`<div class="h">${x}시</div>`).join("")}`;
+ for(const z of d.zones){h+=`<div class="z">${z.name}</div>`;for(const hr of d.hours){const hh=String(hr).padStart(2,"0")+":00",nx=String(hr+1).padStart(2,"0")+":00";const ps=z.permits.filter(p=>p.start_at.slice(11)<nx&&p.end_at.slice(11)>hh&&p.start_at.slice(0,10)<=d.date&&p.end_at.slice(0,10)>=d.date);
+  h+=`<div class="cell" data-testid="cell" data-zone="${z.zone_id}" data-hour="${hr}">${ps.map(p=>`<span class="${p.work_type} ${p.status==="expired"?"expired":""}" title="${p.permit_id}">${p.permit_id.slice(3)} ${KO[p.status]}</span>`).join("")}</div>`}}
+ h+=`</div>`+d.conflicts.map(c=>`<div class="conflict" data-testid="conflict">⚠ 상충: ${c.zone_id} 에서 ${c.permit_ids.join(" · ")} — 화기와 밀폐가 같은 시간에 겹칩니다</div>`).join("")+`</div>`;$("#dash").innerHTML=h}
+async function pick(id){const [st,j]=await api("GET",`/api/permits/${id}?viewer=${me.user_id}`);if(st!==200){$("#right").innerHTML=`<div class="msg" data-testid="message">${j&&j.detail||"조회 실패"}</div>`;return}cur=j;render();loadList()}
+function render(){const p=cur;let h=`<h3>${p.permit_id} · ${p.work_type_name} · ${p.zone_name}</h3><div class="sub">신청 ${p.requester_name} · ${p.start_at} ~ ${p.end_at} · 점검 ${p.checked.join(", ")}</div>
+ <div>상태 <b>${KO[p.status]||p.status}</b>${p.valid_until?` · 유효 ${p.valid_until} 까지`:""}${p.approved_by?` · 승인 ${p.approved_by}`:""}</div><div style="margin:8px 0">`;
+ if(me.role==="safety"&&p.status==="requested")h+=`<button data-testid="review" onclick="doAct('review')">검토 완료</button> `;
+ if(me.role==="manager"&&p.status==="reviewed")h+=`<button class="p" data-testid="approve" onclick="doAct('approve')">승인</button> `;
+ if(me.user_id===p.requester_id&&p.status==="approved")h+=`<button class="p" data-testid="start" onclick="doAct('start')">작업 시작</button> `;
+ if((me.user_id===p.requester_id||me.user_id===p.approved_by)&&p.status==="started")h+=`<button data-testid="close" onclick="doAct('close')">종료</button> `;
+ h+=`</div><div class="msg" data-testid="message" id="msg"></div>`;$("#right").innerHTML=h}
+async function doAct(k){const [st,j]=await api("POST",`/api/permits/${cur.permit_id}/${k}`,{user:me.user_id});if(st===200){await pick(cur.permit_id);$("#msg").textContent=`${KO[j.status]} 처리됨`}else{$("#msg").textContent=j&&j.detail||("오류 "+st)}}
+async function submitPermit(){const checked=[...document.querySelectorAll('[data-testid=check-item]:checked')].map(x=>x.dataset.id);
+ const [st,j]=await api("POST","/api/permits",{user:me.user_id,work_type:$("#wt").value,zone_id:$("#zone").value,start_at:$("#sa").value,end_at:$("#ea").value,checked});
+ if(st===201){cur=j;render();loadList()}else{$("#right").innerHTML=`<div class="msg" data-testid="message">${j&&j.detail||("오류 "+st)}</div>`}return false}
+$("#user").onchange=async e=>{me=users.find(u=>u.user_id===e.target.value);cur=null;$("#right").innerHTML='<div class="sub">왼쪽에서 허가를 고르세요</div>';await loadList()};
+boot();
+</script></body></html>

@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>뚝딱건설 위험 작업 허가서</title>
+<style>
+  :root { --bg:#f4f5f7; --card:#fff; --ink:#1d2433; --mute:#667085; --line:#e1e4ea; --pri:#1f5fbf;
+          --ok:#1a7f4b; --warn:#b26a00; --bad:#b42318; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Malgun Gothic",system-ui,sans-serif; background:var(--bg); color:var(--ink); }
+  header { background:#16233b; color:#fff; padding:10px 20px; display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  header h1 { font-size:18px; margin:0; flex:1; }
+  header select { padding:6px; font-size:14px; }
+  header .clock { font-size:13px; opacity:.8; }
+  nav { display:flex; gap:4px; padding:12px 20px 0; }
+  nav button { border:1px solid var(--line); border-bottom:none; background:#e9ecf2; padding:9px 16px; cursor:pointer;
+               border-radius:8px 8px 0 0; font-size:14px; }
+  nav button.on { background:var(--card); font-weight:bold; }
+  main { background:var(--card); margin:0 20px 20px; padding:18px; border:1px solid var(--line); border-radius:0 8px 8px 8px; min-height:60vh; }
+  .msg { padding:10px 14px; border-radius:6px; margin-bottom:12px; font-size:14px; }
+  .msg.err { background:#fde8e6; color:var(--bad); } .msg.ok { background:#e3f5ec; color:var(--ok); }
+  .card { border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-bottom:10px; }
+  .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .grow { flex:1; }
+  .mute { color:var(--mute); font-size:13px; }
+  .badge { display:inline-block; padding:2px 9px; border-radius:99px; font-size:12px; font-weight:bold; color:#fff; background:#667085; }
+  .st-requested,.st-reviewed { background:var(--warn); } .st-approved { background:var(--pri); }
+  .st-in_progress { background:var(--ok); } .st-completed { background:#667085; }
+  .st-rejected,.st-expired { background:var(--bad); }
+  .type { display:inline-block; padding:1px 8px; border-radius:4px; font-size:12px; border:1px solid var(--line); background:#f8f9fb; }
+  button.act { padding:6px 14px; border:1px solid var(--pri); background:var(--pri); color:#fff; border-radius:6px; cursor:pointer; font-size:13px; }
+  button.act.sec { background:#fff; color:var(--pri); } button.act.bad { background:#fff; color:var(--bad); border-color:var(--bad); }
+  button.act:disabled { opacity:.45; cursor:not-allowed; }
+  .zones { display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:14px; }
+  .zone { border:2px solid var(--line); border-radius:10px; padding:12px; background:#fcfcfd; }
+  .zone.working { border-color:var(--ok); } .zone.approved { border-color:var(--pri); }
+  .zone h3 { margin:0 0 8px; font-size:16px; display:flex; justify-content:space-between; }
+  .zone .item { border-top:1px dashed var(--line); padding:7px 0; font-size:13px; }
+  .counts { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+  .counts span { padding:4px 10px; background:#eef1f6; border-radius:6px; font-size:13px; }
+  form label { display:block; margin:10px 0 4px; font-weight:bold; font-size:14px; }
+  form select, form input[type=text] { width:100%; max-width:420px; padding:7px; font-size:14px; }
+  .checks label { font-weight:normal; display:flex; gap:8px; align-items:center; margin:6px 0; }
+  .types label { display:inline-flex; font-weight:normal; gap:4px; margin-right:16px; }
+  .warn { color:var(--warn); font-size:12px; font-weight:bold; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🏗️ 뚝딱건설 위험 작업 허가서</h1>
+  <span class="clock" id="clock"></span>
+  <label>사용자 <select id="who"></select></label>
+</header>
+<nav id="tabs"></nav>
+<main id="view"></main>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hm = (t) => t ? t.slice(5, 16) : "-";   // MM-DD HH:MM
+let META, USER, TAB, FLASH = null;
+
+async function api(path, opts = {}) {
+  const r = await fetch("/api" + path, {
+    method: opts.method || "GET",
+    headers: { "Content-Type": "application/json", "X-User-Id": USER ? USER.id : "" },
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(typeof data.detail === "string" ? data.detail : "요청이 거부되었습니다.");
+  return data;
+}
+
+const TABS = {
+  "작업반장":   [["mine", "내 허가"], ["apply", "새 허가 신청"]],
+  "안전담당":   [["queue", "검토 대기"], ["all", "전체 허가"], ["board", "구역별 현황판"]],
+  "현장책임자": [["board", "구역별 현황판"], ["queue", "승인 대기"], ["all", "전체 허가"], ["apply", "새 허가 신청"]],
+};
+
+async function init() {
+  META = await api("/meta");
+  const sel = $("#who");
+  sel.innerHTML = META.users.map(u => `<option value="${u.id}">${esc(u.name)} · ${esc(u.role)} (${esc(u.company)})</option>`).join("");
+  const saved = localStorage.getItem("uid");
+  if (saved && META.users.some(u => String(u.id) === saved)) sel.value = saved;
+  sel.onchange = () => { localStorage.setItem("uid", sel.value); pickUser(); };
+  pickUser();
+  setInterval(() => render(true), 30000);
+}
+
+function pickUser() {
+  USER = META.users.find(u => String(u.id) === $("#who").value);
+  TAB = TABS[USER.role][0][0];
+  FLASH = null;
+  drawTabs(); render();
+}
+function drawTabs() {
+  $("#tabs").innerHTML = TABS[USER.role].map(([k, l]) => `<button data-k="${k}" class="${k === TAB ? "on" : ""}">${l}</button>`).join("");
+  document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => { TAB = b.dataset.k; FLASH = null; drawTabs(); render(); });
+}
+
+async function render(quiet) {
+  const v = $("#view");
+  try {
+    if (quiet && TAB === "apply") return;           // 입력 중인 폼은 건드리지 않음
+    let html = "";
+    if (FLASH) html += `<div class="msg ${FLASH.kind}">${esc(FLASH.text)}</div>`;
+    if (TAB === "apply") { v.innerHTML = html + applyForm(); bindForm(); return; }
+    if (TAB === "board") html += await board();
+    else html += await list(TAB);
+    v.innerHTML = html;
+    v.querySelectorAll("[data-act]").forEach(b => b.onclick = () => act(b.dataset.id, b.dataset.act));
+  } catch (e) { v.innerHTML = `<div class="msg err">${esc(e.message)}</div>`; }
+  const n = await api("/meta"); $("#clock").textContent = "현재 " + n.now;
+}
+
+function buttons(p) {
+  const L = { review: ["안전 검토 완료", ""], approve: ["승인", ""], reject: ["반려", "bad"], start: ["작업 시작", ""], end: ["작업 종료", "sec"] };
+  return p.actions.map(a => `<button class="act ${L[a][1]}" data-act="${a}" data-id="${p.id}">${L[a][0]}</button>`).join(" ");
+}
+
+function times(p) {
+  const bits = [`신청 ${hm(p.created_at)}`];
+  if (p.reviewed_at) bits.push(`검토 ${hm(p.reviewed_at)} (${esc(p.reviewer)})`);
+  if (p.approved_at) bits.push(`승인 ${hm(p.approved_at)} (${esc(p.approver)}) → 유효 ${hm(p.valid_until)} 까지`);
+  if (p.started_at) bits.push(`시작 ${hm(p.started_at)}`);
+  if (p.ended_at) bits.push(`종료 ${hm(p.ended_at)}`);
+  return bits.join(" · ");
+}
+
+function card(p) {
+  const note = p.status === "rejected" ? `<div class="mute">반려 사유: ${esc(p.reject_reason)}</div>`
+    : p.status === "expired" ? `<div class="warn">유효시간이 지나 만료되었습니다. 작업을 시작할 수 없으니 새 허가를 신청하세요(연장 없음).</div>` : "";
+  const chk = p.checks.map(c => `${c.ok ? "☑" : "☐"} ${esc(c.label)}`).join("<br>");
+  return `<div class="card"><div class="row">
+      <span class="badge st-${p.status}">${esc(p.status_label)}</span><span class="type">${esc(p.work_type)}</span>
+      <b>#${p.id} ${esc(p.zone)}</b><span class="grow mute">${esc(p.description)} — 신청자 ${esc(p.applicant)}</span>
+      ${p.overdue ? '<span class="warn">⚠ 유효시간 초과 · 종료 처리 필요</span>' : ""}
+      <span>${buttons(p)}</span></div>
+      <div class="mute" style="margin-top:6px">${times(p)}</div>${note}
+      <details style="margin-top:4px"><summary class="mute">점검 항목</summary><div class="mute">${chk}</div></details></div>`;
+}
+
+async function list(kind) {
+  let ps = await api("/permits");
+  if (kind === "queue") ps = ps.filter(p => p.actions.some(a => a === "review" || a === "approve"));
+  const empty = kind === "queue" ? "처리할 건이 없습니다." : "허가서가 없습니다.";
+  return ps.length ? ps.map(card).join("") : `<p class="mute">${empty}</p>`;
+}
+
+async function board() {
+  const d = await api("/dashboard");
+  const order = ["in_progress", "approved", "reviewed", "requested", "completed", "expired", "rejected"];
+  const counts = order.filter(k => d.counts[k]).map(k => `<span>${esc(label(k))} <b>${d.counts[k]}</b></span>`).join("");
+  const zones = d.zones.map(z => {
+    const tag = { working: "🟢 작업 중", approved: "🔵 승인됨", idle: "⚪ 작업 없음" }[z.state];
+    const items = z.permits.map(p => `<div class="item"><span class="badge st-${p.status}">${esc(p.status_label)}</span>
+        <span class="type">${esc(p.work_type)}</span> #${p.id} ${esc(p.applicant)}
+        <div class="mute">${p.approved_at ? `유효 ${hm(p.approved_at)} ~ ${hm(p.valid_until)}` : `신청 ${hm(p.created_at)}`}
+        ${p.overdue ? '<span class="warn">⚠ 시간 초과</span>' : ""}</div>${buttons(p)}</div>`).join("");
+    return `<div class="zone ${z.state}"><h3><span>${esc(z.name)}</span><span class="mute">${tag}</span></h3>${items || '<div class="mute">오늘 허가 없음</div>'}</div>`;
+  }).join("");
+  return `<h2 style="margin-top:0">오늘 구역별 허가 현황 <span class="mute">(${d.now.slice(0, 10)})</span></h2><div class="counts">${counts}</div><div class="zones">${zones}</div>`;
+}
+const label = (k) => ({ requested: "검토 대기", reviewed: "승인 대기", approved: "승인(시작 전)", in_progress: "작업 중", completed: "종료", rejected: "반려", expired: "만료" }[k]);
+
+function applyForm() {
+  return `<h2 style="margin-top:0">위험 작업 허가 신청</h2><form id="f">
+    <label>구역</label><select name="zone">${META.zones.map(z => `<option value="${z.id}">${esc(z.name)}</option>`).join("")}</select>
+    <label>작업 종류</label><div class="types">${Object.keys(META.checklists).map((t, i) =>
+      `<label><input type="radio" name="type" value="${t}" ${i ? "" : "checked"}> ${t}</label>`).join("")}</div>
+    <label>작업 내용</label><input type="text" name="desc" maxlength="200" placeholder="예: 3층 외부 비계 설치">
+    <label>필수 점검 항목 <span class="mute">(모두 체크해야 신청됩니다)</span></label><div class="checks" id="checks"></div>
+    <p class="mute">승인 후 ${META.valid_hours}시간 유효(당일 23:59 까지). 연장은 없고 만료되면 새로 신청합니다.</p>
+    <button class="act" id="submit" disabled>신청</button></form>`;
+}
+function bindForm() {
+  const f = $("#f");
+  const drawChecks = () => {
+    const t = f.type.value;
+    $("#checks").innerHTML = META.checklists[t].map(c => `<label><input type="checkbox" data-k="${c.key}"> ${esc(c.label)}</label>`).join("");
+    $("#checks").querySelectorAll("input").forEach(i => i.onchange = sync);
+    sync();
+  };
+  const sync = () => { $("#submit").disabled = ![...$("#checks").querySelectorAll("input")].every(i => i.checked); };
+  f.querySelectorAll("[name=type]").forEach(r => r.onchange = drawChecks);
+  drawChecks();
+  f.onsubmit = async (e) => {
+    e.preventDefault();
+    const checks = {}; $("#checks").querySelectorAll("input").forEach(i => checks[i.dataset.k] = i.checked);
+    try {
+      const r = await api("/permits", { method: "POST", body: { zone_id: +f.zone.value, work_type: f.type.value, description: f.desc.value, checks } });
+      FLASH = { kind: "ok", text: `허가 #${r.id} 이(가) 신청되었습니다. 안전 담당 검토를 기다리세요.` };
+      TAB = USER.role === "작업반장" ? "mine" : "all"; drawTabs(); render();
+    } catch (er) { FLASH = { kind: "err", text: er.message }; $("#view").insertAdjacentHTML("afterbegin", `<div class="msg err">${esc(er.message)}</div>`); }
+  };
+}
+
+async function act(id, a) {
+  let body = {};
+  if (a === "reject") {
+    const reason = prompt("반려 사유를 입력하세요");
+    if (!reason || !reason.trim()) return;
+    body = { comment: reason };
+  }
+  try {
+    await api(`/permits/${id}/${a}`, { method: "POST", body });
+    FLASH = { kind: "ok", text: `허가 #${id}: 처리되었습니다.` };
+  } catch (e) { FLASH = { kind: "err", text: `허가 #${id}: ${e.message}` }; }
+  render();
+}
+
+init();
+</script>
+</body>
+</html>

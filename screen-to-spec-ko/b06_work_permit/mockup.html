@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<title>뚝딱건설 해뜰현장 위험 작업 허가서 — 목업</title>
+<!-- 「이 화면, PRD 로는 이렇게」 2부 6편 목업. 가상 회사(뚝딱건설) · 가상 현장 · 가상 작업자. ?state=ok|worker|safety|error. Mock-IT 라이트 테마. 실제 서비스 화면 아님. 규칙은 이 현장의 규칙이며 실제 법규 수치가 아님. -->
+<style>
+:root{--ink:#111318;--ink2:#4B5563;--mute:#8A94A6;--line:#E6E8EF;--bg:#F4F5F9;--indigo:#6366F1;--emerald:#10B981;--amber:#F59E0B;--rose:#EF4444}
+*{box-sizing:border-box}html,body,#root{margin:0;height:100%}
+body{font-family:Pretendard,"Malgun Gothic",system-ui,sans-serif;background:var(--bg);color:var(--ink);width:1450px;height:560px;overflow:hidden}
+.app{display:grid;grid-template-columns:200px 1fr;height:100%}
+.side{background:#fff;border-right:1px solid var(--line);padding:22px 18px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px;margin-bottom:26px}
+.logo i{width:28px;height:28px;border-radius:8px;background:var(--amber);display:inline-block;flex:none}
+.nav div{padding:10px 12px;border-radius:8px;color:var(--ink2);font-size:14px;margin-bottom:4px}
+.nav .on{background:#EEF0FF;color:var(--indigo);font-weight:700}
+.main{padding:16px 26px 14px 26px;display:flex;flex-direction:column;gap:10px}
+.top{display:flex;justify-content:space-between;align-items:flex-end}
+h1{margin:0;font-size:21px;letter-spacing:-.3px}.sub{color:var(--mute);font-size:12px;margin-top:3px}
+.who{font-size:12.5px;color:var(--ink2);background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px;white-space:nowrap}
+.row{display:grid;grid-template-columns:1fr 1.05fr;gap:12px;flex:1;min-height:0}
+.box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-height:0;overflow:hidden}
+.box h3{margin:0 0 7px;font-size:13px;color:var(--ink2)}
+table{width:100%;border-collapse:collapse;font-size:13px}th{color:var(--mute);font-weight:600;text-align:left;padding:5px 6px;border-bottom:1px solid var(--line);font-size:11.5px}
+td{padding:7px 6px;border-bottom:1px solid var(--line)}tr.sel td{background:#F5F6FF}
+.chip{display:inline-block;border-radius:999px;padding:1px 9px;font-size:11px;font-weight:700}
+.req{background:#F3F4F6;color:#6B7280}.rev{background:#EEF0FF;color:#4338CA}.apv{background:#ECFDF5;color:#047857}.run{background:#FFF7E6;color:#B45309}.exp{background:#FEF2F2;color:#B91C1C}
+.d{display:grid;grid-template-columns:86px 1fr;gap:6px 10px;font-size:13.5px;margin-bottom:8px}.d b{color:var(--mute);font-weight:600;font-size:12px;align-self:center}
+.big{font-size:19px;font-weight:800}
+.b{display:inline-block;border:1px solid var(--line);border-radius:7px;padding:6px 14px;font-size:13px;font-weight:700;margin-right:6px}.b.p{background:var(--indigo);color:#fff;border-color:var(--indigo)}.b.g{background:var(--emerald);color:#fff;border-color:var(--emerald)}.b.off{opacity:.45}
+.msg{color:var(--rose);font-size:12.5px;margin-top:8px}
+.note{color:var(--mute);font-size:11.5px;margin-top:6px}
+.chk{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;margin:4px 0 8px}.chk span::before{content:"☑ ";color:var(--emerald)}.chk span.no::before{content:"☐ ";color:var(--rose)}
+/* 현황판 격자 */
+.grid{display:grid;grid-template-columns:118px repeat(13,1fr);gap:3px;font-size:11px}
+.grid .h{color:var(--mute);text-align:center;padding-bottom:2px}.grid .z{font-weight:700;font-size:12.5px;align-self:center}
+.cell{height:34px;background:#F4F5F9;border-radius:4px;position:relative}
+.bar{position:absolute;top:4px;bottom:4px;left:2px;right:2px;border-radius:4px;color:#fff;font-size:11px;font-weight:700;padding:3px 6px;white-space:nowrap;overflow:hidden}
+.height{background:var(--indigo)}.hot{background:var(--rose)}.confined{background:var(--amber)}.expired{background:#9CA3AF}
+.warn{background:#FFF7E6;border:1px solid #FDE68A;color:#B45309;border-radius:8px;padding:7px 10px;font-size:12.5px;margin-top:8px}
+.legend{display:flex;gap:14px;font-size:11.5px;color:var(--ink2)}.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.err{background:#FFF5F5;border:1px solid #FECACA;color:#991B1B;border-radius:12px;padding:20px;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.err button{background:#fff;border:1px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700}
+</style></head><body>
+<div id="root"></div>
+<script>
+const state=(new URLSearchParams(location.search).get('state'))||'ok';
+const shell=(on,body)=>`<div class="app"><div class="side"><div class="logo"><i></i>뚝딱건설 해뜰현장</div><div class="nav"><div>안전 점검</div><div class="${on==='p'?'on':''}">작업 허가</div><div>자재 반입</div><div>출역</div><div>하자 접수</div></div></div><div class="main">${body}</div></div>`;
+const head=(t,s,who)=>`<div class="top"><div><h1>${t}</h1><div class="sub">${s}</div></div><span class="who">사용자: ${who} ▾</span></div>`;
+const hours=[6,7,8,9,10,11,12,13,14,15,16,17,18];
+function grid(rows){let h=`<div class="grid"><div></div>${hours.map(x=>`<div class="h">${x}시</div>`).join("")}`;
+ for(const r of rows){h+=`<div class="z">${r.z}</div>`;for(const hr of hours){const b=r.bars.find(b=>hr>=b.s&&hr<b.e);h+=`<div class="cell">${b&&hr===b.s?`<div class="bar ${b.c}" style="right:${-(b.e-b.s-1)*100-((b.e-b.s-1)*3)}%;z-index:2">${b.t}</div>`:""}</div>`}}
+ return h+`</div>`}
+let html='';
+if(state==='ok'){
+ html=shell('p',head('오늘의 허가 현황판 · 11월 6일','구역별 · 시간대별 — 허가는 승인 뒤 8시간 · 당일, 같은 구역 · 같은 시간에 화기와 밀폐는 함께 승인 안 됨','최소장 (현장 책임자)')+
+ `<div class="box" style="flex:1"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><h3 style="margin:0">구역 × 시간 — 오늘 승인 · 작업 중 · 신청 대기</h3><div class="legend"><span><i class="height"></i>고소</span><span><i class="hot"></i>화기</span><span><i class="confined"></i>밀폐</span><span><i class="expired"></i>만료</span></div></div>
+ ${grid([{z:'본관 3층',bars:[{s:7,e:11,c:'height',t:'0106 고소 · 승인 07:10 → 15:10 만료'},{s:13,e:17,c:'height',t:'0110 고소 · 작업 중'}]},
+         {z:'지하 1층 기계실',bars:[{s:9,e:13,c:'confined',t:'0105 밀폐(도장) · 작업 중 · 유효 ~17:40'},{s:14,e:16,c:'hot',t:'0104 화기 · 승인'}]},
+         {z:'옥상',bars:[{s:8,e:12,c:'height',t:'0107 고소 · 작업 중'},{s:12,e:14,c:'hot',t:'0103 화기 · 승인'}]}])}
+ <div class="warn">⚠ 상충 경고 — 지하 1층 기계실 10:00~12:00: <b>WP-0102 화기(용접) 신청</b>이 <b>WP-0105 밀폐(도장) 작업 중</b>과 겹칩니다. 승인하면 서버가 409 로 거절합니다 — 시간을 옮기거나 0105 종료 뒤 승인.</div></div>`);
+}else if(state==='worker'){
+ html=shell('p',head('내 작업 허가','신청 → 안전 담당 검토 → 현장 책임자 승인 → 작업 시작 → 종료 · 허가는 승인 뒤 8시간','김작업 (작업자 · 반장)')+
+ `<div class="row"><div class="box"><h3>내 허가 — 오늘</h3><table><tr><th>번호</th><th>작업</th><th>구역</th><th>시간</th><th>상태</th></tr>
+  <tr><td>WP-0106</td><td>고소</td><td>본관 3층</td><td>02:00~10:00</td><td><span class="chip exp">만료 (승인 03:10 → 11:10)</span></td></tr>
+  <tr class="sel"><td>WP-0101</td><td>고소</td><td>본관 3층</td><td>11:00~15:00</td><td><span class="chip apv">승인 · 유효 ~20:04</span></td></tr>
+  <tr><td>WP-0105</td><td>밀폐</td><td>지하 1층 기계실</td><td>11:00~15:00</td><td><span class="chip run">작업 중</span></td></tr>
+  <tr><td>WP-0111</td><td>화기</td><td>본관 3층</td><td>16:00~18:00</td><td><span class="chip req">신청</span></td></tr></table>
+  <div class="note">만료된 허가는 연장이 없다 — 새 허가를 신청한다</div></div>
+ <div class="box"><h3>WP-0101 · 고소 작업 · 본관 3층</h3><div class="d"><b>상태</b><span class="big">승인 · 작업 전</span><b>유효</b><span>승인 12:04 → <b>20:04 까지</b> (8시간 · 당일 23:59 상한)</span><b>검토 · 승인</b><span>박안전 → 최소장</span><b>점검</b><span></span></div>
+  <div class="chk"><span>안전대 착용</span><span>작업 발판 점검</span><span>추락 방지망 설치</span></div>
+  <span class="b g">작업 시작</span><span class="b off">종료</span><div class="msg" style="color:var(--mute)">만료된 WP-0106 에서 '작업 시작' 을 누르면 — 409 허가가 만료되었습니다</div></div></div>`);
+}else if(state==='safety'){
+ html=shell('p',head('검토 대기 — 안전 담당','필수 점검 항목이 다 체크된 신청만 검토 완료로 · 승인은 현장 책임자','박안전 (안전 담당)')+
+ `<div class="row"><div class="box"><h3>검토 대기 신청</h3><table><tr><th>번호</th><th>작업</th><th>구역</th><th>시간</th><th>신청</th></tr>
+  <tr class="sel"><td>WP-0109</td><td>밀폐</td><td>옥상</td><td>13:00~15:00</td><td>이반장</td></tr>
+  <tr><td>WP-0111</td><td>화기</td><td>본관 3층</td><td>16:00~18:00</td><td>김작업</td></tr>
+  <tr><td>WP-0112</td><td>화기</td><td>지하 1층 기계실</td><td>10:00~12:00</td><td>정부소장</td></tr></table>
+  <div class="note">신청 때 항목이 하나라도 비면 400 — 여기까지 오지 않는다 · 정부소장 신청은 본인이 승인 못 함(403)</div></div>
+ <div class="box"><h3>WP-0109 · 밀폐 작업 · 옥상 · 이반장</h3><div class="d"><b>상태</b><span class="big">신청</span><b>시간</b><span>13:00 ~ 15:00</span><b>점검 항목</b><span>밀폐 작업 3개</span></div>
+  <div class="chk"><span>산소 농도 측정</span><span>환기 장치 가동</span><span>외부 감시자 배치</span></div>
+  <span class="b p">검토 완료</span><div class="msg" style="color:var(--mute)">승인 단추는 없다 — 안전 담당이 승인을 누르면 서버가 403</div></div></div>`);
+}else{
+ html=shell('p',head('내 작업 허가','신청 → 검토 → 승인 → 작업 시작 → 종료','김작업 (작업자 · 반장)')+
+ `<div class="err"><div><b>불러오지 못했습니다.</b> 허가 API 가 응답하지 않습니다 — 허가 상태를 모르면 작업을 시작하지 않습니다.</div><button>다시 시도</button></div>
+ <div class="box" style="flex:1"></div>`);
+}
+document.getElementById('root').innerHTML=html;
+</script></body></html>

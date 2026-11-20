@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>위험 작업 허가서 — 뚝딱건설 해뜰현장</title>
+<style>
+body{font-family:"Malgun Gothic",sans-serif;margin:0;padding:12px 16px;color:#222;background:#fafafa}
+h1{font-size:20px;margin:0 0 8px}h2{font-size:15px;margin:12px 0 6px}
+.top{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.main{display:flex;gap:16px;align-items:flex-start}
+.list{width:42%}.detail{flex:1;background:#fff;border:1px solid #ddd;padding:10px;min-height:120px}
+.permit{border:1px solid #ccc;background:#fff;padding:6px 8px;margin-bottom:4px;cursor:pointer;font-size:13px}
+.permit.sel{border-color:#1565c0;background:#e8f1fb}
+.st{display:inline-block;padding:0 6px;border-radius:8px;background:#eee;font-size:12px}
+.st-expired{background:#f8d7da}.st-approved{background:#d4edda}.st-started{background:#fff3cd}
+#message{min-height:22px;margin:6px 0;color:#b00020;font-weight:bold}
+button{padding:4px 10px;margin-right:4px}
+.form{background:#fff;border:1px solid #ddd;padding:10px;margin-top:12px}
+.form label{display:block;margin:4px 0}.items label{display:inline-block;margin-right:12px}
+table.grid{border-collapse:collapse;font-size:12px}
+table.grid td,table.grid th{border:1px solid #ccc;width:40px;height:26px;text-align:center;padding:0}
+table.grid th.z{width:120px;text-align:left;padding-left:4px}
+.c-height{background:#90caf9}.c-hot{background:#ef9a9a}.c-confined{background:#ce93d8}
+.conflict{background:#ffebee;border:1px solid #c62828;color:#c62828;padding:4px 8px;margin:4px 0}
+.error{background:#fff3f3;border:1px solid #c62828;padding:8px;margin:8px 0}
+.legend span{display:inline-block;padding:0 8px;margin-right:6px;font-size:12px}
+</style>
+</head>
+<body>
+<h1>위험 작업 허가서 <small>뚝딱건설 해뜰현장</small></h1>
+<div class="top">
+  <label>사용자 <select data-testid="user" id="user"></select></label>
+</div>
+<div id="message" data-testid="message"></div>
+<div id="err" class="error" style="display:none"><span>불러오지 못했습니다</span> <button id="retry">다시 시도</button></div>
+<div class="main">
+  <div class="list"><h2>허가 목록</h2><div id="list"></div></div>
+  <div class="detail"><h2>허가 상세</h2><div id="detail">허가를 선택하세요.</div></div>
+</div>
+<div class="form">
+  <h2>허가 신청</h2>
+  <label>작업 종류 <select data-testid="work-type" id="wt"></select></label>
+  <div class="items" id="items"></div>
+  <label>구역 <select data-testid="zone" id="zone"></select></label>
+  <label>시작 <input data-testid="start-at" id="sa" size="18" placeholder="YYYY-MM-DD HH:MM"></label>
+  <label>종료 <input data-testid="end-at" id="ea" size="18" placeholder="YYYY-MM-DD HH:MM"></label>
+  <button data-testid="submit" id="submit">신청</button>
+</div>
+<div id="board"></div>
+<script>
+const ROLE = {worker:"작업자", safety:"안전 담당", manager:"현장 책임자"};
+const STATUS = {requested:"신청", reviewed:"검토 완료", approved:"승인", started:"작업 중", closed:"종료", expired:"만료"};
+let users = [], workTypes = [], zones = [], selected = null;
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const me = () => users.find(u => u.user_id === $("user").value);
+const q = () => encodeURIComponent($("user").value);
+
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  let body = null;
+  try { body = await r.json(); } catch (e) {}
+  if (!r.ok) { const err = new Error((body && body.detail) || "요청 실패"); err.server = true; throw err; }
+  return body;
+}
+const say = t => { $("message").textContent = t || ""; };
+const pad = n => String(n).padStart(2, "0");
+const fmt = d => d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate()) + " " + pad(d.getHours()) + ":" + pad(d.getMinutes());
+
+async function init() {
+  try {
+    [users, workTypes, zones] = await Promise.all([api("/api/users"), api("/api/work-types"), api("/api/zones")]);
+    $("err").style.display = "none";
+    $("user").innerHTML = users.map(u => `<option value="${esc(u.user_id)}">${esc(u.name)} (${ROLE[u.role] || u.role})</option>`).join("");
+    $("wt").innerHTML = workTypes.map(w => `<option value="${esc(w.work_type)}">${esc(w.name)}</option>`).join("");
+    $("zone").innerHTML = zones.map(z => `<option value="${esc(z.zone_id)}">${esc(z.name)}</option>`).join("");
+    const now = new Date(), later = new Date(now.getTime() + 2*3600*1000);
+    $("sa").value = fmt(now); $("ea").value = fmt(later);
+    renderItems();
+    await refresh();
+  } catch (e) { fail(); }
+}
+function fail() { $("err").style.display = "block"; }
+
+function renderItems() {
+  const w = workTypes.find(x => x.work_type === $("wt").value);
+  $("items").innerHTML = w ? w.items.map(i =>
+    `<label><input type="checkbox" data-testid="check-item" data-id="${esc(i.item_id)}"> ${esc(i.name)}</label>`).join("") : "";
+}
+
+async function refresh() {
+  try {
+    const list = await api("/api/permits?viewer=" + q());
+    $("err").style.display = "none";
+    $("list").innerHTML = list.map(p =>
+      `<div class="permit${p.permit_id === selected ? " sel" : ""}" data-testid="permit" data-id="${esc(p.permit_id)}" data-status="${esc(p.status)}">
+        <b>${esc(p.permit_id)}</b> ${esc(p.work_type_name)} · ${esc(p.zone_name)} · ${esc(p.start_at)} ~ ${esc(p.end_at)}
+        <span class="st st-${esc(p.status)}">${STATUS[p.status] || esc(p.status)}</span></div>`).join("") || "허가가 없습니다.";
+    document.querySelectorAll('[data-testid="permit"]').forEach(el => el.onclick = () => { selected = el.dataset.id; say(""); refresh(); });
+    if (selected && list.some(p => p.permit_id === selected)) await showDetail(selected);
+    else { selected = null; $("detail").textContent = "허가를 선택하세요."; }
+    await board();
+  } catch (e) { fail(); }
+}
+
+async function showDetail(id) {
+  const p = await api("/api/permits/" + encodeURIComponent(id) + "?viewer=" + q());
+  const u = me();
+  let btn = "";
+  if (u.role === "safety" && p.status === "requested") btn += `<button data-testid="review" data-act="review">검토</button>`;
+  if (u.role === "manager" && p.status === "reviewed") btn += `<button data-testid="approve" data-act="approve">승인</button>`;
+  if (u.user_id === p.requester_id && p.status === "approved") btn += `<button data-testid="start" data-act="start">작업 시작</button>`;
+  if ((u.user_id === p.requester_id || u.user_id === p.approved_by) &&
+      (p.status === "started" || (p.status === "expired" && p.started_at))) btn += `<button data-testid="close" data-act="close">종료</button>`;
+  const row = (k, v) => `<tr><td>${k}</td><td>${esc(v == null ? "-" : v)}</td></tr>`;
+  $("detail").innerHTML = `<table>` +
+    row("허가 번호", p.permit_id) + row("작업 종류", p.work_type_name) + row("구역", p.zone_name) +
+    row("신청자", p.requester_name) + row("작업 시간", p.start_at + " ~ " + p.end_at) +
+    row("상태", STATUS[p.status] || p.status) + row("점검 항목", p.checked.join(", ")) +
+    row("검토자", p.reviewed_by) + row("승인자", p.approved_by) + row("승인 시각", p.approved_at) +
+    row("유효 시각", p.valid_until) + row("시작 시각", p.started_at) + row("종료 시각", p.closed_at) +
+    `</table><div style="margin-top:8px">${btn}</div>`;
+  $("detail").querySelectorAll("button[data-act]").forEach(b => b.onclick = () => act(p.permit_id, b.dataset.act));
+}
+
+async function act(id, what) {
+  try {
+    await api("/api/permits/" + encodeURIComponent(id) + "/" + what, {method: "POST",
+      headers: {"Content-Type": "application/json"}, body: JSON.stringify({user: $("user").value})});
+    say("");
+  } catch (e) { if (!e.server) return fail(); say(e.message); }
+  await refresh();
+}
+
+async function board() {
+  const u = me();
+  if (!u || u.role === "worker") { $("board").innerHTML = ""; return; }
+  const d = await api("/api/dashboard?viewer=" + q());
+  let h = `<h2>현황판 ${esc(d.date)}</h2><div class="legend"><span class="c-height">고소</span><span class="c-hot">화기</span><span class="c-confined">밀폐</span></div>`;
+  h += d.conflicts.map(c => `<div class="conflict" data-testid="conflict">상충 경고: ${esc(c.permit_ids[0])} · ${esc(c.permit_ids[1])} (${esc((zones.find(z => z.zone_id === c.zone_id) || {}).name || c.zone_id)})</div>`).join("");
+  h += `<table class="grid" data-testid="grid"><tr><th class="z">구역</th>` + d.hours.map(x => `<th>${pad(x)}시</th>`).join("") + `</tr>`;
+  const day = d.date;
+  for (const z of d.zones) {
+    h += `<tr><th class="z">${esc(z.name)}</th>`;
+    for (const hr of d.hours) {
+      const s = day + " " + pad(hr) + ":00", e = day + " " + pad(hr) + ":59";
+      const ps = z.permits.filter(p => p.start_at <= e && p.end_at > s);
+      h += `<td data-testid="cell" data-zone="${esc(z.zone_id)}" data-hour="${hr}" class="${ps.length ? "c-" + esc(ps[0].work_type) : ""}" title="${esc(ps.map(p => p.permit_id).join(", "))}">${esc(ps.map(p => p.permit_id.slice(-4)).join("/"))}</td>`;
+    }
+    h += `</tr>`;
+  }
+  $("board").innerHTML = h + `</table>`;
+}
+
+$("user").onchange = () => { selected = null; say(""); refresh(); };
+$("wt").onchange = renderItems;
+$("retry").onclick = init;
+$("submit").onclick = async () => {
+  const checked = [...document.querySelectorAll('[data-testid="check-item"]')].filter(c => c.checked).map(c => c.dataset.id);
+  try {
+    const p = await api("/api/permits", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({
+      user: $("user").value, work_type: $("wt").value, zone_id: $("zone").value, start_at: $("sa").value.trim(), end_at: $("ea").value.trim(), checked})});
+    say(""); selected = p.permit_id;
+  } catch (e) { if (!e.server) return fail(); say(e.message); }
+  await refresh();
+};
+init();
+</script>
+</body>
+</html>

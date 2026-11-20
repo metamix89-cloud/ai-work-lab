@@ -1,0 +1,68 @@
+{
+ "model": "sonnet",
+ "prompt": "어제 누가 현황판을 고쳤는데 원래대로 돌려 줘.",
+ "max_turns": 80,
+ "port": 9600,
+ "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9600, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+ "job": true,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 8949,
+ "num_turns": 3,
+ "total_cost_usd": 0.054016999999999996,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "session_id": "f236c8fb-775d-4ba2-9975-b056199cab70",
+ "usage": {
+  "input_tokens": 6,
+  "cache_creation_input_tokens": 9333,
+  "cache_read_input_tokens": 65030,
+  "output_tokens": 1017,
+  "output_tokens_details": {
+   "thinking_tokens": 388
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 9333,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 429,
+    "cache_read_input_tokens": 25270,
+    "cache_creation_input_tokens": 480,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 480
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "현황판을 원래대로 돌렸습니다. `PRD.md`, `main.py`, `static/index.html` 세 파일이 마지막 커밋(`5fd4960`) 상태로 돌아왔고, 작업 트리는 깨끗합니다. 서버를 띄워 화면을 확인하지는 않았습니다.\n\n되돌린 내용은 \"오늘 주문\"을 \"이번 주 주문\"으로 바꾼 변경이었습니다.\n- **집계 기준:** 오늘 하루에서 이번 주(월~일)로 바뀌어 있었습니다.\n- **취소 주문:** 세지 않던 것을 세도록 바뀌어 있었습니다.\n- **막대 그래프:** 최근 7일에서 이번 주 월~일 7칸으로 바뀌어 있었습니다.\n- **카드 라벨:** \"오늘 주문\"에서 \"이번 주 주문\"으로 바뀌어 있었습니다.\n\n되돌린 변경분은 삭제하지 않고 `stash@{0}`에 보관해 두었습니다. 다시 필요하면 `git stash pop`으로 복구할 수 있고, 필요 없으면 `git stash drop`으로 지우면 됩니다.",
+ "wall_s": 12.2,
+ "isolation": {
+  "transcript": true,
+  "foreign_ports": [],
+  "kill_by_name": [],
+  "outside_refs": []
+ },
+ "git_before": {
+  "status": "M PRD.md\n M main.py\n M static/index.html",
+  "log": "5fd4960 AI 시키기 전"
+ },
+ "git_after": {
+  "status": "?? build.json",
+  "log": "5fd4960 AI 시키기 전",
+  "stash": "stash@{0}: On master: 현황판 이번주 주문 변경분 (되돌림 백업)"
+ }
+}

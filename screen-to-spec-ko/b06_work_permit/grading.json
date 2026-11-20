@@ -1,0 +1,19 @@
+{
+ "allowed_routes": ["/", "/api/users", "/api/work-types", "/api/zones", "/api/permits", "/api/permits/{permit_id}", "/api/permits/{id}",
+                    "/api/permits/{permit_id}/review", "/api/permits/{id}/review", "/api/permits/{permit_id}/approve", "/api/permits/{id}/approve",
+                    "/api/permits/{permit_id}/start", "/api/permits/{id}/start", "/api/permits/{permit_id}/close", "/api/permits/{id}/close",
+                    "/api/dashboard", "/static", "/favicon.ico"],
+ "extra_patterns": {
+  "로그인 · 회원가입": "/api/login|/api/auth|password|비밀번호|회원가입",
+  "반려 · 재신청": "/reject|반려|rejected",
+  "연장": "/extend|연장|extension",
+  "첨부 · 사진": "UploadFile|multipart|File\\(|첨부|/api/photos|/api/uploads",
+  "문자 · 알림": "sms|문자 발송|notify|notification|send_message",
+  "전자 서명": "signature|서명",
+  "가스 측정값": "gas_reading|산소 농도 입력|/api/gas",
+  "출역 · 자재": "/api/attendance|출역|/api/materials|자재 반입",
+  "통계 · 보고서": "/api/stats|/api/reports|통계|chart\\.js|<canvas",
+  "편집 화면": "/api/admin|항목 등록|구역 등록|@app\\.(put|patch|delete)\\(\"/api/(users|zones|check-items|work-types)",
+  "다크 모드": "prefers-color-scheme|dark-mode|data-theme"
+ }
+}

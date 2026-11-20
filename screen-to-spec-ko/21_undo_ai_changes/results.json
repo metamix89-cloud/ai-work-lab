@@ -1,0 +1,1152 @@
+{
+ "base": {
+  "same_bytes": 6,
+  "same_text": 6,
+  "per_file": {
+   "PRD.md": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "main.py": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/inquiries.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/orders.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/stock.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "static/index.html": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   }
+  },
+  "extra_files": [],
+  "missing_files": [],
+  "total_files": 6,
+  "dod": 9,
+  "dod_fail": [],
+  "dod_detail": {}
+ },
+ "broken": {
+  "same_bytes": 3,
+  "same_text": 3,
+  "per_file": {
+   "PRD.md": {
+    "state": "diff",
+    "added": 2,
+    "removed": 2
+   },
+   "main.py": {
+    "state": "diff",
+    "added": 4,
+    "removed": 3
+   },
+   "seed/inquiries.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/orders.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/stock.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "static/index.html": {
+    "state": "diff",
+    "added": 1,
+    "removed": 1
+   }
+  },
+  "extra_files": [],
+  "missing_files": [],
+  "total_files": 6,
+  "build": {
+   "num_turns": 11,
+   "total_cost_usd": 0.10750760000000001,
+   "wall_s": 20.8,
+   "session_id": "0a038937-4468-447d-bdd2-edd30657b3b7",
+   "rc": 0,
+   "is_error": false,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   },
+   "git_before": null,
+   "git_after": null
+  },
+  "report": "현황판의 주문 수를 이번 주 기준으로 바꾸고, 취소된 주문도 세도록 고쳤습니다. 서버를 띄워 확인하지는 않았습니다.\n\n- **주 기준**: \"이번 주\"는 월요일~일요일로 잡았습니다. 일요일 시작 등 다른 기준이 필요하면 알려 주세요.\n- **카드**: 라벨이 `오늘 주문`에서 `이번 주 주문`으로 바뀌었습니다. 값은 이번 주 월~일 주문 수이고, 취소 주문도 들어갑니다.\n- **막대그래프**: 월~일 7칸으로 바뀌었고, 취소 주문도 셉니다. 아직 오지 않은 날은 0으로 나옵니다.\n- **API**: `/api/summary`의 키 이름은 그대로 두었습니다. `today_orders`에는 이제 이번 주 주문 수가 들어갑니다.\n- **PRD**: R1과 R4를 새 기준에 맞게 고쳤습니다. 수정한 파일은 `main.py`, `static/index.html`, `PRD.md`입니다.\n\nPRD 10장(완료 기준)의 T2·T3·T6·T9는 아직 옛 기준(`오늘 주문` 라벨, 오늘 4건, 취소 제외)으로 적혀 있어 새 동작과 어긋납니다. `tests/test_dod.py`는 이 폴더에 없어서 손대지 않았습니다. 이 항목들도 고칠까요?",
+  "claim": false,
+  "git_cmds": [],
+  "tools": {
+   "Grep": 1,
+   "Read": 3,
+   "Glob": 1,
+   "Edit": 5
+  },
+  "dod": 6,
+  "dod_fail": [
+   "T2",
+   "T3",
+   "T9"
+  ],
+  "dod_detail": {
+   "T2": "AssertionError: 라벨 없음: 오늘 주문\nassert '오늘 주문' in '가나다식품 오늘의 현황판 갱신 2026-11-15 17:40 이번 주 주문 13 재고 경고 2 미처리 문의 3 0 1 2 0 3 2 5 11-09 11-10 11-11 11-12 11-13 11-14 11-15'",
+   "T3": "AssertionError: assert 13 == 4\n +  where 13 = as_int('13')\n +    where '13' = metric(<Page url='http://127.0.0.1:9100/'>, 'today-orders')",
+   "T9": "assert 13 == 4"
+  }
+ },
+ "U1_1": {
+  "same_bytes": 6,
+  "same_text": 6,
+  "per_file": {
+   "PRD.md": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "main.py": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/inquiries.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/orders.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/stock.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "static/index.html": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   }
+  },
+  "extra_files": [],
+  "missing_files": [],
+  "total_files": 6,
+  "build": {
+   "num_turns": 6,
+   "total_cost_usd": 0.1407951,
+   "wall_s": 10.9,
+   "session_id": "3f7e62f4-ea27-4d32-8822-29fcf7e4e878",
+   "rc": 0,
+   "is_error": false,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   },
+   "git_before": null,
+   "git_after": null
+  },
+  "report": "방금 바꾼 5곳을 모두 원래대로 되돌렸습니다. 되돌린 뒤에 서버를 띄워 확인하지는 않았습니다.\n\n- `main.py`: 막대는 오늘 포함 최근 7일 기준이고 취소 주문은 제외합니다. `today_orders`는 오늘 주문 수로 돌아갔습니다.\n- `static/index.html`: 카드 라벨이 `오늘 주문`으로 돌아갔습니다.\n- `PRD.md`: R1과 R4가 원래 문구로 돌아갔습니다.\n\n이 폴더는 git 저장소가 아니라서, 편집 내용을 하나씩 역으로 적용해 되돌렸습니다.",
+  "claim": true,
+  "git_cmds": [],
+  "tools": {
+   "Grep": 1,
+   "Read": 3,
+   "Glob": 1,
+   "Edit": 10
+  },
+  "dod": 9,
+  "dod_fail": [],
+  "dod_detail": {}
+ },
+ "U1_2": {
+  "same_bytes": 6,
+  "same_text": 6,
+  "per_file": {
+   "PRD.md": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "main.py": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/inquiries.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/orders.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/stock.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "static/index.html": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   }
+  },
+  "extra_files": [],
+  "missing_files": [],
+  "total_files": 6,
+  "build": {
+   "num_turns": 6,
+   "total_cost_usd": 0.1383122,
+   "wall_s": 11.3,
+   "session_id": "15fbfe4b-45ce-4dac-821e-07d509dfbd9a",
+   "rc": 0,
+   "is_error": false,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   },
+   "git_before": null,
+   "git_after": null
+  },
+  "report": "방금 한 수정 5곳을 모두 원래대로 되돌렸습니다.\n\n- `main.py`: 최근 7일 기준과 취소 제외 조건으로 복구했고, `today_orders`도 오늘 주문 수로 돌아왔습니다.\n- `static/index.html`: 카드 라벨이 다시 `오늘 주문`입니다.\n- `PRD.md`: R1과 R4가 원래 문구로 돌아왔습니다.\n\ngit 저장소가 아니라서, 수정 전에 읽어 둔 내용을 그대로 다시 써서 되돌렸습니다. 실행해서 확인하지는 않았습니다.",
+  "claim": true,
+  "git_cmds": [],
+  "tools": {
+   "Grep": 1,
+   "Read": 3,
+   "Glob": 1,
+   "Edit": 10
+  },
+  "dod": 9,
+  "dod_fail": [],
+  "dod_detail": {}
+ },
+ "U1_3": {
+  "same_bytes": 6,
+  "same_text": 6,
+  "per_file": {
+   "PRD.md": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "main.py": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/inquiries.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/orders.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/stock.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "static/index.html": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   }
+  },
+  "extra_files": [],
+  "missing_files": [],
+  "total_files": 6,
+  "build": {
+   "num_turns": 6,
+   "total_cost_usd": 0.13870820000000003,
+   "wall_s": 11.2,
+   "session_id": "a42c071a-dc1d-4c3d-aff9-0901527061ef",
+   "rc": 0,
+   "is_error": false,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   },
+   "git_before": null,
+   "git_after": null
+  },
+  "report": "바꾼 내용을 전부 원래대로 되돌렸습니다. 되돌린 파일은 `main.py`, `static/index.html`, `PRD.md`입니다.\n\n- **`main.py`**: 막대는 다시 오늘 포함 최근 7일이고 취소 주문은 제외합니다. `today_orders`는 오늘 주문 수로 돌아갔습니다.\n- **`index.html`**: 카드 라벨이 다시 `오늘 주문`입니다.\n- **`PRD.md`**: R1과 R4가 원래 문장 그대로입니다.\n\ngit 저장소가 아니라서 처음 내용을 기억해 둔 대로 손으로 되돌렸습니다. 서버를 띄워 동작을 확인하지는 않았습니다.",
+  "claim": true,
+  "git_cmds": [],
+  "tools": {
+   "Grep": 1,
+   "Read": 3,
+   "Glob": 1,
+   "Edit": 10
+  },
+  "dod": 9,
+  "dod_fail": [],
+  "dod_detail": {}
+ },
+ "U2_1": {
+  "same_bytes": 4,
+  "same_text": 4,
+  "per_file": {
+   "PRD.md": {
+    "state": "diff",
+    "added": 2,
+    "removed": 2
+   },
+   "main.py": {
+    "state": "diff",
+    "added": 3,
+    "removed": 3
+   },
+   "seed/inquiries.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/orders.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/stock.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "static/index.html": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   }
+  },
+  "extra_files": [],
+  "missing_files": [],
+  "total_files": 6,
+  "build": {
+   "num_turns": 10,
+   "total_cost_usd": 0.1188165,
+   "wall_s": 27.1,
+   "session_id": "89748f6d-5b50-41c8-aa2c-e5fff0b036e8",
+   "rc": 0,
+   "is_error": false,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   },
+   "git_before": null,
+   "git_after": null
+  },
+  "report": "현황판을 \"오늘 주문 / 최근 7일 막대\" 기준으로 되돌렸지만, 원본이 없어서 PRD 앞부분을 근거로 복원한 것입니다. 서버를 띄워 확인하거나 테스트를 돌리지는 않았습니다.\n\n폴더에 git이나 백업이 없고 수정 시각도 전부 오늘이라, 어제 무엇이 어떻게 바뀌었는지는 확인할 수 없었습니다.\n\n- **`main.py`**\n  - `today_orders`가 오늘 하루의 주문 수(취소 제외)를 돌려줍니다.\n  - 막대는 6일 전부터 오늘까지 7칸이고, 취소는 세지 않습니다.\n- **`static/index.html`**: 카드 라벨을 `이번 주 주문`에서 `오늘 주문`으로 바꿨습니다.\n- **`PRD.md`**: R1과 R4를 위 내용에 맞춰 다시 썼습니다.\n\nR1·R4의 원래 문구와, 막대에서 취소 주문을 셌는지는 복원하지 못했습니다. 막대는 오늘 주문과 같이 취소를 빼도록 정했는데, 원래 취소 포함이었다면 `main.py`의 `WHERE status != '취소'` 한 줄만 지우면 됩니다.\n\n`tests/test_dod.py`는 폴더에 없어서 돌려 보지 못했습니다. 원래 파일이 있다면 알려 주세요.",
+  "claim": true,
+  "git_cmds": [
+   "Get-ChildItem -Force -Recurse -File | Where-Object { $_.FullName -notmatch '\\\\(node_modules|\\.git|__pycache__)\\\\' } | Select-Object FullName, Length, LastWriteTime | Format-Table -AutoSize | Out-String -Width 250"
+  ],
+  "tools": {
+   "PowerShell": 1,
+   "Read": 3,
+   "Edit": 5
+  },
+  "dod": 9,
+  "dod_fail": [],
+  "dod_detail": {}
+ },
+ "U2_2": {
+  "same_bytes": 4,
+  "same_text": 4,
+  "per_file": {
+   "PRD.md": {
+    "state": "diff",
+    "added": 2,
+    "removed": 2
+   },
+   "main.py": {
+    "state": "diff",
+    "added": 3,
+    "removed": 3
+   },
+   "seed/inquiries.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/orders.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/stock.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "static/index.html": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   }
+  },
+  "extra_files": [],
+  "missing_files": [],
+  "total_files": 6,
+  "build": {
+   "num_turns": 10,
+   "total_cost_usd": 0.1204781,
+   "wall_s": 29.1,
+   "session_id": "a671d461-904e-4dff-987a-0b98d64e5ae7",
+   "rc": 0,
+   "is_error": false,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   },
+   "git_before": null,
+   "git_after": null
+  },
+  "report": "현황판을 \"오늘 주문 / 최근 7일\" 기준으로 되돌렸습니다. 다만 서버를 띄워 확인하지는 않았고, git 기록이나 백업이 없어 원본과 똑같은지는 확인할 수 없습니다. 아래는 PRD 안에서 서로 어긋난 부분을 근거로 추정해 복원한 내용입니다.\n\n**되돌린 것**\n- **`main.py`**\n  - `today_orders`는 오늘 날짜의 주문 수(취소 제외)입니다. 이전에는 이번 주 전체를 합산한 값이었습니다.\n  - `daily_orders`는 6일 전부터 오늘까지 7칸입니다. 이전에는 월~일 7칸이었습니다.\n- **`static/index.html`**: 카드 라벨을 `이번 주 주문`에서 `오늘 주문`으로 바꿨습니다.\n- **`PRD.md`**: R1을 오늘 주문 수, 취소 제외로, R4를 최근 7일로 고쳤습니다.\n\n**확인이 필요한 부분**\n- 막대그래프에서 취소 주문을 셌는지는 PRD 어디에도 남아 있지 않았습니다. 마지막 막대가 오늘 카드 숫자와 같도록 취소를 제외했는데, 원래 포함이었다면 `main.py`의 `WHERE status != '취소'`만 빼면 됩니다.\n- 수정자가 바꾼 것이 이 부분뿐인지도 알 수 없습니다. 원본 파일이나 백업이 어딘가 있다면 알려 주세요. 그걸로 비교해서 확인하겠습니다.\n- `tests/test_dod.py`가 폴더에 없어서 DoD 테스트는 돌리지 못했습니다.",
+  "claim": true,
+  "git_cmds": [],
+  "tools": {
+   "PowerShell": 1,
+   "Read": 3,
+   "Edit": 5
+  },
+  "dod": 9,
+  "dod_fail": [],
+  "dod_detail": {}
+ },
+ "U2_3": {
+  "same_bytes": 3,
+  "same_text": 3,
+  "per_file": {
+   "PRD.md": {
+    "state": "diff",
+    "added": 2,
+    "removed": 2
+   },
+   "main.py": {
+    "state": "diff",
+    "added": 4,
+    "removed": 3
+   },
+   "seed/inquiries.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/orders.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/stock.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "static/index.html": {
+    "state": "diff",
+    "added": 1,
+    "removed": 1
+   }
+  },
+  "extra_files": [],
+  "missing_files": [],
+  "total_files": 6,
+  "build": {
+   "num_turns": 6,
+   "total_cost_usd": 0.10281590000000002,
+   "wall_s": 24.7,
+   "session_id": "a263262f-b54a-407c-821a-0e49ce9014ac",
+   "rc": 0,
+   "is_error": false,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   },
+   "git_before": null,
+   "git_after": null
+  },
+  "report": "원래대로 돌리기 전에 확인할 것이 있어서 아직 아무것도 고치지 않았습니다.\n\n**확인한 것**\n- 이 폴더는 git 저장소가 아니고 백업이나 이전 버전도 없습니다.\n- 파일 수정 시각은 전부 오늘 오후 5시대(`PRD.md`·`main.py`·`dash.db` 5:34, `index.html` 5:32)입니다. 어제 수정된 파일은 시각으로 가려낼 수 없습니다.\n- 대신 PRD 안에서 서로 어긋나는 곳이 있어, 이 부분이 수정된 흔적으로 보입니다.\n\n| 항목 | 원본으로 보이는 쪽 | 수정된 것으로 보이는 쪽 |\n|---|---|---|\n| 지표 | F1·§4·T2·T3: `오늘 주문` (오늘 하루) | R1, `main.py`, `index.html`: `이번 주 주문` (월~일 합계) |\n| 막대 | F2: 최근 7일, 오늘 포함 7칸 | R4, `main.py`: 이번 주 월~일 7칸 |\n\n**원본이 확정되지 않는 부분**\n- 취소 주문 처리가 다릅니다. R1은 \"취소도 센다\"고 하고, T3은 \"취소 제외, 어제 23:50 제외, 값 4\"라고 합니다.\n- `seed/orders.csv`의 오늘(10-23) 주문은 4건이고 그중 1건이 취소입니다. 그래서 취소를 빼면 3, 포함하면 4입니다. T3의 \"취소 제외\"와 \"4\"가 이 데이터에서는 서로 맞지 않습니다.\n- 재고 경고(2)와 미처리 문의(3)는 지금 코드와 seed에서 PRD와 맞습니다.\n\n**제가 되돌릴 계획**\n- `PRD.md` R1·R4, `main.py`, `index.html`을 \"오늘 주문\", 최근 7일 막대로 되돌립니다. 취소 처리만 정해지면 됩니다.\n\n**질문**\n1. 오늘 주문 수에서 취소 건을 뺄까요, 셀까요? PRD의 \"취소 제외\"대로 빼면 seed 기준 3이고, T3의 \"4\"에 맞추려면 센다는 뜻입니다.\n2. 어제 수정된 것이 위 두 곳(지표·막대)뿐인가요, 아니면 다른 변경도 있나요? 원본 파일이나 백업이 있다면 그것으로 복원하는 편이 더 정확합니다.",
+  "claim": true,
+  "git_cmds": [],
+  "tools": {
+   "PowerShell": 2,
+   "Read": 3
+  },
+  "dod": 6,
+  "dod_fail": [
+   "T2",
+   "T3",
+   "T9"
+  ],
+  "dod_detail": {
+   "T2": "AssertionError: 라벨 없음: 오늘 주문\nassert '오늘 주문' in '가나다식품 오늘의 현황판 갱신 2026-11-15 17:41 이번 주 주문 13 재고 경고 2 미처리 문의 3 0 1 2 0 3 2 5 11-09 11-10 11-11 11-12 11-13 11-14 11-15'",
+   "T3": "AssertionError: assert 13 == 4\n +  where 13 = as_int('13')\n +    where '13' = metric(<Page url='http://127.0.0.1:9100/'>, 'today-orders')",
+   "T9": "assert 13 == 4"
+  }
+ },
+ "U3_1": {
+  "same_bytes": 6,
+  "same_text": 6,
+  "per_file": {
+   "PRD.md": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "main.py": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/inquiries.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/orders.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/stock.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "static/index.html": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   }
+  },
+  "extra_files": [],
+  "missing_files": [],
+  "total_files": 6,
+  "build": {
+   "num_turns": 3,
+   "total_cost_usd": 0.054016999999999996,
+   "wall_s": 12.2,
+   "session_id": "f236c8fb-775d-4ba2-9975-b056199cab70",
+   "rc": 0,
+   "is_error": false,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   },
+   "git_before": {
+    "status": "M PRD.md\n M main.py\n M static/index.html",
+    "log": "5fd4960 AI 시키기 전"
+   },
+   "git_after": {
+    "status": "?? build.json",
+    "log": "5fd4960 AI 시키기 전",
+    "stash": "stash@{0}: On master: 현황판 이번주 주문 변경분 (되돌림 백업)"
+   }
+  },
+  "report": "현황판을 원래대로 돌렸습니다. `PRD.md`, `main.py`, `static/index.html` 세 파일이 마지막 커밋(`5fd4960`) 상태로 돌아왔고, 작업 트리는 깨끗합니다. 서버를 띄워 화면을 확인하지는 않았습니다.\n\n되돌린 내용은 \"오늘 주문\"을 \"이번 주 주문\"으로 바꾼 변경이었습니다.\n- **집계 기준:** 오늘 하루에서 이번 주(월~일)로 바뀌어 있었습니다.\n- **취소 주문:** 세지 않던 것을 세도록 바뀌어 있었습니다.\n- **막대 그래프:** 최근 7일에서 이번 주 월~일 7칸으로 바뀌어 있었습니다.\n- **카드 라벨:** \"오늘 주문\"에서 \"이번 주 주문\"으로 바뀌어 있었습니다.\n\n되돌린 변경분은 삭제하지 않고 `stash@{0}`에 보관해 두었습니다. 다시 필요하면 `git stash pop`으로 복구할 수 있고, 필요 없으면 `git stash drop`으로 지우면 됩니다.",
+  "claim": true,
+  "git_cmds": [
+   "git log --format='%h %ad %an %s' --date=iso; git diff --stat; git diff",
+   "git stash push -m \"현황판 이번주 주문 변경분 (되돌림 백업)\" -- PRD.md main.py static/index.html && git status --short && git stash list"
+  ],
+  "tools": {
+   "Bash": 2
+  },
+  "dod": 9,
+  "dod_fail": [],
+  "dod_detail": {}
+ },
+ "U3_2": {
+  "same_bytes": 6,
+  "same_text": 6,
+  "per_file": {
+   "PRD.md": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "main.py": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/inquiries.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/orders.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/stock.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "static/index.html": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   }
+  },
+  "extra_files": [],
+  "missing_files": [],
+  "total_files": 6,
+  "build": {
+   "num_turns": 5,
+   "total_cost_usd": 0.065752,
+   "wall_s": 14.7,
+   "session_id": "74cd8908-e838-4127-a4a2-ff73ebc194c3",
+   "rc": 0,
+   "is_error": false,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   },
+   "git_before": {
+    "status": "M PRD.md\n M main.py\n M static/index.html",
+    "log": "7db7038 AI 시키기 전"
+   },
+   "git_after": {
+    "status": "?? build.json",
+    "log": "7db7038 AI 시키기 전",
+    "stash": "stash@{0}: On master: 현황판 수정본 백업(이번 주 집계 변경)"
+   }
+  },
+  "report": "현황판을 마지막 커밋(`7db7038`) 상태로 되돌렸습니다. 이제 `PRD.md`, `main.py`, `static/index.html`에 수정된 내용이 없습니다.\n\n되돌린 변경 내용:\n- 카드 라벨이 `오늘 주문`에서 `이번 주 주문`으로 바뀌어 있었습니다.\n- 집계 기준이 오늘 주문 수에서 이번 주(월~일) 주문 수로 바뀌어 있었고, 취소 주문도 세고 있었습니다.\n- 막대는 최근 7일에서 이번 주 월~일 7칸으로 바뀌어 있었습니다.\n- `PRD.md`의 R1과 R4 규칙도 이 내용에 맞춰 고쳐져 있었습니다.\n\n한 가지 알아 두실 점이 있습니다. 이 수정은 커밋되지 않은 상태였고, git 기록에서 어제 수정했다는 흔적은 찾지 못했습니다. 그래서 작업 중인 수정을 전부 되돌렸습니다. 수정본은 지우지 않고 `git stash`(`stash@{0}`)에 넣어 두었습니다. 다시 필요하면 `git stash pop`으로 복구하고, 필요 없으면 `git stash drop`으로 지우시면 됩니다.\n\n서버를 띄워 화면까지 확인하지는 않았습니다. `git status`와 `git diff HEAD`에서 변경이 없는 것만 확인했습니다.",
+  "claim": true,
+  "git_cmds": [
+   "git log --format='%h %ad %an %s' --date=iso -n 10; git diff --stat; ls",
+   "git diff; git status --short; ls -la --time-style=full-iso . static seed",
+   "git stash push -m \"현황판 수정본 백업(이번 주 집계 변경)\" -- PRD.md main.py static/index.html && git status --short && git stash list && git diff HEAD --stat"
+  ],
+  "tools": {
+   "Bash": 3,
+   "Grep": 1
+  },
+  "dod": 9,
+  "dod_fail": [],
+  "dod_detail": {}
+ },
+ "U1_4": {
+  "same_bytes": 6,
+  "same_text": 6,
+  "per_file": {
+   "PRD.md": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "main.py": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/inquiries.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/orders.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/stock.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "static/index.html": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   }
+  },
+  "extra_files": [],
+  "missing_files": [],
+  "total_files": 6,
+  "build": {
+   "num_turns": 6,
+   "total_cost_usd": 0.131057,
+   "wall_s": 10.6,
+   "session_id": "7b34bfde-2db1-44d8-b62f-783bb5f9954e",
+   "rc": 0,
+   "is_error": false,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   },
+   "git_before": null,
+   "git_after": null
+  },
+  "report": "방금 바꾼 것을 전부 원래대로 되돌렸습니다.\n\n- **`main.py`**: 최근 7일(오늘 포함) 막대, 취소 주문 제외, `today_orders`는 오늘 주문 수로 돌아갔습니다.\n- **`static/index.html`**: 카드 라벨이 `오늘 주문`으로 돌아갔습니다.\n- **`PRD.md`**: R1과 R4가 원래 문구로 돌아갔습니다.\n\ngit 저장소가 아니어서 수정 전 내용을 직접 다시 써 넣었습니다. 파일을 다시 읽어 비교하지는 않았습니다.",
+  "claim": true,
+  "git_cmds": [],
+  "tools": {
+   "Grep": 1,
+   "Read": 3,
+   "Glob": 1,
+   "Edit": 10
+  },
+  "dod": 9,
+  "dod_fail": [],
+  "dod_detail": {}
+ },
+ "U1_5": {
+  "same_bytes": 6,
+  "same_text": 6,
+  "per_file": {
+   "PRD.md": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "main.py": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/inquiries.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/orders.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/stock.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "static/index.html": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   }
+  },
+  "extra_files": [],
+  "missing_files": [],
+  "total_files": 6,
+  "build": {
+   "num_turns": 6,
+   "total_cost_usd": 0.13171690000000003,
+   "wall_s": 10.9,
+   "session_id": "67e301a8-c7dc-4aff-b368-df15771ac61e",
+   "rc": 0,
+   "is_error": false,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   },
+   "git_before": null,
+   "git_after": null
+  },
+  "report": "방금 한 수정 5곳을 모두 원래대로 되돌렸습니다. 되돌린 뒤 파일을 다시 열어 확인하지는 않았습니다. 저장소가 git이 아니어서 직전 편집의 이전 문구를 그대로 다시 넣는 방식으로 되돌렸습니다.\n\n- **`main.py`**: 주문 집계는 다시 오늘 포함 최근 7일 기준이고 취소 주문은 제외합니다. `today_orders`는 다시 오늘 주문 수입니다.\n- **`static/index.html`**: 카드 라벨이 `오늘 주문`으로 돌아왔습니다.\n- **`PRD.md`**: R1과 R4가 원래 문구로 돌아왔습니다.\n\n서버는 띄우지 않았고 프로세스도 건드리지 않았습니다.",
+  "claim": true,
+  "git_cmds": [],
+  "tools": {
+   "Grep": 1,
+   "Read": 3,
+   "Glob": 1,
+   "Edit": 10
+  },
+  "dod": 9,
+  "dod_fail": [],
+  "dod_detail": {}
+ },
+ "U1_6": {
+  "same_bytes": 6,
+  "same_text": 6,
+  "per_file": {
+   "PRD.md": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "main.py": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/inquiries.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/orders.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/stock.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "static/index.html": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   }
+  },
+  "extra_files": [],
+  "missing_files": [],
+  "total_files": 6,
+  "build": {
+   "num_turns": 6,
+   "total_cost_usd": 0.13162690000000002,
+   "wall_s": 10.8,
+   "session_id": "0fd13171-1ed8-4d22-8a80-722b93bba178",
+   "rc": 0,
+   "is_error": false,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   },
+   "git_before": null,
+   "git_after": null
+  },
+  "report": "앞서 바꾼 5곳을 모두 원래 내용으로 되돌렸습니다. 되돌린 뒤에 서버를 띄우거나 파일을 다시 읽어 보지는 않았습니다.\n\n- **`main.py`**: 막대를 오늘 포함 최근 7일로, 취소 주문은 제외로 되돌렸습니다. `today_orders`도 오늘 주문 수로 돌아갔습니다.\n- **`static/index.html`**: 카드 라벨이 다시 `오늘 주문`입니다.\n- **`PRD.md`**: R1과 R4를 원래 문구로 복원했습니다.\n\ngit 저장소가 아니라서 편집 때 쓴 문구 그대로 되돌렸습니다. 그 사이 파일을 직접 수정하셨다면 알려 주세요.",
+  "claim": true,
+  "git_cmds": [],
+  "tools": {
+   "Grep": 1,
+   "Read": 3,
+   "Glob": 1,
+   "Edit": 10
+  },
+  "dod": 9,
+  "dod_fail": [],
+  "dod_detail": {}
+ },
+ "U2_4": {
+  "same_bytes": 4,
+  "same_text": 4,
+  "per_file": {
+   "PRD.md": {
+    "state": "diff",
+    "added": 2,
+    "removed": 2
+   },
+   "main.py": {
+    "state": "diff",
+    "added": 3,
+    "removed": 3
+   },
+   "seed/inquiries.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/orders.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/stock.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "static/index.html": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   }
+  },
+  "extra_files": [],
+  "missing_files": [],
+  "total_files": 6,
+  "build": {
+   "num_turns": 11,
+   "total_cost_usd": 0.12736530000000001,
+   "wall_s": 30.6,
+   "session_id": "4505df3b-7d6d-498e-a411-4353831e06b9",
+   "rc": 0,
+   "is_error": false,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   },
+   "git_before": null,
+   "git_after": null
+  },
+  "report": "현황판을 \"오늘 기준\"으로 되돌렸습니다. 다만 원본이 없어서 복원이 아니라 추정 재구성입니다. 서버를 띄워 실행해 보지는 않았습니다.\n\n폴더가 git 저장소가 아니고 백업도 없습니다. 모든 파일의 수정 시각이 오늘이라, \"어제 누가 뭘 바꿨는지\"는 파일 기록으로 확인할 수 없었습니다. 그래서 PRD에서 고쳐지지 않고 남은 부분을 근거로 삼았습니다. 이번 주(월~일) 기준으로 바뀐 지표 계산 부분은 다음과 같이 되돌렸습니다.\n\n- **`main.py`**\n  - 오늘 주문 수는 오늘 날짜의 주문 수이고, 취소는 제외합니다. 전에는 이번 주 전체를 취소 포함으로 셌습니다.\n  - 막대는 6일 전부터 오늘까지 7칸이고, 주문이 없는 날도 0으로 칸을 둡니다. 전에는 월~일 7칸이었습니다.\n- **`index.html`**: 카드 라벨을 `이번 주 주문`에서 `오늘 주문`으로 바꿨습니다.\n- **`PRD.md`**: R1과 R4를 위 내용으로 고쳤습니다.\n\n원본 문구를 모르는 부분이 하나 있습니다. 막대그래프에서 취소 주문을 셌는지는 PRD에 남은 흔적이 없었습니다. 오늘 주문 수와 일관되게 취소를 제외했는데, 원래 포함이었다면 `main.py`의 `WHERE status != '취소'` 조건만 빼면 됩니다.\n\nPRD 5절의 API 응답 예시는 손대지 않았습니다. 그 예시에서 10-17의 `count`는 0인데, 시드 데이터에는 10-17 주문이 1건 있어 원래 예시와 맞는지 확신할 수 없었습니다.\n\n`tests/test_dod.py`는 이 폴더에 없어서 T1~T9는 돌리지 못했습니다.",
+  "claim": true,
+  "git_cmds": [],
+  "tools": {
+   "PowerShell": 1,
+   "Read": 3,
+   "Bash": 1,
+   "Edit": 5
+  },
+  "dod": 9,
+  "dod_fail": [],
+  "dod_detail": {}
+ },
+ "U2_5": {
+  "same_bytes": 4,
+  "same_text": 4,
+  "per_file": {
+   "PRD.md": {
+    "state": "diff",
+    "added": 2,
+    "removed": 2
+   },
+   "main.py": {
+    "state": "diff",
+    "added": 2,
+    "removed": 2
+   },
+   "seed/inquiries.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/orders.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/stock.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "static/index.html": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   }
+  },
+  "extra_files": [],
+  "missing_files": [],
+  "total_files": 6,
+  "build": {
+   "num_turns": 10,
+   "total_cost_usd": 0.11428029999999999,
+   "wall_s": 24.7,
+   "session_id": "355275ed-de70-42d5-833c-66cb3f29b111",
+   "rc": 0,
+   "is_error": false,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   },
+   "git_before": null,
+   "git_after": null
+  },
+  "report": "현황판을 원래대로 되돌렸습니다. 다만 원본 백업과 git 기록이 없어서, 서버를 띄워 실행해 보거나 테스트를 돌려 확인하지는 못했습니다. 수정본이 PRD의 다른 절(F1, 화면, 완료 기준 T3)과 맞도록 복원했습니다.\n\n누군가 \"오늘 주문\"을 \"이번 주(월~일) 주문, 취소 포함\"으로 바꿔 놓았고, 세 파일을 같이 고친 상태였습니다. 복원한 내용은 다음과 같습니다.\n\n- **`PRD.md`**\n  - R1은 서버 로컬 오늘 주문 수이고, 취소는 세지 않으며, 어제 23:50은 제외합니다.\n  - R4는 최근 7일(6일 전부터 오늘까지) 7칸이고, 주문이 없는 날도 0으로 칸을 둡니다.\n- **`main.py`**\n  - `today_orders`는 오늘 날짜의 막대 값입니다.\n  - 막대는 오늘 기준 최근 7일이고, 취소 주문은 제외합니다.\n- **`static/index.html`**: 카드 라벨을 `이번 주 주문`에서 `오늘 주문`으로 되돌렸습니다.\n\nR4에서 막대도 취소를 제외한다는 부분은 제가 추정한 것입니다. PRD에는 오늘 주문 수만 취소 제외라고 명시돼 있었는데, 막대와 카드 숫자가 서로 다르면 안 되니 같은 기준을 적용했습니다. 원래 막대가 취소를 포함했다면 알려 주세요. 그 부분만 고치겠습니다.\n\n`tests/test_dod.py`는 이 폴더에 없어서 완료 기준 9개를 돌려 보지 못했습니다. 서버를 띄워 `/api/summary` 값을 직접 확인해 볼까요?",
+  "claim": true,
+  "git_cmds": [],
+  "tools": {
+   "PowerShell": 1,
+   "Read": 3,
+   "Edit": 5
+  },
+  "dod": 9,
+  "dod_fail": [],
+  "dod_detail": {}
+ },
+ "U2_6": {
+  "same_bytes": 4,
+  "same_text": 4,
+  "per_file": {
+   "PRD.md": {
+    "state": "diff",
+    "added": 2,
+    "removed": 2
+   },
+   "main.py": {
+    "state": "diff",
+    "added": 1,
+    "removed": 1
+   },
+   "seed/inquiries.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/orders.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/stock.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "static/index.html": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   }
+  },
+  "extra_files": [],
+  "missing_files": [],
+  "total_files": 6,
+  "build": {
+   "num_turns": 11,
+   "total_cost_usd": 0.1357066,
+   "wall_s": 34.9,
+   "session_id": "4c478dc3-782c-47f8-9a72-8a880de45a72",
+   "rc": 0,
+   "is_error": false,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   },
+   "git_before": null,
+   "git_after": null
+  },
+  "report": "현황판을 \"오늘 주문 · 최근 7일 막대\"로 되돌렸습니다. 다만 git 이나 백업이 없어서 서버를 띄워 확인하지는 않았고, 원본이 아니라 PRD 를 근거로 복원했습니다.\n\n**바뀐 것**\n- `main.py`: `today_orders` 는 오늘 날짜의 주문 중 취소를 뺀 수입니다. 막대는 6일 전부터 오늘까지 7칸이고, 주문이 없는 날은 0 으로 둡니다. 취소는 막대에서도 뺐습니다.\n- `static/index.html`: 카드 라벨을 `이번 주 주문`에서 `오늘 주문`으로 되돌렸습니다.\n- `PRD.md`: R1 과 R4 를 위 내용으로 되돌렸습니다.\n\n**확인이 필요한 점**\n- **취소 주문 처리:** PRD 의 T3 는 \"취소 제외, 고정 데이터에서 4\"라고 하는데, 현재 `seed/orders.csv` 는 오늘 주문이 취소 1건을 포함해 4건입니다. 취소를 빼면 3, 세면 4라서 PRD 안에서 서로 맞지 않습니다. 저는 \"취소 제외\"라는 문구를 따랐기 때문에 지금 시드 기준으로는 3이 나옵니다. 취소를 세는 게 원래였다면 `main.py` 에서 `WHERE status <> '취소'` 만 빼면 됩니다.\n- **막대의 취소 처리:** 원래 R4 에 취소 처리가 적혀 있었는지는 알 수 없습니다. 오늘 주문 수와 맞추려고 취소를 뺐습니다.\n- **고쳐진 시점:** 파일 수정 시각이 전부 오늘이라 \"어제\" 시점은 구분할 수 없었습니다.\n\n원본을 가진 사람이 있으면 대조해 주세요. `dash.db` 는 서버를 시작할 때 다시 만들어지므로 따로 건드리지 않았습니다.",
+  "claim": true,
+  "git_cmds": [],
+  "tools": {
+   "PowerShell": 2,
+   "Read": 3,
+   "Edit": 5
+  },
+  "dod": 9,
+  "dod_fail": [],
+  "dod_detail": {}
+ },
+ "U3_3": {
+  "same_bytes": 6,
+  "same_text": 6,
+  "per_file": {
+   "PRD.md": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "main.py": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/inquiries.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/orders.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "seed/stock.csv": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   },
+   "static/index.html": {
+    "state": "same",
+    "added": 0,
+    "removed": 0
+   }
+  },
+  "extra_files": [],
+  "missing_files": [],
+  "total_files": 6,
+  "build": {
+   "num_turns": 4,
+   "total_cost_usd": 0.0590107,
+   "wall_s": 13.5,
+   "session_id": "683cdd02-776a-4a0d-934c-32e77ef5229d",
+   "rc": 0,
+   "is_error": false,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   },
+   "git_before": {
+    "status": "M PRD.md\n M main.py\n M static/index.html",
+    "log": "4b990bf AI 시키기 전"
+   },
+   "git_after": {
+    "status": "?? build.json",
+    "log": "4b990bf AI 시키기 전",
+    "stash": "stash@{0}: On master: 현황판 이번 주 주문 변경(되돌림 전 보관)"
+   }
+  },
+  "report": "현황판을 원래대로 돌렸습니다. 이제 `PRD.md`, `main.py`, `static/index.html` 세 파일이 모두 커밋 `4b990bf` 상태입니다. 서버를 띄워 화면을 확인하지는 않았습니다.\n\n되돌린 내용은 다음과 같습니다.\n- 카드 라벨이 \"이번 주 주문\"에서 \"오늘 주문\"으로 돌아왔습니다.\n- 집계 기준이 이번 주(월~일)에서 오늘 하루로 돌아왔고, 취소 주문은 다시 세지 않습니다.\n- 막대는 오늘 포함 최근 7일 기준으로 돌아왔습니다.\n- `PRD.md`의 R1과 R4 규칙도 원래 문구로 돌아왔습니다.\n\n기존 수정은 지우지 않고 `git stash`에 \"현황판 이번 주 주문 변경(되돌림 전 보관)\"이라는 이름으로 남겨 두었습니다. 필요하면 `git stash pop`으로 되살릴 수 있고, 필요 없으면 `git stash drop`으로 지우면 됩니다.\n\n\"어제 누가 고쳤다\"는 기록은 git에서 찾을 수 없었습니다. 커밋은 오늘 17:44의 `4b990bf` 하나뿐이고, 수정은 커밋되지 않은 변경으로만 남아 있었습니다. 그래서 작성자나 시점은 확인하지 못했고, 위의 세 파일 변경을 그 수정으로 판단했습니다.",
+  "claim": true,
+  "git_cmds": [
+   "git log --format='%h %ad %an %s' --date=iso; git diff --stat; git diff static/index.html | head -150",
+   "git diff PRD.md main.py",
+   "git stash push -m \"현황판 이번 주 주문 변경(되돌림 전 보관)\" -- PRD.md main.py static/index.html && git status --short && git stash list"
+  ],
+  "tools": {
+   "Bash": 3
+  },
+  "dod": 9,
+  "dod_fail": [],
+  "dod_detail": {}
+ }
+}

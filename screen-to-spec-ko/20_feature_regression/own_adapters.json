@@ -1,0 +1,120 @@
+{
+ "_note": "M1 · M2 가 스스로 정한 이름. 범위는 아홉 앱 모두 1~12 — bad_weeks 는 그 바깥, ok_weeks 는 그 앱의 최댓값.",
+ "M1_1": {
+  "weeks_field": "weekly_count",
+  "weeks_mode": "count",
+  "cancel_one": "/api/reservations/{res_id}?user={user}",
+  "cancel_following": "/api/reservations/{res_id}?user={user}&series=true",
+  "following_is_all": false,
+  "bad_weeks": [
+   0,
+   13,
+   "abc"
+  ],
+  "ok_weeks": 12
+ },
+ "M1_2": {
+  "weeks_field": "weeks",
+  "weeks_mode": "count",
+  "cancel_one": "/api/reservations/{res_id}?user={user}",
+  "cancel_following": null,
+  "following_is_all": false,
+  "bad_weeks": [
+   0,
+   13,
+   "abc"
+  ],
+  "ok_weeks": 12
+ },
+ "M1_3": {
+  "weeks_field": "repeat_weeks",
+  "weeks_mode": "count",
+  "cancel_one": "/api/reservations/{res_id}?user={user}",
+  "cancel_following": "/api/reservations/{res_id}?user={user}&series=true",
+  "following_is_all": false,
+  "bad_weeks": [
+   0,
+   13,
+   "abc"
+  ],
+  "ok_weeks": 12
+ },
+ "M1_4": {
+  "weeks_field": "weeks",
+  "weeks_mode": "count",
+  "cancel_one": "/api/reservations/{res_id}?user={user}",
+  "cancel_following": "/api/reservations/{res_id}?user={user}&series=true",
+  "following_is_all": false,
+  "bad_weeks": [
+   0,
+   13,
+   "abc"
+  ],
+  "ok_weeks": 12
+ },
+ "M1_5": {
+  "weeks_field": "repeat_weeks",
+  "weeks_mode": "count",
+  "cancel_one": "/api/reservations/{res_id}?user={user}",
+  "cancel_following": null,
+  "following_is_all": false,
+  "bad_weeks": [
+   0,
+   13,
+   "abc"
+  ],
+  "ok_weeks": 12
+ },
+ "M1_6": {
+  "weeks_field": "repeat_weeks",
+  "weeks_mode": "count",
+  "cancel_one": "/api/reservations/{res_id}?user={user}",
+  "cancel_following": null,
+  "following_is_all": false,
+  "bad_weeks": [
+   0,
+   13,
+   "abc"
+  ],
+  "ok_weeks": 12
+ },
+ "M2_1": {
+  "weeks_field": "weeks",
+  "weeks_mode": "count",
+  "cancel_one": "/api/reservations/{res_id}?user={user}",
+  "cancel_following": null,
+  "following_is_all": false,
+  "bad_weeks": [
+   0,
+   13,
+   "abc"
+  ],
+  "ok_weeks": 12
+ },
+ "M2_2": {
+  "weeks_field": "weeks",
+  "weeks_mode": "count",
+  "cancel_one": "/api/reservations/{res_id}?user={user}",
+  "cancel_following": "/api/reservations/{res_id}?user={user}&series=true",
+  "following_is_all": false,
+  "bad_weeks": [
+   0,
+   13,
+   "abc"
+  ],
+  "ok_weeks": 12
+ },
+ "M2_3": {
+  "weeks_field": "repeat_weeks",
+  "weeks_mode": "count",
+  "cancel_one": "/api/reservations/{res_id}?user={user}",
+  "cancel_following": null,
+  "following_is_all": false,
+  "bad_weeks": [
+   0,
+   13,
+   "abc"
+  ],
+  "ok_weeks": 12
+ }
+}

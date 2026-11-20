@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>뚝딱건설 해뜰현장 위험 작업 허가서</title>
+<style>
+  body { font-family: "Malgun Gothic", sans-serif; margin: 0; background: #f4f5f7; color: #222; }
+  header { background: #1f3a5f; color: #fff; padding: 10px 16px; display: flex; gap: 16px; align-items: center; }
+  header h1 { font-size: 18px; margin: 0; flex: 1; }
+  main { display: flex; gap: 12px; padding: 12px; align-items: flex-start; flex-wrap: wrap; }
+  section { background: #fff; border: 1px solid #d5d9e0; border-radius: 6px; padding: 10px; }
+  #left { flex: 1 1 340px; }
+  #right { flex: 1 1 340px; }
+  #message { margin: 8px 12px 0; padding: 6px 10px; min-height: 20px; background: #fff8dc; border: 1px solid #e6d9a2; border-radius: 4px; }
+  .permit { border: 1px solid #ccd; border-radius: 4px; padding: 6px 8px; margin: 4px 0; cursor: pointer; }
+  .permit.sel { border-color: #1f3a5f; background: #eef3fb; }
+  .badge { display: inline-block; padding: 0 6px; border-radius: 8px; font-size: 12px; background: #ddd; margin-left: 6px; }
+  .st-requested { background: #e0e0e0; } .st-reviewed { background: #cfe3ff; } .st-approved { background: #cdeccd; }
+  .st-started { background: #ffe0a8; } .st-closed { background: #bbb; } .st-expired { background: #f5b5b5; }
+  .t-height { background: #9ecbff; } .t-hot { background: #ff9d8a; } .t-confined { background: #c9a7ff; }
+  button { padding: 5px 12px; margin: 4px 4px 0 0; cursor: pointer; }
+  label { display: block; margin: 4px 0; }
+  .chk { display: block; }
+  table.grid { border-collapse: collapse; width: 100%; font-size: 12px; }
+  table.grid th, table.grid td { border: 1px solid #ccd; height: 28px; min-width: 40px; text-align: center; padding: 0; }
+  .chip { display: block; font-size: 10px; line-height: 12px; }
+  .conflict { color: #b00020; font-weight: bold; margin: 4px 0; }
+  .error-box { color: #b00020; padding: 8px; }
+  .legend span { padding: 0 8px; margin-right: 6px; font-size: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>뚝딱건설 해뜰현장 · 위험 작업 허가서</h1>
+  <label style="margin:0">사용자 <select data-testid="user" id="user"></select></label>
+</header>
+<div id="message" data-testid="message"></div>
+<div id="error" class="error-box" style="display:none"></div>
+<main id="app">
+  <section id="left">
+    <h2>허가 목록</h2>
+    <div id="list"></div>
+    <h2>허가 신청</h2>
+    <form id="form" onsubmit="return false">
+      <label>작업 종류 <select data-testid="work-type" id="work-type"></select></label>
+      <div id="items"></div>
+      <label>구역 <select data-testid="zone" id="zone"></select></label>
+      <label>시작 <input data-testid="start-at" id="start-at" placeholder="YYYY-MM-DD HH:MM" autocomplete="off"></label>
+      <label>종료 <input data-testid="end-at" id="end-at" placeholder="YYYY-MM-DD HH:MM" autocomplete="off"></label>
+      <button type="button" data-testid="submit" id="submit">신청</button>
+    </form>
+  </section>
+  <section id="right">
+    <h2>허가 상세</h2>
+    <div id="detail">허가를 선택하세요.</div>
+  </section>
+</main>
+<section id="board" style="margin:0 12px 12px; display:none"></section>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const state = { users: [], types: [], zones: [], permits: [], selected: null };
+const STATUS = { requested: "신청", reviewed: "검토 완료", approved: "승인", started: "작업 중", closed: "종료", expired: "만료" };
+const ROLE = { worker: "작업자", safety: "안전 담당", manager: "현장 책임자" };
+
+function el(tag, props, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(props || {})) {
+    if (k === "text") e.textContent = v;
+    else if (k === "class") e.className = v;
+    else if (k === "onclick") e.onclick = v;
+    else e.setAttribute(k, v);
+  }
+  for (const k of kids) if (k) e.append(k);
+  return e;
+}
+
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  let data = null;
+  try { data = await r.json(); } catch (_) {}
+  if (!r.ok) {
+    const err = new Error((data && data.detail) || "요청에 실패했습니다");
+    err.rejected = true;
+    throw err;
+  }
+  return data;
+}
+
+const post = (path, body) => api(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+const me = () => state.users.find((u) => u.user_id === $("user").value);
+const say = (t) => { $("message").textContent = t || ""; };
+
+function showFatal(retry) {
+  const box = $("error");
+  box.style.display = "block";
+  box.replaceChildren(el("span", { text: "불러오지 못했습니다 " }), el("button", { text: "다시 시도", "data-testid": "retry", onclick: () => { box.style.display = "none"; retry(); } }));
+}
+
+async function boot() {
+  try {
+    [state.users, state.types, state.zones] = await Promise.all([api("/api/users"), api("/api/work-types"), api("/api/zones")]);
+  } catch (e) { showFatal(boot); return; }
+  $("user").replaceChildren(...state.users.map((u) => el("option", { value: u.user_id, text: u.name + " (" + (ROLE[u.role] || u.role) + ")" })));
+  $("work-type").replaceChildren(...state.types.map((t) => el("option", { value: t.work_type, text: t.name })));
+  $("zone").replaceChildren(...state.zones.map((z) => el("option", { value: z.zone_id, text: z.name })));
+  renderItems();
+  await refresh();
+}
+
+function renderItems() {
+  const t = state.types.find((x) => x.work_type === $("work-type").value);
+  $("items").replaceChildren(...(t ? t.items : []).map((i) =>
+    el("label", { class: "chk" }, el("input", { type: "checkbox", "data-testid": "check-item", "data-id": i.item_id, value: i.item_id }), document.createTextNode(" " + i.name))));
+}
+
+async function refresh() {
+  const v = $("user").value;
+  try {
+    state.permits = await api("/api/permits?viewer=" + encodeURIComponent(v));
+    renderList();
+    if (state.selected) {
+      if (state.permits.some((p) => p.permit_id === state.selected)) await showDetail(state.selected);
+      else { state.selected = null; $("detail").textContent = "허가를 선택하세요."; }
+    }
+    await renderBoard();
+  } catch (e) { showFatal(refresh); }
+}
+
+function renderList() {
+  const list = $("list");
+  if (!state.permits.length) { list.textContent = "허가가 없습니다."; return; }
+  list.replaceChildren(...state.permits.map((p) => {
+    const d = el("div", { class: "permit" + (p.permit_id === state.selected ? " sel" : ""), "data-testid": "permit", "data-id": p.permit_id, "data-status": p.status,
+      onclick: () => select(p.permit_id) });
+    d.append(el("b", { text: p.permit_id }), el("span", { class: "badge t-" + p.work_type, text: p.work_type_name }),
+      el("span", { class: "badge st-" + p.status, text: STATUS[p.status] || p.status }),
+      el("div", { text: p.zone_name + " · " + p.start_at + " ~ " + p.end_at }));
+    return d;
+  }));
+}
+
+async function select(id) {
+  state.selected = id;
+  renderList();
+  try { await showDetail(id); } catch (e) { say(e.message); }
+}
+
+async function showDetail(id) {
+  const p = await api("/api/permits/" + encodeURIComponent(id) + "?viewer=" + encodeURIComponent($("user").value));
+  const u = me();
+  const box = $("detail");
+  const rows = [
+    ["허가 번호", p.permit_id], ["작업 종류", p.work_type_name], ["구역", p.zone_name], ["신청자", p.requester_name],
+    ["작업 시간", p.start_at + " ~ " + p.end_at], ["상태", STATUS[p.status] || p.status],
+    ["검토자", p.reviewed_by || "-"], ["승인자", p.approved_by || "-"], ["승인 시각", p.approved_at || "-"],
+    ["유효 시각", p.valid_until || "-"], ["시작 시각", p.started_at || "-"], ["종료 시각", p.closed_at || "-"],
+  ];
+  const tbl = el("table");
+  rows.forEach(([k, v]) => tbl.append(el("tr", {}, el("th", { text: k, style: "text-align:left;padding-right:12px" }), el("td", { text: v }))));
+  const items = (state.types.find((t) => t.work_type === p.work_type) || { items: [] }).items;
+  const chk = el("div", { text: "점검 항목: " + (items.filter((i) => p.checked.includes(i.item_id)).map((i) => i.name).join(", ") || "-") });
+  const btns = el("div");
+  const act = (label, tid, path) => btns.append(el("button", { text: label, "data-testid": tid, onclick: () => doAction(p.permit_id, path) }));
+  if (u.role === "safety" && p.status === "requested") act("검토", "review", "review");
+  if (u.role === "manager" && p.status === "reviewed") act("승인", "approve", "approve");
+  if (u.user_id === p.requester_id && p.status === "approved") act("작업 시작", "start", "start");
+  const closable = p.status === "started" || (p.status === "expired" && p.started_at && !p.closed_at);
+  if (closable && (u.user_id === p.requester_id || u.user_id === p.approved_by)) act("종료", "close", "close");
+  box.replaceChildren(tbl, chk, btns);
+}
+
+async function doAction(id, path) {
+  try {
+    await post("/api/permits/" + encodeURIComponent(id) + "/" + path, { user: $("user").value });
+    say({ review: "검토를 마쳤습니다", approve: "승인했습니다", start: "작업을 시작했습니다", close: "작업을 종료했습니다" }[path]);
+  } catch (e) {
+    if (!e.rejected) { showFatal(refresh); return; }
+    say(e.message);
+  }
+  await refresh();
+}
+
+async function submit() {
+  const checked = [...document.querySelectorAll('[data-testid="check-item"]')].filter((c) => c.checked).map((c) => c.dataset.id);
+  try {
+    const p = await post("/api/permits", {
+      user: $("user").value, work_type: $("work-type").value, zone_id: $("zone").value,
+      start_at: $("start-at").value.trim(), end_at: $("end-at").value.trim(), checked,
+    });
+    say("허가 " + p.permit_id + " 를 신청했습니다");
+    state.selected = p.permit_id;
+  } catch (e) {
+    if (!e.rejected) { showFatal(refresh); return; }
+    say(e.message);
+    return;
+  }
+  await refresh();
+}
+
+async function renderBoard() {
+  const board = $("board");
+  const u = me();
+  if (!u || (u.role !== "safety" && u.role !== "manager")) { board.style.display = "none"; board.replaceChildren(); return; }
+  const d = await api("/api/dashboard?viewer=" + encodeURIComponent(u.user_id));
+  board.style.display = "block";
+  const tbl = el("table", { class: "grid", "data-testid": "grid" });
+  tbl.append(el("tr", {}, el("th", { text: "구역" }), ...d.hours.map((h) => el("th", { text: String(h).padStart(2, "0") + "시" }))));
+  const today = d.date;
+  d.zones.forEach((z) => {
+    const tr = el("tr", {}, el("th", { text: z.name }));
+    d.hours.forEach((h) => {
+      const a = today + " " + String(h).padStart(2, "0") + ":00";
+      const b = h === 23 ? today + " 23:59" : today + " " + String(h + 1).padStart(2, "0") + ":00";
+      const td = el("td", { "data-testid": "cell", "data-zone": z.zone_id, "data-hour": String(h) });
+      z.permits.filter((p) => p.start_at < b && p.end_at > a).forEach((p) =>
+        td.append(el("span", { class: "chip t-" + p.work_type, title: p.requester_name, text: p.permit_id })));
+      tr.append(td);
+    });
+    tbl.append(tr);
+  });
+  const legend = el("div", { class: "legend" }, el("span", { class: "t-height", text: "고소" }), el("span", { class: "t-hot", text: "화기" }), el("span", { class: "t-confined", text: "밀폐" }));
+  const conflicts = d.conflicts.map((c) => el("div", { class: "conflict", "data-testid": "conflict", text: "상충 경고: " + c.permit_ids.join(" · ") + " (" + (state.zones.find((z) => z.zone_id === c.zone_id) || {}).name + ")" }));
+  board.replaceChildren(el("h2", { text: "현황판 " + d.date }), legend, ...conflicts, tbl);
+}
+
+$("user").addEventListener("change", () => { state.selected = null; $("detail").textContent = "허가를 선택하세요."; say(""); refresh(); });
+$("work-type").addEventListener("change", renderItems);
+$("submit").addEventListener("click", submit);
+boot();
+</script>
+</body>
+</html>

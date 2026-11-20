@@ -1,0 +1,1270 @@
+{
+ "M1_1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass",
+   "T10": "fail",
+   "T11": "fail",
+   "T12": "fail"
+  },
+  "detail": {
+   "T10": "AssertionError: 2번째 주(2026-11-10)에 한 건이 있어야 한다\nassert 0 == 1\n +  where 0 = len([])\n +    where [] = on(<test_recur.QuietServer object at 0x0000016887BDAF90>, '2026-11-10', 'B', '16:00', '박지연')\n +      where '2026-11-10' = day(1)",
+   "T11": "AssertionError: 4주에 한 건씩 있어야 한다: [1, 0, 0, 0]\nassert False\n +  where False = all(<generator object test_T11_cancel_one_or_following_owner_only.<locals>.<genexpr> at 0x0000016888C43CA0>)",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 8, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "or: 2번째 주(2026-11-10)에 한 건이 있어야 한다\nE           assert 0 == 1\nE            +  where 0 = len([])\nE            +    where [] = on(<test_recur.QuietServer object at 0x0000016887BDAF90>, '2026-11-10', 'B', '16:00', '박지연')\nE            +      where '2026-11-10' = day(1)\n\n_grader\\test_recur.py:128: AssertionError\n_________________ test_T11_cancel_one_or_following_owner_only _________________\n\nsrv = <test_recur.QuietServer object at 0x0000016887BDAF90>\n\n    def test_T11_cancel_one_or_following_owner_only(srv):\n        st, body = recur(srv, \"A\", \"16:00\", \"17:00\", \"정하늘\", 4)\n        assert ok(st, 201), (\"준비: 4주 반복\", st, body)\n        occ = [on(srv, day(k), \"A\", \"16:00\", \"정하늘\") for k in range(4)]\n>       assert all(len(o) == 1 for o in occ), \"4주에 한 건씩 있어야 한다: %s\" % [len(o) for o in occ]\nE       AssertionError: 4주에 한 건씩 있어야 한다: [1, 0, 0, 0]\nE       assert False\nE        +  where False = all(<generator object test_T11_cancel_one_or_following_owner_only.<locals>.<genexpr> at 0x0000016888C43CA0>)\n\n_grader\\test_recur.py:144: AssertionError\n_________________________ test_T12_repeat_weeks_range _________________________\n\nsrv = <test_recur.QuietServer object at 0x0000016887BDAF90>\n\n    def test_T12_repeat_weeks_range(srv):\n        for bad in AD[\"bad_weeks\"]:\n            st, body = recur(srv, \"C\", \"11:00\", \"11:30\", \"한도윤\", bad)\n>           assert refused(st, 400), (\"반복 %r 은 거부돼야 한다\" % (bad,), st, body)\nE           AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 8, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nE           assert False\nE            +  where False = refused(201, 400)\n\n_grader\\test_recur.py:163: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_recur.py::test_T10_weekly_repeat_all_or_nothing - Asserti...\nFAILED _grader/test_recur.py::test_T11_cancel_one_or_following_owner_only - A...\nFAILED _grader/test_recur.py::test_T12_repeat_weeks_range - AssertionError: (...\n3 failed, 9 passed in 13.40s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 회의실 예약 앱에 매주 반복 예약 기능을 추가해 줘.",
+   "max_turns": 80,
+   "port": 9600,
+   "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9600, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+   "job": true,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 29166,
+   "num_turns": 8,
+   "total_cost_usd": 0.11702670000000001,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "session_id": "e2b3c872-6110-4546-a6b0-3aa2b43e4f1f",
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 13713,
+    "cache_read_input_tokens": 157807,
+    "output_tokens": 4637,
+    "output_tokens_details": {
+     "thinking_tokens": 279
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 13713,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 886,
+      "cache_read_input_tokens": 31975,
+      "cache_creation_input_tokens": 760,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 760
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "매주 반복 예약 기능을 추가했습니다. 서버는 PORT 9600으로 직접 띄워서 API를 호출해 확인했습니다. 브라우저 화면(UI)은 열어 보지 못해 확인하지 못했습니다.\n\n**백엔드 (`main.py`)**\n- 예약 요청(POST)에 `weekly_count`를 넣을 수 있습니다. 1~12가 가능하고, 생략하면 1회라서 기존과 똑같이 동작합니다.\n- 반복 예약은 선택한 날짜부터 같은 요일로 매주 하나씩 만들어집니다.\n- 반복 날짜 중 하나라도 겹치면 전부 등록되지 않습니다. 겹친 날짜는 409 오류 메시지에 함께 나옵니다.\n- 반복 예약은 같은 `series_id`로 묶이고, 예약 목록에도 이 값이 내려갑니다.\n- 취소(DELETE)에 `series=true`를 붙이면 그 날짜부터 이후의 같은 묶음 예약을 한 번에 취소합니다. 본인 예약만 취소할 수 있는 규칙은 그대로입니다.\n- 날짜 형식이 잘못되면 400을 돌려줍니다. 예전에는 검증이 없었습니다.\n\n**화면 (`static/index.html`)**\n- 예약 폼에 \"반복\" 선택이 생겼습니다. \"반복 안 함\"이 기본이고, \"매주 2회\"부터 \"매주 12회\"까지 고를 수 있습니다.\n- 반복 예약 칸에는 🔁 표시가 붙습니다.\n- 반복 예약을 취소할 때는 확인창이 뜹니다. 확인을 누르면 이후 반복분을 모두 취소하고, 취소를 누르면 그 예약 하나만 취소합니다.\n\n**API 확인 결과**\n- 2026-11-10부터 3주 반복 요청은 11-10, 11-17, 11-24 세 건이 등록됐습니다.\n- 2026-10-27부터 2주 반복 요청은 11-03에 기존 예약이 있어 409가 났고, 아무것도 등록되지 않았습니다.\n- `weekly_count` 13은 400으로 거부됐습니다.\n- 반복 취소(`series=true`)는 호출해 보지 않았습니다.\n\n앱을 다시 시작하면 DB를 시드 데이터로 다시 만들기 때문에, 위 테스트로 만든 예약은 남지 않습니다.",
+   "wall_s": 47.0,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   }
+  }
+ },
+ "M1_2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass",
+   "T10": "fail",
+   "T11": "fail",
+   "T12": "fail"
+  },
+  "detail": {
+   "T10": "AssertionError: 2번째 주(2026-11-10)에 한 건이 있어야 한다\nassert 0 == 1\n +  where 0 = len([])\n +    where [] = on(<test_recur.QuietServer object at 0x0000016CD62CAF90>, '2026-11-10', 'B', '16:00', '박지연')\n +      where '2026-11-10' = day(1)",
+   "T11": "AssertionError: 4주에 한 건씩 있어야 한다: [1, 0, 0, 0]\nassert False\n +  where False = all(<generator object test_T11_cancel_one_or_following_owner_only.<locals>.<genexpr> at 0x0000016CD7333CA0>)",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 8, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "or: 2번째 주(2026-11-10)에 한 건이 있어야 한다\nE           assert 0 == 1\nE            +  where 0 = len([])\nE            +    where [] = on(<test_recur.QuietServer object at 0x0000016CD62CAF90>, '2026-11-10', 'B', '16:00', '박지연')\nE            +      where '2026-11-10' = day(1)\n\n_grader\\test_recur.py:128: AssertionError\n_________________ test_T11_cancel_one_or_following_owner_only _________________\n\nsrv = <test_recur.QuietServer object at 0x0000016CD62CAF90>\n\n    def test_T11_cancel_one_or_following_owner_only(srv):\n        st, body = recur(srv, \"A\", \"16:00\", \"17:00\", \"정하늘\", 4)\n        assert ok(st, 201), (\"준비: 4주 반복\", st, body)\n        occ = [on(srv, day(k), \"A\", \"16:00\", \"정하늘\") for k in range(4)]\n>       assert all(len(o) == 1 for o in occ), \"4주에 한 건씩 있어야 한다: %s\" % [len(o) for o in occ]\nE       AssertionError: 4주에 한 건씩 있어야 한다: [1, 0, 0, 0]\nE       assert False\nE        +  where False = all(<generator object test_T11_cancel_one_or_following_owner_only.<locals>.<genexpr> at 0x0000016CD7333CA0>)\n\n_grader\\test_recur.py:144: AssertionError\n_________________________ test_T12_repeat_weeks_range _________________________\n\nsrv = <test_recur.QuietServer object at 0x0000016CD62CAF90>\n\n    def test_T12_repeat_weeks_range(srv):\n        for bad in AD[\"bad_weeks\"]:\n            st, body = recur(srv, \"C\", \"11:00\", \"11:30\", \"한도윤\", bad)\n>           assert refused(st, 400), (\"반복 %r 은 거부돼야 한다\" % (bad,), st, body)\nE           AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 8, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nE           assert False\nE            +  where False = refused(201, 400)\n\n_grader\\test_recur.py:163: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_recur.py::test_T10_weekly_repeat_all_or_nothing - Asserti...\nFAILED _grader/test_recur.py::test_T11_cancel_one_or_following_owner_only - A...\nFAILED _grader/test_recur.py::test_T12_repeat_weeks_range - AssertionError: (...\n3 failed, 9 passed in 13.33s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 회의실 예약 앱에 매주 반복 예약 기능을 추가해 줘.",
+   "max_turns": 80,
+   "port": 9620,
+   "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9620, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+   "job": true,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 24373,
+   "num_turns": 7,
+   "total_cost_usd": 0.1022121,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "session_id": "6f3f1f96-92f9-4b56-8f54-da790fc67ac1",
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 12897,
+    "cache_read_input_tokens": 126141,
+    "output_tokens": 3799,
+    "output_tokens_details": {
+     "thinking_tokens": 335
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 12897,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 874,
+      "cache_read_input_tokens": 31554,
+      "cache_creation_input_tokens": 365,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 365
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "매주 반복 예약 기능을 추가했습니다. 서버는 띄우지 않고 FastAPI 테스트 클라이언트로 API만 확인했고, 화면은 브라우저에서 열어 보지 못했습니다.\n\n**동작**\n- 예약 폼에 \"반복\" 선택이 생겼습니다. \"반복 안 함\"(기본값)이나 \"매주 2~12주간\"을 고르면 선택한 날짜부터 7일 간격으로 그 주 수만큼 예약됩니다.\n- 반복 예약은 전부 되거나 전부 안 됩니다. 한 주라도 겹치면 아무것도 저장하지 않고 409와 함께 `이미 예약된 시간입니다: 2026-11-03` 식으로 겹친 날짜를 알려줍니다.\n- 기존 시간·요일 규칙은 그대로이고, 반복 횟수는 1~12주 범위만 허용합니다. 범위를 벗어나면 400을 반환합니다.\n- 반복 예약에서 날짜 형식이 잘못되면 400을 반환합니다.\n\n**API**\n- `POST /api/reservations`에 선택 항목 `weeks`(기본 1)가 생겼습니다.\n- 응답에는 `weeks`, `series_id`, `res_ids`, `dates`가 추가되었습니다. 단건 예약은 `series_id`가 null이고, 기존 필드는 그대로입니다.\n- `mr_reservations` 테이블에 `series_id` 컬럼을 추가했습니다. 같은 반복 예약끼리 묶는 값입니다.\n\n**확인한 것**\n- 2026-11-03 12:00~13:00을 3주 반복하면 11-03, 11-10, 11-17에 예약되고 `series_id`가 1로 붙었습니다.\n- 11-03 10:00처럼 기존 예약과 겹치면 반복 예약 전체가 409로 거절됩니다.\n- 13주는 400으로 거절됩니다.\n\n**제한**\n- 취소는 아직 하루 단위입니다. 반복 예약을 한 번에 취소하는 기능은 넣지 않았습니다. 필요하면 `series_id`로 전체 취소를 추가할 수 있습니다.\n- 서버는 시작할 때마다 DB를 시드로 다시 만드는 기존 구조라, 확인용으로 만든 `rooms.db`는 지워 두었습니다.\n\n변경한 파일은 `main.py`와 `static/index.html`입니다.",
+   "wall_s": 28.5,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   }
+  }
+ },
+ "M1_3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass",
+   "T10": "pass",
+   "T11": "fail",
+   "T12": "fail"
+  },
+  "detail": {
+   "T11": "AssertionError: 남은 전부 취소 뒤 남은 실행이 기대와 다르다\nassert [1, 0, 0, 1] == [1, 0, 0, 0]\n  \n  At index 3 diff: 1 != 0\n  Use -v to get more diff",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 14, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "한다: %s\" % [len(o) for o in occ]\n        # 남이 '남은 전부' 취소 → 거부, 4건 다 남는다\n        st = cancel(srv, \"following\", occ[0][0], \"한도윤\")\n        assert refused(st, 403), (\"남의 반복 예약 취소는 거부돼야 한다\", st)\n        assert [len(on(srv, day(k), \"A\", \"16:00\", \"정하늘\")) for k in range(4)] == [1, 1, 1, 1], \"거부됐는데 지워진 실행이 있다\"\n        # 본인이 둘째 실행만 취소 → 그 하나만 사라진다\n        st = cancel(srv, \"one\", occ[1][0], \"정하늘\")\n        assert ok(st, 204), (\"본인의 한 실행 취소\", st)\n        assert [len(on(srv, day(k), \"A\", \"16:00\", \"정하늘\")) for k in range(4)] == [1, 0, 1, 1], \"한 실행만 취소했는데 다른 실행이 달라졌다\"\n        # 본인이 셋째 실행부터 남은 전부 취소 → 셋째 · 넷째 사라지고 첫째는 남는다\n        st = cancel(srv, \"following\", occ[2][0], \"정하늘\")\n        assert ok(st, 204), (\"본인의 남은 전부 취소\", st)\n        want = [0, 0, 0, 0] if AD[\"following_is_all\"] else [1, 0, 0, 0]\n>       assert [len(on(srv, day(k), \"A\", \"16:00\", \"정하늘\")) for k in range(4)] == want, \"남은 전부 취소 뒤 남은 실행이 기대와 다르다\"\nE       AssertionError: 남은 전부 취소 뒤 남은 실행이 기대와 다르다\nE       assert [1, 0, 0, 1] == [1, 0, 0, 0]\nE         \nE         At index 3 diff: 1 != 0\nE         Use -v to get more diff\n\n_grader\\test_recur.py:157: AssertionError\n_________________________ test_T12_repeat_weeks_range _________________________\n\nsrv = <test_recur.QuietServer object at 0x000001FC1C4DAF90>\n\n    def test_T12_repeat_weeks_range(srv):\n        for bad in AD[\"bad_weeks\"]:\n            st, body = recur(srv, \"C\", \"11:00\", \"11:30\", \"한도윤\", bad)\n>           assert refused(st, 400), (\"반복 %r 은 거부돼야 한다\" % (bad,), st, body)\nE           AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 14, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nE           assert False\nE            +  where False = refused(201, 400)\n\n_grader\\test_recur.py:163: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_recur.py::test_T11_cancel_one_or_following_owner_only - A...\nFAILED _grader/test_recur.py::test_T12_repeat_weeks_range - AssertionError: (...\n2 failed, 10 passed in 14.81s\n",
+  "passed": 10,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 회의실 예약 앱에 매주 반복 예약 기능을 추가해 줘.",
+   "max_turns": 80,
+   "port": 9610,
+   "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9610, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+   "job": true,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 27163,
+   "num_turns": 7,
+   "total_cost_usd": 0.1116614,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "session_id": "f0f28d0f-8ea0-4fa2-9621-54d8eb58bc5c",
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 13859,
+    "cache_read_input_tokens": 126654,
+    "output_tokens": 4354,
+    "output_tokens_details": {
+     "thinking_tokens": 218
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 13859,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 769,
+      "cache_read_input_tokens": 32206,
+      "cache_creation_input_tokens": 675,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 675
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "회의실 예약 앱에 매주 반복 예약 기능을 추가했습니다. API는 TestClient로 확인했습니다. 브라우저 화면은 열어 보지 않았습니다.\n\n**서버 (`main.py`)**\n- 예약 요청에 `repeat_weeks`(1~12, 기본 1)를 받습니다. 같은 요일·시간으로 매주 개별 예약을 만들고, 반복 예약은 `series_id`로 묶입니다.\n- 모든 실행을 먼저 검사해서 한 실행라도 겹치면 아무것도 저장하지 않습니다. 이때 \"2026-11-10 에 이미 예약된 시간입니다\"처럼 겹친 날짜를 알려 줍니다.\n- 취소 요청에 `?series=true`를 붙이면 그 실행과 이후 실행을 본인 예약에 한해 모두 취소합니다. 기존처럼 한 건만 취소하는 것도 그대로 됩니다.\n- 날짜 형식 검증을 새로 넣었습니다. 기존에는 날짜를 검증하지 않았습니다.\n- DB에 `series_id` 컬럼이 늘었습니다. 서버를 시작할 때 DB를 시드 파일로 다시 만들기 때문에 마이그레이션은 필요 없습니다.\n\n**화면 (`static/index.html`)**\n- 예약 폼에 \"매주 반복\" 선택(반복 안 함, 2~12주간)을 넣었습니다.\n- 반복 예약 칸에는 \"이후 반복 모두 취소\" 버튼이 추가로 나옵니다.\n\n**테스트 결과**\n- 3주 반복 예약은 11/3, 11/10, 11/17로 생성됐습니다.\n- 겹치는 시간으로 요청하면 409가 나오고 아무것도 저장되지 않았습니다.\n- 이후 반복 모두 취소를 실행하자 반복 실행이 전부 지워졌습니다.\n- `repeat_weeks=99`는 400으로 거절됩니다.\n\n최대 12주는 제가 정한 값이라 `main.py`의 `MAX_WEEKS`에서 바꾸면 됩니다.",
+   "wall_s": 30.5,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   }
+  }
+ },
+ "M1_4": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass",
+   "T10": "fail",
+   "T11": "fail",
+   "T12": "fail"
+  },
+  "detail": {
+   "T10": "AssertionError: 2번째 주(2026-11-10)에 한 건이 있어야 한다\nassert 0 == 1\n +  where 0 = len([])\n +    where [] = on(<test_recur.QuietServer object at 0x0000024E6940AF90>, '2026-11-10', 'B', '16:00', '박지연')\n +      where '2026-11-10' = day(1)",
+   "T11": "AssertionError: 4주에 한 건씩 있어야 한다: [1, 0, 0, 0]\nassert False\n +  where False = all(<generator object test_T11_cancel_one_or_following_owner_only.<locals>.<genexpr> at 0x0000024E6A5B7CA0>)",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 8, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "or: 2번째 주(2026-11-10)에 한 건이 있어야 한다\nE           assert 0 == 1\nE            +  where 0 = len([])\nE            +    where [] = on(<test_recur.QuietServer object at 0x0000024E6940AF90>, '2026-11-10', 'B', '16:00', '박지연')\nE            +      where '2026-11-10' = day(1)\n\n_grader\\test_recur.py:128: AssertionError\n_________________ test_T11_cancel_one_or_following_owner_only _________________\n\nsrv = <test_recur.QuietServer object at 0x0000024E6940AF90>\n\n    def test_T11_cancel_one_or_following_owner_only(srv):\n        st, body = recur(srv, \"A\", \"16:00\", \"17:00\", \"정하늘\", 4)\n        assert ok(st, 201), (\"준비: 4주 반복\", st, body)\n        occ = [on(srv, day(k), \"A\", \"16:00\", \"정하늘\") for k in range(4)]\n>       assert all(len(o) == 1 for o in occ), \"4주에 한 건씩 있어야 한다: %s\" % [len(o) for o in occ]\nE       AssertionError: 4주에 한 건씩 있어야 한다: [1, 0, 0, 0]\nE       assert False\nE        +  where False = all(<generator object test_T11_cancel_one_or_following_owner_only.<locals>.<genexpr> at 0x0000024E6A5B7CA0>)\n\n_grader\\test_recur.py:144: AssertionError\n_________________________ test_T12_repeat_weeks_range _________________________\n\nsrv = <test_recur.QuietServer object at 0x0000024E6940AF90>\n\n    def test_T12_repeat_weeks_range(srv):\n        for bad in AD[\"bad_weeks\"]:\n            st, body = recur(srv, \"C\", \"11:00\", \"11:30\", \"한도윤\", bad)\n>           assert refused(st, 400), (\"반복 %r 은 거부돼야 한다\" % (bad,), st, body)\nE           AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 8, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nE           assert False\nE            +  where False = refused(201, 400)\n\n_grader\\test_recur.py:163: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_recur.py::test_T10_weekly_repeat_all_or_nothing - Asserti...\nFAILED _grader/test_recur.py::test_T11_cancel_one_or_following_owner_only - A...\nFAILED _grader/test_recur.py::test_T12_repeat_weeks_range - AssertionError: (...\n3 failed, 9 passed in 15.23s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 회의실 예약 앱에 매주 반복 예약 기능을 추가해 줘.",
+   "max_turns": 80,
+   "port": 9610,
+   "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9610, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+   "job": true,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 30023,
+   "num_turns": 8,
+   "total_cost_usd": 0.13033440000000002,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "session_id": "bdaa651c-c347-4d9e-9e76-c9847e3e8b76",
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 16601,
+    "cache_read_input_tokens": 155464,
+    "output_tokens": 4836,
+    "output_tokens_details": {
+     "thinking_tokens": 337
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 16601,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 722,
+      "cache_read_input_tokens": 32075,
+      "cache_creation_input_tokens": 943,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 943
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "매주 반복 예약을 추가했습니다. 포트 9610에서 API를 직접 호출해 확인했고, 브라우저 화면은 열어 보지 않았습니다.\n\n**서버 (`main.py`)**\n- 예약 요청(POST)에 `weeks`(1~12, 기본 1)를 받을 수 있습니다. 시작 날짜부터 7일 간격으로 `weeks`번 예약하고, 반복 예약 묶음에는 같은 `series_id`가 붙습니다.\n- 한 주라도 겹치면 하나도 만들지 않고 409로 응답합니다. 메시지에 겹치는 날짜가 나옵니다.\n- 취소(DELETE)에 `series=true`를 주면 그 예약과 이후 날짜의 같은 묶음 예약을 함께 지웁니다. 본인 예약만 지울 수 있는 규칙은 그대로입니다.\n- 예약 테이블에 `series_id` 열을 추가했습니다. 앱을 시작할 때마다 DB를 새로 만드는 기존 방식이라 따로 옮길 데이터는 없습니다.\n\n**화면 (`static/index.html`)**\n- 예약 폼에 \"반복 안 함 / 매주 2~12회\" 선택이 생겼습니다.\n- 반복 예약 칸에는 기존 \"취소\" 버튼 외에 \"이후 반복 모두 취소\" 버튼이 추가로 보입니다.\n\n**확인한 것**\n- 3주 반복 예약이 생성되었습니다.\n- 첫 주나 중간 주가 겹칠 때 409가 나오고 아무것도 생성되지 않았습니다.\n- 묶음 취소로 해당 날짜의 예약이 삭제되었습니다.\n\n제가 띄운 서버는 PID로 종료했습니다.\n\n반복 횟수 상한 12주는 임의로 정한 값입니다. `main.py`의 `MAX_WEEKS`에서 바꿀 수 있습니다.",
+   "wall_s": 41.0,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   }
+  }
+ },
+ "M1_5": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass",
+   "T10": "pass",
+   "T11": "fail",
+   "T12": "fail"
+  },
+  "detail": {
+   "T11": "AssertionError: 남은 전부 취소 뒤 남은 실행이 기대와 다르다\nassert [1, 0, 0, 1] == [1, 0, 0, 0]\n  \n  At index 3 diff: 1 != 0\n  Use -v to get more diff",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 14, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "한다: %s\" % [len(o) for o in occ]\n        # 남이 '남은 전부' 취소 → 거부, 4건 다 남는다\n        st = cancel(srv, \"following\", occ[0][0], \"한도윤\")\n        assert refused(st, 403), (\"남의 반복 예약 취소는 거부돼야 한다\", st)\n        assert [len(on(srv, day(k), \"A\", \"16:00\", \"정하늘\")) for k in range(4)] == [1, 1, 1, 1], \"거부됐는데 지워진 실행이 있다\"\n        # 본인이 둘째 실행만 취소 → 그 하나만 사라진다\n        st = cancel(srv, \"one\", occ[1][0], \"정하늘\")\n        assert ok(st, 204), (\"본인의 한 실행 취소\", st)\n        assert [len(on(srv, day(k), \"A\", \"16:00\", \"정하늘\")) for k in range(4)] == [1, 0, 1, 1], \"한 실행만 취소했는데 다른 실행이 달라졌다\"\n        # 본인이 셋째 실행부터 남은 전부 취소 → 셋째 · 넷째 사라지고 첫째는 남는다\n        st = cancel(srv, \"following\", occ[2][0], \"정하늘\")\n        assert ok(st, 204), (\"본인의 남은 전부 취소\", st)\n        want = [0, 0, 0, 0] if AD[\"following_is_all\"] else [1, 0, 0, 0]\n>       assert [len(on(srv, day(k), \"A\", \"16:00\", \"정하늘\")) for k in range(4)] == want, \"남은 전부 취소 뒤 남은 실행이 기대와 다르다\"\nE       AssertionError: 남은 전부 취소 뒤 남은 실행이 기대와 다르다\nE       assert [1, 0, 0, 1] == [1, 0, 0, 0]\nE         \nE         At index 3 diff: 1 != 0\nE         Use -v to get more diff\n\n_grader\\test_recur.py:157: AssertionError\n_________________________ test_T12_repeat_weeks_range _________________________\n\nsrv = <test_recur.QuietServer object at 0x000002040455AF90>\n\n    def test_T12_repeat_weeks_range(srv):\n        for bad in AD[\"bad_weeks\"]:\n            st, body = recur(srv, \"C\", \"11:00\", \"11:30\", \"한도윤\", bad)\n>           assert refused(st, 400), (\"반복 %r 은 거부돼야 한다\" % (bad,), st, body)\nE           AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 14, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nE           assert False\nE            +  where False = refused(201, 400)\n\n_grader\\test_recur.py:163: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_recur.py::test_T11_cancel_one_or_following_owner_only - A...\nFAILED _grader/test_recur.py::test_T12_repeat_weeks_range - AssertionError: (...\n2 failed, 10 passed in 13.90s\n",
+  "passed": 10,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 회의실 예약 앱에 매주 반복 예약 기능을 추가해 줘.",
+   "max_turns": 80,
+   "port": 9600,
+   "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9600, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+   "job": true,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 29859,
+   "num_turns": 14,
+   "total_cost_usd": 0.1339557,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "session_id": "65976a9a-1c69-4281-a441-4c20ef05221d",
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 17026,
+    "cache_read_input_tokens": 189637,
+    "output_tokens": 4686,
+    "output_tokens_details": {
+     "thinking_tokens": 495
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 17026,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 766,
+      "cache_read_input_tokens": 32858,
+      "cache_creation_input_tokens": 585,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 585
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "매주 반복 예약 기능을 추가했습니다. API에서 직접 호출해 확인했고, 브라우저 화면은 열어 보지 않았습니다.\n\n- **서버 (`main.py`)**: 예약 요청에 `repeat_weeks`(1~12, 생략하면 1)를 받을 수 있습니다. 시작일부터 7일 간격으로 그 횟수만큼 예약이 만들어집니다.\n- **겹침 처리**: 반복 날짜 중 하나라도 이미 예약돼 있으면 전체를 거절합니다(409). 응답에는 겹치는 날짜 목록이 들어갑니다. 일부만 예약되는 경우는 없습니다.\n- **그 밖의 응답**: 반복 횟수가 범위를 벗어나면 400을 돌려줍니다. 반복 예약이 성공하면 기존 응답에 `reservations` 목록(각 예약의 번호와 날짜)이 추가됩니다. 반복하지 않는 요청은 이전과 똑같이 동작합니다.\n- **화면 (`index.html`)**: 예약 폼에 \"반복\" 선택 상자(반복 안 함, 매주 2~12회)가 생겼습니다. 성공하면 \"매주 N회 예약했습니다\"가 표시됩니다.\n\n**확인한 결과**\n- 3주 반복 예약이 3건 생성됐습니다.\n- 같은 요청을 다시 보내면 409로 거절됐습니다.\n- 일부 날짜만 겹치는 요청도 409로 거절됐습니다.\n- `repeat_weeks`를 99로 보내면 400이 나왔습니다.\n\n취소는 지금처럼 한 건씩만 됩니다. 반복 예약을 한 번에 취소하려면 예약 테이블에 반복 묶음 번호를 추가해야 하는데, 필요하면 이어서 만들겠습니다.\n\n테스트 중 앱을 불러오면서 `rooms.db`가 다시 만들어졌습니다. 앱은 시작할 때마다 시드 CSV로 DB를 새로 만들기 때문에 테스트로 넣은 예약은 남아 있지 않습니다.",
+   "wall_s": 35.0,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   }
+  }
+ },
+ "M1_6": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass",
+   "T10": "pass",
+   "T11": "fail",
+   "T12": "fail"
+  },
+  "detail": {
+   "T11": "AssertionError: 남은 전부 취소 뒤 남은 실행이 기대와 다르다\nassert [1, 0, 0, 1] == [1, 0, 0, 0]\n  \n  At index 3 diff: 1 != 0\n  Use -v to get more diff",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 14, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "한다: %s\" % [len(o) for o in occ]\n        # 남이 '남은 전부' 취소 → 거부, 4건 다 남는다\n        st = cancel(srv, \"following\", occ[0][0], \"한도윤\")\n        assert refused(st, 403), (\"남의 반복 예약 취소는 거부돼야 한다\", st)\n        assert [len(on(srv, day(k), \"A\", \"16:00\", \"정하늘\")) for k in range(4)] == [1, 1, 1, 1], \"거부됐는데 지워진 실행이 있다\"\n        # 본인이 둘째 실행만 취소 → 그 하나만 사라진다\n        st = cancel(srv, \"one\", occ[1][0], \"정하늘\")\n        assert ok(st, 204), (\"본인의 한 실행 취소\", st)\n        assert [len(on(srv, day(k), \"A\", \"16:00\", \"정하늘\")) for k in range(4)] == [1, 0, 1, 1], \"한 실행만 취소했는데 다른 실행이 달라졌다\"\n        # 본인이 셋째 실행부터 남은 전부 취소 → 셋째 · 넷째 사라지고 첫째는 남는다\n        st = cancel(srv, \"following\", occ[2][0], \"정하늘\")\n        assert ok(st, 204), (\"본인의 남은 전부 취소\", st)\n        want = [0, 0, 0, 0] if AD[\"following_is_all\"] else [1, 0, 0, 0]\n>       assert [len(on(srv, day(k), \"A\", \"16:00\", \"정하늘\")) for k in range(4)] == want, \"남은 전부 취소 뒤 남은 실행이 기대와 다르다\"\nE       AssertionError: 남은 전부 취소 뒤 남은 실행이 기대와 다르다\nE       assert [1, 0, 0, 1] == [1, 0, 0, 0]\nE         \nE         At index 3 diff: 1 != 0\nE         Use -v to get more diff\n\n_grader\\test_recur.py:157: AssertionError\n_________________________ test_T12_repeat_weeks_range _________________________\n\nsrv = <test_recur.QuietServer object at 0x000001E639D1AF90>\n\n    def test_T12_repeat_weeks_range(srv):\n        for bad in AD[\"bad_weeks\"]:\n            st, body = recur(srv, \"C\", \"11:00\", \"11:30\", \"한도윤\", bad)\n>           assert refused(st, 400), (\"반복 %r 은 거부돼야 한다\" % (bad,), st, body)\nE           AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 14, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nE           assert False\nE            +  where False = refused(201, 400)\n\n_grader\\test_recur.py:163: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_recur.py::test_T11_cancel_one_or_following_owner_only - A...\nFAILED _grader/test_recur.py::test_T12_repeat_weeks_range - AssertionError: (...\n2 failed, 10 passed in 15.61s\n",
+  "passed": 10,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 회의실 예약 앱에 매주 반복 예약 기능을 추가해 줘.",
+   "max_turns": 80,
+   "port": 9620,
+   "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9620, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+   "job": true,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 27113,
+   "num_turns": 14,
+   "total_cost_usd": 0.1265016,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "session_id": "7bd04a1a-f13f-40d9-b200-f2afb4b38c1d",
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 16754,
+    "cache_read_input_tokens": 156816,
+    "output_tokens": 4378,
+    "output_tokens_details": {
+     "thinking_tokens": 256
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 16754,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 667,
+      "cache_read_input_tokens": 32712,
+      "cache_creation_input_tokens": 459,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 459
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "매주 반복 예약을 추가했고, 동작도 확인했습니다.\n\n**변경 내용**\n- `main.py`: `POST /api/reservations`에 `repeat_weeks`(1~12, 생략하면 1)를 추가했습니다. 시작 날짜부터 같은 요일에 같은 시간으로 매주 예약이 만들어집니다. 한 주라도 다른 예약과 겹치면 하나도 만들지 않고 409를 돌려주며, 겹친 날짜를 메시지에 담습니다. 날짜 형식도 검증하도록 했습니다.\n- `static/index.html`: 예약 폼에 \"반복\" 선택(반복 안 함 / 매주 2~12회)을 넣었습니다. 반복 예약이 성공하면 \"매주 N회 예약했습니다\"로 안내합니다.\n\n**확인한 것**\n- 3주 반복은 11-17, 11-24, 12-01로 생성되어 201이 나왔습니다.\n- 11-17과 겹치는 반복 요청은 409가 나왔고, 겹치지 않는 주에도 예약이 남지 않았습니다.\n- 13회 요청은 400이 나왔고, `repeat_weeks`를 생략한 기존 방식은 그대로 동작합니다.\n- 브라우저 화면(폼 UI)은 열어 보지 않았습니다.\n\n**참고**\n- 취소는 지금처럼 한 건씩 합니다. 반복 예약을 한 번에 취소하는 기능은 넣지 않았습니다. 필요하면 시리즈 ID를 추가해 드릴 수 있습니다.\n- 테스트하느라 `main`을 불러올 때 `init_db()`가 실행되어 `rooms.db`가 시드 데이터로 다시 만들어졌습니다. 이 앱은 시작할 때마다 DB를 초기화하므로 원래 있던 동작입니다.",
+   "wall_s": 30.9,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   }
+  }
+ },
+ "M2_1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass",
+   "T10": "fail",
+   "T11": "fail",
+   "T12": "fail"
+  },
+  "detail": {
+   "T10": "AssertionError: 2번째 주(2026-11-10)에 한 건이 있어야 한다\nassert 0 == 1\n +  where 0 = len([])\n +    where [] = on(<test_recur.QuietServer object at 0x00000204C7E4AF90>, '2026-11-10', 'B', '16:00', '박지연')\n +      where '2026-11-10' = day(1)",
+   "T11": "AssertionError: 4주에 한 건씩 있어야 한다: [1, 0, 0, 0]\nassert False\n +  where False = all(<generator object test_T11_cancel_one_or_following_owner_only.<locals>.<genexpr> at 0x00000204C8EA7CA0>)",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 8, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "or: 2번째 주(2026-11-10)에 한 건이 있어야 한다\nE           assert 0 == 1\nE            +  where 0 = len([])\nE            +    where [] = on(<test_recur.QuietServer object at 0x00000204C7E4AF90>, '2026-11-10', 'B', '16:00', '박지연')\nE            +      where '2026-11-10' = day(1)\n\n_grader\\test_recur.py:128: AssertionError\n_________________ test_T11_cancel_one_or_following_owner_only _________________\n\nsrv = <test_recur.QuietServer object at 0x00000204C7E4AF90>\n\n    def test_T11_cancel_one_or_following_owner_only(srv):\n        st, body = recur(srv, \"A\", \"16:00\", \"17:00\", \"정하늘\", 4)\n        assert ok(st, 201), (\"준비: 4주 반복\", st, body)\n        occ = [on(srv, day(k), \"A\", \"16:00\", \"정하늘\") for k in range(4)]\n>       assert all(len(o) == 1 for o in occ), \"4주에 한 건씩 있어야 한다: %s\" % [len(o) for o in occ]\nE       AssertionError: 4주에 한 건씩 있어야 한다: [1, 0, 0, 0]\nE       assert False\nE        +  where False = all(<generator object test_T11_cancel_one_or_following_owner_only.<locals>.<genexpr> at 0x00000204C8EA7CA0>)\n\n_grader\\test_recur.py:144: AssertionError\n_________________________ test_T12_repeat_weeks_range _________________________\n\nsrv = <test_recur.QuietServer object at 0x00000204C7E4AF90>\n\n    def test_T12_repeat_weeks_range(srv):\n        for bad in AD[\"bad_weeks\"]:\n            st, body = recur(srv, \"C\", \"11:00\", \"11:30\", \"한도윤\", bad)\n>           assert refused(st, 400), (\"반복 %r 은 거부돼야 한다\" % (bad,), st, body)\nE           AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 8, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nE           assert False\nE            +  where False = refused(201, 400)\n\n_grader\\test_recur.py:163: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_recur.py::test_T10_weekly_repeat_all_or_nothing - Asserti...\nFAILED _grader/test_recur.py::test_T11_cancel_one_or_following_owner_only - A...\nFAILED _grader/test_recur.py::test_T12_repeat_weeks_range - AssertionError: (...\n3 failed, 9 passed in 13.18s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 회의실 예약 앱에 매주 반복 예약 기능을 추가해 줘. 기존 기능은 하나도 깨지지 않게 하고, 바꾼 파일을 알려 줘.",
+   "max_turns": 80,
+   "port": 9600,
+   "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9600, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+   "job": true,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 31859,
+   "num_turns": 15,
+   "total_cost_usd": 0.14502420000000002,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "session_id": "f0633e6d-75bf-4777-a6cc-238b3d438715",
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 17959,
+    "cache_read_input_tokens": 189902,
+    "output_tokens": 5417,
+    "output_tokens_details": {
+     "thinking_tokens": 365
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 17959,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 813,
+      "cache_read_input_tokens": 33615,
+      "cache_creation_input_tokens": 761,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 761
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "매주 반복 예약을 추가했습니다. 반복 예약, 충돌 시 전체 거부, 반복 횟수 검증은 TestClient로 확인했고, 기존 단일 예약 응답도 이전과 같았습니다. 브라우저 화면은 직접 열어 보지 않았습니다.\n\n**바꾼 파일**\n- `main.py`\n  - `POST /api/reservations`에 선택 값 `weeks`(첫 날짜 포함 반복 횟수, 1~12)를 추가했습니다.\n  - `weeks`를 생략하거나 1이면 기존과 똑같이 1회 예약되고 응답 형식도 같습니다.\n  - 2 이상이면 같은 요일·시간으로 매주 예약합니다. 응답에는 기존 `res_id`(첫 건) 외에 `res_ids`와 `dates`가 추가됩니다.\n  - 반복 중 한 날짜라도 시간이 겹치면 아무것도 만들지 않고 409로 거부하며, 겹친 날짜를 메시지에 알려 줍니다.\n  - 반복 횟수가 범위를 벗어나거나 날짜 형식이 잘못되면 400을 돌려줍니다.\n- `static/index.html`\n  - 예약 폼에 \"반복\" 선택(반복 안 함 / 매주 2~12회)을 추가했습니다.\n  - 기본값은 \"반복 안 함\"이라 기존 화면 동작은 그대로입니다.\n\n**확인한 것**\n- 단일 예약은 이전과 같은 응답으로 생성됩니다.\n- `weeks`를 3으로 주면 11-17, 11-24, 12-01에 3건이 만들어집니다.\n- 첫 주가 비어 있어도 뒷주가 겹치면 전체가 거부되고 DB에는 아무것도 남지 않습니다.\n- `weeks`가 99이면 400이 나옵니다.\n\n**참고**\n- 취소는 기존처럼 건별로만 됩니다. 반복 묶음을 한 번에 취소하는 기능은 넣지 않았습니다.\n- `main.py`는 import할 때마다 `rooms.db`를 시드로 다시 만드는 기존 동작을 하므로, 테스트 중 만든 예약은 서버를 다시 띄우면 사라집니다.",
+   "wall_s": 35.7,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   }
+  }
+ },
+ "M2_2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass",
+   "T10": "fail",
+   "T11": "fail",
+   "T12": "fail"
+  },
+  "detail": {
+   "T10": "AssertionError: 2번째 주(2026-11-10)에 한 건이 있어야 한다\nassert 0 == 1\n +  where 0 = len([])\n +    where [] = on(<test_recur.QuietServer object at 0x0000017E1735AF90>, '2026-11-10', 'B', '16:00', '박지연')\n +      where '2026-11-10' = day(1)",
+   "T11": "AssertionError: 4주에 한 건씩 있어야 한다: [1, 0, 0, 0]\nassert False\n +  where False = all(<generator object test_T11_cancel_one_or_following_owner_only.<locals>.<genexpr> at 0x0000017E183B3CA0>)",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 8, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "or: 2번째 주(2026-11-10)에 한 건이 있어야 한다\nE           assert 0 == 1\nE            +  where 0 = len([])\nE            +    where [] = on(<test_recur.QuietServer object at 0x0000017E1735AF90>, '2026-11-10', 'B', '16:00', '박지연')\nE            +      where '2026-11-10' = day(1)\n\n_grader\\test_recur.py:128: AssertionError\n_________________ test_T11_cancel_one_or_following_owner_only _________________\n\nsrv = <test_recur.QuietServer object at 0x0000017E1735AF90>\n\n    def test_T11_cancel_one_or_following_owner_only(srv):\n        st, body = recur(srv, \"A\", \"16:00\", \"17:00\", \"정하늘\", 4)\n        assert ok(st, 201), (\"준비: 4주 반복\", st, body)\n        occ = [on(srv, day(k), \"A\", \"16:00\", \"정하늘\") for k in range(4)]\n>       assert all(len(o) == 1 for o in occ), \"4주에 한 건씩 있어야 한다: %s\" % [len(o) for o in occ]\nE       AssertionError: 4주에 한 건씩 있어야 한다: [1, 0, 0, 0]\nE       assert False\nE        +  where False = all(<generator object test_T11_cancel_one_or_following_owner_only.<locals>.<genexpr> at 0x0000017E183B3CA0>)\n\n_grader\\test_recur.py:144: AssertionError\n_________________________ test_T12_repeat_weeks_range _________________________\n\nsrv = <test_recur.QuietServer object at 0x0000017E1735AF90>\n\n    def test_T12_repeat_weeks_range(srv):\n        for bad in AD[\"bad_weeks\"]:\n            st, body = recur(srv, \"C\", \"11:00\", \"11:30\", \"한도윤\", bad)\n>           assert refused(st, 400), (\"반복 %r 은 거부돼야 한다\" % (bad,), st, body)\nE           AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 8, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nE           assert False\nE            +  where False = refused(201, 400)\n\n_grader\\test_recur.py:163: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_recur.py::test_T10_weekly_repeat_all_or_nothing - Asserti...\nFAILED _grader/test_recur.py::test_T11_cancel_one_or_following_owner_only - A...\nFAILED _grader/test_recur.py::test_T12_repeat_weeks_range - AssertionError: (...\n3 failed, 9 passed in 13.26s\n",
+  "passed": 9,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 회의실 예약 앱에 매주 반복 예약 기능을 추가해 줘. 기존 기능은 하나도 깨지지 않게 하고, 바꾼 파일을 알려 줘.",
+   "max_turns": 80,
+   "port": 9620,
+   "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9620, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+   "job": true,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 39138,
+   "num_turns": 8,
+   "total_cost_usd": 0.1516606,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "session_id": "9fae94a7-6abd-4e8b-8aa6-a93412ed0160",
+   "usage": {
+    "input_tokens": 12,
+    "cache_creation_input_tokens": 18420,
+    "cache_read_input_tokens": 159066,
+    "output_tokens": 6205,
+    "output_tokens_details": {
+     "thinking_tokens": 619
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 18420,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1020,
+      "cache_read_input_tokens": 34092,
+      "cache_creation_input_tokens": 745,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 745
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "매주 반복 예약을 추가했고, API 호출로 확인했습니다. 브라우저 화면은 직접 띄워 보지 않았습니다. 테스트용 서버는 제가 띄운 PID로만 껐고, 테스트로 만든 `rooms.db`는 지웠습니다. 이 DB는 서버를 시작할 때마다 시드 CSV로 다시 만들어집니다.\n\n**바꾼 파일**\n- `main.py`\n- `static/index.html`\n\n`seed/*.csv`는 그대로입니다.\n\n**동작**\n- **예약 요청:** `POST /api/reservations`에 선택 값 `weeks`(1~12, 기본 1)를 받습니다. `weeks`를 보내지 않으면 응답과 동작이 예전과 같습니다.\n- **반복 예약:** `weeks`가 2 이상이면 같은 요일·시간으로 매주 예약합니다. 응답에는 `res_ids`, `dates`, `series_id`가 추가됩니다.\n- **전부 성공하거나 전부 실패:** 반복 주 중 하나라도 겹치면 하나도 만들지 않고 409를 돌려줍니다. 메시지에 겹친 날짜가 들어갑니다.\n- **날짜·횟수 검증:** 반복 횟수가 범위 밖이거나, 반복 예약의 날짜 형식이 잘못되면 400을 돌려줍니다.\n- **취소:** `DELETE`에 `series=true`를 붙이면 그 날짜와 이후의 같은 반복 예약을 본인 것만 지웁니다. 붙이지 않으면 예전처럼 한 건만 지웁니다.\n- **DB:** `mr_reservations`에 `series_id` 컬럼을 추가했고, 시드 입력은 컬럼을 명시하도록 고쳤습니다.\n- **화면:** 예약 폼에 \"반복\" 선택(반복 안 함, 매주 2~12회)을 넣었습니다. 반복 예약을 취소할 때는 \"이후 반복 예약도 모두 취소할까요?\" 확인창이 뜨고, 취소를 누르면 그 날짜만 지웁니다. 기존 `data-testid`와 요소 id는 그대로입니다.\n\n**확인한 것**\n- 3주 반복 예약이 12/1, 12/8, 12/15에 만들어졌습니다.\n- 반복 구간에 겹치는 예약이 있으면 409가 나오고 아무것도 만들어지지 않았습니다.\n- `weeks=0`은 400이 나왔습니다.\n- `weeks` 없이 보낸 단건 예약, 시드와 겹치는 예약(409), 겹치지 않는 예약(201)은 예전과 같았습니다.\n- 반복 예약 중 12/8 건을 `series=true`로 지우니 12/8과 12/15가 지워지고 12/1은 남았습니다.",
+   "wall_s": 53.1,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   }
+  }
+ },
+ "M2_3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass",
+   "T10": "pass",
+   "T11": "fail",
+   "T12": "fail"
+  },
+  "detail": {
+   "T11": "AssertionError: 남은 전부 취소 뒤 남은 실행이 기대와 다르다\nassert [1, 0, 0, 1] == [1, 0, 0, 0]\n  \n  At index 3 diff: 1 != 0\n  Use -v to get more diff",
+   "T12": "AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 14, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nassert False\n +  where False = refused(201, 400)"
+  },
+  "pytest_rc": 1,
+  "stdout_tail": "한다: %s\" % [len(o) for o in occ]\n        # 남이 '남은 전부' 취소 → 거부, 4건 다 남는다\n        st = cancel(srv, \"following\", occ[0][0], \"한도윤\")\n        assert refused(st, 403), (\"남의 반복 예약 취소는 거부돼야 한다\", st)\n        assert [len(on(srv, day(k), \"A\", \"16:00\", \"정하늘\")) for k in range(4)] == [1, 1, 1, 1], \"거부됐는데 지워진 실행이 있다\"\n        # 본인이 둘째 실행만 취소 → 그 하나만 사라진다\n        st = cancel(srv, \"one\", occ[1][0], \"정하늘\")\n        assert ok(st, 204), (\"본인의 한 실행 취소\", st)\n        assert [len(on(srv, day(k), \"A\", \"16:00\", \"정하늘\")) for k in range(4)] == [1, 0, 1, 1], \"한 실행만 취소했는데 다른 실행이 달라졌다\"\n        # 본인이 셋째 실행부터 남은 전부 취소 → 셋째 · 넷째 사라지고 첫째는 남는다\n        st = cancel(srv, \"following\", occ[2][0], \"정하늘\")\n        assert ok(st, 204), (\"본인의 남은 전부 취소\", st)\n        want = [0, 0, 0, 0] if AD[\"following_is_all\"] else [1, 0, 0, 0]\n>       assert [len(on(srv, day(k), \"A\", \"16:00\", \"정하늘\")) for k in range(4)] == want, \"남은 전부 취소 뒤 남은 실행이 기대와 다르다\"\nE       AssertionError: 남은 전부 취소 뒤 남은 실행이 기대와 다르다\nE       assert [1, 0, 0, 1] == [1, 0, 0, 0]\nE         \nE         At index 3 diff: 1 != 0\nE         Use -v to get more diff\n\n_grader\\test_recur.py:157: AssertionError\n_________________________ test_T12_repeat_weeks_range _________________________\n\nsrv = <test_recur.QuietServer object at 0x0000021F854BAF90>\n\n    def test_T12_repeat_weeks_range(srv):\n        for bad in AD[\"bad_weeks\"]:\n            st, body = recur(srv, \"C\", \"11:00\", \"11:30\", \"한도윤\", bad)\n>           assert refused(st, 400), (\"반복 %r 은 거부돼야 한다\" % (bad,), st, body)\nE           AssertionError: ('반복 1 은 거부돼야 한다', 201, {'res_id': 14, 'room_id': 'C', 'date': '2026-11-03', 'start': '11:00', ...})\nE           assert False\nE            +  where False = refused(201, 400)\n\n_grader\\test_recur.py:163: AssertionError\n=========================== short test summary info ===========================\nFAILED _grader/test_recur.py::test_T11_cancel_one_or_following_owner_only - A...\nFAILED _grader/test_recur.py::test_T12_repeat_weeks_range - AssertionError: (...\n2 failed, 10 passed in 13.18s\n",
+  "passed": 10,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users"
+  ],
+  "tests_modified": null,
+  "files": [
+   "build.json",
+   "main.py",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 회의실 예약 앱에 매주 반복 예약 기능을 추가해 줘. 기존 기능은 하나도 깨지지 않게 하고, 바꾼 파일을 알려 줘.",
+   "max_turns": 80,
+   "port": 9610,
+   "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9610, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+   "job": true,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 26876,
+   "num_turns": 13,
+   "total_cost_usd": 0.11413100000000001,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "session_id": "9b936ba4-453b-4fa3-b133-3d8b6d9b2a36",
+   "usage": {
+    "input_tokens": 10,
+    "cache_creation_input_tokens": 14449,
+    "cache_read_input_tokens": 127350,
+    "output_tokens": 4358,
+    "output_tokens_details": {
+     "thinking_tokens": 425
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 14449,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 729,
+      "cache_read_input_tokens": 32619,
+      "cache_creation_input_tokens": 891,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 891
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "매주 반복 예약 기능을 추가했습니다. TestClient로 API를 확인했고, 브라우저 화면은 열어 보지 못했습니다.\n\n**바꾼 파일**\n- `main.py`\n- `static/index.html`\n\n**동작**\n- 예약 요청(POST)에 선택 값 `repeat_weeks`(1~12, 총 예약 건수)를 받을 수 있습니다. 생략하거나 1이면 기존과 응답·동작이 같습니다.\n- 반복 예약은 같은 회의실, 같은 시간대로 7일 간격 날짜에 만들어집니다. 응답에는 기존 필드에 `res_ids`와 `dates`가 더해집니다.\n- 한 주라도 이미 예약된 시간과 겹치면 409를 반환하고 하나도 만들지 않습니다. 메시지에 충돌한 날짜가 나옵니다.\n- 범위를 벗어난 횟수나 잘못된 날짜(반복 시)는 400을 반환합니다.\n- 화면의 예약 폼에 \"반복\" 선택(반복 안 함 / 매주 2~12회)이 생겼습니다. 기본값은 \"반복 안 함\"이고, 칸을 새로 누를 때마다 다시 \"반복 안 함\"으로 돌아갑니다.\n- 취소는 기존대로 건별로 하며, 반복 예약 전체를 한 번에 취소하는 기능은 넣지 않았습니다.\n\n**확인한 것**\n- 반복 없는 예약은 이전과 같은 응답으로 만들어집니다.\n- 3주 반복이 첫 주 충돌로 409가 나면 아무것도 만들어지지 않습니다.\n- 2주 반복은 2건이 만들어집니다.\n- 반복 횟수 99는 400입니다.\n\n테스트 중 서버를 띄우지는 않았지만, `main.py`를 불러오면서 `rooms.db`가 시드 데이터로 다시 만들어졌습니다. 이 앱은 시작할 때마다 원래 그렇게 초기화됩니다.",
+   "wall_s": 30.1,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   }
+  }
+ },
+ "M3_1": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass",
+   "T10": "pass",
+   "T11": "pass",
+   "T12": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": "............                                                             [100%]\n12 passed in 13.25s\n",
+  "passed": 12,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users"
+  ],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py",
+   "tests/test_recur.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 가 v2 로 바뀌었어. [v2] 표시가 붙은 내용대로 앱을 고쳐 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "port": 9600,
+   "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9600, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+   "job": true,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 44806,
+   "num_turns": 10,
+   "total_cost_usd": 0.19623900000000002,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "session_id": "078dcdd9-694d-4140-b7ea-2433ddbe106f",
+   "usage": {
+    "input_tokens": 14,
+    "cache_creation_input_tokens": 24261,
+    "cache_read_input_tokens": 247370,
+    "output_tokens": 7443,
+    "output_tokens_details": {
+     "thinking_tokens": 677
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 24261,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 844,
+      "cache_read_input_tokens": 44237,
+      "cache_creation_input_tokens": 514,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 514
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "기존 DoD: 9/9 — 고치기 전과 뒤에 `pytest tests/test_dod.py` 를 실제로 돌린 결과입니다.\n새 기준: T10 · T11 · T12 모두 확인함 — 새로 만든 `tests/test_recur.py` 로 서버를 띄워 API 를 호출해 확인했고, 전체 12개가 통과했습니다. 화면(반복 선택 상자, 남은 전부 취소 버튼)은 브라우저로 열어 보지 못했습니다. 코드만 고쳤고 눈으로는 확인하지 않았습니다.\n바꾼 파일:\n- `main.py` — `mr_reservations` 에 `series_id` 칸을 더했습니다. 시드 INSERT 는 칸 이름을 지정하도록 바꿨습니다. `GET` 응답에 `series_id` 를 더했습니다. `POST` 는 `repeat_weeks` 를 받아 전부 아니면 전무로 만들고(R10 · R12), `DELETE` 는 `scope=one|following` 을 받습니다(R11).\n- `static/index.html` — 반복 선택 상자(`repeat-select`)와 남은 전부 취소 버튼(`cancel-following-btn`)을 더했습니다. 반복 예약이 아닌 칸에는 이 버튼을 그리지 않습니다.\n- `tests/test_recur.py` — 새로 만들었습니다(T10~T12).\n- `PRD.md` — 변경 이력의 마지막 줄을 채웠습니다.\n\n범위 밖 기능: 없음\nPRD 와 다르게 한 것 · PRD 가 안 정해서 직접 정한 것: PRD 와 다르게 한 것은 없습니다. PRD 가 정하지 않아 직접 정한 것은 아래 네 가지입니다.\n- 반복 예약인데 `date` 가 올바른 날짜가 아니면 400 `모든 값을 입력해 주세요` 를 돌려줍니다.\n- `scope` 가 `following` 이 아닌 값이면 `one` 으로 처리합니다.\n- `repeat_weeks` 가 `null` 이면 없는 것으로 봅니다.\n- 반복 묶음은 새 표 없이 `series_id` 칸으로 저장합니다.",
+   "wall_s": 165.9,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   }
+  }
+ },
+ "M3_2": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass",
+   "T10": "pass",
+   "T11": "pass",
+   "T12": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": "............                                                             [100%]\n12 passed in 13.29s\n",
+  "passed": 12,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users"
+  ],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py",
+   "tests/test_recur.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 가 v2 로 바뀌었어. [v2] 표시가 붙은 내용대로 앱을 고쳐 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "port": 9610,
+   "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9610, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+   "job": true,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 115059,
+   "num_turns": 23,
+   "total_cost_usd": 0.4307681,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "session_id": "0e7a08cf-a8c0-4e7a-bf55-f773b1983e19",
+   "usage": {
+    "input_tokens": 40,
+    "cache_creation_input_tokens": 44422,
+    "cache_read_input_tokens": 959101,
+    "output_tokens": 15709,
+    "output_tokens_details": {
+     "thinking_tokens": 5263
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 44422,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 901,
+      "cache_read_input_tokens": 60212,
+      "cache_creation_input_tokens": 627,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 627
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "기존 DoD: 9/9. 고치기 전에도 9/9였고, 고친 뒤 `pytest tests`를 다시 돌려 `test_dod.py`가 그대로 9/9였습니다(전체 13개 통과).\n새 기준: T10 · T11 · T12 모두 확인함. 새로 만든 `tests/test_recur.py`로 서버를 띄워 확인했고, 반복 칸의 취소 버튼 노출 여부는 Playwright 테스트 1개로 확인했습니다.\n바꾼 파일:\n- `main.py`:\n  - `mr_reservations`에 `series_id` 칸을 더했습니다.\n  - `GET`이 `series_id`를 함께 돌려줍니다.\n  - `POST`가 `repeat_weeks`(R12, R10)를 처리합니다. 전부 아니면 전무이고, 응답은 `{series_id, reservations}`입니다.\n  - `DELETE`가 `scope=one|following`을 처리합니다.\n- `static/index.html`: `repeat-select`를 더했습니다. 반복 예약의 `mine` 칸에만 `cancel-following-btn`이 나오고, 취소 요청에 `scope`를 실어 보냅니다.\n- `tests/test_recur.py`: 새로 만들었습니다(T10~T12와 화면 확인).\n- `PRD.md`: 변경 이력 마지막 줄을 채웠습니다.\n\n범위 밖 기능: 없음\nPRD 와 다르게 한 것 · PRD 가 안 정해서 직접 정한 것:\n- `repeat_weeks: null`은 값이 없는 것으로 보고 v1처럼 동작합니다.\n- 반복인데 `date` 형식이 틀리면 400 `모든 값을 입력해 주세요`를 돌려줍니다.\n- `scope`가 `one`·`following`이 아니면 400 `scope 는 one 또는 following 이어야 합니다`를 돌려줍니다.\n\n이번 변경과 무관한 문제도 하나 봤습니다. 이 환경에서는 서버가 요청 약 45~60번 뒤에 응답을 멈춥니다. 안 건드린 `/api/rooms`만 반복해서 불러도 62번째에서 멈췄습니다. 범위 밖이라 고치지 않았고, 그래서 `test_recur.py`는 요청 수를 아끼게 짰습니다. 원인은 못 찾았고, 처음부터 있던 문제인지는 확인하지 못했습니다(v1 원본으로 돌려 보지 못함).",
+   "wall_s": 439.4,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   }
+  }
+ },
+ "M3_3": {
+  "tests": {
+   "T1": "pass",
+   "T2": "pass",
+   "T3": "pass",
+   "T4": "pass",
+   "T5": "pass",
+   "T6": "pass",
+   "T7": "pass",
+   "T8": "pass",
+   "T9": "pass",
+   "T10": "pass",
+   "T11": "pass",
+   "T12": "pass"
+  },
+  "detail": {},
+  "pytest_rc": 0,
+  "stdout_tail": "............                                                             [100%]\n12 passed in 13.68s\n",
+  "passed": 12,
+  "routes": [
+   "/",
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users",
+   "/static"
+  ],
+  "extra_routes": [
+   "/api/reservations",
+   "/api/reservations/{res_id}",
+   "/api/rooms",
+   "/api/users"
+  ],
+  "tests_modified": false,
+  "files": [
+   "CLAUDE.md",
+   "PRD.md",
+   "build.json",
+   "main.py",
+   "seed/reservations.csv",
+   "seed/rooms.csv",
+   "seed/users.csv",
+   "static/index.html",
+   "tests/test_dod.py",
+   "tests/test_recur.py"
+  ],
+  "build": {
+   "model": "sonnet",
+   "prompt": "이 폴더의 PRD.md 가 v2 로 바뀌었어. [v2] 표시가 붙은 내용대로 앱을 고쳐 줘. CLAUDE.md 를 지켜.",
+   "max_turns": 80,
+   "port": 9620,
+   "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9620, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+   "job": true,
+   "rc": 0,
+   "stderr_tail": "",
+   "duration_api_ms": 70717,
+   "num_turns": 23,
+   "total_cost_usd": 0.29756050000000006,
+   "stop_reason": "end_turn",
+   "terminal_reason": "completed",
+   "is_error": false,
+   "session_id": "8b385b87-1d8b-4966-ac83-ef03e69de1a4",
+   "usage": {
+    "input_tokens": 18,
+    "cache_creation_input_tokens": 35194,
+    "cache_read_input_tokens": 347485,
+    "output_tokens": 12200,
+    "output_tokens_details": {
+     "thinking_tokens": 870
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 35194,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 922,
+      "cache_read_input_tokens": 50942,
+      "cache_creation_input_tokens": 669,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 669
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "result": "기존 DoD: 9/9. 고치기 전에 한 번, 고친 뒤에 `pytest tests -q` 로 한 번 돌렸고, 고친 뒤에는 `test_recur.py` 3개까지 합쳐 12 passed 였습니다.\n새 기준: T10 · T11 · T12 모두 확인함. 새로 만든 `tests/test_recur.py` 가 실제 서버를 띄워 API 로 확인했습니다. 화면의 반복 선택 상자와 남은 전부 취소 버튼은 코드만 넣었고 브라우저에서 눌러 보지는 못했습니다.\n바꾼 파일:\n- `main.py`:\n  - `mr_reservations` 에 `series_id` 칸을 더했습니다. seed 를 넣는 INSERT 는 칸 이름을 적도록 고쳤습니다.\n  - GET 응답에 `series_id` 를 더했습니다.\n  - POST 에 `repeat_weeks` 를 더했습니다. R12 · R10 대로 전부 아니면 전무로 만들고, 201 은 `{series_id, reservations}` 입니다.\n  - DELETE 에 `scope=one|following` 을 더했습니다.\n- `static/index.html`: 반복 선택 상자(`repeat-select`)와 남은 전부 취소 버튼(`cancel-following-btn`, 반복 예약의 `mine` 칸에만)을 더했습니다.\n- `tests/test_recur.py`: 새로 만든 T10~T12 확인용 테스트입니다. `test_dod.py` 는 건드리지 않았습니다.\n- `PRD.md`: 변경 이력 마지막 줄을 채웠습니다.\n\n범위 밖 기능: 없음\nPRD 와 다르게 한 것 · PRD 가 안 정해서 직접 정한 것: PRD 와 다르게 한 것은 없고, 아래 네 가지는 PRD 가 정하지 않아 직접 정했습니다. 같은 내용을 변경 이력에도 적었습니다.\n- `scope` 가 `one`·`following` 이 아니면 `one` 으로 처리합니다.\n- `repeat_weeks` 가 있는데 `date` 형식이 틀리면 400 `날짜는 YYYY-MM-DD 형식으로 입력해 주세요` 를 돌려줍니다.\n- `repeat_weeks` 가 `\"3\"` 같은 숫자 문자열이거나 true/false 면 정수가 아니므로 400 입니다.\n- 반복 예약 201 응답의 각 예약에도 `series_id` 를 넣었습니다.",
+   "wall_s": 157.6,
+   "isolation": {
+    "transcript": true,
+    "foreign_ports": [],
+    "kill_by_name": [],
+    "outside_refs": []
+   }
+  }
+ }
+}

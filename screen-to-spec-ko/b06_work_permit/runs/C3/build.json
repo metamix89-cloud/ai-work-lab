@@ -1,0 +1,59 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "port": 9600,
+ "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9600, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+ "job": true,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 104460,
+ "num_turns": 11,
+ "total_cost_usd": 0.4432219,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "session_id": "c079c17a-e87b-45aa-a36e-50804c8c0a03",
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 58820,
+  "cache_read_input_tokens": 305679,
+  "output_tokens": 17735,
+  "output_tokens_details": {
+   "thinking_tokens": 2775
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 58820,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 716,
+    "cache_read_input_tokens": 75353,
+    "cache_creation_input_tokens": 301,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 301
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "테스트가 9개 모두 통과했고(`PORT=9600`으로 실행), 서버를 따로 띄우지는 않았습니다. 테스트가 끝난 뒤 `seed/`는 원래 내용으로 돌아와 있습니다.\n\n```\nDoD: 9/9\n만든 파일: main.py, static/index.html, seed/*.csv (users · zones · check_items · permits)\n범위 밖 기능: 없음\nPRD 와 다르게 한 것: 없음 (PRD 에 없는 API · 칸 · 화면 요소 추가 없음. 새로 둔 파일 `permit.db` 는 서버가 시작할 때마다 새로 만드는 SQLite 이고, PRD 5 에 적힌 것이다)\nPRD 가 정하지 않아 직접 정한 것:\n- 신청 폼의 시작·종료는 텍스트 입력이고, 처음 값은 지금과 지금 + 2시간이다.\n- 신청에서 점검 항목이 빠진 것과 모르는 항목이 함께 있으면, R1 에 적힌 순서대로 \"비었음\"을 먼저 거부한다. 메시지의 \"(항목 이름)\" 에는 빠진 항목 이름을 쉼표로 이어 쓴다.\n- 만료로 보이는 허가는 `started_at` 이 있으면 작업 중이던 건으로 보고 종료 단추를 둔다. R5 의 \"만료돼도 종료는 된다\" 를 화면에서 따른 것이다.\n- 현황판 상충 경고 줄에는 구역 이름과 허가 번호 둘을 적는다.\n- 시드 `permits.csv` 는 2026-11-06 날짜 고정값 8건이라, 날짜가 지나면 현황판에는 안 보인다. 테스트는 이 시드를 자기 데이터로 바꿔 쓰므로 영향이 없다.\n```",
+ "wall_s": 122.0,
+ "isolation": {
+  "transcript": true,
+  "foreign_ports": [],
+  "kill_by_name": [],
+  "outside_refs": []
+ }
+}

@@ -1,0 +1,32 @@
+{
+ "git_version": "git version 2.52.0.windows.1",
+ "autocrlf_default": "true",
+ "default": {
+  "same_files": 3,
+  "of": 6,
+  "restore_seconds": 0.039,
+  "new_file_left": true,
+  "log": {
+   "init": "",
+   "add": "warning: in the working copy of 'PRD.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'main.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'seed/inquiries.csv', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'seed/orders.csv', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'seed/stock.csv', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'static/index.html', LF will be replaced by CRLF the next time Git touches it",
+   "commit": "",
+   "diff_stat": "PRD.md            | 4 ++--\n main.py           | 7 ++++---\n static/index.html | 2 +-\n 3 files changed, 7 insertions(+), 6 deletions(-)\nwarning: in the working copy of 'PRD.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'main.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'static/index.html', LF will be replaced by CRLF the next time Git touches it",
+   "restore": "",
+   "status_after": "?? new_by_ai.txt"
+  }
+ },
+ "noautocrlf": {
+  "same_files": 6,
+  "of": 6,
+  "restore_seconds": 0.039,
+  "new_file_left": true,
+  "log": {
+   "init": "",
+   "add": "",
+   "commit": "",
+   "diff_stat": "PRD.md            | 4 ++--\n main.py           | 7 ++++---\n static/index.html | 2 +-\n 3 files changed, 7 insertions(+), 6 deletions(-)",
+   "restore": "",
+   "status_after": "?? new_by_ai.txt"
+  }
+ }
+}

@@ -36,6 +36,10 @@ from port_block import BUILD_BASE, PortBlock  # noqa: E402
 
 sys.stdout.reconfigure(encoding="utf-8")
 NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)   # pythonw 에서 콘솔 프로그램을 띄울 때 창이 뜨지 않게
+# 이 PC 의 사용자 설정(설치한 플러그인 · 훅 · MCP)을 빌더가 읽지 않게 한다 — 모든 `claude -p` 에 붙인다.
+# 2026-11-15 ep097 첫 9회: superpowers 플러그인의 시작 훅이 끼어들어 한 줄 요청 조건이 코드를 안 고치고 되묻기만 했다($2.24 버림).
+# 'project' 는 남기므로 작업 폴더 안의 CLAUDE.md(PRD 조건 등)는 그대로 읽힌다.
+ISOLATE = ["--setting-sources", "project,local", "--strict-mcp-config"]
 
 # 동시 실행 때 빌더에게 덧붙이는 한 줄 — 조건(prompts.json)은 그대로 두고 시스템 프롬프트로만
 PARALLEL_NOTE = ("이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(%d, 서버가 둘이면 다음 번호)을 쓴다. "
@@ -172,7 +176,7 @@ def build(claude, run_dir, prompt, model, max_turns, timeout, block=None, tmp=No
     for k in ("CLAUDECODE", "CLAUDE_CODE_ENTRYPOINT"):
         env.pop(k, None)
     cmd = [claude, "-p", prompt, "--output-format", "json", "--dangerously-skip-permissions",
-           "--model", model, "--max-turns", str(max_turns)]
+           "--model", model, "--max-turns", str(max_turns)] + ISOLATE
     if block:
         env.update(PORT=str(block.port), UVICORN_PORT=str(block.port), TEMP=tmp, TMP=tmp, TMPDIR=tmp)
         cmd += ["--append-system-prompt", PARALLEL_NOTE % block.port]

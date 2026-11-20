@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>뚝딱건설 위험 작업 허가서</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--ink:#1d2330;--mute:#6b7280;--line:#e1e4ea;--brand:#e8590c;
+--s-신청:#6b7280;--s-검토완료:#1c7ed6;--s-승인:#2f9e44;--s-작업중:#e8590c;--s-종료:#495057;--s-반려:#c92a2a;--s-취소:#adb5bd}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif;background:var(--bg);color:var(--ink);font-size:15px}
+header{background:#1d2330;color:#fff;padding:12px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+header h1{font-size:18px;margin:0}header h1 b{color:#ffa94d}
+header .sp{flex:1}
+main{max-width:1200px;margin:0 auto;padding:18px}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:#fff;border-radius:6px;padding:7px 14px}
+button.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+button.ok{background:#2f9e44;color:#fff;border-color:#2f9e44}
+button.danger{background:#fff;color:#c92a2a;border-color:#c92a2a}
+button:disabled{opacity:.45;cursor:not-allowed}
+.tabs{display:flex;gap:6px;margin-bottom:14px}
+.tabs button.on{background:#1d2330;color:#fff;border-color:#1d2330}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
+.badge{display:inline-block;padding:2px 10px;border-radius:12px;color:#fff;font-size:12px;font-weight:bold}
+.type{display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:bold;background:#fff4e6;color:#d9480f;border:1px solid #ffd8a8}
+.type.화기{background:#fff5f5;color:#c92a2a;border-color:#ffc9c9}.type.밀폐{background:#f3f0ff;color:#5f3dc4;border-color:#d0bfff}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row .sp{flex:1}
+.mute{color:var(--mute);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.zone{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.zone h3{margin:0;padding:10px 14px;background:#eef0f4;font-size:15px;display:flex;justify-content:space-between}
+.zone .empty{padding:18px 14px;color:var(--mute)}
+.zone .p{padding:10px 14px;border-top:1px solid var(--line);border-left:5px solid var(--c)}
+.zone.hot h3{background:#fff0e6;color:#d9480f}
+.sum{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.sum div{background:#fff;border:1px solid var(--line);border-top:4px solid var(--c);border-radius:8px;padding:8px 16px;text-align:center;min-width:84px}
+.sum b{display:block;font-size:22px}
+form label{display:block;margin:10px 0 4px;font-weight:bold;font-size:13px}
+form input,form select,form textarea{width:100%;padding:8px;border:1px solid #ccd0d8;border-radius:6px;font:inherit}
+form .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chk{display:block;font-weight:normal!important;margin:6px 0!important}.chk input{width:auto;margin-right:6px}
+.err{background:#fff5f5;color:#c92a2a;border:1px solid #ffc9c9;padding:8px 12px;border-radius:6px;margin:10px 0}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1d2330;color:#fff;padding:10px 20px;border-radius:8px;z-index:9}
+.login{max-width:520px;margin:60px auto}.login button{display:block;width:100%;text-align:left;margin:8px 0;padding:12px}
+.login button small{color:var(--mute);margin-left:8px}
+dialog{border:none;border-radius:10px;max-width:560px;width:92%;padding:20px}dialog::backdrop{background:#0006}
+ul.ev{margin:6px 0;padding-left:18px;font-size:13px}
+.hint{font-size:12px;color:#d9480f;margin-top:4px}
+</style>
+</head>
+<body>
+<header>
+  <h1><b>뚝딱건설</b> 위험 작업 허가서</h1>
+  <span class="sp"></span>
+  <span id="who"></span>
+  <button id="logout" style="display:none">로그아웃</button>
+</header>
+<main id="app"></main>
+<dialog id="dlg"></dialog>
+<script>
+const ROLE={foreman:'작업반장',safety:'안전 담당',manager:'현장 책임자'};
+const COLOR={신청:'#6b7280',검토완료:'#1c7ed6',승인:'#2f9e44',작업중:'#e8590c',종료:'#495057',반려:'#c92a2a',취소:'#adb5bd'};
+let token=sessionStorage.token||'',me=null,meta=null,tab='';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const badge=s=>`<span class="badge" style="background:${COLOR[s]}">${s}</span>`;
+
+async function api(path,method='GET',body){
+  const r=await fetch('/api'+path,{method,headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:body?JSON.stringify(body):undefined});
+  const d=await r.json().catch(()=>({}));
+  if(r.status===401&&token){logout();throw new Error('다시 로그인하세요')}
+  if(!r.ok)throw new Error(typeof d.detail==='string'?d.detail:'요청이 올바르지 않습니다');
+  return d;
+}
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),2600)}
+async function act(path,body,msg){try{await api(path,'POST',body||{});toast(msg);await render()}catch(e){toast('⚠ '+e.message)}}
+
+function logout(){token='';sessionStorage.clear();me=null;showLogin()}
+$('#logout').onclick=logout;
+
+async function showLogin(){
+  $('#who').textContent='';$('#logout').style.display='none';
+  const us=await (await fetch('/api/users')).json();
+  $('#app').innerHTML=`<div class="card login"><h2>사용자 선택 (데모 로그인)</h2>${us.map(u=>
+    `<button data-id="${u.id}">${esc(u.name)} <small>${ROLE[u.role]} · ${esc(u.team)}</small></button>`).join('')}</div>`;
+  document.querySelectorAll('.login button').forEach(b=>b.onclick=async()=>{
+    const r=await (await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:+b.dataset.id})})).json();
+    token=r.token;me=r.user;sessionStorage.token=token;sessionStorage.me=JSON.stringify(me);tab='';await start();
+  });
+}
+async function start(){
+  me=JSON.parse(sessionStorage.me);meta=await api('/meta');
+  $('#who').textContent=`${me.name} · ${ROLE[me.role]}`;$('#logout').style.display='';
+  tab=me.role==='foreman'?'mine':'board';await render();
+}
+
+const TABS={foreman:[['mine','내 허가서'],['new','허가 신청']],
+  safety:[['board','오늘 현황판'],['queue','검토 대기'],['all','전체 허가서']],
+  manager:[['board','오늘 현황판'],['queue','승인 대기'],['all','전체 허가서']]};
+
+async function render(){
+  const tabs=TABS[me.role];
+  let html=`<div class="tabs">${tabs.map(([k,n])=>`<button class="${k===tab?'on':''}" data-t="${k}">${n}</button>`).join('')}</div><div id="body"></div>`;
+  $('#app').innerHTML=html;
+  document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;render()});
+  const body=$('#body');
+  if(tab==='new')return newForm(body);
+  if(tab==='board')return board(body);
+  const ps=await api('/permits');
+  let list=ps;
+  if(tab==='queue')list=ps.filter(p=>p.status===(me.role==='safety'?'신청':'검토완료'));
+  body.innerHTML=(tab==='queue'?`<p class="mute">${me.role==='safety'?'안전 검토를 기다리는':'안전 검토가 끝나 승인을 기다리는'} 허가서 ${list.length}건</p>`:'')+
+    (list.map(card).join('')||'<div class="card mute">허가서가 없습니다.</div>');
+  bind(body);
+}
+
+function actions(p){
+  const b=[];
+  if(me.role==='foreman'){
+    const today=meta.today;
+    if(p.status==='승인')b.push(`<button class="primary" data-a="start" data-id="${p.id}" ${p.work_date!==today?'disabled title="허가된 작업일에만 시작할 수 있습니다"':''}>▶ 작업 시작</button>`);
+    if(p.status==='작업중')b.push(`<button class="ok" data-a="finish" data-id="${p.id}">■ 작업 종료</button>`);
+    if(['신청','검토완료','승인'].includes(p.status))b.push(`<button class="danger" data-a="cancel" data-id="${p.id}">신청 취소</button>`);
+  }
+  if(me.role==='safety'&&p.status==='신청'){
+    b.push(`<button class="ok" data-a="review" data-id="${p.id}">안전 검토 완료</button>`,`<button class="danger" data-a="reject" data-id="${p.id}">반려</button>`);
+  }
+  if(me.role==='manager'&&p.status==='검토완료'){
+    b.push(`<button class="ok" data-a="approve" data-id="${p.id}">승인</button>`,`<button class="danger" data-a="reject" data-id="${p.id}">반려</button>`);
+  }
+  b.push(`<button data-a="detail" data-id="${p.id}">상세</button>`);
+  return b.join(' ');
+}
+function stepper(p){
+  const flow=['신청','검토완료','승인','작업중','종료'];
+  if(['반려','취소'].includes(p.status))return `<span class="mute">진행: ${badge(p.status)}</span>`;
+  const i=flow.indexOf(p.status);
+  return `<span class="mute">${flow.map((s,k)=>k<=i?`<b style="color:${COLOR[s]}">${s}</b>`:s).join(' › ')}</span>`;
+}
+function card(p){
+  return `<div class="card"><div class="row"><span class="type ${p.type}">${p.type}</span><b>#${p.id} ${esc(p.zone)}</b>${badge(p.status)}
+  <span class="sp"></span><span class="mute">${p.work_date} ${p.start_time}~${p.end_time}</span></div>
+  <p style="margin:8px 0">${esc(p.description)}</p>
+  <div class="mute">${esc(p.foreman)}(${esc(p.team)}) · ${p.workers}명 ${p.safety_comment?` · 안전담당 의견: ${esc(p.safety_comment)}`:''}${p.approve_comment&&p.status==='반려'?` · 책임자 사유: ${esc(p.approve_comment)}`:''}</div>
+  <div class="row" style="margin-top:10px">${stepper(p)}<span class="sp"></span>${actions(p)}</div></div>`;
+}
+function bind(root){
+  root.querySelectorAll('button[data-a]').forEach(b=>b.onclick=()=>{
+    const id=b.dataset.id,a=b.dataset.a;
+    if(a==='start')act(`/permits/${id}/start`,0,'작업을 시작했습니다');
+    else if(a==='finish')act(`/permits/${id}/finish`,0,'작업을 종료했습니다');
+    else if(a==='cancel'){if(confirm('이 신청을 취소할까요?'))act(`/permits/${id}/cancel`,0,'취소했습니다')}
+    else if(a==='review')ask('안전 검토 의견 (선택)',false,c=>act(`/permits/${id}/review`,{comment:c},'검토 완료 → 책임자 승인 대기'));
+    else if(a==='approve')ask('승인 의견 (선택)',false,c=>act(`/permits/${id}/approve`,{comment:c},'승인했습니다'));
+    else if(a==='reject')ask('반려 사유 (필수)',true,c=>act(`/permits/${id}/reject`,{comment:c},'반려했습니다'));
+    else if(a==='detail')detail(id);
+  });
+}
+function ask(title,required,cb){
+  const d=$('#dlg');d.innerHTML=`<h3>${title}</h3><textarea id="cm" rows="3" style="width:100%;font:inherit"></textarea>
+  <div class="err" id="de" style="display:none">사유를 입력하세요</div>
+  <div class="row" style="margin-top:10px"><span class="sp"></span><button id="dc">닫기</button><button class="primary" id="dk">확인</button></div>`;
+  d.showModal();$('#dc').onclick=()=>d.close();
+  $('#dk').onclick=()=>{const v=$('#cm').value.trim();if(required&&!v){$('#de').style.display='block';return}d.close();cb(v)};
+}
+async function detail(id){
+  const p=await api('/permits/'+id),d=$('#dlg');
+  d.innerHTML=`<h3><span class="type ${p.type}">${p.type}</span> #${p.id} ${esc(p.zone)} ${badge(p.status)}</h3>
+  <p>${esc(p.description)}</p>
+  <div class="mute">${p.work_date} ${p.start_time}~${p.end_time} · ${esc(p.foreman)}(${esc(p.team)}) · ${p.workers}명</div>
+  <h4>안전 조치 체크리스트</h4>${Object.keys(p.checklist).map(k=>`<div>✅ ${esc(k)}</div>`).join('')}
+  <h4>처리 이력</h4><ul class="ev">${p.events.map(e=>`<li>${e.at} · ${esc(e.user||'')} · <b>${esc(e.action)}</b> ${esc(e.note||'')}</li>`).join('')}</ul>
+  <div class="row"><span class="sp"></span><button id="dc">닫기</button></div>`;
+  d.showModal();$('#dc').onclick=()=>d.close();
+}
+
+async function board(el){
+  const b=await api('/board');
+  el.innerHTML=`<h2 style="margin:0 0 4px">${b.date} 구역별 허가 현황 <span class="mute">(총 ${b.total}건)</span></h2>
+  <div class="sum">${Object.entries(b.summary).map(([s,n])=>`<div style="--c:${COLOR[s]}"><b>${n}</b>${s}</div>`).join('')}</div>
+  <div class="grid">${b.zones.map(z=>{
+    const act=z.permits.filter(p=>p.status==='작업중');
+    return `<div class="zone ${act.length?'hot':''}"><h3><span>${esc(z.name)}</span><span>${act.length?'🔥 작업 중 '+act.length+'건':z.permits.length?'':'작업 없음'}</span></h3>
+    ${z.permits.length?z.permits.map(p=>`<div class="p" style="--c:${COLOR[p.status]}"><div class="row"><span class="type ${p.type}">${p.type}</span>${badge(p.status)}<span class="sp"></span><span class="mute">${p.start_time}~${p.end_time}</span></div>
+    <div style="margin:4px 0">${esc(p.description)}</div><div class="mute">${esc(p.foreman)}(${esc(p.team)}) · ${p.workers}명</div>
+    <div class="row" style="margin-top:6px"><span class="sp"></span>${actions(p)}</div></div>`).join(''):'<div class="empty">오늘 신청된 허가 없음</div>'}</div>`}).join('')}</div>`;
+  bind(el);
+}
+
+function newForm(el){
+  const types=Object.keys(meta.types);
+  el.innerHTML=`<div class="card"><h2 style="margin-top:0">위험 작업 허가 신청</h2><form id="f">
+  <div class="two"><div><label>작업 종류</label><select id="ty">${types.map(t=>`<option>${t}</option>`).join('')}</select></div>
+  <div><label>작업 구역</label><select id="zn">${meta.zones.map(z=>`<option value="${z.id}">${esc(z.name)}</option>`).join('')}</select></div></div>
+  <div class="two"><div><label>작업일</label><input type="date" id="dt" value="${meta.today}" min="${meta.today}"></div>
+  <div><label>작업 인원</label><input type="number" id="wk" value="2" min="1"></div></div>
+  <div class="two"><div><label>시작 시간</label><input type="time" id="st" value="09:00"></div><div><label>종료 시간</label><input type="time" id="et" value="12:00"></div></div>
+  <label>작업 내용</label><textarea id="ds" rows="3" placeholder="예) 3층 철골 보 용접"></textarea>
+  <label>안전 조치 체크리스트 (모두 확인해야 신청 가능)</label><div id="cl"></div>
+  <div class="err" id="fe" style="display:none"></div>
+  <p class="hint">허가가 승인되기 전에는 작업을 시작할 수 없습니다.</p>
+  <button class="primary" type="submit">신청하기</button></form></div>`;
+  const cl=()=>{$('#cl').innerHTML=meta.types[$('#ty').value].map(i=>`<label class="chk"><input type="checkbox" value="${esc(i)}"> ${esc(i)}</label>`).join('')};
+  cl();$('#ty').onchange=cl;
+  $('#f').onsubmit=async e=>{
+    e.preventDefault();
+    const checklist={};document.querySelectorAll('#cl input').forEach(c=>checklist[c.value]=c.checked);
+    try{await api('/permits','POST',{type:$('#ty').value,zone_id:+$('#zn').value,work_date:$('#dt').value,start_time:$('#st').value,end_time:$('#et').value,description:$('#ds').value,workers:+$('#wk').value,checklist});
+      toast('신청되었습니다. 안전 담당 검토를 기다려 주세요');tab='mine';render()}
+    catch(err){const x=$('#fe');x.textContent=err.message;x.style.display='block'}
+  };
+}
+
+(async()=>{ if(token&&sessionStorage.me){try{await start();return}catch(e){} } showLogin(); })();
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 대로 웹앱을 만들어 줘.",
+ "max_turns": 80,
+ "port": 9640,
+ "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9640, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+ "job": true,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 117455,
+ "num_turns": 7,
+ "total_cost_usd": 0.4188862,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "session_id": "f95e8821-4156-47dc-9c46-efa40411444f",
+ "usage": {
+  "input_tokens": 12,
+  "cache_creation_input_tokens": 48689,
+  "cache_read_input_tokens": 272862,
+  "output_tokens": 19682,
+  "output_tokens_details": {
+   "thinking_tokens": 4488
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 48689,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 886,
+    "cache_read_input_tokens": 64059,
+    "cache_creation_input_tokens": 1464,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1464
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "PRD 대로 웹앱을 만들었고, API는 curl 로 직접 확인했습니다. 화면(`/`)은 응답이 오는 것만 봤고 브라우저에서 눌러 보지는 않았습니다. `tests/test_dod.py` 는 폴더에 없어서 돌리지 못했습니다.\n\ncurl 로 확인한 것:\n- 책임자의 현황판에 상충 쌍이 하나(WP-0101 과 WP-0102) 나옵니다.\n- 본인 허가 승인은 403 입니다.\n- 승인 9시간 전에 받은 허가는 시작이 409 `허가가 만료되었습니다` 입니다.\n- 화기 허가가 이미 승인돼 있으면 같은 구역의 밀폐 허가 승인은 409 입니다.\n- 신청 번호는 최댓값 + 1 로 WP-0110 이 나옵니다.\n\n**구성**\n- `main.py` — FastAPI 앱입니다. 시작할 때마다 `seed/` CSV 로 `permit.db` 를 새로 만들고, API 11개와 규칙 R1~R8 을 구현했습니다.\n- `static/index.html` — 순수 HTML/JS 한 페이지입니다. 사용자 선택, 허가 목록, 상세와 역할·상태별 단추, 신청 폼, 현황판 격자, 메시지 줄, 오류 상태(`불러오지 못했습니다` + 다시 시도)를 `data-testid` 대로 넣었습니다.\n- `seed/` — 사용자 5명, 구역 3개, 점검 항목 9개, 허가 9건입니다. 신청·검토·승인·작업 중·종료·만료가 모두 섞여 있습니다.\n\n**알아 둘 점**\n- 시드 CSV 의 시각 칸에 `TODAY` 와 `YESTERDAY` 를 쓸 수 있게 했습니다. PRD 에 없는 추가 기능이고, 날짜가 지나도 시드가 \"오늘\" 로 보이게 하려는 것입니다. 날짜를 직접 적어도 됩니다.\n- 시드의 승인 시각은 `TODAY 16:00` 이라 오늘 안에는 만료되지 않습니다. 만료 예시는 어제 승인한 WP-0105 입니다.\n- 서버는 제가 띄운 PID 로만 종료했고, 지금은 꺼져 있습니다.\n- 실행은 `python -m uvicorn main:app --port 9640` 입니다.",
+ "wall_s": 126.0,
+ "isolation": {
+  "transcript": true,
+  "foreign_ports": [],
+  "kill_by_name": [],
+  "outside_refs": []
+ }
+}

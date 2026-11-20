@@ -1,0 +1,1133 @@
+{
+ "base": {
+  "한 번 예약": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "그 날 목록": {
+   "status": 200,
+   "shape": "[{date,end,res_id,room_id,start,user}]",
+   "detail": null
+  },
+  "날짜가 글자(내일)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "없는 날짜(13월 45일)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "날짜 형식 다름(2026/11/03)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "빈 사용자": {
+   "status": 400,
+   "shape": "",
+   "detail": "모든 값을 입력해 주세요"
+  },
+  "없는 회의실": {
+   "status": 404,
+   "shape": "",
+   "detail": "회의실을 찾을 수 없습니다"
+  },
+  "명단에 없는 사람": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "겹침": {
+   "status": 409,
+   "shape": "",
+   "detail": "이미 예약된 시간입니다"
+  },
+  "3시간": {
+   "status": 400,
+   "shape": "",
+   "detail": "한 번에 최대 2시간까지 예약할 수 있습니다"
+  },
+  "남의 예약 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "사용자 없이 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "본인 취소": {
+   "status": 204,
+   "shape": "NoneType",
+   "detail": null
+  },
+  "없는 예약 취소": {
+   "status": 404,
+   "shape": "",
+   "detail": "예약을 찾을 수 없습니다"
+  },
+  "날짜 없이 목록": {
+   "status": 422,
+   "shape": "",
+   "detail": null
+  },
+  "회의실 목록": {
+   "status": 200,
+   "shape": "[{capacity,name,room_id}]",
+   "detail": null
+  },
+  "사용자 목록": {
+   "status": 200,
+   "shape": "[str]",
+   "detail": null
+  }
+ },
+ "M1_1": {
+  "한 번 예약": {
+   "status": 201,
+   "shape": "{date,dates,end,res_id,res_ids,room_id,series_id,start,user}",
+   "detail": null
+  },
+  "그 날 목록": {
+   "status": 200,
+   "shape": "[{date,end,res_id,room_id,series_id,start,user}]",
+   "detail": null
+  },
+  "날짜가 글자(내일)": {
+   "status": 400,
+   "shape": "",
+   "detail": "날짜 형식이 올바르지 않습니다"
+  },
+  "없는 날짜(13월 45일)": {
+   "status": 400,
+   "shape": "",
+   "detail": "날짜 형식이 올바르지 않습니다"
+  },
+  "날짜 형식 다름(2026/11/03)": {
+   "status": 400,
+   "shape": "",
+   "detail": "날짜 형식이 올바르지 않습니다"
+  },
+  "빈 사용자": {
+   "status": 400,
+   "shape": "",
+   "detail": "모든 값을 입력해 주세요"
+  },
+  "없는 회의실": {
+   "status": 404,
+   "shape": "",
+   "detail": "회의실을 찾을 수 없습니다"
+  },
+  "명단에 없는 사람": {
+   "status": 201,
+   "shape": "{date,dates,end,res_id,res_ids,room_id,series_id,start,user}",
+   "detail": null
+  },
+  "겹침": {
+   "status": 409,
+   "shape": "",
+   "detail": "이미 예약된 시간입니다"
+  },
+  "3시간": {
+   "status": 400,
+   "shape": "",
+   "detail": "한 번에 최대 2시간까지 예약할 수 있습니다"
+  },
+  "남의 예약 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "사용자 없이 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "본인 취소": {
+   "status": 204,
+   "shape": "NoneType",
+   "detail": null
+  },
+  "없는 예약 취소": {
+   "status": 404,
+   "shape": "",
+   "detail": "예약을 찾을 수 없습니다"
+  },
+  "날짜 없이 목록": {
+   "status": 422,
+   "shape": "",
+   "detail": null
+  },
+  "회의실 목록": {
+   "status": 200,
+   "shape": "[{capacity,name,room_id}]",
+   "detail": null
+  },
+  "사용자 목록": {
+   "status": 200,
+   "shape": "[str]",
+   "detail": null
+  }
+ },
+ "M1_2": {
+  "한 번 예약": {
+   "status": 201,
+   "shape": "{date,dates,end,res_id,res_ids,room_id,series_id,start,user,weeks}",
+   "detail": null
+  },
+  "그 날 목록": {
+   "status": 200,
+   "shape": "[{date,end,res_id,room_id,series_id,start,user}]",
+   "detail": null
+  },
+  "날짜가 글자(내일)": {
+   "status": 201,
+   "shape": "{date,dates,end,res_id,res_ids,room_id,series_id,start,user,weeks}",
+   "detail": null
+  },
+  "없는 날짜(13월 45일)": {
+   "status": 201,
+   "shape": "{date,dates,end,res_id,res_ids,room_id,series_id,start,user,weeks}",
+   "detail": null
+  },
+  "날짜 형식 다름(2026/11/03)": {
+   "status": 201,
+   "shape": "{date,dates,end,res_id,res_ids,room_id,series_id,start,user,weeks}",
+   "detail": null
+  },
+  "빈 사용자": {
+   "status": 400,
+   "shape": "",
+   "detail": "모든 값을 입력해 주세요"
+  },
+  "없는 회의실": {
+   "status": 404,
+   "shape": "",
+   "detail": "회의실을 찾을 수 없습니다"
+  },
+  "명단에 없는 사람": {
+   "status": 201,
+   "shape": "{date,dates,end,res_id,res_ids,room_id,series_id,start,user,weeks}",
+   "detail": null
+  },
+  "겹침": {
+   "status": 409,
+   "shape": "",
+   "detail": "이미 예약된 시간입니다"
+  },
+  "3시간": {
+   "status": 400,
+   "shape": "",
+   "detail": "한 번에 최대 2시간까지 예약할 수 있습니다"
+  },
+  "남의 예약 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "사용자 없이 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "본인 취소": {
+   "status": 204,
+   "shape": "NoneType",
+   "detail": null
+  },
+  "없는 예약 취소": {
+   "status": 404,
+   "shape": "",
+   "detail": "예약을 찾을 수 없습니다"
+  },
+  "날짜 없이 목록": {
+   "status": 422,
+   "shape": "",
+   "detail": null
+  },
+  "회의실 목록": {
+   "status": 200,
+   "shape": "[{capacity,name,room_id}]",
+   "detail": null
+  },
+  "사용자 목록": {
+   "status": 200,
+   "shape": "[str]",
+   "detail": null
+  }
+ },
+ "M1_3": {
+  "한 번 예약": {
+   "status": 201,
+   "shape": "{date,dates,end,res_id,res_ids,room_id,series_id,start,user}",
+   "detail": null
+  },
+  "그 날 목록": {
+   "status": 200,
+   "shape": "[{date,end,res_id,room_id,series_id,start,user}]",
+   "detail": null
+  },
+  "날짜가 글자(내일)": {
+   "status": 400,
+   "shape": "",
+   "detail": "날짜 형식이 올바르지 않습니다"
+  },
+  "없는 날짜(13월 45일)": {
+   "status": 400,
+   "shape": "",
+   "detail": "날짜 형식이 올바르지 않습니다"
+  },
+  "날짜 형식 다름(2026/11/03)": {
+   "status": 400,
+   "shape": "",
+   "detail": "날짜 형식이 올바르지 않습니다"
+  },
+  "빈 사용자": {
+   "status": 400,
+   "shape": "",
+   "detail": "모든 값을 입력해 주세요"
+  },
+  "없는 회의실": {
+   "status": 404,
+   "shape": "",
+   "detail": "회의실을 찾을 수 없습니다"
+  },
+  "명단에 없는 사람": {
+   "status": 201,
+   "shape": "{date,dates,end,res_id,res_ids,room_id,series_id,start,user}",
+   "detail": null
+  },
+  "겹침": {
+   "status": 409,
+   "shape": "",
+   "detail": "이미 예약된 시간입니다"
+  },
+  "3시간": {
+   "status": 400,
+   "shape": "",
+   "detail": "한 번에 최대 2시간까지 예약할 수 있습니다"
+  },
+  "남의 예약 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "사용자 없이 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "본인 취소": {
+   "status": 204,
+   "shape": "NoneType",
+   "detail": null
+  },
+  "없는 예약 취소": {
+   "status": 404,
+   "shape": "",
+   "detail": "예약을 찾을 수 없습니다"
+  },
+  "날짜 없이 목록": {
+   "status": 422,
+   "shape": "",
+   "detail": null
+  },
+  "회의실 목록": {
+   "status": 200,
+   "shape": "[{capacity,name,room_id}]",
+   "detail": null
+  },
+  "사용자 목록": {
+   "status": 200,
+   "shape": "[str]",
+   "detail": null
+  }
+ },
+ "M2_1": {
+  "한 번 예약": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "그 날 목록": {
+   "status": 200,
+   "shape": "[{date,end,res_id,room_id,start,user}]",
+   "detail": null
+  },
+  "날짜가 글자(내일)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "없는 날짜(13월 45일)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "날짜 형식 다름(2026/11/03)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "빈 사용자": {
+   "status": 400,
+   "shape": "",
+   "detail": "모든 값을 입력해 주세요"
+  },
+  "없는 회의실": {
+   "status": 404,
+   "shape": "",
+   "detail": "회의실을 찾을 수 없습니다"
+  },
+  "명단에 없는 사람": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "겹침": {
+   "status": 409,
+   "shape": "",
+   "detail": "이미 예약된 시간입니다"
+  },
+  "3시간": {
+   "status": 400,
+   "shape": "",
+   "detail": "한 번에 최대 2시간까지 예약할 수 있습니다"
+  },
+  "남의 예약 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "사용자 없이 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "본인 취소": {
+   "status": 204,
+   "shape": "NoneType",
+   "detail": null
+  },
+  "없는 예약 취소": {
+   "status": 404,
+   "shape": "",
+   "detail": "예약을 찾을 수 없습니다"
+  },
+  "날짜 없이 목록": {
+   "status": 422,
+   "shape": "",
+   "detail": null
+  },
+  "회의실 목록": {
+   "status": 200,
+   "shape": "[{capacity,name,room_id}]",
+   "detail": null
+  },
+  "사용자 목록": {
+   "status": 200,
+   "shape": "[str]",
+   "detail": null
+  }
+ },
+ "M2_2": {
+  "한 번 예약": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "그 날 목록": {
+   "status": 200,
+   "shape": "[{date,end,res_id,room_id,series_id,start,user}]",
+   "detail": null
+  },
+  "날짜가 글자(내일)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "없는 날짜(13월 45일)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "날짜 형식 다름(2026/11/03)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "빈 사용자": {
+   "status": 400,
+   "shape": "",
+   "detail": "모든 값을 입력해 주세요"
+  },
+  "없는 회의실": {
+   "status": 404,
+   "shape": "",
+   "detail": "회의실을 찾을 수 없습니다"
+  },
+  "명단에 없는 사람": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "겹침": {
+   "status": 409,
+   "shape": "",
+   "detail": "이미 예약된 시간입니다"
+  },
+  "3시간": {
+   "status": 400,
+   "shape": "",
+   "detail": "한 번에 최대 2시간까지 예약할 수 있습니다"
+  },
+  "남의 예약 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "사용자 없이 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "본인 취소": {
+   "status": 204,
+   "shape": "NoneType",
+   "detail": null
+  },
+  "없는 예약 취소": {
+   "status": 404,
+   "shape": "",
+   "detail": "예약을 찾을 수 없습니다"
+  },
+  "날짜 없이 목록": {
+   "status": 422,
+   "shape": "",
+   "detail": null
+  },
+  "회의실 목록": {
+   "status": 200,
+   "shape": "[{capacity,name,room_id}]",
+   "detail": null
+  },
+  "사용자 목록": {
+   "status": 200,
+   "shape": "[str]",
+   "detail": null
+  }
+ },
+ "M2_3": {
+  "한 번 예약": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "그 날 목록": {
+   "status": 200,
+   "shape": "[{date,end,res_id,room_id,start,user}]",
+   "detail": null
+  },
+  "날짜가 글자(내일)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "없는 날짜(13월 45일)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "날짜 형식 다름(2026/11/03)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "빈 사용자": {
+   "status": 400,
+   "shape": "",
+   "detail": "모든 값을 입력해 주세요"
+  },
+  "없는 회의실": {
+   "status": 404,
+   "shape": "",
+   "detail": "회의실을 찾을 수 없습니다"
+  },
+  "명단에 없는 사람": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "겹침": {
+   "status": 409,
+   "shape": "",
+   "detail": "이미 예약된 시간입니다"
+  },
+  "3시간": {
+   "status": 400,
+   "shape": "",
+   "detail": "한 번에 최대 2시간까지 예약할 수 있습니다"
+  },
+  "남의 예약 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "사용자 없이 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "본인 취소": {
+   "status": 204,
+   "shape": "NoneType",
+   "detail": null
+  },
+  "없는 예약 취소": {
+   "status": 404,
+   "shape": "",
+   "detail": "예약을 찾을 수 없습니다"
+  },
+  "날짜 없이 목록": {
+   "status": 422,
+   "shape": "",
+   "detail": null
+  },
+  "회의실 목록": {
+   "status": 200,
+   "shape": "[{capacity,name,room_id}]",
+   "detail": null
+  },
+  "사용자 목록": {
+   "status": 200,
+   "shape": "[str]",
+   "detail": null
+  }
+ },
+ "M3_1": {
+  "한 번 예약": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "그 날 목록": {
+   "status": 200,
+   "shape": "[{date,end,res_id,room_id,series_id,start,user}]",
+   "detail": null
+  },
+  "날짜가 글자(내일)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "없는 날짜(13월 45일)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "날짜 형식 다름(2026/11/03)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "빈 사용자": {
+   "status": 400,
+   "shape": "",
+   "detail": "모든 값을 입력해 주세요"
+  },
+  "없는 회의실": {
+   "status": 404,
+   "shape": "",
+   "detail": "회의실을 찾을 수 없습니다"
+  },
+  "명단에 없는 사람": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "겹침": {
+   "status": 409,
+   "shape": "",
+   "detail": "이미 예약된 시간입니다"
+  },
+  "3시간": {
+   "status": 400,
+   "shape": "",
+   "detail": "한 번에 최대 2시간까지 예약할 수 있습니다"
+  },
+  "남의 예약 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "사용자 없이 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "본인 취소": {
+   "status": 204,
+   "shape": "NoneType",
+   "detail": null
+  },
+  "없는 예약 취소": {
+   "status": 404,
+   "shape": "",
+   "detail": "예약을 찾을 수 없습니다"
+  },
+  "날짜 없이 목록": {
+   "status": 422,
+   "shape": "",
+   "detail": null
+  },
+  "회의실 목록": {
+   "status": 200,
+   "shape": "[{capacity,name,room_id}]",
+   "detail": null
+  },
+  "사용자 목록": {
+   "status": 200,
+   "shape": "[str]",
+   "detail": null
+  }
+ },
+ "M3_2": {
+  "한 번 예약": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "그 날 목록": {
+   "status": 200,
+   "shape": "[{date,end,res_id,room_id,series_id,start,user}]",
+   "detail": null
+  },
+  "날짜가 글자(내일)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "없는 날짜(13월 45일)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "날짜 형식 다름(2026/11/03)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "빈 사용자": {
+   "status": 400,
+   "shape": "",
+   "detail": "모든 값을 입력해 주세요"
+  },
+  "없는 회의실": {
+   "status": 404,
+   "shape": "",
+   "detail": "회의실을 찾을 수 없습니다"
+  },
+  "명단에 없는 사람": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "겹침": {
+   "status": 409,
+   "shape": "",
+   "detail": "이미 예약된 시간입니다"
+  },
+  "3시간": {
+   "status": 400,
+   "shape": "",
+   "detail": "한 번에 최대 2시간까지 예약할 수 있습니다"
+  },
+  "남의 예약 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "사용자 없이 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "본인 취소": {
+   "status": 204,
+   "shape": "NoneType",
+   "detail": null
+  },
+  "없는 예약 취소": {
+   "status": 404,
+   "shape": "",
+   "detail": "예약을 찾을 수 없습니다"
+  },
+  "날짜 없이 목록": {
+   "status": 422,
+   "shape": "",
+   "detail": null
+  },
+  "회의실 목록": {
+   "status": 200,
+   "shape": "[{capacity,name,room_id}]",
+   "detail": null
+  },
+  "사용자 목록": {
+   "status": 200,
+   "shape": "[str]",
+   "detail": null
+  }
+ },
+ "M3_3": {
+  "한 번 예약": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "그 날 목록": {
+   "status": 200,
+   "shape": "[{date,end,res_id,room_id,series_id,start,user}]",
+   "detail": null
+  },
+  "날짜가 글자(내일)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "없는 날짜(13월 45일)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "날짜 형식 다름(2026/11/03)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "빈 사용자": {
+   "status": 400,
+   "shape": "",
+   "detail": "모든 값을 입력해 주세요"
+  },
+  "없는 회의실": {
+   "status": 404,
+   "shape": "",
+   "detail": "회의실을 찾을 수 없습니다"
+  },
+  "명단에 없는 사람": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "겹침": {
+   "status": 409,
+   "shape": "",
+   "detail": "이미 예약된 시간입니다"
+  },
+  "3시간": {
+   "status": 400,
+   "shape": "",
+   "detail": "한 번에 최대 2시간까지 예약할 수 있습니다"
+  },
+  "남의 예약 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "사용자 없이 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "본인 취소": {
+   "status": 204,
+   "shape": "NoneType",
+   "detail": null
+  },
+  "없는 예약 취소": {
+   "status": 404,
+   "shape": "",
+   "detail": "예약을 찾을 수 없습니다"
+  },
+  "날짜 없이 목록": {
+   "status": 422,
+   "shape": "",
+   "detail": null
+  },
+  "회의실 목록": {
+   "status": 200,
+   "shape": "[{capacity,name,room_id}]",
+   "detail": null
+  },
+  "사용자 목록": {
+   "status": 200,
+   "shape": "[str]",
+   "detail": null
+  }
+ },
+ "M1_4": {
+  "한 번 예약": {
+   "status": 201,
+   "shape": "{date,dates,end,res_id,res_ids,room_id,series_id,start,user}",
+   "detail": null
+  },
+  "그 날 목록": {
+   "status": 200,
+   "shape": "[{date,end,res_id,room_id,series_id,start,user}]",
+   "detail": null
+  },
+  "날짜가 글자(내일)": {
+   "status": 400,
+   "shape": "",
+   "detail": "날짜 형식이 올바르지 않습니다"
+  },
+  "없는 날짜(13월 45일)": {
+   "status": 400,
+   "shape": "",
+   "detail": "날짜 형식이 올바르지 않습니다"
+  },
+  "날짜 형식 다름(2026/11/03)": {
+   "status": 400,
+   "shape": "",
+   "detail": "날짜 형식이 올바르지 않습니다"
+  },
+  "빈 사용자": {
+   "status": 400,
+   "shape": "",
+   "detail": "모든 값을 입력해 주세요"
+  },
+  "없는 회의실": {
+   "status": 404,
+   "shape": "",
+   "detail": "회의실을 찾을 수 없습니다"
+  },
+  "명단에 없는 사람": {
+   "status": 201,
+   "shape": "{date,dates,end,res_id,res_ids,room_id,series_id,start,user}",
+   "detail": null
+  },
+  "겹침": {
+   "status": 409,
+   "shape": "",
+   "detail": "이미 예약된 시간입니다"
+  },
+  "3시간": {
+   "status": 400,
+   "shape": "",
+   "detail": "한 번에 최대 2시간까지 예약할 수 있습니다"
+  },
+  "남의 예약 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "사용자 없이 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "본인 취소": {
+   "status": 204,
+   "shape": "NoneType",
+   "detail": null
+  },
+  "없는 예약 취소": {
+   "status": 404,
+   "shape": "",
+   "detail": "예약을 찾을 수 없습니다"
+  },
+  "날짜 없이 목록": {
+   "status": 422,
+   "shape": "",
+   "detail": null
+  },
+  "회의실 목록": {
+   "status": 200,
+   "shape": "[{capacity,name,room_id}]",
+   "detail": null
+  },
+  "사용자 목록": {
+   "status": 200,
+   "shape": "[str]",
+   "detail": null
+  }
+ },
+ "M1_5": {
+  "한 번 예약": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "그 날 목록": {
+   "status": 200,
+   "shape": "[{date,end,res_id,room_id,start,user}]",
+   "detail": null
+  },
+  "날짜가 글자(내일)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "없는 날짜(13월 45일)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "날짜 형식 다름(2026/11/03)": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "빈 사용자": {
+   "status": 400,
+   "shape": "",
+   "detail": "모든 값을 입력해 주세요"
+  },
+  "없는 회의실": {
+   "status": 404,
+   "shape": "",
+   "detail": "회의실을 찾을 수 없습니다"
+  },
+  "명단에 없는 사람": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "겹침": {
+   "status": 409,
+   "shape": "",
+   "detail": "이미 예약된 시간입니다"
+  },
+  "3시간": {
+   "status": 400,
+   "shape": "",
+   "detail": "한 번에 최대 2시간까지 예약할 수 있습니다"
+  },
+  "남의 예약 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "사용자 없이 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "본인 취소": {
+   "status": 204,
+   "shape": "NoneType",
+   "detail": null
+  },
+  "없는 예약 취소": {
+   "status": 404,
+   "shape": "",
+   "detail": "예약을 찾을 수 없습니다"
+  },
+  "날짜 없이 목록": {
+   "status": 422,
+   "shape": "",
+   "detail": null
+  },
+  "회의실 목록": {
+   "status": 200,
+   "shape": "[{capacity,name,room_id}]",
+   "detail": null
+  },
+  "사용자 목록": {
+   "status": 200,
+   "shape": "[str]",
+   "detail": null
+  }
+ },
+ "M1_6": {
+  "한 번 예약": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "그 날 목록": {
+   "status": 200,
+   "shape": "[{date,end,res_id,room_id,start,user}]",
+   "detail": null
+  },
+  "날짜가 글자(내일)": {
+   "status": 400,
+   "shape": "",
+   "detail": "날짜 형식이 올바르지 않습니다"
+  },
+  "없는 날짜(13월 45일)": {
+   "status": 400,
+   "shape": "",
+   "detail": "날짜 형식이 올바르지 않습니다"
+  },
+  "날짜 형식 다름(2026/11/03)": {
+   "status": 400,
+   "shape": "",
+   "detail": "날짜 형식이 올바르지 않습니다"
+  },
+  "빈 사용자": {
+   "status": 400,
+   "shape": "",
+   "detail": "모든 값을 입력해 주세요"
+  },
+  "없는 회의실": {
+   "status": 404,
+   "shape": "",
+   "detail": "회의실을 찾을 수 없습니다"
+  },
+  "명단에 없는 사람": {
+   "status": 201,
+   "shape": "{date,end,res_id,room_id,start,user}",
+   "detail": null
+  },
+  "겹침": {
+   "status": 409,
+   "shape": "",
+   "detail": "이미 예약된 시간입니다"
+  },
+  "3시간": {
+   "status": 400,
+   "shape": "",
+   "detail": "한 번에 최대 2시간까지 예약할 수 있습니다"
+  },
+  "남의 예약 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "사용자 없이 취소": {
+   "status": 403,
+   "shape": "",
+   "detail": "본인 예약만 취소할 수 있습니다"
+  },
+  "본인 취소": {
+   "status": 204,
+   "shape": "NoneType",
+   "detail": null
+  },
+  "없는 예약 취소": {
+   "status": 404,
+   "shape": "",
+   "detail": "예약을 찾을 수 없습니다"
+  },
+  "날짜 없이 목록": {
+   "status": 422,
+   "shape": "",
+   "detail": null
+  },
+  "회의실 목록": {
+   "status": 200,
+   "shape": "[{capacity,name,room_id}]",
+   "detail": null
+  },
+  "사용자 목록": {
+   "status": 200,
+   "shape": "[str]",
+   "detail": null
+  }
+ }
+}

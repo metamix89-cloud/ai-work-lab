@@ -1,0 +1,59 @@
+{
+ "model": "sonnet",
+ "prompt": "이 폴더의 PRD.md 가 v2 로 바뀌었어. [v2] 표시가 붙은 내용대로 앱을 고쳐 줘. CLAUDE.md 를 지켜.",
+ "max_turns": 80,
+ "port": 9600,
+ "parallel_note": "이 PC 에서는 같은 일을 하는 다른 작업이 동시에 돌고 있다. 서버를 띄우거나 부를 때 포트는 문서에 적힌 값 대신 환경 변수 PORT 의 값(9600, 서버가 둘이면 다음 번호)을 쓴다. 프로세스를 끌 때는 네가 띄운 것의 PID 로만 끄고, 이름이나 명령줄 패턴(python.exe · uvicorn)으로 찾아 끄지 않는다. 이 작업 폴더 밖은 보지 않는다.",
+ "job": true,
+ "rc": 0,
+ "stderr_tail": "",
+ "duration_api_ms": 44806,
+ "num_turns": 10,
+ "total_cost_usd": 0.19623900000000002,
+ "stop_reason": "end_turn",
+ "terminal_reason": "completed",
+ "is_error": false,
+ "session_id": "078dcdd9-694d-4140-b7ea-2433ddbe106f",
+ "usage": {
+  "input_tokens": 14,
+  "cache_creation_input_tokens": 24261,
+  "cache_read_input_tokens": 247370,
+  "output_tokens": 7443,
+  "output_tokens_details": {
+   "thinking_tokens": 677
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 24261,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 844,
+    "cache_read_input_tokens": 44237,
+    "cache_creation_input_tokens": 514,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 514
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "기존 DoD: 9/9 — 고치기 전과 뒤에 `pytest tests/test_dod.py` 를 실제로 돌린 결과입니다.\n새 기준: T10 · T11 · T12 모두 확인함 — 새로 만든 `tests/test_recur.py` 로 서버를 띄워 API 를 호출해 확인했고, 전체 12개가 통과했습니다. 화면(반복 선택 상자, 남은 전부 취소 버튼)은 브라우저로 열어 보지 못했습니다. 코드만 고쳤고 눈으로는 확인하지 않았습니다.\n바꾼 파일:\n- `main.py` — `mr_reservations` 에 `series_id` 칸을 더했습니다. 시드 INSERT 는 칸 이름을 지정하도록 바꿨습니다. `GET` 응답에 `series_id` 를 더했습니다. `POST` 는 `repeat_weeks` 를 받아 전부 아니면 전무로 만들고(R10 · R12), `DELETE` 는 `scope=one|following` 을 받습니다(R11).\n- `static/index.html` — 반복 선택 상자(`repeat-select`)와 남은 전부 취소 버튼(`cancel-following-btn`)을 더했습니다. 반복 예약이 아닌 칸에는 이 버튼을 그리지 않습니다.\n- `tests/test_recur.py` — 새로 만들었습니다(T10~T12).\n- `PRD.md` — 변경 이력의 마지막 줄을 채웠습니다.\n\n범위 밖 기능: 없음\nPRD 와 다르게 한 것 · PRD 가 안 정해서 직접 정한 것: PRD 와 다르게 한 것은 없습니다. PRD 가 정하지 않아 직접 정한 것은 아래 네 가지입니다.\n- 반복 예약인데 `date` 가 올바른 날짜가 아니면 400 `모든 값을 입력해 주세요` 를 돌려줍니다.\n- `scope` 가 `following` 이 아닌 값이면 `one` 으로 처리합니다.\n- `repeat_weeks` 가 `null` 이면 없는 것으로 봅니다.\n- 반복 묶음은 새 표 없이 `series_id` 칸으로 저장합니다.",
+ "wall_s": 165.9,
+ "isolation": {
+  "transcript": true,
+  "foreign_ports": [],
+  "kill_by_name": [],
+  "outside_refs": []
+ }
+}

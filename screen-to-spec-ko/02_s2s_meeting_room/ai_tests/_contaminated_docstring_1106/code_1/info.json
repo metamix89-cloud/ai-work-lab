@@ -1,0 +1,61 @@
+{
+ "model": "sonnet",
+ "cond": "code",
+ "prompt": "이 폴더는 우리 회사 회의실 예약 웹앱이야(main.py · seed/). 이 앱의 pytest 테스트를 써 줘. 앱 코드(main.py)는 고치지 마.\n테스트 틀은 tests/conftest.py 에 있어. srv 픽스처가 서버를 띄우고(srv.base 가 주소) seed/ 를 고정 데이터(DATE · ROOMS · USERS · RES 상수)로 바꿔 끼워. http(method, url, body) 는 (상태 코드, 응답) 을 돌려주고, pw 는 Playwright 브라우저야. conftest.py 는 바꾸지 말고 그 틀로 tests/test_app.py 에 테스트를 써 줘. 끝나면 무슨 테스트를 몇 개 썼는지 짧게 보고해.",
+ "port": 9620,
+ "job": true,
+ "rc": 0,
+ "wall_s": 71.1,
+ "num_turns": 5,
+ "total_cost_usd": 0.23861140000000003,
+ "is_error": false,
+ "session_id": "bf9b52b4-51de-413a-8294-c386a148b3ee",
+ "usage": {
+  "input_tokens": 10,
+  "cache_creation_input_tokens": 33875,
+  "cache_read_input_tokens": 187414,
+  "output_tokens": 8435,
+  "output_tokens_details": {
+   "thinking_tokens": 1833
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 33875,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 981,
+    "cache_read_input_tokens": 47117,
+    "cache_creation_input_tokens": 3583,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 3583
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "result": "`tests/test_app.py`에 테스트 39개(함수 25개, 파라미터 포함)를 썼습니다. 실행 결과는 27개 통과, 12개 실패입니다. 실패는 모두 지금 `main.py`의 결함 때문이고, `main.py`와 `conftest.py`는 건드리지 않았습니다.\n\n실패한 12개는 아래 규칙을 앱이 지키지 않아서 나는 것입니다.\n- **붙여 예약**: 끝나는 시각과 시작 시각이 맞닿는 예약(예: 10~11시 다음 11~12시)이 거부됩니다. 겹침 검사가 `<=`라서입니다. (2개)\n- **30분 단위**: 09:10처럼 30분 단위가 아닌 시각이 받아들여집니다. (3개)\n- **시간 범위**: 시작과 끝이 같거나 거꾸로인 예약이 받아들여집니다. (2개)\n- **2시간 상한**: 2시간을 넘는 예약이 받아들여집니다. (1개)\n- **취소 권한**: 다른 사람의 예약, 사용자 없는 요청의 취소가 모두 204로 성공합니다. 없는 id를 취소해도 404가 아니라 204입니다. (3개)\n- **화면 사용자 선택**: 사용자 선택 목록에 6명 중 2명만 나옵니다. (1개)\n\n통과한 27개는 다음을 확인합니다.\n- **조회**: 시드 5건 조회, 다른 날짜는 빈 목록.\n- **생성**: 201과 새 id 반환, 필수 필드 누락 거부.\n- **겹침**: 같은 방 겹침은 409(4가지 모양), 다른 방·다른 날짜는 허용, 거부된 예약은 저장 안 됨.\n- **시간대**: 09:00 이전·18:00 이후 거부, 18:00까지·30분·2시간 예약은 허용.\n- **취소**: 본인 취소, 취소 후 같은 시간 재예약.\n- **화면**: 제목, 방 3개 × 18칸 표, 시간 헤더, 예약자 이름 표시.\n\n요구사항 문서가 없어서 규칙은 `main.py` 안내문에 적힌 의도(30분 단위, 09~18시, 2시간 상한, 본인만 취소)와 일반 상식으로 정했습니다. 오류 코드는 400/422, 401/403처럼 범위로 받게 해 뒀습니다. 표 칸의 `data-*` 속성은 이름을 알 수 없어서 검사하지 않았습니다.\n\n화면 테스트가 전제하는 시드 데이터가 변하지 않도록, 예약을 만들거나 취소하는 테스트는 각자 별도 날짜를 씁니다.",
+ "test_files": [
+  "tests/test_app.py"
+ ],
+ "all_files": [
+  "main.py",
+  "seed/reservations.csv",
+  "seed/rooms.csv",
+  "seed/users.csv",
+  "tests/conftest.py",
+  "tests/test_app.py"
+ ],
+ "conftest_modified": false,
+ "app_modified": false
+}
